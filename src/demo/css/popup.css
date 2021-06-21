@@ -1,0 +1,117 @@
+/* Custom styles */
+.center_only {
+  background: none;
+  padding: 10px;
+}
+
+.center_only .popup__content-box {
+  background-color: #ffffff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Bordered popup */
+.border_popup .popup__content-box {
+  border: 1px solid #000000;
+  background-color: #ddddff;
+}
+
+/* Draggable popup */
+.popup__content.draggable_popup {
+  height: 100%;
+  position: relative;
+}
+
+.popup__content.draggable_popup .popup__content-box {
+  position: absolute;
+  border: 1px solid #000000;
+  background-color: #eeffff;
+}
+
+.popup__content-box.dragging {
+  border: 1px solid #000000;
+  background-color: #eeffff;
+  max-width: 600px;
+  min-width: 130px;
+  padding: 15px 20px;
+}
+
+/* Message popups */
+.popup .popup__content.msg {
+  background: none;
+  margin-top: 70px;
+  align-self: baseline;
+}
+
+.popup .popup__content.msg .popup__content-box {
+  padding: 0;
+  max-width: 824px;
+  width: 100%;
+  background: none;
+}
+
+.msg .popup__content-box .popup__message {
+  max-width: 300px;
+  min-width: 200px;
+  color: #ffffff;
+  position: absolute;
+  right: 0;
+  padding: 15px 30px 15px 20px;
+}
+
+.msg.msg_success .popup__content-box .popup__message {
+  border-color: #20d040;
+  background-color: #40d060;
+}
+
+.msg.msg_error .popup__content-box .popup__message {
+  border-color: #f02020;
+  background-color: #f02020;
+}
+
+/* Template */
+.template_test > div {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  background-color: #00ff00;
+  border: 1px dashed #008800;
+}
+
+/* Controls */
+.btn {
+  padding: 5px 10px;
+  margin: 5px 0;
+  border-radius: 3px;
+  background-color: #2020ff;
+  color: #ffffff;
+}
+
+.btn.submit-btn {
+  margin-right: 10px;
+}
+
+.btn.cancel-btn {
+  background-color: #888888;
+}
+
+.stretch_input {
+  border: 1px solid #000000;
+  padding: 3px;
+  overflow: hidden;
+}
+
+.stretch_input > input[type="text"],
+.stretch_input > input[type="password"],
+.stretch_input > select {
+  width: 100%;
+}
+
+.controls_test .btn.submit-btn,
+.controls_test .btn.cancel-btn {
+  background-color: #88bbff;
+}
+
+.controls_test .btn.submit-btn[disabled],
+.controls_test .btn.cancel-btn[disabled] {
+  background-color: #888888;
+}

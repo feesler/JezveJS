@@ -1,0 +1,33 @@
+.container {
+  padding: 5px;
+}
+
+.container__dashed {
+  border: 2px dashed;
+}
+
+/* Test div */
+.class5 {
+  width: 50px;
+  height: 50px;
+  background-color: #6f32ff;
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  border: 0 none;
+}
+
+.square.square__red {
+  background-color: #dd0055;
+}
+
+.square.square__green {
+  background-color: #00dd55;
+}
+
+#restbl th,
+#restbl td {
+  border: 1px solid #000000;
+}

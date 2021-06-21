@@ -1,0 +1,125 @@
+.logs-container {
+  display: inline-flex;
+  padding: 4px;
+  margin-top: 6px;
+  min-height: 1rem;
+  max-height: 100px;
+  min-width: 300px;
+  line-height: 1.5;
+  overflow-y: auto;
+  border: 1px solid #b4b4b4;
+}
+
+.allwidth {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.halfwidth {
+  width: 50%;
+}
+
+.dd_stretch {
+  width: 100%;
+}
+
+.bluebox {
+  width: 100px;
+  height: 100px;
+  background-color: #20a0ff;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.link_inline_cont {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.link_inline_cont .ddmobile > select {
+  cursor: pointer;
+}
+
+.link_inline_cont .link_inline {
+  color: #2020ff;
+}
+
+.link_inline_cont:hover .link_inline {
+  text-decoration: underline;
+}
+
+.offset-parent {
+  position: relative;
+}
+
+.clipper {
+  height: 50px;
+  overflow: hidden;
+  background-color: #bbbbbb;
+}
+
+.btn {
+  padding: 5px;
+  margin: 5px 0;
+  background-color: #2020ff;
+  color: #ffffff;
+}
+
+.admin_btn:focus {
+  outline: 2px #aee5ff solid;
+  outline-offset: 0.1rem;
+}
+
+.inp {
+  border: 1px solid #000000;
+  padding: 5px;
+}
+
+/* Custom selected item */
+.dd__selection > .dd__custom-selection-item {
+  background-color: #f3be78;
+  border: 1px solid #eeb05e;
+  border-radius: 5px;
+}
+
+.dd__container_disabled .dd__selection > .dd__custom-selection-item {
+  border-color: #c5c5c5;
+}
+
+.dd__container_enabled
+  .dd__selection
+  > .dd__custom-selection-item.dd__selection-item_active,
+.dd__container_enabled .dd__selection > .dd__custom-selection-item:hover {
+  background-color: #e6a34b;
+  border-color: #e79f40;
+}
+
+.dd__selection > .dd__custom-selection-item > .dd__del-selection-item-btn {
+  color: #999999;
+  padding: 0 3px 0 0;
+  width: 24px;
+  text-align: center;
+}
+
+.dd__container_enabled
+  .dd__selection
+  > .dd__custom-selection-item
+  > .dd__del-selection-item-btn:hover {
+  color: #ffffff;
+}
+
+.dd__container_enabled
+  .dd__selection
+  > .dd__custom-selection-item
+  > .dd__del-selection-item-btn::after {
+  content: "\2014";
+}
+
+.dd__container_enabled
+  .dd__selection
+  > .dd__custom-selection-item
+  > .dd__del-selection-item-btn:hover::after {
+  content: "|";
+}

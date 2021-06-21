@@ -1,0 +1,71 @@
+.middle_pie .pie__sector-1 {
+  fill: #00b74a;
+}
+
+.middle_pie .pie__sector-1:hover {
+  fill: #37db79;
+}
+
+.middle_pie .pie__sector-2 {
+  fill: #ff8700;
+}
+
+.middle_pie .pie__sector-2:hover {
+  fill: #ffa540;
+}
+
+.middle_pie .pie__sector-3 {
+  fill: #db0058;
+}
+
+.middle_pie .pie__sector-3:hover {
+  fill: #ed3b83;
+}
+
+.middle_pie .pie__sector-4 {
+  fill: #086ca2;
+}
+
+.middle_pie .pie__sector-4:hover {
+  fill: #3c9dd1;
+}
+
+.middle_pie .pie__sector-5 {
+  fill: #ffba00;
+}
+
+.middle_pie .pie__sector-5:hover {
+  fill: #ffcb40;
+}
+
+.middle_pie .pie__sector-6 {
+  fill: #ff3900;
+}
+
+.middle_pie .pie__sector-6:hover {
+  fill: #ff6b40;
+}
+
+.middle_pie .pie__sector-7 {
+  fill: #dc0055;
+}
+
+.middle_pie .pie__sector-7:hover {
+  fill: #ee3b80;
+}
+
+.middle_pie .pie__sector-8 {
+  fill: #00b64f;
+}
+
+.middle_pie .pie__sector-8:hover {
+  fill: #37da7e;
+}
+
+.middle_pie .pie__sector-9 {
+  fill: #dcf900;
+}
+
+.middle_pie .pie__sector-9:hover {
+  fill: #e6fc3f;
+}

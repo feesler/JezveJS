@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+}
+
+*,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Hide clear button inside inputs */
+::-ms-clear {
+  display: none;
+}
+
+/* WebKit focus fix */
+*:focus {
+  outline: none;
+}
+
+input[type="button"],
+input[type="submit"],
+button {
+  overflow: visible;    /* IE button padding fix */
+  appearance: button;   /* iOS Safari styling issue fix */
+}
+
+/* Firefox fix */
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+/* Hidden element */
+.hidden {
+  display: none !important;
+}
+
+/* Clearfix */
+.clearfix {
+  float: none;
+  clear: both;
+  display: table;
+  zoom: 1;
+}
+
+.clearfix::after {
+  content: ". .";
+  display: block;
+  word-spacing: 99in;
+  height: 0;
+  overflow: hidden;
+  font-size: 0.13em;      /* Opera fix */
+  line-height: 0;
+}

@@ -1,0 +1,8 @@
+.pie-chart,
+.pie-chart__sector {
+  display: block;
+  stroke-width: 0;
+  stroke-linejoin: round;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  user-select: none;
+}

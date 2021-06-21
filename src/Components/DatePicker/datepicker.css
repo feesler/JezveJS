@@ -1,0 +1,190 @@
+/* Relative container of Date Picker */
+.dp__container {
+  position: relative;
+  max-width: 19rem;
+}
+
+/* View wrapper */
+.dp__wrapper {
+  position: absolute;
+  overflow: hidden;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  font-size: 1rem;
+  z-index: 1000;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dp__static-wrapper {
+  position: static;
+  z-index: auto;
+}
+
+.dp__header {
+  text-align: center;
+}
+
+.dp__header_item {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 2rem;
+  line-height: 2rem;
+  cursor: pointer;
+}
+
+.dp__header_title {
+  width: 80%;
+}
+
+.dp__header_title:hover {
+  color: #20d0ff;
+}
+
+.dp__header_nav {
+  width: 10%;
+}
+
+.dp__header_nav > svg {
+  vertical-align: middle;
+  fill: #b0b0b0;
+  display: inline-block;
+}
+
+.dp__header_nav:hover > svg {
+  fill: #80d0ff;
+}
+
+/* Common class for all kind of cells */
+.dp__cell {
+  display: inline-block;
+  box-sizing: border-box;
+  text-align: center;
+  color: #000000;
+  border: 1px solid #ffffff;
+  background-color: #ffffff;
+}
+
+/* Year view */
+.dp__year-range-view__cell,
+.dp__year-view__cell {
+  width: 25%;
+  font-weight: normal;
+  padding: 0.2rem;
+  cursor: pointer;
+  line-height: 2rem;
+}
+
+/* Month view */
+.dp__month-view_cell {
+  width: 14.2857%;
+  font-weight: 400;
+  padding: 0.2rem;
+  font-size: 0.85rem;
+}
+
+.dp__weekday-cell {
+  text-align: center;
+  font-weight: 500;
+}
+
+.dp__day-cell {
+  text-align: right;
+  cursor: pointer;
+  padding: 0 0.6rem;
+  line-height: 1.4rem;
+}
+
+.dp__other-month-cell {
+  color: #b0b0b0;
+}
+
+.dp__today-cell {
+  border: 1px dashed #20d0ff;
+}
+
+.dp__cell_act {
+  border: 1px solid #20d0ff;
+}
+
+.dp__cell_hl {
+  background-color: #80d0ff;
+  border: 1px solid #80d0ff;
+  color: #ffffff;
+}
+
+.dp__year-range-view__cell:hover,
+.dp__year-view__cell:hover,
+.dp__day-cell:hover {
+  background-color: #80d0ff;
+}
+
+/* View layer */
+.dp__view {
+  position: relative;
+}
+
+/* Container of view cells */
+.dp__view-container {
+  transform: none;
+  transition-delay: 0s;
+  transform-origin: 0 0;
+}
+
+.dp__animated-view,
+.dp__animated-view > .dp__view-container {
+  transition-property: all;
+  transition-duration: 0.5s;
+}
+
+.dp__animated-view .dp__cell:hover {
+  background-color: #ffffff;
+}
+
+.dp__layered-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.dp__layered-view.top_from {
+  z-index: 3;
+  opacity: 1;
+}
+
+.dp__layered-view.top_to {
+  z-index: 3;
+  opacity: 0;
+}
+
+.dp__layered-view.bottom_from {
+  z-index: 2;
+  opacity: 1;
+}
+
+.dp__layered-view.bottom_to {
+  z-index: 2;
+  opacity: 0;
+}
+
+@media screen and (max-width: 767px) and (-webkit-device-pixel-ratio: 1),
+  screen and (max-width: 384px) and (-webkit-device-pixel-ratio: 2),
+  screen and (max-width: 384px) and (-webkit-device-pixel-ratio: 3) {
+  .dp__container,
+  .dp__view-container {
+    max-width: 100%;
+    font-size: 1rem;
+  }
+
+  .dp__day-cell {
+    font-size: 1rem;
+    padding: 1.75% 4%;
+  }
+
+  .dp__year-range-view__cell,
+  .dp__year-view__cell {
+    font-size: 1.125rem;
+    padding: 3% 4%;
+  }
+}

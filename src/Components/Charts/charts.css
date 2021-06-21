@@ -1,0 +1,69 @@
+/* Main container for charts */
+.charts {
+  display: flex;
+  flex-flow: row nowrap;
+  flex-basis: 100%;
+}
+
+.charts svg {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  user-select: none;
+  overflow: hidden;
+}
+
+.chart_wrap {
+  flex-basis: 100%;
+  overflow: hidden;
+}
+
+.chart_content {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+/* Bar chart information popup */
+.chart_popup {
+  position: absolute;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+  padding: 5px;
+  white-space: nowrap;
+}
+
+/* Chart grid line */
+.chart__grid-line {
+  stroke-width: 1;
+  fill: none;
+  stroke: #808080;
+  stroke-dasharray: 4, 3;
+}
+
+/* Chart text */
+.chart__text {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  text-anchor: "start";
+}
+
+/* Histogram bar item */
+.histogram__bar {
+  fill: #00bfff;
+  fill-opacity: 1;
+  stroke: none;
+}
+
+/* Linechart circle item */
+.linechart__item {
+  fill: #ffffff;
+  stroke: #00bfff;
+  stroke-width: 1.5;
+}
+
+/* Linechart line path */
+.linechart__path {
+  stroke-width: 3;
+  stroke: #00bfff;
+  fill: none;
+}

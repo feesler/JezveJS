@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+<title>Jezve JS | Drag and Drop features</title>
+</head>
+<body>
+<div class="page">
+	<div class="page-wrapper">
+
+		<div class="nav-header">
+			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+			<div class="nav-header__menu">
+			</div>
+		</div>
+
+		<div class="page-container">
+			<div class="page-content">
+				<div class="page-content-wrap">
+
+	<h2>Drag original object. Drop target accept only OriginalDragAvatar</h2>
+	<div id="drop_area1" class="drop_area relative_area">
+		<div id="sq1" class="square abs_pos_square"></div>
+	</div>
+
+	<h2>Drag two objects with semitransparent avatars. Drop targets accept only DefaultDragAvatar</h2>
+	<div class="drop_area relative_area">
+		<div id="inner_drop1" class="inner_drop left_inner_drop">
+			<div id="sq2" class="square">1</div>
+			<div id="sq3" class="square">2</div>
+		</div>
+		<div id="inner_drop2" class="inner_drop right_inner_drop">
+		</div>
+	</div>
+
+	<h2>Sortable implementation</h2>
+	<div id="sortable_container" class="drop_area sortable_drop_area">
+		<div id="sort1" class="sortable_item normal_item"><span>Item 1</span></div><div class="sortable_item normal_item item_placeholder"></div><div id="sort2" class="sortable_item normal_item"><span>Item 2</span></div><div id="sort3" class="sortable_item normal_item"><span>Item 3</span></div><div id="sort4" class="sortable_item normal_item"><span>Item 4</span></div>
+	</div>
+
+	<h2>Sortable list</h2>
+	<div class="vstretch_drop_area sortable_drop_area clearfix">
+		<div id="list_sortable" class="list_area"></div>
+		<div id="listsort_out" class="output_area"></div>
+	</div>
+
+	<h2>Exchangable list</h2>
+	<h3>Example of usage of same <i>group</i> identifier<br>
+	Left list uses default dragClass option <i>(.drag)</i>. Right list use own dragClass.</h3>
+	<div class="vstretch_drop_area sortable_drop_area clearfix">
+		<div id="list_exch_1" class="list_area"></div>
+		<div id="list_exch_2" class="list_area"></div>
+		<div id="exch_out" class="output_area"></div>
+	</div>
+
+	<h2>Sortable table with TBODY per each row</h2>
+	<div class="vstretch_drop_area sortable_drop_area">
+		<table id="table_sortable" class="sortable_tbl">
+			<tbody class="tbl_list_item"><tr><td><div>1</div></td><td><div>10000</div></td><td><div>some text</div></td></tr></tbody>
+			<tbody class="tbl_list_item"><tr><td><div>2</div></td><td><div>354</div></td><td><div>some text</div></td></tr></tbody>
+			<tbody class="tbl_list_item"><tr><td><div>3</div></td><td><div>850110</div></td><td><div>some long long text</div></td></tr></tbody>
+			<tbody class="tbl_list_item"><tr><td><div>4</div></td><td><div>6000</div></td><td><div>some text</div></td></tr></tbody>
+			<tbody class="tbl_list_item"><tr><td><div>5</div></td><td><div>7860</div></td><td><div>some short text</div></td></tr></tbody>
+			<tbody class="tbl_list_item"><tr><td><div>6</div></td><td><div>4500</div></td><td><div>some text</div></td></tr></tbody>
+			<tbody class="tbl_list_item"><tr><td><div>7</div></td><td><div>200</div></td><td><div>some text</div></td></tr></tbody>
+		</table>
+	</div>
+
+	<h2>Sortable table with single TBODY for all rows</h2>
+	<div class="vstretch_drop_area sortable_drop_area">
+		<table id="table_sortable_2" class="sortable_tbl">
+			<tbody class="tbl_list_item">
+				<tr><td><div>1</div></td><td><div>10000</div></td><td><div>some text</div></td></tr>
+				<tr><td><div>2</div></td><td><div>354</div></td><td><div>some text</div></td></tr>
+				<tr><td><div>3</div></td><td><div>850110</div></td><td><div>some long long text</div></td></tr>
+				<tr><td><div>4</div></td><td><div>6000</div></td><td><div>some text</div></td></tr>
+				<tr><td><div>5</div></td><td><div>7860</div></td><td><div>some short text</div></td></tr>
+				<tr><td><div>6</div></td><td><div>4500</div></td><td><div>some text</div></td></tr>
+				<tr><td><div>7</div></td><td><div>200</div></td><td><div>some text</div></td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>Sortable table without TBODY</h2>
+	<div class="vstretch_drop_area sortable_drop_area">
+		<table id="table_sortable_3" class="sortable_tbl">
+			<tr><td><div>1</div></td><td><div>10000</div></td><td><div>some text</div></td></tr>
+			<tr><td><div>2</div></td><td><div>354</div></td><td><div>some text</div></td></tr>
+			<tr><td><div>3</div></td><td><div>850110</div></td><td><div>some long long text</div></td></tr>
+			<tr><td><div>4</div></td><td><div>6000</div></td><td><div>some text</div></td></tr>
+			<tr><td><div>5</div></td><td><div>7860</div></td><td><div>some short text</div></td></tr>
+			<tr><td><div>6</div></td><td><div>4500</div></td><td><div>some text</div></td></tr>
+			<tr><td><div>7</div></td><td><div>200</div></td><td><div>some text</div></td></tr>
+		</table>
+	</div>
+
+	<h2>Drag handle option</h2>
+	<div id="drop_area2" class="drop_area relative_area">
+		<div id="di1" class="drag_item">
+			<input type="text">
+		</div>
+		<div id="di2" class="drag_item" style="top: 50px;">
+			<input type="text">
+			<div id="dh2_1" class="drag_handle_small"></div>
+			<div id="dh2_2" class="drag_handle_small"></div>
+		</div>
+		<div id="di3" class="drag_item" style="top: 100px;">
+			<input type="text">
+			<div id="dh3_1" class="drag_handle"><div class="drag_handle_small green"></div></div>
+			<div id="dh3_2" class="drag_handle"><div class="drag_handle_small red"></div></div>
+		</div>
+	</div>
+
+	<h2>Sortable list with onlyRootHandle option</h2>
+	<div class="vstretch_drop_area sortable_drop_area clearfix">
+		<div id="sortable_roothnd" class="list_area"></div>
+	</div>
+
+	<h2>Sortable list with drag handle option</h2>
+	<div class="vstretch_drop_area sortable_drop_area clearfix">
+		<div id="sortable_hnd" class="list_area"></div>
+	</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

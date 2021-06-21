@@ -1,0 +1,42 @@
+.page-content-wrap {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.column {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 500px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#chart_single_neg .chart__item_active,
+#chart_callbacks .chart__item_active {
+  fill: #00ffbf;
+}
+
+#linechart_callbacks .chart__item_active {
+  fill: #00bfff;
+}
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-items: normal;
+}
+
+.test-chart-container {
+  display: flex;
+  flex-flow: column wrap;
+  margin-bottom: 30px;
+  margin-right: 15px;
+}
+
+.test-chart__descr {
+  background-color: #c2c2c2;
+}
+
+.test-chart-container .std_chart_wrap {
+  width: 250px;
+}

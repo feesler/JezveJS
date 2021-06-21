@@ -1,0 +1,177 @@
+.drop_area {
+  display: flex;
+  min-height: 200px;
+  background-color: #aaeeff;
+}
+
+.vstretch_drop_area {
+  background-color: #aaeeff;
+}
+
+.relative_area {
+  position: relative;
+}
+
+.sortable_drop_area {
+  flex-flow: row wrap;
+  padding: 10px;
+}
+
+.inner_drop {
+  position: absolute;
+  top: 10px;
+  width: 180px;
+  height: 180px;
+  background-color: #3388bb;
+}
+
+.left_inner_drop {
+  left: 10px;
+}
+
+.right_inner_drop {
+  right: 10px;
+}
+
+.square {
+  width: 75px;
+  height: 75px;
+  background-color: #77bbff;
+}
+
+.abs_pos_square {
+  position: absolute;
+}
+
+.semitransp {
+  opacity: 0.5;
+}
+
+.sortable_item {
+  margin: 0 10px 10px 0;
+  padding: 10px;
+}
+
+.normal_item {
+  width: 100px;
+  height: 100px;
+  background-color: #55dd99;
+  position: relative;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.normal_item > span {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: #ffffff;
+}
+
+.item_placeholder {
+  width: 98px;
+  height: 98px;
+  border: 1px dashed #ffffff;
+  background: none;
+}
+
+.item_placeholder * {
+  visibility: hidden;
+}
+
+.list_area {
+  display: inline-block;
+  float: left;
+  margin-right: 20px;
+  width: 300px;
+}
+
+.output_area {
+  display: inline-block;
+  float: left;
+  border: 1px dashed #888888;
+  height: 515px;
+  width: 50%;
+}
+
+.list_item {
+  width: 100% !important;
+  padding: 5px;
+  margin: 0 0 10px 0;
+  background-color: #55dd99;
+  box-sizing: border-box;
+}
+
+.list_item_2 {
+  background-color: #dd5599;
+}
+
+.list_item > span {
+  height: 24px;
+  line-height: 24px;
+  font-size: 18px;
+  margin: 0 5px;
+  color: #ffffff;
+}
+
+.list_item_placeholder {
+  border: 1px dashed #ffffff;
+  background: none;
+}
+
+.list_item_placeholder * {
+  visibility: hidden;
+}
+
+.list_item.drag {
+  opacity: 0.5;
+}
+
+.list_item_2.list_item_drag {
+  background-color: #9955ee;
+}
+
+.sortable_tbl td > div {
+  color: #000000;
+  background-color: #ffffff;
+  padding: 10px;
+  height: 40px;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.drag_item {
+  padding: 10px 30px 10px 10px;
+  background-color: #77bbff;
+  position: absolute;
+}
+
+.drag_item > input[type="text"],
+.list_item input[type="text"] {
+  height: 25px;
+  border: 1px solid #000000;
+}
+
+.drag_handle {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-color: #0088ff;
+  vertical-align: middle;
+}
+
+.drag_handle_small {
+  display: inline-block;
+  line-height: 25px;
+  width: 10px;
+  height: 10px;
+  background-color: #8888ff;
+}
+
+.drag_handle_small.green {
+  background-color: #22ff22;
+}
+
+.drag_handle_small.red {
+  background-color: #ff2222;
+}

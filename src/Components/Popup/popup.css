@@ -1,0 +1,88 @@
+/* popup */
+.popup {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2010;
+}
+
+.nodim {
+  background: none;
+}
+
+.popup__scroller {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+.popup__wrapper {
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+
+.popup__content {
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 100%;
+  max-width: 100vw;
+  width: 100%;
+  background-color: #ffffff;
+  color: #000000;
+  z-index: 2100;
+}
+
+.popup__content-box {
+  display: -ms-flexbox;
+  display: flex;
+  flex-flow: column nowrap;
+  box-sizing: border-box;
+  margin: 0;
+  max-width: 600px;
+  min-width: 130px;
+  padding: 15px 20px;
+  position: relative;
+  background: none;
+}
+
+/* Close button */
+.popup .close-btn,
+.popup__content-box.dragging .close-btn {
+  position: absolute;
+  overflow: hidden;
+  top: 10px;
+  right: 10px;
+  height: 14px;
+  width: 14px;
+  border: 0 none;
+  cursor: pointer;
+  background: none;
+}
+
+.close-btn > svg {
+  width: 14px;
+  height: 14px;
+  fill: #888888;
+}
+
+.close-btn:hover > svg {
+  fill: #000000;
+}
+
+.popup__controls {
+  padding: 29px 0 8px;
+  display: inline-block;
+}

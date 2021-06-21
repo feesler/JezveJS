@@ -1,0 +1,14 @@
+.pic {
+  width: 100px;
+  height: 100px;
+  background-repeat: no-repeat;
+}
+
+.pic-single {
+  background-image: url("../img/1x.png");
+}
+
+.pic-double {
+  background-image: url("../img/2x.png");
+  background-size: 100px 100px;
+}
