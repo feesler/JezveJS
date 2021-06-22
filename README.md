@@ -4,7 +4,7 @@ JavaScript utility and components library written from scratch.
 <h2 align="left">Install</h2>
 
 ```bash
-npm install jezve-js
+npm install jezvejs
 ```
 
 <h2 align="left">Common</h2>

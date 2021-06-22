@@ -1,7 +1,8 @@
 {
   "name": "jezvejs",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "type": "module",
+  "main": "./src/js/index.js",
   "description": "JavaScript utility and components library",
   "repository": {
     "type": "git",
@@ -64,20 +65,6 @@
     "whatwg-fetch": "^3.4.0"
   },
   "exports": {
-    ".": "./src/js/common.js",
-    "./Component": "./src/js/Component.js",
-    "./Selection": "./src/js/Selection.js",
-    "./Histogram": "./src/Components/Charts/Histogram.js",
-    "./LineChart": "./src/Components/Charts/LineChart.js",
-    "./DateInput": "./src/Components/DateInput/DateInput.js",
-    "./DatePicker": "./src/Components/DatePicker/DatePicker.js",
-    "./Debug": "./src/Components/Debug/Debug.js",
-    "./DragnDrop": "./src/Components/DragnDrop/index.js",
-    "./DropDown": "./src/Components/DropDown/DropDown.js",
-    "./PieChart": "./src/Components/PieChart/PieChart.js",
-    "./Popup": "./src/Components/Popup/Popup.js",
-    "./Progress": "./src/Components/Progress/Progress.js",
-    "./Slider": "./src/Components/Slider/Slider.js",
-    "./Sortable": "./src/Components/Sortable/index.js"
+    ".": "./src/js/index.js"
   }
 }
