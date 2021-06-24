@@ -8,7 +8,7 @@ import {
     onReady,
 } from '../../js/common.js';
 import { Histogram } from '../../Components/Charts/Histogram.js';
-import { LineChart } from '../../Components/Charts/Linechart.js';
+import { LineChart } from '../../Components/Charts/LineChart.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

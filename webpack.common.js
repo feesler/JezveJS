@@ -15,7 +15,7 @@ export default {
         DragnDrop: './src/Components/DragnDrop',
         Sortable: './src/Components/Sortable',
         Histogram: './src/Components/Charts/Histogram.js',
-        Linechart: './src/Components/Charts/Linechart.js',
+        LineChart: './src/Components/Charts/LineChart.js',
         PieChart: './src/Components/PieChart/PieChart.js',
         Popup: './src/Components/Popup/Popup.js',
         Progress: './src/Components/Progress/Progress.js',
@@ -32,7 +32,7 @@ export default {
         chartsDemo: {
             import: './src/demo/js/Charts.js',
             filename: 'demo/js/[name].js',
-            dependOn: ['Histogram', 'Linechart']
+            dependOn: ['Histogram', 'LineChart']
         },
         commonTestsDemo: {
             import: './src/demo/js/CommonTests.js',
@@ -127,7 +127,7 @@ export default {
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/charts.html',
             filename: 'demo/charts.html',
-            chunks: ['Histogram', 'Linechart', 'chartsDemo']
+            chunks: ['Histogram', 'LineChart', 'chartsDemo']
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/common.html',

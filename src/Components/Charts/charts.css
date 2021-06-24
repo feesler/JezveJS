@@ -54,14 +54,14 @@
   stroke: none;
 }
 
-/* Linechart circle item */
+/* LineChart circle item */
 .linechart__item {
   fill: #ffffff;
   stroke: #00bfff;
   stroke-width: 1.5;
 }
 
-/* Linechart line path */
+/* LineChart line path */
 .linechart__path {
   stroke-width: 3;
   stroke: #00bfff;
