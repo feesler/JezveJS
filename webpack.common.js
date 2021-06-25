@@ -5,8 +5,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default {
-    target: ['web', 'es5'],
+    target: 'browserslist',
     entry: {
+        index: './src/js/index.js',
+
         polyfills: './src/js/polyfill/index.js',
         DateInput: './src/Components/DateInput/DateInput.js',
         DecimalInput: './src/Components/DecimalInput/DecimalInput.js',
@@ -94,7 +96,12 @@ export default {
     output: {
         filename: '[name].js',
         path: resolve(__dirname, 'dist'),
-        clean: true
+        clean: true,
+        library: {
+            name: 'jezvejs',
+            type: 'umd',
+            umdNamedDefine: true,
+        },
     },
     module: {
         rules: [
