@@ -1,1 +1,67 @@
-<!doctype html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0"><title>Jezve JS | Charts</title><script defer="defer" src="../runtime.js"></script><script defer="defer" src="../demo/js/commonTestsDemo.js"></script></head><body><div class="page"><div class="page-wrapper"><div class="nav-header"><h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1><div class="nav-header__menu"></div></div><div class="page-container"><div class="page-content"><div class="page-content-wrap"><div class="results"><div class="controls"><input id="startbtn" class="btn" type="button" value="start"><table class="adm_tbl counter_tbl"><tr><td class="title">Total</td><td id="totalRes"></td><td class="title">Ok</td><td id="okRes"></td><td class="title">Fail</td><td id="failRes"></td></tr></table></div><div class="tbl_container"><table><tbody id="restbl"></tbody></table></div></div><div class="ph"></div><div id="testview" class="testview"><div id="topParent"><div class="container container__dashed"><span>Visible element</span><div id="visibleElem" class="square square__green"></div></div><div class="container container__dashed"><span>Hidded element</span><div id="hiddenElem1" class="square square__red" style="display: none;"></div></div><div id="container2" class="container container__dashed"><span>Element inside hierarchy of hidden parent</span><div style="display: none;"><div><div id="hiddenElem2" class="square square__red"></div></div></div></div></div><div>Hover/out or click element below to test setup of event handlers</div><div id="evResult"></div></div></div></div></div></div></div></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+<title>Jezve JS | Charts</title>
+<script defer="defer" src="../runtime.js"></script><script defer="defer" src="../demo/js/commonTestsDemo.js"></script></head>
+<body>
+<div class="page">
+	<div class="page-wrapper">
+
+		<div class="nav-header">
+			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+			<div class="nav-header__menu">
+			</div>
+		</div>
+
+		<div class="page-container">
+			<div class="page-content">
+				<div class="page-content-wrap">
+
+	<div class="results">
+		<div class="controls">
+			<input id="startbtn" class="btn" type="button" value="start">
+			<table class="adm_tbl counter_tbl">
+				<tr>
+					<td class="title">Total</td><td id="totalRes"></td>
+					<td class="title">Ok</td><td id="okRes"></td>
+					<td class="title">Fail</td><td id="failRes"></td>
+				</tr>
+			</table>
+		</div>
+		<div class="tbl_container"><table><tbody id="restbl"></tbody></table></div>
+	</div>
+	<div class="ph"></div>
+	<div id="testview" class="testview">
+		<div id="topParent">
+			<div class="container container__dashed">
+				<span>Visible element</span>
+				<div id="visibleElem" class="square square__green"></div>
+			</div>
+
+			<div class="container container__dashed">
+				<span>Hidded element</span>
+				<div id="hiddenElem1" class="square square__red" style="display: none;"></div>
+			</div>
+
+			<div id="container2" class="container container__dashed">
+				<span>Element inside hierarchy of hidden parent</span>
+				<div style="display: none;">
+					<div>
+						<div id="hiddenElem2" class="square square__red"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div>Hover/out or click element below to test setup of event handlers</div>
+        <div id="evResult"></div>
+	</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
