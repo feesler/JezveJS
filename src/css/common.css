@@ -21,11 +21,18 @@ body {
   outline: none;
 }
 
+/* iOS Safari input height fix */
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+  overflow: hidden;
+}
+
 input[type="button"],
 input[type="submit"],
 button {
-  overflow: visible;    /* IE button padding fix */
-  appearance: button;   /* iOS Safari styling issue fix */
+  overflow: visible; /* IE button padding fix */
+  appearance: button; /* iOS Safari styling issue fix */
 }
 
 /* Firefox fix */
@@ -53,6 +60,6 @@ button::-moz-focus-inner {
   word-spacing: 99in;
   height: 0;
   overflow: hidden;
-  font-size: 0.13em;      /* Opera fix */
+  font-size: 0.13em; /* Opera fix */
   line-height: 0;
 }
