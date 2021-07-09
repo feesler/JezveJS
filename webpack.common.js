@@ -4,6 +4,10 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const htmlMinifyOptions = {
+    removeRedundantAttributes: false
+};
+
 export default {
     target: 'browserslist',
     entry: {
@@ -124,77 +128,92 @@ export default {
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/index.html',
             filename: 'demo/index.html',
-            chunks: ['demoMain']
+            chunks: ['demoMain'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/chartgrid.html',
             filename: 'demo/chartgrid.html',
-            chunks: ['chartGridDemo']
+            chunks: ['chartGridDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/charts.html',
             filename: 'demo/charts.html',
-            chunks: ['Histogram', 'LineChart', 'chartsDemo']
+            chunks: ['Histogram', 'LineChart', 'chartsDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/common.html',
             filename: 'demo/common.html',
-            chunks: ['commonTestsDemo']
+            chunks: ['commonTestsDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/dateinput.html',
             filename: 'demo/dateinput.html',
-            chunks: ['DateInput', 'dateInputDemo']
+            chunks: ['DateInput', 'dateInputDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/datepicker.html',
             filename: 'demo/datepicker.html',
-            chunks: ['DatePicker', 'datePickerDemo']
+            chunks: ['DatePicker', 'datePickerDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/debug.html',
             filename: 'demo/debug.html',
-            chunks: ['debugDemo']
+            chunks: ['debugDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/decimal.html',
             filename: 'demo/decimal.html',
-            chunks: ['DecimalInput', 'decimalInputDemo']
+            chunks: ['DecimalInput', 'decimalInputDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/dpitest.html',
             filename: 'demo/dpitest.html',
-            chunks: ['dpiTestDemo']
+            chunks: ['dpiTestDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/dragndrop.html',
             filename: 'demo/dragndrop.html',
-            chunks: ['DragnDrop', 'Sortable', 'dragnDropDemo']
+            chunks: ['DragnDrop', 'Sortable', 'dragnDropDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/dropdown.html',
             filename: 'demo/dropdown.html',
-            chunks: ['DropDown', 'dropDownDemo']
+            chunks: ['DropDown', 'dropDownDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/emptyclick.html',
             filename: 'demo/emptyclick.html',
-            chunks: ['emptyClickDemo']
+            chunks: ['emptyClickDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/piechart.html',
             filename: 'demo/piechart.html',
-            chunks: ['PieChart', 'pieChartDemo']
+            chunks: ['PieChart', 'pieChartDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/popup.html',
             filename: 'demo/popup.html',
-            chunks: ['Popup', 'DragnDrop', 'popupDemo']
+            chunks: ['Popup', 'DragnDrop', 'popupDemo'],
+            minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/progress.html',
             filename: 'demo/progress.html',
-            chunks: ['Progress', 'progressDemo']
+            chunks: ['Progress', 'progressDemo'],
+            minify: htmlMinifyOptions,
         }),
     ],
     optimization: {
