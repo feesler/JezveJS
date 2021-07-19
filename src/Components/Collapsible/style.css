@@ -1,0 +1,22 @@
+.collapsible {
+  display: flex;
+  flex-flow: column nowrap;
+  flex: 1 1 auto;
+}
+
+.collapsible-header {
+  display: flex;
+  flex-flow: column nowrap;
+  border: 0 none;
+  padding: 0;
+  background: none;
+  text-align: left;
+}
+
+.collapsible-content {
+  display: none;
+}
+
+.collapsible__expanded > .collapsible-content {
+  display: flex;
+}

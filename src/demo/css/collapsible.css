@@ -1,0 +1,96 @@
+.simple .collapsible-header {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.styled {
+  display: inline-flex;
+  min-width: 200px;
+}
+
+.styled .collapsible-header {
+  display: flex;
+  font-size: 16px;
+  padding: 8px 8px 8px 8px;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+  color: #dddddd;
+  background-color: #202020;
+  border-color: #202020;
+}
+
+.styled .collapsible-content {
+  flex-flow: column nowrap;
+  padding: 8px;
+  margin: 0 1px;
+  border: 0 none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: #bbbbbb;
+  border-color: #303030;
+  background-color: #252525;
+}
+
+#styled-content {
+  list-style-type: none;
+}
+
+.custom {
+  display: inline-flex;
+  min-width: 300px;
+  background-color: #55b0ff;
+}
+
+.custom .collapsible-header {
+  flex-flow: row nowrap;
+  align-items: center;
+  cursor: pointer;
+}
+
+.custom .collapsible-header:focus,
+.custom .collapsible-header:hover {
+  background-color: #1d93fa;
+}
+
+.custom-title {
+  flex-grow: 1;
+  font-size: 16px;
+  padding: 8px 8px 8px 8px;
+}
+
+.custom-header-btn {
+  width: 34px;
+  height: 34px;
+  padding: 5px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.custom-header-btn > svg {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+  opacity: 0;
+}
+
+.collapsible-header:focus .custom-header-btn > svg,
+.collapsible-header:hover .custom-header-btn > svg {
+  opacity: 0.5;
+}
+
+.custom .custom-header-btn:hover > svg {
+  opacity: 1;
+}
+
+.custom .collapsible-content {
+  padding: 8px;
+  justify-content: center;
+  background-color: #94bde0;
+}
+
+.styled .collapsible-header:hover {
+  background-color: #2e2e2e;
+  border-color: #505050;
+}

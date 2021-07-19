@@ -14,6 +14,7 @@ export default {
         index: './src/js/index.js',
 
         polyfills: './src/js/polyfill/index.js',
+        Collapsible: './src/Components/Collapsible/Collapsible.js',
         DateInput: './src/Components/DateInput/DateInput.js',
         DecimalInput: './src/Components/DecimalInput/DecimalInput.js',
         DropDown: './src/Components/DropDown/DropDown.js',
@@ -43,6 +44,11 @@ export default {
         commonTestsDemo: {
             import: './src/demo/js/CommonTests.js',
             filename: 'demo/js/[name].js',
+        },
+        collapsibleDemo: {
+            import: './src/demo/js/Collapsible.js',
+            filename: 'demo/js/[name].js',
+            dependOn: ['Collapsible']
         },
         dateInputDemo: {
             import: './src/demo/js/DateInput.js',
@@ -147,6 +153,12 @@ export default {
             template: 'src/demo/templates/common.html',
             filename: 'demo/common.html',
             chunks: ['commonTestsDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/templates/collapsible.html',
+            filename: 'demo/collapsible.html',
+            chunks: ['Collapsible', 'collapsibleDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
