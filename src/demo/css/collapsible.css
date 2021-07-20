@@ -94,3 +94,14 @@
   background-color: #2e2e2e;
   border-color: #505050;
 }
+
+.methods-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+}
+
+.methods {
+  display: inline-flex;
+  margin-right: 15px;
+}

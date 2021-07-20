@@ -4,6 +4,7 @@ export * from './Component.js';
 export * from './Selection.js';
 export * from '../Components/Charts/Histogram.js';
 export * from '../Components/Charts/LineChart.js';
+export * from '../Components/Collapsible/Collapsible.js';
 export * from '../Components/DateInput/DateInput.js';
 export * from '../Components/DecimalInput/DecimalInput.js';
 export * from '../Components/DatePicker/DatePicker.js';

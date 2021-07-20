@@ -1,6 +1,5 @@
 import {
     isFunction,
-    ge,
     ce,
     removeChilds,
     addChilds,
@@ -38,7 +37,7 @@ export class Collapsible extends Component {
             'button',
             { className: 'collapsible-header' },
             null,
-            { click: this.toggleCollapse.bind(this) },
+            { click: () => this.toggle() },
         );
         this.setHeader(this.props.header);
 
@@ -58,6 +57,20 @@ export class Collapsible extends Component {
             }
             this.elem.classList.add(...this.props.className);
         }
+    }
+
+    setState(state) {
+        if (state.expanded === this.state.expanded) {
+            return;
+        }
+
+        this.state = state;
+
+        if (isFunction(this.stateChangeHandler)) {
+            this.stateChangeHandler(this.state.expanded);
+        }
+
+        this.render(this.state);
     }
 
     setHeader(header) {
@@ -88,15 +101,19 @@ export class Collapsible extends Component {
         }
     }
 
-    /** Toggle expand/collapse button 'click' event handler */
-    toggleCollapse() {
-        this.state.expanded = !this.state.expanded;
+    /** Collapse content */
+    collapse() {
+        this.setState({ expanded: false });
+    }
 
-        if (isFunction(this.stateChangeHandler)) {
-            this.stateChangeHandler(this.state.expanded);
-        }
+    /** Expand content */
+    expand() {
+        this.setState({ expanded: true });
+    }
 
-        this.render(this.state);
+    /** Toggle expand/collapse content */
+    toggle() {
+        this.setState({ expanded: !this.state.expanded });
     }
 
     /** Render component state */

@@ -2,6 +2,7 @@ import {
     ge,
     ce,
     svg,
+    setEvents,
     onReady,
 } from '../../js/common.js';
 import { Collapsible } from '../../Components/Collapsible/Collapsible.js';
@@ -71,8 +72,21 @@ function initCustomHeader() {
     ge('custom-collapse').appendChild(collapse.elem);
 }
 
+function initMethods() {
+    const collapse = new Collapsible({
+        className: 'methods',
+        header: 'Header',
+        content: 'Content',
+    });
+    ge('methods-collapse').appendChild(collapse.elem);
+
+    setEvents(ge('expand-btn'), { click: () => collapse.expand() });
+    setEvents(ge('collapse-btn'), { click: () => collapse.collapse() });
+}
+
 onReady(() => {
     initSimple();
     initStyled();
     initCustomHeader();
+    initMethods();
 });
