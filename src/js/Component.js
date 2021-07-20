@@ -1,4 +1,4 @@
-import { ge, show } from './common.js';
+import { ge, show, isVisible } from './common.js';
 
 /**
  * Base component constructor
@@ -31,6 +31,11 @@ export class Component {
 
     /** Render component state */
     render() { }
+
+    /** Check root element of component is visible */
+    isVisible() {
+        return isVisible(this.elem, true);
+    }
 
     /**
      * Show/hide base element of component
