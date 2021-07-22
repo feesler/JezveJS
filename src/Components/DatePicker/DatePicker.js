@@ -14,6 +14,7 @@ import {
     re,
     px,
 } from '../../js/common.js';
+import '../../css/common.css';
 import './datepicker.css';
 
 /**

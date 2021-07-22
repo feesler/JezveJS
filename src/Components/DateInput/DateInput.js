@@ -4,6 +4,7 @@ import {
     setCursorPos,
     isNum,
 } from '../../js/common.js';
+import '../../css/common.css';
 
 /**
  * Decimal value input

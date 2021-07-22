@@ -5,6 +5,7 @@ import {
     setParam,
     px,
 } from '../../js/common.js';
+import '../../css/common.css';
 
 // Return reverce function for delta
 export function easeOut(delta) {

@@ -73,6 +73,7 @@
   },
   "exports": {
     ".": "./src/js/index.js",
+    "./style": "./src/css/common.css",
     "./Component": "./src/js/Component.js",
     "./Selection": "./src/js/Selection.js",
     "./Histogram": "./src/Components/Charts/Histogram.js",

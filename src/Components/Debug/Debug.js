@@ -1,4 +1,5 @@
 import { ce, re } from '../../js/common.js';
+import '../../css/common.css';
 import './debug.css';
 
 export class Debug {

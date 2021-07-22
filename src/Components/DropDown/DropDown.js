@@ -18,6 +18,7 @@ import {
     setEvents,
     removeEvents,
 } from '../../js/common.js';
+import '../../css/common.css';
 import './dropdown.css';
 
 const CHECK_ICON = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z';

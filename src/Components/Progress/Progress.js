@@ -1,4 +1,5 @@
 import { ge, ce, isInt } from '../../js/common.js';
+import '../../css/common.css';
 import './progress.css';
 
 /** Progress constructor */
