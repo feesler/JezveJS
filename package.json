@@ -86,6 +86,7 @@
     "./DragnDrop": "./src/Components/DragnDrop/index.js",
     "./DropDown": "./src/Components/DropDown/DropDown.js",
     "./PieChart": "./src/Components/PieChart/PieChart.js",
+    "./Paginator": "./src/Components/Paginator/Paginator.js",
     "./Popup": "./src/Components/Popup/Popup.js",
     "./Progress": "./src/Components/Progress/Progress.js",
     "./Slider": "./src/Components/Slider/Slider.js",

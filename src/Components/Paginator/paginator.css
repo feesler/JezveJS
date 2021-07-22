@@ -1,0 +1,13 @@
+/* Paginator */
+.paginator {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  margin-left: auto;
+  padding: 5px 0;
+}
+
+.paginator > span {
+  margin-left: 5px;
+  height: 22px;
+  line-height: 22px;
+}
