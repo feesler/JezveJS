@@ -23,6 +23,7 @@ export default {
         Sortable: './src/Components/Sortable',
         Histogram: './src/Components/Charts/Histogram.js',
         LineChart: './src/Components/Charts/LineChart.js',
+        Paginator: './src/Components/Paginator/Paginator.js',
         PieChart: './src/Components/PieChart/PieChart.js',
         Popup: './src/Components/Popup/Popup.js',
         Progress: './src/Components/Progress/Progress.js',
@@ -86,6 +87,11 @@ export default {
         emptyClickDemo: {
             import: './src/demo/js/EmptyClick.js',
             filename: 'demo/js/[name].js',
+        },
+        paginatorDemo: {
+            import: './src/demo/js/Paginator.js',
+            filename: 'demo/js/[name].js',
+            dependOn: 'Paginator'
         },
         pieChartDemo: {
             import: './src/demo/js/PieChart.js',
@@ -207,6 +213,12 @@ export default {
             template: 'src/demo/templates/emptyclick.html',
             filename: 'demo/emptyclick.html',
             chunks: ['emptyClickDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/templates/paginator.html',
+            filename: 'demo/paginator.html',
+            chunks: ['Paginator', 'paginatorDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({

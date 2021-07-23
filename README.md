@@ -12,6 +12,7 @@ npm install jezvejs
 - DOM manipulation utilities
 
 <h2 align="left">Components</h2>
+- Collapsible
 - Charts
     - Histogram
     - LineChart
@@ -21,6 +22,7 @@ npm install jezvejs
 - Debug
 - DecimalInput
 - DropDown
+- Paginator
 - Popup
 - Progress
 - Slider
