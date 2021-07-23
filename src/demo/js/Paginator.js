@@ -9,7 +9,7 @@ import '../css/app.css';
 import '../css/paginator.css';
 
 function initSimple() {
-    const paginator = new Paginator({
+    const paginator = Paginator.create({
         pagesCount: 10,
     });
 
@@ -17,7 +17,7 @@ function initSimple() {
 }
 
 function initStyled() {
-    const paginator = new Paginator({
+    const paginator = Paginator.create({
         className: 'styled',
         pagesCount: 10,
     });
@@ -26,7 +26,7 @@ function initStyled() {
 }
 
 function initActiveLink() {
-    const paginator = new Paginator({
+    const paginator = Paginator.create({
         pagesCount: 10,
         allowActiveLink: true,
     });
@@ -35,7 +35,7 @@ function initActiveLink() {
 }
 
 function initCustomURL() {
-    const paginator = new Paginator({
+    const paginator = Paginator.create({
         pagesCount: 10,
         url: 'https://test.url/content/',
         pageParam: 'p',
@@ -45,7 +45,7 @@ function initCustomURL() {
 }
 
 function initDisabledURL() {
-    const paginator = new Paginator({
+    const paginator = Paginator.create({
         pagesCount: 10,
         url: null,
     });
@@ -55,7 +55,7 @@ function initDisabledURL() {
 
 function initHandler() {
     const handlerStatus = ge('handler-status');
-    const paginator = new Paginator({
+    const paginator = Paginator.create({
         pagesCount: 10,
         onChange: (page) => {
             handlerStatus.textContent = `Page ${page} selected`;
@@ -65,6 +65,13 @@ function initHandler() {
     ge('handler').appendChild(paginator.elem);
 }
 
+function initPrerendered() {
+    Paginator.fromElement(ge('prerendered'), {
+        url: null,
+        breakLimit: 4,
+    });
+}
+
 onReady(() => {
     initSimple();
     initStyled();
@@ -72,4 +79,5 @@ onReady(() => {
     initCustomURL();
     initDisabledURL();
     initHandler();
+    initPrerendered();
 });

@@ -1,4 +1,4 @@
-import { addChilds, ce, isFunction, removeChilds } from '../../js/common.js';
+import { addChilds, ce, isFunction, removeChilds, setEvents } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import './paginator.css';
 
@@ -12,7 +12,23 @@ const defaultProps = {
     url: window.location,
 };
 
+const CONTAINER_CLASS = 'paginator';
+const ITEM_CLASS = 'paginator-item';
+const ACTIVE_ITEM_CLASS = 'paginator-item__active';
+
 export class Paginator extends Component {
+    static create(props = {}) {
+        const instance = new Paginator(props);
+        instance.init();
+        return instance;
+    }
+
+    static fromElement(elem, props = {}) {
+        const instance = new Paginator(props);
+        instance.parse(elem);
+        return instance;
+    }
+
     constructor(props) {
         super(props);
 
@@ -21,27 +37,54 @@ export class Paginator extends Component {
             ...this.props,
         };
 
-        this.init();
-        this.render(this.state);
-    }
-
-    init() {
         this.state = {
             ...this.props,
         };
+    }
 
-        this.elem = ce('div',
-            { className: 'paginator' },
-            null,
-            { click: (e) => this.onChangePage(e) },
-        );
+    init() {
+        this.elem = ce('div', { className: CONTAINER_CLASS });
+        this.setHandlers();
+        this.setClassNames();
 
-        if (this.props.className) {
-            if (!Array.isArray(this.props.className)) {
-                this.props.className = [this.props.className];
-            }
-            this.elem.classList.add(...this.props.className);
+        this.render(this.state);
+    }
+
+    parse(elem) {
+        if (!elem || !elem.classList || !elem.classList.contains(CONTAINER_CLASS)) {
+            throw new Error('Invalid element');
         }
+
+        this.elem = elem;
+        this.setHandlers();
+        this.setClassNames();
+
+        const items = Array.from(elem.querySelectorAll(`.${ITEM_CLASS}`));
+        items.forEach((item) => {
+            if (!item.dataset.page) {
+                return;
+            }
+
+            if (item.classList.contains(ACTIVE_ITEM_CLASS)) {
+                this.state.pageNum = item.dataset.page;
+            }
+            this.state.pagesCount = item.dataset.page;
+        });
+    }
+
+    setHandlers() {
+        setEvents(this.elem, { click: (e) => this.onChangePage(e) });
+    }
+
+    setClassNames() {
+        if (!this.props.className) {
+            return;
+        }
+
+        if (!Array.isArray(this.props.className)) {
+            this.props.className = [this.props.className];
+        }
+        this.elem.classList.add(...this.props.className);
     }
 
     onChangePage(e) {
@@ -120,18 +163,18 @@ export class Paginator extends Component {
 
     renderItem(item) {
         if (item.ellipsis) {
-            return ce('span', { className: 'paginator-item', textContent: '...' });
+            return ce('span', { className: ITEM_CLASS, textContent: '...' });
         }
 
         if (item.active && !this.props.allowActiveLink) {
             return ce('span', {
-                className: 'paginator-item paginator-item__active',
+                className: `${ITEM_CLASS} ${ACTIVE_ITEM_CLASS}`,
                 textContent: item.page,
             });
         }
 
         const res = ce('a', {
-            className: 'paginator-item',
+            className: ITEM_CLASS,
             textContent: item.page,
         });
         res.setAttribute('data-page', item.page);
@@ -143,7 +186,7 @@ export class Paginator extends Component {
         }
 
         if (item.active) {
-            res.classList.add('paginator-item__active');
+            res.classList.add(ACTIVE_ITEM_CLASS);
         }
 
         return res;
