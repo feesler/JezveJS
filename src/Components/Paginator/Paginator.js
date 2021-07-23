@@ -5,7 +5,7 @@ import './paginator.css';
 const defaultProps = {
     breakLimit: 5,
     groupLimit: 3,
-    pageNum: 0,
+    pageNum: 1,
     pagesCount: 0,
     allowActiveLink: false,
     pageParam: 'page',
@@ -60,7 +60,7 @@ export class Paginator extends Component {
             this.props.onChange(page);
         }
 
-        this.setPage(page - 1);
+        this.setPage(page);
     }
 
     setPage(page) {
@@ -77,36 +77,42 @@ export class Paginator extends Component {
 
         // 1 2 3 4 5
         if (state.pagesCount <= state.breakLimit) {
-            for (let i = 0; i < state.pagesCount; i++) {
-                res.push({ page: (i + 1), active: (i === state.pageNum) });
+            for (let i = 1; i <= state.pagesCount; i++) {
+                res.push({ page: i, active: (i === state.pageNum) });
             }
 
             return res;
         }
 
-        if (state.pageNum < state.groupLimit) {
-            //  1 2 3 4 5 ... 18
-            for (let i = 0; i < state.breakLimit; i++) {
-                res.push({ page: (i + 1), active: (i === state.pageNum) });
+        //  1 2 3 4 5 ... 18
+        if (state.pageNum < state.breakLimit) {
+            for (let i = 1; i <= state.breakLimit; i++) {
+                res.push({ page: i, active: (i === state.pageNum) });
             }
             res.push({ ellipsis: true });
             res.push({ page: state.pagesCount, active: false });
-        } else if (state.pageNum >= state.groupLimit && state.pageNum < state.pagesCount - state.groupLimit) {
-            //  1 ... 14 15 16 ... 18
+
+            return res;
+        }
+
+        //  1 ... 14 15 16 ... 18
+        if (state.pageNum <= state.pagesCount - state.breakLimit + 1) {
             res.push({ page: 1, active: false });
             res.push({ ellipsis: true });
             for (let i = state.pageNum - (state.groupLimit - 2); i <= state.pageNum + (state.groupLimit - 2); i++) {
-                res.push({ page: (i + 1), active: (i === state.pageNum) });
+                res.push({ page: i, active: (i === state.pageNum) });
             }
             res.push({ ellipsis: true });
             res.push({ page: state.pagesCount, active: false });
-        } else if (state.pageNum >= state.groupLimit && state.pageNum >= state.pagesCount - state.groupLimit) {
-            //  1 ... 14 15 16 17 18
-            res.push({ page: 1, active: false });
-            res.push({ ellipsis: true });
-            for (let i = state.pagesCount - state.breakLimit; i < state.pagesCount; i++) {
-                res.push({ page: (i + 1), active: (i === state.pageNum) });
-            }
+
+            return res;
+        }
+
+        //  1 ... 14 15 16 17 18
+        res.push({ page: 1, active: false });
+        res.push({ ellipsis: true });
+        for (let i = state.pagesCount - state.breakLimit + 1; i <= state.pagesCount; i++) {
+            res.push({ page: i, active: (i === state.pageNum) });
         }
 
         return res;
