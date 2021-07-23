@@ -1,4 +1,4 @@
-import { addChilds, ce, removeChilds } from '../../js/common.js';
+import { addChilds, ce, isFunction, removeChilds } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import './paginator.css';
 
@@ -7,6 +7,9 @@ const defaultProps = {
     groupLimit: 3,
     pageNum: 0,
     pagesCount: 0,
+    allowActiveLink: false,
+    pageParam: 'page',
+    url: window.location,
 };
 
 export class Paginator extends Component {
@@ -32,17 +35,32 @@ export class Paginator extends Component {
             null,
             { click: (e) => this.onChangePage(e) },
         );
+
+        if (this.props.className) {
+            if (!Array.isArray(this.props.className)) {
+                this.props.className = [this.props.className];
+            }
+            this.elem.classList.add(...this.props.className);
+        }
     }
 
     onChangePage(e) {
         e.preventDefault();
 
-        if (e.target.tagName === 'A') {
-            const page = parseInt(e.target.textContent, 10);
-            if (!Number.isNaN(page)) {
-                this.setPage(page - 1);
-            }
+        if (e.target.tagName !== 'A') {
+            return;
         }
+
+        const page = parseInt(e.target.dataset.page, 10);
+        if (Number.isNaN(page)) {
+            return;
+        }
+
+        if (isFunction(this.props.onChange)) {
+            this.props.onChange(page);
+        }
+
+        this.setPage(page - 1);
     }
 
     setPage(page) {
@@ -60,7 +78,7 @@ export class Paginator extends Component {
         // 1 2 3 4 5
         if (state.pagesCount <= state.breakLimit) {
             for (let i = 0; i < state.pagesCount; i++) {
-                res.push({ title: (i + 1), active: (i === state.pageNum) });
+                res.push({ page: (i + 1), active: (i === state.pageNum) });
             }
 
             return res;
@@ -69,26 +87,57 @@ export class Paginator extends Component {
         if (state.pageNum < state.groupLimit) {
             //  1 2 3 4 5 ... 18
             for (let i = 0; i < state.breakLimit; i++) {
-                res.push({ title: (i + 1), active: (i === state.pageNum) });
+                res.push({ page: (i + 1), active: (i === state.pageNum) });
             }
-            res.push({ title: '...' });
-            res.push({ title: state.pagesCount, active: false });
+            res.push({ ellipsis: true });
+            res.push({ page: state.pagesCount, active: false });
         } else if (state.pageNum >= state.groupLimit && state.pageNum < state.pagesCount - state.groupLimit) {
             //  1 ... 14 15 16 ... 18
-            res.push({ title: 1, active: false });
-            res.push({ title: '...' });
+            res.push({ page: 1, active: false });
+            res.push({ ellipsis: true });
             for (let i = state.pageNum - (state.groupLimit - 2); i <= state.pageNum + (state.groupLimit - 2); i++) {
-                res.push({ title: (i + 1), active: (i === state.pageNum) });
+                res.push({ page: (i + 1), active: (i === state.pageNum) });
             }
-            res.push({ title: '...' });
-            res.push({ title: state.pagesCount, active: false });
+            res.push({ ellipsis: true });
+            res.push({ page: state.pagesCount, active: false });
         } else if (state.pageNum >= state.groupLimit && state.pageNum >= state.pagesCount - state.groupLimit) {
             //  1 ... 14 15 16 17 18
-            res.push({ title: 1, active: false });
-            res.push({ title: '...' });
+            res.push({ page: 1, active: false });
+            res.push({ ellipsis: true });
             for (let i = state.pagesCount - state.breakLimit; i < state.pagesCount; i++) {
-                res.push({ title: (i + 1), active: (i === state.pageNum) });
+                res.push({ page: (i + 1), active: (i === state.pageNum) });
             }
+        }
+
+        return res;
+    }
+
+    renderItem(item) {
+        if (item.ellipsis) {
+            return ce('span', { className: 'paginator-item', textContent: '...' });
+        }
+
+        if (item.active && !this.props.allowActiveLink) {
+            return ce('span', {
+                className: 'paginator-item paginator-item__active',
+                textContent: item.page,
+            });
+        }
+
+        const res = ce('a', {
+            className: 'paginator-item',
+            textContent: item.page,
+        });
+        res.setAttribute('data-page', item.page);
+
+        if (this.props.url) {
+            const url = new URL(this.props.url);
+            url.searchParams.set(this.props.pageParam, item.page);
+            res.href = url;
+        }
+
+        if (item.active) {
+            res.classList.add('paginator-item__active');
         }
 
         return res;
@@ -96,15 +145,7 @@ export class Paginator extends Component {
 
     render(state) {
         const items = this.getItems(state);
-        const elems = items.map((item) => (
-            ('active' in item)
-                ? ce('span', {}, (
-                    (item.active)
-                        ? ce('b', { textContent: item.title })
-                        : ce('a', { textContent: item.title, href: '#' })
-                ))
-                : ce('span', { textContent: item.title })
-        ));
+        const elems = items.map((item) => this.renderItem(item));
 
         removeChilds(this.elem);
         addChilds(this.elem, elems);

@@ -1,0 +1,22 @@
+.styled .paginator-item {
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+  text-decoration: none;
+  border: 1px solid #ffffff;
+  border-radius: 3px;
+  color: #447fd6;
+}
+
+.styled .paginator-item__active {
+  font-weight: normal;
+  background-color: #557dff;
+  color: #ffffff;
+}
+
+.styled a.paginator-item:hover {
+  border-color: #93beff;
+}
+
+.styled .paginator-item + .paginator-item {
+  margin-left: 2px;
+}
