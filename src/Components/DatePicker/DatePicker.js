@@ -16,6 +16,21 @@ import {
 } from '../../js/common.js';
 import '../../css/common.css';
 import './datepicker.css';
+import {
+    DAYS_IN_WEEK,
+    MONTHS_COUNT,
+    getDaysInMonth,
+    getMondayBasedDayOfWeek,
+    getWeekdayShort,
+    getLongMonthName,
+    getShortMonthName,
+    getFirstDayOfWeek,
+    shiftDate,
+} from '../../js/DateUtils.js';
+
+const MONTH_VIEW = 1;
+const YEAR_VIEW = 2;
+const YEARRANGE_VIEW = 3;
 
 /**
  * Date picker constructor
@@ -32,17 +47,6 @@ import './datepicker.css';
  * @param {Date} date - initial date to show
  */
 export class DatePicker {
-    /** Static properties */
-    static months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    static weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-    static MONTH_VIEW = 1;
-
-    static YEAR_VIEW = 2;
-
-    static YEARRANGE_VIEW = 3;
-
     constructor(params) {
         this.baseObj = null;
         this.wrapperObj = null;
@@ -63,6 +67,7 @@ export class DatePicker {
         this.cellsContainer = null;
         this.isAnimated = true;
         this.animation = false;
+        this.locales = params.locales || [];
 
         if (!('wrapper' in params)) {
             throw new Error('Wrapper element not specified');
@@ -114,30 +119,6 @@ export class DatePicker {
     }
 
     /**
-     * Return count of days in specified month
-     * @param {Date} date - Date object for specified month
-     */
-    getDaysInMonth(date) {
-        const monthDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-        return monthDate.getDate();
-    }
-
-    /**
-     * Return fixed(0 - monday, 6 - sunday) day of week of specified date
-     * @param {*} date - Date object for specified day
-     */
-    getDayOfWeek(date) {
-        if (!isDate(date)) {
-            return null;
-        }
-
-        const res = date.getDay();
-
-        return (res) ? (res - 1) : 6;
-    }
-
-    /**
      * Create year picker view
      * @param {Date} date - Date object for specified year range
      */
@@ -153,7 +134,7 @@ export class DatePicker {
         const startYear = rYear - (rYear % 10) - 1;
 
         const res = {
-            type: DatePicker.YEARRANGE_VIEW,
+            type: YEARRANGE_VIEW,
             set: [],
             viewDate: date,
             title: `${startYear + 1}-${startYear + rangeLength}`,
@@ -199,7 +180,7 @@ export class DatePicker {
         const rYear = date.getFullYear();
 
         const res = {
-            type: DatePicker.YEAR_VIEW,
+            type: YEAR_VIEW,
             set: [],
             viewDate: date,
             title: rYear,
@@ -211,13 +192,13 @@ export class DatePicker {
         };
 
         // months of current year
-        for (let i = 0; i < DatePicker.months.length; i += 1) {
+        for (let i = 0; i < MONTHS_COUNT; i += 1) {
             const setObj = {
                 date: new Date(rYear, i, 1),
             };
             setObj.cell = ce('div', {
                 className: 'dp__cell dp__year-view__cell',
-                textContent: DatePicker.months[setObj.date.getMonth()].substr(0, 3),
+                textContent: getShortMonthName(setObj.date, this.locales)
             });
 
             res.set.push(setObj);
@@ -243,13 +224,13 @@ export class DatePicker {
         /* get real date from specified */
         const rMonth = date.getMonth();
         const rYear = date.getFullYear();
-        const daysInMonth = this.getDaysInMonth(date);
+        const daysInMonth = getDaysInMonth(date);
 
         const res = {
-            type: DatePicker.MONTH_VIEW,
+            type: MONTH_VIEW,
             set: [],
             viewDate: date,
-            title: `${DatePicker.months[rMonth]} ${rYear}`,
+            title: `${getLongMonthName(date, this.locales)} ${rYear}`,
             viewContainer: ce('div', { className: 'dp__view-container' }),
             nav: {
                 prev: new Date(rYear, rMonth - 1, 1),
@@ -258,18 +239,23 @@ export class DatePicker {
         };
 
         // week days
-        const weekDaysHeader = DatePicker.weekdays.map((item) => (
-            ce('div', {
+        const firstMonthDay = new Date(rYear, rMonth, 1);
+        const firstDay = getFirstDayOfWeek(firstMonthDay);
+
+        for (let i = 0; i < DAYS_IN_WEEK; i += 1) {
+            const weekDay = shiftDate(firstDay, i);
+            const weekDayName = getWeekdayShort(weekDay, this.locales);
+
+            res.viewContainer.appendChild(ce('div', {
                 className: 'dp__cell dp__month-view_cell dp__weekday-cell',
-                textContent: item,
-            })
-        ));
-        addChilds(res.viewContainer, weekDaysHeader);
+                textContent: weekDayName,
+            }));
+        }
 
         /* days of previous month */
-        const pMonthDays = this.getDaysInMonth(res.nav.prev);
+        const pMonthDays = getDaysInMonth(res.nav.prev);
         // week day of first day in month
-        const dayOfWeek = this.getDayOfWeek(new Date(rYear, rMonth, 1));
+        const dayOfWeek = getMondayBasedDayOfWeek(firstMonthDay);
         let daysInRow = dayOfWeek;
         for (let i = 1; i <= dayOfWeek; i += 1) {
             const setObj = {
@@ -817,12 +803,12 @@ export class DatePicker {
             cellElement = cellView.set.find((cellObj) => (
                 /* navigate from month view to year view */
                 (
-                    relView.type === DatePicker.MONTH_VIEW
+                    relView.type === MONTH_VIEW
                     && cellObj.date.getFullYear() === relYear
                     && cellObj.date.getMonth() === relMonth
                 ) || (
                     /* navigate from year view to years range */
-                    relView.type === DatePicker.YEAR_VIEW
+                    relView.type === YEAR_VIEW
                     && cellObj.date.getFullYear() === relYear
                 )
             ));

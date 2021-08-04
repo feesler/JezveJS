@@ -130,6 +130,22 @@ function init() {
 
     const calbtn5 = ge('calbtn5');
     calbtn5.onclick = showCalendar5;
+
+    DatePicker.create({
+        wrapper: 'calendar6',
+        static: true,
+        locales: ['en-US']
+    });
+    DatePicker.create({
+        wrapper: 'calendar7',
+        static: true,
+        locales: ['fr']
+    });
+    DatePicker.create({
+        wrapper: 'calendar8',
+        static: true,
+        locales: ['ru']
+    });
 }
 
 onReady(init);

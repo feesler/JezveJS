@@ -6,3 +6,12 @@ input[type="text"] {
 .calBtn {
   padding: 5px;
 }
+
+.locales-container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.locales-item + .locales-item {
+    margin-left: 2rem;
+}
