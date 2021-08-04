@@ -7,21 +7,20 @@ function firstUpperCase(str, locales = []) {
 
     return first.toLocaleUpperCase(locales)
         .concat(rest.toLocaleLowerCase(locales));
-};
+}
 
 /** Return fixed locale string without RTL characters */
-export const dateToLocaleString = (date, locales, options) =>
-    date.toLocaleString(locales, options).replace(/\u200e/g, '');
+export const dateToLocaleString = (date, locales, options) => (
+    date.toLocaleString(locales, options).replace(/\u200e/g, '')
+);
 
 /** Shift date to specified count of days */
 export const shiftDate = (date, shift) => (
-    new Date(
-        Date.UTC(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate() + shift
-        )
-    )
+    new Date(Date.UTC(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() + shift,
+    ))
 );
 
 /**
@@ -37,8 +36,7 @@ export const getDaysInMonth = (date) => {
  */
 export const getMondayBasedDayOfWeek = (date) => {
     const day = date.getDay();
-
-    return ((day) ? day : DAYS_IN_WEEK) - 1;
+    return (day || DAYS_IN_WEEK) - 1;
 };
 
 /**
@@ -48,7 +46,6 @@ export const getFirstDayOfWeek = (date) => {
     const day = getMondayBasedDayOfWeek(date);
     return shiftDate(date, -day);
 };
-
 
 /**
  * Returns long weekday name for specified date
@@ -63,7 +60,6 @@ export const getWeekdayLong = (date, locales = []) => {
  */
 export const getWeekdayShort = (date, locales = []) => {
     const weekdayName = dateToLocaleString(date, locales, { weekday: 'short' });
-
     return firstUpperCase(weekdayName.substr(0, 3), locales);
 };
 
