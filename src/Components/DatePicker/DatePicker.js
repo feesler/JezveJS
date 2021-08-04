@@ -109,7 +109,7 @@ export class DatePicker {
                 : params.relparent;
         }
 
-        this.transitionHandler = this.onTransitionEnd.bind(this);
+        this.transitionHandler = (e) => this.onTransitionEnd(e);
 
         /* Prepare date */
         const date = isDate(params.date) ? params.date : new Date();
@@ -352,13 +352,10 @@ export class DatePicker {
         // set automatic hide on empty click
         if (!this.isStatic) {
             if (toShow) {
-                setEmptyClick(
-                    this.showView.bind(this, false),
-                    [
-                        this.wrapperObj,
-                        this.relativeParent,
-                    ],
-                );
+                setEmptyClick(() => this.showView(false), [
+                    this.wrapperObj,
+                    this.relativeParent,
+                ]);
             } else {
                 setEmptyClick();
             }
@@ -453,7 +450,7 @@ export class DatePicker {
         }
 
         const nav = (dir) ? this.currView.nav.prev : this.currView.nav.next;
-        setTimeout(this.currView.callback.nav.bind(null, nav));
+        setTimeout(() => this.currView.callback.nav(nav));
 
         if (e.preventDefault) {
             e.preventDefault();
@@ -473,19 +470,19 @@ export class DatePicker {
                 return;
             }
 
-            setTimeout(this.currView.callback.hdr.bind(null, this.currView.viewDate));
+            setTimeout(() => this.currView.callback.hdr(this.currView.viewDate));
         } else if (this.navPrevElem.contains(e.target)) {
             if (!isFunction(this.currView.callback.nav) || !this.currView.nav) {
                 return;
             }
 
-            setTimeout(this.currView.callback.nav.bind(null, this.currView.nav.prev));
+            setTimeout(() => this.currView.callback.nav(this.currView.nav.prev));
         } else if (this.navNextElem.contains(e.target)) {
             if (!isFunction(this.currView.callback.nav) || !this.currView.nav) {
                 return;
             }
 
-            setTimeout(this.currView.callback.nav.bind(null, this.currView.nav.next));
+            setTimeout(() => this.currView.callback.nav(this.currView.nav.next));
         } else {
             // check main cells
             if (!isFunction(this.currView.callback.cell)) {
@@ -493,9 +490,8 @@ export class DatePicker {
             }
 
             const setObj = this.currView.set.find((item) => item.cell === e.target);
-
             if (setObj) {
-                setTimeout(this.currView.callback.cell.bind(null, setObj.date));
+                setTimeout(() => this.currView.callback.cell(setObj.date));
             }
         }
     }
@@ -516,8 +512,8 @@ export class DatePicker {
             },
         };
 
-        this.wrapperObj.addEventListener('click', this.onViewClick.bind(this));
-        this.wrapperObj.addEventListener('wheel', this.onWheel.bind(this));
+        this.wrapperObj.addEventListener('click', (e) => this.onViewClick(e));
+        this.wrapperObj.addEventListener('wheel', (e) => this.onWheel(e));
 
         this.cellsContainer = ce('div', { className: 'dp__view' });
         addChilds(this.wrapperObj, [this.renderHead(), this.cellsContainer]);
@@ -869,9 +865,9 @@ export class DatePicker {
     showMonth(date) {
         const viewObj = this.createMonthView(date);
         this.setView(viewObj, {
-            cell: this.onDayClick.bind(this),
-            nav: this.showMonth.bind(this),
-            hdr: this.showYear.bind(this),
+            cell: (date) => this.onDayClick(date),
+            nav: (date) => this.showMonth(date),
+            hdr: (date) => this.showYear(date),
         });
 
         this.activateCell(this.actDate);
@@ -888,9 +884,9 @@ export class DatePicker {
     showYear(date) {
         const viewObj = this.createYearView(date);
         this.setView(viewObj, {
-            cell: this.showMonth.bind(this),
-            nav: this.showYear.bind(this),
-            hdr: this.showYearRange.bind(this),
+            cell: (date) => this.showMonth(date),
+            nav: (date) => this.showYear(date),
+            hdr: (date) => this.showYearRange(date),
         });
     }
 
@@ -901,8 +897,8 @@ export class DatePicker {
     showYearRange(date) {
         const viewObj = this.createYearRangeView(date);
         this.setView(viewObj, {
-            cell: this.showYear.bind(this),
-            nav: this.showYearRange.bind(this),
+            cell: (date) => this.showYear(date),
+            nav: (date) => this.showYearRange(date),
             hdr: null,
         });
     }
