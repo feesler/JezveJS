@@ -10,7 +10,7 @@ import '../css/paginator.css';
 
 function initSimple() {
     const paginator = Paginator.create({
-        pagesCount: 10,
+        pagesCount: 5,
     });
 
     ge('simple').appendChild(paginator.elem);
@@ -23,6 +23,16 @@ function initStyled() {
     });
 
     ge('styled').appendChild(paginator.elem);
+}
+
+function initArrows() {
+    const paginator = Paginator.create({
+        className: 'styled',
+        pagesCount: 10,
+        arrows: true,
+    });
+
+    ge('arrows').appendChild(paginator.elem);
 }
 
 function initActiveLink() {
@@ -75,6 +85,7 @@ function initPrerendered() {
 onReady(() => {
     initSimple();
     initStyled();
+    initArrows();
     initActiveLink();
     initCustomURL();
     initDisabledURL();

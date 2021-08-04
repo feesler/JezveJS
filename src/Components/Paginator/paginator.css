@@ -13,9 +13,21 @@
 }
 
 a.paginator-item {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .paginator-item__active {
   font-weight: bold;
+}
+
+.paginator-arrow {
+  width: 8px;
+  display: flex;
+  align-content: center;
+  flex-flow: row nowrap;
+  cursor: pointer;
+}
+
+.paginator-arrow[disabled] {
+  pointer-events: none;
 }
