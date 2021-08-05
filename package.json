@@ -1,6 +1,6 @@
 {
   "name": "jezvejs",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "main": "dist/index.js",
   "type": "module",
   "jsnext:main": "src/js/index.js",
@@ -21,7 +21,7 @@
   "scripts": {
     "test": "node ./tests/index.js",
     "lint": "npm-run-all lint-src lint-tests lint-css",
-    "lint-src": "eslint --quiet ./src/js/ ./src/demo/js/",
+    "lint-src": "eslint --quiet ./src/**/*.js",
     "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/",
     "lint-css": "npx stylelint src/**/*.css",
     "debug": "node --inspect-brk ./tests/index.js",

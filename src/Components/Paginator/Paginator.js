@@ -143,7 +143,7 @@ export class Paginator extends Component {
 
         // 1 2 3 4 5
         if (state.pagesCount <= state.breakLimit) {
-            for (let i = 1; i <= state.pagesCount; i++) {
+            for (let i = 1; i <= state.pagesCount; i += 1) {
                 res.push({ page: i, active: (i === state.pageNum) });
             }
 
@@ -152,7 +152,7 @@ export class Paginator extends Component {
 
         //  1 2 3 4 5 ... 18
         if (state.pageNum < state.breakLimit) {
-            for (let i = 1; i <= state.breakLimit; i++) {
+            for (let i = 1; i <= state.breakLimit; i += 1) {
                 res.push({ page: i, active: (i === state.pageNum) });
             }
             res.push({ ellipsis: true });
@@ -165,7 +165,11 @@ export class Paginator extends Component {
         if (state.pageNum <= state.pagesCount - state.breakLimit + 1) {
             res.push({ page: 1, active: false });
             res.push({ ellipsis: true });
-            for (let i = state.pageNum - (state.groupLimit - 2); i <= state.pageNum + (state.groupLimit - 2); i++) {
+            for (
+                let i = state.pageNum - (state.groupLimit - 2);
+                i <= state.pageNum + (state.groupLimit - 2);
+                i += 1
+            ) {
                 res.push({ page: i, active: (i === state.pageNum) });
             }
             res.push({ ellipsis: true });
@@ -177,7 +181,7 @@ export class Paginator extends Component {
         //  1 ... 14 15 16 17 18
         res.push({ page: 1, active: false });
         res.push({ ellipsis: true });
-        for (let i = state.pagesCount - state.breakLimit + 1; i <= state.pagesCount; i++) {
+        for (let i = state.pagesCount - state.breakLimit + 1; i <= state.pagesCount; i += 1) {
             res.push({ page: i, active: (i === state.pageNum) });
         }
 
@@ -258,7 +262,7 @@ export class Paginator extends Component {
         return ce(
             'a',
             { className: `${ITEM_CLASS} ${ARROW_CLASS} ${ARROW_CLASS_PREV}` },
-            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm6 1-6 5.5 6 5.5z' }))
+            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm6 1-6 5.5 6 5.5z' })),
         );
     }
 
@@ -266,7 +270,7 @@ export class Paginator extends Component {
         return ce(
             'a',
             { className: `${ITEM_CLASS} ${ARROW_CLASS} ${ARROW_CLASS_NEXT}` },
-            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm0 1 6 5.5-6 5.5z' }))
+            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm0 1 6 5.5-6 5.5z' })),
         );
     }
 
