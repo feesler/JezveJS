@@ -20,6 +20,7 @@ function initStyled() {
     const paginator = Paginator.create({
         className: 'styled',
         pagesCount: 10,
+        onChange: () => {},
     });
 
     ge('styled').appendChild(paginator.elem);
@@ -30,6 +31,7 @@ function initArrows() {
         className: 'styled',
         pagesCount: 10,
         arrows: true,
+        onChange: () => {},
     });
 
     ge('arrows').appendChild(paginator.elem);
@@ -39,6 +41,7 @@ function initActiveLink() {
     const paginator = Paginator.create({
         pagesCount: 10,
         allowActiveLink: true,
+        onChange: () => {},
     });
 
     ge('active-link').appendChild(paginator.elem);
@@ -49,6 +52,7 @@ function initCustomURL() {
         pagesCount: 10,
         url: 'https://test.url/content/',
         pageParam: 'p',
+        onChange: () => {},
     });
 
     ge('custom-url').appendChild(paginator.elem);
@@ -58,6 +62,7 @@ function initDisabledURL() {
     const paginator = Paginator.create({
         pagesCount: 10,
         url: null,
+        onChange: () => {},
     });
 
     ge('no-url').appendChild(paginator.elem);
@@ -79,6 +84,7 @@ function initPrerendered() {
     Paginator.fromElement(ge('prerendered'), {
         url: null,
         breakLimit: 4,
+        onChange: () => {},
     });
 }
 

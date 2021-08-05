@@ -110,6 +110,10 @@ export class Paginator extends Component {
     }
 
     onChangePage(e) {
+        if (!isFunction(this.props.onChange)) {
+            return;
+        }
+
         e.preventDefault();
 
         const itemTarget = e.target.closest(`.${ITEM_CLASS}`);
@@ -122,9 +126,7 @@ export class Paginator extends Component {
             return;
         }
 
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(page);
-        }
+        this.props.onChange(page);
 
         this.setPage(page);
     }
