@@ -17,6 +17,19 @@
   border-color: #93beff;
 }
 
+.styled .paginator-arrow {
+  fill: #93beff;
+}
+
+.styled a.paginator-arrow:hover {
+  fill: #447fd6;
+  border-color: #ffffff;
+}
+
+.styled .paginator-arrow[disabled] {
+  fill: #dbdbdb;
+}
+
 .styled .paginator-item + .paginator-item {
   margin-left: 2px;
 }

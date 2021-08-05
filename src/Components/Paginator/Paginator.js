@@ -1,4 +1,11 @@
-import { addChilds, ce, isFunction, removeChilds, setEvents } from '../../js/common.js';
+import {
+    addChilds,
+    ce,
+    svg,
+    isFunction,
+    removeChilds,
+    setEvents,
+} from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import './paginator.css';
 
@@ -8,6 +15,7 @@ const defaultProps = {
     pageNum: 1,
     pagesCount: 0,
     allowActiveLink: false,
+    arrows: false,
     pageParam: 'page',
     url: window.location,
 };
@@ -15,6 +23,9 @@ const defaultProps = {
 const CONTAINER_CLASS = 'paginator';
 const ITEM_CLASS = 'paginator-item';
 const ACTIVE_ITEM_CLASS = 'paginator-item__active';
+const ARROW_CLASS = 'paginator-arrow';
+const ARROW_CLASS_PREV = 'paginator-arrow__prev';
+const ARROW_CLASS_NEXT = 'paginator-arrow__next';
 
 export class Paginator extends Component {
     static create(props = {}) {
@@ -61,15 +72,26 @@ export class Paginator extends Component {
 
         const items = Array.from(elem.querySelectorAll(`.${ITEM_CLASS}`));
         items.forEach((item) => {
+            if (item.classList.contains(ARROW_CLASS)) {
+                this.state.arrows = true;
+                return;
+            }
+
             if (!item.dataset.page) {
+                return;
+            }
+            const page = parseInt(item.dataset.page, 10);
+            if (Number.isNaN(page)) {
                 return;
             }
 
             if (item.classList.contains(ACTIVE_ITEM_CLASS)) {
-                this.state.pageNum = item.dataset.page;
+                this.state.pageNum = page;
             }
-            this.state.pagesCount = item.dataset.page;
+            this.state.pagesCount = page;
         });
+
+        this.render(this.state);
     }
 
     setHandlers() {
@@ -90,11 +112,12 @@ export class Paginator extends Component {
     onChangePage(e) {
         e.preventDefault();
 
-        if (e.target.tagName !== 'A') {
+        const itemTarget = e.target.closest(`.${ITEM_CLASS}`);
+        if (!itemTarget || !itemTarget.dataset.page) {
             return;
         }
 
-        const page = parseInt(e.target.dataset.page, 10);
+        const page = parseInt(itemTarget.dataset.page, 10);
         if (Number.isNaN(page)) {
             return;
         }
@@ -115,12 +138,12 @@ export class Paginator extends Component {
         this.render(this.state);
     }
 
-    getItems(state) {
+    getPageItems(state) {
         const res = [];
 
         // 1 2 3 4 5
         if (state.pagesCount <= state.breakLimit) {
-            for (let i = 1; i <= state.pagesCount; i++) {
+            for (let i = 1; i <= state.pagesCount; i += 1) {
                 res.push({ page: i, active: (i === state.pageNum) });
             }
 
@@ -129,7 +152,7 @@ export class Paginator extends Component {
 
         //  1 2 3 4 5 ... 18
         if (state.pageNum < state.breakLimit) {
-            for (let i = 1; i <= state.breakLimit; i++) {
+            for (let i = 1; i <= state.breakLimit; i += 1) {
                 res.push({ page: i, active: (i === state.pageNum) });
             }
             res.push({ ellipsis: true });
@@ -142,7 +165,11 @@ export class Paginator extends Component {
         if (state.pageNum <= state.pagesCount - state.breakLimit + 1) {
             res.push({ page: 1, active: false });
             res.push({ ellipsis: true });
-            for (let i = state.pageNum - (state.groupLimit - 2); i <= state.pageNum + (state.groupLimit - 2); i++) {
+            for (
+                let i = state.pageNum - (state.groupLimit - 2);
+                i <= state.pageNum + (state.groupLimit - 2);
+                i += 1
+            ) {
                 res.push({ page: i, active: (i === state.pageNum) });
             }
             res.push({ ellipsis: true });
@@ -154,8 +181,35 @@ export class Paginator extends Component {
         //  1 ... 14 15 16 17 18
         res.push({ page: 1, active: false });
         res.push({ ellipsis: true });
-        for (let i = state.pagesCount - state.breakLimit + 1; i <= state.pagesCount; i++) {
+        for (let i = state.pagesCount - state.breakLimit + 1; i <= state.pagesCount; i += 1) {
             res.push({ page: i, active: (i === state.pageNum) });
+        }
+
+        return res;
+    }
+
+    getItems(state) {
+        const res = [];
+
+        // Previous page arrow
+        if (state.arrows) {
+            const navItem = { navigation: 'prev' };
+            if (state.pageNum > 1) {
+                navItem.page = state.pageNum - 1;
+            }
+            res.push(navItem);
+        }
+
+        const pageItems = this.getPageItems(state);
+        res.push(...pageItems);
+
+        // Next page arrow
+        if (state.arrows) {
+            const navItem = { navigation: 'next' };
+            if (state.pageNum < state.pagesCount) {
+                navItem.page = state.pageNum + 1;
+            }
+            res.push(navItem);
         }
 
         return res;
@@ -173,11 +227,23 @@ export class Paginator extends Component {
             });
         }
 
-        const res = ce('a', {
-            className: ITEM_CLASS,
-            textContent: item.page,
-        });
-        res.setAttribute('data-page', item.page);
+        let res;
+        if (item.navigation) {
+            res = (item.navigation === 'prev')
+                ? this.renderPrevArrow()
+                : this.renderNextArrow();
+        } else {
+            res = ce('a', {
+                className: ITEM_CLASS,
+                textContent: item.page,
+            });
+        }
+
+        if (item.page) {
+            res.setAttribute('data-page', item.page);
+        } else {
+            res.setAttribute('disabled', true);
+        }
 
         if (this.props.url) {
             const url = new URL(this.props.url);
@@ -190,6 +256,22 @@ export class Paginator extends Component {
         }
 
         return res;
+    }
+
+    renderPrevArrow() {
+        return ce(
+            'a',
+            { className: `${ITEM_CLASS} ${ARROW_CLASS} ${ARROW_CLASS_PREV}` },
+            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm6 1-6 5.5 6 5.5z' })),
+        );
+    }
+
+    renderNextArrow() {
+        return ce(
+            'a',
+            { className: `${ITEM_CLASS} ${ARROW_CLASS} ${ARROW_CLASS_NEXT}` },
+            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm0 1 6 5.5-6 5.5z' })),
+        );
     }
 
     render(state) {
