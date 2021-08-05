@@ -19,18 +19,22 @@ import './datepicker.css';
 import {
     DAYS_IN_WEEK,
     MONTHS_COUNT,
-    getDaysInMonth,
-    getMondayBasedDayOfWeek,
     getWeekdayShort,
     getLongMonthName,
     getShortMonthName,
-    getFirstDayOfWeek,
     shiftDate,
+    getWeekDays,
+    isSameYearMonth,
+    isSameDate,
 } from '../../js/DateUtils.js';
 
 const MONTH_VIEW = 1;
 const YEAR_VIEW = 2;
 const YEARRANGE_VIEW = 3;
+
+const YEAR_RANGE_LENGTH = 10;
+
+const toCSSValue = (val) => (+val.toFixed(4));
 
 /**
  * Date picker constructor
@@ -47,6 +51,11 @@ const YEARRANGE_VIEW = 3;
  * @param {Date} date - initial date to show
  */
 export class DatePicker {
+    /** Static alias for DatePicker constructor */
+    static create(params) {
+        return new DatePicker(params);
+    }
+
     constructor(params) {
         this.baseObj = null;
         this.wrapperObj = null;
@@ -123,13 +132,10 @@ export class DatePicker {
      * @param {Date} date - Date object for specified year range
      */
     createYearRangeView(date) {
-        const rangeLength = 10;
-
         if (!isDate(date)) {
             return null;
         }
 
-        /* get real date from specified */
         const rYear = date.getFullYear();
         const startYear = rYear - (rYear % 10) - 1;
 
@@ -137,26 +143,26 @@ export class DatePicker {
             type: YEARRANGE_VIEW,
             set: [],
             viewDate: date,
-            title: `${startYear + 1}-${startYear + rangeLength}`,
+            title: `${startYear + 1}-${startYear + YEAR_RANGE_LENGTH}`,
             viewContainer: ce('div', { className: 'dp__view-container' }),
             nav: {
-                prev: new Date(rYear - rangeLength, 1, 1),
-                next: new Date(rYear + rangeLength, 1, 1),
+                prev: new Date(rYear - YEAR_RANGE_LENGTH, 1, 1),
+                next: new Date(rYear + YEAR_RANGE_LENGTH, 1, 1),
             },
         };
 
         // years of current range
-        for (let i = 0; i < rangeLength + 2; i += 1) {
+        for (let i = 0; i < YEAR_RANGE_LENGTH + 2; i += 1) {
+            const yearDate = new Date(startYear + i, 0, 1);
             const setObj = {
-                date: new Date(startYear + i, 0, 1),
+                date: yearDate,
+                cell: ce('div', {
+                    className: 'dp__cell dp__year-range-view__cell',
+                    textContent: yearDate.getFullYear(),
+                }),
             };
 
-            setObj.cell = ce('div', {
-                className: 'dp__cell dp__year-range-view__cell',
-                textContent: setObj.date.getFullYear(),
-            });
-
-            if (i === 0 || i === rangeLength + 1) {
+            if (i === 0 || i === YEAR_RANGE_LENGTH + 1) {
                 setObj.cell.classList.add('dp__other-month-cell');
             }
 
@@ -193,13 +199,14 @@ export class DatePicker {
 
         // months of current year
         for (let i = 0; i < MONTHS_COUNT; i += 1) {
+            const monthDate = new Date(rYear, i, 1);
             const setObj = {
-                date: new Date(rYear, i, 1),
+                date: monthDate,
+                cell: ce('div', {
+                    className: 'dp__cell dp__year-view__cell',
+                    textContent: getShortMonthName(monthDate, this.locales),
+                }),
             };
-            setObj.cell = ce('div', {
-                className: 'dp__cell dp__year-view__cell',
-                textContent: getShortMonthName(setObj.date, this.locales)
-            });
 
             res.set.push(setObj);
             res.viewContainer.appendChild(setObj.cell);
@@ -213,18 +220,13 @@ export class DatePicker {
      * @param {Date} date - Date object for specified month
      */
     createMonthView(date) {
-        const daysInWeek = 7;
-
         if (!isDate(date)) {
             return null;
         }
 
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        /* get real date from specified */
         const rMonth = date.getMonth();
         const rYear = date.getFullYear();
-        const daysInMonth = getDaysInMonth(date);
 
         const res = {
             type: MONTH_VIEW,
@@ -238,77 +240,42 @@ export class DatePicker {
             },
         };
 
-        // week days
+        // header
         const firstMonthDay = new Date(rYear, rMonth, 1);
-        const firstDay = getFirstDayOfWeek(firstMonthDay);
+        let week = getWeekDays(firstMonthDay);
+        const headerElems = week.map((weekday) => ce('div', {
+            className: 'dp__cell dp__month-view_cell dp__weekday-cell',
+            textContent: getWeekdayShort(weekday, this.locales),
+        }));
+        addChilds(res.viewContainer, headerElems);
 
-        for (let i = 0; i < DAYS_IN_WEEK; i += 1) {
-            const weekDay = shiftDate(firstDay, i);
-            const weekDayName = getWeekdayShort(weekDay, this.locales);
+        // days
+        do {
+            const dateElems = week.map((weekday) => {
+                const setObj = {
+                    date: weekday,
+                    cell: ce('div', {
+                        className: 'dp__cell dp__month-view_cell dp__day-cell',
+                        textContent: weekday.getDate(),
+                    }),
+                };
 
-            res.viewContainer.appendChild(ce('div', {
-                className: 'dp__cell dp__month-view_cell dp__weekday-cell',
-                textContent: weekDayName,
-            }));
-        }
+                if (!isSameYearMonth(date, weekday)) {
+                    setObj.cell.classList.add('dp__other-month-cell');
+                }
+                if (isSameDate(weekday, today)) {
+                    setObj.cell.classList.add('dp__today-cell');
+                }
 
-        /* days of previous month */
-        const pMonthDays = getDaysInMonth(res.nav.prev);
-        // week day of first day in month
-        const dayOfWeek = getMondayBasedDayOfWeek(firstMonthDay);
-        let daysInRow = dayOfWeek;
-        for (let i = 1; i <= dayOfWeek; i += 1) {
-            const setObj = {
-                date: new Date(
-                    res.nav.prev.getFullYear(),
-                    res.nav.prev.getMonth(),
-                    pMonthDays - (dayOfWeek - i),
-                ),
-            };
-
-            setObj.cell = ce('div', {
-                className: 'dp__cell dp__month-view_cell dp__other-month-cell dp__day-cell',
-                textContent: setObj.date.getDate(),
+                return setObj;
             });
+            res.set.push(...dateElems);
 
-            res.set.push(setObj);
-        }
-
-        /* days of current month */
-        for (let i = 1; i < daysInMonth + 1; i += 1) {
-            const setObj = {
-                date: new Date(rYear, rMonth, i),
-            };
-
-            setObj.cell = ce('div', {
-                className: 'dp__cell dp__month-view_cell dp__day-cell',
-                textContent: setObj.date.getDate(),
-            });
-            if (setObj.date - today === 0) {
-                setObj.cell.classList.add('dp__today-cell');
-            }
-
-            res.set.push(setObj);
-        }
-
-        daysInRow = res.set.length % 7;
-        /* append days of next month */
-        for (let i = daysInRow; i < daysInWeek; i += 1) {
-            const setObj = {
-                date: new Date(
-                    res.nav.next.getFullYear(),
-                    res.nav.next.getMonth(),
-                    i - daysInRow + 1,
-                ),
-            };
-
-            setObj.cell = ce('div', {
-                className: 'dp__cell dp__month-view_cell dp__other-month-cell dp__day-cell',
-                textContent: setObj.date.getDate(),
-            });
-
-            res.set.push(setObj);
-        }
+            const nextWeekDay = shiftDate(week[0], DAYS_IN_WEEK);
+            week = isSameYearMonth(date, nextWeekDay)
+                ? getWeekDays(nextWeekDay)
+                : null;
+        } while (week);
 
         const viewIems = res.set.map((item) => item.cell);
         addChilds(res.viewContainer, viewIems);
@@ -764,12 +731,9 @@ export class DatePicker {
         const currTblHeight = this.cellsContainer.offsetHeight;
 
         this.cellsContainer.appendChild(view.viewContainer);
-
         this.cellsContainer.style.width = px(currTblWidth);
         this.cellsContainer.style.height = px(currTblHeight);
 
-        let cellElement = null;
-        let goUp;
         if (this.currView.type === view.type) {
             const leftToRight = this.currView.viewDate < view.viewDate;
 
@@ -789,41 +753,40 @@ export class DatePicker {
             this.nextCallbacks = callbacks;
 
             this.cellsContainer.addEventListener('transitionend', this.transitionHandler);
-        } else {
-            goUp = (this.currView.type < view.type);
-            const cellView = (goUp) ? view : this.currView;
-            const relView = (goUp) ? this.currView : view;
-            const relYear = relView.viewDate.getFullYear();
-            const relMonth = relView.viewDate.getMonth();
-
-            cellElement = cellView.set.find((cellObj) => (
-                /* navigate from month view to year view */
-                (
-                    relView.type === MONTH_VIEW
-                    && cellObj.date.getFullYear() === relYear
-                    && cellObj.date.getMonth() === relMonth
-                ) || (
-                    /* navigate from year view to years range */
-                    relView.type === YEAR_VIEW
-                    && cellObj.date.getFullYear() === relYear
-                )
-            ));
-        }
-
-        if (!cellElement) {
             return;
         }
-        cellElement = cellElement.cell;
+
+        const goUp = (this.currView.type < view.type);
+        const cellView = (goUp) ? view : this.currView;
+        const relView = (goUp) ? this.currView : view;
+        const relYear = relView.viewDate.getFullYear();
+        const relMonth = relView.viewDate.getMonth();
+
+        // Search for target cell on navigate from month view to year view or
+        // from year view to years range view
+        const cellObj = cellView.set.find((item) => (
+            (
+                relView.type === MONTH_VIEW
+                && item.date.getFullYear() === relYear
+                && item.date.getMonth() === relMonth
+            ) || (
+                relView.type === YEAR_VIEW
+                && item.date.getFullYear() === relYear
+            )
+        ));
+        if (!cellObj) {
+            return;
+        }
+
+        const { cell } = cellObj;
 
         view.viewContainer.classList.add('dp__layered-view', (goUp) ? 'bottom_to' : 'top_to');
 
-        const cellX = cellElement.offsetLeft;
-        const cellY = cellElement.offsetTop;
-        const scaleX = cellElement.offsetWidth / currTblWidth;
-        const scaleY = cellElement.offsetHeight / currTblHeight;
-
-        const toFix = (val) => (+val.toFixed(4));
-        const cellTrans = [scaleX, 0, 0, scaleY, cellX, cellY].map(toFix);
+        const cellX = cell.offsetLeft;
+        const cellY = cell.offsetTop;
+        const scaleX = cell.offsetWidth / currTblWidth;
+        const scaleY = cell.offsetHeight / currTblHeight;
+        const cellTrans = [scaleX, 0, 0, scaleY, cellX, cellY].map(toCSSValue);
         const viewTrans = [
             1 / scaleX,
             0,
@@ -831,7 +794,7 @@ export class DatePicker {
             1 / scaleY,
             -cellX / scaleX,
             -cellY / scaleY,
-        ].map(toFix);
+        ].map(toCSSValue);
 
         transform(view.viewContainer, `matrix(${(goUp ? viewTrans : cellTrans).join()})`);
 
@@ -855,7 +818,7 @@ export class DatePicker {
             this.nextCallbacks = callbacks;
 
             this.cellsContainer.addEventListener('transitionend', this.transitionHandler);
-        }, 100);
+        });
     }
 
     /**
@@ -865,9 +828,9 @@ export class DatePicker {
     showMonth(date) {
         const viewObj = this.createMonthView(date);
         this.setView(viewObj, {
-            cell: (date) => this.onDayClick(date),
-            nav: (date) => this.showMonth(date),
-            hdr: (date) => this.showYear(date),
+            cell: (d) => this.onDayClick(d),
+            nav: (d) => this.showMonth(d),
+            hdr: (d) => this.showYear(d),
         });
 
         this.activateCell(this.actDate);
@@ -884,9 +847,9 @@ export class DatePicker {
     showYear(date) {
         const viewObj = this.createYearView(date);
         this.setView(viewObj, {
-            cell: (date) => this.showMonth(date),
-            nav: (date) => this.showYear(date),
-            hdr: (date) => this.showYearRange(date),
+            cell: (d) => this.showMonth(d),
+            nav: (d) => this.showYear(d),
+            hdr: (d) => this.showYearRange(d),
         });
     }
 
@@ -897,34 +860,9 @@ export class DatePicker {
     showYearRange(date) {
         const viewObj = this.createYearRangeView(date);
         this.setView(viewObj, {
-            cell: (date) => this.showYear(date),
-            nav: (date) => this.showYearRange(date),
+            cell: (d) => this.showYear(d),
+            nav: (d) => this.showYearRange(d),
             hdr: null,
         });
-    }
-
-    /** Static alias for DatePicker constructor */
-    static create(params) {
-        return new DatePicker(params);
-    }
-
-    /**
-     * Format date as DD.MM.YYYY
-     * @param {number|Date} date - day or Date object to
-     * @param {number} month - month of Date to format
-     * @param {number} year - year of Date to format
-     */
-    static format(date, month, year) {
-        let rDay = date;
-        let rMonth = month;
-        let rYear = year;
-
-        if (isDate(date) && !month && !year) {
-            rMonth = date.getMonth();
-            rYear = date.getFullYear();
-            rDay = date.getDate();
-        }
-
-        return `${(rDay > 9) ? '' : '0'}${rDay}.${(rMonth + 1 > 9) ? '' : '0'}${rMonth + 1}.${rYear}`;
     }
 }

@@ -1,5 +1,6 @@
 import { ge, onReady } from '../../js/common.js';
 import { DatePicker } from '../../Components/DatePicker/DatePicker.js';
+import { formatDate } from '../../js/DateUtils.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
@@ -14,7 +15,7 @@ let calendarObj5 = null;
 function onSelectDate(date) {
     const datefield = ge('dateinp');
     if (datefield) {
-        datefield.value = DatePicker.format(date);
+        datefield.value = formatDate(date);
     }
 }
 
@@ -22,7 +23,7 @@ function onSelectDate(date) {
 function onSelectDate2(date) {
     const datefield = ge('dateinp2');
     if (datefield) {
-        datefield.value = DatePicker.format(date);
+        datefield.value = formatDate(date);
     }
 
     calendarObj2.hide();
@@ -37,8 +38,8 @@ function showCalendar2() {
 function onRangeSelect(range) {
     const datefield = ge('rangeinp');
     if (datefield) {
-        const startFmt = DatePicker.format(range.start);
-        const endFmt = DatePicker.format(range.end);
+        const startFmt = formatDate(range.start);
+        const endFmt = formatDate(range.end);
         datefield.value = `${startFmt} - ${endFmt}`;
     }
 
@@ -54,8 +55,8 @@ function showCalendar3() {
 function onCBRangeSelect(range) {
     const datefield = ge('cbinp');
     if (datefield) {
-        const startFmt = DatePicker.format(range.start);
-        const endFmt = DatePicker.format(range.end);
+        const startFmt = formatDate(range.start);
+        const endFmt = formatDate(range.end);
         datefield.value = `${startFmt} - ${endFmt}`;
     }
 }
@@ -64,7 +65,7 @@ function onCBRangeSelect(range) {
 function CBDateSelect(date) {
     const statustext = ge('statustext');
     if (statustext) {
-        statustext.textContent = `Date selected: ${DatePicker.format(date)}`;
+        statustext.textContent = `Date selected: ${formatDate(date)}`;
     }
 }
 
