@@ -2,38 +2,37 @@
 /* eslint no-bitwise: "off" */
 
 /** Return DOM element by id */
-export const ge = document.getElementById.bind(document);
+export const ge = (id) => document.getElementById(id);
 
-/** Check object is date */
-export function isDate(obj) {
-    return obj instanceof Date && !isNaN(obj.valueOf());
-}
+/** Check parameter is date */
+export const isDate = (obj) => (
+    obj instanceof Date && !Number.isNaN(obj.valueOf())
+);
 
-/** Check object is function */
-export function isFunction(obj) {
-    const getType = {};
-    return obj
-        && (getType.toString.call(obj) === '[object Function]'
-            || typeof obj === 'function');
-}
+/** Check parameter is function */
+export const isFunction = (obj) => (
+    obj
+    && (
+        Object.prototype.toString.call(obj) === '[object Function]'
+        || typeof obj === 'function'
+    )
+);
 
-/** Check parameter is object */
-export function isObject(o) {
-    return 0 !== null
-        && typeof o === 'object'
-        && Object.prototype.toString.call(o) === '[object Object]';
-}
+/** Check parameter is instance of Object */
+export const isObject = (obj) => (
+    obj !== null
+    && typeof obj === 'object'
+    && Object.prototype.toString.call(obj) === '[object Object]'
+);
 
 /** Return deep copy of object */
 export function copyObject(item) {
-    let res;
-
     if (Array.isArray(item)) {
         return item.map(copyObject);
     }
 
     if (isObject(item)) {
-        res = {};
+        const res = {};
 
         Object.keys(item).forEach((key) => {
             res[key] = copyObject(item[key]);
@@ -220,7 +219,7 @@ export function isNum(val) {
 export function isInt(x) {
     const y = parseInt(x, 10);
 
-    if (isNaN(y)) {
+    if (Number.isNaN(y)) {
         return false;
     }
 
