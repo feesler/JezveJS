@@ -140,6 +140,18 @@ export class Paginator extends Component {
         this.render(this.state);
     }
 
+    setPagesCount(pagesCount) {
+        if (this.state.pagesCount === pagesCount) {
+            return;
+        }
+
+        this.state.pagesCount = pagesCount;
+        if (this.state.pageNum > pagesCount) {
+            this.state.pageNum = 1;
+        }
+        this.render(this.state);
+    }
+
     getPageItems(state) {
         const res = [];
 
