@@ -15,6 +15,7 @@ const defaultProps = {
     pageNum: 1,
     pagesCount: 0,
     allowActiveLink: false,
+    showSingleItem: false,
     arrows: false,
     pageParam: 'page',
     url: window.location,
@@ -204,6 +205,10 @@ export class Paginator extends Component {
 
     getItems(state) {
         const res = [];
+
+        if (!state.showSingleItem && state.pagesCount < 2) {
+            return res;
+        }
 
         // Previous page arrow
         if (state.arrows) {
