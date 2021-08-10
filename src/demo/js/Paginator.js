@@ -88,6 +88,24 @@ function initPrerendered() {
     });
 }
 
+function initSingleItem() {
+    const paginatorOn = Paginator.create({
+        url: null,
+        pagesCount: 1,
+        onChange: () => {},
+        showSingleItem: true,
+    });
+    ge('single-on').appendChild(paginatorOn.elem);
+
+    const paginatorOff = Paginator.create({
+        url: null,
+        pagesCount: 1,
+        onChange: () => {},
+        showSingleItem: false,
+    });
+    ge('single-off').appendChild(paginatorOff.elem);
+}
+
 onReady(() => {
     initSimple();
     initStyled();
@@ -97,4 +115,5 @@ onReady(() => {
     initDisabledURL();
     initHandler();
     initPrerendered();
+    initSingleItem();
 });
