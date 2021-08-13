@@ -153,6 +153,11 @@ export class Paginator extends Component {
         this.render(this.state);
     }
 
+    setURL(url) {
+        this.state.url = url.toString();
+        this.render(this.state);
+    }
+
     getPageItems(state) {
         const res = [];
 
@@ -239,7 +244,7 @@ export class Paginator extends Component {
             return ce('span', { className: ITEM_CLASS, textContent: '...' });
         }
 
-        if (item.active && !this.props.allowActiveLink) {
+        if (item.active && !this.state.allowActiveLink) {
             return ce('span', {
                 className: `${ITEM_CLASS} ${ACTIVE_ITEM_CLASS}`,
                 textContent: item.page,
@@ -264,9 +269,9 @@ export class Paginator extends Component {
             res.setAttribute('disabled', true);
         }
 
-        if (this.props.url) {
-            const url = new URL(this.props.url);
-            url.searchParams.set(this.props.pageParam, item.page);
+        if (this.state.url) {
+            const url = new URL(this.state.url);
+            url.searchParams.set(this.state.pageParam, item.page);
             res.href = url;
         }
 
