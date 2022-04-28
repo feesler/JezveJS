@@ -1,6 +1,6 @@
 {
   "name": "jezvejs",
-  "version": "1.5.7",
+  "version": "1.6.0",
   "main": "dist/index.js",
   "type": "module",
   "jsnext:main": "src/js/index.js",
@@ -53,7 +53,7 @@
     "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-import": "^2.22.1",
     "html-webpack-plugin": "^5.3.1",
-    "jezve-test": "^0.9.4",
+    "jezve-test": "^0.13.0",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^8.3.1",
     "postcss-loader": "^5.2.0",
@@ -63,7 +63,7 @@
     "stylelint-config-standard": "^22.0.0",
     "webpack": "^5.35.1",
     "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.8.1",
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {

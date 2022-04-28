@@ -1,8 +1,8 @@
 import {
     isFunction,
-    isObject,
     isDate,
     isNum,
+    isObject,
 } from 'jezve-test';
 
 export async function asyncMap(data, func) {

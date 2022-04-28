@@ -8,14 +8,14 @@ export class AppView extends TestView {
     }
 
     async closeNotification() {
-        if (!this.msgPopup) {
+        if (!this.content.msgPopup) {
             return;
         }
 
-        await this.performAction(() => this.msgPopup.close());
+        await this.performAction(() => this.content.msgPopup.close());
     }
 
     async goToMainView() {
-        await this.navigation(() => this.click(this.header.logo.linkElem));
+        await navigation(() => click(this.content.header.content.logo.linkElem));
     }
 }

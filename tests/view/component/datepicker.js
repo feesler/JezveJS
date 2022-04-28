@@ -1,48 +1,62 @@
-import { TestComponent, isDate, copyObject } from 'jezve-test';
+import { copyObject, isDate } from 'jezvejs';
+import { TestComponent } from 'jezve-test';
+import {
+    query,
+    queryAll,
+    hasClass,
+    prop,
+    isVisible,
+    click,
+    wait,
+} from '../../env.js';
 
 const shortMonthTitles = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 const monthTitles = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
 export class DatePicker extends TestComponent {
-    async parse() {
-        this.wrapper = await this.query(this.elem, '.dp__wrapper');
+    async parseContent() {
+        const res = {
+            wrapper: await query(this.elem, '.dp__wrapper'),
+        };
 
-        this.prevBtn = await this.query(this.wrapper, '.dp__header .dp__header_nav:first-child');
-        this.nextBtn = await this.query(this.wrapper, '.dp__header .dp__header_nav:last-child');
-        this.titleElem = await this.query(this.wrapper, '.dp__header .dp__header_title');
-        this.title = await this.prop(this.titleElem, 'textContent');
+        res.prevBtn = await query(res.wrapper, '.dp__header .dp__header_nav:first-child');
+        res.nextBtn = await query(res.wrapper, '.dp__header .dp__header_nav:last-child');
+        res.titleElem = await query(res.wrapper, '.dp__header .dp__header_title');
+        res.title = await prop(res.titleElem, 'textContent');
 
-        this.cells = [];
-        this.viewType = 'month';
-        const elems = await this.queryAll(this.wrapper, '.dp__view-container .dp__cell');
+        res.cells = [];
+        res.viewType = 'month';
+        const elems = await queryAll(res.wrapper, '.dp__view-container .dp__cell');
         for (const elem of elems) {
-            if (await this.hasClass(elem, 'dp__year-view__cell')) {
-                this.viewType = 'year';
-            } else if (await this.hasClass(elem, 'dp__year-range-view__cell')) {
-                this.viewType = 'yearRange';
+            if (await hasClass(elem, 'dp__year-view__cell')) {
+                res.viewType = 'year';
+            } else if (await hasClass(elem, 'dp__year-range-view__cell')) {
+                res.viewType = 'yearRange';
             }
 
-            if (await this.hasClass(elem, 'dp__other-month-cell')) {
+            if (await hasClass(elem, 'dp__other-month-cell')) {
                 continue;
             }
 
             const cell = {
                 elem,
-                title: await this.prop(elem, 'textContent'),
-                active: await this.hasClass(elem, 'dp__cell_act'),
-                highlighted: await this.hasClass(elem, 'dp__cell_hl'),
+                title: await prop(elem, 'textContent'),
+                active: await hasClass(elem, 'dp__cell_act'),
+                highlighted: await hasClass(elem, 'dp__cell_hl'),
             };
 
-            this.cells.push(cell);
+            res.cells.push(cell);
         }
 
-        this.current = this.parseHeader(this.title);
+        res.current = this.parseHeader(res.title, res.viewType);
+
+        return res;
     }
 
-    parseHeader(title) {
+    parseHeader(title, viewType) {
         const res = {};
 
-        if (this.viewType === 'month') {
+        if (viewType === 'month') {
             const titleItems = title.split(' ');
 
             res.month = monthTitles.indexOf(titleItems[0].toLowerCase());
@@ -50,9 +64,9 @@ export class DatePicker extends TestComponent {
                 throw new Error('Invalid month string');
             }
             res.year = parseInt(titleItems[1], 10);
-        } else if (this.viewType === 'year') {
+        } else if (viewType === 'year') {
             res.year = parseInt(title, 10);
-        } else if (this.viewType === 'yearRange') {
+        } else if (viewType === 'yearRange') {
             const titleItems = title.split('-');
             res.yearRange = {
                 start: parseInt(titleItems[0], 10),
@@ -64,78 +78,78 @@ export class DatePicker extends TestComponent {
     }
 
     async selectCell(val) {
-        if (!await this.isVisible(this.wrapper)) {
+        if (!await isVisible(this.content.wrapper)) {
             throw new Error('DatePicker is not visible');
         }
 
         const lval = val.toString().toLowerCase();
-        const cell = this.cells.find((item) => item.title.toLowerCase() === lval);
+        const cell = this.content.cells.find((item) => item.title.toLowerCase() === lval);
         if (!cell) {
             throw new Error('Specified cell not found');
         }
 
-        await this.click(cell.elem);
+        await click(cell.elem);
     }
 
     async isTitleChanged() {
-        const titleElem = await this.query(this.elem, '.dp__wrapper .dp__header_title');
+        const titleElem = await query(this.elem, '.dp__wrapper .dp__header_title');
         if (!titleElem) {
             return false;
         }
 
-        const title = await this.prop(titleElem, 'textContent');
+        const title = await prop(titleElem, 'textContent');
 
-        return title !== this.title;
+        return title !== this.content.title;
     }
 
     async navigateToPrevious() {
-        await this.click(this.prevBtn);
-        await this.wait(() => this.isTitleChanged());
+        await click(this.content.prevBtn);
+        await wait(() => this.isTitleChanged());
         await this.parse();
     }
 
     async navigateToNext() {
-        await this.click(this.nextBtn);
-        await this.wait(() => this.isTitleChanged());
+        await click(this.content.nextBtn);
+        await wait(() => this.isTitleChanged());
         await this.parse();
     }
 
     async zoomOut() {
-        await this.click(this.titleElem);
-        await this.wait(() => this.isTitleChanged());
+        await click(this.content.titleElem);
+        await wait(() => this.isTitleChanged());
         await this.parse();
     }
 
     async selectYear(year) {
-        if (this.viewType !== 'yearRange') {
-            throw new Error(`Invalid type of date picker view: ${this.viewType}`);
+        if (this.content.viewType !== 'yearRange') {
+            throw new Error(`Invalid type of date picker view: ${this.content.viewType}`);
         }
 
-        while (this.current.yearRange.start > year) {
+        while (this.content.current.yearRange.start > year) {
             this.navigateToPrevious();
         }
 
-        while (this.current.yearRange.end < year) {
+        while (this.content.current.yearRange.end < year) {
             this.navigateToNext();
         }
 
         await this.selectCell(year);
-        await this.wait(() => this.isTitleChanged());
+        await wait(() => this.isTitleChanged());
         await this.parse();
     }
 
     async selectMonth(month, year) {
-        if (this.viewType !== 'year') {
-            throw new Error(`Invalid type of date picker view: ${this.viewType}`);
+        if (this.content.viewType !== 'year') {
+            throw new Error(`Invalid type of date picker view: ${this.content.viewType}`);
         }
 
-        if (this.current.year !== year) {
-            if (this.current.year > year && this.current.year - year <= 2) {
-                while (this.current.year > year) {
+        if (this.content.current.year !== year) {
+            if (this.content.current.year > year && this.content.current.year - year <= 2) {
+                while (this.content.current.year > year) {
                     await this.navigateToPrevious();
                 }
-            } else if (this.current.year < year && year - this.current.year <= 2) {
-                while (this.current.year < year) {
+            } else if (this.content.current.year < year && year - this.content.current.year <= 2) {
+                while (this.content.current.year < year) {
                     await this.navigateToNext();
                 }
             } else {
@@ -146,7 +160,7 @@ export class DatePicker extends TestComponent {
         }
 
         await this.selectCell(shortMonthTitles[month]);
-        await this.wait(() => this.isTitleChanged());
+        await wait(() => this.isTitleChanged());
         await this.parse();
     }
 
@@ -155,29 +169,35 @@ export class DatePicker extends TestComponent {
             throw new Error('Invalid parameters');
         }
 
-        if (this.viewType !== 'month') {
-            throw new Error(`Invalid type of date picker view: ${this.viewType}`);
+        if (this.content.viewType !== 'month') {
+            throw new Error(`Invalid type of date picker view: ${this.content.viewType}`);
         }
 
         const day = date.getDate();
         const month = date.getMonth();
         const year = date.getFullYear();
 
-        if (this.current.year !== year) {
+        if (this.content.current.year !== year) {
             await this.zoomOut();
             await this.selectMonth(month, year);
         }
-        if (this.current.year !== year) {
+        if (this.content.current.year !== year) {
             throw new Error('Fail to set up specified year');
         }
 
-        if (this.current.month !== month) {
-            if (this.current.month > month && this.current.month - month <= 2) {
-                while (this.current.month > month) {
+        if (this.content.current.month !== month) {
+            if (
+                this.content.current.month > month
+                && this.content.current.month - month <= 2
+            ) {
+                while (this.content.current.month > month) {
                     await this.navigateToPrevious();
                 }
-            } else if (this.current.month < month && month - this.current.month <= 2) {
-                while (this.current.month < month) {
+            } else if (
+                this.content.current.month < month
+                && month - this.content.current.month <= 2
+            ) {
+                while (this.content.current.month < month) {
                     await this.navigateToNext();
                 }
             } else {
@@ -186,7 +206,7 @@ export class DatePicker extends TestComponent {
             }
         }
 
-        if (this.current.month !== month) {
+        if (this.content.current.month !== month) {
             throw new Error('Fail to set up specified month');
         }
 
@@ -203,6 +223,6 @@ export class DatePicker extends TestComponent {
     }
 
     getSelectedRange() {
-        return copyObject(this.value);
+        return copyObject(this.content.value);
     }
 }

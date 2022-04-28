@@ -38,7 +38,7 @@ export class Scenario {
     }
 
     async dropDownTests() {
-        const pageUrl = `${this.environment.baseUrl()}jezvejs/demo/dropdown`;
+        const pageUrl = `${this.environment.baseUrl()}demo/dropdown.html`;
         await this.environment.goTo(pageUrl);
 
         this.environment.setBlock('Drop Down component', 1);
@@ -49,25 +49,25 @@ export class Scenario {
         await DropDownTests.selectTest('halfWidthDropDown', '2');
 
         await test('Parse select',
-            () => App.view.content.parsedSelDropDown.textValue === 'Item 1');
+            () => App.view.content.parsedSelDropDown.content.textValue === 'Item 1');
 
         await DropDownTests.selectTest('parsedSelDropDown', '3');
         await test('Selected value update',
-            () => App.view.content.parsedSelDropDown.textValue === 'Item 3');
+            () => App.view.content.parsedSelDropDown.content.textValue === 'Item 3');
 
         await test('Parse select with selected option',
-            () => App.view.content.parsedSelSelectedDropDown.textValue === 'Item 3');
+            () => App.view.content.parsedSelSelectedDropDown.content.textValue === 'Item 3');
         await DropDownTests.selectTest('parsedSelDropDown', '5');
 
         await test('Attached to block element',
             async () => !(await this.environment.isVisible(
-                App.view.content.attachedToBlockDropDown.listContainer, true,
+                App.view.content.attachedToBlockDropDown.content.listContainer, true,
             )));
         await DropDownTests.selectTest('attachedToBlockDropDown', '2');
 
         await test('Attached to inline element',
             async () => !(await this.environment.isVisible(
-                App.view.content.attachedToInlineDropDown.listContainer, true,
+                App.view.content.attachedToInlineDropDown.content.listContainer, true,
             )));
         await DropDownTests.selectTest('attachedToInlineDropDown', '3');
 
@@ -78,9 +78,9 @@ export class Scenario {
         ];
 
         await test('Multi select Drop Down',
-            () => App.view.content.multiSelDropDown.isMulti
+            () => App.view.content.multiSelDropDown.content.isMulti
                 && checkObjValue(
-                    App.view.content.multiSelDropDown.selectedItems,
+                    App.view.content.multiSelDropDown.content.selectedItems,
                     expectedSelectedItems,
                 ));
         await DropDownTests.selectTest('multiSelDropDown', '3');
