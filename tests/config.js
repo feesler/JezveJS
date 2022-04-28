@@ -1,4 +1,4 @@
 export const config = {
-    nodeURL: 'http://localtest:8096/',
+    nodeURL: 'http://localhost:8080/',
     testsExpected: 18,
 };

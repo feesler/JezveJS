@@ -35,6 +35,11 @@ export async function route(env, url) {
         return MainView;
     }
 
+    const dotInd = part.indexOf('.');
+    if (dotInd !== -1) {
+        part = part.substring(0, dotInd);
+    }
+
     if (part === 'dropdown') {
         return DropDownView;
     }

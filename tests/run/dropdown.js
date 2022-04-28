@@ -14,7 +14,7 @@ export async function selectTest(ddname, value) {
     const origSelected = dropdown.getSelectedValues();
     let expSelected;
 
-    if (dropdown.isMulti) {
+    if (dropdown.content.isMulti) {
         // Deselect if already selected
         if (origSelected.includes(value)) {
             expSelected = origSelected.filter((item) => item !== value);
@@ -42,7 +42,7 @@ export async function deselectTest(ddname, value) {
     if (!dropdown) {
         throw new Error(`Component ${ddname} not found`);
     }
-    if (!dropdown.isMulti) {
+    if (!dropdown.content.isMulti) {
         throw new Error('Deselect is not available for single selection component');
     }
 
