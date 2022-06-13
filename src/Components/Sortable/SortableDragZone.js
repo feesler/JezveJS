@@ -28,7 +28,7 @@ export class SortableDragZone extends DragZone {
         }
 
         if (this.params && isFunction(this.params.ondragstart)) {
-            this.params.ondragstart(this.elem);
+            this.params.ondragstart(avatar.dragZoneElem);
         }
 
         return avatar;
