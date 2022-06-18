@@ -91,7 +91,7 @@ function init() {
         maxHeight: 6,
         editable: true,
         placeholder: 'Select item 2',
-        data: initItems('Item', 10),
+        data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
     });
 
     // Stretch drop down 100% width
