@@ -852,14 +852,18 @@ export class DropDown {
             // Check horizontal offset of drop down list
             this.list.style.minWidth = px(container.width);
 
+            // Check list element wider than screen
             const listWidth = this.list.offsetWidth;
-            const leftOffset = container.left - html.scrollLeft + container.width;
-            if (leftOffset + listWidth > html.clientWidth) {
-                this.list.style.left = px(
-                    container.left + container.width - listWidth - offset.left,
-                );
+            if (listWidth >= html.clientWidth) {
+                this.list.style.width = px(html.clientWidth);
+                this.list.style.left = px(0);
             } else {
-                this.list.style.left = px(container.left - offset.left);
+                const leftOffset = container.left - html.scrollLeft;
+                const listLeft = (leftOffset + listWidth > html.clientWidth)
+                    ? (container.left + container.width - listWidth - offset.left)
+                    : (container.left - offset.left);
+
+                this.list.style.left = px(listLeft);
             }
 
             setEmptyClick(
