@@ -11,6 +11,7 @@ import {
     prependChild,
     show,
     setEmptyClick,
+    removeEmptyClick,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.css';
@@ -55,6 +56,7 @@ export class Popup extends Component {
             this.elem.classList.add('nodim');
         }
 
+        this.emptyClickHandler = () => this.close();
         this.onCloseHandler = (isFunction(this.props.onclose)) ? this.props.onclose : null;
 
         if (!this.setContent(this.props.content)) {
@@ -108,7 +110,7 @@ export class Popup extends Component {
 
         if (this.props.closeOnEmptyClick === true) {
             setTimeout(() => {
-                setEmptyClick(() => this.close(), [this.boxElem]);
+                setEmptyClick(this.emptyClickHandler, [this.boxElem]);
             });
         }
     }
@@ -120,6 +122,10 @@ export class Popup extends Component {
 
         show(this.elem, false);
         document.body.style.overflow = '';
+
+        if (this.props.closeOnEmptyClick === true) {
+            removeEmptyClick(this.emptyClickHandler);
+        }
     }
 
     close() {

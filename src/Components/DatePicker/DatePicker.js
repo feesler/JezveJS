@@ -10,6 +10,7 @@ import {
     transform,
     isVisible,
     setEmptyClick,
+    removeEmptyClick,
     getOffset,
     re,
     px,
@@ -119,6 +120,7 @@ export class DatePicker {
         }
 
         this.transitionHandler = (e) => this.onTransitionEnd(e);
+        this.emptyClickHandler = () => this.showView(false);
 
         /* Prepare date */
         const date = isDate(params.date) ? params.date : new Date();
@@ -319,10 +321,12 @@ export class DatePicker {
         // set automatic hide on empty click
         if (!this.isStatic) {
             if (toShow) {
-                setEmptyClick(() => this.showView(false), [
+                setEmptyClick(this.emptyClickHandler, [
                     this.wrapperObj,
                     this.relativeParent,
                 ]);
+            } else {
+                removeEmptyClick(this.emptyClickHandler);
             }
         }
 
