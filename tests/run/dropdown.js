@@ -1,4 +1,4 @@
-import { copyObject, checkObjValue, test } from 'jezve-test';
+import { copyObject, assert, test } from 'jezve-test';
 import { App } from '../app.js';
 
 export async function selectTest(ddname, value) {
@@ -30,7 +30,7 @@ export async function selectTest(ddname, value) {
     dropdown = App.view.content[ddname];
 
     const selected = dropdown.getSelectedValues();
-    await test(`[DropDown] Select by value (${value})`, () => checkObjValue(selected, expSelected));
+    await test(`[DropDown] Select by value (${value})`, () => assert.deepMeet(selected, expSelected));
 }
 
 export async function deselectTest(ddname, value) {
@@ -59,5 +59,5 @@ export async function deselectTest(ddname, value) {
 
     const selected = dropdown.getSelectedValues();
 
-    await test(`[DropDown] Deselect by tag (${value})`, () => checkObjValue(selected, expSelected));
+    await test(`[DropDown] Deselect by tag (${value})`, () => assert.deepMeet(selected, expSelected));
 }

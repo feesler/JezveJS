@@ -1,6 +1,6 @@
-import { copyObject, isDate } from 'jezvejs';
-import { TestComponent } from 'jezve-test';
 import {
+    TestComponent,
+    assert,
     query,
     queryAll,
     hasClass,
@@ -8,7 +8,8 @@ import {
     isVisible,
     click,
     wait,
-} from '../../env.js';
+} from 'jezve-test';
+import { copyObject } from 'jezvejs';
 
 const shortMonthTitles = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 const monthTitles = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -60,9 +61,7 @@ export class DatePicker extends TestComponent {
             const titleItems = title.split(' ');
 
             res.month = monthTitles.indexOf(titleItems[0].toLowerCase());
-            if (res.month === -1) {
-                throw new Error('Invalid month string');
-            }
+            assert(res.month !== -1, 'Invalid month string');
             res.year = parseInt(titleItems[1], 10);
         } else if (viewType === 'year') {
             res.year = parseInt(title, 10);
@@ -78,15 +77,12 @@ export class DatePicker extends TestComponent {
     }
 
     async selectCell(val) {
-        if (!await isVisible(this.content.wrapper)) {
-            throw new Error('DatePicker is not visible');
-        }
+        const visible = await isVisible(this.content.wrapper);
+        assert(visible, 'DatePicker is not visible');
 
         const lval = val.toString().toLowerCase();
         const cell = this.content.cells.find((item) => item.title.toLowerCase() === lval);
-        if (!cell) {
-            throw new Error('Specified cell not found');
-        }
+        assert(cell, 'Specified cell not found');
 
         await click(cell.elem);
     }
@@ -121,9 +117,7 @@ export class DatePicker extends TestComponent {
     }
 
     async selectYear(year) {
-        if (this.content.viewType !== 'yearRange') {
-            throw new Error(`Invalid type of date picker view: ${this.content.viewType}`);
-        }
+        assert(this.content.viewType === 'yearRange', `Invalid type of date picker view: ${this.content.viewType}`);
 
         while (this.content.current.yearRange.start > year) {
             this.navigateToPrevious();
@@ -139,9 +133,7 @@ export class DatePicker extends TestComponent {
     }
 
     async selectMonth(month, year) {
-        if (this.content.viewType !== 'year') {
-            throw new Error(`Invalid type of date picker view: ${this.content.viewType}`);
-        }
+        assert(this.content.viewType === 'year', `Invalid type of date picker view: ${this.content.viewType}`);
 
         if (this.content.current.year !== year) {
             if (this.content.current.year > year && this.content.current.year - year <= 2) {
@@ -165,13 +157,8 @@ export class DatePicker extends TestComponent {
     }
 
     async selectDate(date) {
-        if (!isDate(date)) {
-            throw new Error('Invalid parameters');
-        }
-
-        if (this.content.viewType !== 'month') {
-            throw new Error(`Invalid type of date picker view: ${this.content.viewType}`);
-        }
+        assert.isDate(date, 'Invalid parameters');
+        assert(this.content.viewType === 'month', `Invalid type of date picker view: ${this.content.viewType}`);
 
         const day = date.getDate();
         const month = date.getMonth();
@@ -181,9 +168,7 @@ export class DatePicker extends TestComponent {
             await this.zoomOut();
             await this.selectMonth(month, year);
         }
-        if (this.content.current.year !== year) {
-            throw new Error('Fail to set up specified year');
-        }
+        assert(this.content.current.year === year, 'Fail to set up specified year');
 
         if (this.content.current.month !== month) {
             if (
@@ -206,17 +191,14 @@ export class DatePicker extends TestComponent {
             }
         }
 
-        if (this.content.current.month !== month) {
-            throw new Error('Fail to set up specified month');
-        }
+        assert(this.content.current.month === month, 'Fail to set up specified month');
 
         return this.selectCell(day);
     }
 
     async selectRange(date1, date2) {
-        if (!isDate(date1) || !isDate(date2)) {
-            throw new Error('Invalid parameters');
-        }
+        assert.isDate(date1, 'Invalid parameters');
+        assert.isDate(date2, 'Invalid parameters');
 
         await this.selectDate(date1);
         return this.selectDate(date2);
