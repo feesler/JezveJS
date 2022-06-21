@@ -897,7 +897,6 @@ export class DropDown {
             this.list.classList.remove('dd__list_drop-down');
             this.list.classList.remove('dd__list_drop-up');
 
-            setEmptyClick();
             this.sendChangeEvent();
             this.setActive(null);
         }

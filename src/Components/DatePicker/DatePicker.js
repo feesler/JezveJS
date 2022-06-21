@@ -323,8 +323,6 @@ export class DatePicker {
                     this.wrapperObj,
                     this.relativeParent,
                 ]);
-            } else {
-                setEmptyClick();
             }
         }
 

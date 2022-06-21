@@ -8,3 +8,31 @@
   top: 150px;
   left: 100px;
 }
+
+#container {
+  position: absolute;
+  top: 150px;
+  left: 350px;
+}
+
+#openbtn {
+  padding: 5px;
+  background-color: #2a7200;
+}
+
+.test-menu {
+  position: absolute;
+  display: none;
+  flex-flow: column nowrap;
+  list-style: none;
+  border: 1px solid #000000;
+}
+
+.test-menu li {
+  padding: 5px;
+  white-space: nowrap;
+}
+
+.test-menu_open {
+  display: flex;
+}

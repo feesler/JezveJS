@@ -93,8 +93,6 @@ function hideChartPopup() {
     }
 
     show(this.popup, false);
-
-    setEmptyClick();
 }
 
 function onChartsScroll() {
@@ -144,7 +142,12 @@ function onBarClick(e, item) {
 
         setParam(this.popup.style, { left: px(popupX), top: px(popupY) });
 
-        setTimeout(setEmptyClick.bind(this, hideChartPopup.bind(this), [item.elem[0], this.popup]));
+        setTimeout(() => {
+            setEmptyClick(
+                () => hideChartPopup.call(this),
+                [item.elem[0], this.popup],
+            );
+        });
     }
 }
 
