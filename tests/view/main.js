@@ -1,10 +1,10 @@
-import { AppView } from './AppView.js';
 import {
     queryAll,
     prop,
     navigation,
     click,
-} from '../env.js';
+} from 'jezve-test';
+import { AppView } from './AppView.js';
 
 export class MainView extends AppView {
     async parseContent() {

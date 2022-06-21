@@ -1,5 +1,4 @@
-import { TestView } from 'jezve-test';
-import { navigation, click } from '../env.js';
+import { TestView, navigation, click } from 'jezve-test';
 
 export class AppView extends TestView {
     isUserLoggedIn() {

@@ -1,4 +1,10 @@
-import { setupTest, formatDate, TestApplication } from 'jezve-test';
+import {
+    setupTest,
+    formatDate,
+    TestApplication,
+    goTo,
+    baseUrl,
+} from 'jezve-test';
 import { config } from './config.js';
 import { Scenario } from './scenario.js';
 
@@ -46,7 +52,7 @@ class Application extends TestApplication {
         if (this.view) {
             await this.view.goToMainView();
         } else {
-            await this.environment.goTo(this.environment.baseUrl());
+            await goTo(baseUrl());
         }
     }
 }

@@ -1,6 +1,6 @@
-import { TestComponent } from 'jezve-test';
-import { asyncMap } from '../../common.js';
 import {
+    TestComponent,
+    assert,
     query,
     queryAll,
     hasClass,
@@ -8,14 +8,13 @@ import {
     isVisible,
     click,
     closest,
-} from '../../env.js';
+} from 'jezve-test';
+import { asyncMap } from '../../common.js';
 
 export class DropDown extends TestComponent {
     /** Find for closest parent DropDown container of element */
     static async getParentContainer(elem) {
-        if (!elem) {
-            throw new Error('Invalid element');
-        }
+        assert(elem, 'Invalid element');
 
         let container = await closest(elem, '.dd__container');
         if (!container) {
@@ -27,26 +26,18 @@ export class DropDown extends TestComponent {
 
     /** Create new instance of DropDown component using any child element of container */
     static async createFromChild(parent, elem) {
-        if (!parent || !elem) {
-            throw new Error('Invalid parameters');
-        }
+        assert(parent && elem, 'Invalid parameters');
 
         const container = await DropDown.getParentContainer(elem);
-        if (!container) {
-            throw new Error('Container not found');
-        }
+        assert(container, 'Container not found');
 
         return super.create(parent, container);
     }
 
     async parseContent() {
-        if (
-            !this.elem
-            || (!await hasClass(this.elem, 'dd__container')
-                && !await hasClass(this.elem, 'dd__container_attached'))
-        ) {
-            throw new Error('Invalid drop down element');
-        }
+        const validClass = await hasClass(this.elem, 'dd__container');
+        const validAttachedClass = await hasClass(this.elem, 'dd__container_attached');
+        assert(validClass || validAttachedClass, 'Invalid drop down element');
 
         const res = {};
 
@@ -56,21 +47,15 @@ export class DropDown extends TestComponent {
         } else {
             res.selectBtn = await query(this.elem, '.dd__toggle-btn');
         }
-        if (!res.selectBtn) {
-            throw new Error('Select button not found');
-        }
+        assert(res.selectBtn, 'Select button not found');
 
         res.disabled = await hasClass(this.elem, 'dd__container_disabled');
 
         if (!res.isAttached) {
             res.statSel = await query(this.elem, '.dd__single-selection');
-            if (!res.statSel) {
-                throw new Error('Static select element not found');
-            }
+            assert(res.statSel, 'Static select element not found');
             res.inputElem = await query(this.elem, 'input[type="text"]');
-            if (!res.inputElem) {
-                throw new Error('Input element not found');
-            }
+            assert(res.inputElem, 'Input element not found');
 
             res.editable = await isVisible(res.inputElem);
             if (res.editable) {
@@ -155,9 +140,7 @@ export class DropDown extends TestComponent {
 
     async toggleItem(itemId) {
         const li = this.getItem(itemId);
-        if (!li) {
-            throw new Error(`List item ${itemId} not found`);
-        }
+        assert(li, `List item ${itemId} not found`);
 
         if (li.selected) {
             if (this.content.isMulti) {
@@ -172,9 +155,7 @@ export class DropDown extends TestComponent {
 
     async selectItem(itemId) {
         const li = this.getItem(itemId);
-        if (!li) {
-            throw new Error(`List item ${itemId} not found`);
-        }
+        assert(li, `List item ${itemId} not found`);
 
         if (li.selected) {
             return;
@@ -185,14 +166,10 @@ export class DropDown extends TestComponent {
     }
 
     async deselectItem(itemId) {
-        if (!this.content.isMulti) {
-            throw new Error('Deselect item not available for single select DropDown');
-        }
+        assert(this.content.isMulti, 'Deselect item not available for single select DropDown');
 
         const li = this.getItem(itemId);
-        if (!li) {
-            throw new Error(`List item ${itemId} not found`);
-        }
+        assert(li, `List item ${itemId} not found`);
 
         if (!li.selected) {
             return;
@@ -203,14 +180,10 @@ export class DropDown extends TestComponent {
     }
 
     async deselectItemByTag(itemId) {
-        if (!this.content.isMulti) {
-            throw new Error('Deselect item not available for single select DropDown');
-        }
+        assert(this.content.isMulti, 'Deselect item not available for single select DropDown');
 
         const selItem = this.getSelectedItem(itemId);
-        if (!selItem) {
-            throw new Error(`Selected item ${itemId} not found`);
-        }
+        assert(selItem, `Selected item ${itemId} not found`);
 
         await click(selItem.deselectBtn);
         await this.parse();
@@ -219,8 +192,8 @@ export class DropDown extends TestComponent {
     async setSelection(val) {
         const values = Array.isArray(val) ? val : [val];
 
-        if (values.length > 1 && !this.content.isMulti) {
-            throw new Error('Select multiple items not available for single select DropDown');
+        if (values.length > 1) {
+            assert(this.content.isMulti, 'Select multiple items not available for single select DropDown');
         }
 
         if (this.content.isMulti) {
@@ -244,9 +217,7 @@ export class DropDown extends TestComponent {
     }
 
     async deselectAll() {
-        if (!this.content.isMulti) {
-            throw new Error('Deselect items not available for single select DropDown');
-        }
+        assert(this.content.isMulti, 'Deselect items not available for single select DropDown');
 
         const selectedValues = this.getSelectedValues();
         for (const value of selectedValues) {

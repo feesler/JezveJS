@@ -1,4 +1,12 @@
-import { test, checkObjValue, Runner } from 'jezve-test';
+import {
+    test,
+    assert,
+    Runner,
+    baseUrl,
+    goTo,
+    setBlock,
+    isVisible,
+} from 'jezve-test';
 import * as DropDownTests from './run/dropdown.js';
 import { App } from './app.js';
 
@@ -38,10 +46,10 @@ export class Scenario {
     }
 
     async dropDownTests() {
-        const pageUrl = `${this.environment.baseUrl()}demo/dropdown.html`;
-        await this.environment.goTo(pageUrl);
+        const pageUrl = `${baseUrl()}demo/dropdown.html`;
+        await goTo(pageUrl);
 
-        this.environment.setBlock('Drop Down component', 1);
+        setBlock('Drop Down component', 1);
 
         await DropDownTests.selectTest('inlineDropDown', '2');
         await DropDownTests.selectTest('editableInlineDropDown', '3');
@@ -60,13 +68,13 @@ export class Scenario {
         await DropDownTests.selectTest('parsedSelDropDown', '5');
 
         await test('Attached to block element',
-            async () => !(await this.environment.isVisible(
+            async () => !(await isVisible(
                 App.view.content.attachedToBlockDropDown.content.listContainer, true,
             )));
         await DropDownTests.selectTest('attachedToBlockDropDown', '2');
 
         await test('Attached to inline element',
-            async () => !(await this.environment.isVisible(
+            async () => !(await isVisible(
                 App.view.content.attachedToInlineDropDown.content.listContainer, true,
             )));
         await DropDownTests.selectTest('attachedToInlineDropDown', '3');
@@ -79,7 +87,7 @@ export class Scenario {
 
         await test('Multi select Drop Down',
             () => App.view.content.multiSelDropDown.content.isMulti
-                && checkObjValue(
+                && assert.deepMeet(
                     App.view.content.multiSelDropDown.content.selectedItems,
                     expectedSelectedItems,
                 ));

@@ -1,6 +1,6 @@
+import { query } from 'jezve-test';
 import { DropDown } from './component/dropdown.js';
 import { AppView } from './AppView.js';
-import { query } from '../env.js';
 
 export class DropDownView extends AppView {
     async parseContent() {
