@@ -585,28 +585,26 @@ export function onEmptyClick(e, callback, elem) {
 
     if (notExcluded) {
         callback();
+    } else {
+        document.documentElement.addEventListener(
+            'click',
+            (ev) => onEmptyClick(ev, callback, elem),
+            { once: true },
+        );
     }
 }
 
 /** Set or unset event handler for */
 export function setEmptyClick(callback, elem) {
-    let onClickHandler = null;
-    const handler = callback || null;
-
-    if (!document.documentElement) {
+    if (!document.documentElement || !isFunction(callback)) {
         return;
     }
 
-    if (isFunction(handler)) {
-        onClickHandler = (e) => {
-            onEmptyClick(e, handler, elem);
-        };
-    }
-
-    document.documentElement.onclick = null;
-    setTimeout(() => {
-        document.documentElement.onclick = onClickHandler;
-    });
+    document.documentElement.addEventListener(
+        'click',
+        (e) => onEmptyClick(e, callback, elem),
+        { once: true },
+    );
 }
 
 /** Calculate offset of element by sum of offsets of parents */

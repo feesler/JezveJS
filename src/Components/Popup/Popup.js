@@ -108,7 +108,7 @@ export class Popup extends Component {
 
         if (this.props.closeOnEmptyClick === true) {
             setTimeout(() => {
-                setEmptyClick(this.close.bind(this), [this.boxElem]);
+                setEmptyClick(() => this.close(), [this.boxElem]);
             });
         }
     }
@@ -120,10 +120,6 @@ export class Popup extends Component {
 
         show(this.elem, false);
         document.body.style.overflow = '';
-
-        if (this.props.closeOnEmptyClick === true) {
-            setEmptyClick();
-        }
     }
 
     close() {

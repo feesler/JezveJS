@@ -40,7 +40,6 @@ export default {
         chartsDemo: {
             import: './src/demo/js/Charts.js',
             filename: 'demo/js/[name].js',
-            dependOn: ['Histogram', 'LineChart']
         },
         commonTestsDemo: {
             import: './src/demo/js/CommonTests.js',
@@ -152,7 +151,7 @@ export default {
         new HtmlWebpackPlugin({
             template: 'src/demo/templates/charts.html',
             filename: 'demo/charts.html',
-            chunks: ['polyfills', 'Histogram', 'LineChart', 'chartsDemo'],
+            chunks: ['polyfills', 'chartsDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
