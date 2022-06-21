@@ -777,6 +777,88 @@ export class DropDown {
         );
     }
 
+    /** Calculate height, vertical and horizontal offset of list element */
+    calculatePosition() {
+        if (isVisible(this.selectElem)) {
+            return;
+        }
+
+        if (!this.list || !this.visible) {
+            return;
+        }
+
+        const html = document.documentElement;
+        const { scrollHeight } = html;
+        const screenBottom = html.scrollTop + html.clientHeight;
+
+        this.containerElem.classList.add('dd__open');
+
+        let listHeight = 0;
+        const visibleItems = this.getVisibleItems();
+        if (visibleItems.length > 0) {
+            const itemHeight = parseInt(visibleItems[0].elem.offsetHeight, 10);
+            const itemsToShow = this.getListHeight();
+            listHeight = itemsToShow * itemHeight;
+        }
+
+        let border = 0;
+        if (!this.listAttach) {
+            border = (this.comboElem.offsetHeight - this.comboElem.scrollHeight) / 2;
+        }
+
+        this.list.style.height = px(0);
+
+        const offset = getOffset(this.list.offsetParent);
+        const container = getOffset(this.containerElem);
+        container.width = this.containerElem.offsetWidth;
+        container.height = this.containerElem.offsetHeight;
+        const totalListHeight = container.height + listHeight;
+        const listBottom = container.top + totalListHeight;
+
+        if (this.fullScreen && isVisible(this.backgroundElem)) {
+            document.body.style.overflow = 'hidden';
+            this.list.classList.add('dd__list_drop-down');
+
+            const fullScreenListHeight = html.clientHeight - this.comboElem.offsetHeight;
+            this.list.style.height = px(fullScreenListHeight / 2);
+        } else {
+            // Check vertical offset of drop down list
+            if (listBottom > scrollHeight) {
+                this.list.classList.add('dd__list_drop-up');
+                this.list.style.top = px(container.top - offset.top - listHeight + border);
+            } else {
+                this.list.classList.add('dd__list_drop-down');
+                if (listBottom > screenBottom) {
+                    html.scrollTop += listBottom - screenBottom;
+                }
+                this.list.style.top = px(
+                    container.top - offset.top + container.height - border,
+                );
+            }
+
+            this.list.style.height = px(
+                listHeight + this.list.offsetHeight - this.list.scrollHeight,
+            );
+        }
+
+        // Check horizontal offset of drop down list
+        this.list.style.minWidth = px(container.width);
+
+        // Check list element wider than screen
+        const listWidth = this.list.offsetWidth;
+        if (listWidth >= html.clientWidth) {
+            this.list.style.width = px(html.clientWidth);
+            this.list.style.left = px(0);
+        } else {
+            const leftOffset = container.left - html.scrollLeft;
+            const listLeft = (leftOffset + listWidth > html.clientWidth)
+                ? (container.left + container.width - listWidth - offset.left)
+                : (container.left - offset.left);
+
+            this.list.style.left = px(listLeft);
+        }
+    }
+
     /** Show or hide drop down list */
     show(val) {
         if (isVisible(this.selectElem)) {
@@ -795,76 +877,7 @@ export class DropDown {
             }
             this.activate(true);
 
-            const html = document.documentElement;
-            const { scrollHeight } = html;
-            const screenBottom = html.scrollTop + html.clientHeight;
-
-            this.containerElem.classList.add('dd__open');
-
-            let listHeight = 0;
-            const visibleItems = this.getVisibleItems();
-            if (visibleItems.length > 0) {
-                const itemHeight = parseInt(visibleItems[0].elem.offsetHeight, 10);
-                const itemsToShow = this.getListHeight();
-                listHeight = itemsToShow * itemHeight;
-            }
-
-            let border = 0;
-            if (!this.listAttach) {
-                border = (this.comboElem.offsetHeight - this.comboElem.scrollHeight) / 2;
-            }
-
-            this.list.style.height = px(0);
-
-            const offset = getOffset(this.list.offsetParent);
-            const container = getOffset(this.containerElem);
-            container.width = this.containerElem.offsetWidth;
-            container.height = this.containerElem.offsetHeight;
-            const totalListHeight = container.height + listHeight;
-            const listBottom = container.top + totalListHeight;
-
-            if (this.fullScreen && isVisible(this.backgroundElem)) {
-                document.body.style.overflow = 'hidden';
-                this.list.classList.add('dd__list_drop-down');
-
-                const fullScreenListHeight = html.clientHeight - this.comboElem.offsetHeight;
-                this.list.style.height = px(fullScreenListHeight / 2);
-            } else {
-                // Check vertical offset of drop down list
-                if (listBottom > scrollHeight) {
-                    this.list.classList.add('dd__list_drop-up');
-                    this.list.style.top = px(container.top - offset.top - listHeight + border);
-                } else {
-                    this.list.classList.add('dd__list_drop-down');
-                    if (listBottom > screenBottom) {
-                        html.scrollTop += listBottom - screenBottom;
-                    }
-                    this.list.style.top = px(
-                        container.top - offset.top + container.height - border,
-                    );
-                }
-
-                this.list.style.height = px(
-                    listHeight + this.list.offsetHeight - this.list.scrollHeight,
-                );
-            }
-
-            // Check horizontal offset of drop down list
-            this.list.style.minWidth = px(container.width);
-
-            // Check list element wider than screen
-            const listWidth = this.list.offsetWidth;
-            if (listWidth >= html.clientWidth) {
-                this.list.style.width = px(html.clientWidth);
-                this.list.style.left = px(0);
-            } else {
-                const leftOffset = container.left - html.scrollLeft;
-                const listLeft = (leftOffset + listWidth > html.clientWidth)
-                    ? (container.left + container.width - listWidth - offset.left)
-                    : (container.left - offset.left);
-
-                this.list.style.left = px(listLeft);
-            }
+            this.calculatePosition();
 
             setEmptyClick(
                 this.show.bind(this, false),
@@ -1083,6 +1096,8 @@ export class DropDown {
         if (this.actSelItem && !this.disabled) {
             this.actSelItem.selectedElem.focus();
         }
+
+        this.calculatePosition();
     }
 
     /** Deselect all items */
