@@ -12,6 +12,7 @@ import {
     prependChild,
     show,
     setEmptyClick,
+    removeEmptyClick,
     getOffset,
     isVisible,
     getCursorPos,
@@ -89,6 +90,7 @@ export class DropDown {
             this.renderItem = params.renderItem;
         }
 
+        this.emptyClickHandler = () => this.show(false);
         this.toggleHandler = this.toggleList.bind(this);
         this.inputHandler = this.onInput.bind(this);
         this.hoverHandler = this.onMouseOver.bind(this);
@@ -880,7 +882,7 @@ export class DropDown {
             this.calculatePosition();
 
             setEmptyClick(
-                this.show.bind(this, false),
+                this.emptyClickHandler,
                 [this.inputElem, this.staticElem, this.list, this.toggleBtn],
             );
 
@@ -897,6 +899,7 @@ export class DropDown {
             this.list.classList.remove('dd__list_drop-down');
             this.list.classList.remove('dd__list_drop-up');
 
+            removeEmptyClick(this.emptyClickHandler);
             this.sendChangeEvent();
             this.setActive(null);
         }

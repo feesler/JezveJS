@@ -557,6 +557,8 @@ export function fixEvent(e, _this) {
 }
 /* eslint-enable no-param-reassign */
 
+const clickHandlersMap = [];
+
 /**
  * Handler for click on empty space event
  * @param {Event} e - click event object
@@ -585,30 +587,40 @@ export function onEmptyClick(e, callback, elem) {
 
     if (notExcluded) {
         callback();
-    } else {
-        setTimeout(() => {
-            document.documentElement.addEventListener(
-                'click',
-                (ev) => onEmptyClick(ev, callback, elem),
-                { once: true },
-            );
-        });
     }
 }
 
-/** Set or unset event handler for */
+/** Set event handler for click by empty place */
 export function setEmptyClick(callback, elem) {
     if (!document.documentElement || !isFunction(callback)) {
         return;
     }
 
     setTimeout(() => {
+        const handler = (e) => onEmptyClick(e, callback, elem);
+        clickHandlersMap.push({ callback, handler });
+
         document.documentElement.addEventListener(
             'click',
-            (e) => onEmptyClick(e, callback, elem),
-            { once: true },
+            handler,
         );
     });
+}
+
+/** Remove previously set event handler for click by empty place */
+export function removeEmptyClick(callback) {
+    const ind = clickHandlersMap.findIndex((item) => item.callback === callback);
+    if (ind === -1) {
+        return;
+    }
+
+    const handlerItem = clickHandlersMap[ind];
+    document.documentElement.removeEventListener(
+        'click',
+        handlerItem.handler,
+    );
+
+    clickHandlersMap.splice(ind, 1);
 }
 
 /** Calculate offset of element by sum of offsets of parents */
