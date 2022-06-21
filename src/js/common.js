@@ -586,11 +586,13 @@ export function onEmptyClick(e, callback, elem) {
     if (notExcluded) {
         callback();
     } else {
-        document.documentElement.addEventListener(
-            'click',
-            (ev) => onEmptyClick(ev, callback, elem),
-            { once: true },
-        );
+        setTimeout(() => {
+            document.documentElement.addEventListener(
+                'click',
+                (ev) => onEmptyClick(ev, callback, elem),
+                { once: true },
+            );
+        });
     }
 }
 
@@ -600,11 +602,13 @@ export function setEmptyClick(callback, elem) {
         return;
     }
 
-    document.documentElement.addEventListener(
-        'click',
-        (e) => onEmptyClick(e, callback, elem),
-        { once: true },
-    );
+    setTimeout(() => {
+        document.documentElement.addEventListener(
+            'click',
+            (e) => onEmptyClick(e, callback, elem),
+            { once: true },
+        );
+    });
 }
 
 /** Calculate offset of element by sum of offsets of parents */
