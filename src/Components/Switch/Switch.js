@@ -34,11 +34,11 @@ export class Switch extends Component {
             ...defaultProps,
             ...this.props,
         };
+
+        this.onChangeHandler = this.props.onChange;
     }
 
     init() {
-        this.onChangeHandler = this.props.onChange;
-
         this.state = {
             checked: this.props.checked,
             disabled: this.props.disabled,
@@ -52,13 +52,7 @@ export class Switch extends Component {
             [this.checkbox, this.slider],
         );
 
-        if (this.props.className) {
-            if (!Array.isArray(this.props.className)) {
-                this.props.className = [this.props.className];
-            }
-            this.elem.classList.add(...this.props.className);
-        }
-
+        this.setClassNames();
         this.setHandlers();
 
         this.render(this.state);
@@ -81,6 +75,7 @@ export class Switch extends Component {
             disabled: elem.hasAttribute('disabled'),
         };
 
+        this.setClassNames();
         this.setHandlers();
 
         this.render(this.state);
@@ -88,6 +83,17 @@ export class Switch extends Component {
 
     setHandlers() {
         setEvents(this.checkbox, { change: (e) => this.onChange(e) });
+    }
+
+    setClassNames() {
+        if (!this.props.className) {
+            return;
+        }
+
+        if (!Array.isArray(this.props.className)) {
+            this.props.className = [this.props.className];
+        }
+        this.elem.classList.add(...this.props.className);
     }
 
     onChange(e) {

@@ -5,19 +5,21 @@ import '../css/common.css';
 import '../css/app.css';
 import '../css/switch.css';
 
-const initParsed = () => {
-    Switch.fromElement(ge('defaultSwitch'));
-};
-
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');
     logElem.value += `${value}\r\n`;
 };
 
+const initParsed = () => {
+    Switch.fromElement(ge('defaultSwitch'), {
+        onChange: (checked) => addEventLog(`Parsed Switch change. checked: ${checked}`),
+    });
+};
+
 const initDynamic = () => {
     const dynamicSwitch = Switch.create({
         className: 'gray-switch',
-        onChange: (checked) => addEventLog(`change event. checked: ${checked}`),
+        onChange: (checked) => addEventLog(`Dynamic Switch change. checked: ${checked}`),
     });
     ge('dynamicContainer').appendChild(dynamicSwitch.elem);
 
@@ -31,6 +33,7 @@ const initDynamic = () => {
 const initLarge = () => {
     const largeSwitch = Switch.create({
         className: 'large-switch',
+        onChange: (checked) => addEventLog(`Large Switch change. checked: ${checked}`),
     });
     ge('largeContainer').appendChild(largeSwitch.elem);
 };
