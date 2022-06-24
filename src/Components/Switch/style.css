@@ -1,0 +1,62 @@
+.switch {
+  display: flex;
+  position: relative;
+  width: 34px;
+  height: 20px;
+}
+
+.switch input {
+  display: none;
+}
+
+/* Slider container */
+.switch-slider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #555555;
+  cursor: pointer;
+  border-radius: 100vh;
+}
+
+.switch-slider:hover {
+  background-color: #707070;
+}
+
+/* Sliding disc */
+.switch-slider::before {
+  content: "";
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #f0f0f0;
+  border-radius: 100vh;
+}
+
+.switch-slider:hover::before {
+  background-color: #ffffff;
+}
+
+/* Checked state */
+.switch input:checked + .switch-slider {
+  background-color: #0d9c00;
+}
+
+.switch input:checked + .switch-slider:hover {
+  background-color: #10c200;
+}
+
+.switch input:checked + .switch-slider::before {
+  left: 17px;
+}
+
+/* Disabled state */
+.switch[disabled] {
+  pointer-events: none;
+  opacity: 0.8;
+}

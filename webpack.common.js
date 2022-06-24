@@ -28,6 +28,7 @@ export default {
         Popup: './src/Components/Popup/Popup.js',
         Progress: './src/Components/Progress/Progress.js',
         Slider: './src/Components/Slider/Slider.js',
+        Switch: './src/Components/Switch/Switch.js',
 
         demoMain: {
             import: './src/demo/js/main.js',
@@ -106,6 +107,11 @@ export default {
             import: './src/demo/js/Progress.js',
             filename: 'demo/js/[name].js',
             dependOn: 'Progress'
+        },
+        switchDemo: {
+            import: './src/demo/js/Switch.js',
+            filename: 'demo/js/[name].js',
+            dependOn: 'Switch'
         },
     },
     output: {
@@ -236,6 +242,12 @@ export default {
             template: 'src/demo/templates/progress.html',
             filename: 'demo/progress.html',
             chunks: ['polyfills', 'Progress', 'progressDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/templates/switch.html',
+            filename: 'demo/switch.html',
+            chunks: ['polyfills', 'Switch', 'switchDemo'],
             minify: htmlMinifyOptions,
         }),
     ],
