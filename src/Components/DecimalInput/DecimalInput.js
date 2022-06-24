@@ -15,6 +15,13 @@ export class DecimalInput {
 
         this.elem = props.elem;
 
+        this.useFixed = ('digits' in props);
+        if (this.useFixed) {
+            if (!isNum(props.digits)) {
+                throw new Error('Invalid digits property specified');
+            }
+        }
+
         this.beforeInputHandler = this.validateInput.bind(this);
         this.elem.addEventListener('keypress', this.beforeInputHandler);
         this.elem.addEventListener('paste', this.beforeInputHandler);
@@ -114,7 +121,19 @@ export class DecimalInput {
 
     /** Validate specified value */
     isValidValue(value) {
-        return isNum(this.fixFloat(value));
+        const fixed = this.fixFloat(value);
+        if (!isNum(fixed)) {
+            return false;
+        }
+
+        if (this.useFixed) {
+            const float = parseFloat(fixed);
+            const inputValue = float.toString();
+            const intPart = Math.trunc(float).toString();
+            return inputValue.length <= intPart.length + this.props.digits + 1;
+        }
+
+        return true;
     }
 
     /** Before input events('keypress', 'paste', 'beforeinput) handler */
