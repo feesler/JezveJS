@@ -34,6 +34,8 @@ export class DecimalInput {
             this.oninput = props.oninput;
             this.elem.addEventListener('input', this.inputHandler);
         }
+
+        this.observeInputValue();
     }
 
     /** Component destructor: free resources */
@@ -59,6 +61,26 @@ export class DecimalInput {
         if (this.isValidValue(val)) {
             this.elem.value = val;
         }
+    }
+
+    /** Define setter for 'value' property of input to prevent invalid values */
+    observeInputValue() {
+        const decimalInput = this;
+        const elementPrototype = Object.getPrototypeOf(this.elem);
+        const descriptor = Object.getOwnPropertyDescriptor(elementPrototype, 'value');
+
+        Object.defineProperty(this.elem, 'value', {
+            get() {
+                return descriptor.get.call(this);
+            },
+            set(value) {
+                if (decimalInput.isValidValue(value)) {
+                    descriptor.set.call(this, value);
+                }
+
+                return this.value;
+            },
+        });
     }
 
     /**
