@@ -95,28 +95,26 @@ export class DecimalInput {
      * @param {string} str - decimal value string
      */
     fixFloat(str) {
-        let res;
-
         if (typeof str === 'number') {
-            return str;
+            return str.toString();
         }
 
-        if (typeof str === 'string') {
-            res = str.replace(/,/g, '.');
-            if (res.indexOf('-') === 0
-                && (
-                    res.length === 1
-                    || res.indexOf('.') === 1
-                )) {
-                res = `-0${res.substr(1)}`;
-            }
-            if (res.indexOf('.') === 0 || !res.length) {
-                res = `0${res}`;
-            }
-            return res;
+        if (typeof str !== 'string') {
+            return null;
         }
 
-        return null;
+        let res = str.replace(/,/g, '.');
+        if (res.indexOf('-') === 0
+            && (
+                res.length === 1
+                || res.indexOf('.') === 1
+            )) {
+            res = `-0${res.substring(1)}`;
+        }
+        if (res.indexOf('.') === 0 || !res.length) {
+            res = `0${res}`;
+        }
+        return res;
     }
 
     /** Validate specified value */
