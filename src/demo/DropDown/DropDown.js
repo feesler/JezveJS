@@ -8,7 +8,7 @@ import { DropDown } from '../../Components/DropDown/DropDown.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/dropdown.css';
+import './dropdown.css';
 
 function initItems(title, count) {
     const res = [];

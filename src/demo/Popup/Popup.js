@@ -5,12 +5,12 @@ import {
     onReady,
 } from '../../js/common.js';
 import { Popup } from '../../Components/Popup/Popup.js';
-import { PopupDragZone } from './Popup/PopupDragZone.js';
-import { PopupDropTarget } from './Popup/PopupDropTarget.js';
+import { PopupDragZone } from './impl/PopupDragZone.js';
+import { PopupDropTarget } from './impl/PopupDropTarget.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/popup.css';
+import './popup.css';
 
 const popupArr = [];
 

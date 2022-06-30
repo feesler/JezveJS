@@ -3,7 +3,7 @@ import { Checkbox } from '../../Components/Checkbox/Checkbox.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/checkbox.css';
+import './checkbox.css';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

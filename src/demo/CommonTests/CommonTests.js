@@ -11,7 +11,7 @@ import { ajax } from '../../js/ajax.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/common_test.css';
+import './common_test.css';
 
 let restbl = null;
 let totalRes = null;

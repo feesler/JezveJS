@@ -6,7 +6,7 @@ import {
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/dpitest.css';
+import './dpitest.css';
 
 function init() {
     const realDPI = getRealDPI();

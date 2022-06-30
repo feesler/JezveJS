@@ -12,7 +12,7 @@ import { LineChart } from '../../Components/Charts/LineChart.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/charts.css';
+import './charts.css';
 
 /* eslint-disable no-unused-vars */
 

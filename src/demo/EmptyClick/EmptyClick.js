@@ -2,7 +2,7 @@ import { ge, setEmptyClick, onReady } from '../../js/common.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/emptyclick.css';
+import './emptyclick.css';
 
 let count = 0;
 

@@ -3,7 +3,7 @@ import { PieChart } from '../../Components/PieChart/PieChart.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/piechart.css';
+import './piechart.css';
 
 /* eslint-disable no-unused-vars */
 
