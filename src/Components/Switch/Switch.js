@@ -38,6 +38,14 @@ export class Switch extends Component {
         this.onChangeHandler = this.props.onChange;
     }
 
+    get checked() {
+        return this.state.checked;
+    }
+
+    get disabled() {
+        return this.state.disabled;
+    }
+
     init() {
         this.state = {
             checked: this.props.checked,
