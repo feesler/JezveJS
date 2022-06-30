@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+<title>Jezve JS | Checkbox</title>
+</head>
+<body>
+<div class="page">
+	<div class="page-wrapper">
+
+		<div class="nav-header">
+			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+			<div class="nav-header__menu">
+			</div>
+		</div>
+
+		<div class="page-container">
+			<div class="page-content">
+				<div class="page-content-wrap">
+                    <h1>Checkbox</h1>
+
+                    <h2>Parse component from DOM</h2>
+                    <div class="section">
+                        <label id="defaultCheckbox" class="checkbox">
+                            <input type="checkbox" checked>
+                            <span class="checkbox__check">
+                                <svg version="1.1" viewBox="0 0 9.2604 9.2604" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z"/>
+                                </svg>
+                            </span>
+                            <span class="checkbox__label">Checkbox label</span>
+                        </label>
+                    </div>
+
+                    <h2>Dynamically create component with 'checkbox-circle' className option and custom label option</h2>
+                    <div class="section">
+                        <div id="dynamicContainer"></div>
+                        <div class="controls">
+                            <button id="checkBtn" class="btn" type="button">Check</button>
+                            <button id="uncheckBtn" class="btn" type="button">Uncheck</button>
+                            <button id="toggleBtn" class="btn" type="button">Toggle</button>
+                            <button id="enableBtn" class="btn" type="button">Enable</button>
+                            <button id="disableBtn" class="btn" type="button">Disable</button>
+                        </div>
+                    </div>
+
+                    <h2>Large</h2>
+                    <div class="section">
+                        <div id="largeContainer"></div>
+                    </div>
+
+                    <div class="section">
+                        <label>Events log</label><br>
+                        <textarea id="eventsLog" class="logs-container"></textarea>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

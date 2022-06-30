@@ -168,9 +168,7 @@
   opacity: 0;
 }
 
-@media screen and (max-width: 767px) and (-webkit-device-pixel-ratio: 1),
-  screen and (max-width: 384px) and (-webkit-device-pixel-ratio: 2),
-  screen and (max-width: 384px) and (-webkit-device-pixel-ratio: 3) {
+@media screen and (max-width: 767px) {
   .dp__container,
   .dp__view-container {
     max-width: 100%;
