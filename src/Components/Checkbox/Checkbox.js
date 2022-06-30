@@ -189,9 +189,14 @@ export class Checkbox extends Component {
 
     /** Render label content */
     renderLabel(state) {
+        if (!state.label && !this.label) {
+            return;
+        }
+
         if (state.label && !this.label) {
             this.label = this.createLabel();
         }
+
         if (typeof state.label === 'string' || state.label == null) {
             this.label.textContent = state.label;
         } else if (state.label instanceof Element) {
