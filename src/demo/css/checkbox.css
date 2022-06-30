@@ -1,0 +1,20 @@
+.section {
+    margin: 8px 0 16px 0;
+}
+
+/* Circle */
+.checkbox.checkbox-circle .checkbox__check {
+  border-radius: 100vh;
+  padding: 4px;
+}
+
+/* Large */
+.checkbox.checkbox-large .checkbox__check {
+  width: 28px;
+  height: 28px;
+}
+
+.checkbox.checkbox-large .checkbox__check svg {
+  width: 28px;
+  height: 28px;
+}

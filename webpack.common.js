@@ -14,6 +14,7 @@ export default {
         index: './src/js/index.js',
 
         polyfills: './src/js/polyfill/index.js',
+        Checkbox: './src/Components/Checkbox/Checkbox.js',
         Collapsible: './src/Components/Collapsible/Collapsible.js',
         DateInput: './src/Components/DateInput/DateInput.js',
         DecimalInput: './src/Components/DecimalInput/DecimalInput.js',
@@ -41,6 +42,11 @@ export default {
         chartsDemo: {
             import: './src/demo/js/Charts.js',
             filename: 'demo/js/[name].js',
+        },
+        checkboxDemo: {
+            import: './src/demo/js/Checkbox.js',
+            filename: 'demo/js/[name].js',
+            dependOn: 'Checkbox'
         },
         commonTestsDemo: {
             import: './src/demo/js/CommonTests.js',
@@ -158,6 +164,12 @@ export default {
             template: 'src/demo/templates/charts.html',
             filename: 'demo/charts.html',
             chunks: ['polyfills', 'chartsDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/templates/checkbox.html',
+            filename: 'demo/checkbox.html',
+            chunks: ['polyfills', 'Checkbox', 'checkboxDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
