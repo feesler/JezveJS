@@ -44,6 +44,14 @@ export class Checkbox extends Component {
         this.onChangeHandler = this.props.onChange;
     }
 
+    get checked() {
+        return this.state.checked;
+    }
+
+    get disabled() {
+        return this.state.disabled;
+    }
+
     createCheckPath() {
         return svg('svg', { viewBox: CHECK_VIEWBOX }, svg('path', { d: CHECK_PATH }));
     }
