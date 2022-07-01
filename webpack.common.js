@@ -28,6 +28,7 @@ export default {
         PieChart: './src/Components/PieChart/PieChart.js',
         Popup: './src/Components/Popup/Popup.js',
         Progress: './src/Components/Progress/Progress.js',
+        Radio: './src/Components/Radio/Radio.js',
         Slider: './src/Components/Slider/Slider.js',
         Switch: './src/Components/Switch/Switch.js',
 
@@ -169,7 +170,7 @@ export default {
         new HtmlWebpackPlugin({
             template: 'src/demo/Checkbox/checkbox.html',
             filename: 'demo/checkbox.html',
-            chunks: ['polyfills', 'Checkbox', 'checkboxDemo'],
+            chunks: ['polyfills', 'Checkbox', 'Radio', 'checkboxDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
