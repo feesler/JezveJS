@@ -4,13 +4,13 @@ import {
     onReady,
 } from '../../js/common.js';
 import { Sortable } from '../../Components/Sortable/index.js';
-import { DefaultDragZone } from './DragnDrop/DefaultDragZone.js';
-import { DefaultDropTarget } from './DragnDrop/DefaultDropTarget.js';
-import { OriginalDropTarget } from './DragnDrop/OriginalDropTarget.js';
+import { DefaultDragZone } from './impl/DefaultDragZone.js';
+import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
+import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/dragndrop.css';
+import './dragndrop.css';
 
 /* eslint-disable-next-line no-unused-vars */
 function onSort(srcElem, destElem) {

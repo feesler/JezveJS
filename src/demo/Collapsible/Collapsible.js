@@ -9,7 +9,7 @@ import { Collapsible } from '../../Components/Collapsible/Collapsible.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/collapsible.css';
+import './collapsible.css';
 
 /** Create SVG icon element */
 const createIcon = (icon) => {

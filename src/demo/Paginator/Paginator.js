@@ -6,7 +6,7 @@ import { Paginator } from '../../Components/Paginator/Paginator.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/paginator.css';
+import './paginator.css';
 
 function initSimple() {
     const paginator = Paginator.create({

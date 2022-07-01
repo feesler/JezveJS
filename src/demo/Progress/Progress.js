@@ -3,7 +3,7 @@ import { Progress } from '../../Components/Progress/Progress.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/progress.css';
+import './progress.css';
 
 function init() {
     const toggle1 = ge('toggle1');

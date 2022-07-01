@@ -3,7 +3,7 @@ import { Switch } from '../../Components/Switch/Switch.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/switch.css';
+import './switch.css';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

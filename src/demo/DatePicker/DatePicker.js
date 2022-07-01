@@ -4,7 +4,7 @@ import { formatDate } from '../../js/DateUtils.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
-import '../css/datepicker.css';
+import './datepicker.css';
 
 let calendarObj2 = null;
 let calendarObj3 = null;

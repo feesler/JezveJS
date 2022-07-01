@@ -28,94 +28,95 @@ export default {
         PieChart: './src/Components/PieChart/PieChart.js',
         Popup: './src/Components/Popup/Popup.js',
         Progress: './src/Components/Progress/Progress.js',
+        Radio: './src/Components/Radio/Radio.js',
         Slider: './src/Components/Slider/Slider.js',
         Switch: './src/Components/Switch/Switch.js',
 
         demoMain: {
-            import: './src/demo/js/main.js',
+            import: './src/demo/main/main.js',
             filename: 'demo/js/[name].js',
         },
         chartGridDemo: {
-            import: './src/demo/js/ChartGrid.js',
+            import: './src/demo/ChartGrid/ChartGrid.js',
             filename: 'demo/js/[name].js',
         },
         chartsDemo: {
-            import: './src/demo/js/Charts.js',
+            import: './src/demo/Charts/Charts.js',
             filename: 'demo/js/[name].js',
         },
         checkboxDemo: {
-            import: './src/demo/js/Checkbox.js',
+            import: './src/demo/Checkbox/Checkbox.js',
             filename: 'demo/js/[name].js',
             dependOn: 'Checkbox'
         },
         commonTestsDemo: {
-            import: './src/demo/js/CommonTests.js',
+            import: './src/demo/CommonTests/CommonTests.js',
             filename: 'demo/js/[name].js',
         },
         collapsibleDemo: {
-            import: './src/demo/js/Collapsible.js',
+            import: './src/demo/Collapsible/Collapsible.js',
             filename: 'demo/js/[name].js',
             dependOn: ['Collapsible']
         },
         dateInputDemo: {
-            import: './src/demo/js/DateInput.js',
+            import: './src/demo/DateInput/DateInput.js',
             filename: 'demo/js/[name].js',
             dependOn: 'DateInput'
         },
         datePickerDemo: {
-            import: './src/demo/js/DatePicker.js',
+            import: './src/demo/DatePicker/DatePicker.js',
             filename: 'demo/js/[name].js',
             dependOn: 'DatePicker'
         },
         debugDemo: {
-            import: './src/demo/js/Debug.js',
+            import: './src/demo/Debug/Debug.js',
             filename: 'demo/js/[name].js',
         },
         decimalInputDemo: {
-            import: './src/demo/js/DecimalInput.js',
+            import: './src/demo/DecimalInput/DecimalInput.js',
             filename: 'demo/js/[name].js',
             dependOn: 'DecimalInput'
         },
         dpiTestDemo: {
-            import: './src/demo/js/DpiTest.js',
+            import: './src/demo/DpiTest/DpiTest.js',
             filename: 'demo/js/[name].js'
         },
         dragnDropDemo: {
-            import: './src/demo/js/DragnDrop.js',
+            import: './src/demo/DragnDrop/DragnDrop.js',
             filename: 'demo/js/[name].js',
             dependOn: ['DragnDrop', 'Sortable']
         },
         dropDownDemo: {
-            import: './src/demo/js/DropDown.js',
+            import: './src/demo/DropDown/DropDown.js',
             filename: 'demo/js/[name].js',
             dependOn: 'DropDown'
         },
         emptyClickDemo: {
-            import: './src/demo/js/EmptyClick.js',
+            import: './src/demo/EmptyClick/EmptyClick.js',
             filename: 'demo/js/[name].js',
         },
         paginatorDemo: {
-            import: './src/demo/js/Paginator.js',
+            import: './src/demo/Paginator/Paginator.js',
             filename: 'demo/js/[name].js',
             dependOn: 'Paginator'
         },
         pieChartDemo: {
-            import: './src/demo/js/PieChart.js',
+            import: './src/demo/PieChart/PieChart.js',
             filename: 'demo/js/[name].js',
             dependOn: 'PieChart'
         },
         popupDemo: {
-            import: './src/demo/js/Popup.js',
+            import: './src/demo/Popup/Popup.js',
             filename: 'demo/js/[name].js',
             dependOn: ['Popup', 'DragnDrop']
         },
         progressDemo: {
-            import: './src/demo/js/Progress.js',
+            import: './src/demo/Progress/Progress.js',
             filename: 'demo/js/[name].js',
             dependOn: 'Progress'
         },
         switchDemo: {
-            import: './src/demo/js/Switch.js',
+            import: './src/demo/Switch/Switch.js',
             filename: 'demo/js/[name].js',
             dependOn: 'Switch'
         },
@@ -149,115 +150,115 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/index.html',
+            template: 'src/demo/main/index.html',
             filename: 'demo/index.html',
             chunks: ['polyfills', 'demoMain'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/chartgrid.html',
+            template: 'src/demo/ChartGrid/chartgrid.html',
             filename: 'demo/chartgrid.html',
             chunks: ['polyfills', 'chartGridDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/charts.html',
+            template: 'src/demo/Charts/charts.html',
             filename: 'demo/charts.html',
             chunks: ['polyfills', 'chartsDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/checkbox.html',
+            template: 'src/demo/Checkbox/checkbox.html',
             filename: 'demo/checkbox.html',
-            chunks: ['polyfills', 'Checkbox', 'checkboxDemo'],
+            chunks: ['polyfills', 'Checkbox', 'Radio', 'checkboxDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/common.html',
+            template: 'src/demo/CommonTests/common.html',
             filename: 'demo/common.html',
             chunks: ['polyfills', 'commonTestsDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/collapsible.html',
+            template: 'src/demo/Collapsible/collapsible.html',
             filename: 'demo/collapsible.html',
             chunks: ['polyfills', 'Collapsible', 'collapsibleDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/dateinput.html',
+            template: 'src/demo/DateInput/dateinput.html',
             filename: 'demo/dateinput.html',
             chunks: ['polyfills', 'DateInput', 'dateInputDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/datepicker.html',
+            template: 'src/demo/DatePicker/datepicker.html',
             filename: 'demo/datepicker.html',
             chunks: ['polyfills', 'DatePicker', 'datePickerDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/debug.html',
+            template: 'src/demo/Debug/debug.html',
             filename: 'demo/debug.html',
             chunks: ['polyfills', 'debugDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/decimal.html',
+            template: 'src/demo/DecimalInput/decimal.html',
             filename: 'demo/decimal.html',
             chunks: ['polyfills', 'DecimalInput', 'decimalInputDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/dpitest.html',
+            template: 'src/demo/DpiTest/dpitest.html',
             filename: 'demo/dpitest.html',
             chunks: ['polyfills', 'dpiTestDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/dragndrop.html',
+            template: 'src/demo/DragnDrop/dragndrop.html',
             filename: 'demo/dragndrop.html',
             chunks: ['polyfills', 'DragnDrop', 'Sortable', 'dragnDropDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/dropdown.html',
+            template: 'src/demo/DropDown/dropdown.html',
             filename: 'demo/dropdown.html',
             chunks: ['polyfills', 'DropDown', 'dropDownDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/emptyclick.html',
+            template: 'src/demo/EmptyClick/emptyclick.html',
             filename: 'demo/emptyclick.html',
             chunks: ['polyfills', 'emptyClickDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/paginator.html',
+            template: 'src/demo/Paginator/paginator.html',
             filename: 'demo/paginator.html',
             chunks: ['polyfills', 'Paginator', 'paginatorDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/piechart.html',
+            template: 'src/demo/PieChart/piechart.html',
             filename: 'demo/piechart.html',
             chunks: ['polyfills', 'PieChart', 'pieChartDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/popup.html',
+            template: 'src/demo/Popup/popup.html',
             filename: 'demo/popup.html',
             chunks: ['polyfills', 'Popup', 'DragnDrop', 'popupDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/progress.html',
+            template: 'src/demo/Progress/progress.html',
             filename: 'demo/progress.html',
             chunks: ['polyfills', 'Progress', 'progressDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/templates/switch.html',
+            template: 'src/demo/Switch/switch.html',
             filename: 'demo/switch.html',
             chunks: ['polyfills', 'Switch', 'switchDemo'],
             minify: htmlMinifyOptions,

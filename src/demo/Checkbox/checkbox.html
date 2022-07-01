@@ -49,6 +49,43 @@
                         <div id="largeContainer"></div>
                     </div>
 
+                    <h1>Radio</h1>
+
+                    <h2>Parse component from DOM</h2>
+                    <div class="section">
+                        <label id="defaultRadio1" class="radio">
+                            <input name="radio1" type="radio" value="1" checked>
+                            <span class="radio__check"></span>
+                            <span class="radio__label">Value 1</span>
+                        </label>
+                        <label id="defaultRadio2" class="radio">
+                            <input name="radio1" type="radio" value="2">
+                            <span class="radio__check"></span>
+                            <span class="radio__label">Value 2</span>
+                        </label>
+                        <label id="defaultRadio3" class="radio">
+                            <input name="radio1" type="radio" value="3">
+                            <span class="radio__check"></span>
+                            <span class="radio__label">Value 3</span>
+                        </label>
+                        <label id="defaultRadio4" class="radio">
+                            <input name="radio1" type="radio" value="4" disabled>
+                            <span class="radio__check"></span>
+                            <span class="radio__label">Value 4</span>
+                        </label>
+                    </div>
+
+                    <h2>Dynamically create Radio</h2>
+                    <div class="section">
+                        <div id="dynamicRadioContainer"></div>
+                        <div class="controls">
+                            <button id="checkRadioBtn" class="btn" type="button">Check</button>
+                            <button id="uncheckRadioBtn" class="btn" type="button">Uncheck</button>
+                            <button id="enableRadioBtn" class="btn" type="button">Enable</button>
+                            <button id="disableRadioBtn" class="btn" type="button">Disable</button>
+                        </div>
+                    </div>
+
                     <div class="section">
                         <label>Events log</label><br>
                         <textarea id="eventsLog" class="logs-container"></textarea>
