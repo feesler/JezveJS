@@ -153,7 +153,7 @@ function init() {
     const customGroup = groupsDropDown.addGroup('Hidden');
     const hiddenGroupItems = initItems('Hidden item', 3);
     hiddenGroupItems.forEach(
-        (item) => groupsDropDown.addItem({ ...item, group: customGroup }),
+        (item) => groupsDropDown.addItem({ ...item, id: item.id + 2, group: customGroup }),
     );
 
     // Attach drop down to block element

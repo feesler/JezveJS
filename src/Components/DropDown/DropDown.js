@@ -1560,7 +1560,8 @@ export class DropDown {
         }
 
         if (appendToSelect) {
-            item.optionElem = this.addOption(this.selectElem, item.id, item.title, item.disabled);
+            const targetElem = (item.group) ? item.group.optGroupElem : this.selectElem;
+            item.optionElem = this.addOption(targetElem, item.id, item.title, item.disabled);
             if (!this.multi) {
                 item.selected = item.optionElem.selected;
             }
