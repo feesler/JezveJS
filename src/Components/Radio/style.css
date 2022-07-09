@@ -36,14 +36,6 @@
   background-color: #ffffff;
 }
 
-.radio__check:hover {
-  background-color: #1e82cc;
-}
-
-.radio .radio__check:hover {
-  background-color: #cccccc;
-}
-
 .radio .radio__check:active {
   background-color: #1e82cc;
 }
@@ -63,4 +55,14 @@
 
 .radio__label {
   font-size: 16px;
+}
+
+@media (hover: hover) {
+  .radio__check:hover {
+    background-color: #1e82cc;
+  }
+
+  .radio .radio__check:hover {
+    background-color: #cccccc;
+  }
 }
