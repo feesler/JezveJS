@@ -34,10 +34,15 @@ export class DropDown extends TestComponent {
         return super.create(parent, container);
     }
 
+    static async isValidContainer(elem) {
+        const validClass = await hasClass(elem, 'dd__container');
+        const validAttachedClass = await hasClass(elem, 'dd__container_attached');
+        return validClass || validAttachedClass;
+    }
+
     async parseContent() {
-        const validClass = await hasClass(this.elem, 'dd__container');
-        const validAttachedClass = await hasClass(this.elem, 'dd__container_attached');
-        assert(validClass || validAttachedClass, 'Invalid drop down element');
+        const validContainer = await DropDown.isValidContainer(this.elem);
+        assert(validContainer, 'Invalid drop down element');
 
         const res = {};
 

@@ -1,12 +1,11 @@
 {
   "name": "jezvejs",
-  "version": "1.11.0",
-  "main": "dist/index.js",
+  "version": "1.12.0",
   "type": "module",
-  "jsnext:main": "src/js/index.js",
   "module": "src/js/index.js",
   "files": [
-    "src"
+    "src",
+    "tests"
   ],
   "description": "JavaScript utility and components library",
   "repository": {
@@ -93,6 +92,7 @@
     "./Progress": "./src/Components/Progress/Progress.js",
     "./Slider": "./src/Components/Slider/Slider.js",
     "./Sortable": "./src/Components/Sortable/index.js",
-    "./Switch": "./src/Components/Switch/Switch.js"
+    "./Switch": "./src/Components/Switch/Switch.js",
+    "./tests": "./tests/components.js"
   }
 }
