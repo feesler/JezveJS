@@ -1,6 +1,6 @@
 import { MainView } from './view/main.js';
-import { DropDownView } from './view/dropdown.js';
-import { DatePickerView } from './view/datepicker.js';
+import { DropDownView } from './view/DropDown.js';
+import { DatePickerView } from './view/DatePicker.js';
 
 /** Process request url and return view class if match */
 export async function route(env, url) {

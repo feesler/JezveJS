@@ -7,7 +7,7 @@ import {
     setBlock,
     isVisible,
 } from 'jezve-test';
-import * as DropDownTests from './run/dropdown.js';
+import * as DropDownTests from './run/DropDown.js';
 import { App } from './app.js';
 
 export class Scenario {

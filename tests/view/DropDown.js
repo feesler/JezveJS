@@ -1,5 +1,5 @@
 import { query } from 'jezve-test';
-import { DropDown } from './component/dropdown.js';
+import { DropDown } from './component/DropDown.js';
 import { AppView } from './AppView.js';
 
 export class DropDownView extends AppView {
