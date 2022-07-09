@@ -1429,10 +1429,6 @@ export class DropDown {
                         return false;
                     }
                 }
-
-                if (group.listElem.children.length > 0) {
-                    this.listElem.appendChild(group.elem);
-                }
             } else if (childElem.tagName === 'OPTION') {
                 if (!this.parseOption(childElem, null)) {
                     return false;
@@ -1605,6 +1601,8 @@ export class DropDown {
                 group.listElem,
             ],
         );
+
+        this.listElem.appendChild(group.elem);
 
         if (toAppend) {
             group.optGroupElem = this.addOptGroup(this.selectElem, group.title);

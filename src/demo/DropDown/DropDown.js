@@ -144,6 +144,18 @@ function init() {
         editable: false,
     });
 
+    // Dynamic groups create
+    const groupsDropDown = DropDown.create({
+        input_id: 'optgroupsdyn',
+        editable: false,
+        data: initItems('Visible item', 3),
+    });
+    const customGroup = groupsDropDown.addGroup('Hidden');
+    const hiddenGroupItems = initItems('Hidden item', 3);
+    hiddenGroupItems.forEach(
+        (item) => groupsDropDown.addItem({ ...item, group: customGroup }),
+    );
+
     // Attach drop down to block element
     DropDown.create({
         input_id: 'box',
