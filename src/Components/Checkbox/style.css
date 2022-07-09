@@ -26,19 +26,6 @@
   visibility: hidden;
 }
 
-.checkbox__check:hover {
-  background-color: #1e82cc;
-}
-
-.checkbox__check:hover svg {
-  visibility: visible;
-  fill: #ffffff;
-}
-
-.checkbox .checkbox__check:hover {
-  background-color: #cccccc;
-}
-
 .checkbox .checkbox__check:active {
   background-color: #1e82cc;
 }
@@ -55,4 +42,19 @@
 
 .checkbox__label {
   font-size: 16px;
+}
+
+@media (hover: hover) {
+  .checkbox__check:hover {
+    background-color: #1e82cc;
+  }
+
+  .checkbox__check:hover svg {
+    visibility: visible;
+    fill: #ffffff;
+  }
+
+  .checkbox .checkbox__check:hover {
+    background-color: #cccccc;
+  }
 }
