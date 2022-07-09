@@ -28,7 +28,41 @@ function toggleEnable(e) {
     btn.value = (this.disabled) ? 'Enable' : 'Disable';
 }
 
-function customRenderItem(item) {
+const customColorsMap = {
+    1: 'dd__custom-list-item_blue',
+    2: 'dd__custom-list-item_red',
+    3: 'dd__custom-list-item_green',
+    4: 'dd__custom-list-item_yellow',
+    5: 'dd__custom-list-item_pink',
+};
+
+function renderCustomItem(item) {
+    const colorClass = customColorsMap[item.id];
+    const colorElem = ce('span', { className: `dd__custom-list-item_color ${colorClass}` });
+    const titleElem = ce('span', {
+        className: 'dd__custom-list-item_title',
+        title: item.title,
+        textContent: item.title,
+    });
+
+    const elem = ce(
+        'div',
+        { className: 'dd__list-item dd__custom-list-item' },
+        [colorElem, titleElem],
+    );
+
+    if (this.multi) {
+        const checkIcon = ce(
+            'span',
+            { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
+        );
+        colorElem.append(checkIcon);
+    }
+
+    return elem;
+}
+
+function renderCustomSelectionItem(item) {
     const deselectButton = ce('span', { className: 'dd__del-selection-item-btn' });
     deselectButton.addEventListener('click', this.delSelectItemHandler);
 
@@ -264,7 +298,8 @@ function init() {
         onchange(selection) {
             logTo('log-custom', `change: ${formatObject(selection)}`);
         },
-        renderItem: customRenderItem,
+        renderItem: renderCustomItem,
+        renderSelectionItem: renderCustomSelectionItem,
     });
 
     const enableBtn2 = ge('enableBtn2');

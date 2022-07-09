@@ -39,7 +39,8 @@ const CHECK_ICON = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.
  * @param {Function} params.onchange - selection changed event handler
  * @param {boolean|Function} params.oninput - text input event handler
  *    If set to true list items will be filtered by input value
- * @param {Function} params.renderItem - callback for custom selected item render
+ * @param {Function} params.renderItem - callback for custom list item render
+ * @param {Function} params.renderSelectionItem - callback for custom selected item render
  * @param {string} params.extraClass - additional CSS classes
  * @param {Object} params.data - array of item objects { id, title }
  */
@@ -87,7 +88,13 @@ export class DropDown {
             if (!isFunction(params.renderItem)) {
                 throw new Error('Invalid renderItem handler specified');
             }
-            this.renderItem = params.renderItem;
+            this.renderItemCallback = params.renderItem;
+        }
+        if ('renderSelectionItem' in params) {
+            if (!isFunction(params.renderSelectionItem)) {
+                throw new Error('Invalid renderSelectionItem handler specified');
+            }
+            this.renderSelectionItemCallback = params.renderSelectionItem;
         }
 
         this.emptyClickHandler = () => this.show(false);
@@ -1043,8 +1050,46 @@ export class DropDown {
         return elem && this.containerElem.contains(elem);
     }
 
+    /** Renturns default list item container */
+    defaultItem(item) {
+        const elem = ce('div', { className: 'dd__list-item' });
+
+        if (this.multi) {
+            const checkIcon = svg(
+                'svg',
+                { width: 17, height: 17, viewBox: '0 1 10 10' },
+                svg('path', { d: CHECK_ICON }),
+            );
+            const titleElem = ce('span', { title: item.title, textContent: item.title });
+            elem.append(checkIcon, titleElem);
+        } else {
+            elem.title = item.title;
+            elem.textContent = item.title;
+        }
+
+        return elem;
+    }
+
+    renderItem(item) {
+        const res = item;
+
+        const renderCallback = isFunction(this.renderItemCallback)
+            ? this.renderItemCallback
+            : this.defaultItem;
+
+        res.contentElem = renderCallback.call(this, item);
+        setEvents(res.contentElem, { mouseover: this.hoverHandler });
+
+        res.elem = ce('li', {}, res.contentElem, { click: this.listItemClickHandler });
+        if (item.disabled) {
+            res.elem.setAttribute('disabled', '');
+        }
+
+        return res;
+    }
+
     /** Return selected item element for specified item object */
-    renderSelectedItem(item) {
+    defaultSelectionItem(item) {
         const deselectButton = ce(
             'span',
             { className: 'dd__del-selection-item-btn', innerHTML: '&times;' },
@@ -1073,9 +1118,9 @@ export class DropDown {
             return;
         }
 
-        const renderCallback = isFunction(this.renderItem)
-            ? this.renderItem
-            : this.renderSelectedItem;
+        const renderCallback = isFunction(this.renderSelectionItemCallback)
+            ? this.renderSelectionItemCallback
+            : this.defaultSelectionItem;
         this.selectedElems = selectedItems.map((item) => {
             const listItem = item;
             const elem = renderCallback.call(this, listItem);
@@ -1335,14 +1380,14 @@ export class DropDown {
         }
 
         const item = this.getItem(itemId);
-        if (!item || !item.divElem) {
+        if (!item || !item.contentElem) {
             return false;
         }
 
         if (val) {
-            item.divElem.classList.add('dd__list-item_selected');
+            item.contentElem.classList.add('dd__list-item_selected');
         } else {
-            item.divElem.classList.remove('dd__list-item_selected');
+            item.contentElem.classList.remove('dd__list-item_selected');
         }
 
         return true;
@@ -1521,35 +1566,11 @@ export class DropDown {
             appendToSelect = !!props.appendToSelect;
         }
 
-        if (appendToSelect && !this.multi && !this.items.length && item.id !== 0) {
+        if (appendToSelect && !this.multi && !this.items.length && props.id !== 0) {
             this.selectElem.appendChild(ce('option', { disabled: true, value: 0 }));
         }
 
-        item.divElem = ce(
-            'div',
-            { className: 'dd__list-item' },
-            null,
-            { mouseover: this.hoverHandler },
-        );
-        if (this.multi) {
-            item.checkIcon = svg(
-                'svg',
-                { width: 17, height: 17, viewBox: '0 1 10 10' },
-                svg('path', { d: CHECK_ICON }),
-            );
-            item.divElem.appendChild(item.checkIcon);
-
-            item.titleElem = ce('span', { title: item.title, textContent: item.title });
-            item.divElem.appendChild(item.titleElem);
-        } else {
-            item.divElem.title = item.title;
-            item.divElem.textContent = item.title;
-        }
-
-        item.elem = ce('li', {}, item.divElem, { click: this.listItemClickHandler });
-        if (item.disabled) {
-            item.elem.setAttribute('disabled', '');
-        }
+        this.renderItem(item);
 
         if (props.group) {
             props.group.listElem.appendChild(item.elem);
@@ -1622,7 +1643,7 @@ export class DropDown {
 
         this.deselectItem(item.id);
         re(item.optionElem);
-        re(item.divElem);
+        re(item.contentElem);
     }
 
     /** Remove item by id */
@@ -1652,7 +1673,7 @@ export class DropDown {
         const listItem = item;
 
         if (this.actItem) {
-            this.actItem.divElem.classList.remove('dd__list-item_active');
+            this.actItem.contentElem.classList.remove('dd__list-item_active');
             this.actItem = null;
         }
 
@@ -1664,7 +1685,7 @@ export class DropDown {
             return;
         }
 
-        listItem.divElem.classList.add('dd__list-item_active');
+        listItem.contentElem.classList.add('dd__list-item_active');
         this.actItem = listItem;
 
         if (this.editable) {
@@ -1680,7 +1701,7 @@ export class DropDown {
         }
 
         if (this.actItem === item) {
-            this.actItem.divElem.classList.remove('dd__list-item_active');
+            this.actItem.contentElem.classList.remove('dd__list-item_active');
             this.actItem = null;
         }
 
