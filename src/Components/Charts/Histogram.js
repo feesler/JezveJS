@@ -1,4 +1,4 @@
-import { svg } from '../../js/common.js';
+import { svg } from '../../js/index.js';
 import { BaseChart } from './BaseChart.js';
 
 /**

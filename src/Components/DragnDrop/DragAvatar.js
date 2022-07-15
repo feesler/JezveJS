@@ -1,4 +1,4 @@
-import { px } from '../../js/common.js';
+import { px } from '../../js/index.js';
 import { dragMaster } from './index.js';
 
 /* eslint no-unused-vars: "warn" */

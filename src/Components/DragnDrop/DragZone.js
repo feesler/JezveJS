@@ -1,4 +1,4 @@
-import { ge, isObject } from '../../js/common.js';
+import { ge, isObject } from '../../js/index.js';
 import { dragMaster } from './index.js';
 
 /**

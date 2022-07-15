@@ -4,7 +4,7 @@ import {
     svg,
     setEvents,
     onReady,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Collapsible } from '../../Components/Collapsible/Collapsible.js';
 import '../../css/common.css';
 import '../css/common.css';

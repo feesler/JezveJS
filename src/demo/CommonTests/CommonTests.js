@@ -6,7 +6,7 @@ import {
     isVisible,
     show,
     onReady,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { ajax } from '../../js/ajax.js';
 import '../../css/common.css';
 import '../css/common.css';

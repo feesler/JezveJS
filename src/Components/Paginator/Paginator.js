@@ -5,7 +5,7 @@ import {
     isFunction,
     removeChilds,
     setEvents,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Component } from '../../js/Component.js';
 import './paginator.css';
 

@@ -3,7 +3,7 @@ import {
     setEmptyClick,
     removeEmptyClick,
     onReady,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

@@ -18,7 +18,7 @@ import {
     getCursorPos,
     setEvents,
     removeEvents,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import '../../css/common.css';
 import './dropdown.css';
 

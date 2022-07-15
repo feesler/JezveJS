@@ -3,7 +3,7 @@ import {
     ce,
     selectedValue,
     onReady,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Popup } from '../../Components/Popup/Popup.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';

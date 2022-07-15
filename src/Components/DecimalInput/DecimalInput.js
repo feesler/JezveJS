@@ -1,4 +1,4 @@
-import { isFunction, getCursorPos, isNum } from '../../js/common.js';
+import { isFunction, getCursorPos, isNum } from '../../js/index.js';
 import '../../css/common.css';
 
 /**

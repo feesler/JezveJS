@@ -1,4 +1,4 @@
-import { re, getOffset } from '../../../js/common.js';
+import { re, getOffset } from '../../../js/index.js';
 import { DragAvatar } from '../../../Components/DragnDrop/DragAvatar.js';
 
 /**

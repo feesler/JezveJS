@@ -1,4 +1,4 @@
-import { ce, ge, onReady } from '../../js/common.js';
+import { ce, ge, onReady } from '../../js/index.js';
 import { Checkbox } from '../../Components/Checkbox/Checkbox.js';
 import { Radio } from '../../Components/Radio/Radio.js';
 import '../../css/common.css';
