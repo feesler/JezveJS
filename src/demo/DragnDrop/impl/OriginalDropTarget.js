@@ -1,5 +1,5 @@
-import { getOffset, px } from '../../../js/common.js';
-import { dragMaster } from '../../../Components/DragnDrop/index.js';
+import { getOffset, px } from '../../../js/index.js';
+import { DragMaster } from '../../../Components/DragnDrop/index.js';
 import { DropTarget } from '../../../Components/DragnDrop/DropTarget.js';
 import { OriginalDragAvatar } from './OriginalDragAvatar.js';
 
@@ -24,7 +24,7 @@ export class OriginalDropTarget extends DropTarget {
 
         const offset = getOffset(this.elem);
 
-        const page = dragMaster.getEventPageCoordinates(e);
+        const page = DragMaster.getEventPageCoordinates(e);
         elemToMove.style.left = px(page.x - avatarInfo.mouseShift.x - offset.left);
         elemToMove.style.top = px(page.y - avatarInfo.mouseShift.y - offset.top);
 

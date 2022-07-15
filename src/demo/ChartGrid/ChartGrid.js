@@ -1,4 +1,4 @@
-import { ge, ce, onReady } from '../../js/common.js';
+import { ge, ce, onReady } from '../../js/index.js';
 import { ChartGrid } from '../../Components/Charts/ChartGrid.js';
 import { Histogram } from '../../Components/Charts/Histogram.js';
 import { LineChart } from '../../Components/Charts/LineChart.js';

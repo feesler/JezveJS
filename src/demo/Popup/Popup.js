@@ -3,7 +3,7 @@ import {
     ce,
     selectedValue,
     onReady,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Popup } from '../../Components/Popup/Popup.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
@@ -239,8 +239,8 @@ function showPopup12() {
             closeBtn: true,
         });
 
-        ge('valueselect').addEventListener('change', () => {
-            ge('valueresult').textContent = selectedValue(this);
+        ge('valueselect').addEventListener('change', (e) => {
+            ge('valueresult').textContent = selectedValue(e.target);
         });
     }
 
@@ -304,10 +304,6 @@ function showPopup13() {
         popupArr[ind].setControls({
             okBtn: { onclick: restoreControls.bind(popupArr[ind]) },
             cancelBtn: { onclick: removeControls.bind(popupArr[ind]) },
-        });
-
-        ge('valueselect').addEventListener('change', () => {
-            ge('valueresult').textContent = selectedValue(this);
         });
     }
 

@@ -4,7 +4,7 @@ import {
     isFunction,
     copyObject,
     removeChilds,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.css';
 import './piechart.css';

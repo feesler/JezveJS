@@ -1,4 +1,4 @@
-import { isObject } from '../../js/common.js';
+import { isObject } from '../../js/index.js';
 
 /**
  * Chart grid class constructor

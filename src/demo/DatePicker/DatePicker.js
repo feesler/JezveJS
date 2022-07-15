@@ -1,4 +1,4 @@
-import { ge, onReady } from '../../js/common.js';
+import { ge, onReady } from '../../js/index.js';
 import { DatePicker } from '../../Components/DatePicker/DatePicker.js';
 import { formatDate } from '../../js/DateUtils.js';
 import '../../css/common.css';

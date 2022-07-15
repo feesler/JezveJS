@@ -12,7 +12,7 @@ import {
     show,
     setEmptyClick,
     removeEmptyClick,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.css';
 import './popup.css';

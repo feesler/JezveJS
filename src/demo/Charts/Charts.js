@@ -6,7 +6,7 @@ import {
     setEmptyClick,
     px,
     onReady,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Histogram } from '../../Components/Charts/Histogram.js';
 import { LineChart } from '../../Components/Charts/LineChart.js';
 import '../../css/common.css';

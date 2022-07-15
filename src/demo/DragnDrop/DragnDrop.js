@@ -2,7 +2,7 @@ import {
     ge,
     ce,
     onReady,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Sortable } from '../../Components/Sortable/index.js';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';

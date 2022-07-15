@@ -2,7 +2,7 @@ import {
     isFunction,
     ce,
     setEvents,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.css';
 import './style.css';

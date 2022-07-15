@@ -18,10 +18,11 @@ import {
     getCursorPos,
     setEvents,
     removeEvents,
-} from '../../js/common.js';
+} from '../../js/index.js';
 import '../../css/common.css';
 import './dropdown.css';
 
+const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
 const CHECK_ICON = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z';
 
 /**
@@ -98,6 +99,7 @@ export class DropDown {
         }
 
         this.emptyClickHandler = () => this.show(false);
+        this.clearHandler = this.clear.bind(this);
         this.toggleHandler = this.toggleList.bind(this);
         this.inputHandler = this.onInput.bind(this);
         this.hoverHandler = this.onMouseOver.bind(this);
@@ -306,14 +308,31 @@ export class DropDown {
 
         const res = ce('div', { className: 'dd__combo' });
         if (this.multi) {
-            addChilds(res, this.selectionElem);
+            res.append(this.selectionElem);
         }
-        addChilds(res, [
-            this.staticElem,
-            this.inputElem,
-            this.selectElem,
-            this.toggleBtn,
-        ]);
+        res.append(this.staticElem, this.inputElem);
+        if (this.multi) {
+            this.clearBtn = this.createClearButton();
+            res.append(this.clearBtn);
+        }
+        res.append(this.selectElem, this.toggleBtn);
+
+        return res;
+    }
+
+    /** Create clear selection button */
+    createClearButton() {
+        const closeIcon = svg('svg', {}, svg('path', { d: CLOSE_ICON }));
+        const res = ce(
+            'div',
+            { className: 'dd__clear-btn' },
+            closeIcon,
+            { click: this.clearHandler },
+        );
+
+        if (this.disabled) {
+            res.disabled = true;
+        }
 
         return res;
     }
@@ -1153,6 +1172,10 @@ export class DropDown {
             const listItem = item;
 
             listItem.selected = false;
+            listItem.selectedElem = null;
+
+            this.check(item.id, false);
+            selectByValue(this.selectElem, item.id, false);
         });
     }
 
@@ -1254,6 +1277,11 @@ export class DropDown {
         item.selectedElem = null;
         item.selected = false;
 
+        this.renderSelection();
+    }
+
+    clear() {
+        this.clearSelection();
         this.renderSelection();
     }
 

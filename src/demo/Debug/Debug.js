@@ -1,4 +1,4 @@
-import { onReady } from '../../js/common.js';
+import { onReady } from '../../js/index.js';
 import { Debug } from '../../Components/Debug/Debug.js';
 import '../../css/common.css';
 import '../css/common.css';

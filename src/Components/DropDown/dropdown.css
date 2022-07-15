@@ -89,6 +89,21 @@
   font-weight: 400 !important;
 }
 
+/* Clear selection button */
+.dd__clear-btn {
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.dd__clear-btn > svg {
+  width: 14px;
+  height: 14px;
+  fill: #888888;
+}
+
 /* Select Drop Down button */
 .dd__toggle-btn {
   background-color: #ffffff;
@@ -294,6 +309,10 @@
 }
 
 /* Disabled drop down */
+.dd__container.dd__container_disabled {
+  pointer-events: none;
+}
+
 .dd__container.dd__container_disabled .dd__combo {
   border: 2px solid #cccccc;
 }
@@ -302,10 +321,7 @@
   color: #cccccc;
 }
 
-.dd__container_disabled .dd__toggle-btn {
-  cursor: default;
-}
-
+.dd__container_disabled .dd__clear-btn > svg,
 .dd__container_disabled .dd__toggle-btn path {
   fill: #cccccc;
 }
@@ -323,6 +339,7 @@
 }
 
 /* Enabled */
+.dd__container_enabled .dd__clear-btn:hover path,
 .dd__container_enabled .dd__toggle-btn:hover path {
   fill: #000000;
 }
