@@ -99,7 +99,7 @@ export class DropDown {
         }
 
         this.emptyClickHandler = () => this.show(false);
-        this.clearHandler = this.clear.bind(this);
+        this.clearHandler = () => this.onClear();
         this.toggleHandler = this.toggleList.bind(this);
         this.inputHandler = this.onInput.bind(this);
         this.hoverHandler = this.onMouseOver.bind(this);
@@ -557,6 +557,10 @@ export class DropDown {
                 const item = selectedItems[index];
                 if (item) {
                     this.deselectItem(item.id);
+
+                    this.sendItemSelectEvent();
+                    this.changed = true;
+                    this.sendChangeEvent();
                 }
             }
 
@@ -685,6 +689,13 @@ export class DropDown {
         }
 
         return true;
+    }
+
+    /** Handler for 'clear selection' button click */
+    onClear() {
+        this.clearSelection();
+        this.renderSelection();
+        this.sendChangeEvent();
     }
 
     /* List items methods */
@@ -1177,6 +1188,7 @@ export class DropDown {
             this.check(item.id, false);
             selectByValue(this.selectElem, item.id, false);
         });
+        this.changed = true;
     }
 
     /** Return selected items data for 'itemselect' and 'change' events */
@@ -1277,11 +1289,6 @@ export class DropDown {
         item.selectedElem = null;
         item.selected = false;
 
-        this.renderSelection();
-    }
-
-    clear() {
-        this.clearSelection();
         this.renderSelection();
     }
 
