@@ -1,5 +1,5 @@
 import { px } from '../../js/index.js';
-import { dragMaster } from './index.js';
+import { DragMaster } from './index.js';
 
 /* eslint no-unused-vars: "warn" */
 
@@ -67,13 +67,13 @@ export class DragAvatar {
      * @param {Event} e - event object
      */
     onDragMove(e) {
-        const page = dragMaster.getEventPageCoordinates(e);
-        const client = dragMaster.getEventClientCoordinates(e);
+        const page = DragMaster.getEventPageCoordinates(e);
+        const client = DragMaster.getEventClientCoordinates(e);
 
         this.elem.style.left = px(page.x - this.shiftX);
         this.elem.style.top = px(page.y - this.shiftY);
 
-        this.currentTargetElem = dragMaster.getElementUnderClientXY(
+        this.currentTargetElem = DragMaster.getElementUnderClientXY(
             this.elem,
             client.x,
             client.y,

@@ -1,91 +1,101 @@
 /* eslint no-unused-vars: "warn" */
 
 /** Main drag and drop class */
-export const dragMaster = (function () {
-    let dragZone;
-    let avatar;
-    let dropTarget;
-    let downX;
-    let downY;
-    let touchTimeout = 0;
-    let touchMoveReady = false;
-    let handlers = null;
+export class DragMaster {
+    static instance = null;
 
-    function disableTextSelect() {
+    static getInstance() {
+        if (!this.instance) {
+            this.instance = new DragMaster();
+        }
+
+        return this.instance;
+    }
+
+    constructor() {
+        this.dragZone = null;
+        this.avatar = null;
+        this.dropTarget = null;
+        this.touchTimeout = 0;
+        this.touchMoveReady = false;
+        this.handlers = null;
+    }
+
+    disableTextSelect() {
         document.body.style.userSelect = 'none';
         document.body.style.webkitUserSelect = 'none';
     }
 
-    function enableTextSelect() {
+    enableTextSelect() {
         document.body.style.userSelect = '';
         document.body.style.webkitUserSelect = '';
     }
 
     /** Set event handlers for document */
-    function addTouchEventHandlers() {
-        if (!handlers) {
+    addTouchEventHandlers() {
+        if (!this.handlers) {
             return;
         }
 
-        document.addEventListener('keydown', handlers.keydown);
-        document.addEventListener('touchmove', handlers.touchmove, { passive: false });
-        document.addEventListener('touchend', handlers.touchend);
-        document.addEventListener('touchcancel', handlers.touchcancel);
-        document.addEventListener('dragstart', handlers.dragstart);
-        document.body.addEventListener('selectstart', handlers.selectstart);
-        disableTextSelect();
+        document.addEventListener('keydown', this.handlers.keydown);
+        document.addEventListener('touchmove', this.handlers.touchmove, { passive: false });
+        document.addEventListener('touchend', this.handlers.touchend);
+        document.addEventListener('touchcancel', this.handlers.touchcancel);
+        document.addEventListener('dragstart', this.handlers.dragstart);
+        document.body.addEventListener('selectstart', this.handlers.selectstart);
+        this.disableTextSelect();
     }
 
     /** Set event handlers for document */
-    function addDocumentEventHandlers() {
-        if (!handlers) {
+    addDocumentEventHandlers() {
+        if (!this.handlers) {
             return;
         }
 
-        document.addEventListener('keydown', handlers.keydown);
-        document.addEventListener('mousemove', handlers.mousemove);
-        document.addEventListener('mouseup', handlers.mouseup);
-        document.addEventListener('dragstart', handlers.dragstart);
-        document.body.addEventListener('selectstart', handlers.selectstart);
+        document.addEventListener('keydown', this.handlers.keydown);
+        document.addEventListener('mousemove', this.handlers.mousemove);
+        document.addEventListener('mouseup', this.handlers.mouseup);
+        document.addEventListener('dragstart', this.handlers.dragstart);
+        document.body.addEventListener('selectstart', this.handlers.selectstart);
     }
 
     /** Remove event handler from document */
-    function removeTouchEventHandlers() {
-        if (!handlers) {
+    removeTouchEventHandlers() {
+        if (!this.handlers) {
             return;
         }
 
-        document.removeEventListener('keydown', handlers.keydown);
-        document.removeEventListener('touchmove', handlers.touchmove);
-        document.removeEventListener('touchend', handlers.touchend);
-        document.removeEventListener('touchcancel', handlers.touchcancel);
-        document.removeEventListener('dragstart', handlers.dragstart);
-        document.body.removeEventListener('selectstart', handlers.selectstart);
-        enableTextSelect();
+        document.removeEventListener('keydown', this.handlers.keydown);
+        document.removeEventListener('touchmove', this.handlers.touchmove);
+        document.removeEventListener('touchend', this.handlers.touchend);
+        document.removeEventListener('touchcancel', this.handlers.touchcancel);
+        document.removeEventListener('dragstart', this.handlers.dragstart);
+        document.body.removeEventListener('selectstart', this.handlers.selectstart);
+        this.enableTextSelect();
     }
 
     /** Remove event handler from document */
-    function removeDocumentEventHandlers() {
-        if (!handlers) {
+    removeDocumentEventHandlers() {
+        if (!this.handlers) {
             return;
         }
 
-        document.removeEventListener('keydown', handlers.keydown);
-        document.removeEventListener('mousemove', handlers.mousemove);
-        document.removeEventListener('mouseup', handlers.mouseup);
-        document.removeEventListener('dragstart', handlers.dragstart);
-        document.body.removeEventListener('selectstart', handlers.selectstart);
+        document.removeEventListener('keydown', this.handlers.keydown);
+        document.removeEventListener('mousemove', this.handlers.mousemove);
+        document.removeEventListener('mouseup', this.handlers.mouseup);
+        document.removeEventListener('dragstart', this.handlers.dragstart);
+        document.body.removeEventListener('selectstart', this.handlers.selectstart);
     }
 
     /** Clean up drag objects */
-    function cleanUp() {
-        dragZone = null;
-        avatar = null;
-        dropTarget = null;
+    cleanUp() {
+        this.dragZone = null;
+        this.avatar = null;
+        this.dropTarget = null;
     }
 
     /** Search for drag zone object */
-    function findDragZone(e) {
+    findDragZone(e) {
         let elem = e.target;
 
         while (elem !== document && !elem.dragZone) {
@@ -96,8 +106,8 @@ export const dragMaster = (function () {
     }
 
     /** Try to find drop target under mouse cursor */
-    function findDropTarget(e) {
-        let elem = avatar.getTargetElem();
+    findDropTarget(e) {
+        let elem = this.avatar.getTargetElem();
 
         while (elem !== document && !elem.dropTarget) {
             elem = elem.parentNode;
@@ -110,7 +120,7 @@ export const dragMaster = (function () {
         return elem.dropTarget;
     }
 
-    function getEventCoordinatesObject(e) {
+    static getEventCoordinatesObject(e) {
         if (e.touches) {
             if (e.type === 'touchend' || e.type === 'touchcancel') {
                 return e.changedTouches[0];
@@ -122,8 +132,8 @@ export const dragMaster = (function () {
         return e;
     }
 
-    function getEventPageCoordinates(e) {
-        const coords = getEventCoordinatesObject(e);
+    static getEventPageCoordinates(e) {
+        const coords = this.getEventCoordinatesObject(e);
 
         return {
             x: coords.pageX,
@@ -131,8 +141,8 @@ export const dragMaster = (function () {
         };
     }
 
-    function getEventClientCoordinates(e) {
-        const coords = getEventCoordinatesObject(e);
+    static getEventClientCoordinates(e) {
+        const coords = this.getEventCoordinatesObject(e);
 
         return {
             x: coords.clientX,
@@ -140,73 +150,73 @@ export const dragMaster = (function () {
         };
     }
 
-    function initAvatar(e) {
-        if (avatar) {
+    initAvatar(e) {
+        if (this.avatar) {
             return;
         }
 
-        const coords = getEventPageCoordinates(e);
+        const coords = DragMaster.getEventPageCoordinates(e);
         if (!e.touches) {
-            if (Math.abs(downX - coords.x) < 5 && Math.abs(downY - coords.y) < 5) {
+            if (Math.abs(this.downX - coords.x) < 5 && Math.abs(this.downY - coords.y) < 5) {
                 return;
             }
         }
 
-        avatar = dragZone.onDragStart(downX, downY, e);
-        if (!avatar) {
-            cleanUp();
+        this.avatar = this.dragZone.onDragStart(this.downX, this.downY, e);
+        if (!this.avatar) {
+            this.cleanUp();
         }
     }
 
-    function handleMove(e) {
-        if (!dragZone) {
+    handleMove(e) {
+        if (!this.dragZone) {
             return;
         }
 
-        if (!avatar) {
-            initAvatar(e);
+        if (!this.avatar) {
+            this.initAvatar(e);
         }
-        if (!avatar) {
+        if (!this.avatar) {
             return;
         }
 
-        avatar.onDragMove(e);
+        this.avatar.onDragMove(e);
 
-        const newDropTarget = findDropTarget(e);
-        if (dropTarget !== newDropTarget) {
-            if (dropTarget) {
-                dropTarget.onDragLeave(newDropTarget, avatar, e);
+        const newDropTarget = this.findDropTarget(e);
+        if (this.dropTarget !== newDropTarget) {
+            if (this.dropTarget) {
+                this.dropTarget.onDragLeave(newDropTarget, this.avatar, e);
             }
             if (newDropTarget) {
-                newDropTarget.onDragEnter(dropTarget, avatar, e);
+                newDropTarget.onDragEnter(this.dropTarget, this.avatar, e);
             }
         }
 
-        dropTarget = newDropTarget;
-        if (dropTarget) {
-            dropTarget.onDragMove(avatar, e);
+        this.dropTarget = newDropTarget;
+        if (this.dropTarget) {
+            this.dropTarget.onDragMove(this.avatar, e);
         }
     }
 
     /** Document mouse move event handler */
-    function mouseMove(e) {
+    mouseMove(e) {
         if (e.touches) {
-            if (!touchMoveReady) {
-                clearTimeout(touchTimeout);
-                touchTimeout = 0;
+            if (!this.touchMoveReady) {
+                clearTimeout(this.touchTimeout);
+                this.touchTimeout = 0;
                 return;
             }
             e.preventDefault();
         }
 
-        handleMove(e);
+        this.handleMove(e);
     }
 
     /** Document mouse up event handler */
-    function mouseUp(e) {
-        if (touchTimeout) {
-            clearTimeout(touchTimeout);
-            touchTimeout = 0;
+    mouseUp(e) {
+        if (this.touchTimeout) {
+            clearTimeout(this.touchTimeout);
+            this.touchTimeout = 0;
         }
 
         if (!e.touches) {
@@ -215,43 +225,43 @@ export const dragMaster = (function () {
             }
         }
 
-        if (avatar) {
-            if (dropTarget) {
-                dropTarget.onDragEnd(avatar, e);
+        if (this.avatar) {
+            if (this.dropTarget) {
+                this.dropTarget.onDragEnd(this.avatar, e);
             } else {
-                avatar.onDragCancel();
+                this.avatar.onDragCancel();
             }
         }
 
-        cleanUp();
+        this.cleanUp();
         if (e.touches) {
-            removeTouchEventHandlers();
+            this.removeTouchEventHandlers();
         } else {
-            removeDocumentEventHandlers();
+            this.removeDocumentEventHandlers();
         }
 
         return false;
     }
 
     /** Keydown event handler */
-    function onKey(e) {
+    onKey(e) {
         if (e.code === 'Escape') {
-            if (avatar) {
-                avatar.onDragCancel();
+            if (this.avatar) {
+                this.avatar.onDragCancel();
             }
 
-            cleanUp();
-            removeDocumentEventHandlers();
+            this.cleanUp();
+            this.removeDocumentEventHandlers();
         }
     }
 
     /** Empty function return false */
-    function emptyFalse(e) {
+    emptyFalse(e) {
         e.preventDefault();
     }
 
     /** Mouse down on drag object element event handler */
-    function mouseDown(e) {
+    mouseDown(e) {
         if (e.touches) {
             if (e.touches.length > 1) {
                 return;
@@ -264,51 +274,51 @@ export const dragMaster = (function () {
             return;
         }
 
-        dragZone = findDragZone(e);
-        if (!dragZone || !dragZone.isValidDragHandle(e.target)) {
+        this.dragZone = this.findDragZone(e);
+        if (!this.dragZone || !this.dragZone.isValidDragHandle(e.target)) {
             return;
         }
 
-        const coord = getEventPageCoordinates(e);
-        downX = coord.x;
-        downY = coord.y;
+        const coord = DragMaster.getEventPageCoordinates(e);
+        this.downX = coord.x;
+        this.downY = coord.y;
 
         if (e.touches) {
-            touchMoveReady = false;
-            handlers = {
-                keydown: onKey,
-                touchmove: mouseMove,
-                touchend: mouseUp,
-                touchcancel: mouseUp,
-                dragstart: emptyFalse,
-                selectstart: emptyFalse,
+            this.touchMoveReady = false;
+            this.handlers = {
+                keydown: (ev) => this.onKey(ev),
+                touchmove: (ev) => this.mouseMove(ev),
+                touchend: (ev) => this.mouseUp(ev),
+                touchcancel: (ev) => this.mouseUp(ev),
+                dragstart: (ev) => this.emptyFalse(ev),
+                selectstart: (ev) => this.emptyFalse(ev),
             };
-            addTouchEventHandlers();
+            this.addTouchEventHandlers();
 
-            if (touchTimeout) {
-                clearTimeout(touchTimeout);
-                touchTimeout = 0;
+            if (this.touchTimeout) {
+                clearTimeout(this.touchTimeout);
+                this.touchTimeout = 0;
             }
 
             const touchStartEvent = e;
-            touchTimeout = setTimeout(() => {
-                touchMoveReady = true;
-                handleMove(touchStartEvent);
+            this.touchTimeout = setTimeout(() => {
+                this.touchMoveReady = true;
+                this.handleMove(touchStartEvent);
             }, 200);
         } else {
-            handlers = {
-                keydown: onKey,
-                mousemove: mouseMove,
-                mouseup: mouseUp,
-                dragstart: emptyFalse,
-                selectstart: emptyFalse,
+            this.handlers = {
+                keydown: (ev) => this.onKey(ev),
+                mousemove: (ev) => this.mouseMove(ev),
+                mouseup: (ev) => this.mouseUp(ev),
+                dragstart: (ev) => this.emptyFalse(ev),
+                selectstart: (ev) => this.emptyFalse(ev),
             };
-            addDocumentEventHandlers();
+            this.addDocumentEventHandlers();
         }
     }
 
     // Check pointer is mouse
-    function isMousePointer(e) {
+    static isMousePointer(e) {
         if (typeof e.pointerType === 'undefined') {
             return true;
         }
@@ -327,55 +337,47 @@ export const dragMaster = (function () {
         return (pointerType === 'mouse');
     }
 
-    return {
-        makeDraggable(elem) {
-            const el = elem;
-            el.addEventListener('mousedown', mouseDown);
-            el.addEventListener('touchstart', mouseDown);
+    static makeDraggable(elem) {
+        const el = elem;
 
-            if (typeof el.onpointerdown !== 'undefined') {
-                el.onpointerdown = isMousePointer;
-            } else {
-                el.onmspointerdown = isMousePointer;
-            }
-        },
+        const inst = this.getInstance();
+        el.addEventListener('mousedown', (e) => inst.mouseDown(e));
+        el.addEventListener('touchstart', (e) => inst.mouseDown(e));
 
-        getElementUnderClientXY(elem, clientX, clientY) {
-            const el = elem;
-            const quirks = !elem.style.getPropertyValue; // IE < 9
+        if (typeof el.onpointerdown !== 'undefined') {
+            el.onpointerdown = this.isMousePointer;
+        } else {
+            el.onmspointerdown = this.isMousePointer;
+        }
+    }
 
-            let display;
-            let priority;
-            if (quirks) {
-                display = el.style.cssText;
-                el.style.cssText += 'display: none!important';
-            } else {
-                display = el.style.getPropertyValue('display');
-                priority = el.style.getPropertyPriority('display');
-                el.style.setProperty('display', 'none', 'important');
-            }
+    static getElementUnderClientXY(elem, clientX, clientY) {
+        const el = elem;
+        const quirks = !elem.style.getPropertyValue; // IE < 9
 
-            let target = document.elementFromPoint(clientX, clientY);
+        let display;
+        let priority;
+        if (quirks) {
+            display = el.style.cssText;
+            el.style.cssText += 'display: none!important';
+        } else {
+            display = el.style.getPropertyValue('display');
+            priority = el.style.getPropertyPriority('display');
+            el.style.setProperty('display', 'none', 'important');
+        }
 
-            if (quirks) {
-                el.style.cssText = display;
-            } else {
-                el.style.setProperty('display', display, priority);
-            }
+        let target = document.elementFromPoint(clientX, clientY);
 
-            if (!target || target === document) {
-                target = document.body;
-            }
+        if (quirks) {
+            el.style.cssText = display;
+        } else {
+            el.style.setProperty('display', display, priority);
+        }
 
-            return target;
-        },
+        if (!target || target === document) {
+            target = document.body;
+        }
 
-        getEventPageCoordinates(e) {
-            return getEventPageCoordinates(e);
-        },
-
-        getEventClientCoordinates(e) {
-            return getEventClientCoordinates(e);
-        },
-    };
-}());
+        return target;
+    }
+}

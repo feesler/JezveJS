@@ -1,5 +1,5 @@
 import { ge, isObject } from '../../js/index.js';
-import { dragMaster } from './index.js';
+import { DragMaster } from './index.js';
 
 /**
  * Drag start zone class
@@ -14,7 +14,7 @@ export class DragZone {
 
         this.elem.dragZone = this;
 
-        dragMaster.makeDraggable(elem);
+        DragMaster.makeDraggable(elem);
     }
 
     /** Return element of drag zone */
