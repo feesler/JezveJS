@@ -789,7 +789,8 @@ export class DropDown extends Component {
     /* List items methods */
     /** Return list item object by id */
     getItem(itemId) {
-        return this.state.items.find((item) => item.id === itemId);
+        const strId = itemId.toString();
+        return this.state.items.find((item) => item.id === strId);
     }
 
     /** Return active list item */
@@ -799,7 +800,8 @@ export class DropDown extends Component {
 
     /** Return index of list item by id */
     getItemIndex(itemId) {
-        return this.state.items.findIndex((item) => item.id === itemId);
+        const strId = itemId.toString();
+        return this.state.items.findIndex((item) => item.id === strId);
     }
 
     /**
@@ -1323,7 +1325,8 @@ export class DropDown extends Component {
 
     /** Select specified item */
     selectItem(itemId) {
-        const itemToSelect = this.getItem(itemId);
+        const strId = itemId.toString();
+        const itemToSelect = this.getItem(strId);
         if (!itemToSelect) {
             throw new Error(`Item ${itemId} not found`);
         }
@@ -1337,8 +1340,8 @@ export class DropDown extends Component {
             items: this.state.items.map((item) => ({
                 ...item,
                 selected: (this.props.multi)
-                    ? (item.selected || item.id === itemId)
-                    : (item.id === itemId),
+                    ? (item.selected || item.id === strId)
+                    : (item.id === strId),
             })),
         });
     }
@@ -1349,7 +1352,8 @@ export class DropDown extends Component {
             return;
         }
 
-        const itemToDeselect = this.getItem(itemId);
+        const strId = itemId.toString();
+        const itemToDeselect = this.getItem(strId);
         if (!itemToDeselect) {
             throw new Error(`Item ${itemId} not found`);
         }
@@ -1362,7 +1366,7 @@ export class DropDown extends Component {
             ...this.state,
             items: this.state.items.map((item) => ({
                 ...item,
-                selected: item.selected && item.id !== itemId,
+                selected: item.selected && item.id !== strId,
             })),
         });
     }
@@ -1767,7 +1771,8 @@ export class DropDown extends Component {
 
     /** Enable/disable list item by id */
     enableItem(itemId, val) {
-        const actionItem = this.getItem(itemId);
+        const strId = itemId.toString();
+        const actionItem = this.getItem(strId);
         const toDisable = !val;
         if (!actionItem || actionItem.disabled === toDisable) {
             return;
@@ -1777,8 +1782,8 @@ export class DropDown extends Component {
             ...this.state,
             items: this.state.items.map((item) => ({
                 ...item,
-                disabled: (item.id === itemId) ? toDisable : item.disabled,
-                active: (item.id === itemId && toDisable) ? false : item.active,
+                disabled: (item.id === strId) ? toDisable : item.disabled,
+                active: (item.id === strId && toDisable) ? false : item.active,
             })),
         });
     }
