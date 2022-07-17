@@ -99,17 +99,6 @@ export class Paginator extends Component {
         setEvents(this.elem, { click: (e) => this.onChangePage(e) });
     }
 
-    setClassNames() {
-        if (!this.props.className) {
-            return;
-        }
-
-        if (!Array.isArray(this.props.className)) {
-            this.props.className = [this.props.className];
-        }
-        this.elem.classList.add(...this.props.className);
-    }
-
     onChangePage(e) {
         if (!isFunction(this.props.onChange)) {
             return;

@@ -249,17 +249,6 @@ export class DropDown extends Component {
         return this.state.disabled;
     }
 
-    setClassNames() {
-        if (!this.props.className) {
-            return;
-        }
-
-        if (!Array.isArray(this.props.className)) {
-            this.props.className = [this.props.className];
-        }
-        this.elem.classList.add(...this.props.className);
-    }
-
     /** Set maximum height of list element as count of items to be visible */
     setMaxHeight(value) {
         const maxHeight = parseInt(value, 10);

@@ -119,17 +119,6 @@ export class Checkbox extends Component {
         setEvents(this.input, { change: (e) => this.onChange(e) });
     }
 
-    setClassNames() {
-        if (!this.props.className) {
-            return;
-        }
-
-        if (!Array.isArray(this.props.className)) {
-            this.props.className = [this.props.className];
-        }
-        this.elem.classList.add(...this.props.className);
-    }
-
     onChange(e) {
         this.setState({
             ...this.state,
