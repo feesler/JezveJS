@@ -841,12 +841,12 @@ export class DropDown extends Component {
     }
 
     /** Return array of visible(not hidden) list items */
-    getVisibleItems(state) {
+    getVisibleItems(state = this.state) {
         return state.items.filter((item) => !item.hidden);
     }
 
     /** Return array of visible and enabled list items */
-    getAvailableItems(state) {
+    getAvailableItems(state = this.state) {
         return state.items.filter((item) => (!item.hidden && !item.disabled));
     }
 
@@ -885,7 +885,7 @@ export class DropDown extends Component {
     }
 
     /** Return array of selected items */
-    getSelectedItems(state) {
+    getSelectedItems(state = this.state) {
         return state?.items?.filter((item) => item?.selected);
     }
 
@@ -907,7 +907,7 @@ export class DropDown extends Component {
     }
 
     /** Return count of items to show at drop down list */
-    getListHeight(state) {
+    getListHeight(state = this.state) {
         return Math.min(
             state.maxHeight,
             (state.filtered) ? state.filteredCount : state.items.length,
@@ -916,7 +916,7 @@ export class DropDown extends Component {
 
     /** Calculate height, vertical and horizontal offset of list element */
     calculatePosition(state) {
-        if (isVisible(this.selectElem)) {
+        if (isVisible(this.selectElem, true)) {
             return;
         }
 
@@ -1103,7 +1103,7 @@ export class DropDown extends Component {
                 this.inputElem.removeAttribute('tabindex');
             }
             this.selectElem.removeAttribute('tabindex');
-        } else if (isVisible(this.selectElem)) {
+        } else if (isVisible(this.selectElem, true)) {
             this.selectElem.setAttribute('tabindex', 0);
             this.elem.setAttribute('tabindex', -1);
             if (this.inputElem) {
@@ -1954,7 +1954,7 @@ export class DropDown extends Component {
 
     renderList(state) {
         // Skip render if currently native select is visible
-        if (isVisible(this.selectElem)) {
+        if (isVisible(this.selectElem, true)) {
             return;
         }
 
