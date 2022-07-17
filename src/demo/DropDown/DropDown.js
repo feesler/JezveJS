@@ -51,7 +51,7 @@ function renderCustomItem(item) {
         [colorElem, titleElem],
     );
 
-    if (this.multi) {
+    if (this.props.multi) {
         const checkIcon = ce(
             'span',
             { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
@@ -272,8 +272,8 @@ const dynamicMultipleSelect = () => {
 
     const enableOptionBtn = ge('enableOptionBtn');
     enableOptionBtn.addEventListener('click', () => {
-        const item = genDropDown.getItem(3);
-        genDropDown.enableItem(3, item.disabled);
+        const item = genDropDown.getItem('3');
+        genDropDown.enableItem('3', item.disabled);
     });
 };
 
