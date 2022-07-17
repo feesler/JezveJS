@@ -892,3 +892,55 @@ export function extendError(Class) {
     }
 }
 /* eslint-enable no-param-reassign */
+
+/**
+ * Compare object with expected
+ * @param {Object} obj
+ * @param {Object} expectedObj
+ */
+export const deepMeet = (obj, expectedObj) => {
+    // undefined expected means not care
+    if (typeof expectedObj === 'undefined') {
+        return true;
+    }
+
+    // undefined object is invalid
+    if (typeof obj === 'undefined') {
+        return false;
+    }
+
+    if (!isObject(expectedObj) && !Array.isArray(expectedObj)) {
+        if (obj === expectedObj) {
+            return true;
+        }
+
+        return false;
+    }
+
+    if (obj === expectedObj) {
+        return true;
+    }
+
+    let value;
+    let expected;
+    const expectedKeys = Object.getOwnPropertyNames(expectedObj);
+    /* eslint-disable-next-line no-restricted-syntax */
+    for (const vKey of expectedKeys) {
+        if (obj === null || !(vKey in obj)) {
+            return false;
+        }
+
+        expected = expectedObj[vKey];
+        value = obj[vKey];
+        if (isObject(expected) || Array.isArray(expected)) {
+            const res = deepMeet(value, expected);
+            if (res !== true) {
+                return false;
+            }
+        } else if (value !== expected) {
+            return false;
+        }
+    }
+
+    return true;
+};

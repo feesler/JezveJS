@@ -53,4 +53,15 @@ export class Component {
     hide() {
         this.show(false);
     }
+
+    setClassNames() {
+        if (!this.props.className) {
+            return;
+        }
+
+        if (!Array.isArray(this.props.className)) {
+            this.props.className = [this.props.className];
+        }
+        this.elem.classList.add(...this.props.className);
+    }
 }

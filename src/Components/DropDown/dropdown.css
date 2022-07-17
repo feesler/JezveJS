@@ -321,7 +321,7 @@
   color: #cccccc;
 }
 
-.dd__container_disabled .dd__clear-btn > svg,
+.dd__container_disabled .dd__clear-btn path,
 .dd__container_disabled .dd__toggle-btn path {
   fill: #cccccc;
 }

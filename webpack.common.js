@@ -34,43 +34,43 @@ export default {
 
         demoMain: {
             import: './src/demo/main/main.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         chartGridDemo: {
             import: './src/demo/ChartGrid/ChartGrid.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         chartsDemo: {
             import: './src/demo/Charts/Charts.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         checkboxDemo: {
             import: './src/demo/Checkbox/Checkbox.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         commonTestsDemo: {
             import: './src/demo/CommonTests/CommonTests.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         collapsibleDemo: {
             import: './src/demo/Collapsible/Collapsible.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         dateInputDemo: {
             import: './src/demo/DateInput/DateInput.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         datePickerDemo: {
             import: './src/demo/DatePicker/DatePicker.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         debugDemo: {
             import: './src/demo/Debug/Debug.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         decimalInputDemo: {
             import: './src/demo/DecimalInput/DecimalInput.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         dpiTestDemo: {
             import: './src/demo/DpiTest/DpiTest.js',
@@ -78,35 +78,35 @@ export default {
         },
         dragnDropDemo: {
             import: './src/demo/DragnDrop/DragnDrop.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         dropDownDemo: {
             import: './src/demo/DropDown/DropDown.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         emptyClickDemo: {
             import: './src/demo/EmptyClick/EmptyClick.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         paginatorDemo: {
             import: './src/demo/Paginator/Paginator.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         pieChartDemo: {
             import: './src/demo/PieChart/PieChart.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         popupDemo: {
             import: './src/demo/Popup/Popup.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         progressDemo: {
             import: './src/demo/Progress/Progress.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
         switchDemo: {
             import: './src/demo/Switch/Switch.js',
-            filename: 'demo/js/[name].js',
+            filename: 'demo/js/[name].[fullhash].js',
         },
     },
     output: {
