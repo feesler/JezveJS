@@ -341,6 +341,14 @@ const customRender = () => {
 
 // useNativeSelect drop down
 const useNativeSelect = () => {
+    // Single select
+    DropDown.create({
+        input_id: 'selinp11single',
+        placeholder: 'Use native select',
+        useNativeSelect: true,
+        editable: false,
+    });
+    // Multiple select
     DropDown.create({
         input_id: 'selinp11',
         placeholder: 'Use native select',
