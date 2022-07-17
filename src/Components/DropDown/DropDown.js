@@ -916,7 +916,7 @@ export class DropDown extends Component {
 
     /** Calculate height, vertical and horizontal offset of list element */
     calculatePosition(state) {
-        if (isVisible(this.selectElem)) {
+        if (isVisible(this.selectElem, true)) {
             return;
         }
 
@@ -1103,7 +1103,7 @@ export class DropDown extends Component {
                 this.inputElem.removeAttribute('tabindex');
             }
             this.selectElem.removeAttribute('tabindex');
-        } else if (isVisible(this.selectElem)) {
+        } else if (isVisible(this.selectElem, true)) {
             this.selectElem.setAttribute('tabindex', 0);
             this.elem.setAttribute('tabindex', -1);
             if (this.inputElem) {
@@ -1954,7 +1954,7 @@ export class DropDown extends Component {
 
     renderList(state) {
         // Skip render if currently native select is visible
-        if (isVisible(this.selectElem)) {
+        if (isVisible(this.selectElem, true)) {
             return;
         }
 
