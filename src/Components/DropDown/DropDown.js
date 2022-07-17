@@ -841,12 +841,12 @@ export class DropDown extends Component {
     }
 
     /** Return array of visible(not hidden) list items */
-    getVisibleItems(state) {
+    getVisibleItems(state = this.state) {
         return state.items.filter((item) => !item.hidden);
     }
 
     /** Return array of visible and enabled list items */
-    getAvailableItems(state) {
+    getAvailableItems(state = this.state) {
         return state.items.filter((item) => (!item.hidden && !item.disabled));
     }
 
@@ -885,7 +885,7 @@ export class DropDown extends Component {
     }
 
     /** Return array of selected items */
-    getSelectedItems(state) {
+    getSelectedItems(state = this.state) {
         return state?.items?.filter((item) => item?.selected);
     }
 
@@ -907,7 +907,7 @@ export class DropDown extends Component {
     }
 
     /** Return count of items to show at drop down list */
-    getListHeight(state) {
+    getListHeight(state = this.state) {
         return Math.min(
             state.maxHeight,
             (state.filtered) ? state.filteredCount : state.items.length,
