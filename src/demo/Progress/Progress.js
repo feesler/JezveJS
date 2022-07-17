@@ -1,11 +1,12 @@
 import { ge, onReady } from '../../js/index.js';
 import { Progress } from '../../Components/Progress/Progress.js';
+import { Spinner } from '../../Components/Spinner/Spinner.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
 import './progress.css';
 
-function init() {
+const initProgress = () => {
     const toggle1 = ge('toggle1');
     if (!toggle1) {
         return;
@@ -31,6 +32,16 @@ function init() {
         pr2.start();
         pr3.start();
     }, 1000);
-}
+};
+
+const initSpinner = () => {
+    const spinner = Spinner.create();
+    ge('spinnerContainer').append(spinner.elem);
+};
+
+const init = () => {
+    initProgress();
+    initSpinner();
+};
 
 onReady(init);

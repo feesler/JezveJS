@@ -95,7 +95,7 @@ export class Scenario {
         await DropDownTests.selectTest('multiSelDropDown', '5');
 
         await test('List of multi select Drop Down not closed after click by item',
-            async () => (await isVisible(
+            () => (isVisible(
                 App.view.content.multiSelDropDown.content.listContainer, true,
             )));
 
