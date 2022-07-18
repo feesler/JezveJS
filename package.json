@@ -1,6 +1,6 @@
 {
   "name": "jezvejs",
-  "version": "1.15.1",
+  "version": "1.15.2",
   "type": "module",
   "module": "src/js/index.js",
   "files": [
@@ -94,7 +94,7 @@
     "./Radio": "./src/Components/Radio/Radio.js",
     "./Slider": "./src/Components/Slider/Slider.js",
     "./Sortable": "./src/Components/Sortable/index.js",
-    "./Spinned": "./src/Components/Spinned/Spinned.js",
+    "./Spinner": "./src/Components/Spinner/Spinner.js",
     "./Switch": "./src/Components/Switch/Switch.js",
     "./tests": "./tests/components.js"
   }

@@ -6,12 +6,8 @@ import { ge, show, isVisible } from './common.js';
  * @param {string|Element} props.elem - base element for component
  */
 export class Component {
-    constructor(props) {
-        if (typeof props === 'undefined') {
-            this.props = {};
-        } else {
-            this.props = props;
-        }
+    constructor(props = {}) {
+        this.props = props;
 
         if (this.props.parent) {
             this.parent = this.props.parent;
@@ -24,9 +20,7 @@ export class Component {
         }
     }
 
-    /**
-     * Parse DOM to obtain child elements and build state of component
-     */
+    /** Parse DOM to obtain child elements and build state of component */
     parse() { }
 
     /** Render component state */
@@ -41,11 +35,9 @@ export class Component {
      * Show/hide base element of component
      * @param {boolean} val - if true component will be shown, hidden otherwise. Default is true
      */
-    show(val) {
-        const toShow = (typeof val === 'undefined') ? true : !!val;
-
+    show(value = true) {
         if (this.elem) {
-            show(this.elem, toShow);
+            show(this.elem, value);
         }
     }
 
