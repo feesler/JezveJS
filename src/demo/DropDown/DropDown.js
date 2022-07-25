@@ -114,14 +114,14 @@ function logTo(target, value) {
 // Standard inline drop down
 const initStandardInline = () => {
     DropDown.create({
-        input_id: 'selinp',
+        elem: 'selinp',
         editable: false,
         placeholder: 'Select item',
         data: initItems('Item', 10),
     });
 
     DropDown.create({
-        input_id: 'selinp2',
+        elem: 'selinp2',
         maxHeight: 6,
         editable: true,
         placeholder: 'Select item 2',
@@ -133,7 +133,7 @@ const initStandardInline = () => {
 const initStandardStretch = () => {
     // Stretch drop down 100% width
     DropDown.create({
-        input_id: 'selinp3',
+        elem: 'selinp3',
         className: 'dd_stretch',
         editable: true,
         placeholder: 'Select item 3',
@@ -142,7 +142,7 @@ const initStandardStretch = () => {
 
     // Stretch drop down 50% width
     DropDown.create({
-        input_id: 'selinp4',
+        elem: 'selinp4',
         className: 'dd_stretch',
         editable: true,
         placeholder: 'Select item 4',
@@ -159,7 +159,7 @@ const initStandardStretch = () => {
 // Parse select element (with no default selection)
 const initParseSingleNoSelection = () => {
     DropDown.create({
-        input_id: 'sel0',
+        elem: 'sel0',
         editable: true,
         placeholder: 'Select item 5',
     });
@@ -168,7 +168,7 @@ const initParseSingleNoSelection = () => {
 // Parse select element (with selected option support)
 const initParseSingleWithSelection = () => {
     DropDown.create({
-        input_id: 'sel',
+        elem: 'sel',
         editable: true,
         placeholder: 'Select item 5',
     });
@@ -177,7 +177,7 @@ const initParseSingleWithSelection = () => {
 // Disabled options support
 const initParseDisabledOptions = () => {
     DropDown.create({
-        input_id: 'disabledopt',
+        elem: 'disabledopt',
         editable: false,
     });
 };
@@ -185,7 +185,7 @@ const initParseDisabledOptions = () => {
 // Option groups support
 const initParseOptGroups = () => {
     DropDown.create({
-        input_id: 'optgroupssel',
+        elem: 'optgroupssel',
         editable: false,
     });
 };
@@ -193,7 +193,7 @@ const initParseOptGroups = () => {
 // Dynamic groups create
 const dynamicOptGroups = () => {
     const groupsDropDown = DropDown.create({
-        input_id: 'optgroupsdyn',
+        elem: 'optgroupsdyn',
         editable: false,
         data: initItems('Visible item', 3),
     });
@@ -207,7 +207,7 @@ const dynamicOptGroups = () => {
 // Attach drop down to block element
 const attachToBlockElement = () => {
     DropDown.create({
-        input_id: 'box',
+        elem: 'box',
         listAttach: true,
         editable: false,
         data: initItems('Long Item Lorem Lorem', 10),
@@ -217,7 +217,7 @@ const attachToBlockElement = () => {
 // Attach drop down to inline element
 const attachToInlineElement = () => {
     DropDown.create({
-        input_id: 'inline',
+        elem: 'inline',
         className: 'link_inline_cont',
         listAttach: true,
         data: initItems('Long Item Lorem Lorem ', 10),
@@ -226,13 +226,13 @@ const attachToInlineElement = () => {
 
 // Clipping test
 const clippingTest = () => {
-    DropDown.create({ input_id: 'clipped' });
+    DropDown.create({ elem: 'clipped' });
 };
 
 // Multiple select drop down
 const parseMultipleSelect = () => {
     DropDown.create({
-        input_id: 'selinp5',
+        elem: 'selinp5',
         className: 'dd_stretch',
         placeholder: 'Multi select control',
         onitemselect(selection) {
@@ -247,7 +247,7 @@ const parseMultipleSelect = () => {
 // Generated multiple select drop down
 const dynamicMultipleSelect = () => {
     const genDropDown = DropDown.create({
-        input_id: 'selinp6',
+        elem: 'selinp6',
         className: 'dd_stretch',
         placeholder: 'Multi select control',
         onitemselect(selection) {
@@ -280,7 +280,7 @@ const dynamicMultipleSelect = () => {
 // Disabled single select drop down
 const parseDisabledSingleSelect = () => {
     const disabledSingleDropDown = DropDown.create({
-        input_id: 'selinp7single',
+        elem: 'selinp7single',
         className: 'dd_stretch',
         disabled: true,
         placeholder: 'Multi select control',
@@ -295,7 +295,7 @@ const parseDisabledSingleSelect = () => {
 // Disabled multiple select drop down
 const parseDisabledMultiSelect = () => {
     const disabledDropDown = DropDown.create({
-        input_id: 'selinp7',
+        elem: 'selinp7',
         className: 'dd_stretch',
         disabled: true,
         placeholder: 'Multi select control',
@@ -310,7 +310,7 @@ const parseDisabledMultiSelect = () => {
 // Built-in items filter
 const dynamicBuiltinFilter = () => {
     DropDown.create({
-        input_id: 'selinp8',
+        elem: 'selinp8',
         oninput: true,
         placeholder: 'Type to filter',
         data: initItems('Filter item', 100),
@@ -320,7 +320,7 @@ const dynamicBuiltinFilter = () => {
 // Custom render drop down
 const customRender = () => {
     const customDropDown = DropDown.create({
-        input_id: 'selinp10',
+        elem: 'selinp10',
         className: 'dd_stretch',
         placeholder: 'Multi select control',
         onitemselect(selection) {
@@ -343,14 +343,14 @@ const customRender = () => {
 const useNativeSelect = () => {
     // Single select
     DropDown.create({
-        input_id: 'selinp11single',
+        elem: 'selinp11single',
         placeholder: 'Use native select',
         useNativeSelect: true,
         editable: false,
     });
     // Multiple select
     DropDown.create({
-        input_id: 'selinp11',
+        elem: 'selinp11',
         placeholder: 'Use native select',
         useNativeSelect: true,
         editable: false,
@@ -360,7 +360,7 @@ const useNativeSelect = () => {
 // Full screen drop down
 const fullScreen = () => {
     DropDown.create({
-        input_id: 'selinp12',
+        elem: 'selinp12',
         placeholder: 'Full screen',
         fullScreen: true,
         editable: true,
@@ -370,7 +370,7 @@ const fullScreen = () => {
 // Dynamic add/remove items
 const dynamicAddRemoveItems = () => {
     const dynamicDropDown = DropDown.create({
-        input_id: 'dynamicSel',
+        elem: 'dynamicSel',
         placeholder: 'Dynamic Drop Down',
         editable: false,
         multi: true,
