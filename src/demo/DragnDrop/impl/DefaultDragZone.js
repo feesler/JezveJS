@@ -1,4 +1,4 @@
-import { DragZone } from '../../../Components/DragnDrop/DragZone.js';
+import { DragZone } from '../../../js/index.js';
 import { DefaultDragAvatar } from './DefaultDragAvatar.js';
 import { OriginalDragAvatar } from './OriginalDragAvatar.js';
 

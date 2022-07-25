@@ -1,6 +1,6 @@
 {
   "name": "jezvejs",
-  "version": "1.15.4",
+  "version": "1.16.2",
   "type": "module",
   "module": "src/js/index.js",
   "files": [
@@ -27,8 +27,7 @@
     "build": "npx webpack --config ./webpack.prod.js",
     "build-dev": "npx webpack --config ./webpack.dev.js",
     "build-tests": "npx webpack --config ./webpack.tests.js",
-    "serve": "webpack serve -c ./webpack.dev.js",
-    "prepublish": "npm run build"
+    "serve": "webpack serve -c ./webpack.dev.js"
   },
   "author": "Henry Feesler",
   "license": "ISC",
@@ -73,29 +72,6 @@
   "exports": {
     ".": "./src/js/index.js",
     "./style": "./src/css/common.css",
-    "./Component": "./src/js/Component.js",
-    "./DateUtils": "./src/js/DateUtils.js",
-    "./Selection": "./src/js/Selection.js",
-    "./ChartGrid": "./src/Components/Charts/ChartGrid.js",
-    "./Checkbox": "./src/Components/Checkbox/Checkbox.js",
-    "./Collapsible": "./src/Components/Collapsible/Collapsible.js",
-    "./DateInput": "./src/Components/DateInput/DateInput.js",
-    "./DecimalInput": "./src/Components/DecimalInput/DecimalInput.js",
-    "./DatePicker": "./src/Components/DatePicker/DatePicker.js",
-    "./Debug": "./src/Components/Debug/Debug.js",
-    "./DragnDrop": "./src/Components/DragnDrop/index.js",
-    "./DropDown": "./src/Components/DropDown/DropDown.js",
-    "./Histogram": "./src/Components/Charts/Histogram.js",
-    "./LineChart": "./src/Components/Charts/LineChart.js",
-    "./Paginator": "./src/Components/Paginator/Paginator.js",
-    "./PieChart": "./src/Components/PieChart/PieChart.js",
-    "./Popup": "./src/Components/Popup/Popup.js",
-    "./Progress": "./src/Components/Progress/Progress.js",
-    "./Radio": "./src/Components/Radio/Radio.js",
-    "./Slider": "./src/Components/Slider/Slider.js",
-    "./Sortable": "./src/Components/Sortable/index.js",
-    "./Spinner": "./src/Components/Spinner/Spinner.js",
-    "./Switch": "./src/Components/Switch/Switch.js",
     "./tests": "./tests/components.js"
   }
 }

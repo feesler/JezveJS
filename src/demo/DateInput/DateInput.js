@@ -1,5 +1,4 @@
-import { ge, onReady } from '../../js/index.js';
-import { DateInput } from '../../Components/DateInput/DateInput.js';
+import { ge, onReady, DateInput } from '../../js/index.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

@@ -1,7 +1,11 @@
-import { ge, ce, onReady } from '../../js/index.js';
-import { ChartGrid } from '../../Components/Charts/ChartGrid.js';
-import { Histogram } from '../../Components/Charts/Histogram.js';
-import { LineChart } from '../../Components/Charts/LineChart.js';
+import {
+    ge,
+    ce,
+    onReady,
+    ChartGrid,
+    Histogram,
+    LineChart,
+} from '../../js/index.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

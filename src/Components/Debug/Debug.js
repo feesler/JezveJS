@@ -1,4 +1,4 @@
-import { ce, re } from '../../js/index.js';
+import { ce, re } from '../../js/common.js';
 import '../../css/common.css';
 import './debug.css';
 

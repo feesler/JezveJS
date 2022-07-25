@@ -3,8 +3,8 @@ import {
     ge,
     ce,
     onReady,
+    DropDown,
 } from '../../js/index.js';
-import { DropDown } from '../../Components/DropDown/DropDown.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

@@ -3,7 +3,7 @@ import {
     ce,
     removeChilds,
     addChilds,
-} from '../../js/index.js';
+} from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.css';
 import './style.css';

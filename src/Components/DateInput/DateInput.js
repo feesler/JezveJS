@@ -3,7 +3,7 @@ import {
     getCursorPos,
     setCursorPos,
     isNum,
-} from '../../js/index.js';
+} from '../../js/common.js';
 import '../../css/common.css';
 
 /**
