@@ -1,6 +1,5 @@
 import {
     isFunction,
-    ge,
     ce,
     svg,
     removeChilds,
@@ -30,6 +29,7 @@ const TOGGLE_ICON = 'm5.5 12 6.5 6 6.5-6z';
 /* CSS classes */
 /* Container */
 const CONTAINER_CLASS = 'dd__container';
+const MULTIPLE_CLASS = 'dd__container_multiple';
 const ACTIVE_CLASS = 'dd__container_active';
 const ATTACHED_CLASS = 'dd__container_attached';
 const DISABLED_CLASS = 'dd__container_disabled';
@@ -78,7 +78,7 @@ const defaultProps = {
 /**
  * Drop Down List constructor
  * @param {Object} props
- * @param {string|Element} props.input_id - identifier or element to attach DropDown comonent to
+ * @param {string|Element} props.elem - identifier or element to attach DropDown component to
  * @param {boolean} props.editable - if set true user will be able to type text in the combo box
  * @param {boolean} props.disabled - if set true any interactions with component will be disabled
  * @param {boolean} props.useNativeSelect - if set true component will use native select element on
@@ -113,9 +113,14 @@ export class DropDown extends Component {
             ...this.props,
         };
 
-        if (!this.props.input_id) {
-            throw new Error('input_id not specified');
+        if (!this.props.elem) {
+            throw new Error('Element not specified');
         }
+        if (!this.elem || !this.elem.parentNode) {
+            throw new Error('Invalid element specified');
+        }
+        this.hostElem = this.elem;
+        this.elem = null;
 
         this.state = {
             active: false,
@@ -160,7 +165,7 @@ export class DropDown extends Component {
         this.emptyClickHandler = () => this.showList(false);
         this.toggleHandler = () => this.toggleList();
         this.inputHandler = (e) => this.onInput(e);
-        this.mouseDownHandler = (e) => this.onMouseDown(e);
+        this.touchStartHandler = (e) => this.onTouchStart(e);
         this.moveHandler = (e) => this.onMouseMove(e);
         this.inpHandlers = {
             focus: (e) => this.onFocus(e),
@@ -168,17 +173,10 @@ export class DropDown extends Component {
             keydown: (e) => this.onKey(e),
         };
 
-        const inpObj = (typeof this.props.input_id === 'string')
-            ? ge(this.props.input_id)
-            : this.props.input_id;
-        if (!inpObj || !inpObj.parentNode) {
-            throw new Error('Invalid element specified');
-        }
-
         if (this.props.listAttach) {
-            this.attachToElement(inpObj);
+            this.attachToElement();
         } else {
-            this.attachToInput(inpObj);
+            this.attachToInput();
         }
 
         if (!this.state.disabled) {
@@ -225,7 +223,7 @@ export class DropDown extends Component {
 
         this.makeEditable(this.state.editable);
 
-        if (inpObj.tagName === 'SELECT') {
+        if (this.hostElem.tagName === 'SELECT') {
             this.parseSelect(this.selectElem);
         }
 
@@ -265,8 +263,8 @@ export class DropDown extends Component {
     }
 
     /** Attach DropDown component to specified input element */
-    attachToInput(elem) {
-        if (!this.isInputElement(elem)) {
+    attachToInput() {
+        if (!this.isInputElement(this.hostElem)) {
             throw new Error('Invalid element specified');
         }
 
@@ -274,46 +272,46 @@ export class DropDown extends Component {
         this.elem = ce('div', { className: CONTAINER_CLASS });
         this.selectionElem = ce('div', { className: SELECTION_CLASS });
 
-        if (elem.tagName === 'SELECT') {
-            this.selectElem = elem;
-            if (elem.multiple) {
+        if (this.hostElem.tagName === 'SELECT') {
+            this.selectElem = this.hostElem;
+            if (this.hostElem.multiple) {
                 this.props.multi = true;
             }
 
-            if (elem.disabled) {
+            if (this.hostElem.disabled) {
                 this.state.disabled = true;
                 this.state.editable = false;
             }
 
-            insertAfter(this.elem, elem);
+            insertAfter(this.elem, this.hostElem);
             this.inputElem = ce('input', { type: 'text' });
         } else {
-            insertAfter(this.elem, elem);
-            this.inputElem = re(elem);
+            insertAfter(this.elem, this.hostElem);
+            this.inputElem = re(this.hostElem);
 
             this.selectElem = ce('select');
             if (this.props.multi) {
                 this.selectElem.multiple = true;
             }
         }
+
+        if (this.props.multi) {
+            this.elem.classList.add(MULTIPLE_CLASS);
+        }
     }
 
     /** Attach DropDown to specified element */
-    attachToElement(elem) {
+    attachToElement() {
         this.elem = ce('div', { className: ATTACHED_CLASS });
 
-        insertAfter(this.elem, elem);
-        this.elem.style.width = px(elem.offsetWidth);
-        this.elem.style.height = px(elem.offsetHeight);
+        insertAfter(this.elem, this.hostElem);
+        this.elem.style.width = px(this.hostElem.offsetWidth);
+        this.elem.style.height = px(this.hostElem.offsetHeight);
 
-        const hostElement = re(elem);
-        if (!hostElement) {
-            return false;
-        }
-        this.elem.appendChild(hostElement);
+        this.elem.append(this.hostElem);
 
-        hostElement.addEventListener('click', this.toggleHandler);
-        if (!this.isInputElement(elem)) {
+        this.hostElem.addEventListener('click', this.toggleHandler);
+        if (!this.isInputElement(this.hostElem)) {
             this.state.editable = false;
         }
 
@@ -326,8 +324,7 @@ export class DropDown extends Component {
             this.selectElem.multiple = true;
         }
 
-        this.elem.appendChild(hostElement);
-        this.elem.appendChild(this.selectElem);
+        this.elem.append(this.hostElem, this.selectElem);
 
         return true;
     }
@@ -738,8 +735,12 @@ export class DropDown extends Component {
         }
     }
 
-    /** Handler for 'mousedown' event on list item */
-    onMouseDown(e) {
+    /**
+     * Handler for 'touchstart' event on list item
+     * Set blockTouch flasg for further 'mousemove' event
+     * @param {TouchEvent} e - event object
+     */
+    onTouchStart(e) {
         if (e.touches) {
             this.state.blockTouch = true;
         }
@@ -1193,7 +1194,7 @@ export class DropDown extends Component {
 
         const contentElem = renderCallback.call(this, item);
         setEvents(contentElem, {
-            touchstart: this.mouseDownHandler,
+            touchstart: this.touchStartHandler,
             mousemove: this.moveHandler,
         });
         if (this.props.multi && item.selected) {
@@ -1748,6 +1749,14 @@ export class DropDown extends Component {
 
     /** Set active state for specified list item */
     setActive(itemToActivate) {
+        const activeItem = this.getActiveItem();
+        if (
+            (activeItem === itemToActivate)
+            || (!activeItem && !itemToActivate)
+        ) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             items: this.state.items.map((item) => ({

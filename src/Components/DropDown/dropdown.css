@@ -24,6 +24,11 @@
   overflow: hidden;
 }
 
+/* Multiple select */
+.dd__container_multiple .dd__combo {
+  padding: 0 48px 0 0;
+}
+
 /* Current selection items */
 .dd__selection {
   display: flex;
@@ -92,10 +97,16 @@
 /* Clear selection button */
 .dd__clear-btn {
   width: 24px;
+  height: 100%;
+  max-height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: absolute;
+  right: 24px;
+  bottom: 0;
+  z-index: 1001;
 }
 
 .dd__clear-btn > svg {
@@ -106,7 +117,7 @@
 
 /* Select Drop Down button */
 .dd__toggle-btn {
-  background-color: #ffffff;
+  width: 24px;
   height: 100%;
   max-height: 2rem;
   overflow: hidden;
@@ -114,6 +125,7 @@
   right: 0;
   bottom: 0;
   cursor: pointer;
+  background-color: #ffffff;
 }
 
 .dd__toggle-btn path {
