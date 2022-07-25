@@ -42,7 +42,7 @@ button::-moz-focus-inner {
 }
 
 /* Hidden element */
-.hidden {
+[hidden] {
   display: none !important;
 }
 
