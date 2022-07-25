@@ -1,23 +1,36 @@
 import { isFunction, getCursorPos, isNum } from '../../js/index.js';
 import '../../css/common.css';
 
+const defaultProps = {
+    digits: undefined,
+    oninput: null,
+    allowNegative: true,
+};
+
 /**
  * Decimal value input
  * @param {Object} props
+ * @param {string|Element} props.elem - identifier or element to attach component to
+ * @param {Number} props.digits - decimal digits limit
+ * @param {Function} props.oninput - 'input' event handler
+ * @param {Function} props.allowNegative - enables input negative values
  */
 export class DecimalInput {
     constructor(props) {
-        this.props = props;
+        this.props = {
+            ...defaultProps,
+            ...props,
+        };
 
-        if (!props.elem) {
+        if (!this.props.elem) {
             throw new Error('Invalid input element specified');
         }
 
-        this.elem = props.elem;
+        this.elem = this.props.elem;
 
-        this.useFixed = ('digits' in props);
+        this.useFixed = (typeof this.props.digits !== 'undefined');
         if (this.useFixed) {
-            if (!isNum(props.digits)) {
+            if (!isNum(this.props.digits)) {
                 throw new Error('Invalid digits property specified');
             }
         }
@@ -29,9 +42,9 @@ export class DecimalInput {
 
         this.elem.inputMode = 'decimal';
 
-        if (isFunction(props.oninput)) {
+        if (isFunction(this.props.oninput)) {
             this.inputHandler = this.handleInput.bind(this);
-            this.oninput = props.oninput;
+            this.oninput = this.props.oninput;
             this.elem.addEventListener('input', this.inputHandler);
         }
 
@@ -146,8 +159,12 @@ export class DecimalInput {
             return false;
         }
 
+        const float = parseFloat(fixed);
+        if (!this.props.allowNegative && (float < 0 || fixed.startsWith('-'))) {
+            return false;
+        }
+
         if (this.useFixed) {
-            const float = parseFloat(fixed);
             const intPart = Math.trunc(float).toString();
             const dotOffset = (float < 0) ? 2 : 1;
             return fixed.length <= intPart.length + this.props.digits + dotOffset;
