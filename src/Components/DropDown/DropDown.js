@@ -1748,6 +1748,14 @@ export class DropDown extends Component {
 
     /** Set active state for specified list item */
     setActive(itemToActivate) {
+        const activeItem = this.getActiveItem();
+        if (
+            (activeItem === itemToActivate)
+            || (!activeItem && !itemToActivate)
+        ) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             items: this.state.items.map((item) => ({
