@@ -14,7 +14,7 @@ import {
     getOffset,
     re,
     px,
-} from '../../js/index.js';
+} from '../../js/common.js';
 import '../../css/common.css';
 import './datepicker.css';
 import {

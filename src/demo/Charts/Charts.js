@@ -6,9 +6,9 @@ import {
     setEmptyClick,
     px,
     onReady,
+    Histogram,
+    LineChart,
 } from '../../js/index.js';
-import { Histogram } from '../../Components/Charts/Histogram.js';
-import { LineChart } from '../../Components/Charts/LineChart.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

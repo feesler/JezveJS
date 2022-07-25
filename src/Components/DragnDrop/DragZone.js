@@ -1,5 +1,5 @@
-import { ge, isObject } from '../../js/index.js';
-import { DragMaster } from './index.js';
+import { ge, isObject } from '../../js/common.js';
+import { DragMaster } from './DragMaster.js';
 
 /**
  * Drag start zone class

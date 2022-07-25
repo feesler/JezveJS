@@ -1,6 +1,9 @@
-import { ge, onReady } from '../../js/index.js';
-import { Progress } from '../../Components/Progress/Progress.js';
-import { Spinner } from '../../Components/Spinner/Spinner.js';
+import {
+    ge,
+    onReady,
+    Progress,
+    Spinner,
+} from '../../js/index.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

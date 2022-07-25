@@ -2,8 +2,8 @@ import {
     ge,
     ce,
     onReady,
+    Sortable,
 } from '../../js/index.js';
-import { Sortable } from '../../Components/Sortable/index.js';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';

@@ -1,4 +1,4 @@
-import { DragZone } from '../../../Components/DragnDrop/DragZone.js';
+import { DragZone } from '../../../js/index.js';
 import { PopupDragAvatar } from './PopupDragAvatar.js';
 
 /** Draggable popup implementation */

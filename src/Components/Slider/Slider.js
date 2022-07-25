@@ -4,7 +4,7 @@ import {
     ce,
     setParam,
     px,
-} from '../../js/index.js';
+} from '../../js/common.js';
 import '../../css/common.css';
 
 // Return reverce function for delta

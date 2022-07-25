@@ -1,6 +1,9 @@
-import { getOffset, px } from '../../../js/index.js';
-import { DragMaster } from '../../../Components/DragnDrop/index.js';
-import { DropTarget } from '../../../Components/DragnDrop/DropTarget.js';
+import {
+    getOffset,
+    px,
+    DragMaster,
+    DropTarget,
+} from '../../../js/index.js';
 import { OriginalDragAvatar } from './OriginalDragAvatar.js';
 
 /**

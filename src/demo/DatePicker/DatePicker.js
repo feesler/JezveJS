@@ -1,6 +1,9 @@
-import { ge, onReady } from '../../js/index.js';
-import { DatePicker } from '../../Components/DatePicker/DatePicker.js';
-import { formatDate } from '../../js/DateUtils.js';
+import {
+    ge,
+    onReady,
+    formatDate,
+    DatePicker,
+} from '../../js/index.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

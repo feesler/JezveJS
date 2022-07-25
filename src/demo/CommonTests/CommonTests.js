@@ -7,7 +7,6 @@ import {
     show,
     onReady,
 } from '../../js/index.js';
-import { ajax } from '../../js/ajax.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';
@@ -71,23 +70,6 @@ function test(descr, action) {
     addResult(descr, res, errorMessage);
 }
 
-// Run async action, check state and add result to the list
-function testAsync(descr, action) {
-    try {
-        console.log(`Test: ${descr}`);
-        action(
-            () => {
-                addResult(descr, true);
-            },
-            (message) => {
-                addResult(descr, false, message);
-            },
-        );
-    } catch (e) {
-        addResult(descr, false, e.message);
-    }
-}
-
 /** Type check tests */
 function typeCheckTests() {
     const testArray = [1, 2, 3, 4];
@@ -106,7 +88,6 @@ function typeCheckTests() {
 }
 
 /** DOM tests */
-
 function setEventResult(text) {
     const resultElem = ge('evResult');
     if (!resultElem) {
@@ -186,93 +167,6 @@ function domTests() {
     });
 }
 
-/** JSON */
-function jsonTests() {
-    let jsonObj;
-    const jsonStr = '{"var1":"value1","var2":[1,2,3],"var3":{"subvar1":1}}';
-
-    addBlock('JSON', 1);
-
-    test('JSON.parse', () => {
-        jsonObj = JSON.parse(jsonStr);
-
-        return (
-            typeof jsonObj !== 'undefined'
-            && jsonObj.var1 === 'value1'
-            && Array.isArray(jsonObj.var2)
-            && jsonObj.var2.length === 3
-            && jsonObj.var2[1] === 2
-            && typeof jsonObj.var3 !== 'undefined'
-            && jsonObj.var3.subvar1 === 1
-        );
-    });
-
-    test('JSON.stringify', () => {
-        const strfyed = JSON.stringify(jsonObj);
-
-        return (strfyed === jsonStr);
-    });
-}
-
-/** AJAX */
-function ajaxTests() {
-    const ajaxUrl = './ajax.php';
-
-    addBlock('AJAX', 1);
-
-    testAsync('ajax.get', (resolve, reject) => {
-        ajax.get({
-            url: `${ajaxUrl}?getcheck=1&ar[]=1&ar[]=2`,
-            callback(result) {
-                const res = JSON.parse(result);
-
-                if (
-                    typeof res === 'undefined'
-                    || res.result !== 'ok'
-                    || res.method.toLowerCase() !== 'get'
-                    || typeof res.get === 'undefined'
-                    || res.get.getcheck !== '1'
-                    || !Array.isArray(res.get.ar)
-                    || res.get.ar.length !== 2
-                    || res.get.ar[0] !== '1'
-                    || res.get.ar[1] !== '2'
-                ) {
-                    reject('Wrong AJAX response');
-                } else {
-                    resolve();
-                }
-            },
-        });
-    });
-
-    testAsync('ajax.post', (resolve, reject) => {
-        ajax.post({
-            url: `${ajaxUrl}?getcheck=1`,
-            data: 'postcheck=1&ar[]=1&ar[]=2',
-            callback(result) {
-                const res = JSON.parse(result);
-
-                if (
-                    typeof res === 'undefined'
-                    || res.result !== 'ok'
-                    || res.method.toLowerCase() !== 'post'
-                    || typeof res.post === 'undefined'
-                    || typeof res.get === 'undefined'
-                    || res.get.getcheck !== '1'
-                    || !Array.isArray(res.post.ar)
-                    || res.post.ar.length !== 2
-                    || res.post.ar[0] !== '1'
-                    || res.post.ar[1] !== '2'
-                ) {
-                    reject('Wrong AJAX response');
-                } else {
-                    resolve();
-                }
-            },
-        });
-    });
-}
-
 /** Run all remain tests */
 function runTests() {
     addBlock('Utils', 1);
@@ -283,8 +177,6 @@ function runTests() {
 
     typeCheckTests();
     domTests();
-    jsonTests();
-    ajaxTests();
 }
 
 function onStartClick() {

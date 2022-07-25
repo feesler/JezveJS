@@ -1,5 +1,4 @@
-import { ge, onReady } from '../../js/index.js';
-import { Switch } from '../../Components/Switch/Switch.js';
+import { ge, onReady, Switch } from '../../js/index.js';
 import '../../css/common.css';
 import '../css/common.css';
 import '../css/app.css';

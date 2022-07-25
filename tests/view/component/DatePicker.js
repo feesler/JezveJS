@@ -8,8 +8,8 @@ import {
     isVisible,
     click,
     wait,
+    copyObject,
 } from 'jezve-test';
-import { copyObject } from 'jezvejs';
 
 const shortMonthTitles = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 const monthTitles = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];

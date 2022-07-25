@@ -1,4 +1,4 @@
-import { DropTarget } from '../../../Components/DragnDrop/DropTarget.js';
+import { DropTarget } from '../../../js/index.js';
 import { DefaultDragAvatar } from './DefaultDragAvatar.js';
 
 /**

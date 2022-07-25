@@ -3,7 +3,7 @@ import {
     comparePosition,
     insertAfter,
     insertBefore,
-} from '../../js/index.js';
+} from '../../js/common.js';
 import { DropTarget } from '../DragnDrop/DropTarget.js';
 import { SortableDragAvatar } from './SortableDragAvatar.js';
 
