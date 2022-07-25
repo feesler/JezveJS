@@ -160,7 +160,7 @@ export class DropDown extends Component {
         this.emptyClickHandler = () => this.showList(false);
         this.toggleHandler = () => this.toggleList();
         this.inputHandler = (e) => this.onInput(e);
-        this.mouseDownHandler = (e) => this.onMouseDown(e);
+        this.touchStartHandler = (e) => this.onTouchStart(e);
         this.moveHandler = (e) => this.onMouseMove(e);
         this.inpHandlers = {
             focus: (e) => this.onFocus(e),
@@ -738,8 +738,12 @@ export class DropDown extends Component {
         }
     }
 
-    /** Handler for 'mousedown' event on list item */
-    onMouseDown(e) {
+    /**
+     * Handler for 'touchstart' event on list item
+     * Set blockTouch flasg for further 'mousemove' event
+     * @param {TouchEvent} e - event object
+     */
+    onTouchStart(e) {
         if (e.touches) {
             this.state.blockTouch = true;
         }
@@ -1193,7 +1197,7 @@ export class DropDown extends Component {
 
         const contentElem = renderCallback.call(this, item);
         setEvents(contentElem, {
-            touchstart: this.mouseDownHandler,
+            touchstart: this.touchStartHandler,
             mousemove: this.moveHandler,
         });
         if (this.props.multi && item.selected) {
