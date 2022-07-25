@@ -348,6 +348,14 @@ const useNativeSelect = () => {
         useNativeSelect: true,
         editable: false,
     });
+    // Dynamic single select
+    DropDown.create({
+        elem: 'nativeGenerated',
+        placeholder: 'Use native select',
+        useNativeSelect: true,
+        editable: false,
+        data: initItems('Item', 5),
+    });
     // Multiple select
     DropDown.create({
         elem: 'selinp11',
