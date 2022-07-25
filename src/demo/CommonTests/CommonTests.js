@@ -167,34 +167,6 @@ function domTests() {
     });
 }
 
-/** JSON */
-function jsonTests() {
-    let jsonObj;
-    const jsonStr = '{"var1":"value1","var2":[1,2,3],"var3":{"subvar1":1}}';
-
-    addBlock('JSON', 1);
-
-    test('JSON.parse', () => {
-        jsonObj = JSON.parse(jsonStr);
-
-        return (
-            typeof jsonObj !== 'undefined'
-            && jsonObj.var1 === 'value1'
-            && Array.isArray(jsonObj.var2)
-            && jsonObj.var2.length === 3
-            && jsonObj.var2[1] === 2
-            && typeof jsonObj.var3 !== 'undefined'
-            && jsonObj.var3.subvar1 === 1
-        );
-    });
-
-    test('JSON.stringify', () => {
-        const strfyed = JSON.stringify(jsonObj);
-
-        return (strfyed === jsonStr);
-    });
-}
-
 /** Run all remain tests */
 function runTests() {
     addBlock('Utils', 1);
@@ -205,7 +177,6 @@ function runTests() {
 
     typeCheckTests();
     domTests();
-    jsonTests();
 }
 
 function onStartClick() {
