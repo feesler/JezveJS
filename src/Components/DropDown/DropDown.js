@@ -29,6 +29,7 @@ const TOGGLE_ICON = 'm5.5 12 6.5 6 6.5-6z';
 /* CSS classes */
 /* Container */
 const CONTAINER_CLASS = 'dd__container';
+const MULTIPLE_CLASS = 'dd__container_multiple';
 const ACTIVE_CLASS = 'dd__container_active';
 const ATTACHED_CLASS = 'dd__container_attached';
 const DISABLED_CLASS = 'dd__container_disabled';
@@ -292,6 +293,10 @@ export class DropDown extends Component {
             if (this.props.multi) {
                 this.selectElem.multiple = true;
             }
+        }
+
+        if (this.props.multi) {
+            this.elem.classList.add(MULTIPLE_CLASS);
         }
     }
 
