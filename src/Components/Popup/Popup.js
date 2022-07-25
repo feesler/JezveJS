@@ -47,7 +47,8 @@ export class Popup extends Component {
                 throw new Error(`Element with id ${this.props.id} already exist`);
             }
         }
-        this.elem = ce('div', { className: 'popup hidden' });
+        this.elem = ce('div', { className: 'popup' });
+        show(this.elem, false);
         if ('id' in this.props) {
             this.elem.id = this.props.id;
         }

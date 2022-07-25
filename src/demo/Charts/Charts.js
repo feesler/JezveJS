@@ -113,7 +113,8 @@ function onBarClick(e, item) {
     }
 
     if (!this.popup) {
-        this.popup = ce('div', { className: 'chart_popup hidden' });
+        this.popup = ce('div', { className: 'chart_popup' });
+        show(this.popup, false);
         chartsWrapObj.appendChild(this.popup);
     }
 

@@ -280,9 +280,9 @@ export function show(elem, val) {
     }
 
     if (val) {
-        domElem.classList.remove('hidden');
+        domElem.removeAttribute('hidden');
     } else {
-        domElem.classList.add('hidden');
+        domElem.setAttribute('hidden', '');
     }
 }
 
