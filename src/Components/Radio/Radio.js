@@ -5,8 +5,8 @@ import {
     removeChilds,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import '../../css/common.css';
-import './style.css';
+import '../../css/common.scss';
+import './style.scss';
 
 const CONTAINER_CLASS = 'radio';
 const CHECK_CLASS = 'radio__check';

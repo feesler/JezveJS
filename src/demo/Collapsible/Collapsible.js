@@ -6,10 +6,10 @@ import {
     onReady,
     Collapsible,
 } from '../../js/index.js';
-import '../../css/common.css';
-import '../css/common.css';
-import '../css/app.css';
-import './collapsible.css';
+import '../../css/common.scss';
+import '../css/common.scss';
+import '../css/app.scss';
+import './style.scss';
 
 /** Create SVG icon element */
 const createIcon = (icon) => {

@@ -5,8 +5,8 @@ import {
     addChilds,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import '../../css/common.css';
-import './style.css';
+import '../../css/common.scss';
+import './style.scss';
 
 const EXPANDED_CLASS = 'collapsible__expanded';
 const defaultProps = {

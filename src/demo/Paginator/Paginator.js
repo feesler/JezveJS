@@ -3,10 +3,10 @@ import {
     onReady,
     Paginator,
 } from '../../js/index.js';
-import '../../css/common.css';
-import '../css/common.css';
-import '../css/app.css';
-import './paginator.css';
+import '../../css/common.scss';
+import '../css/common.scss';
+import '../css/app.scss';
+import './style.scss';
 
 function initSimple() {
     const paginator = Paginator.create({

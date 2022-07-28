@@ -6,10 +6,10 @@ import {
     Histogram,
     LineChart,
 } from '../../js/index.js';
-import '../../css/common.css';
-import '../css/common.css';
-import '../css/app.css';
-import '../Charts/charts.css';
+import '../../css/common.scss';
+import '../css/common.scss';
+import '../css/app.scss';
+import '../Charts/style.scss';
 
 const assert = {
     equal(a, b) {

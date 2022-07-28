@@ -7,7 +7,7 @@ import {
     setEvents,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import './paginator.css';
+import './style.scss';
 
 const defaultProps = {
     breakLimit: 5,

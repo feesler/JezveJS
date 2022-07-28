@@ -1,6 +1,6 @@
 import { ce, re } from '../../js/common.js';
-import '../../css/common.css';
-import './debug.css';
+import '../../css/common.scss';
+import './debug.scss';
 
 export class Debug {
     constructor() {

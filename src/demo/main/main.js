@@ -1,4 +1,4 @@
-import '../../css/common.css';
-import '../css/common.css';
-import '../css/app.css';
-import './main.css';
+import '../../css/common.scss';
+import '../css/common.scss';
+import '../css/app.scss';
+import './style.scss';

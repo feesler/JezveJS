@@ -6,8 +6,8 @@ import {
     removeChilds,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import '../../css/common.css';
-import './piechart.css';
+import '../../css/common.scss';
+import './style.scss';
 
 /* eslint-disable no-bitwise */
 

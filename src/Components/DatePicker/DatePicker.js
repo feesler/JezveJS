@@ -15,8 +15,8 @@ import {
     re,
     px,
 } from '../../js/common.js';
-import '../../css/common.css';
-import './datepicker.css';
+import '../../css/common.scss';
+import './style.scss';
 import {
     DAYS_IN_WEEK,
     MONTHS_COUNT,
