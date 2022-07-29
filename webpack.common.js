@@ -260,4 +260,7 @@ export default {
             minify: htmlMinifyOptions,
         }),
     ],
+    cache: {
+        type: 'filesystem',
+    },
 };
