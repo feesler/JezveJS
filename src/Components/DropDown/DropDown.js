@@ -1946,7 +1946,7 @@ export class DropDown extends Component {
                 if (!group) {
                     group = {
                         group: item.group,
-                        elems: this.renderGroupItem(item.group.title, item.group.disabled),
+                        elems: this.renderGroupItem(item.group),
                     };
                     optGroups.push(group);
                     listElems.push(group.elems.elem);
