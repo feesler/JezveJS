@@ -45,21 +45,3 @@ button::-moz-focus-inner {
 [hidden] {
   display: none !important;
 }
-
-/* Clearfix */
-.clearfix {
-  float: none;
-  clear: both;
-  display: table;
-  zoom: 1;
-}
-
-.clearfix::after {
-  content: ". .";
-  display: block;
-  word-spacing: 99in;
-  height: 0;
-  overflow: hidden;
-  font-size: 0.13em; /* Opera fix */
-  line-height: 0;
-}
