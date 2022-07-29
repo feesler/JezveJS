@@ -1,8 +1,23 @@
 .switch {
+  --switch-width: 34px;
+  --switch-height: 20px;
+  --switch-slider-size: 16px;
+  --switch-slider-top: 2px;
+  --switch-slider-left: 2px;
+  --switch-bg: #555555;
+  --switch-hover-bg: #707070;
+  --switch-slider-color: #f0f0f0;
+  --switch-hover-slider: #ffffff;
+
+  /* Checked state */
+  --switch-checked-slider-left: 17px;
+  --switch-checked-bg: #0d9c00;
+  --switch-checked-hover-bg: #10c200;
+
   display: flex;
   position: relative;
-  width: 34px;
-  height: 20px;
+  width: var(--switch-width);
+  height: var(--switch-height);
 
   input {
     display: none;
@@ -16,42 +31,42 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #555555;
+  background-color: var(--switch-bg);
   cursor: pointer;
   border-radius: 100vh;
 
   &:hover {
-    background-color: #707070;
+    background-color: var(--switch-hover-bg);
   }
 
   /* Sliding disc */
   &::before {
     content: "";
-    top: 2px;
-    left: 2px;
+    top: var(--switch-slider-top);
+    left: var(--switch-slider-left);
     transition: left 0.2s;
     position: absolute;
-    width: 16px;
-    height: 16px;
-    background-color: #f0f0f0;
+    width: var(--switch-slider-size);
+    height: var(--switch-slider-size);
+    background-color: var(--switch-slider-color);
     border-radius: 100vh;
   }
 
   &:hover::before {
-    background-color: #ffffff;
+    background-color: var(--switch-hover-slider);
   }
 }
 
 /* Checked state */
 .switch input:checked + .switch-slider {
-  background-color: #0d9c00;
+  background-color: var(--switch-checked-bg);
 
   &:hover {
-    background-color: #10c200;
+    background-color: var(--switch-checked-hover-bg);
   }
 
   &::before {
-    left: 17px;
+    left: var(--switch-checked-slider-left);
   }
 }
 

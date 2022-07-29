@@ -5,16 +5,21 @@
 }
 
 .spinner {
-  width: 32px;
-  height: 32px;
+  --spinner-size: 32px;
+  --spinner-width: 4px;
+  --spinner-color: #003464;
+  --spinner-animation-time: 1s;
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
   border-radius: 100vh;
-  border-width: 4px;
+  border-width: var(--spinner-width);
   border-style: solid;
   border-color: transparent;
-  border-top-color: #003464;
-  border-right-color: #003464;
+  border-top-color: var(--spinner-color);
+  border-right-color: var(--spinner-color);
   animation-name: spinner-rotate;
-  animation-duration: 1s;
+  animation-duration: var(--spinner-animation-time);
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 }

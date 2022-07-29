@@ -1,4 +1,13 @@
 .checkbox {
+  --checkbox-size: 14px;
+  --checkbox-border: #cccccc;
+  --checkbox-hover-bg: #cccccc;
+  --checkbox-disabled-bg: #dddddd;
+  --checkbox-active-bg: #1e82cc;
+  --checkbox-active-fill: #ffffff;
+  --checkbox-checked-fill: #5082aa;
+  --checkbox-label-size: 16px;
+
   padding: 2px;
   margin: 0 12px 0 0;
   white-space: nowrap;
@@ -10,55 +19,51 @@
 }
 
 .checkbox__check {
-  width: 14px;
-  height: 14px;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
   display: inline-block;
   vertical-align: bottom;
-  border: 1px solid #cccccc;
+  border: 1px solid var(--checkbox-border);
   padding: 2px;
   margin: 0 6px 0 0;
 
   svg {
     display: block;
-    width: 14px;
-    height: 14px;
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
     visibility: hidden;
   }
 }
 
 .checkbox input:checked + .checkbox__check svg {
   visibility: visible;
-  fill: #5082aa;
+  fill: var(--checkbox-checked-fill);
 }
 
 .checkbox input:active + .checkbox__check {
-  background-color: #1e82cc;
+  background-color: var(--checkbox-active-bg);
 
   svg {
-    fill: #ffffff;
+    fill: var(--checkbox-active-fill);
   }
 }
 
 .checkbox input[disabled] + .checkbox__check {
-  background: #dddddd;
+  background: var(--checkbox-disabled-bg);
   opacity: 0.5;
 }
 
 .checkbox__label {
-  font-size: 16px;
+  font-size: var(--checkbox-label-size);
 }
 
 @media (hover: hover) {
   .checkbox__check:hover {
-    background-color: #1e82cc;
-  }
+    background-color: var(--checkbox-hover-bg);
 
-  .checkbox__check:hover svg {
-    visibility: visible;
-    fill: #ffffff;
-  }
-
-  .checkbox .checkbox__check:hover {
-    background-color: #cccccc;
+    svg {
+      visibility: visible;
+      fill: var(--checkbox-active-fill);
+    }
   }
 }

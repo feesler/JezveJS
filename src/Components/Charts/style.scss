@@ -1,5 +1,21 @@
 /* Main container for charts */
 .charts {
+  --chart-grid-color: #808080;
+  --chart-text-size: 14px;
+
+  /* Popup */
+  --chart-popup-text: #000000;
+  --chart-popup-border: #000000;
+  --chart-popup-bg: #ffffff;
+
+  /* Histogram */
+  --historgam-bar-color: #00bfff;
+
+  /* Linechart */
+  --linechart-item-fill: #ffffff;
+  --linechart-item-border: #00bfff;
+  --linechart-line-color: #00bfff;
+
   display: flex;
   flex-flow: row nowrap;
   flex-basis: 100%;
@@ -26,8 +42,9 @@
 /* Bar chart information popup */
 .chart_popup {
   position: absolute;
-  border: 1px solid #000000;
-  background-color: #ffffff;
+  color: var(--chart-popup-text);
+  border: 1px solid var(--chart-popup-border);
+  background-color: var(--chart-popup-bg);
   padding: 5px;
   white-space: nowrap;
 }
@@ -36,34 +53,34 @@
 .chart__grid-line {
   stroke-width: 1;
   fill: none;
-  stroke: #808080;
+  stroke: var(--chart-grid-color);
   stroke-dasharray: 4, 3;
 }
 
 /* Chart text */
 .chart__text {
   font-family: "Segoe UI", sans-serif;
-  font-size: 14px;
+  font-size: var(--chart-text-size);
   text-anchor: "start";
 }
 
 /* Histogram bar item */
 .histogram__bar {
-  fill: #00bfff;
+  fill: var(--historgam-bar-color);
   fill-opacity: 1;
   stroke: none;
 }
 
 /* LineChart circle item */
 .linechart__item {
-  fill: #ffffff;
-  stroke: #00bfff;
+  fill: var(--linechart-item-fill);
+  stroke: var(--linechart-item-border);
   stroke-width: 1.5;
 }
 
 /* LineChart line path */
 .linechart__path {
   stroke-width: 3;
-  stroke: #00bfff;
+  stroke: var(--linechart-line-color);
   fill: none;
 }

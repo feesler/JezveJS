@@ -1,14 +1,9 @@
 .progress-bar.pb-style {
-  width: 600px;
+  --progress-width: 600px;
+  --progress-animation-time: 5s;
 }
 
-.progress-bar.pb-style .progress-container.run .progress-circle {
-  transition-duration: 5s;
-  transform: translateX(610px);
-}
-
-.progress-bar.circles-style .progress-circle::after {
-  content: "\25A0";
-  font-size: 15px;
-  color: #d73000;
+.progress-bar.circles-style {
+  --progress-item-content: "\25A0";
+  --progress-item-color: #d73000;
 }
