@@ -3,12 +3,12 @@
   display: flex;
   flex-flow: row nowrap;
   flex-basis: 100%;
-}
 
-.charts svg {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  user-select: none;
-  overflow: hidden;
+  svg {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    user-select: none;
+    overflow: hidden;
+  }
 }
 
 .chart_wrap {

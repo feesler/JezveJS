@@ -6,30 +6,30 @@
 .styled {
   display: inline-flex;
   min-width: 200px;
-}
 
-.styled .collapsible-header {
-  display: flex;
-  font-size: 16px;
-  padding: 8px 8px 8px 8px;
-  border-width: 1px;
-  border-style: solid;
-  cursor: pointer;
-  color: #dddddd;
-  background-color: #202020;
-  border-color: #202020;
-}
+  .collapsible-header {
+    display: flex;
+    font-size: 16px;
+    padding: 8px 8px 8px 8px;
+    border-width: 1px;
+    border-style: solid;
+    cursor: pointer;
+    color: #dddddd;
+    background-color: #202020;
+    border-color: #202020;
+  }
 
-.styled .collapsible-content {
-  flex-flow: column nowrap;
-  padding: 8px;
-  margin: 0 1px;
-  border: 0 none;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  color: #bbbbbb;
-  border-color: #303030;
-  background-color: #252525;
+  .collapsible-content {
+    flex-flow: column nowrap;
+    padding: 8px;
+    margin: 0 1px;
+    border: 0 none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: #bbbbbb;
+    border-color: #303030;
+    background-color: #252525;
+  }
 }
 
 #styled-content {
@@ -40,17 +40,17 @@
   display: inline-flex;
   min-width: 300px;
   background-color: #55b0ff;
-}
 
-.custom .collapsible-header {
-  flex-flow: row nowrap;
-  align-items: center;
-  cursor: pointer;
-}
+  .collapsible-header {
+    flex-flow: row nowrap;
+    align-items: center;
+    cursor: pointer;
+  }
 
-.custom .collapsible-header:focus,
-.custom .collapsible-header:hover {
-  background-color: #1d93fa;
+  .collapsible-header:focus,
+  .collapsible-header:hover {
+    background-color: #1d93fa;
+  }
 }
 
 .custom-title {
@@ -66,13 +66,13 @@
   margin: 0;
   background: none;
   cursor: pointer;
-}
 
-.custom-header-btn > svg {
-  width: 24px;
-  height: 24px;
-  fill: #ffffff;
-  opacity: 0;
+  > svg {
+    width: 24px;
+    height: 24px;
+    fill: #ffffff;
+    opacity: 0;
+  }
 }
 
 .collapsible-header:focus .custom-header-btn > svg,
@@ -96,9 +96,9 @@
 }
 
 .methods-container {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
 }
 
 .methods {

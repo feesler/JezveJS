@@ -87,11 +87,11 @@
   min-width: 50px;
   background-color: #ffffff;
   color: #000000;
-}
 
-.dd__input:placeholder {
-  color: #808080 !important;
-  font-weight: 400 !important;
+  &:placeholder {
+    color: #808080 !important;
+    font-weight: 400 !important;
+  }
 }
 
 /* Clear selection button */
@@ -107,12 +107,11 @@
   right: 24px;
   bottom: 0;
   z-index: 1001;
-}
-
-.dd__clear-btn > svg {
-  width: 14px;
-  height: 14px;
-  fill: #888888;
+  > svg {
+    width: 14px;
+    height: 14px;
+    fill: #888888;
+  }
 }
 
 /* Select Drop Down button */
@@ -126,12 +125,12 @@
   bottom: 0;
   cursor: pointer;
   background-color: #ffffff;
-}
 
-.dd__toggle-btn path {
-  fill: #808080;
-  fill-opacity: 1;
-  stroke: none;
+  path {
+    fill: #808080;
+    fill-opacity: 1;
+    stroke: none;
+  }
 }
 
 /* Drop down list */
@@ -145,6 +144,15 @@
   max-width: 100%;
   display: none;
   z-index: 100;
+
+  > ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    list-style-image: none;
+    list-style-type: none;
+    overflow-x: hidden;
+  }
 }
 
 .dd__open .dd__list {
@@ -162,15 +170,6 @@
   border-bottom: 0 none;
 }
 
-.dd__list > ul {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  list-style-image: none;
-  list-style-type: none;
-  overflow-x: hidden;
-}
-
 .dd__list-item {
   padding: 10px;
   font-size: 1rem;
@@ -183,8 +182,39 @@
   cursor: pointer;
   color: #000000;
   background-color: #ffffff;
+
+  > svg {
+    vertical-align: middle;
+    display: inline-block;
+    visibility: hidden;
+    margin: 0 10px 0 0;
+    fill: #000000;
+  }
+
+  &.dd__list-item_active {
+    color: #ffffff;
+    background-color: #3078e2;
+    > svg {
+      fill: #ffffff;
+    }
+  }
+
+  &.dd__list-item_selected > svg {
+    visibility: visible;
+  }
 }
 
+/* Disabled list item */
+.dd__list li[disabled] {
+  pointer-events: none;
+
+  .dd__list-item {
+    background-color: #bbbbbb;
+    color: #505050;
+  }
+}
+
+/* List group */
 .dd__list-group {
   display: flex;
   flex-flow: column nowrap;
@@ -197,43 +227,13 @@
   cursor: pointer;
   color: #000000;
   background-color: #ffffff;
-}
 
-.dd__list-group label {
-  text-align: left;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 6px 0;
-}
-
-.dd__list li[disabled] {
-  pointer-events: none;
-}
-
-.dd__list li[disabled] .dd__list-item {
-  background-color: #bbbbbb;
-  color: #505050;
-}
-
-.dd__list-item.dd__list-item_active {
-  color: #ffffff;
-  background-color: #3078e2;
-}
-
-.dd__list-item > svg {
-  vertical-align: middle;
-  display: inline-block;
-  visibility: hidden;
-  margin: 0 10px 0 0;
-  fill: #000000;
-}
-
-.dd__list-item_selected > svg {
-  visibility: visible;
-}
-
-.dd__list-item_active > svg {
-  fill: #ffffff;
+  label {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 0;
+  }
 }
 
 .dd__container_attached select,
@@ -266,120 +266,111 @@
     right: 0;
     bottom: 0;
     z-index: 100;
-  }
 
-  .dd__container.dd__fullscreen.dd__open .dd__background {
-    z-index: 110;
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.9;
-    background-color: #ffffff;
-  }
+    .dd__background {
+      z-index: 110;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.9;
+      background-color: #ffffff;
+    }
 
-  .dd__container.dd__fullscreen.dd__open .dd__combo {
-    z-index: 120;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    width: auto;
-  }
+    .dd__combo {
+      z-index: 120;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      width: auto;
+    }
 
-  .dd__container.dd__fullscreen.dd__open .dd__list {
-    z-index: 120;
-    border: 2px solid #000000;
+    .dd__list {
+      z-index: 120;
+      border: 2px solid #000000;
+    }
   }
 }
 
 /* Attached drop down list */
 .dd__container_attached {
   position: static;
-}
 
-.dd__container_active.dd__container_attached {
-  outline: 2px #aee5ff solid;
-  outline-offset: 0.1rem;
-}
+  &.dd__container_active {
+    outline: 2px #aee5ff solid;
+    outline-offset: 0.1rem;
+  }
 
-.dd__container_attached .dd__list {
-  border: 2px solid #000000;
-  width: auto;
-  min-width: 130px;
-  max-width: 250px;
+  .dd__list {
+    border: 2px solid #000000;
+    width: auto;
+    min-width: 130px;
+    max-width: 250px;
+  }
 }
 
 /* Active container */
-.dd__container_active .dd__combo,
-.dd__container_active .dd__input,
-.dd__container_active .dd__single-selection,
-.dd__container_active .dd__toggle-btn {
-  background-color: #c7edff;
+.dd__container_active {
+  .dd__combo,
+  .dd__input,
+  .dd__single-selection,
+  .dd__toggle-btn {
+    background-color: #c7edff;
+  }
 }
 
 /* Disabled drop down */
 .dd__container.dd__container_disabled {
   pointer-events: none;
-}
 
-.dd__container.dd__container_disabled .dd__combo {
-  border: 2px solid #cccccc;
-}
+  .dd__combo {
+    border: 2px solid #cccccc;
+  }
 
-.dd__container.dd__container_disabled .dd__single-selection {
-  color: #cccccc;
-}
+  .dd__single-selection {
+    color: #cccccc;
+  }
 
-.dd__container_disabled .dd__clear-btn path,
-.dd__container_disabled .dd__toggle-btn path {
-  fill: #cccccc;
-}
+  .dd__clear-btn path,
+  .dd__toggle-btn path {
+    fill: #cccccc;
+  }
 
-.dd__container_disabled
-  .dd__selection
-  > .dd__selection-item
-  > .dd__del-selection-item-btn {
-  display: none;
-}
+  .dd__selection > .dd__selection-item > .dd__del-selection-item-btn {
+    display: none;
+  }
 
-.dd__container_disabled .dd__selection > .dd__selection-item {
-  color: #cccccc;
-  background-color: #dfdfdf;
+  .dd__selection > .dd__selection-item {
+    color: #cccccc;
+    background-color: #dfdfdf;
+  }
 }
 
 /* Enabled */
-.dd__container_enabled .dd__clear-btn:hover path,
-.dd__container_enabled .dd__toggle-btn:hover path {
-  fill: #000000;
-}
+.dd__container.dd__container_enabled {
+  .dd__clear-btn:hover path,
+  .dd__toggle-btn:hover path {
+    fill: #000000;
+  }
 
-.dd__container_enabled
-  .dd__selection
-  > .dd__selection-item.dd__selection-item_active,
-.dd__container_enabled .dd__selection > .dd__selection-item:hover {
-  background-color: #1e82cc;
-}
+  .dd__selection > .dd__selection-item {
+    &.dd__selection-item_active,
+    &:hover {
+      background-color: #1e82cc;
 
-.dd__container_enabled
-  .dd__selection
-  > .dd__selection-item_active
-  > .dd__del-selection-item-btn,
-.dd__container_enabled
-  .dd__selection
-  > .dd__selection-item:hover
-  > .dd__del-selection-item-btn {
-  color: #166096;
-  cursor: pointer;
-}
+      > .dd__del-selection-item-btn {
+        color: #166096;
+        cursor: pointer;
+      }
+    }
 
-.dd__container_enabled
-  .dd__selection
-  > .dd__selection-item
-  > .dd__del-selection-item-btn:hover {
-  color: #ffffff;
+    > .dd__del-selection-item-btn:hover {
+      color: #ffffff;
+    }
+  }
 }
 
 /* Hidden option wrapper for iOS */

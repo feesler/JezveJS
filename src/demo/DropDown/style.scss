@@ -36,14 +36,10 @@
 .link_inline_cont {
   display: inline-block;
   cursor: pointer;
-}
 
-.link_inline_cont .ddmobile > select {
-  cursor: pointer;
-}
-
-.link_inline_cont .link_inline {
-  color: #2020ff;
+  .link_inline {
+    color: #2020ff;
+  }
 }
 
 .link_inline_cont:hover .link_inline {

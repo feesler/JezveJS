@@ -3,10 +3,10 @@
   margin: 0 12px 0 0;
   white-space: nowrap;
   cursor: pointer;
-}
 
-.checkbox input {
-  display: none;
+  input {
+    display: none;
+  }
 }
 
 .checkbox__check {
@@ -17,22 +17,26 @@
   border: 1px solid #cccccc;
   padding: 2px;
   margin: 0 6px 0 0;
-}
 
-.checkbox__check svg {
-  display: block;
-  width: 14px;
-  height: 14px;
-  visibility: hidden;
-}
-
-.checkbox .checkbox__check:active {
-  background-color: #1e82cc;
+  svg {
+    display: block;
+    width: 14px;
+    height: 14px;
+    visibility: hidden;
+  }
 }
 
 .checkbox input:checked + .checkbox__check svg {
   visibility: visible;
   fill: #5082aa;
+}
+
+.checkbox input:active + .checkbox__check {
+  background-color: #1e82cc;
+
+  svg {
+    fill: #ffffff;
+  }
 }
 
 .checkbox input[disabled] + .checkbox__check {

@@ -36,24 +36,24 @@
 
 .dp__header_title {
   width: 80%;
-}
 
-.dp__header_title:hover {
-  color: #20d0ff;
+  &:hover {
+    color: #20d0ff;
+  }
 }
 
 .dp__header_nav {
   width: 10%;
-}
 
-.dp__header_nav > svg {
-  vertical-align: middle;
-  fill: #b0b0b0;
-  display: inline-block;
-}
+  > svg {
+    vertical-align: middle;
+    fill: #b0b0b0;
+    display: inline-block;
+  }
 
-.dp__header_nav:hover > svg {
-  fill: #80d0ff;
+  &:hover > svg {
+    fill: #80d0ff;
+  }
 }
 
 /* Common class for all kind of cells */
@@ -146,26 +146,26 @@
   position: absolute;
   top: 0;
   left: 0;
-}
 
-.dp__layered-view.top_from {
-  z-index: 3;
-  opacity: 1;
-}
+  &.top_from {
+    z-index: 3;
+    opacity: 1;
+  }
 
-.dp__layered-view.top_to {
-  z-index: 3;
-  opacity: 0;
-}
+  &.top_to {
+    z-index: 3;
+    opacity: 0;
+  }
 
-.dp__layered-view.bottom_from {
-  z-index: 2;
-  opacity: 1;
-}
+  &.bottom_from {
+    z-index: 2;
+    opacity: 1;
+  }
 
-.dp__layered-view.bottom_to {
-  z-index: 2;
-  opacity: 0;
+  &.bottom_to {
+    z-index: 2;
+    opacity: 0;
+  }
 }
 
 @media screen and (max-width: 767px) {

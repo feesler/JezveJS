@@ -6,38 +6,38 @@
   width: 500px;
   height: 300px;
   padding: 10px;
-}
 
-.debug.left {
-  left: 10px;
-}
+  &.left {
+    left: 10px;
+  }
 
-.debug.right {
-  right: 10px;
-}
+  &.right {
+    right: 10px;
+  }
 
-.debug.top {
-  top: 10px;
-}
+  &.top {
+    top: 10px;
+  }
 
-.debug.bottom {
-  bottom: 10px;
-}
+  &.bottom {
+    bottom: 10px;
+  }
 
-.debug .log {
-  overflow-y: auto;
-  width: 100%;
-  height: 270px;
-}
+  .log {
+    overflow-y: auto;
+    width: 100%;
+    height: 270px;
+  }
 
-.debug .controls {
-  width: 100%;
-  height: 30px;
-  padding: 10px 0 0 0;
-}
+  .controls {
+    width: 100%;
+    height: 30px;
+    padding: 10px 0 0 0;
+  }
 
-.debug .controls input[type="button"] {
-  padding: 3px 5px;
-  margin: 0 5px 0 0;
-  overflow: visible;
+  .controls input[type="button"] {
+    padding: 3px 5px;
+    margin: 0 5px 0 0;
+    overflow: visible;
+  }
 }

@@ -26,11 +26,11 @@
   flex-flow: column nowrap;
   list-style: none;
   border: 1px solid #000000;
-}
 
-.test-menu li {
-  padding: 5px;
-  white-space: nowrap;
+  li {
+    padding: 5px;
+    white-space: nowrap;
+  }
 }
 
 .test-menu_open {

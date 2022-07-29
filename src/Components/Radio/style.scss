@@ -3,10 +3,9 @@
   margin: 0 12px 0 0;
   white-space: nowrap;
   cursor: pointer;
-}
-
-.radio input {
-  display: none;
+  input {
+    display: none;
+  }
 }
 
 .radio__check {
@@ -19,33 +18,33 @@
   vertical-align: bottom;
   border: 1px solid #cccccc;
   border-radius: 100vh;
-}
 
-.radio__check::after {
-  content: "";
-  display: block;
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  border-radius: 50%;
-  visibility: hidden;
-  top: 50%;
-  margin-top: -5px;
-  left: 50%;
-  margin-left: -5px;
-  background-color: #ffffff;
-}
+  &::after {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    border-radius: 50%;
+    visibility: hidden;
+    top: 50%;
+    margin-top: -5px;
+    left: 50%;
+    margin-left: -5px;
+    background-color: #ffffff;
+  }
 
-.radio .radio__check:active {
-  background-color: #1e82cc;
+  :active {
+    background-color: #1e82cc;
+  }
 }
 
 .radio input:checked + .radio__check {
   background-color: #1e82cc;
-}
 
-.radio input:checked + .radio__check::after {
-  visibility: visible;
+  &::after {
+    visibility: visible;
+  }
 }
 
 .radio input[disabled] + .radio__check {
@@ -59,10 +58,6 @@
 
 @media (hover: hover) {
   .radio__check:hover {
-    background-color: #1e82cc;
-  }
-
-  .radio .radio__check:hover {
     background-color: #cccccc;
   }
 }
