@@ -5,9 +5,13 @@
   --dp-text-color: #000000;
   --dp-other-text-color: #b0b0b0;
   --dp-active-color: #20d0ff;
+  --dp-today-color: #20d0ff;
+  --dp-hover-bg-color: #80d0ff;
+  --dp-hover-color: #ffffff;
   --dp-hl-bg-color: #80d0ff;
   --dp-hl-color: #ffffff;
   --dp-nav-fill: #b0b0b0;
+  --dp-nav-hover-fill: #80d0ff;
 
   position: relative;
   max-width: 19rem;
@@ -61,7 +65,7 @@
   }
 
   &:hover > svg {
-    fill: var(--dp-hl-bg-color);
+    fill: var(--dp-nav-hover-fill);
   }
 }
 
@@ -110,7 +114,7 @@
 }
 
 .dp__today-cell {
-  border: 1px dashed var(--dp-active-color);
+  border: 1px dashed var(--dp-today-color);
 }
 
 .dp__cell_act {
@@ -126,7 +130,8 @@
 .dp__year-range-view__cell:hover,
 .dp__year-view__cell:hover,
 .dp__day-cell:hover {
-  background-color: var(--dp-hl-bg-color);
+  background-color: var(--dp-hover-bg-color);
+  color: var(--dp-hover-color);
 }
 
 /* View layer */
