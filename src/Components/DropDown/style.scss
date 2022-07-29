@@ -8,6 +8,7 @@
   --dd-placeholder: #808080;
 
   /* Active component */
+  --dd-active-border: #000000;
   --dd-active-bg: #c7edff;
   --dd-active-outline: #aee5ff;
 
@@ -376,6 +377,10 @@
   .dd__single-selection,
   .dd__toggle-btn {
     background-color: var(--dd-active-bg);
+  }
+
+  .dd__combo {
+    border-color: var(--dd-active-border);
   }
 }
 
