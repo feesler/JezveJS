@@ -17,8 +17,10 @@
   --dd-btn-hover-fill: #000000;
 
   /* Disabled component */
+  --dd-disabled-bg: #ffffff;
   --dd-disabled-border: #cccccc;
   --dd-disabled-selection-color: #cccccc;
+  --dd-disabled-input-text: #cccccc;
   --dd-disabled-btn-fill: #cccccc;
   --dd-disabled-selection-item-text: #cccccc;
   --dd-disabled-selection-item-bg: #dfdfdf;
@@ -97,6 +99,7 @@
   font-weight: 400;
   font-size: 1rem;
   vertical-align: middle;
+  background-color: var(--dd-bg-color);
 }
 
 .dd__selection-item {
@@ -164,7 +167,9 @@
   position: absolute;
   right: 24px;
   bottom: 0;
+  background-color: var(--dd-bg-color);
   z-index: 1001;
+
   > svg {
     width: 14px;
     height: 14px;
@@ -375,11 +380,14 @@
   .dd__combo,
   .dd__input,
   .dd__single-selection,
+  .dd__selection,
+  .dd__clear-btn,
   .dd__toggle-btn {
     background-color: var(--dd-active-bg);
   }
 
-  .dd__combo {
+  .dd__combo,
+  .dd__list {
     border-color: var(--dd-active-border);
   }
 }
@@ -390,10 +398,22 @@
 
   .dd__combo {
     border-color: var(--dd-disabled-border);
+    background-color: var(--dd-disabled-bg);
   }
 
   .dd__single-selection {
     color: var(--dd-disabled-selection-color);
+    background-color: var(--dd-disabled-bg);
+  }
+
+  .dd__input {
+    background-color: var(--dd-disabled-bg);
+    color: var(--dd-disabled-input-text);
+
+    &:placeholder {
+      color: var(--dd-disabled-input-text) !important;
+      font-weight: 400 !important;
+    }
   }
 
   .dd__clear-btn path,
