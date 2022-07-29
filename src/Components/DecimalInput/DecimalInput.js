@@ -1,5 +1,5 @@
 import { isFunction, getCursorPos, isNum } from '../../js/common.js';
-import '../../css/common.css';
+import '../../css/common.scss';
 
 const defaultProps = {
     digits: undefined,

@@ -7,10 +7,10 @@ import {
 } from '../../js/index.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
-import '../../css/common.css';
-import '../css/common.css';
-import '../css/app.css';
-import './popup.css';
+import '../../css/common.scss';
+import '../css/common.scss';
+import '../css/app.scss';
+import './style.scss';
 
 const popupArr = [];
 

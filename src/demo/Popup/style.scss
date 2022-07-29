@@ -2,11 +2,11 @@
 .center_only {
   background: none;
   padding: 10px;
-}
 
-.center_only .popup__content-box {
-  background-color: #ffffff;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  .popup__content-box {
+    background-color: #ffffff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  }
 }
 
 /* Bordered popup */
@@ -40,32 +40,32 @@
   background: none;
   margin-top: 70px;
   align-self: baseline;
-}
 
-.popup .popup__content.msg .popup__content-box {
-  padding: 0;
-  max-width: 824px;
-  width: 100%;
-  background: none;
-}
+  .popup__content-box {
+    padding: 0;
+    max-width: 824px;
+    width: 100%;
+    background: none;
+  }
 
-.msg .popup__content-box .popup__message {
-  max-width: 300px;
-  min-width: 200px;
-  color: #ffffff;
-  position: absolute;
-  right: 0;
-  padding: 15px 30px 15px 20px;
-}
+  .popup__message {
+    max-width: 300px;
+    min-width: 200px;
+    color: #ffffff;
+    position: absolute;
+    right: 0;
+    padding: 15px 30px 15px 20px;
+  }
 
-.msg.msg_success .popup__content-box .popup__message {
-  border-color: #20d040;
-  background-color: #40d060;
-}
+  &.msg_success .popup__message {
+    border-color: #20d040;
+    background-color: #40d060;
+  }
 
-.msg.msg_error .popup__content-box .popup__message {
-  border-color: #f02020;
-  background-color: #f02020;
+  &.msg_error .popup__message {
+    border-color: #f02020;
+    background-color: #f02020;
+  }
 }
 
 /* Template */
@@ -98,12 +98,12 @@
   border: 1px solid #000000;
   padding: 3px;
   overflow: hidden;
-}
 
-.stretch_input > input[type="text"],
-.stretch_input > input[type="password"],
-.stretch_input > select {
-  width: 100%;
+  > input[type="text"],
+  > input[type="password"],
+  > select {
+    width: 100%;
+  }
 }
 
 .controls_test .btn.submit-btn,

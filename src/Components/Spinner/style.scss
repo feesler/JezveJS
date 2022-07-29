@@ -1,0 +1,25 @@
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  --spinner-size: 32px;
+  --spinner-width: 4px;
+  --spinner-color: #003464;
+  --spinner-animation-time: 1s;
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border-radius: 100vh;
+  border-width: var(--spinner-width);
+  border-style: solid;
+  border-color: transparent;
+  border-top-color: var(--spinner-color);
+  border-right-color: var(--spinner-color);
+  animation-name: spinner-rotate;
+  animation-duration: var(--spinner-animation-time);
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}

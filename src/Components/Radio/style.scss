@@ -1,0 +1,72 @@
+.radio {
+  --radio-size: 14px;
+  --radio-border: #cccccc;
+  --radio-hover-bg: #cccccc;
+  --radio-disabled-bg: #dddddd;
+  --radio-active-bg: #1e82cc;
+  --radio-check-color: #ffffff;
+  --radio-checked-bg: #1e82cc;
+  --radio-label-size: 16px;
+
+  padding: 2px;
+  margin: 0 12px 0 0;
+  white-space: nowrap;
+  cursor: pointer;
+  input {
+    display: none;
+  }
+}
+
+.radio__check {
+  display: inline-block;
+  position: relative;
+  width: var(--radio-size);
+  height: var(--radio-size);
+  padding: 2px;
+  margin: 0 6px 0 0;
+  vertical-align: bottom;
+  border: 1px solid var(--radio-border);
+  border-radius: 100vh;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    border-radius: 50%;
+    visibility: hidden;
+    top: 50%;
+    margin-top: -5px;
+    left: 50%;
+    margin-left: -5px;
+    background-color: var(--radio-check-color);
+  }
+}
+
+.radio input:checked + .radio__check {
+  background-color: var(--radio-checked-bg);
+
+  &::after {
+    visibility: visible;
+  }
+}
+
+.radio input:active + .radio__check {
+  background-color: var(--radio-active-bg);
+}
+
+.radio input[disabled] + .radio__check {
+  background: var(--radio-disabled-bg);
+  opacity: 0.5;
+}
+
+.radio__label {
+  font-size: var(--radio-label-size);
+}
+
+@media (hover: hover) {
+  .radio__check:hover {
+    background-color: var(--radio-hover-bg);
+  }
+}

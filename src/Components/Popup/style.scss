@@ -1,5 +1,11 @@
 /* popup */
 .popup {
+  --popup-bg: #ffffff;
+  --popup-text: #000000;
+  --popup-close-btn: #888888;
+  --popup-close-btn-hover: #000000;
+  --popup-dim-bg: rgba(0, 0, 0, 0.5);
+
   display: block;
   position: fixed;
   left: 0;
@@ -8,7 +14,7 @@
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--popup-dim-bg);
   z-index: 2010;
 }
 
@@ -38,8 +44,8 @@
   min-width: 100%;
   max-width: 100vw;
   width: 100%;
-  background-color: #ffffff;
-  color: #000000;
+  background-color: var(--popup-bg);
+  color: var(--popup-text);
   z-index: 2100;
 }
 
@@ -72,11 +78,11 @@
 .close-btn > svg {
   width: 14px;
   height: 14px;
-  fill: #888888;
+  fill: var(--popup-close-btn);
 }
 
 .close-btn:hover > svg {
-  fill: #000000;
+  fill: var(--popup-close-btn-hover);
 }
 
 .popup__controls {

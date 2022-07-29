@@ -1,5 +1,14 @@
 /* Relative container of Date Picker */
 .dp__container {
+  --dp-bg-color: #ffffff;
+  --dp-border-color: #000000;
+  --dp-text-color: #000000;
+  --dp-other-text-color: #b0b0b0;
+  --dp-active-color: #20d0ff;
+  --dp-hl-bg-color: #80d0ff;
+  --dp-hl-color: #ffffff;
+  --dp-nav-fill: #b0b0b0;
+
   position: relative;
   max-width: 19rem;
 }
@@ -8,9 +17,9 @@
 .dp__wrapper {
   position: absolute;
   overflow: hidden;
-  background-color: #ffffff;
-  color: #000000;
-  border: 2px solid #000000;
+  background-color: var(--dp-bg-color);
+  color: var(--dp-text-color);
+  border: 2px solid var(--dp-border-color);
   font-size: 1rem;
   z-index: 1000;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -36,24 +45,24 @@
 
 .dp__header_title {
   width: 80%;
-}
 
-.dp__header_title:hover {
-  color: #20d0ff;
+  &:hover {
+    color: var(--dp-active-color);
+  }
 }
 
 .dp__header_nav {
   width: 10%;
-}
 
-.dp__header_nav > svg {
-  vertical-align: middle;
-  fill: #b0b0b0;
-  display: inline-block;
-}
+  > svg {
+    vertical-align: middle;
+    fill: var(--dp-nav-fill);
+    display: inline-block;
+  }
 
-.dp__header_nav:hover > svg {
-  fill: #80d0ff;
+  &:hover > svg {
+    fill: var(--dp-hl-bg-color);
+  }
 }
 
 /* Common class for all kind of cells */
@@ -61,9 +70,9 @@
   display: inline-block;
   box-sizing: border-box;
   text-align: center;
-  color: #000000;
-  border: 1px solid #ffffff;
-  background-color: #ffffff;
+  color: var(--dp-text-color);
+  border: 1px solid var(--dp-bg-color);
+  background-color: var(--dp-bg-color);
 }
 
 /* Year view */
@@ -97,27 +106,27 @@
 }
 
 .dp__other-month-cell {
-  color: #b0b0b0;
+  color: var(--dp-other-text-color);
 }
 
 .dp__today-cell {
-  border: 1px dashed #20d0ff;
+  border: 1px dashed var(--dp-active-color);
 }
 
 .dp__cell_act {
-  border: 1px solid #20d0ff;
+  border: 1px solid var(--dp-active-color);
 }
 
 .dp__cell_hl {
-  background-color: #80d0ff;
-  border: 1px solid #80d0ff;
-  color: #ffffff;
+  background-color: var(--dp-hl-bg-color);
+  border: 1px solid var(--dp-hl-bg-color);
+  color: var(--dp-hl-color);
 }
 
 .dp__year-range-view__cell:hover,
 .dp__year-view__cell:hover,
 .dp__day-cell:hover {
-  background-color: #80d0ff;
+  background-color: var(--dp-hl-bg-color);
 }
 
 /* View layer */
@@ -139,33 +148,33 @@
 }
 
 .dp__animated-view .dp__cell:hover {
-  background-color: #ffffff;
+  background-color: var(--dp-bg-color);
 }
 
 .dp__layered-view {
   position: absolute;
   top: 0;
   left: 0;
-}
 
-.dp__layered-view.top_from {
-  z-index: 3;
-  opacity: 1;
-}
+  &.top_from {
+    z-index: 3;
+    opacity: 1;
+  }
 
-.dp__layered-view.top_to {
-  z-index: 3;
-  opacity: 0;
-}
+  &.top_to {
+    z-index: 3;
+    opacity: 0;
+  }
 
-.dp__layered-view.bottom_from {
-  z-index: 2;
-  opacity: 1;
-}
+  &.bottom_from {
+    z-index: 2;
+    opacity: 1;
+  }
 
-.dp__layered-view.bottom_to {
-  z-index: 2;
-  opacity: 0;
+  &.bottom_to {
+    z-index: 2;
+    opacity: 0;
+  }
 }
 
 @media screen and (max-width: 767px) {

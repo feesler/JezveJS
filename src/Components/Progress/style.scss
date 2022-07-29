@@ -1,0 +1,78 @@
+.progress-bar {
+  --progress-width: 300px;
+  --progress-height: 12px;
+  --progress-animation-time: 3s;
+  --progress-translate: calc(var(--progress-width) + 10px);
+  --progress-item-content: "\2022";
+  --progress-item-color: #0078d7;
+  --progress-item-width: 8px;
+  --progress-item-size: 15px;
+  --progress-item-delay: 0.2s;
+
+  position: relative;
+  width: var(--progress-width);
+  height: var(--progress-height);
+  overflow: hidden;
+
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .progress-container {
+    z-index: 9;
+  }
+
+  .progress-opacity {
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 20%,
+      rgba(255, 255, 255, 0) 80%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    z-index: 10;
+  }
+
+  .progress-circle {
+    position: absolute;
+    top: 0;
+    left: calc(var(--progress-item-width) * -1);
+    width: var(--progress-item-width);
+    height: var(--progress-height);
+    line-height: var(--progress-height);
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .progress-circle::after {
+    content: var(--progress-item-content);
+    font-size: var(--progress-item-size);
+    color: var(--progress-item-color);
+  }
+}
+
+.progress-container.run .progress-circle {
+  transition: transform var(--progress-animation-time)
+    cubic-bezier(0.1, 0.85, 0.85, 0.1);
+  transform: translateX(var(--progress-translate));
+
+  &:nth-child(2) {
+    transition-delay: var(--progress-item-delay);
+  }
+
+  &:nth-child(3) {
+    transition-delay: calc(var(--progress-item-delay) * 2);
+  }
+
+  &:nth-child(4) {
+    transition-delay: calc(var(--progress-item-delay) * 3);
+  }
+
+  &:nth-child(5) {
+    transition-delay: calc(var(--progress-item-delay) * 4);
+  }
+}

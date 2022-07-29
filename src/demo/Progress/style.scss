@@ -1,0 +1,9 @@
+.progress-bar.pb-style {
+  --progress-width: 600px;
+  --progress-animation-time: 5s;
+}
+
+.progress-bar.circles-style {
+  --progress-item-content: "\25A0";
+  --progress-item-color: #d73000;
+}

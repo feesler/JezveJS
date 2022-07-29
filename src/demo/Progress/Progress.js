@@ -4,10 +4,10 @@ import {
     Progress,
     Spinner,
 } from '../../js/index.js';
-import '../../css/common.css';
-import '../css/common.css';
-import '../css/app.css';
-import './progress.css';
+import '../../css/common.scss';
+import '../css/common.scss';
+import '../css/app.scss';
+import './style.scss';
 
 const initProgress = () => {
     const toggle1 = ge('toggle1');

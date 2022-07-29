@@ -1,19 +1,9 @@
 /* Main layout */
 html,
 body {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   height: 100%;
   border: 0 none;
   margin: 0;
@@ -108,15 +98,15 @@ h3 {
 
 .nav-header__logo {
   padding: 6px 0;
-}
 
-.nav-header__logo > a {
-  text-decoration: none;
-  color: #dddddd;
-}
+  > a {
+    text-decoration: none;
+    color: #dddddd;
+  }
 
-.nav-header__logo > a:hover {
-  color: #ffffff;
+  > a:hover {
+    color: #ffffff;
+  }
 }
 
 .nav-header__menu-item {

@@ -1,5 +1,5 @@
 .section {
-    margin: 8px 0 16px 0;
+  margin: 8px 0 16px 0;
 }
 
 /* Circle */
@@ -10,11 +10,5 @@
 
 /* Large */
 .checkbox.checkbox-large .checkbox__check {
-  width: 28px;
-  height: 28px;
-}
-
-.checkbox.checkbox-large .checkbox__check svg {
-  width: 28px;
-  height: 28px;
+  --checkbox-size: 28px;
 }

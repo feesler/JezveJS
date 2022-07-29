@@ -57,48 +57,48 @@ h2 {
 .tbl_container {
   max-height: 700px;
   overflow-y: auto;
-}
 
-.tbl_container table {
-  border-collapse: collapse;
-}
+  table {
+    border-collapse: collapse;
+  }
 
-.tbl_container td {
-  border: 1px solid #000000;
-  padding: 5px;
+  td {
+    border: 1px solid #000000;
+    padding: 5px;
+  }
 }
 
 /* Admin table */
 .adm_tbl {
   border-collapse: collapse;
   border: 1px solid #000000;
+
+  th,
+  td {
+    border: 1px solid #000000;
+    padding: 5px;
+  }
+
+  tr {
+    cursor: pointer;
+  }
+
+  tr:hover td {
+    background-color: #bbbbbb;
+  }
 }
 
-.adm_tbl th,
-.adm_tbl td {
-  border: 1px solid #000000;
-  padding: 5px;
-}
-
-.adm_tbl tr {
-  cursor: pointer;
-}
-
-.adm_tbl tr:hover td {
-  background-color: #bbbbbb;
-}
-
-.adm_tbl.counter_tbl {
+.counter_tbl {
   display: inline;
   border: 0 none;
-}
 
-.counter_tbl td.title {
-  border-right: 0 none;
-}
+  td.title {
+    border-right: 0 none;
+  }
 
-.counter_tbl td.title + td {
-  border-left: 0 none;
+  td.title + td {
+    border-left: 0 none;
+  }
 }
 
 .results {

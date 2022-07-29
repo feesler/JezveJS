@@ -1,6 +1,6 @@
 import { ge, ce, isInt } from '../../js/common.js';
-import '../../css/common.css';
-import './progress.css';
+import '../../css/common.scss';
+import './style.scss';
 
 /** Progress constructor */
 export const Progress = new (function () {

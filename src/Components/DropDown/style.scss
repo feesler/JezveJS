@@ -1,0 +1,445 @@
+.dd__container,
+.dd__container_attached {
+  --dd-bg-color: #ffffff;
+  --dd-border-color: #000000;
+  --dd-border-width: 2px;
+  --dd-selection-text: #000000;
+  --dd-input-text: #000000;
+  --dd-placeholder: #808080;
+
+  /* Active component */
+  --dd-active-bg: #c7edff;
+  --dd-active-outline: #aee5ff;
+
+  /* Clear and toggle buttons */
+  --dd-btn-fill: #888888;
+  --dd-btn-hover-fill: #000000;
+
+  /* Disabled component */
+  --dd-disabled-border: #cccccc;
+  --dd-disabled-selection-color: #cccccc;
+  --dd-disabled-btn-fill: #cccccc;
+  --dd-disabled-selection-item-text: #cccccc;
+  --dd-disabled-selection-item-bg: #dfdfdf;
+
+  /* Multiple selection item */
+  --dd-selection-item-text: #ffffff;
+  --dd-selection-item-bg: #20a0ff;
+  --dd-selection-item-btn: #1e82cc;
+
+  /* Multiple selection item hover */
+  --dd-selection-item-hover-text: #ffffff;
+  --dd-selection-item-hover-bg: #1e82cc;
+  --dd-selection-item-hover-btn: #166096;
+  --dd-selection-item-btn-hover: #ffffff;
+
+  /* List item */
+  --dd-list-item-text: #000000;
+  --dd-list-item-bg: #ffffff;
+  --dd-list-item-check: #000000;
+
+  /* Active list item */
+  --dd-active-list-item-text: #ffffff;
+  --dd-active-list-item-bg: #3078e2;
+  --dd-active-list-item-check: #ffffff;
+
+  /* Disabled list item */
+  --dd-disabled-list-item-text: #505050;
+  --dd-disabled-list-item-bg: #bbbbbb;
+
+  /* List group */
+  --dd-list-group-text: #000000;
+  --dd-list-group-bg: #ffffff;
+
+  /* Fullscreen mode */
+  --dd-fullscreen-bg: #ffffff;
+}
+
+/* Container of drop down control */
+.dd__container {
+  display: inline-flex;
+  align-self: baseline;
+  position: static;
+}
+
+.dd__background {
+  display: none;
+}
+
+.dd__combo {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  min-height: 34px;
+  border: var(--dd-border-width) solid var(--dd-border-color);
+  background-color: var(--dd-bg-color);
+  padding: 0 24px 0 0;
+  overflow: hidden;
+}
+
+/* Multiple select */
+.dd__container_multiple .dd__combo {
+  padding: 0 48px 0 0;
+}
+
+/* Current selection items */
+.dd__selection {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  align-content: space-around;
+  font-weight: 400;
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+.dd__selection-item {
+  display: flex;
+  margin: 1px;
+  padding: 3px;
+  font-weight: normal;
+  white-space: nowrap;
+  background-color: var(--dd-selection-item-bg);
+  color: var(--dd-selection-item-text);
+}
+
+.dd__selection > .dd__selection-item > .dd__del-selection-item-btn {
+  color: var(--dd-selection-item-btn);
+  padding: 0 0 0 3px;
+}
+
+/* Single selection */
+.dd__single-selection {
+  display: flex;
+  flex: 1 0 auto;
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0 0 0 4px;
+  margin: 0;
+  height: 30px;
+  align-items: center;
+  background-color: var(--dd-bg-color);
+  color: var(--dd-selection-text);
+}
+
+.dd__single-selection_placeholder {
+  color: var(--dd-placeholder);
+}
+
+/* Editable input */
+.dd__input {
+  display: flex;
+  flex: 1 1 auto;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0 0 0 4px;
+  margin: 0;
+  height: 30px;
+  min-width: 50px;
+  background-color: var(--dd-bg-color);
+  color: var(--dd-input-text);
+
+  &:placeholder {
+    color: var(--dd-placeholder) !important;
+    font-weight: 400 !important;
+  }
+}
+
+/* Clear selection button */
+.dd__clear-btn {
+  width: 24px;
+  height: 100%;
+  max-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  right: 24px;
+  bottom: 0;
+  z-index: 1001;
+  > svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--dd-btn-fill);
+  }
+}
+
+/* Select Drop Down button */
+.dd__toggle-btn {
+  width: 24px;
+  height: 100%;
+  max-height: 2rem;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  background-color: var(--dd-bg-color);
+
+  path {
+    fill: var(--dd-btn-fill);
+    fill-opacity: 1;
+    stroke: none;
+  }
+}
+
+/* Drop down list */
+.dd__list {
+  box-sizing: border-box;
+  background-color: var(--dd-bg-color);
+  border-right: var(--dd-border-width) solid var(--dd-border-color);
+  border-left: var(--dd-border-width) solid var(--dd-border-color);
+  overflow-y: auto;
+  position: absolute;
+  max-width: 100%;
+  display: none;
+  z-index: 1002;
+
+  > ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    list-style-image: none;
+    list-style-type: none;
+    overflow-x: hidden;
+  }
+}
+
+.dd__open .dd__list {
+  display: flex;
+}
+
+.dd__list_drop-down {
+  border-top: 0 none;
+  border-bottom: var(--dd-border-width) solid var(--dd-border-color);
+}
+
+/* Drop up list */
+.dd__list_drop-up {
+  border-top: var(--dd-border-width) solid var(--dd-border-color);
+  border-bottom: 0 none;
+}
+
+.dd__list-item {
+  padding: 10px;
+  font-size: 1rem;
+  text-align: left;
+  border-width: 0;
+  border-style: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--dd-list-item-text);
+  background-color: var(--dd-list-item-bg);
+
+  > svg {
+    vertical-align: middle;
+    display: inline-block;
+    visibility: hidden;
+    margin: 0 10px 0 0;
+    fill: var(--dd-list-item-check);
+  }
+
+  &.dd__list-item_active {
+    color: var(--dd-active-list-item-text);
+    background-color: var(--dd-active-list-item-bg);
+    > svg {
+      fill: var(--dd-active-list-item-check);
+    }
+  }
+
+  &.dd__list-item_selected > svg {
+    visibility: visible;
+  }
+}
+
+/* Disabled list item */
+.dd__list li[disabled] {
+  pointer-events: none;
+
+  .dd__list-item {
+    background-color: var(--dd-disabled-list-item-bg);
+    color: var(--dd-disabled-list-item-text);
+  }
+}
+
+/* List group */
+.dd__list-group {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 0 0 0 10px;
+  border-width: 0;
+  border-style: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--dd-list-group-text);
+  background-color: var(--dd-list-group-bg);
+
+  label {
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 0;
+  }
+}
+
+.dd__container_attached select,
+.dd__container select {
+  display: none;
+}
+
+.dd__container_native.dd__container_attached select,
+.dd__container_native.dd__container select {
+  display: block;
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+}
+
+.dd__container.dd__container_native.dd__editable select {
+  right: 0;
+  width: 24px;
+}
+
+/* Full screen drop down */
+@media (max-width: 767px) {
+  .dd__container.dd__fullscreen.dd__open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1010;
+
+    .dd__background {
+      z-index: 1100;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.9;
+      background-color: var(--dd-fullscreen-bg);
+    }
+
+    .dd__combo {
+      z-index: 1200;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      width: auto;
+    }
+
+    .dd__list {
+      z-index: 1200;
+      border: var(--dd-border-width) solid var(--dd-border-color);
+    }
+  }
+}
+
+/* Attached drop down list */
+.dd__container_attached {
+  position: static;
+
+  &.dd__container_active {
+    outline: 2px var(--dd-active-outline) solid;
+    outline-offset: 0.1rem;
+  }
+
+  .dd__list {
+    border: var(--dd-border-width) solid var(--dd-border-color);
+    width: auto;
+    min-width: 130px;
+    max-width: 250px;
+  }
+}
+
+/* Active container */
+.dd__container_active {
+  .dd__combo,
+  .dd__input,
+  .dd__single-selection,
+  .dd__toggle-btn {
+    background-color: var(--dd-active-bg);
+  }
+}
+
+/* Disabled drop down */
+.dd__container.dd__container_disabled {
+  pointer-events: none;
+
+  .dd__combo {
+    border-color: var(--dd-disabled-border);
+  }
+
+  .dd__single-selection {
+    color: var(--dd-disabled-selection-color);
+  }
+
+  .dd__clear-btn path,
+  .dd__toggle-btn path {
+    fill: var(--dd-disabled-btn-fill);
+  }
+
+  .dd__selection > .dd__selection-item > .dd__del-selection-item-btn {
+    display: none;
+  }
+
+  .dd__selection > .dd__selection-item {
+    color: var(--dd-disabled-selection-item-text);
+    background-color: var(--dd-disabled-selection-item-bg);
+  }
+}
+
+/* Enabled */
+.dd__container.dd__container_enabled {
+  .dd__clear-btn:hover path,
+  .dd__toggle-btn:hover path {
+    fill: var(--dd-btn-hover-fill);
+  }
+
+  .dd__selection > .dd__selection-item {
+    &.dd__selection-item_active,
+    &:hover {
+      color: var(--dd-selection-item-hover-text);
+      background-color: var(--dd-selection-item-hover-bg);
+
+      > .dd__del-selection-item-btn {
+        color: var(--dd-selection-item-hover-btn);
+        cursor: pointer;
+      }
+    }
+
+    > .dd__del-selection-item-btn:hover {
+      color: var(--dd-selection-item-btn-hover);
+    }
+  }
+}
+
+/* Hidden option wrapper for iOS */
+.dd__opt-wrapper {
+  display: none;
+}
+
+/* Don't use native select on large screens even useNativeSelect option is set */
+@media (min-width: 768px) {
+  .dd__container_native.dd__container_attached select,
+  .dd__container_native.dd__container select {
+    display: none;
+  }
+}
