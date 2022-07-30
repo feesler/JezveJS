@@ -35,10 +35,6 @@
   cursor: pointer;
   border-radius: 100vh;
 
-  &:hover {
-    background-color: var(--switch-hover-bg);
-  }
-
   /* Sliding disc */
   &::before {
     content: "";
@@ -51,19 +47,11 @@
     background-color: var(--switch-slider-color);
     border-radius: 100vh;
   }
-
-  &:hover::before {
-    background-color: var(--switch-hover-slider);
-  }
 }
 
 /* Checked state */
 .switch input:checked + .switch-slider {
   background-color: var(--switch-checked-bg);
-
-  &:hover {
-    background-color: var(--switch-checked-hover-bg);
-  }
 
   &::before {
     left: var(--switch-checked-slider-left);
@@ -74,4 +62,19 @@
 .switch[disabled] {
   pointer-events: none;
   opacity: 0.8;
+}
+
+@media (hover: hover) {
+  .switch-slider:hover {
+    background-color: var(--switch-hover-bg);
+  }
+
+  .switch-slider:hover::before {
+    background-color: var(--switch-hover-slider);
+  }
+
+  /* Checked state */
+  .switch input:checked + .switch-slider:hover {
+    background-color: var(--switch-checked-hover-bg);
+  }
 }

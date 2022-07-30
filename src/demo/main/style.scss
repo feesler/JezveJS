@@ -8,8 +8,10 @@
     font-size: 18px;
     color: #0072c6;
   }
+}
 
-  a:hover {
+@media (hover: hover) {
+  .main-menu li a:hover {
     text-decoration: underline;
     color: #0093ff;
   }

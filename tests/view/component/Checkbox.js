@@ -38,6 +38,8 @@ export class Checkbox extends TestComponent {
     }
 
     async toggle() {
+        assert(!this.content.disabled, 'Component is disabled');
+
         return click(this.elem);
     }
 }

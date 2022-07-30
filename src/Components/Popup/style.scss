@@ -81,11 +81,13 @@
   fill: var(--popup-close-btn);
 }
 
-.close-btn:hover > svg {
-  fill: var(--popup-close-btn-hover);
-}
-
 .popup__controls {
   padding: 29px 0 8px;
   display: inline-block;
+}
+
+@media (hover: hover) {
+  .close-btn:hover > svg {
+    fill: var(--popup-close-btn-hover);
+  }
 }

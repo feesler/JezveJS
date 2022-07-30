@@ -1,8 +1,10 @@
 .radio {
   --radio-size: 14px;
   --radio-border: #cccccc;
+  --radio-text: #000000;
   --radio-hover-bg: #cccccc;
   --radio-disabled-bg: #dddddd;
+  --radio-disabled-text: #888888;
   --radio-active-bg: #1e82cc;
   --radio-check-color: #ffffff;
   --radio-checked-bg: #1e82cc;
@@ -57,12 +59,19 @@
 }
 
 .radio input[disabled] + .radio__check {
+  pointer-events: none;
   background: var(--radio-disabled-bg);
   opacity: 0.5;
 }
 
 .radio__label {
   font-size: var(--radio-label-size);
+  color: var(--radio-text);
+}
+
+.radio input[disabled] + .radio__label {
+  pointer-events: none;
+  color: var(--radio-disabled-text);
 }
 
 @media (hover: hover) {

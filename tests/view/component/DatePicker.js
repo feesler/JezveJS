@@ -58,18 +58,18 @@ export class DatePicker extends TestComponent {
         const res = {};
 
         if (viewType === 'month') {
-            const titleItems = title.split(' ');
+            const [month, year] = title.split(' ');
 
-            res.month = monthTitles.indexOf(titleItems[0].toLowerCase());
+            res.month = monthTitles.indexOf(month.toLowerCase());
             assert(res.month !== -1, 'Invalid month string');
-            res.year = parseInt(titleItems[1], 10);
+            res.year = parseInt(year, 10);
         } else if (viewType === 'year') {
             res.year = parseInt(title, 10);
         } else if (viewType === 'yearRange') {
-            const titleItems = title.split('-');
+            const [startYear, endYear] = title.split('-');
             res.yearRange = {
-                start: parseInt(titleItems[0], 10),
-                end: parseInt(titleItems[1], 10),
+                start: parseInt(startYear, 10),
+                end: parseInt(endYear, 10),
             };
         }
 

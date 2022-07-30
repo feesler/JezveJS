@@ -1,8 +1,10 @@
 .checkbox {
   --checkbox-size: 14px;
   --checkbox-border: #cccccc;
+  --checkbox-text: #000000;
   --checkbox-hover-bg: #cccccc;
   --checkbox-disabled-bg: #dddddd;
+  --checkbox-disabled-text: #888888;
   --checkbox-active-bg: #1e82cc;
   --checkbox-active-fill: #ffffff;
   --checkbox-checked-fill: #5082aa;
@@ -49,12 +51,19 @@
 }
 
 .checkbox input[disabled] + .checkbox__check {
+  pointer-events: none;
   background: var(--checkbox-disabled-bg);
   opacity: 0.5;
 }
 
 .checkbox__label {
   font-size: var(--checkbox-label-size);
+  color: var(--checkbox-text);
+}
+
+.checkbox input[disabled] + .checkbox__label {
+  pointer-events: none;
+  color: var(--checkbox-disabled-text);
 }
 
 @media (hover: hover) {

@@ -16,8 +16,11 @@ const addEventLog = (value) => {
 };
 
 const initParsed = () => {
-    Checkbox.fromElement(ge('defaultCheckbox'), {
+    Checkbox.fromElement(ge('defaultCheckboxNoLabel'), {
         onChange: (checked) => addEventLog(`Parsed Checkbox change. checked: ${checked}`),
+    });
+    Checkbox.fromElement(ge('defaultCheckboxLabel'), {
+        onChange: (checked) => addEventLog(`Parsed Checkbox with label change. checked: ${checked}`),
     });
 };
 

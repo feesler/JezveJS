@@ -42,10 +42,6 @@
   }
 }
 
-.link_inline_cont:hover .link_inline {
-  text-decoration: underline;
-}
-
 .offset-parent {
   position: relative;
 }
@@ -138,8 +134,7 @@
 
 .dd__container_enabled
   .dd__selection
-  > .dd__custom-selection-item.dd__selection-item_active,
-.dd__container_enabled .dd__selection > .dd__custom-selection-item:hover {
+  > .dd__custom-selection-item.dd__selection-item_active {
   background-color: #e6a34b;
   border-color: #e79f40;
 }
@@ -154,20 +149,31 @@
 .dd__container_enabled
   .dd__selection
   > .dd__custom-selection-item
-  > .dd__del-selection-item-btn:hover {
-  color: #ffffff;
-}
-
-.dd__container_enabled
-  .dd__selection
-  > .dd__custom-selection-item
   > .dd__del-selection-item-btn::after {
   content: "\2014";
 }
 
-.dd__container_enabled
-  .dd__selection
-  > .dd__custom-selection-item
-  > .dd__del-selection-item-btn:hover::after {
-  content: "|";
+@media (hover: hover) {
+  .link_inline_cont:hover .link_inline {
+    text-decoration: underline;
+  }
+
+  .dd__container_enabled
+    .dd__selection
+    > .dd__custom-selection-item
+    > .dd__del-selection-item-btn:hover {
+    color: #ffffff;
+  }
+
+  .dd__container_enabled .dd__selection > .dd__custom-selection-item:hover {
+    background-color: #e6a34b;
+    border-color: #e79f40;
+  }
+
+  .dd__container_enabled
+    .dd__selection
+    > .dd__custom-selection-item
+    > .dd__del-selection-item-btn:hover::after {
+    content: "|";
+  }
 }
