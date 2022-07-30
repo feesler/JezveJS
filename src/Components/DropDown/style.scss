@@ -432,27 +432,15 @@
 }
 
 /* Enabled */
-.dd__container.dd__container_enabled {
-  .dd__clear-btn:hover path,
-  .dd__toggle-btn:hover path {
-    fill: var(--dd-btn-hover-fill);
-  }
+.dd__container.dd__container_enabled
+  .dd__selection
+  > .dd__selection-item.dd__selection-item_active {
+  color: var(--dd-selection-item-hover-text);
+  background-color: var(--dd-selection-item-hover-bg);
 
-  .dd__selection > .dd__selection-item {
-    &.dd__selection-item_active,
-    &:hover {
-      color: var(--dd-selection-item-hover-text);
-      background-color: var(--dd-selection-item-hover-bg);
-
-      > .dd__del-selection-item-btn {
-        color: var(--dd-selection-item-hover-btn);
-        cursor: pointer;
-      }
-    }
-
-    > .dd__del-selection-item-btn:hover {
-      color: var(--dd-selection-item-btn-hover);
-    }
+  > .dd__del-selection-item-btn {
+    color: var(--dd-selection-item-hover-btn);
+    cursor: pointer;
   }
 }
 
@@ -466,5 +454,30 @@
   .dd__container_native.dd__container_attached select,
   .dd__container_native.dd__container select {
     display: none;
+  }
+}
+
+@media (hover: hover) {
+  .dd__container.dd__container_enabled {
+    .dd__clear-btn:hover path,
+    .dd__toggle-btn:hover path {
+      fill: var(--dd-btn-hover-fill);
+    }
+
+    .dd__selection > .dd__selection-item {
+      &:hover {
+        color: var(--dd-selection-item-hover-text);
+        background-color: var(--dd-selection-item-hover-bg);
+
+        > .dd__del-selection-item-btn {
+          color: var(--dd-selection-item-hover-btn);
+          cursor: pointer;
+        }
+      }
+
+      > .dd__del-selection-item-btn:hover {
+        color: var(--dd-selection-item-btn-hover);
+      }
+    }
   }
 }

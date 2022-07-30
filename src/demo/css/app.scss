@@ -103,10 +103,6 @@ h3 {
     text-decoration: none;
     color: #dddddd;
   }
-
-  > a:hover {
-    color: #ffffff;
-  }
 }
 
 .nav-header__menu-item {
@@ -128,4 +124,10 @@ h3 {
 
 .adm_act_btn:disabled {
   background-color: #708290;
+}
+
+@media (hover: hover) {
+  .nav-header__logo > a:hover {
+    color: #ffffff;
+  }
 }

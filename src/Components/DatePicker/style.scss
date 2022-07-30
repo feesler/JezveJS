@@ -49,10 +49,6 @@
 
 .dp__header_title {
   width: 80%;
-
-  &:hover {
-    color: var(--dp-active-color);
-  }
 }
 
 .dp__header_nav {
@@ -62,10 +58,6 @@
     vertical-align: middle;
     fill: var(--dp-nav-fill);
     display: inline-block;
-  }
-
-  &:hover > svg {
-    fill: var(--dp-nav-hover-fill);
   }
 }
 
@@ -125,13 +117,6 @@
   background-color: var(--dp-hl-bg-color);
   border: 1px solid var(--dp-hl-bg-color);
   color: var(--dp-hl-color);
-}
-
-.dp__year-range-view__cell:hover,
-.dp__year-view__cell:hover,
-.dp__day-cell:hover {
-  background-color: var(--dp-hover-bg-color);
-  color: var(--dp-hover-color);
 }
 
 /* View layer */
@@ -198,5 +183,22 @@
   .dp__year-view__cell {
     font-size: 1.125rem;
     padding: 3% 4%;
+  }
+}
+
+@media (hover: hover) {
+  .dp__header_title:hover {
+    color: var(--dp-active-color);
+  }
+
+  .dp__header_nav:hover > svg {
+    fill: var(--dp-nav-hover-fill);
+  }
+
+  .dp__year-range-view__cell:hover,
+  .dp__year-view__cell:hover,
+  .dp__day-cell:hover {
+    background-color: var(--dp-hover-bg-color);
+    color: var(--dp-hover-color);
   }
 }

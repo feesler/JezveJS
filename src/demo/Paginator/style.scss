@@ -14,17 +14,8 @@
     color: #ffffff;
   }
 
-  a.paginator-item:hover {
-    border-color: #93beff;
-  }
-
   .paginator-arrow {
     fill: #93beff;
-  }
-
-  a.paginator-arrow:hover {
-    fill: #447fd6;
-    border-color: #ffffff;
   }
 
   .paginator-arrow[disabled] {
@@ -33,5 +24,16 @@
 
   .paginator-item + .paginator-item {
     margin-left: 2px;
+  }
+}
+
+@media (hover: hover) {
+  .styled a.paginator-item:hover {
+    border-color: #93beff;
+  }
+
+  .styled a.paginator-arrow:hover {
+    fill: #447fd6;
+    border-color: #ffffff;
   }
 }
