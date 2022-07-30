@@ -51,6 +51,7 @@
 }
 
 .checkbox input[disabled] + .checkbox__check {
+  pointer-events: none;
   background: var(--checkbox-disabled-bg);
   opacity: 0.5;
 }
@@ -61,6 +62,7 @@
 }
 
 .checkbox input[disabled] + .checkbox__label {
+  pointer-events: none;
   color: var(--checkbox-disabled-text);
 }
 

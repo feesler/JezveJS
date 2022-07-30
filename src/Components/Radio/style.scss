@@ -59,6 +59,7 @@
 }
 
 .radio input[disabled] + .radio__check {
+  pointer-events: none;
   background: var(--radio-disabled-bg);
   opacity: 0.5;
 }
@@ -69,6 +70,7 @@
 }
 
 .radio input[disabled] + .radio__label {
+  pointer-events: none;
   color: var(--radio-disabled-text);
 }
 
