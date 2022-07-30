@@ -135,6 +135,8 @@ export class DropDown extends TestComponent {
     }
 
     async showList(show = true) {
+        assert(!this.content.disabled, 'Component is disabled');
+
         const listVisible = await isVisible(this.content.listContainer);
         if (show === listVisible) {
             return;
@@ -144,6 +146,8 @@ export class DropDown extends TestComponent {
     }
 
     async toggleItem(itemId) {
+        assert(!this.content.disabled, 'Component is disabled');
+
         const li = this.getItem(itemId);
         assert(li, `List item ${itemId} not found`);
 
@@ -159,6 +163,8 @@ export class DropDown extends TestComponent {
     }
 
     async selectItem(itemId) {
+        assert(!this.content.disabled, 'Component is disabled');
+
         const li = this.getItem(itemId);
         assert(li, `List item ${itemId} not found`);
 
@@ -171,6 +177,7 @@ export class DropDown extends TestComponent {
     }
 
     async deselectItem(itemId) {
+        assert(!this.content.disabled, 'Component is disabled');
         assert(this.content.isMulti, 'Deselect item not available for single select DropDown');
 
         const li = this.getItem(itemId);
@@ -185,6 +192,7 @@ export class DropDown extends TestComponent {
     }
 
     async deselectItemByTag(itemId) {
+        assert(!this.content.disabled, 'Component is disabled');
         assert(this.content.isMulti, 'Deselect item not available for single select DropDown');
 
         const selItem = this.getSelectedItem(itemId);
@@ -195,8 +203,9 @@ export class DropDown extends TestComponent {
     }
 
     async setSelection(val) {
-        const values = Array.isArray(val) ? val : [val];
+        assert(!this.content.disabled, 'Component is disabled');
 
+        const values = Array.isArray(val) ? val : [val];
         if (values.length > 1) {
             assert(this.content.isMulti, 'Select multiple items not available for single select DropDown');
         }
@@ -222,6 +231,7 @@ export class DropDown extends TestComponent {
     }
 
     async deselectAll() {
+        assert(!this.content.disabled, 'Component is disabled');
         assert(this.content.isMulti, 'Deselect items not available for single select DropDown');
 
         const selectedValues = this.getSelectedValues();
