@@ -11,18 +11,19 @@ export class LineChart extends BaseChart {
         super(props);
 
         this.line = null;
-        this.visibilityOffset = 2;
-        this.scaleAroundAxis = false;
+        this.props.visibilityOffset = 2;
+        this.props.scaleAroundAxis = false;
 
         this.init();
     }
 
     /** Create items with default scale */
     createItems() {
-        const dw = (this.barWidth + this.barMargin) / 2;
+        const { barOuterWidth } = this;
+        const dw = barOuterWidth / 2;
 
-        this.items = this.data.values.map((val, index) => {
-            const leftPos = index * (this.barWidth + this.barMargin);
+        this.items = this.state.data.values.map((val, index) => {
+            const leftPos = index * barOuterWidth;
             const item = {
                 value: val,
                 dot: {

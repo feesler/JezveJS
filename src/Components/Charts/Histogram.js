@@ -10,18 +10,19 @@ export class Histogram extends BaseChart {
     constructor(props) {
         super(props);
 
-        this.visibilityOffset = 1;
-        this.scaleAroundAxis = true;
+        this.props.visibilityOffset = 1;
+        this.props.scaleAroundAxis = true;
 
         this.init();
     }
 
     /** Create items with default scale */
     createItems() {
+        const { barOuterWidth } = this;
         const y0 = this.grid.getY(0);
 
-        this.items = this.data.values.map((val, index) => {
-            const leftPos = index * (this.barWidth + this.barMargin);
+        this.items = this.state.data.values.map((val, index) => {
+            const leftPos = index * barOuterWidth;
             const y1 = this.grid.getY(val);
             const barHeight = Math.abs(y0 - y1);
             const y = Math.min(y0, y1);
@@ -32,7 +33,7 @@ export class Histogram extends BaseChart {
                 class: 'histogram__bar',
                 x: leftPos,
                 y,
-                width: this.barWidth,
+                width: this.state.barWidth,
                 height: barHeight,
             });
             this.container.appendChild(item.elem);
