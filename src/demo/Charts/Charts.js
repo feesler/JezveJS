@@ -177,7 +177,7 @@ function init() {
     Histogram.create({
         data: chartData,
         elem: 'chart_fittowidth',
-        widthFit: true,
+        fitToWidth: true,
     });
     Histogram.create({
         data: chartData2,
@@ -228,7 +228,7 @@ function init() {
     LineChart.create({
         data: chartData,
         elem: 'linechart_fittowidth',
-        widthFit: true,
+        fitToWidth: true,
     });
     LineChart.create({
         data: eurData,

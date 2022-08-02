@@ -10,6 +10,17 @@ import { ChartGrid } from './ChartGrid.js';
 import '../../css/common.scss';
 import './style.scss';
 
+/** Default properties */
+const defaultProps = {
+    height: 300,
+    fitToWidth: false,
+    autoScale: false,
+    onscroll: null,
+    onitemclick: null,
+    onitemover: null,
+    onitemout: null,
+};
+
 /**
  * Base chart class
  * @param {Object} props
@@ -18,6 +29,11 @@ import './style.scss';
 export class BaseChart extends Component {
     constructor(props) {
         super(props);
+
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+        };
 
         if (!this.elem
             || !this.props
@@ -33,7 +49,7 @@ export class BaseChart extends Component {
         this.verticalLabels = null;
         this.container = null;
         this.labelsContainer = null;
-        this.paperHeight = 300;
+
         this.hLabelsHeight = 25;
         this.vLabelsWidth = 10;
         this.chartMarginTop = 10;
@@ -46,40 +62,14 @@ export class BaseChart extends Component {
         this.gridValuesMargin = 0.1;
         this.minGridStep = 30;
         this.maxGridStep = 60;
-        if (!('visibilityOffset' in this)) {
-            this.visibilityOffset = 1;
-        }
-        if (!('scaleAroundAxis' in this)) {
-            this.scaleAroundAxis = true;
-        }
-        this.data = {};
+        this.visibilityOffset = 1;
+        this.scaleAroundAxis = true;
         this.items = [];
         this.grid = null;
         this.gridLines = [];
         this.vertLabels = [];
-        this.fitToWidth = false;
-        this.autoScale = false;
-        this.itemClickHandler = null;
-        this.scrollHandler = null;
-        this.itemOverHandler = null;
-        this.itemOutHandler = null;
 
         this.data = this.props.data;
-
-        if ('widthFit' in this.props) {
-            this.fitToWidth = this.props.widthFit;
-        }
-        if ('autoScale' in this.props) {
-            this.autoScale = this.props.autoScale;
-        }
-        if ('height' in this.props) {
-            this.paperHeight = parseInt(this.props.height, 10);
-        }
-
-        this.scrollHandler = isFunction(this.props.onscroll) ? this.props.onscroll : null;
-        this.itemClickHandler = isFunction(this.props.onitemclick) ? this.props.onitemclick : null;
-        this.itemOverHandler = isFunction(this.props.onitemover) ? this.props.onitemover : null;
-        this.itemOutHandler = isFunction(this.props.onitemout) ? this.props.onitemout : null;
     }
 
     /** Initialization of chart */
@@ -99,16 +89,16 @@ export class BaseChart extends Component {
         ]);
         this.elem.appendChild(this.chartsWrapObj);
 
-        this.chartHeight = this.paperHeight - this.hLabelsHeight - this.chartMarginTop;
+        this.chartHeight = this.props.height - this.hLabelsHeight - this.chartMarginTop;
         this.barWidth = 38;
 
-        this.labelsContainer = svg('svg', { width: this.vLabelsWidth, height: this.paperHeight + 20 });
+        this.labelsContainer = svg('svg', { width: this.vLabelsWidth, height: this.props.height + 20 });
         this.verticalLabels.appendChild(this.labelsContainer);
 
         // create grid
         this.calculateGrid(this.data.values);
 
-        if (this.fitToWidth) {
+        if (this.props.fitToWidth) {
             this.barWidth = (this.chart.parentNode.offsetWidth / (this.data.values.length + 1));
             if (this.barWidth > 10) {
                 this.barMargin = this.barWidth / 5;
@@ -122,17 +112,17 @@ export class BaseChart extends Component {
         this.chartWidth = Math.max(this.chart.offsetWidth, this.chartContentWidth);
 
         const events = {};
-        if (isFunction(this.itemOverHandler) || isFunction(this.itemOutHandler)) {
-            events.mousemove = this.onItemOver.bind(this);
-            events.mouseout = this.onItemOut.bind(this);
+        if (isFunction(this.props.onitemover) || isFunction(this.props.onitemout)) {
+            events.mousemove = (e) => this.onItemOver(e);
+            events.mouseout = (e) => this.onItemOut(e);
         }
-        if (isFunction(this.itemClickHandler)) {
-            events.click = this.onItemClick.bind(this);
+        if (isFunction(this.props.onitemclick)) {
+            events.click = (e) => this.onItemClick(e);
         }
 
         this.container = svg(
             'svg',
-            { width: this.chartWidth, height: this.paperHeight },
+            { width: this.chartWidth, height: this.props.height },
             null,
             events,
         );
@@ -261,7 +251,7 @@ export class BaseChart extends Component {
         const paperWidth = Math.max(chartOffset - this.vLabelsWidth, this.chartContentWidth);
 
         this.container.setAttribute('width', paperWidth);
-        this.container.setAttribute('height', this.paperHeight);
+        this.container.setAttribute('height', this.props.height);
 
         this.chartWidth = Math.max(paperWidth, this.chartContentWidth);
     }
@@ -278,7 +268,7 @@ export class BaseChart extends Component {
         }
 
         this.labelsContainer.setAttribute('width', lWidth);
-        this.labelsContainer.setAttribute('height', this.paperHeight + 20);
+        this.labelsContainer.setAttribute('height', this.props.height + 20);
         this.vLabelsWidth = lWidth;
 
         this.updateChartWidth();
@@ -355,7 +345,7 @@ export class BaseChart extends Component {
         let lastOffset = 0;
         const lblMarginLeft = 10;
         const dyOffset = 5.5;
-        const lblY = this.paperHeight - (this.hLabelsHeight / 2);
+        const lblY = this.props.height - (this.hLabelsHeight / 2);
 
         this.data.series.forEach(function (val) {
             const itemDate = val[0];
@@ -396,7 +386,7 @@ export class BaseChart extends Component {
 
     /** Chart item click event handler */
     onItemClick(e) {
-        if (!isFunction(this.itemClickHandler)) {
+        if (!isFunction(this.props.onitemclick)) {
             return;
         }
         const item = this.findItemByEvent(e);
@@ -404,20 +394,20 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.itemClickHandler.call(this, e, item);
+        this.props.onitemclick.call(this, e, item);
     }
 
     /** Chart item mouse over event handler */
     onItemOver(e) {
-        if (!isFunction(this.itemOverHandler)) {
+        if (!isFunction(this.props.onitemover)) {
             return;
         }
         const item = this.findItemByEvent(e);
         if (this.activeItem === item) {
             return;
         }
-        if (this.activeItem && isFunction(this.itemOutHandler)) {
-            this.itemOutHandler.call(this, e, this.activeItem);
+        if (this.activeItem && isFunction(this.props.onitemout)) {
+            this.props.onitemout.call(this, e, this.activeItem);
         }
 
         if (!item) {
@@ -425,12 +415,12 @@ export class BaseChart extends Component {
         }
 
         this.activeItem = item;
-        this.itemOverHandler.call(this, e, item);
+        this.props.onitemover.call(this, e, item);
     }
 
     /** Chart item mouse out from bar event handler */
     onItemOut(e) {
-        if (!isFunction(this.itemOutHandler)) {
+        if (!isFunction(this.props.onitemout)) {
             return;
         }
 
@@ -440,12 +430,12 @@ export class BaseChart extends Component {
         if (!item) {
             return;
         }
-        this.itemOutHandler.call(this, e, item);
+        this.props.onitemout.call(this, e, item);
     }
 
     /** Scale visible items of chart */
     scaleVisible() {
-        if (!this.autoScale) {
+        if (!this.props.autoScale) {
             return;
         }
 
@@ -463,8 +453,8 @@ export class BaseChart extends Component {
     onScroll() {
         this.scaleVisible();
 
-        if (isFunction(this.scrollHandler)) {
-            this.scrollHandler.call(this);
+        if (isFunction(this.props.onscroll)) {
+            this.props.onscroll.call(this);
         }
     }
 
