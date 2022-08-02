@@ -9,6 +9,7 @@ npm install jezvejs
 
 <h2 align="left">Run tests</h2>
 - Build and run local server:
+
 ```bash
 npm run build
 npm run serve
@@ -21,15 +22,18 @@ npm test
 ```
 
 <h2 align="left">Common</h2>
+
 - JavaScript utilities
 - DOM manipulation utilities
 
 <h2 align="left">Components</h2>
-- Collapsible
+
 - Charts
     - Histogram
     - LineChart
     - PieChart
+- Checkbox
+- Collapsible
 - DateInput
 - DatePicker
 - Debug
@@ -38,9 +42,13 @@ npm test
 - Paginator
 - Popup
 - Progress
+- Radio
 - Slider
+- Spinner
+- Switch
 
 <h2 align="left">Utilities</h2>
+
 - DragnDrop
     - DragAvatar
     - DragZone
