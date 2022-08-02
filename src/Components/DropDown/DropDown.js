@@ -993,7 +993,9 @@ export class DropDown extends Component {
         }
 
         // Check horizontal offset of drop down list
-        this.list.style.minWidth = px((combo) ? combo.width : container.width);
+        const minWidth = (combo) ? combo.width : container.width;
+        this.list.style.minWidth = px(minWidth);
+        this.list.style.width = '';
 
         if (this.props.fullScreen) {
             return;
@@ -1006,11 +1008,20 @@ export class DropDown extends Component {
             this.list.style.left = px(0);
         } else {
             const leftOffset = container.left - html.scrollLeft;
-            const listLeft = (leftOffset + listWidth > html.clientWidth)
-                ? (container.left + container.width - listWidth - offset.left)
-                : (container.left - offset.left);
 
-            this.list.style.left = px(listLeft);
+            // Check list overflows screen to the right
+            // if rendered from the left of container
+            if (leftOffset + listWidth > html.clientWidth) {
+                const listLeft = container.left + container.width - listWidth - offset.left;
+                if (listLeft < 0) {
+                    this.list.style.left = px(0);
+                    this.list.style.width = px(listWidth + listLeft);
+                } else {
+                    this.list.style.left = px(listLeft);
+                }
+            } else {
+                this.list.style.left = px(container.left - offset.left);
+            }
         }
     }
 
