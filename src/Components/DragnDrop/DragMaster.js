@@ -317,38 +317,12 @@ export class DragMaster {
         }
     }
 
-    // Check pointer is mouse
-    static isMousePointer(e) {
-        if (typeof e.pointerType === 'undefined') {
-            return true;
-        }
-
-        let pointerType;
-        if (typeof e.pointerType === 'string') {
-            pointerType = e.pointerType;
-        } else if (e.pointerType === 2) { /* IE 10 MSPOINTER_TYPE_TOUCH */
-            pointerType = 'touch';
-        } else if (e.pointerType === 3) { /* IE 10 MSPOINTER_TYPE_PEN */
-            pointerType = 'pen';
-        } else if (e.pointerType === 4) { /* IE 10 MSPOINTER_TYPE_MOUSE */
-            pointerType = 'mouse';
-        }
-
-        return (pointerType === 'mouse');
-    }
-
     static makeDraggable(elem) {
         const el = elem;
 
         const inst = this.getInstance();
         el.addEventListener('mousedown', (e) => inst.mouseDown(e));
         el.addEventListener('touchstart', (e) => inst.mouseDown(e));
-
-        if (typeof el.onpointerdown !== 'undefined') {
-            el.onpointerdown = this.isMousePointer;
-        } else {
-            el.onmspointerdown = this.isMousePointer;
-        }
     }
 
     static getElementUnderClientXY(elem, clientX, clientY) {
