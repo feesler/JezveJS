@@ -1,13 +1,13 @@
 import {
     ce,
     setParam,
-    isVisible,
     show,
     setEmptyClick,
     px,
     onReady,
     Histogram,
     LineChart,
+    removeEmptyClick,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../css/common.scss';
@@ -86,18 +86,21 @@ const negPosData = {
     series: [['x1', 5]],
 };
 
+let chartPopup = null;
+
 // Hide chart popup
 function hideChartPopup() {
-    if (!this.popup) {
+    if (!chartPopup) {
         return;
     }
 
-    show(this.popup, false);
+    show(chartPopup, false);
+    removeEmptyClick(hideChartPopup);
 }
 
 function onChartsScroll() {
-    if (this.popup) {
-        hideChartPopup.call(this);
+    if (chartPopup) {
+        hideChartPopup();
     }
 }
 
@@ -112,44 +115,39 @@ function onBarClick(e, item) {
         return;
     }
 
-    if (!this.popup) {
-        this.popup = ce('div', { className: 'chart_popup' });
-        show(this.popup, false);
-        chartsWrapObj.appendChild(this.popup);
-    }
-
-    if (isVisible(this.popup)) {
-        hideChartPopup.call(this);
+    if (chartPopup) {
+        removeEmptyClick(hideChartPopup);
     } else {
-        show(this.popup, true);
-
-        chartsWrapObj.style.position = 'relative';
-
-        this.popup.textContent = item.value;
-
-        const rectBBox = item.elem.getBBox();
-        const chartsBRect = chartContent.getBoundingClientRect();
-
-        let popupX = rectBBox.x - chartContent.scrollLeft
-            + (rectBBox.width - this.popup.offsetWidth) / 2;
-        const popupY = rectBBox.y - this.popup.offsetHeight - 10;
-
-        if (popupX < 0) {
-            popupX = 0;
-        }
-        if (this.popup.offsetWidth + popupX > chartsBRect.right) {
-            popupX = chartsBRect.width - this.popup.offsetWidth;
-        }
-
-        setParam(this.popup.style, { left: px(popupX), top: px(popupY) });
-
-        setTimeout(() => {
-            setEmptyClick(
-                () => hideChartPopup.call(this),
-                [item.elem[0], this.popup],
-            );
-        });
+        chartPopup = ce('div', { className: 'chart_popup' });
+        show(chartPopup, false);
+        chartsWrapObj.appendChild(chartPopup);
     }
+
+    show(chartPopup, true);
+
+    chartsWrapObj.style.position = 'relative';
+
+    chartPopup.textContent = item.value;
+
+    const rectBBox = item.elem.getBBox();
+    const chartsBRect = chartContent.getBoundingClientRect();
+
+    let popupX = rectBBox.x - chartContent.scrollLeft
+        + (rectBBox.width - chartPopup.offsetWidth) / 2;
+    const popupY = rectBBox.y - chartPopup.offsetHeight - 10;
+
+    if (popupX < 0) {
+        popupX = 0;
+    }
+    if (chartPopup.offsetWidth + popupX > chartsBRect.right) {
+        popupX = chartsBRect.width - chartPopup.offsetWidth;
+    }
+
+    setParam(chartPopup.style, { left: px(popupX), top: px(popupY) });
+
+    setTimeout(
+        () => setEmptyClick(hideChartPopup, [item.elem, this.popup]),
+    );
 }
 
 function onBarOver(e, item) {
