@@ -132,17 +132,6 @@ export class BaseChart extends Component {
         // create grid
         this.calculateGrid(this.state.data.values);
 
-        if (this.props.fitToWidth) {
-            const valuesExtended = this.state.data.values.length + 1;
-            this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
-            if (this.state.barWidth > 10) {
-                this.state.barMargin = this.state.barWidth / 5;
-                this.state.barWidth -= this.state.barMargin * 4;
-            } else {
-                this.state.barMargin = 0;
-            }
-        }
-
         this.state.chartContentWidth = this.state.data.values.length * this.barOuterWidth;
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
@@ -166,6 +155,8 @@ export class BaseChart extends Component {
         this.containerOffset = getOffset(this.container);
 
         this.drawVLabels();
+        this.updateBarWidth();
+        this.updateChartWidth();
 
         // create bars
         this.createItems();
@@ -293,6 +284,22 @@ export class BaseChart extends Component {
         this.state.chartWidth = Math.max(paperWidth, contentWidth);
     }
 
+    /** Calculate width and margin of bar for fitToWidth option */
+    updateBarWidth() {
+        if (!this.props.fitToWidth) {
+            return;
+        }
+
+        const valuesExtended = this.state.data.values.length + 1;
+        this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
+        if (this.state.barWidth > 10) {
+            this.state.barMargin = this.state.barWidth / 5;
+            this.state.barWidth -= this.state.barMargin * 4;
+        } else {
+            this.state.barMargin = 0;
+        }
+    }
+
     /** Set new width for vertical labels block and SVG object */
     setVertLabelsWidth(width) {
         if (!this.labelsContainer || !this.chart) {
@@ -384,9 +391,8 @@ export class BaseChart extends Component {
         const dyOffset = 5.5;
         const lblY = this.props.height - (this.state.hLabelsHeight / 2);
 
-        this.state.data.series.forEach(function (val) {
-            const itemDate = val[0];
-            const itemsCount = val[1];
+        this.state.data.series.forEach((val) => {
+            const [itemDate, itemsCount] = val;
 
             if (lastOffset === 0 || labelShift > lastOffset + lblMarginLeft) {
                 const tspan = svg('tspan', { dy: dyOffset });
@@ -401,10 +407,17 @@ export class BaseChart extends Component {
                 this.container.appendChild(txtEl);
 
                 const labelRect = txtEl.getBoundingClientRect();
-                lastOffset = labelShift + Math.ceil(labelRect.width);
+                const currentOffset = labelShift + Math.ceil(labelRect.width);
+
+                // Check last label not overflow chart to prevent horizontal scroll in fitToWidth mode
+                if (this.props.fitToWidth && currentOffset > this.state.chartContentWidth) {
+                    txtEl.remove();
+                } else {
+                    lastOffset = currentOffset;
+                }
             }
-            labelShift += itemsCount * (this.state.barWidth + this.state.barMargin);
-        }, this);
+            labelShift += itemsCount * this.barOuterWidth;
+        });
 
         this.state.lastHLabelOffset = lastOffset;
     }
