@@ -125,26 +125,31 @@ function onNodeOut(e, item) {
     setLinechartEvent(`Mouse out node, value=${item.value}`);
 }
 
-function renderPopupContent(item) {
-    return `$ ${item.value}`;
-}
-
-function init() {
+const defaultHistogram = () => {
     Histogram.create({
         data: chartData,
         elem: 'chart',
     });
+};
+
+const fitToWidthHistogram = () => {
     Histogram.create({
         data: chartData,
         elem: 'chart_fittowidth',
         fitToWidth: true,
     });
+};
+
+const autoScaleHistogram = () => {
     Histogram.create({
         data: chartData2,
         elem: 'chart_autoscale',
         autoScale: true,
         scrollThrottle: 200,
     });
+};
+
+const callbacksHistogram = () => {
     Histogram.create({
         data: chartData2,
         elem: 'chart_callbacks',
@@ -153,17 +158,23 @@ function init() {
         autoScale: true,
         showPopup: true,
         scrollThrottle: 50,
-        renderPopup: (item) => renderPopupContent(item),
+        renderPopup: (item) => `$ ${item.value}`,
         onitemclick: onBarClick,
         onscroll: onChartsScroll,
         onitemover: onBarOver,
         onitemout: onBarOut,
     });
+};
+
+const noDataHistogram = () => {
     Histogram.create({
         data: noData,
         elem: 'chart_no_data',
         autoScale: true,
     });
+};
+
+const singleNegativeHistogram = () => {
     Histogram.create({
         data: singleNegData,
         elem: 'chart_single_neg',
@@ -171,36 +182,56 @@ function init() {
         onitemover: onBarOver,
         onitemout: onBarOut,
     });
+};
+
+const onlyPositiveHistogram = () => {
     Histogram.create({
         data: posData,
         elem: 'chart_pos',
         autoScale: true,
     });
+};
+
+const onlyNegativeHistogram = () => {
     Histogram.create({
         data: negData,
         elem: 'chart_neg',
         autoScale: true,
     });
+};
+
+const negativeAndPositiveHistogram = () => {
     Histogram.create({
         data: negPosData,
         elem: 'chart_negpos',
         autoScale: true,
     });
+};
 
+const defaultLinechart = () => {
     LineChart.create({
         data: chartData,
         elem: 'linechart',
     });
+};
+
+const fitToWidthLinechart = () => {
     LineChart.create({
         data: chartData,
         elem: 'linechart_fittowidth',
         fitToWidth: true,
     });
+};
+
+const autoScaleLinechart = () => {
     LineChart.create({
         data: eurData,
         elem: 'linechart_autoscale',
         autoScale: true,
     });
+};
+
+const callbacksLinechart = () => {
     LineChart.create({
         data: chartData,
         elem: 'linechart_callbacks',
@@ -213,31 +244,72 @@ function init() {
         onitemover: onNodeOver,
         onitemout: onNodeOut,
     });
+};
+
+const noDataLinechart = () => {
     LineChart.create({
         data: noData,
         elem: 'linechart_no_data',
         autoScale: true,
     });
+};
+
+const singleNegativeLinechart = () => {
     LineChart.create({
         data: singleNegData,
         elem: 'linechart_single_neg',
         autoScale: true,
     });
+};
+
+const onlyPositiveLinechart = () => {
     LineChart.create({
         data: posData,
         elem: 'linechart_pos',
         autoScale: true,
     });
+};
+
+const onlyNegativeLinechart = () => {
     LineChart.create({
         data: negData,
         elem: 'linechart_neg',
         autoScale: true,
     });
+};
+
+const negativeAndPositiveLinechart = () => {
     LineChart.create({
         data: negPosData,
         elem: 'linechart_negpos',
         autoScale: true,
     });
-}
+};
+
+const init = () => {
+    // Histogram
+    defaultHistogram();
+    fitToWidthHistogram();
+    autoScaleHistogram();
+    callbacksHistogram();
+    // Different data tests
+    noDataHistogram();
+    singleNegativeHistogram();
+    onlyPositiveHistogram();
+    onlyNegativeHistogram();
+    negativeAndPositiveHistogram();
+
+    // LineChart
+    defaultLinechart();
+    fitToWidthLinechart();
+    autoScaleLinechart();
+    callbacksLinechart();
+    // Different data tests
+    noDataLinechart();
+    singleNegativeLinechart();
+    onlyPositiveLinechart();
+    onlyNegativeLinechart();
+    negativeAndPositiveLinechart();
+};
 
 onReady(init);
