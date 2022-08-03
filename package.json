@@ -1,6 +1,6 @@
 {
   "name": "jezvejs",
-  "version": "1.18.6",
+  "version": "1.18.7",
   "type": "module",
   "module": "src/js/index.js",
   "files": [
