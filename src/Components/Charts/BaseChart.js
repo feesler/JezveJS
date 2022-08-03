@@ -264,7 +264,7 @@ export class BaseChart extends Component {
             return null;
         }
 
-        return items.map((item) => item.value);
+        return items.flat().map((item) => item.value);
     }
 
     /** Update width of chart block */
@@ -590,5 +590,9 @@ export class BaseChart extends Component {
     /** Update vertical scale of items */
     /* eslint-disable-next-line no-unused-vars */
     updateItemsScale(items) {
+    }
+
+    /** Update horizontal scale of items */
+    updateItemsWidth() {
     }
 }
