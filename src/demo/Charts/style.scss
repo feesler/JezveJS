@@ -1,3 +1,13 @@
+.charts {
+  --historgam-bar-color: #20a0ff;
+  --historgam-bar-color-2: #ff0077;
+  --historgam-bar-color-3: #00d647;
+
+  --historgam-bar-active-color: #00bfff;
+  --historgam-bar-active-color-2: #ff3392;
+  --historgam-bar-active-color-3: #00ff55;
+}
+
 .page-content-wrap {
   display: flex;
   flex-flow: row wrap;
@@ -18,6 +28,28 @@
 
 #linechart_callbacks .chart__item_active {
   fill: #00bfff;
+}
+
+.histogram__bar--cat-1 {
+  fill: var(--historgam-bar-color-2);
+}
+
+.histogram__bar--cat-2 {
+  fill: var(--historgam-bar-color-3);
+}
+
+.chart__item_active {
+  &.histogram__bar {
+    fill: var(--historgam-bar-active-color);
+  }
+
+  &.histogram__bar--cat-1 {
+    fill: var(--historgam-bar-active-color-2);
+  }
+
+  &.histogram__bar--cat-2 {
+    fill: var(--historgam-bar-active-color-3);
+  }
 }
 
 .row {

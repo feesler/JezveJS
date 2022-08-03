@@ -264,8 +264,9 @@ export class ChartGrid {
             return;
         }
 
-        let minValue = Math.min(...values);
-        let maxValue = Math.max(...values);
+        const flatValues = values.flat();
+        let minValue = Math.min(...flatValues);
+        let maxValue = Math.max(...flatValues);
         if (this.scaleAroundAxis || values.length === 1) {
             minValue = Math.min(minValue, 0);
             maxValue = Math.max(maxValue, 0);

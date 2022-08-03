@@ -132,17 +132,6 @@ export class BaseChart extends Component {
         // create grid
         this.calculateGrid(this.state.data.values);
 
-        if (this.props.fitToWidth) {
-            const valuesExtended = this.state.data.values.length + 1;
-            this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
-            if (this.state.barWidth > 10) {
-                this.state.barMargin = this.state.barWidth / 5;
-                this.state.barWidth -= this.state.barMargin * 4;
-            } else {
-                this.state.barMargin = 0;
-            }
-        }
-
         this.state.chartContentWidth = this.state.data.values.length * this.barOuterWidth;
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
@@ -166,6 +155,8 @@ export class BaseChart extends Component {
         this.containerOffset = getOffset(this.container);
 
         this.drawVLabels();
+        this.updateBarWidth();
+        this.updateChartWidth();
 
         // create bars
         this.createItems();
@@ -273,7 +264,7 @@ export class BaseChart extends Component {
             return null;
         }
 
-        return items.map((item) => item.value);
+        return items.flat().map((item) => item.value);
     }
 
     /** Update width of chart block */
@@ -291,6 +282,22 @@ export class BaseChart extends Component {
         this.container.setAttribute('height', this.props.height);
 
         this.state.chartWidth = Math.max(paperWidth, contentWidth);
+    }
+
+    /** Calculate width and margin of bar for fitToWidth option */
+    updateBarWidth() {
+        if (!this.props.fitToWidth) {
+            return;
+        }
+
+        const valuesExtended = this.state.data.values.length + 1;
+        this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
+        if (this.state.barWidth > 10) {
+            this.state.barMargin = this.state.barWidth / 5;
+            this.state.barWidth -= this.state.barMargin * 4;
+        } else {
+            this.state.barMargin = 0;
+        }
     }
 
     /** Set new width for vertical labels block and SVG object */
@@ -313,14 +320,14 @@ export class BaseChart extends Component {
 
     /** Return array of currently visible items */
     getVisibleItems() {
+        const { barOuterWidth } = this;
         const res = [];
         const offs = this.props.visibilityOffset;
 
-        const itemOutWidth = this.state.barWidth + this.state.barMargin;
-        let itemsOnWidth = Math.round(this.chartContent.offsetWidth / itemOutWidth);
+        let itemsOnWidth = Math.round(this.chartContent.offsetWidth / barOuterWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
-        let firstItem = Math.floor(this.chartContent.scrollLeft / itemOutWidth);
+        let firstItem = Math.floor(this.chartContent.scrollLeft / barOuterWidth);
         firstItem = Math.max(0, firstItem - offs);
 
         if (firstItem + itemsOnWidth >= this.items.length) {
@@ -384,9 +391,8 @@ export class BaseChart extends Component {
         const dyOffset = 5.5;
         const lblY = this.props.height - (this.state.hLabelsHeight / 2);
 
-        this.state.data.series.forEach(function (val) {
-            const itemDate = val[0];
-            const itemsCount = val[1];
+        this.state.data.series.forEach((val) => {
+            const [itemDate, itemsCount] = val;
 
             if (lastOffset === 0 || labelShift > lastOffset + lblMarginLeft) {
                 const tspan = svg('tspan', { dy: dyOffset });
@@ -401,10 +407,18 @@ export class BaseChart extends Component {
                 this.container.appendChild(txtEl);
 
                 const labelRect = txtEl.getBoundingClientRect();
-                lastOffset = labelShift + Math.ceil(labelRect.width);
+                const currentOffset = labelShift + Math.ceil(labelRect.width);
+
+                // Check last label not overflow chart to prevent
+                // horizontal scroll in fitToWidth mode
+                if (this.props.fitToWidth && currentOffset > this.state.chartContentWidth) {
+                    txtEl.remove();
+                } else {
+                    lastOffset = currentOffset;
+                }
             }
-            labelShift += itemsCount * (this.state.barWidth + this.state.barMargin);
-        }, this);
+            labelShift += itemsCount * this.barOuterWidth;
+        });
 
         this.state.lastHLabelOffset = lastOffset;
     }
@@ -412,7 +426,7 @@ export class BaseChart extends Component {
     /** Find item by event object */
     findItemByEvent(e) {
         const x = e.clientX - this.containerOffset.left + this.chartContent.scrollLeft;
-        const index = Math.floor(x / (this.state.barWidth + this.state.barMargin));
+        const index = Math.floor(x / this.barOuterWidth);
 
         if (index < 0 || index >= this.items.length) {
             return null;
@@ -573,8 +587,12 @@ export class BaseChart extends Component {
     createItems() {
     }
 
-    /** Update scale of items */
+    /** Update vertical scale of items */
     /* eslint-disable-next-line no-unused-vars */
     updateItemsScale(items) {
+    }
+
+    /** Update horizontal scale of items */
+    updateItemsWidth() {
     }
 }
