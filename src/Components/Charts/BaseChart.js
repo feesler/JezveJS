@@ -320,14 +320,14 @@ export class BaseChart extends Component {
 
     /** Return array of currently visible items */
     getVisibleItems() {
+        const { barOuterWidth } = this;
         const res = [];
         const offs = this.props.visibilityOffset;
 
-        const itemOutWidth = this.state.barWidth + this.state.barMargin;
-        let itemsOnWidth = Math.round(this.chartContent.offsetWidth / itemOutWidth);
+        let itemsOnWidth = Math.round(this.chartContent.offsetWidth / barOuterWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
-        let firstItem = Math.floor(this.chartContent.scrollLeft / itemOutWidth);
+        let firstItem = Math.floor(this.chartContent.scrollLeft / barOuterWidth);
         firstItem = Math.max(0, firstItem - offs);
 
         if (firstItem + itemsOnWidth >= this.items.length) {
@@ -409,7 +409,8 @@ export class BaseChart extends Component {
                 const labelRect = txtEl.getBoundingClientRect();
                 const currentOffset = labelShift + Math.ceil(labelRect.width);
 
-                // Check last label not overflow chart to prevent horizontal scroll in fitToWidth mode
+                // Check last label not overflow chart to prevent
+                // horizontal scroll in fitToWidth mode
                 if (this.props.fitToWidth && currentOffset > this.state.chartContentWidth) {
                     txtEl.remove();
                 } else {
@@ -425,7 +426,7 @@ export class BaseChart extends Component {
     /** Find item by event object */
     findItemByEvent(e) {
         const x = e.clientX - this.containerOffset.left + this.chartContent.scrollLeft;
-        const index = Math.floor(x / (this.state.barWidth + this.state.barMargin));
+        const index = Math.floor(x / this.barOuterWidth);
 
         if (index < 0 || index >= this.items.length) {
             return null;
@@ -586,7 +587,7 @@ export class BaseChart extends Component {
     createItems() {
     }
 
-    /** Update scale of items */
+    /** Update vertical scale of items */
     /* eslint-disable-next-line no-unused-vars */
     updateItemsScale(items) {
     }
