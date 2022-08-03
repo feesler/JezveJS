@@ -16,6 +16,30 @@ export class Histogram extends BaseChart {
         this.init();
     }
 
+    /** Find item by event object */
+    findItemByEvent(e) {
+        const result = super.findItemByEvent(e);
+        if (!Array.isArray(result)) {
+            return result;
+        }
+
+        const x = e.clientX - this.containerOffset.left + this.chartContent.scrollLeft;
+        const groupIndex = Math.floor(x / this.barOuterWidth);
+        if (groupIndex < 0 || groupIndex >= this.items.length) {
+            return null;
+        }
+
+        const groupX = this.barOuterWidth * groupIndex;
+        const innerX = x - groupX;
+        const innerBarWidth = this.state.barWidth / result.length;
+        const index = Math.floor(innerX / innerBarWidth);
+        if (index < 0 || index >= result.length) {
+            return null;
+        }
+
+        return result[index];
+    }
+
     /** Create items with default scale */
     createItems() {
         const { barOuterWidth } = this;
@@ -40,6 +64,11 @@ export class Histogram extends BaseChart {
                         width: innerBarWidth,
                         height: barHeight,
                     });
+                    if (innerIndex > 0) {
+                        const categoryClass = `histogram__bar--cat-${innerIndex}`;
+                        item.elem.classList.add(categoryClass);
+                    }
+
                     this.container.appendChild(item.elem);
 
                     return item;
