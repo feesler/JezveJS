@@ -1,14 +1,23 @@
 import {
     ce,
     svg,
+    setParam,
     isFunction,
+    show,
+    setEmptyClick,
+    removeEmptyClick,
     getOffset,
     prependChild,
+    removeChilds,
+    px,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from './ChartGrid.js';
 import '../../css/common.scss';
 import './style.scss';
+
+/* CSS classes */
+const POPUP_CLASS = 'chart__popup';
 
 /** Default properties */
 const defaultProps = {
@@ -23,6 +32,8 @@ const defaultProps = {
     maxGridStep: 60,
     fitToWidth: false,
     autoScale: false,
+    showPopup: false,
+    renderPopup: null,
     onscroll: null,
     onitemclick: null,
     onitemover: null,
@@ -57,10 +68,13 @@ export class BaseChart extends Component {
         this.verticalLabels = null;
         this.container = null;
         this.labelsContainer = null;
+        this.popup = null;
         this.items = [];
         this.grid = null;
         this.gridLines = [];
         this.vertLabels = [];
+
+        this.emptyClickHandler = () => this.hidePopup();
 
         this.state = {
             barWidth: this.props.barWidth,
@@ -171,7 +185,7 @@ export class BaseChart extends Component {
      */
     calculateGrid(values) {
         const grid = new ChartGrid({
-            scaleAroundAxis: this.scaleAroundAxis,
+            scaleAroundAxis: this.props.scaleAroundAxis,
             height: this.state.chartHeight,
             margin: this.props.marginTop,
             minStep: this.props.minGridStep,
@@ -408,6 +422,10 @@ export class BaseChart extends Component {
             return;
         }
 
+        if (this.props.showPopup) {
+            this.showPopup(item);
+        }
+
         this.props.onitemclick.call(this, e, item);
     }
 
@@ -447,6 +465,71 @@ export class BaseChart extends Component {
         this.props.onitemout.call(this, e, item);
     }
 
+    defaultPopupContent(item) {
+        return ce('span', { textContent: item.value });
+    }
+
+    renderPopupContent(item) {
+        if (isFunction(this.props.renderPopup)) {
+            return this.props.renderPopup(item);
+        }
+
+        return this.defaultPopupContent(item);
+    }
+
+    hidePopup() {
+        if (!this.popup) {
+            return;
+        }
+
+        show(this.popup, false);
+
+        removeEmptyClick(this.emptyClickHandler);
+    }
+
+    showPopup(item) {
+        if (!item) {
+            return;
+        }
+
+        if (this.popup) {
+            removeEmptyClick(this.emptyClickHandler);
+        } else {
+            this.popup = ce('div', { className: POPUP_CLASS });
+            this.chartsWrapObj.appendChild(this.popup);
+        }
+
+        show(this.popup, true);
+
+        this.chartsWrapObj.style.position = 'relative';
+
+        const content = this.renderPopupContent(item);
+        if (typeof content === 'string') {
+            this.popup.textContent = content;
+        } else {
+            removeChilds(this.popup);
+            this.popup.append(content);
+        }
+
+        const rectBBox = item.elem.getBBox();
+        const chartsBRect = this.chartContent.getBoundingClientRect();
+
+        let popupX = rectBBox.x - this.chartContent.scrollLeft
+            + (rectBBox.width - this.popup.offsetWidth) / 2;
+        const popupY = rectBBox.y - this.popup.offsetHeight - 10;
+
+        if (popupX < 0) {
+            popupX = 0;
+        }
+        if (this.popup.offsetWidth + popupX > chartsBRect.right) {
+            popupX = chartsBRect.width - this.popup.offsetWidth;
+        }
+
+        setParam(this.popup.style, { left: px(popupX), top: px(popupY) });
+
+        setEmptyClick(this.emptyClickHandler, [item.elem, this.popup]);
+    }
+
     /** Scale visible items of chart */
     scaleVisible() {
         if (!this.props.autoScale) {
@@ -466,6 +549,10 @@ export class BaseChart extends Component {
     /** Chart content 'scroll' event handler */
     onScroll() {
         this.scaleVisible();
+
+        if (this.props.showPopup) {
+            this.hidePopup();
+        }
 
         if (isFunction(this.props.onscroll)) {
             this.props.onscroll.call(this);

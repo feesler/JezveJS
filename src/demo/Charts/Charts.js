@@ -1,13 +1,8 @@
 import {
-    ce,
-    setParam,
-    show,
-    setEmptyClick,
-    px,
     onReady,
     Histogram,
     LineChart,
-    removeEmptyClick,
+    ge,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../css/common.scss';
@@ -86,87 +81,52 @@ const negPosData = {
     series: [['x1', 5]],
 };
 
-let chartPopup = null;
-
-// Hide chart popup
-function hideChartPopup() {
-    if (!chartPopup) {
-        return;
-    }
-
-    show(chartPopup, false);
-    removeEmptyClick(hideChartPopup);
+function setHistogramEvent(str) {
+    ge('histogram_events').textContent = str;
 }
 
 function onChartsScroll() {
-    if (chartPopup) {
-        hideChartPopup();
-    }
+    setHistogramEvent('Histogram scroll');
 }
 
 function onBarClick(e, item) {
-    if (!item) {
-        return;
-    }
-
-    const chartsWrapObj = this.getWrapObject();
-    const chartContent = this.getContent();
-    if (!chartsWrapObj || !chartContent) {
-        return;
-    }
-
-    if (chartPopup) {
-        removeEmptyClick(hideChartPopup);
-    } else {
-        chartPopup = ce('div', { className: 'chart_popup' });
-        show(chartPopup, false);
-        chartsWrapObj.appendChild(chartPopup);
-    }
-
-    show(chartPopup, true);
-
-    chartsWrapObj.style.position = 'relative';
-
-    chartPopup.textContent = item.value;
-
-    const rectBBox = item.elem.getBBox();
-    const chartsBRect = chartContent.getBoundingClientRect();
-
-    let popupX = rectBBox.x - chartContent.scrollLeft
-        + (rectBBox.width - chartPopup.offsetWidth) / 2;
-    const popupY = rectBBox.y - chartPopup.offsetHeight - 10;
-
-    if (popupX < 0) {
-        popupX = 0;
-    }
-    if (chartPopup.offsetWidth + popupX > chartsBRect.right) {
-        popupX = chartsBRect.width - chartPopup.offsetWidth;
-    }
-
-    setParam(chartPopup.style, { left: px(popupX), top: px(popupY) });
-
-    setTimeout(
-        () => setEmptyClick(hideChartPopup, [item.elem, this.popup]),
-    );
+    setHistogramEvent(`Clicked bar, value=${item.value}`);
 }
 
 function onBarOver(e, item) {
     item.elem.classList.add('chart__item_active');
+
+    setHistogramEvent(`Mouse over bar, value=${item.value}`);
 }
 
 function onBarOut(e, item) {
     item.elem.classList.remove('chart__item_active');
+
+    setHistogramEvent(`Mouse out bar, value=${item.value}`);
+}
+
+function setLinechartEvent(str) {
+    ge('linechart_events').textContent = str;
 }
 
 function onNodeClick(e, item) {
+    setLinechartEvent(`Clicked node, value=${item.value}`);
 }
 
 function onNodeOver(e, item) {
     item.elem.classList.add('chart__item_active');
+
+    setLinechartEvent(`Mouse over node, value=${item.value}`);
 }
 
 function onNodeOut(e, item) {
     item.elem.classList.remove('chart__item_active');
+
+    setLinechartEvent(`Mouse out node, value=${item.value}`);
+}
+
+function renderPopupContent(item) {
+    return `$ ${item.value}`;
 }
 
 function init() {
@@ -187,7 +147,11 @@ function init() {
     Histogram.create({
         data: chartData2,
         elem: 'chart_callbacks',
+        height: 320,
+        marginTop: 35,
         autoScale: true,
+        showPopup: true,
+        renderPopup: (item) => renderPopupContent(item),
         onitemclick: onBarClick,
         onscroll: onChartsScroll,
         onitemover: onBarOver,
@@ -238,7 +202,10 @@ function init() {
     LineChart.create({
         data: chartData,
         elem: 'linechart_callbacks',
+        height: 320,
+        marginTop: 35,
         autoScale: true,
+        showPopup: true,
         onitemclick: onNodeClick,
         onscroll: onChartsScroll,
         onitemover: onNodeOver,
