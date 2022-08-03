@@ -143,6 +143,7 @@ function init() {
         data: chartData2,
         elem: 'chart_autoscale',
         autoScale: true,
+        scrollThrottle: 200,
     });
     Histogram.create({
         data: chartData2,
@@ -151,6 +152,7 @@ function init() {
         marginTop: 35,
         autoScale: true,
         showPopup: true,
+        scrollThrottle: 50,
         renderPopup: (item) => renderPopupContent(item),
         onitemclick: onBarClick,
         onscroll: onChartsScroll,
