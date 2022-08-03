@@ -136,13 +136,12 @@ export class BaseChart extends Component {
         this.state.chartContentWidth = this.state.data.values.length * this.barOuterWidth;
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
-        const events = {};
+        const events = {
+            click: (e) => this.onItemClick(e),
+        };
         if (isFunction(this.props.onitemover) || isFunction(this.props.onitemout)) {
             events.mousemove = (e) => this.onItemOver(e);
             events.mouseout = (e) => this.onItemOut(e);
-        }
-        if (isFunction(this.props.onitemclick)) {
-            events.click = (e) => this.onItemClick(e);
         }
 
         this.container = svg(
@@ -414,9 +413,6 @@ export class BaseChart extends Component {
 
     /** Chart item click event handler */
     onItemClick(e) {
-        if (!isFunction(this.props.onitemclick)) {
-            return;
-        }
         const item = this.findItemByEvent(e);
         if (!item) {
             return;
@@ -426,7 +422,9 @@ export class BaseChart extends Component {
             this.showPopup(item);
         }
 
-        this.props.onitemclick.call(this, e, item);
+        if (isFunction(this.props.onitemclick)) {
+            this.props.onitemclick(e, item);
+        }
     }
 
     /** Chart item mouse over event handler */
