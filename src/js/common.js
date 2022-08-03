@@ -944,3 +944,38 @@ export const deepMeet = (obj, expectedObj) => {
 
     return true;
 };
+
+/**
+ * Call function no more than once every ms seconds
+ * @param {Function} func - function to throttle
+ * @param {Number} ms - timeout
+ * @returns
+ */
+export function throttle(func, ms) {
+    let isThrottled = false;
+    let savedArgs;
+    let savedThis;
+
+    function wrapper(...args) {
+        if (isThrottled) {
+            savedArgs = args;
+            savedThis = this;
+            return;
+        }
+
+        func.apply(this, args);
+
+        isThrottled = true;
+
+        setTimeout(() => {
+            isThrottled = false;
+            if (savedArgs) {
+                wrapper.apply(savedThis, savedArgs);
+                savedArgs = null;
+                savedThis = null;
+            }
+        }, ms);
+    }
+
+    return wrapper;
+}

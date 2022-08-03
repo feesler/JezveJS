@@ -10,6 +10,7 @@ import {
     prependChild,
     removeChilds,
     px,
+    throttle,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from './ChartGrid.js';
@@ -34,6 +35,7 @@ const defaultProps = {
     autoScale: false,
     showPopup: false,
     renderPopup: null,
+    scrollThrottle: false,
     onscroll: null,
     onitemclick: null,
     onitemover: null,
@@ -73,6 +75,14 @@ export class BaseChart extends Component {
         this.grid = null;
         this.gridLines = [];
         this.vertLabels = [];
+
+        if (!this.props.autoScale) {
+            this.scaleFunc = null;
+        } else if (this.props.scrollThrottle === false) {
+            this.scaleFunc = () => this.scaleVisible();
+        } else {
+            this.scaleFunc = throttle(() => this.scaleVisible(), this.props.scrollThrottle);
+        }
 
         this.emptyClickHandler = () => this.hidePopup();
 
@@ -546,7 +556,9 @@ export class BaseChart extends Component {
 
     /** Chart content 'scroll' event handler */
     onScroll() {
-        this.scaleVisible();
+        if (this.scaleFunc) {
+            this.scaleFunc();
+        }
 
         if (this.props.showPopup) {
             this.hidePopup();
