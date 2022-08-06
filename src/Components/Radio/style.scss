@@ -1,6 +1,7 @@
 .radio {
   --radio-size: 14px;
   --radio-border: #cccccc;
+  --radio-bg: #ffffff;
   --radio-text: #000000;
   --radio-hover-bg: #cccccc;
   --radio-disabled-bg: #dddddd;
@@ -28,6 +29,7 @@
   margin: 0 6px 0 0;
   vertical-align: bottom;
   border: 1px solid var(--radio-border);
+  background-color: var(--radio-bg);
   border-radius: 100vh;
 
   &::after {

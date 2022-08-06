@@ -1,6 +1,7 @@
 .checkbox {
   --checkbox-size: 14px;
   --checkbox-border: #cccccc;
+  --checkbox-bg: #ffffff;
   --checkbox-text: #000000;
   --checkbox-hover-bg: #cccccc;
   --checkbox-disabled-bg: #dddddd;
@@ -26,6 +27,7 @@
   display: inline-block;
   vertical-align: bottom;
   border: 1px solid var(--checkbox-border);
+  background-color: var(--checkbox-bg);
   padding: 2px;
   margin: 0 6px 0 0;
 
