@@ -1,3 +1,5 @@
+import { isObject } from '../../js/common.js';
+
 const mandatoryProps = ['height', 'margin'];
 const defaultProps = {
     scaleAroundAxis: true,
@@ -251,16 +253,30 @@ export class ChartGrid {
         return this.props.height + this.props.margin - yAbs;
     }
 
+    /** Obtain all values from chart data structure */
+    getAllValues(values) {
+        if (!values.length) {
+            return [];
+        }
+
+        const [firstItem] = values;
+        if (isObject(firstItem)) {
+            return values.map((item) => item.data).flat();
+        }
+
+        return values;
+    }
+
     /** Calculate grid parameters for specified values */
     calculate(values) {
-        if (!values.length) {
+        const allValues = this.getAllValues(values);
+        if (!allValues.length) {
             return;
         }
 
-        const flatValues = values.flat();
-        let minValue = Math.min(...flatValues);
-        let maxValue = Math.max(...flatValues);
-        if (this.props.scaleAroundAxis || values.length === 1) {
+        let minValue = Math.min(...allValues);
+        let maxValue = Math.max(...allValues);
+        if (this.props.scaleAroundAxis || allValues.length === 1) {
             minValue = Math.min(minValue, 0);
             maxValue = Math.max(maxValue, 0);
         }

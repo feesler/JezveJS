@@ -74,19 +74,26 @@ export class Histogram extends BaseChart {
 
     /** Create items with default scale */
     createItems() {
+        const dataSets = this.getDataSets();
+        if (dataSets.length === 0) {
+            return;
+        }
+
         this.state.y0 = this.grid.getY(0);
-        this.items = this.state.data.values.map((val, index) => {
-            const categories = Array.isArray(val) ? val : [val];
-            const width = this.state.barWidth / categories.length;
+        const width = this.state.barWidth / dataSets.length;
 
-            const res = categories.map((value, categoryIndex) => this.createItem({
-                value,
-                width,
-                index,
-                categoryIndex,
-            }));
-
-            return Array.isArray(val) ? res : res[0];
+        this.items = [];
+        const [firstSet] = dataSets;
+        firstSet.forEach((_, index) => {
+            const group = dataSets.map(
+                (data, categoryIndex) => this.createItem({
+                    value: data[index],
+                    width,
+                    index,
+                    categoryIndex,
+                }),
+            );
+            this.items.push(group);
         });
     }
 

@@ -3,6 +3,7 @@ import {
     svg,
     setParam,
     isFunction,
+    isObject,
     show,
     setEmptyClick,
     removeEmptyClick,
@@ -97,6 +98,7 @@ export class BaseChart extends Component {
             lastHLabelOffset: 0,
             data: this.props.data,
         };
+        this.state.columnsCount = this.getColumnsCount();
     }
 
     get barOuterWidth() {
@@ -132,7 +134,7 @@ export class BaseChart extends Component {
         // create grid
         this.calculateGrid(this.state.data.values);
 
-        this.state.chartContentWidth = this.state.data.values.length * this.barOuterWidth;
+        this.state.chartContentWidth = this.state.columnsCount * this.barOuterWidth;
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
         const events = {
@@ -177,6 +179,37 @@ export class BaseChart extends Component {
     /** Return charts wrap element */
     getWrapObject() {
         return this.chartsWrapObj;
+    }
+
+    /** Returns count of data columns */
+    getColumnsCount() {
+        const { values } = this.state.data;
+        if (values.length === 0) {
+            return 0;
+        }
+
+        const [firstItem] = values;
+        if (isObject(firstItem)) {
+            const valuesLength = values.map((item) => item.data.length);
+            return Math.max(...valuesLength);
+        }
+
+        return values.length;
+    }
+
+    /** Returns array of data sets */
+    getDataSets() {
+        const { values } = this.state.data;
+        if (values.length === 0) {
+            return [];
+        }
+
+        const [firstItem] = values;
+        if (isObject(firstItem)) {
+            return values.map((item) => item.data);
+        }
+
+        return [values];
     }
 
     /**
@@ -270,7 +303,7 @@ export class BaseChart extends Component {
     /** Update width of chart block */
     updateChartWidth() {
         const contentWidth = Math.max(
-            this.state.data.values.length * this.barOuterWidth,
+            this.state.columnsCount * this.barOuterWidth,
             this.state.lastHLabelOffset,
         );
 
@@ -290,7 +323,7 @@ export class BaseChart extends Component {
             return;
         }
 
-        const valuesExtended = this.state.data.values.length + 1;
+        const valuesExtended = this.state.columnsCount + 1;
         this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
         if (this.state.barWidth > 10) {
             this.state.barMargin = this.state.barWidth / 5;
