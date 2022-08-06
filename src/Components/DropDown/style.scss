@@ -416,6 +416,11 @@
     }
   }
 
+  .dd__clear-btn,
+  .dd__toggle-btn {
+    background-color: var(--dd-disabled-bg);
+  }
+
   .dd__clear-btn path,
   .dd__toggle-btn path {
     fill: var(--dd-disabled-btn-fill);
