@@ -235,11 +235,7 @@ export class BaseChart extends Component {
     removeElements(elem) {
         const elems = Array.isArray(elem) ? elem : [elem];
 
-        elems.forEach((el) => {
-            if (el.parentNode) {
-                el.parentNode.removeChild(el);
-            }
-        });
+        elems.forEach((el) => el?.parentNode?.removeChild(el));
     }
 
     /** Draw grid and return array of grid lines */

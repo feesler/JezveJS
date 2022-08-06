@@ -273,6 +273,21 @@ const callbacksLinechart = () => {
     });
 };
 
+const multipleLinechart = () => {
+    LineChart.create({
+        data: chartMultiData,
+        elem: 'linechart_multiple',
+        height: 320,
+        marginTop: 35,
+        autoScale: true,
+        showPopup: true,
+        onitemclick: onNodeClick,
+        onscroll: onChartsScroll,
+        onitemover: onNodeOver,
+        onitemout: onNodeOut,
+    });
+};
+
 const noDataLinechart = () => {
     LineChart.create({
         data: noData,
@@ -332,6 +347,7 @@ const init = () => {
     fitToWidthLinechart();
     autoScaleLinechart();
     callbacksLinechart();
+    multipleLinechart();
     // Different data tests
     noDataLinechart();
     singleNegativeLinechart();

@@ -1,12 +1,12 @@
 .charts {
-  --historgam-bar-color: #20a0ff;
-  --historgam-bar-color-2: #ff0077;
-  --historgam-bar-color-3: #00d647;
+  --charts-color: #20a0ff;
+  --charts-color-2: #ff0077;
+  --charts-color-3: #00d647;
 
   /* Active chart item */
-  --historgam-bar-active-color: #00bfff;
-  --historgam-bar-active-color-2: #ff3392;
-  --historgam-bar-active-color-3: #00ff55;
+  --charts-active-color: #00bfff;
+  --charts-active-color-2: #ff3392;
+  --charts-active-color-3: #00ff55;
 }
 
 .page-content-wrap {
@@ -23,24 +23,44 @@
 }
 
 .histogram__bar--cat-1 {
-  fill: var(--historgam-bar-color-2);
+  fill: var(--charts-color-2);
 }
 
 .histogram__bar--cat-2 {
-  fill: var(--historgam-bar-color-3);
+  fill: var(--charts-color-3);
+}
+
+.linechart--cat-1 {
+  stroke: var(--charts-color-2);
+}
+
+.linechart--cat-2 {
+  stroke: var(--charts-color-3);
 }
 
 .chart__item_active {
   &.histogram__bar {
-    fill: var(--historgam-bar-active-color);
+    fill: var(--charts-active-color);
   }
 
   &.histogram__bar--cat-1 {
-    fill: var(--historgam-bar-active-color-2);
+    fill: var(--charts-active-color-2);
   }
 
   &.histogram__bar--cat-2 {
-    fill: var(--historgam-bar-active-color-3);
+    fill: var(--charts-active-color-3);
+  }
+
+  &.linechart__item {
+    fill: var(--charts-active-color);
+  }
+
+  &.linechart__item.linechart--cat-1 {
+    fill: var(--charts-active-color-2);
+  }
+
+  &.linechart__item.linechart--cat-2 {
+    fill: var(--charts-active-color-3);
   }
 }
 
