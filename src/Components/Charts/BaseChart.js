@@ -33,6 +33,7 @@ const defaultProps = {
     minGridStep: 30,
     maxGridStep: 60,
     fitToWidth: false,
+    scrollToEnd: false,
     autoScale: false,
     showPopup: false,
     renderPopup: null,
@@ -169,6 +170,10 @@ export class BaseChart extends Component {
         this.updateChartWidth();
 
         this.drawGrid();
+
+        if (this.props.scrollToEnd) {
+            this.chartContent.scrollLeft = this.chartContent.scrollWidth;
+        }
     }
 
     /** Return charts content elemtnt */
