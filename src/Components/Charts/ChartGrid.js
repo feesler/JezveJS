@@ -1,4 +1,10 @@
-import { isObject } from '../../js/common.js';
+const mandatoryProps = ['height', 'margin'];
+const defaultProps = {
+    scaleAroundAxis: true,
+    valuesMargin: 0,
+    minStep: 0,
+    maxStep: 0,
+};
 
 /**
  * Chart grid class constructor
@@ -10,30 +16,17 @@ import { isObject } from '../../js/common.js';
  * @param {Number} props.maxStep - maximum grid step in pixels
  */
 export class ChartGrid {
-    constructor(props) {
-        const mandatoryProps = ['height', 'margin'];
-        const defaultProps = {
-            scaleAroundAxis: true,
-            valuesMargin: 0,
-            minStep: 0,
-            maxStep: 0,
-        };
-
-        this.props = isObject(props) ? props : {};
-        // Mandatory properties
+    constructor(props = {}) {
         mandatoryProps.forEach((propName) => {
-            if (!(propName in this.props)) {
+            if (!(propName in props)) {
                 throw new Error(`Invalid properties: Expected ${propName}`);
             }
         });
-        this.absMaxVal = this.props.height;
-        this.margin = this.props.margin;
-        // Optional properties
-        Object.keys(defaultProps).forEach((propName) => {
-            this[propName] = (propName in this.props)
-                ? this.props[propName]
-                : defaultProps[propName];
-        });
+
+        this.props = {
+            ...defaultProps,
+            ...props,
+        };
 
         this.precision = 0;
         this.valueStep = 1;
@@ -197,7 +190,7 @@ export class ChartGrid {
 
     /** Scale view range of grid by specified count of steps */
     addSteps(steps) {
-        if (this.scaleAroundAxis && !this.isBoth()) {
+        if (this.props.scaleAroundAxis && !this.isBoth()) {
             if (this.isPositive()) {
                 this.firstStep += steps * this.valueStep;
             } else if (this.isNegative()) {
@@ -224,7 +217,7 @@ export class ChartGrid {
         let scaledMin = this.viewMin;
         let scaledMax = this.viewMax;
 
-        if (this.scaleAroundAxis && !this.isBoth()) {
+        if (this.props.scaleAroundAxis && !this.isBoth()) {
             if (this.isPositive()) {
                 scaledMax = this.viewMax * value;
             } else if (this.isNegative()) {
@@ -242,7 +235,7 @@ export class ChartGrid {
 
     /** Convert relative value to absolute */
     convertRelToAbs(value) {
-        return this.absMaxVal * ((value - this.viewMin) / this.viewDelta);
+        return this.props.height * ((value - this.viewMin) / this.viewDelta);
     }
 
     /** Convert height value from grid to view units */
@@ -255,7 +248,7 @@ export class ChartGrid {
     /** Convert y-axis value from grid to view units */
     getY(value) {
         const yAbs = this.convertRelToAbs(value);
-        return this.absMaxVal + this.margin - yAbs;
+        return this.props.height + this.props.margin - yAbs;
     }
 
     /** Calculate grid parameters for specified values */
@@ -267,7 +260,7 @@ export class ChartGrid {
         const flatValues = values.flat();
         let minValue = Math.min(...flatValues);
         let maxValue = Math.max(...flatValues);
-        if (this.scaleAroundAxis || values.length === 1) {
+        if (this.props.scaleAroundAxis || values.length === 1) {
             minValue = Math.min(minValue, 0);
             maxValue = Math.max(maxValue, 0);
         }
@@ -275,20 +268,20 @@ export class ChartGrid {
         this.setValueRange(minValue, maxValue);
 
         // ajdust view scale if needed
-        if (this.valuesMargin > 0) {
-            const scale = (this.dValue / (1 - this.valuesMargin)) / this.viewDelta;
+        if (this.props.valuesMargin > 0) {
+            const scale = (this.dValue / (1 - this.props.valuesMargin)) / this.viewDelta;
             this.scaleViewRange(scale);
         }
         // adjust absolute grid step according to settings
         this.yStep = this.getHeight(this.valueStep);
-        if (this.maxStep) {
-            while (this.yStep > this.maxStep) {
+        if (this.props.maxStep) {
+            while (this.yStep > this.props.maxStep) {
                 this.splitSteps();
                 this.yStep = this.getHeight(this.valueStep);
             }
         }
-        if (this.minStep) {
-            while (this.yStep < this.minStep) {
+        if (this.props.minStep) {
+            while (this.yStep < this.props.minStep) {
                 this.joinSteps();
                 this.yStep = this.getHeight(this.valueStep);
             }
