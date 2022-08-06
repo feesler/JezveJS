@@ -1,6 +1,8 @@
 import { svg } from '../../js/common.js';
 import { BaseChart } from './BaseChart.js';
 
+const BAR_CLASS = 'histogram__bar';
+
 /**
  * Base chart component constructor
  * @param {Object} props
@@ -31,8 +33,8 @@ export class Histogram extends BaseChart {
 
         const groupX = this.barOuterWidth * groupIndex;
         const innerX = x - groupX;
-        const innerBarWidth = this.state.barWidth / result.length;
-        const index = Math.floor(innerX / innerBarWidth);
+        const barWidth = this.state.barWidth / result.length;
+        const index = Math.floor(innerX / barWidth);
         if (index < 0 || index >= result.length) {
             return null;
         }
@@ -40,58 +42,58 @@ export class Histogram extends BaseChart {
         return result[index];
     }
 
+    createItem({
+        value,
+        width,
+        index,
+        categoryIndex = 0,
+    }) {
+        const { y0 } = this.state;
+        const y1 = this.grid.getY(value);
+
+        const item = {
+            value,
+            elem: svg('rect', {
+                class: BAR_CLASS,
+                x: index * this.barOuterWidth + categoryIndex * width,
+                y: Math.min(y0, y1),
+                width,
+                height: Math.abs(y0 - y1),
+            }),
+        };
+
+        if (categoryIndex > 0) {
+            const categoryClass = `histogram__bar--cat-${categoryIndex}`;
+            item.elem.classList.add(categoryClass);
+        }
+
+        this.container.appendChild(item.elem);
+
+        return item;
+    }
+
     /** Create items with default scale */
     createItems() {
-        const { barOuterWidth } = this;
-        const y0 = this.grid.getY(0);
+        const dataSets = this.getDataSets();
+        if (dataSets.length === 0) {
+            return;
+        }
 
-        this.items = this.state.data.values.map((val, index) => {
-            if (Array.isArray(val)) {
-                const innerBarWidth = this.state.barWidth / val.length;
+        this.state.y0 = this.grid.getY(0);
+        const width = this.state.barWidth / dataSets.length;
 
-                return val.map((innerVal, innerIndex) => {
-                    const leftPos = index * barOuterWidth + innerIndex * innerBarWidth;
-                    const y1 = this.grid.getY(innerVal);
-                    const barHeight = Math.abs(y0 - y1);
-                    const y = Math.min(y0, y1);
-
-                    const item = { value: innerVal };
-
-                    item.elem = svg('rect', {
-                        class: 'histogram__bar',
-                        x: leftPos,
-                        y,
-                        width: innerBarWidth,
-                        height: barHeight,
-                    });
-                    if (innerIndex > 0) {
-                        const categoryClass = `histogram__bar--cat-${innerIndex}`;
-                        item.elem.classList.add(categoryClass);
-                    }
-
-                    this.container.appendChild(item.elem);
-
-                    return item;
-                });
-            } else {
-                const leftPos = index * barOuterWidth;
-                const y1 = this.grid.getY(val);
-                const barHeight = Math.abs(y0 - y1);
-                const y = Math.min(y0, y1);
-
-                const item = { value: val };
-
-                item.elem = svg('rect', {
-                    class: 'histogram__bar',
-                    x: leftPos,
-                    y,
-                    width: this.state.barWidth,
-                    height: barHeight,
-                });
-                this.container.appendChild(item.elem);
-
-                return item;
-            }
+        this.items = [];
+        const [firstSet] = dataSets;
+        firstSet.forEach((_, index) => {
+            const group = dataSets.map(
+                (data, categoryIndex) => this.createItem({
+                    value: data[index],
+                    width,
+                    index,
+                    categoryIndex,
+                }),
+            );
+            this.items.push(group);
         });
     }
 

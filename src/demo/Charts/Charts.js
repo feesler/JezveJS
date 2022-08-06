@@ -48,11 +48,11 @@ const chartData2 = {
 };
 
 const chartMultiData = {
-    values: [
-        [1000, 553], [1001, 200], [1002, 5500], [1005, 0],
-        [1050, 58], [1200, 347], [1000, 1302], [1001, 12],
-        [1002, 780], [1005, 5600], [1050, 460], [1200, 150],
-    ],
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+    }, {
+        data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150],
+    }],
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 5],
     ],
@@ -166,6 +166,7 @@ const callbacksHistogram = () => {
         elem: 'chart_callbacks',
         height: 320,
         marginTop: 35,
+        scrollToEnd: true,
         autoScale: true,
         showPopup: true,
         scrollThrottle: 50,
@@ -264,6 +265,22 @@ const callbacksLinechart = () => {
         elem: 'linechart_callbacks',
         height: 320,
         marginTop: 35,
+        scrollToEnd: true,
+        autoScale: true,
+        showPopup: true,
+        onitemclick: onNodeClick,
+        onscroll: onChartsScroll,
+        onitemover: onNodeOver,
+        onitemout: onNodeOut,
+    });
+};
+
+const multipleLinechart = () => {
+    LineChart.create({
+        data: chartMultiData,
+        elem: 'linechart_multiple',
+        height: 320,
+        marginTop: 35,
         autoScale: true,
         showPopup: true,
         onitemclick: onNodeClick,
@@ -332,6 +349,7 @@ const init = () => {
     fitToWidthLinechart();
     autoScaleLinechart();
     callbacksLinechart();
+    multipleLinechart();
     // Different data tests
     noDataLinechart();
     singleNegativeLinechart();
