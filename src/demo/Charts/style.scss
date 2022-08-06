@@ -3,6 +3,7 @@
   --historgam-bar-color-2: #ff0077;
   --historgam-bar-color-3: #00d647;
 
+  /* Active chart item */
   --historgam-bar-active-color: #00bfff;
   --historgam-bar-active-color-2: #ff3392;
   --historgam-bar-active-color-3: #00ff55;
@@ -19,15 +20,6 @@
   width: 500px;
   max-width: 100%;
   box-sizing: border-box;
-}
-
-#chart_single_neg .chart__item_active,
-#chart_callbacks .chart__item_active {
-  fill: #00ffbf;
-}
-
-#linechart_callbacks .chart__item_active {
-  fill: #00bfff;
 }
 
 .histogram__bar--cat-1 {
