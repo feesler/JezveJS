@@ -42,6 +42,26 @@ export class Histogram extends BaseChart {
         return result[index];
     }
 
+    /** Set new position of item */
+    setItemPos(item, y, height) {
+        const bar = item;
+
+        if (bar.y === y && bar.height === height) {
+            return;
+        }
+
+        if (this.props.autoScale && this.props.animate) {
+            bar.elem.style.y = this.formatCoord(y, true);
+            bar.elem.style.height = this.formatCoord(height, true);
+        } else {
+            bar.elem.setAttribute('y', y);
+            bar.elem.setAttribute('height', height);
+        }
+
+        bar.y = y;
+        bar.height = height;
+    }
+
     createItem({
         value,
         width,
@@ -53,15 +73,19 @@ export class Histogram extends BaseChart {
 
         const item = {
             value,
-            elem: svg('rect', {
-                class: BAR_CLASS,
-                x: index * this.barOuterWidth + categoryIndex * width,
-                y: Math.min(y0, y1),
-                width,
-                height: Math.abs(y0 - y1),
-            }),
+            x: index * this.barOuterWidth + categoryIndex * width,
+            y: Math.min(y0, y1),
+            width,
+            height: Math.abs(y0 - y1),
         };
 
+        item.elem = svg('rect', {
+            class: BAR_CLASS,
+            x: item.x,
+            y: item.y,
+            width: item.width,
+            height: item.height,
+        });
         if (categoryIndex > 0) {
             const categoryClass = `histogram__bar--cat-${categoryIndex}`;
             item.elem.classList.add(categoryClass);
@@ -109,8 +133,7 @@ export class Histogram extends BaseChart {
             const newY = Math.min(y0, y1);
             const barHeight = Math.abs(y0 - y1);
 
-            item.elem.setAttribute('y', newY);
-            item.elem.setAttribute('height', barHeight);
+            this.setItemPos(item, newY, barHeight);
         });
     }
 

@@ -84,3 +84,25 @@
   stroke: var(--linechart-line-color);
   fill: none;
 }
+
+.chart--animated {
+    --chart-animation-duration: 0.5s;
+
+    .histogram__bar {
+        transition-property: y, height;
+    }
+
+    .linechart__item {
+        transition-property: cy;
+    }
+
+    .linechart__path {
+        transition-property: d;
+    }
+
+    .histogram__bar,
+    .linechart__item,
+    .linechart__path {
+        transition-duration: var(--chart-animation-duration);
+    }
+}

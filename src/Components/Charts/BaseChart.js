@@ -20,6 +20,7 @@ import './style.scss';
 
 /* CSS classes */
 const POPUP_CLASS = 'chart__popup';
+const ANIMATE_CLASS = 'chart--animated';
 
 /** Default properties */
 const defaultProps = {
@@ -35,6 +36,7 @@ const defaultProps = {
     fitToWidth: false,
     scrollToEnd: false,
     autoScale: false,
+    animate: false,
     showPopup: false,
     renderPopup: null,
     scrollThrottle: false,
@@ -121,6 +123,10 @@ export class BaseChart extends Component {
             ce('div', { className: 'chart_wrap' }, this.chartContent),
             ce('div', { className: 'vertical-legend' }, this.verticalLabels),
         ]);
+        if (this.props.autoScale && this.props.animate) {
+            this.chartsWrapObj.classList.add(ANIMATE_CLASS);
+        }
+
         this.elem.appendChild(this.chartsWrapObj);
 
         const { height, marginTop } = this.props;
@@ -186,6 +192,21 @@ export class BaseChart extends Component {
         return this.chartsWrapObj;
     }
 
+    /** Returns count of data categories */
+    getCategoriesCount() {
+        const { values } = this.state.data;
+        if (values.length === 0) {
+            return 0;
+        }
+
+        const [firstItem] = values;
+        if (isObject(firstItem)) {
+            return values.length;
+        }
+
+        return 1;
+    }
+
     /** Returns count of data columns */
     getColumnsCount() {
         const { values } = this.state.data;
@@ -215,6 +236,11 @@ export class BaseChart extends Component {
         }
 
         return [values];
+    }
+
+    formatCoord(value, asPixels = false) {
+        const fmt = value.toFixed(3);
+        return (asPixels) ? `${fmt}px` : fmt;
     }
 
     /**

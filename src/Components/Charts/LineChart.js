@@ -10,7 +10,8 @@ export class LineChart extends BaseChart {
     constructor(props) {
         super(props);
 
-        this.line = null;
+        this.paths = [];
+        this.pathAnimate = [];
         this.props.visibilityOffset = 2;
         this.props.scaleAroundAxis = false;
 
@@ -50,6 +51,23 @@ export class LineChart extends BaseChart {
         };
     }
 
+    /** Set new position of item */
+    setItemPos(item, y) {
+        const point = item;
+
+        if (point.dot.y === y) {
+            return;
+        }
+
+        if (this.props.autoScale && this.props.animate) {
+            point.elem.style.cy = this.formatCoord(y, true);
+        } else {
+            point.elem.setAttribute('cy', y);
+        }
+
+        point.dot.y = y;
+    }
+
     createItem({ value, index, categoryIndex = 0 }) {
         const item = {
             value,
@@ -57,11 +75,11 @@ export class LineChart extends BaseChart {
         };
 
         item.elem = svg('circle', {
+            class: 'linechart__item',
             cx: item.dot.x,
             cy: item.dot.y,
             r: 4,
         });
-        item.elem.classList.add('linechart__item');
         if (categoryIndex > 0) {
             const categoryClass = `linechart__item--cat-${categoryIndex}`;
             item.elem.classList.add(categoryClass);
@@ -95,27 +113,65 @@ export class LineChart extends BaseChart {
         this.renderPaths();
     }
 
-    /** Draw path currently saved at nodes */
-    drawPath(values, categoryIndex = 0) {
-        const coords = values.map((value, index) => {
-            const point = this.getCoordinates(value, index);
-            return `${point.x},${point.y}`;
+    formatPath(points, isCSS = false) {
+        const coords = points.map((point) => {
+            const x = this.formatCoord(point.x);
+            const y = this.formatCoord(point.y);
+
+            return (isCSS) ? `${x} ${y}` : `${x},${y}`;
         });
 
-        const path = svg('path', { d: `M${coords.join('L')}` });
-        path.classList.add('linechart__path');
-        if (categoryIndex > 0) {
-            const categoryClass = `linechart--cat-${categoryIndex}`;
-            path.classList.add(categoryClass);
+        return (isCSS) ? `path("M ${coords.join(' L ')}")` : `M${coords.join('L')}`;
+    }
+
+    /** Draw path currently saved at nodes */
+    drawPath(values, categoryIndex = 0) {
+        const { barOuterWidth } = this;
+
+        const coords = values.map((value, index) => ({
+            x: index * barOuterWidth + barOuterWidth / 2,
+            y: value,
+        }));
+
+        const isAnimated = this.props.autoScale && this.props.animate;
+        const pathShape = this.formatPath(coords, isAnimated);
+
+        let path = null;
+        if (this.paths && this.paths[categoryIndex]) {
+            path = this.paths[categoryIndex];
+        } else {
+            path = svg('path', { d: '' });
+            path.classList.add('linechart__path');
+            if (categoryIndex > 0) {
+                const categoryClass = `linechart--cat-${categoryIndex}`;
+                path.classList.add(categoryClass);
+            }
+
+            this.container.appendChild(path);
+            // Insert path before circles
+            const group = this.items[0];
+            const groupItems = Array.isArray(group) ? group : [group];
+            insertBefore(path, groupItems[0].elem);
+
+            this.paths[categoryIndex] = path;
         }
 
-        this.container.appendChild(path);
-        // Insert path before circles
-        const group = this.items[0];
-        const groupItems = Array.isArray(group) ? group : [group];
-        insertBefore(path, groupItems[0].elem);
+        if (isAnimated) {
+            path.style.d = pathShape;
+        } else {
+            path.setAttribute('d', pathShape);
+        }
+    }
 
-        return path;
+    getCategoryItems(categoryIndex = 0) {
+        return this.items.map((item) => {
+            const group = Array.isArray(item) ? item : [item];
+            if (categoryIndex < 0 || categoryIndex >= group.length) {
+                throw new Error(`Invalid category ${categoryIndex}`);
+            }
+
+            return group[categoryIndex];
+        });
     }
 
     renderPaths() {
@@ -124,8 +180,12 @@ export class LineChart extends BaseChart {
             return;
         }
 
-        this.removeElements(this.paths);
-        this.paths = dataSets.map((values, index) => this.drawPath(values, index));
+        const categoriesCount = this.getCategoriesCount();
+        for (let i = 0; i < categoriesCount; i += 1) {
+            const items = this.getCategoryItems(i);
+            const values = items.map((item) => item.dot.y);
+            this.drawPath(values, i);
+        }
     }
 
     /** Update scale of path */
@@ -136,10 +196,8 @@ export class LineChart extends BaseChart {
 
         // update height of bars
         items.flat().forEach((item) => {
-            const { dot } = item;
-
-            dot.y = this.grid.getY(item.value);
-            item.elem.setAttribute('cy', dot.y);
+            const y = this.grid.getY(item.value);
+            this.setItemPos(item, y);
         });
 
         this.renderPaths();
