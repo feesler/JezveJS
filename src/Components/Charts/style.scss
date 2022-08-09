@@ -9,12 +9,15 @@
   --chart-popup-bg: #ffffff;
 
   /* Histogram */
-  --historgam-bar-color: #00bfff;
+  --historgam-bar-color: #20a0ff;
+  --historgam-active-bar-color: #00bfff;
 
   /* Linechart */
   --linechart-item-fill: #ffffff;
-  --linechart-item-border: #00bfff;
-  --linechart-line-color: #00bfff;
+  --linechart-item-border: #20a0ff;
+  --linechart-line-color: #20a0ff;
+  --linechart-active-item-fill: #00bfff;
+  --linechart-active-item-border: #00bfff;
 
   display: flex;
   flex-flow: row nowrap;
@@ -27,12 +30,12 @@
   }
 }
 
-.chart_wrap {
+.chart__wrap {
   flex-basis: 100%;
   overflow: hidden;
 }
 
-.chart_content {
+.chart__content {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -83,4 +86,39 @@
   stroke-width: 3;
   stroke: var(--linechart-line-color);
   fill: none;
+}
+
+/* Active items */
+.chart__item--active {
+  &.histogram__bar {
+    fill: var(--historgam-active-bar-color);
+  }
+
+  &.linechart__item {
+    fill: var(--linechart-active-item-fill);
+    stroke: var(--linechart-active-item-border);
+  }
+}
+
+/* Animation */
+.chart--animated {
+  --chart-animation-duration: 0.5s;
+
+  .histogram__bar {
+    transition-property: y, height;
+  }
+
+  .linechart__item {
+    transition-property: cy;
+  }
+
+  .linechart__path {
+    transition-property: d;
+  }
+
+  .histogram__bar,
+  .linechart__item,
+  .linechart__path {
+    transition-duration: var(--chart-animation-duration);
+  }
 }

@@ -19,25 +19,36 @@ import '../../css/common.scss';
 import './style.scss';
 
 /* CSS classes */
+const CONTENT_CLASS = 'chart__content';
+const WRAPPER_CLASS = 'chart__wrap';
+const VLEGEND_CLASS = 'vertical-legend';
 const POPUP_CLASS = 'chart__popup';
+const ACTIVE_ITEM_CLASS = 'chart__item--active';
+const ANIMATE_CLASS = 'chart--animated';
 
 /** Default properties */
 const defaultProps = {
+    // Layout
     height: 300,
     barWidth: 38,
     barMargin: 10,
     marginTop: 10,
+    // Grid behavior
     visibilityOffset: 1,
     scaleAroundAxis: true,
     gridValuesMargin: 0.1,
     minGridStep: 30,
     maxGridStep: 60,
+    // Render properties
     fitToWidth: false,
     scrollToEnd: false,
     autoScale: false,
+    animate: false,
     showPopup: false,
     renderPopup: null,
     scrollThrottle: false,
+    activateOnHover: false,
+    // Callbacks
     onscroll: null,
     onitemclick: null,
     onitemover: null,
@@ -112,15 +123,19 @@ export class BaseChart extends Component {
         this.chart = ce('div');
         this.chartContent = ce(
             'div',
-            { className: 'chart_content' },
+            { className: CONTENT_CLASS },
             this.chart,
             { scroll: this.onScroll.bind(this) },
         );
 
         this.chartsWrapObj = ce('div', { className: 'charts' }, [
-            ce('div', { className: 'chart_wrap' }, this.chartContent),
-            ce('div', { className: 'vertical-legend' }, this.verticalLabels),
+            ce('div', { className: WRAPPER_CLASS }, this.chartContent),
+            ce('div', { className: VLEGEND_CLASS }, this.verticalLabels),
         ]);
+        if (this.props.autoScale && this.props.animate) {
+            this.chartsWrapObj.classList.add(ANIMATE_CLASS);
+        }
+
         this.elem.appendChild(this.chartsWrapObj);
 
         const { height, marginTop } = this.props;
@@ -141,7 +156,11 @@ export class BaseChart extends Component {
         const events = {
             click: (e) => this.onItemClick(e),
         };
-        if (isFunction(this.props.onitemover) || isFunction(this.props.onitemout)) {
+        if (
+            this.props.activateOnHover
+            || isFunction(this.props.onitemover)
+            || isFunction(this.props.onitemout)
+        ) {
             events.mousemove = (e) => this.onItemOver(e);
             events.mouseout = (e) => this.onItemOut(e);
         }
@@ -186,6 +205,21 @@ export class BaseChart extends Component {
         return this.chartsWrapObj;
     }
 
+    /** Returns count of data categories */
+    getCategoriesCount() {
+        const { values } = this.state.data;
+        if (values.length === 0) {
+            return 0;
+        }
+
+        const [firstItem] = values;
+        if (isObject(firstItem)) {
+            return values.length;
+        }
+
+        return 1;
+    }
+
     /** Returns count of data columns */
     getColumnsCount() {
         const { values } = this.state.data;
@@ -215,6 +249,11 @@ export class BaseChart extends Component {
         }
 
         return [values];
+    }
+
+    formatCoord(value, asPixels = false) {
+        const fmt = value.toFixed(3);
+        return (asPixels) ? `${fmt}px` : fmt;
     }
 
     /**
@@ -481,21 +520,21 @@ export class BaseChart extends Component {
         }
 
         if (isFunction(this.props.onitemclick)) {
-            this.props.onitemclick(e, item);
+            this.props.onitemclick({ item, event: e });
         }
     }
 
     /** Chart item mouse over event handler */
     onItemOver(e) {
-        if (!isFunction(this.props.onitemover)) {
-            return;
-        }
         const item = this.findItemByEvent(e);
         if (this.activeItem === item) {
             return;
         }
         if (this.activeItem && isFunction(this.props.onitemout)) {
-            this.props.onitemout.call(this, e, this.activeItem);
+            if (this.props.activateOnHover) {
+                this.activeItem.elem.classList.remove(ACTIVE_ITEM_CLASS);
+            }
+            this.props.onitemout({ item: this.activeItem, event: e });
         }
 
         if (!item) {
@@ -503,22 +542,30 @@ export class BaseChart extends Component {
         }
 
         this.activeItem = item;
-        this.props.onitemover.call(this, e, item);
+        if (this.props.activateOnHover) {
+            item.elem.classList.add(ACTIVE_ITEM_CLASS);
+        }
+
+        if (isFunction(this.props.onitemover)) {
+            this.props.onitemover({ item, event: e });
+        }
     }
 
     /** Chart item mouse out from bar event handler */
     onItemOut(e) {
-        if (!isFunction(this.props.onitemout)) {
-            return;
-        }
-
         const item = this.activeItem;
         this.activeItem = null;
 
         if (!item) {
             return;
         }
-        this.props.onitemout.call(this, e, item);
+        if (this.props.activateOnHover) {
+            item.elem.classList.remove(ACTIVE_ITEM_CLASS);
+        }
+
+        if (isFunction(this.props.onitemout)) {
+            this.props.onitemout({ item, event: e });
+        }
     }
 
     defaultPopupContent(item) {

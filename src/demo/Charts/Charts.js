@@ -100,19 +100,15 @@ function onChartsScroll() {
     setHistogramEvent('Histogram scroll');
 }
 
-function onBarClick(e, item) {
+function onBarClick({ item }) {
     setHistogramEvent(`Clicked bar, value=${item.value}`);
 }
 
-function onBarOver(e, item) {
-    item.elem.classList.add('chart__item_active');
-
+function onBarOver({ item }) {
     setHistogramEvent(`Mouse over bar, value=${item.value}`);
 }
 
-function onBarOut(e, item) {
-    item.elem.classList.remove('chart__item_active');
-
+function onBarOut({ item }) {
     setHistogramEvent(`Mouse out bar, value=${item.value}`);
 }
 
@@ -120,19 +116,15 @@ function setLinechartEvent(str) {
     ge('linechart_events').textContent = str;
 }
 
-function onNodeClick(e, item) {
+function onNodeClick({ item }) {
     setLinechartEvent(`Clicked node, value=${item.value}`);
 }
 
-function onNodeOver(e, item) {
-    item.elem.classList.add('chart__item_active');
-
+function onNodeOver({ item }) {
     setLinechartEvent(`Mouse over node, value=${item.value}`);
 }
 
-function onNodeOut(e, item) {
-    item.elem.classList.remove('chart__item_active');
-
+function onNodeOut({ item }) {
     setLinechartEvent(`Mouse out node, value=${item.value}`);
 }
 
@@ -168,8 +160,10 @@ const callbacksHistogram = () => {
         marginTop: 35,
         scrollToEnd: true,
         autoScale: true,
+        animate: true,
         showPopup: true,
         scrollThrottle: 50,
+        activateOnHover: true,
         renderPopup: (item) => `$ ${item.value}`,
         onitemclick: onBarClick,
         onscroll: onChartsScroll,
@@ -187,6 +181,7 @@ const multiColumnHistogram = () => {
         autoScale: true,
         showPopup: true,
         scrollThrottle: 50,
+        activateOnHover: true,
         onitemclick: onBarClick,
         onscroll: onChartsScroll,
         onitemover: onBarOver,
@@ -267,7 +262,9 @@ const callbacksLinechart = () => {
         marginTop: 35,
         scrollToEnd: true,
         autoScale: true,
+        animate: true,
         showPopup: true,
+        activateOnHover: true,
         onitemclick: onNodeClick,
         onscroll: onChartsScroll,
         onitemover: onNodeOver,
@@ -283,6 +280,7 @@ const multipleLinechart = () => {
         marginTop: 35,
         autoScale: true,
         showPopup: true,
+        activateOnHover: true,
         onitemclick: onNodeClick,
         onscroll: onChartsScroll,
         onitemover: onNodeOver,
