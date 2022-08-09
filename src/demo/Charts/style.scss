@@ -49,7 +49,7 @@
   --linechart-line-color: var(--charts-color-3);
 }
 
-.chart__item_active {
+.chart__item--active {
   &.histogram__bar {
     --historgam-bar-color: var(--charts-active-color);
   }
