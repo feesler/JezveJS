@@ -1,7 +1,9 @@
 import { svg } from '../../js/common.js';
 import { BaseChart } from './BaseChart.js';
 
+/* CSS classes */
 const BAR_CLASS = 'histogram__bar';
+const CATEGORY_CLASS = 'histogram--cat-';
 
 /**
  * Base chart component constructor
@@ -87,7 +89,7 @@ export class Histogram extends BaseChart {
             height: item.height,
         });
         if (categoryIndex > 0) {
-            const categoryClass = `histogram__bar--cat-${categoryIndex}`;
+            const categoryClass = `${CATEGORY_CLASS}${categoryIndex}`;
             item.elem.classList.add(categoryClass);
         }
 

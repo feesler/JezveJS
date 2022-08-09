@@ -19,6 +19,9 @@ import '../../css/common.scss';
 import './style.scss';
 
 /* CSS classes */
+const CONTENT_CLASS = 'chart__content';
+const WRAPPER_CLASS = 'chart__wrap';
+const VLEGEND_CLASS = 'vertical-legend';
 const POPUP_CLASS = 'chart__popup';
 const ANIMATE_CLASS = 'chart--animated';
 
@@ -114,14 +117,14 @@ export class BaseChart extends Component {
         this.chart = ce('div');
         this.chartContent = ce(
             'div',
-            { className: 'chart_content' },
+            { className: CONTENT_CLASS },
             this.chart,
             { scroll: this.onScroll.bind(this) },
         );
 
         this.chartsWrapObj = ce('div', { className: 'charts' }, [
-            ce('div', { className: 'chart_wrap' }, this.chartContent),
-            ce('div', { className: 'vertical-legend' }, this.verticalLabels),
+            ce('div', { className: WRAPPER_CLASS }, this.chartContent),
+            ce('div', { className: VLEGEND_CLASS }, this.verticalLabels),
         ]);
         if (this.props.autoScale && this.props.animate) {
             this.chartsWrapObj.classList.add(ANIMATE_CLASS);

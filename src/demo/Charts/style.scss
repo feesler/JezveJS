@@ -26,11 +26,11 @@
   --historgam-bar-color: var(--charts-color);
 }
 
-.histogram__bar--cat-1 {
+.histogram--cat-1 {
   --historgam-bar-color: var(--charts-color-2);
 }
 
-.histogram__bar--cat-2 {
+.histogram--cat-2 {
   --historgam-bar-color: var(--charts-color-3);
 }
 
@@ -54,11 +54,11 @@
     --historgam-bar-color: var(--charts-active-color);
   }
 
-  &.histogram__bar--cat-1 {
+  &.histogram--cat-1 {
     --historgam-bar-color: var(--charts-active-color-2);
   }
 
-  &.histogram__bar--cat-2 {
+  &.histogram--cat-2 {
     --historgam-bar-color: var(--charts-active-color-3);
   }
 
