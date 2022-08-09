@@ -11,7 +11,6 @@ export class LineChart extends BaseChart {
         super(props);
 
         this.paths = [];
-        this.pathAnimate = [];
         this.props.visibilityOffset = 2;
         this.props.scaleAroundAxis = false;
 
@@ -113,15 +112,14 @@ export class LineChart extends BaseChart {
         this.renderPaths();
     }
 
-    formatPath(points, isCSS = false) {
+    formatPath(points) {
         const coords = points.map((point) => {
             const x = this.formatCoord(point.x);
             const y = this.formatCoord(point.y);
-
-            return (isCSS) ? `${x} ${y}` : `${x},${y}`;
+            return `${x}, ${y}`;
         });
 
-        return (isCSS) ? `path("M ${coords.join(' L ')}")` : `M${coords.join('L')}`;
+        return `M ${coords.join(' ')}`;
     }
 
     /** Draw path currently saved at nodes */
@@ -134,33 +132,52 @@ export class LineChart extends BaseChart {
         }));
 
         const isAnimated = this.props.autoScale && this.props.animate;
-        const pathShape = this.formatPath(coords, isAnimated);
+        const shape = this.formatPath(coords);
 
         let path = null;
         if (this.paths && this.paths[categoryIndex]) {
             path = this.paths[categoryIndex];
         } else {
-            path = svg('path', { d: '' });
-            path.classList.add('linechart__path');
+            path = {
+                elem: svg('path', {}),
+            };
+
+            path.elem.classList.add('linechart__path');
             if (categoryIndex > 0) {
                 const categoryClass = `linechart--cat-${categoryIndex}`;
-                path.classList.add(categoryClass);
+                path.elem.classList.add(categoryClass);
             }
 
-            this.container.appendChild(path);
+            this.container.appendChild(path.elem);
             // Insert path before circles
             const group = this.items[0];
             const groupItems = Array.isArray(group) ? group : [group];
-            insertBefore(path, groupItems[0].elem);
+            insertBefore(path.elem, groupItems[0].elem);
+
+            path.animateElem = svg('animate', {
+                attributeType: 'XML',
+                attributeName: 'd',
+                dur: '0.5s',
+                begin: 'indefinite',
+                fill: 'freeze',
+                repeatCount: '1',
+                calcMode: 'linear',
+            });
+            path.elem.appendChild(path.animateElem);
 
             this.paths[categoryIndex] = path;
         }
 
         if (isAnimated) {
-            path.style.d = pathShape;
+            if (shape !== path.shape) {
+                path.animateElem.setAttribute('from', path.shape);
+                path.animateElem.setAttribute('to', shape);
+                path.animateElem.beginElement();
+            }
         } else {
-            path.setAttribute('d', pathShape);
+            path.elem.setAttribute('d', shape);
         }
+        path.shape = shape;
     }
 
     getCategoryItems(categoryIndex = 0) {
