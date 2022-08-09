@@ -100,15 +100,15 @@ function onChartsScroll() {
     setHistogramEvent('Histogram scroll');
 }
 
-function onBarClick(e, item) {
+function onBarClick({ item }) {
     setHistogramEvent(`Clicked bar, value=${item.value}`);
 }
 
-function onBarOver(e, item) {
+function onBarOver({ item }) {
     setHistogramEvent(`Mouse over bar, value=${item.value}`);
 }
 
-function onBarOut(e, item) {
+function onBarOut({ item }) {
     setHistogramEvent(`Mouse out bar, value=${item.value}`);
 }
 
@@ -116,15 +116,15 @@ function setLinechartEvent(str) {
     ge('linechart_events').textContent = str;
 }
 
-function onNodeClick(e, item) {
+function onNodeClick({ item }) {
     setLinechartEvent(`Clicked node, value=${item.value}`);
 }
 
-function onNodeOver(e, item) {
+function onNodeOver({ item }) {
     setLinechartEvent(`Mouse over node, value=${item.value}`);
 }
 
-function onNodeOut(e, item) {
+function onNodeOut({ item }) {
     setLinechartEvent(`Mouse out node, value=${item.value}`);
 }
 

@@ -28,15 +28,18 @@ const ANIMATE_CLASS = 'chart--animated';
 
 /** Default properties */
 const defaultProps = {
+    // Layout
     height: 300,
     barWidth: 38,
     barMargin: 10,
     marginTop: 10,
+    // Grid behavior
     visibilityOffset: 1,
     scaleAroundAxis: true,
     gridValuesMargin: 0.1,
     minGridStep: 30,
     maxGridStep: 60,
+    // Render properties
     fitToWidth: false,
     scrollToEnd: false,
     autoScale: false,
@@ -45,6 +48,7 @@ const defaultProps = {
     renderPopup: null,
     scrollThrottle: false,
     activateOnHover: false,
+    // Callbacks
     onscroll: null,
     onitemclick: null,
     onitemover: null,
@@ -516,7 +520,7 @@ export class BaseChart extends Component {
         }
 
         if (isFunction(this.props.onitemclick)) {
-            this.props.onitemclick(e, item);
+            this.props.onitemclick({ item, event: e });
         }
     }
 
@@ -530,7 +534,7 @@ export class BaseChart extends Component {
             if (this.props.activateOnHover) {
                 this.activeItem.elem.classList.remove(ACTIVE_ITEM_CLASS);
             }
-            this.props.onitemout.call(this, e, this.activeItem);
+            this.props.onitemout({ item: this.activeItem, event: e });
         }
 
         if (!item) {
@@ -543,7 +547,7 @@ export class BaseChart extends Component {
         }
 
         if (isFunction(this.props.onitemover)) {
-            this.props.onitemover.call(this, e, item);
+            this.props.onitemover({ item, event: e });
         }
     }
 
@@ -560,7 +564,7 @@ export class BaseChart extends Component {
         }
 
         if (isFunction(this.props.onitemout)) {
-            this.props.onitemout.call(this, e, item);
+            this.props.onitemout({ item, event: e });
         }
     }
 
