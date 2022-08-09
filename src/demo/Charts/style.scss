@@ -24,58 +24,38 @@
 
 .histogram__bar {
   --historgam-bar-color: var(--charts-color);
+  --historgam-active-bar-color: var(--charts-active-color);
 }
 
 .histogram--cat-1 {
   --historgam-bar-color: var(--charts-color-2);
+  --historgam-active-bar-color: var(--charts-active-color-2);
 }
 
 .histogram--cat-2 {
   --historgam-bar-color: var(--charts-color-3);
+  --historgam-active-bar-color: var(--charts-active-color-3);
 }
 
 .linechart__item {
   --linechart-item-border: var(--charts-color);
   --linechart-line-color: var(--charts-color);
+  --linechart-active-item-fill: var(--charts-active-color);
+  --linechart-active-item-border: var(--charts-active-color);
 }
 
 .linechart--cat-1 {
   --linechart-item-border: var(--charts-color-2);
   --linechart-line-color: var(--charts-color-2);
+  --linechart-active-item-fill: var(--charts-active-color-2);
+  --linechart-active-item-border: var(--charts-active-color-2);
 }
 
 .linechart--cat-2 {
   --linechart-item-border: var(--charts-color-3);
   --linechart-line-color: var(--charts-color-3);
-}
-
-.chart__item--active {
-  &.histogram__bar {
-    --historgam-bar-color: var(--charts-active-color);
-  }
-
-  &.histogram--cat-1 {
-    --historgam-bar-color: var(--charts-active-color-2);
-  }
-
-  &.histogram--cat-2 {
-    --historgam-bar-color: var(--charts-active-color-3);
-  }
-
-  &.linechart__item {
-    --linechart-item-border: var(--charts-active-color);
-    --linechart-item-fill: var(--charts-active-color);
-  }
-
-  &.linechart__item.linechart--cat-1 {
-    --linechart-item-border: var(--charts-active-color-2);
-    --linechart-item-fill: var(--charts-active-color-2);
-  }
-
-  &.linechart__item.linechart--cat-2 {
-    --linechart-item-border: var(--charts-active-color-3);
-    --linechart-item-fill: var(--charts-active-color-3);
-  }
+  --linechart-active-item-fill: var(--charts-active-color-3);
+  --linechart-active-item-border: var(--charts-active-color-3);
 }
 
 .row {
