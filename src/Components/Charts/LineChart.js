@@ -1,6 +1,11 @@
 import { svg, insertBefore } from '../../js/common.js';
 import { BaseChart } from './BaseChart.js';
 
+/* CSS classes */
+const PATH_CLASS = 'linechart__path';
+const ITEM_CLASS = 'linechart__item';
+const CATEGORY_CLASS = 'linechart--cat-';
+
 /**
  * Base chart component constructor
  * @param {Object} props
@@ -74,13 +79,14 @@ export class LineChart extends BaseChart {
         };
 
         item.elem = svg('circle', {
-            class: 'linechart__item',
+            class: ITEM_CLASS,
             cx: item.dot.x,
             cy: item.dot.y,
             r: 4,
         });
+
         if (categoryIndex > 0) {
-            const categoryClass = `linechart__item--cat-${categoryIndex}`;
+            const categoryClass = `${CATEGORY_CLASS}${categoryIndex}`;
             item.elem.classList.add(categoryClass);
         }
 
@@ -142,9 +148,9 @@ export class LineChart extends BaseChart {
                 elem: svg('path', {}),
             };
 
-            path.elem.classList.add('linechart__path');
+            path.elem.classList.add(PATH_CLASS);
             if (categoryIndex > 0) {
-                const categoryClass = `linechart--cat-${categoryIndex}`;
+                const categoryClass = `${CATEGORY_CLASS}${categoryIndex}`;
                 path.elem.classList.add(categoryClass);
             }
 

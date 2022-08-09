@@ -22,45 +22,59 @@
   box-sizing: border-box;
 }
 
+.histogram__bar {
+  --historgam-bar-color: var(--charts-color);
+}
+
 .histogram__bar--cat-1 {
-  fill: var(--charts-color-2);
+  --historgam-bar-color: var(--charts-color-2);
 }
 
 .histogram__bar--cat-2 {
-  fill: var(--charts-color-3);
+  --historgam-bar-color: var(--charts-color-3);
+}
+
+.linechart__item {
+  --linechart-item-border: var(--charts-color);
+  --linechart-line-color: var(--charts-color);
 }
 
 .linechart--cat-1 {
-  stroke: var(--charts-color-2);
+  --linechart-item-border: var(--charts-color-2);
+  --linechart-line-color: var(--charts-color-2);
 }
 
 .linechart--cat-2 {
-  stroke: var(--charts-color-3);
+  --linechart-item-border: var(--charts-color-3);
+  --linechart-line-color: var(--charts-color-3);
 }
 
 .chart__item_active {
   &.histogram__bar {
-    fill: var(--charts-active-color);
+    --historgam-bar-color: var(--charts-active-color);
   }
 
   &.histogram__bar--cat-1 {
-    fill: var(--charts-active-color-2);
+    --historgam-bar-color: var(--charts-active-color-2);
   }
 
   &.histogram__bar--cat-2 {
-    fill: var(--charts-active-color-3);
+    --historgam-bar-color: var(--charts-active-color-3);
   }
 
   &.linechart__item {
-    fill: var(--charts-active-color);
+    --linechart-item-border: var(--charts-active-color);
+    --linechart-item-fill: var(--charts-active-color);
   }
 
   &.linechart__item.linechart--cat-1 {
-    fill: var(--charts-active-color-2);
+    --linechart-item-border: var(--charts-active-color-2);
+    --linechart-item-fill: var(--charts-active-color-2);
   }
 
   &.linechart__item.linechart--cat-2 {
-    fill: var(--charts-active-color-3);
+    --linechart-item-border: var(--charts-active-color-3);
+    --linechart-item-fill: var(--charts-active-color-3);
   }
 }
 
