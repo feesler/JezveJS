@@ -26,7 +26,7 @@ export class SortableDragAvatar extends DragAvatar {
 
         this.dragZoneElem.classList.add(this.dragZone.getPlaceholder());
 
-        if (this.dragZone.params.copyWidth) {
+        if (this.dragZone.props.copyWidth) {
             const quirks = !elem.style.getPropertyValue; // IE < 9
             const width = px(this.dragZoneElem.offsetWidth);
             if (quirks) {

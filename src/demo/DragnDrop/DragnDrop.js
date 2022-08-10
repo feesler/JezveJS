@@ -17,20 +17,20 @@ function onSort(srcElem, destElem) {
 }
 
 const initOriginalAvatar = () => {
-    DefaultDragZone.create(ge('sq1'), { dragOriginal: true });
-    OriginalDropTarget.create(ge('drop_area1'));
+    DefaultDragZone.create({ elem: ge('sq1'), dragOriginal: true });
+    OriginalDropTarget.create({ elem: ge('drop_area1') });
 };
 
 const initClonedAvatar = () => {
-    DefaultDragZone.create(ge('sq2'));
-    DefaultDragZone.create(ge('sq3'));
-    DefaultDropTarget.create(ge('inner_drop1'));
-    DefaultDropTarget.create(ge('inner_drop2'));
+    DefaultDragZone.create({ elem: ge('sq2') });
+    DefaultDragZone.create({ elem: ge('sq3') });
+    DefaultDropTarget.create({ elem: ge('inner_drop1') });
+    DefaultDropTarget.create({ elem: ge('inner_drop2') });
 };
 
 const initSortable = () => {
     Sortable.create({
-        container: 'sortable_container',
+        elem: 'sortable_container',
         oninsertat: onSort,
         selector: '.normal_item',
         placeholderClass: 'item_placeholder',
@@ -72,7 +72,7 @@ const onListSort = (srcElem, destElem) => {
 const renderListItem = (title = 'Item') => ce(
     'div',
     { className: 'list_item' },
-    ce('span', { textContentt: title }),
+    ce('span', { textContent: title }),
 );
 
 const initSortableList = () => {
@@ -83,7 +83,7 @@ const initSortableList = () => {
     }
 
     Sortable.create({
-        container: 'list_sortable',
+        elem: 'list_sortable',
         oninsertat: onListSort,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
@@ -128,7 +128,7 @@ const onExchange = (srcElem, destElem) => {
 const renderDestListItem = (title = 'Item', isPlaceholder = false) => ce(
     'div',
     { className: `list_item ${isPlaceholder ? 'list_item_placeholder' : 'list_item_2'}` },
-    ce('span', { textContentt: title }),
+    ce('span', { textContent: title }),
 );
 
 const initExchangable = () => {
@@ -143,7 +143,7 @@ const initExchangable = () => {
     }
 
     Sortable.create({
-        container: 'list_exch_1',
+        elem: 'list_exch_1',
         oninsertat: onExchange,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
@@ -152,7 +152,7 @@ const initExchangable = () => {
         copyWidth: true,
     });
     Sortable.create({
-        container: 'list_exch_2',
+        elem: 'list_exch_2',
         oninsertat: onExchange,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
@@ -164,7 +164,7 @@ const initExchangable = () => {
 /** Sortable table with TBODY per each row */
 const initTableEachBody = () => {
     Sortable.create({
-        container: 'table_sortable',
+        elem: 'table_sortable',
         oninsertat: onSort,
         selector: 'tbody',
         placeholderClass: 'list_item_placeholder',
@@ -177,7 +177,7 @@ const initTableEachBody = () => {
 /** Sortable table with single TBODY for all rows */
 const initTableSingleBody = () => {
     Sortable.create({
-        container: 'table_sortable_2',
+        elem: 'table_sortable_2',
         oninsertat: onSort,
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
@@ -190,7 +190,7 @@ const initTableSingleBody = () => {
 /** Sortable table without TBODY */
 const initTableNoBody = () => {
     Sortable.create({
-        container: 'table_sortable_3',
+        elem: 'table_sortable_3',
         oninsertat: onSort,
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
@@ -202,19 +202,21 @@ const initTableNoBody = () => {
 
 /** handles option */
 const initHandles = () => {
-    DefaultDragZone.create(ge('di1'), { dragOriginal: true, handles: 'di1' });
-    DefaultDragZone.create(ge('di2'), {
+    DefaultDragZone.create({ elem: ge('di1'), dragOriginal: true, handles: 'di1' });
+    DefaultDragZone.create({
+        elem: ge('di2'),
         dragOriginal: true,
         handles: ['dh2_1', { elem: 'dh2_2' }],
     });
-    DefaultDragZone.create(ge('di3'), {
+    DefaultDragZone.create({
+        elem: ge('di3'),
         dragOriginal: true,
         handles: [
             { elem: 'dh3_1', includeChilds: true },
             { elem: 'dh3_2', includeChilds: false },
         ],
     });
-    OriginalDropTarget.create(ge('drop_area2'));
+    OriginalDropTarget.create({ elem: ge('drop_area2') });
 };
 
 const renderListItemWithInput = (title = 'Item') => ce(
@@ -235,7 +237,7 @@ const initRootOnlyHandle = () => {
     }
 
     Sortable.create({
-        container: 'sortable_roothnd',
+        elem: 'sortable_roothnd',
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         group: 'list_root',
@@ -262,7 +264,7 @@ const initQueryHandles = () => {
     }
 
     Sortable.create({
-        container: 'sortable_hnd',
+        elem: 'sortable_hnd',
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         group: 'list_hnd',
@@ -273,7 +275,7 @@ const initQueryHandles = () => {
 /** Sortable with single item */
 const initSingleItem = () => {
     Sortable.create({
-        container: 'singleItemSortable',
+        elem: 'singleItemSortable',
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         group: 'single',
@@ -281,7 +283,7 @@ const initSingleItem = () => {
         copyWidth: true,
     });
     Sortable.create({
-        container: 'singleItemSortableAllow',
+        elem: 'singleItemSortableAllow',
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         group: 'singleAllow',

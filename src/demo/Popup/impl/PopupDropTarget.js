@@ -7,6 +7,10 @@ import { PopupDragAvatar } from './PopupDragAvatar.js';
  */
 /* eslint-disable-next-line no-unused-vars */
 export class PopupDropTarget extends DropTarget {
+    static create(...args) {
+        return new PopupDropTarget(...args);
+    }
+
     onDragEnd(avatar, e) {
         if (!this.targetElem || !(avatar instanceof PopupDragAvatar)) {
             avatar.onDragCancel();

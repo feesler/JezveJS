@@ -11,10 +11,15 @@ export class DefaultDragZone extends DragZone {
     }
 
     makeAvatar() {
-        if (this.params && this.params.dragOriginal === true) {
-            return new OriginalDragAvatar(this, this.elem);
+        const avatarProps = {
+            dragZone: this,
+            elem: this.elem,
+        };
+
+        if (this.props.dragOriginal === true) {
+            return new OriginalDragAvatar(avatarProps);
         }
 
-        return new DefaultDragAvatar(this, this.elem);
+        return DefaultDragAvatar.create(avatarProps);
     }
 }

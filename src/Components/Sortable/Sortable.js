@@ -2,28 +2,10 @@ import { ge } from '../../js/common.js';
 import { SortableDragZone } from './SortableDragZone.js';
 import { SortableDropTarget } from './SortableDropTarget.js';
 
-const dragZoneDefaults = {
-    group: null,
-    ondragstart: null,
-    oninsertat: null,
-    table: false,
-    copyWidth: false,
-    selector: null,
-    placeholderClass: false,
-    dragClass: 'drag',
-    onlyRootHandle: false,
-    allowSingleItemSort: false,
-    handles: null,
-};
-
-const dropTargetDefaults = {
-    group: null,
-};
-
 /**
  * Sortable widget constructor
  * @param {Object} props
- * @param {String} props.container - identifier or Element of sortable container
+ * @param {String} props.elem - identifier or Element of sortable container
  * @param {String} props.group - sortable group udentifier
  * @param {Function} props.ondragstart - drag start event handler
  * @param {Function} props.oninsertat - drop item on new place event handler
@@ -41,27 +23,17 @@ export class Sortable {
     }
 
     constructor(props = {}) {
-        const dragZoneParam = {};
-        const dropTargetParam = {};
-
-        Object.keys(dragZoneDefaults).forEach((key) => {
-            dragZoneParam[key] = (key in props)
-                ? props[key]
-                : dragZoneDefaults[key];
-        });
-
-        Object.keys(dropTargetDefaults).forEach((key) => {
-            dropTargetParam[key] = (key in props)
-                ? props[key]
-                : dropTargetDefaults[key];
-        });
-
-        const containerElem = (typeof props.container === 'string') ? ge(props.container) : props.container;
-        if (!containerElem) {
+        this.elem = (typeof props.elem === 'string') ? ge(props.elem) : props.elem;
+        if (!this.elem) {
             return;
         }
 
-        this.dragZone = SortableDragZone.create(containerElem, dragZoneParam);
-        this.dropTarget = SortableDropTarget.create(containerElem, dropTargetParam);
+        this.props = {
+            ...props,
+            elem: this.elem,
+        };
+
+        this.dragZone = SortableDragZone.create(this.props);
+        this.dropTarget = SortableDropTarget.create(this.props);
     }
 }

@@ -13,10 +13,19 @@ export class DragAvatar {
         return new DragAvatar(...args);
     }
 
-    constructor(dragZone, dragElem) {
-        this.dragZone = dragZone;
-        this.dragZoneElem = dragElem;
-        this.elem = dragElem; // element of avatar
+    constructor(props = {}) {
+        if (!props?.elem) {
+            throw new Error('Invalid element specified');
+        }
+        if (!props?.dragZone) {
+            throw new Error('Invalid drag zone specified');
+        }
+
+        this.props = { ...props };
+
+        this.dragZone = this.props.dragZone;
+        this.dragZoneElem = this.props.elem;
+        this.elem = this.props.elem; // element of avatar
     }
 
     /**

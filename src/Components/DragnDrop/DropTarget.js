@@ -2,19 +2,20 @@
 
 /**
  * Drop target class constructor
- * @param {Element} elem - element to create drop target at
- * @param {Object} params - properties object
+ * @param {Object} props - properties object
+ * @param {Element} props.elem - element to create drop target at
  */
 export class DropTarget {
     static create(...args) {
         return new DropTarget(...args);
     }
 
-    constructor(elem, params) {
-        this.elem = elem;
+    constructor(props = {}) {
+        this.props = { ...props };
+
+        this.elem = this.props.elem;
         this.elem.dropTarget = this;
         this.targetElem = null; // target element under avatar
-        this.params = params;
     }
 
     /**
