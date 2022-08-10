@@ -24,6 +24,6 @@ export { Popup } from '../Components/Popup/Popup.js';
 export { Progress } from '../Components/Progress/Progress.js';
 export { Radio } from '../Components/Radio/Radio.js';
 export { Slider } from '../Components/Slider/Slider.js';
-export { Sortable } from '../Components/Sortable/index.js';
+export { Sortable } from '../Components/Sortable/Sortable.js';
 export { Spinner } from '../Components/Spinner/Spinner.js';
 export { Switch } from '../Components/Switch/Switch.js';
