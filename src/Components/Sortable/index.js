@@ -12,6 +12,7 @@ const dragZoneDefaults = {
     placeholderClass: false,
     dragClass: 'drag',
     onlyRootHandle: false,
+    allowSingleItemSort: false,
     handles: null,
 };
 

@@ -240,6 +240,24 @@ function init() {
         group: 'list_hnd',
         handles: [{ query: '.drag_handle', includeChilds: true }],
     });
+
+    this.singleItem = new Sortable({
+        container: 'singleItemSortable',
+        selector: '.list_item',
+        placeholderClass: 'list_item_placeholder',
+        group: 'single',
+        dragClass: true,
+        copyWidth: true,
+    });
+    this.singleItemAllow = new Sortable({
+        container: 'singleItemSortableAllow',
+        selector: '.list_item',
+        placeholderClass: 'list_item_placeholder',
+        group: 'singleAllow',
+        dragClass: true,
+        copyWidth: true,
+        allowSingleItemSort: true,
+    });
 }
 
 onReady(init);

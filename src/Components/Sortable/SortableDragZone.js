@@ -55,10 +55,22 @@ export class SortableDragZone extends DragZone {
         return null;
     }
 
+    // Returns all drag items inside of container
+    findAllDragZoneItems() {
+        return Array.from(this.elem.querySelectorAll(this.params.selector));
+    }
+
     // Check specified targer element is valid
     isValidDragHandle(target) {
         if (!target) {
             return false;
+        }
+
+        if (!this.params?.allowSingleItemSort) {
+            const allItems = this.findAllDragZoneItems();
+            if (allItems.length < 2) {
+                return false;
+            }
         }
 
         const item = this.findDragZoneItem(target);
@@ -67,7 +79,7 @@ export class SortableDragZone extends DragZone {
         }
 
         // allow to drag using whole drag zone in case no handles is set
-        if (!this.params || !this.params.onlyRootHandle) {
+        if (!this.params?.onlyRootHandle) {
             return super.isValidDragHandle(target);
         }
 
