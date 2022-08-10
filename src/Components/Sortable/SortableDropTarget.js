@@ -9,8 +9,25 @@ import { SortableDragAvatar } from './SortableDragAvatar.js';
 
 /* eslint-disable no-bitwise, no-unused-vars */
 
+const defaultProps = {
+    group: null,
+};
+
 // Sortable drop target
 export class SortableDropTarget extends DropTarget {
+    static create(...args) {
+        return new SortableDropTarget(...args);
+    }
+
+    constructor(...args) {
+        super(...args);
+
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+        };
+    }
+
     getTargetElem(avatar, event) {
         let el = avatar.getTargetElem();
         const dragInfo = avatar.getDragInfo();
@@ -41,9 +58,11 @@ export class SortableDropTarget extends DropTarget {
         this.showHoverIndication(avatar);
 
         const dragInfo = avatar.getDragInfo();
-        if (!this.targetElem
+        if (
+            !this.targetElem
             || !(avatar instanceof SortableDragAvatar)
-            || (dragInfo.dragZone.getGroup() !== this.params.group)) {
+            || (dragInfo.dragZone.getGroup() !== this.props.group)
+        ) {
             return;
         }
 

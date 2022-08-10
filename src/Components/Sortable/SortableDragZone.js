@@ -3,20 +3,48 @@ import { SortableDragAvatar } from './SortableDragAvatar.js';
 import { SortableTableDragAvatar } from './SortableTableDragAvatar.js';
 import { DragZone } from '../DragnDrop/DragZone.js';
 
-// Sortable drag zone
+const defaultProps = {
+    group: null,
+    ondragstart: null,
+    oninsertat: null,
+    table: false,
+    copyWidth: false,
+    selector: null,
+    placeholderClass: false,
+    dragClass: 'drag',
+    onlyRootHandle: false,
+    allowSingleItemSort: false,
+    handles: null,
+};
+
+/** Sortable drag zone */
 export class SortableDragZone extends DragZone {
+    static create(...args) {
+        return new SortableDragZone(...args);
+    }
+
     constructor(...args) {
         super(...args);
+
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+        };
 
         this.sortTarget = null;
     }
 
     makeAvatar() {
-        if (this.params.table) {
-            return new SortableTableDragAvatar(this, this.elem);
+        const avatarProps = {
+            dragZone: this,
+            elem: this.elem,
+        };
+
+        if (this.props.table) {
+            return SortableTableDragAvatar.create(avatarProps);
         }
 
-        return new SortableDragAvatar(this, this.elem);
+        return SortableDragAvatar.create(avatarProps);
     }
 
     // Drag start handler
@@ -27,8 +55,8 @@ export class SortableDragZone extends DragZone {
             return false;
         }
 
-        if (this.params && isFunction(this.params.ondragstart)) {
-            this.params.ondragstart(avatar.dragZoneElem);
+        if (this.props && isFunction(this.props.ondragstart)) {
+            this.props.ondragstart(avatar.dragZoneElem);
         }
 
         return avatar;
@@ -36,14 +64,14 @@ export class SortableDragZone extends DragZone {
 
     // Find specific drag zone element
     findDragZoneItem(target) {
-        if (!this.params || !this.params.selector) {
+        if (!this.props.selector) {
             return null;
         }
 
         let el = target;
         while (el && el !== this.elem) {
-            if (isFunction(el.matches) && el.matches(this.params.selector)) {
-                if (el.classList.contains(this.params.placeholderClass)) {
+            if (isFunction(el.matches) && el.matches(this.props.selector)) {
+                if (el.classList.contains(this.props.placeholderClass)) {
                     return null;
                 }
 
@@ -55,10 +83,22 @@ export class SortableDragZone extends DragZone {
         return null;
     }
 
+    // Returns all drag items inside of container
+    findAllDragZoneItems() {
+        return Array.from(this.elem.querySelectorAll(this.props.selector));
+    }
+
     // Check specified targer element is valid
     isValidDragHandle(target) {
         if (!target) {
             return false;
+        }
+
+        if (!this.props?.allowSingleItemSort) {
+            const allItems = this.findAllDragZoneItems();
+            if (allItems.length < 2) {
+                return false;
+            }
         }
 
         const item = this.findDragZoneItem(target);
@@ -67,17 +107,17 @@ export class SortableDragZone extends DragZone {
         }
 
         // allow to drag using whole drag zone in case no handles is set
-        if (!this.params || !this.params.onlyRootHandle) {
+        if (!this.props?.onlyRootHandle) {
             return super.isValidDragHandle(target);
         }
 
-        return this.params.onlyRootHandle && target === item;
+        return this.props.onlyRootHandle && target === item;
     }
 
     // Return group of sortable
     getGroup() {
-        if (this.params && this.params.group) {
-            return this.params.group;
+        if (this.props && this.props.group) {
+            return this.props.group;
         }
 
         return null;
@@ -85,8 +125,8 @@ export class SortableDragZone extends DragZone {
 
     // Return class for placeholder element
     getPlaceholder() {
-        if (this.params && this.params.placeholderClass) {
-            return this.params.placeholderClass;
+        if (this.props && this.props.placeholderClass) {
+            return this.props.placeholderClass;
         }
 
         return null;
@@ -94,8 +134,8 @@ export class SortableDragZone extends DragZone {
 
     // Return class for item element
     getItemSelector() {
-        if (this.params && this.params.selector) {
-            return this.params.selector;
+        if (this.props && this.props.selector) {
+            return this.props.selector;
         }
 
         return null;
@@ -103,8 +143,8 @@ export class SortableDragZone extends DragZone {
 
     // Return class for drag avatar element
     getDragClass() {
-        if (this.params && this.params.dragClass) {
-            return (this.params.dragClass === true) ? 'drag' : this.params.dragClass;
+        if (this.props && this.props.dragClass) {
+            return (this.props.dragClass === true) ? 'drag' : this.props.dragClass;
         }
 
         return null;
@@ -112,8 +152,8 @@ export class SortableDragZone extends DragZone {
 
     // Insert event handler
     onInsertAt(srcElem, elem) {
-        if (this.params && isFunction(this.params.oninsertat)) {
-            this.params.oninsertat(srcElem, elem);
+        if (this.props && isFunction(this.props.oninsertat)) {
+            this.props.oninsertat(srcElem, elem);
         }
     }
 }

@@ -3,6 +3,10 @@ import { SortableDragAvatar } from './SortableDragAvatar.js';
 
 // Sortable table drag avatar
 export class SortableTableDragAvatar extends SortableDragAvatar {
+    static create(...args) {
+        return new SortableTableDragAvatar(...args);
+    }
+
     initFromEvent(downX, downY, e) {
         this.dragZoneElem = this.dragZone.findDragZoneItem(e.target);
         if (!this.dragZoneElem) {
@@ -20,7 +24,7 @@ export class SortableTableDragAvatar extends SortableDragAvatar {
         this.shiftX = downX - offset.left;
         this.shiftY = downY - offset.top;
 
-        if (this.dragZone.params.copyWidth) {
+        if (this.dragZone.props.copyWidth) {
             let srcCell = this.dragZoneElem.querySelector('td');
             let destCell = tbl.querySelector('td');
             while (srcCell && destCell) {

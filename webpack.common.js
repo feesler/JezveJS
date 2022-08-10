@@ -24,7 +24,7 @@ export default {
         DragAvatar: './src/Components/DragnDrop/DragAvatar.js',
         DragZone: './src/Components/DragnDrop/DragZone.js',
         DropTarget: './src/Components/DragnDrop/DropTarget.js',
-        Sortable: './src/Components/Sortable',
+        Sortable: './src/Components/Sortable/Sortable.js',
         Histogram: './src/Components/Charts/Histogram.js',
         LineChart: './src/Components/Charts/LineChart.js',
         Paginator: './src/Components/Paginator/Paginator.js',

@@ -1,20 +1,35 @@
 import { ge, isObject } from '../../js/common.js';
 import { DragMaster } from './DragMaster.js';
 
+const defaultProps = {
+    handles: null,
+};
+
 /**
  * Drag start zone class
  * Handle drag start event and make avatar
- * @param {Element} elem - element to create drag zone
- * @param {Object} params - properties object
+ * @param {Object} props - properties object
+ * @param {Element} props.elem - element to create drag zone
  */
 export class DragZone {
-    constructor(elem, params) {
-        this.elem = elem;
-        this.params = params;
+    static create(...args) {
+        return new DragZone(...args);
+    }
 
+    constructor(props = {}) {
+        if (!props?.elem) {
+            throw new Error('Invalid element specified');
+        }
+
+        this.elem = props.elem;
         this.elem.dragZone = this;
 
-        DragMaster.makeDraggable(elem);
+        this.props = {
+            ...defaultProps,
+            ...props,
+        };
+
+        DragMaster.makeDraggable(this.elem);
     }
 
     /** Return element of drag zone */
@@ -52,11 +67,11 @@ export class DragZone {
         }
 
         // allow to drag using whole drag zone in case no handles is set
-        if (!this.params || !this.params.handles) {
+        if (!this.props.handles) {
             return true;
         }
 
-        const hnds = this.params.handles;
+        const hnds = this.props.handles;
         const handles = Array.isArray(hnds) ? hnds : [hnds];
 
         return handles.some((hnd) => {

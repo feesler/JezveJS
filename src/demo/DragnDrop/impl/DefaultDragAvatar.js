@@ -5,6 +5,10 @@ import { re, getOffset, DragAvatar } from '../../../js/index.js';
  * Clone original element and make it semitransparent
  */
 export class DefaultDragAvatar extends DragAvatar {
+    static create(...args) {
+        return new DefaultDragAvatar(...args);
+    }
+
     /* eslint-disable-next-line no-unused-vars */
     initFromEvent(downX, downY, e) {
         this.dragZoneElem = this.dragZone.getElement();

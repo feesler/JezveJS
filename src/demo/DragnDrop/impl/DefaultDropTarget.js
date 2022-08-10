@@ -5,6 +5,10 @@ import { DefaultDragAvatar } from './DefaultDragAvatar.js';
  * Default drop target
  */
 export class DefaultDropTarget extends DropTarget {
+    static create(...args) {
+        return new DefaultDropTarget(...args);
+    }
+
     onDragEnd(avatar, e) {
         if (!this.targetElem || !(avatar instanceof DefaultDragAvatar)) {
             avatar.onDragCancel();

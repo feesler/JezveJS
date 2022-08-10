@@ -11,10 +11,14 @@
   --radio-checked-bg: #1e82cc;
   --radio-label-size: 16px;
 
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
   padding: 2px;
   margin: 0 12px 0 0;
   white-space: nowrap;
   cursor: pointer;
+
   input {
     display: none;
   }

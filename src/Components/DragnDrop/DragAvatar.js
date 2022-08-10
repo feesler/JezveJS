@@ -9,10 +9,23 @@ import { DragMaster } from './DragMaster.js';
  * @param {Element} dragElem - original element related to avatar
  */
 export class DragAvatar {
-    constructor(dragZone, dragElem) {
-        this.dragZone = dragZone;
-        this.dragZoneElem = dragElem;
-        this.elem = dragElem; // element of avatar
+    static create(...args) {
+        return new DragAvatar(...args);
+    }
+
+    constructor(props = {}) {
+        if (!props?.elem) {
+            throw new Error('Invalid element specified');
+        }
+        if (!props?.dragZone) {
+            throw new Error('Invalid drag zone specified');
+        }
+
+        this.props = { ...props };
+
+        this.dragZone = this.props.dragZone;
+        this.dragZoneElem = this.props.elem;
+        this.elem = this.props.elem; // element of avatar
     }
 
     /**

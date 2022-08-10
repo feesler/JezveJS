@@ -5,6 +5,10 @@ import { DragAvatar } from '../DragnDrop/DragAvatar.js';
 
 // Sortable drag avatar
 export class SortableDragAvatar extends DragAvatar {
+    static create(...args) {
+        return new SortableDragAvatar(...args);
+    }
+
     initFromEvent(downX, downY, e) {
         // Overwrite drag zone here to find exact item to manipulate
         this.dragZoneElem = this.dragZone.findDragZoneItem(e.target);
@@ -22,7 +26,7 @@ export class SortableDragAvatar extends DragAvatar {
 
         this.dragZoneElem.classList.add(this.dragZone.getPlaceholder());
 
-        if (this.dragZone.params.copyWidth) {
+        if (this.dragZone.props.copyWidth) {
             const quirks = !elem.style.getPropertyValue; // IE < 9
             const width = px(this.dragZoneElem.offsetWidth);
             if (quirks) {
