@@ -11,6 +11,10 @@ import { SortableDragAvatar } from './SortableDragAvatar.js';
 
 // Sortable drop target
 export class SortableDropTarget extends DropTarget {
+    static create(...args) {
+        return new SortableDropTarget(...args);
+    }
+
     getTargetElem(avatar, event) {
         let el = avatar.getTargetElem();
         const dragInfo = avatar.getDragInfo();

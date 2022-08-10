@@ -6,6 +6,10 @@
  * @param {Object} params - properties object
  */
 export class DropTarget {
+    static create(...args) {
+        return new DropTarget(...args);
+    }
+
     constructor(elem, params) {
         this.elem = elem;
         this.elem.dropTarget = this;

@@ -9,6 +9,10 @@ import { DragMaster } from './DragMaster.js';
  * @param {Element} dragElem - original element related to avatar
  */
 export class DragAvatar {
+    static create(...args) {
+        return new DragAvatar(...args);
+    }
+
     constructor(dragZone, dragElem) {
         this.dragZone = dragZone;
         this.dragZoneElem = dragElem;

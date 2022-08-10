@@ -36,6 +36,10 @@ const dropTargetDefaults = {
  * @param {String|String[]} props.handles - CSS selectors for available drag start handles
  */
 export class Sortable {
+    static create(...args) {
+        return new Sortable(...args);
+    }
+
     constructor(props = {}) {
         const dragZoneParam = {};
         const dropTargetParam = {};
@@ -57,7 +61,7 @@ export class Sortable {
             return;
         }
 
-        this.dragZone = new SortableDragZone(containerElem, dragZoneParam);
-        this.dropTarget = new SortableDropTarget(containerElem, dropTargetParam);
+        this.dragZone = SortableDragZone.create(containerElem, dragZoneParam);
+        this.dropTarget = SortableDropTarget.create(containerElem, dropTargetParam);
     }
 }

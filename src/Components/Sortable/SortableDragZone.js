@@ -5,6 +5,10 @@ import { DragZone } from '../DragnDrop/DragZone.js';
 
 // Sortable drag zone
 export class SortableDragZone extends DragZone {
+    static create(...args) {
+        return new SortableDragZone(...args);
+    }
+
     constructor(...args) {
         super(...args);
 
@@ -13,10 +17,10 @@ export class SortableDragZone extends DragZone {
 
     makeAvatar() {
         if (this.params.table) {
-            return new SortableTableDragAvatar(this, this.elem);
+            return SortableTableDragAvatar.create(this, this.elem);
         }
 
-        return new SortableDragAvatar(this, this.elem);
+        return SortableDragAvatar.create(this, this.elem);
     }
 
     // Drag start handler

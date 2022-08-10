@@ -8,6 +8,10 @@ import { DragMaster } from './DragMaster.js';
  * @param {Object} params - properties object
  */
 export class DragZone {
+    static create(...args) {
+        return new DragZone(...args);
+    }
+
     constructor(elem, params) {
         this.elem = elem;
         this.params = params;
