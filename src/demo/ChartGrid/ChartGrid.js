@@ -7,7 +7,6 @@ import {
     LineChart,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/common.scss';
 import '../css/app.scss';
 import '../Charts/style.scss';
 
