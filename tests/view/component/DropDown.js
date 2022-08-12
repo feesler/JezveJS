@@ -48,11 +48,11 @@ export class DropDown extends TestComponent {
 
         res.isAttached = await hasClass(this.elem, 'dd__container_attached');
         if (res.isAttached) {
-            res.selectBtn = await query(this.elem, ':scope > *');
+            res.toggleBtn = await query(this.elem, ':scope > *');
         } else {
-            res.selectBtn = await query(this.elem, '.dd__toggle-btn');
+            res.toggleBtn = await query(this.elem, '.dd__toggle-btn');
         }
-        assert(res.selectBtn, 'Select button not found');
+        assert(res.toggleBtn, 'Select button not found');
 
         res.disabled = await hasClass(this.elem, 'dd__container_disabled');
 
@@ -73,6 +73,9 @@ export class DropDown extends TestComponent {
         res.selectElem = await query(this.elem, 'select');
         res.isMulti = await prop(res.selectElem, 'multiple');
         if (res.isMulti) {
+            res.clearBtn = await query(this.elem, '.dd__clear-btn');
+            assert(res.clearBtn, 'Clear button not found');
+
             const selItemElems = await queryAll(this.elem, '.dd__selection > .dd__selection-item');
             res.selectedItems = await asyncMap(selItemElems, async (el) => {
                 const deselectBtn = await query(el, '.dd__del-selection-item-btn');
@@ -142,7 +145,7 @@ export class DropDown extends TestComponent {
             return;
         }
 
-        await click(this.content.selectBtn);
+        await click(this.content.toggleBtn);
     }
 
     async toggleItem(itemId) {
@@ -174,6 +177,13 @@ export class DropDown extends TestComponent {
 
         await this.showList();
         await click(li.elem);
+    }
+
+    async clearSelection() {
+        assert(!this.content.disabled, 'Component is disabled');
+        assert(this.content.isMulti, 'Clear selection not available for single select DropDown');
+
+        await click(this.content.clearBtn);
     }
 
     async deselectItem(itemId) {
@@ -211,13 +221,7 @@ export class DropDown extends TestComponent {
         }
 
         if (this.content.isMulti) {
-            const selectedValues = this.getSelectedValues();
-            for (const value of selectedValues) {
-                if (!values.includes(value)) {
-                    await this.deselectItem(value);
-                }
-            }
-
+            await this.clearSelection();
             await this.parse();
 
             for (const value of values) {
