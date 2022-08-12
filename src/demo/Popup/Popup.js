@@ -83,7 +83,7 @@ function showPopup3() {
             content: 'This popup is dynamically created and have only center background.',
             btn: { closeBtn: true },
             onclose: onClosePopup,
-            additional: 'center_only',
+            className: 'center_only',
         });
     }
 
@@ -100,7 +100,7 @@ function showPopup4() {
             content: 'This popup is dynamically created and doesn\'t dim page background.',
             btn: { closeBtn: true },
             onclose: onClosePopup,
-            additional: 'center_only border_popup',
+            className: ['center_only', 'border_popup'],
             nodim: true,
         });
     }
@@ -118,7 +118,7 @@ function showPopup5() {
             content: 'This popup is dynamically created and draggable.',
             btn: { closeBtn: true },
             onclose: onClosePopup,
-            additional: 'center_only border_popup draggable_popup',
+            className: ['center_only', 'border_popup', 'draggable_popup'],
             nodim: true,
         });
 
@@ -141,7 +141,7 @@ function showPopup6() {
             id: 'popup6',
             content: 'This popup is dynamically created. It has no buttons and title and will be closed only on click on empty place.',
             onclose: onClosePopup,
-            additional: 'center_only border_popup',
+            className: ['center_only', 'border_popup'],
             nodim: true,
             closeOnEmptyClick: true,
         });
@@ -159,7 +159,7 @@ function showPopup7() {
             content: 'Success message. Something created as expected.',
             onclose: onClosePopup,
             btn: { closeBtn: true },
-            additional: 'msg msg_success',
+            className: ['msg', 'msg_success'],
             nodim: true,
             closeOnEmptyClick: true,
         });
@@ -177,7 +177,7 @@ function showPopup8() {
             content: 'Error message. Fail to create something',
             onclose: onClosePopup,
             btn: { closeBtn: true },
-            additional: 'msg msg_error',
+            className: ['msg', 'msg_error'],
             nodim: true,
             closeOnEmptyClick: true,
         });
@@ -228,7 +228,7 @@ function showPopup12() {
             id: 'popup12',
             title: 'Select something',
             content: ge('template4'),
-            additional: 'center_only border_popup',
+            className: ['center_only', 'border_popup'],
             nodim: true,
             onclose: onClosePopup,
         });
@@ -290,7 +290,7 @@ function showPopup13() {
             title: 'setControls() methods test',
             content: 'After click on Remove button it and Close button will disappear and Restore button will be enabled.<br>'
                 + 'After click on Restore button Close and Remove button will appear and Restore button will be disabled.',
-            additional: 'center_only border_popup controls_test',
+            className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
             btn: {
                 okBtn: { value: 'Restore', disabled: true },
@@ -338,7 +338,7 @@ function showPopup14() {
             id: 'popup14',
             title: 'setTitle() method test',
             content: 'This popup is able to change its title.<br>',
-            additional: 'center_only border_popup controls_test',
+            className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
             btn: {
                 okBtn: { value: 'Change title' },
@@ -389,7 +389,7 @@ function showPopup15() {
             id: 'popup15',
             title: 'setContent() method test',
             content: 'This popup is able to change its content.',
-            additional: 'center_only border_popup controls_test',
+            className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
             btn: {
                 okBtn: { value: 'String', disabled: true },
