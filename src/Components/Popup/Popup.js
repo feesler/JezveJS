@@ -27,6 +27,7 @@ const CLOSE_BTN_CLASS = 'close-btn';
 const CLOSE_ICON_CLASS = 'close-btn__icon';
 const NO_DIM_CLASS = 'nodim';
 const MESSAGE_CLASS = 'popup__message';
+const HEADER_CLASS = 'popup__header';
 const TITLE_CLASS = 'popup__title';
 const CONTROLS_CLASS = 'popup__controls';
 const SUBMIT_BTN_CLASS = 'btn submit-btn';
@@ -49,6 +50,10 @@ const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2
  * @param {Object|false} params.btn.closeBtn - properties object. Remove if false
  */
 export class Popup extends Component {
+    static create(props) {
+        return new Popup(props);
+    }
+
     constructor(...args) {
         super(...args);
 
@@ -87,7 +92,10 @@ export class Popup extends Component {
 
         this.setClassNames();
 
+        this.headerElem = ce('div', { className: HEADER_CLASS });
+
         prependChild(this.boxElem, this.messageElem);
+        prependChild(this.boxElem, this.headerElem);
         this.setTitle(this.props.title);
         this.setControls(this.props.btn);
         show(this.messageElem, true);
@@ -149,13 +157,19 @@ export class Popup extends Component {
             return;
         }
 
+        const icon = svg(
+            'svg',
+            { class: CLOSE_ICON_CLASS, viewBox: '0,0,14,14' },
+            svg('path', { d: CLOSE_ICON }),
+        );
+
         this.closeBtn = ce(
             'button',
             { className: CLOSE_BTN_CLASS, type: 'button' },
-            svg('svg', { class: CLOSE_ICON_CLASS }, svg('path', { d: CLOSE_ICON })),
-            { click: this.close.bind(this) },
+            icon,
+            { click: () => this.close() },
         );
-        this.boxElem.appendChild(this.closeBtn);
+        this.headerElem.append(this.closeBtn);
     }
 
     // Remove close button
@@ -194,7 +208,7 @@ export class Popup extends Component {
 
         if (!this.titleElem) {
             this.titleElem = ce('h1', { className: TITLE_CLASS });
-            prependChild(this.boxElem, this.titleElem);
+            prependChild(this.headerElem, this.titleElem);
         }
 
         this.titleElem.textContent = title;
@@ -272,15 +286,5 @@ export class Popup extends Component {
         }
 
         return true;
-    }
-
-    /** Static alias for Popup constructor */
-    static create(props) {
-        try {
-            return new Popup(props);
-        } catch (e) {
-            console.error(e);
-            return null;
-        }
     }
 }

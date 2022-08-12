@@ -54,6 +54,15 @@
     background: none;
   }
 
+  .popup__header {
+    position: absolute;
+    right: 15px;
+    top: 17px;
+    width: 18px;
+    height: 18px;
+    z-index: 3;
+  }
+
   .popup__message {
     max-width: 300px;
     min-width: 200px;
