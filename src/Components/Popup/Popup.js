@@ -119,8 +119,9 @@ export class Popup extends Component {
             return;
         }
 
-        document.body.style.overflow = 'hidden';
-        document.documentElement.scrollTop = 0;
+        if (this.props.nodim !== true) {
+            document.body.style.overflow = 'hidden';
+        }
         show(this.elem, true);
 
         if (this.props.closeOnEmptyClick === true) {
@@ -136,7 +137,9 @@ export class Popup extends Component {
         }
 
         show(this.elem, false);
-        document.body.style.overflow = '';
+        if (this.props.nodim !== true) {
+            document.body.style.overflow = '';
+        }
 
         if (this.props.closeOnEmptyClick === true) {
             removeEmptyClick(this.emptyClickHandler);
