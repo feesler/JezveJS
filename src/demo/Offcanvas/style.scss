@@ -1,0 +1,52 @@
+.offcanvas-nav {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  padding: 24px;
+}
+
+.offcanvas-nav li {
+  margin: 0 0 6px 0;
+  list-style-type: none;
+  white-space: nowrap;
+}
+
+.offcanvas-horizontal-nav {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 100%;
+  padding: 24px;
+}
+
+.offcanvas-horizontal-nav li {
+  margin: 0 12px 0 0;
+  list-style-type: none;
+  white-space: nowrap;
+}
+
+.offcanvas.offcanvas-responsive {
+  box-sizing: border-box;
+  width: 200px;
+  top: 66px;
+  padding: 10px;
+  background-color: #efefef;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .page-content-wrap {
+    padding: 65px 12px 50px 212px;
+  }
+
+  .offcanvas.offcanvas-responsive {
+    --offcanvas-z: 1500;
+  }
+
+  .offcanvas-responsive.offcanvas--closed {
+    transform: translateX(0);
+  }
+
+  .offcanvas-responsive + .offcanvas__bg {
+    display: none;
+  }
+}
