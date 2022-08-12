@@ -24,6 +24,7 @@ export default {
         DragAvatar: './src/Components/DragnDrop/DragAvatar.js',
         DragZone: './src/Components/DragnDrop/DragZone.js',
         DropTarget: './src/Components/DragnDrop/DropTarget.js',
+        InputGroup: './src/Components/InputGroup/InputGroup.js',
         Sortable: './src/Components/Sortable/Sortable.js',
         Histogram: './src/Components/Charts/Histogram.js',
         LineChart: './src/Components/Charts/LineChart.js',
@@ -89,6 +90,10 @@ export default {
         },
         emptyClickDemo: {
             import: './src/demo/EmptyClick/EmptyClick.js',
+            filename: 'demo/js/[name].[fullhash].js',
+        },
+        inputGroupDemo: {
+            import: './src/demo/InputGroup/InputGroup.js',
             filename: 'demo/js/[name].[fullhash].js',
         },
         paginatorDemo: {
@@ -227,6 +232,12 @@ export default {
             template: 'src/demo/EmptyClick/emptyclick.html',
             filename: 'demo/emptyclick.html',
             chunks: ['polyfills', 'emptyClickDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/InputGroup/inputgroup.html',
+            filename: 'demo/inputgroup.html',
+            chunks: ['polyfills', 'inputGroupDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({

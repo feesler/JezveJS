@@ -1,3 +1,92 @@
+.controls {
+  padding: 10px 0;
+}
+
+.btn {
+  padding: 3px 10px;
+  background-color: #44aaff;
+  color: #ffffff;
+}
+
+.results,
+.testview,
+.ph {
+  display: inline-block;
+  float: left;
+  height: 100%;
+}
+
+/* Test view */
+.testview {
+  width: 50%;
+  max-height: 730px;
+  overflow: hidden;
+}
+
+.tbl_container {
+  max-height: 700px;
+  overflow-y: auto;
+
+  table {
+    border-collapse: collapse;
+  }
+
+  td {
+    border: 1px solid #000000;
+    padding: 5px;
+  }
+}
+
+/* Admin table */
+.adm_tbl {
+  border-collapse: collapse;
+  border: 1px solid #000000;
+
+  th,
+  td {
+    border: 1px solid #000000;
+    padding: 5px;
+  }
+
+  tr {
+    cursor: pointer;
+  }
+
+  tr:hover td {
+    background-color: #bbbbbb;
+  }
+}
+
+.counter_tbl {
+  display: inline;
+  border: 0 none;
+
+  td.title {
+    border-right: 0 none;
+  }
+
+  td.title + td {
+    border-left: 0 none;
+  }
+}
+
+.results {
+  width: 40%;
+}
+
+.res-block-1 {
+  background-color: #005588;
+  color: #ffffff;
+}
+
+.res-block-2 {
+  background-color: #0099bb;
+}
+
+.res-block-3 {
+  background-color: #22ccff;
+}
+
 .container {
   padding: 5px;
 }

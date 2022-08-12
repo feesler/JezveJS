@@ -8,7 +8,6 @@ import {
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
 import '../../css/common.scss';
-import '../css/common.scss';
 import '../css/app.scss';
 import './style.scss';
 

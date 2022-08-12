@@ -10,7 +10,11 @@ onReady(() => {
         const { origin } = window.location;
         if (origin.includes('jezve.net')) {
             envOptions.appPath = '/jezvejs/';
+        } else if (origin.includes('localtest')) {
+            envOptions.appPath = '/jezvejs/dist/';
         }
+
+        envOptions.container = document.getElementById('testscontainer');
 
         environment.init(envOptions);
     });

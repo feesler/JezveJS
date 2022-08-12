@@ -8,7 +8,6 @@ import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import '../../css/common.scss';
-import '../css/common.scss';
 import '../css/app.scss';
 import './style.scss';
 

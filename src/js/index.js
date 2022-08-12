@@ -18,6 +18,7 @@ export { DragAvatar } from '../Components/DragnDrop/DragAvatar.js';
 export { DragZone } from '../Components/DragnDrop/DragZone.js';
 export { DropTarget } from '../Components/DragnDrop/DropTarget.js';
 export { DropDown } from '../Components/DropDown/DropDown.js';
+export { InputGroup } from '../Components/InputGroup/InputGroup.js';
 export { Paginator } from '../Components/Paginator/Paginator.js';
 export { PieChart } from '../Components/PieChart/PieChart.js';
 export { Popup } from '../Components/Popup/Popup.js';

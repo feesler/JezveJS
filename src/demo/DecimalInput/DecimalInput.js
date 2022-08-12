@@ -1,6 +1,5 @@
 import { ge, onReady, DecimalInput } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/common.scss';
 import '../css/app.scss';
 
 const initDefault = () => {
