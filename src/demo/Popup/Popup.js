@@ -125,8 +125,8 @@ function showPopup5() {
         const contentObj = popupArr[ind].contentElem;
         const boxObj = popupArr[ind].boxElem;
         if (contentObj && boxObj) {
-            this.popup5Zone = PopupDragZone.create(boxObj);
-            this.popup5Target = PopupDropTarget.create(contentObj);
+            this.popup5Zone = PopupDragZone.create({ elem: boxObj });
+            this.popup5Target = PopupDropTarget.create({ elem: contentObj });
         }
     }
 
