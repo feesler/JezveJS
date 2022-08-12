@@ -1,7 +1,10 @@
-.offcanvas {
+.offcanvas,
+.offcanvas__bg {
   --offcanvas-bg: #ffffff;
   --offcanvas-z: 2000;
+}
 
+.offcanvas {
   display: flex;
   flex-flow: column nowrap;
   position: fixed;
