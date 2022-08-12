@@ -61,23 +61,34 @@
   background: none;
 }
 
+/* Header */
+.popup__header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+
+.popup__title {
+  padding: 0;
+}
+
 /* Close button */
 .popup .close-btn,
 .popup__content-box.dragging .close-btn {
-  position: absolute;
   overflow: hidden;
-  top: 10px;
-  right: 10px;
-  height: 14px;
-  width: 14px;
+  margin-left: auto;
+  height: 18px;
+  width: 18px;
   border: 0 none;
   cursor: pointer;
   background: none;
 }
 
-.close-btn > svg {
-  width: 14px;
-  height: 14px;
+.close-btn__icon {
+  width: 18px;
+  height: 18px;
   fill: var(--popup-close-btn);
 }
 
@@ -87,7 +98,7 @@
 }
 
 @media (hover: hover) {
-  .close-btn:hover > svg {
+  .close-btn:hover .close-btn__icon {
     fill: var(--popup-close-btn-hover);
   }
 }

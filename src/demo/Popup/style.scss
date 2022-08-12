@@ -1,7 +1,9 @@
 /* Custom styles */
 .center_only {
-  background: none;
-  padding: 10px;
+  .popup__content {
+    background: none;
+    padding: 10px;
+  }
 
   .popup__content-box {
     background-color: #ffffff;
@@ -16,15 +18,17 @@
 }
 
 /* Draggable popup */
-.popup__content.draggable_popup {
-  height: 100%;
-  position: relative;
-}
+.draggable_popup {
+  .popup__content {
+    height: 100%;
+    position: relative;
+  }
 
-.popup__content.draggable_popup .popup__content-box {
-  position: absolute;
-  border: 1px solid #000000;
-  background-color: #eeffff;
+  .popup__content-box {
+    position: absolute;
+    border: 1px solid #000000;
+    background-color: #eeffff;
+  }
 }
 
 .popup__content-box.dragging {
@@ -36,16 +40,27 @@
 }
 
 /* Message popups */
-.popup .popup__content.msg {
-  background: none;
-  margin-top: 70px;
-  align-self: baseline;
+.popup.msg {
+  .popup__content {
+    background: none;
+    margin-top: 70px;
+    align-self: baseline;
+  }
 
   .popup__content-box {
     padding: 0;
     max-width: 824px;
     width: 100%;
     background: none;
+  }
+
+  .popup__header {
+    position: absolute;
+    right: 15px;
+    top: 17px;
+    width: 18px;
+    height: 18px;
+    z-index: 3;
   }
 
   .popup__message {

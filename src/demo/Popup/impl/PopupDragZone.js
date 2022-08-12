@@ -8,6 +8,6 @@ export class PopupDragZone extends DragZone {
     }
 
     makeAvatar() {
-        return new PopupDragAvatar(this, this.elem);
+        return PopupDragAvatar.create({ dragZone: this, elem: this.elem });
     }
 }
