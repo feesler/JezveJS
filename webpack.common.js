@@ -28,6 +28,7 @@ export default {
         Sortable: './src/Components/Sortable/Sortable.js',
         Histogram: './src/Components/Charts/Histogram.js',
         LineChart: './src/Components/Charts/LineChart.js',
+        Offcanvas: './src/Components/Offcanvas/Offcanvas.js',
         Paginator: './src/Components/Paginator/Paginator.js',
         PieChart: './src/Components/PieChart/PieChart.js',
         Popup: './src/Components/Popup/Popup.js',
@@ -94,6 +95,10 @@ export default {
         },
         inputGroupDemo: {
             import: './src/demo/InputGroup/InputGroup.js',
+            filename: 'demo/js/[name].[fullhash].js',
+        },
+        offcanvasDemo: {
+            import: './src/demo/Offcanvas/Offcanvas.js',
             filename: 'demo/js/[name].[fullhash].js',
         },
         paginatorDemo: {
@@ -238,6 +243,12 @@ export default {
             template: 'src/demo/InputGroup/inputgroup.html',
             filename: 'demo/inputgroup.html',
             chunks: ['polyfills', 'inputGroupDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/Offcanvas/offcanvas.html',
+            filename: 'demo/offcanvas.html',
+            chunks: ['polyfills', 'offcanvasDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({

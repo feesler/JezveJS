@@ -44,7 +44,7 @@ body {
 }
 
 .page-content-wrap {
-  padding: 12px;
+  padding: 65px 12px 50px 12px
 }
 
 /* Typography */
@@ -91,13 +91,22 @@ h3 {
 
 /* Navigation */
 .nav-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 12px;
+  height: 65px;
+  box-sizing: border-box;
   background-color: #404040;
   color: #ffffff;
-  padding: 12px;
 }
 
 .nav-header__logo {
-  padding: 6px 0;
+  padding: 0;
 
   > a {
     text-decoration: none;

@@ -1,0 +1,63 @@
+.offcanvas {
+  --offcanvas-bg: #ffffff;
+  --offcanvas-z: 2000;
+
+  display: flex;
+  flex-flow: column nowrap;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+  z-index: var(--offcanvas-z);
+  transition: transform 0.1s ease;
+  background-color: var(--offcanvas-bg);
+}
+
+.offcanvas--right {
+  left: auto;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.offcanvas--top {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: auto;
+}
+
+.offcanvas--bottom {
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+}
+
+.offcanvas--closed {
+  transform: translateX(-100%);
+}
+
+.offcanvas--right.offcanvas--closed {
+  transform: translateX(100%);
+}
+
+.offcanvas--top.offcanvas--closed {
+  transform: translateY(-100%);
+}
+
+.offcanvas--bottom.offcanvas--closed {
+  transform: translateY(100%);
+}
+
+.offcanvas__bg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--offcanvas-z) - 1);
+}
