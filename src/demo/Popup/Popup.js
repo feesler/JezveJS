@@ -312,10 +312,16 @@ function showPopup13() {
 function toggleTitle() {
     if (this.titleState === 1) {
         this.titleState = 2;
-        this.setTitle('Multiple case popup');
+
+        const elementTitle = ce('div', { className: 'element-title' }, [
+            ce('button', { className: 'element-title__btn', innerHTML: '&#10004;' }),
+            ce('span', { textContent: 'Element title' }),
+        ]);
+
+        this.setTitle(elementTitle);
     } else {
         this.titleState = 1;
-        this.setTitle('Single case popup');
+        this.setTitle('String title');
     }
     this.setControls({ cancelBtn: { disabled: false } });
 }
