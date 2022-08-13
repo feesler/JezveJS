@@ -12,6 +12,7 @@ import {
     show,
     setEmptyClick,
     removeEmptyClick,
+    removeChilds,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -206,6 +207,7 @@ export class Popup extends Component {
 
     setTitle(title) {
         if (!title) {
+            this.removeTitle();
             return;
         }
 
@@ -214,7 +216,12 @@ export class Popup extends Component {
             prependChild(this.headerElem, this.titleElem);
         }
 
-        this.titleElem.textContent = title;
+        if (typeof title === 'string') {
+            this.titleElem.textContent = title;
+        } else {
+            removeChilds(this.titleElem);
+            this.titleElem.append(title);
+        }
     }
 
     removeTitle() {
