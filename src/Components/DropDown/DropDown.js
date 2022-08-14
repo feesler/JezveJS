@@ -907,14 +907,6 @@ export class DropDown extends Component {
         return this.listElem.querySelector(`[data-id="${id}"]`);
     }
 
-    /** Return count of items to show at drop down list */
-    getListHeight(state = this.state) {
-        return Math.min(
-            state.maxHeight,
-            (state.filtered) ? state.filteredCount : state.items.length,
-        );
-    }
-
     /** Calculate height, vertical and horizontal offset of list element */
     calculatePosition(state) {
         if (isVisible(this.selectElem, true)) {
@@ -937,7 +929,7 @@ export class DropDown extends Component {
             const [visibleItem] = visibleItems;
             const visibleElem = this.getListItemElem(visibleItem.id);
             const itemHeight = parseInt(visibleElem.offsetHeight, 10);
-            const itemsToShow = this.getListHeight(state);
+            const itemsToShow = Math.min(state.maxHeight, visibleItems.length);
             listHeight = itemsToShow * itemHeight;
         }
 
@@ -1672,7 +1664,7 @@ export class DropDown extends Component {
             id: props.id.toString(),
             title: props.title,
             selected: props.selected,
-            hidden: false,
+            hidden: props.hidden,
             disabled: props.disabled,
             active: false,
             group: props.group,
