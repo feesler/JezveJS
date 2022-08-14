@@ -57,20 +57,19 @@ export class Scenario {
         await DropDownTests.selectTest('halfWidthDropDown', '2');
 
         await test('Parse select',
-            () => App.view.content.parsedSelDropDown.content.textValue === 'Item 1');
+            () => App.view.content.parsedSelDropDown.textValue === 'Item 1');
 
         await DropDownTests.selectTest('parsedSelDropDown', '3');
         await test('Selected value update',
-            () => App.view.content.parsedSelDropDown.content.textValue === 'Item 3');
+            () => App.view.content.parsedSelDropDown.textValue === 'Item 3');
 
         await test('Parse select with selected option',
-            () => App.view.content.parsedSelSelectedDropDown.content.textValue === 'Item 3');
+            () => App.view.content.parsedSelSelectedDropDown.textValue === 'Item 3');
         await DropDownTests.selectTest('parsedSelDropDown', '5');
 
-        await test('Attached to block element',
-            async () => !(await isVisible(
-                App.view.content.attachedToBlockDropDown.content.listContainer, true,
-            )));
+        await test('Attached to block element', () => (
+            !App.view.content.attachedToBlockDropDown.listContainer?.visible
+        ));
         await DropDownTests.selectTest('attachedToBlockDropDown', '2');
 
         await test('Attached to inline element',
@@ -86,7 +85,7 @@ export class Scenario {
         ];
 
         await test('Multi select Drop Down',
-            () => App.view.content.multiSelDropDown.content.isMulti
+            () => App.view.content.multiSelDropDown.multiple
                 && assert.deepMeet(
                     App.view.content.multiSelDropDown.content.selectedItems,
                     expectedSelectedItems,

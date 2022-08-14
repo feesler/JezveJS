@@ -125,6 +125,26 @@ export class DropDown extends TestComponent {
         return res;
     }
 
+    get disabled() {
+        return this.content.disabled;
+    }
+
+    get value() {
+        return this.content.value;
+    }
+
+    get textValue() {
+        return this.content.textValue;
+    }
+
+    get attached() {
+        return this.content.isAttached;
+    }
+
+    get multiple() {
+        return this.content.isMulti;
+    }
+
     getItem(itemId) {
         const strId = itemId.toString();
 

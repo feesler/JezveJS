@@ -1,4 +1,4 @@
-import { query } from 'jezve-test';
+import { query, assert } from 'jezve-test';
 import { DropDown } from './component/DropDown.js';
 import { AppView } from './AppView.js';
 
@@ -31,28 +31,60 @@ export class DropDownView extends AppView {
 
         res.fullscreenDropDown = await DropDown.createFromChild(this, await query('#selinp12'));
 
-        if (
-            !res.inlineDropDown
-            || !res.editableInlineDropDown
-            || !res.fullWidthDropDown
-            || !res.halfWidthDropDown
-            || !res.parsedSelDropDown
-            || !res.parsedSelSelectedDropDown
-            || !res.attachedToBlockDropDown
-            || !res.attachedToInlineDropDown
-            || !res.multiSelDropDown
-            || !res.genMultiSelDropDown
-            || !res.disabledDropDown
-            || !res.enableBtn
-            || !res.filterDropDown
-            || !res.customDropDown
-            || !res.nativeSelDropDown
-            || !res.enableBtn2
-            || !res.fullscreenDropDown
-        ) {
-            throw new Error('Invalid view');
-        }
+        res.dynamicDropDown = await DropDown.createFromChild(this, await query('#dynamicSel'));
+        res.addItemBtn = await query('#addBtn');
+        res.addDisabledItemBtn = await query('#addDisBtn');
+        res.addHiddenItemBtn = await query('#addHiddenBtn');
+        res.delLastItemBtn = await query('#delBtn');
+        res.delAllItemsBtn = await query('#delAllBtn');
+
+        assert(
+            res.inlineDropDown
+            && res.editableInlineDropDown
+            && res.fullWidthDropDown
+            && res.halfWidthDropDown
+            && res.parsedSelDropDown
+            && res.parsedSelSelectedDropDown
+            && res.attachedToBlockDropDown
+            && res.attachedToInlineDropDown
+            && res.multiSelDropDown
+            && res.genMultiSelDropDown
+            && res.disabledDropDown
+            && res.enableBtn
+            && res.filterDropDown
+            && res.customDropDown
+            && res.nativeSelDropDown
+            && res.enableBtn2
+            && res.fullscreenDropDown
+            && res.dynamicDropDown
+            && res.addItemBtn
+            && res.addDisabledItemBtn
+            && res.addHiddenItemBtn
+            && res.delLastItemBtn
+            && res.delAllItemsBtn,
+            'Invalid view',
+        );
 
         return res;
+    }
+
+    async addItem() {
+        await click(this.parseContent.addItemBtn);
+    }
+
+    async addDisabledItem() {
+        await click(this.parseContent.addDisabledItemBtn);
+    }
+
+    async addHiddenItem() {
+        await click(this.parseContent.addHiddenItemBtn);
+    }
+
+    async removeLastItem() {
+        await click(this.parseContent.delLastItemBtn);
+    }
+
+    async removeAllItems() {
+        await click(this.parseContent.delAllItemsBtn);
     }
 }
