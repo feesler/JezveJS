@@ -395,29 +395,36 @@ const dynamicAddRemoveItems = () => {
     }
 
     const addDisabledBtn = ge('addDisBtn');
-    if (addDisabledBtn) {
-        addDisabledBtn.addEventListener('click', () => {
-            const itemId = dynamicDropDown.items.length + 1;
-            dynamicDropDown.addItem({
-                id: itemId,
-                title: `Item ${itemId}`,
-                disabled: true,
-            });
+    addDisabledBtn.addEventListener('click', () => {
+        const itemId = dynamicDropDown.items.length + 1;
+        dynamicDropDown.addItem({
+            id: itemId,
+            title: `Item ${itemId}`,
+            disabled: true,
         });
-    }
+    });
+
+    const addHiddenBtn = ge('addHiddenBtn');
+    addHiddenBtn.addEventListener('click', () => {
+        const itemId = dynamicDropDown.items.length + 1;
+        dynamicDropDown.addItem({
+            id: itemId,
+            title: `Item ${itemId}`,
+            disabled: true,
+            hidden: true,
+        });
+    });
 
     const delBtn = ge('delBtn');
-    if (delBtn) {
-        delBtn.addEventListener('click', () => {
-            const itemsCount = dynamicDropDown.items.length;
-            if (!itemsCount) {
-                return;
-            }
+    delBtn.addEventListener('click', () => {
+        const itemsCount = dynamicDropDown.items.length;
+        if (!itemsCount) {
+            return;
+        }
 
-            const item = dynamicDropDown.items[itemsCount - 1];
-            dynamicDropDown.removeItem(item.id);
-        });
-    }
+        const item = dynamicDropDown.items[itemsCount - 1];
+        dynamicDropDown.removeItem(item.id);
+    });
 
     const delAllBtn = ge('delAllBtn');
     if (delAllBtn) {
