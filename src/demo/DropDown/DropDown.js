@@ -121,7 +121,6 @@ const initStandardInline = () => {
     DropDown.create({
         elem: 'selinp2',
         maxHeight: 6,
-        editable: true,
         placeholder: 'Select item 2',
         data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
     });
@@ -133,7 +132,6 @@ const initStandardStretch = () => {
     DropDown.create({
         elem: 'selinp3',
         className: 'dd_stretch',
-        editable: true,
         placeholder: 'Select item 3',
         data: initItems('Item', 10),
     });
@@ -142,7 +140,6 @@ const initStandardStretch = () => {
     DropDown.create({
         elem: 'selinp4',
         className: 'dd_stretch',
-        editable: true,
         placeholder: 'Select item 4',
         data: initItems('Item', 10),
         onitemselect(selection) {
@@ -158,7 +155,6 @@ const initStandardStretch = () => {
 const initParseSingleNoSelection = () => {
     DropDown.create({
         elem: 'sel0',
-        editable: true,
         placeholder: 'Select item 5',
     });
 };
@@ -167,7 +163,6 @@ const initParseSingleNoSelection = () => {
 const initParseSingleWithSelection = () => {
     DropDown.create({
         elem: 'sel',
-        editable: true,
         placeholder: 'Select item 5',
     });
 };
@@ -362,7 +357,6 @@ const fullScreen = () => {
         elem: 'selinp12',
         placeholder: 'Full screen',
         fullScreen: true,
-        editable: true,
     });
 };
 
