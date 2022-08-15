@@ -114,7 +114,6 @@ function logTo(target, value) {
 const initStandardInline = () => {
     DropDown.create({
         elem: 'selinp',
-        editable: false,
         placeholder: 'Select item',
         data: initItems('Item', 10),
     });
@@ -177,7 +176,6 @@ const initParseSingleWithSelection = () => {
 const initParseDisabledOptions = () => {
     DropDown.create({
         elem: 'disabledopt',
-        editable: false,
     });
 };
 
@@ -185,7 +183,6 @@ const initParseDisabledOptions = () => {
 const initParseOptGroups = () => {
     DropDown.create({
         elem: 'optgroupssel',
-        editable: false,
     });
 };
 
@@ -193,7 +190,6 @@ const initParseOptGroups = () => {
 const dynamicOptGroups = () => {
     const groupsDropDown = DropDown.create({
         elem: 'optgroupsdyn',
-        editable: false,
         data: initItems('Visible item', 3),
     });
     const customGroup = groupsDropDown.addGroup('Hidden');
@@ -208,7 +204,6 @@ const attachToBlockElement = () => {
     DropDown.create({
         elem: 'box',
         listAttach: true,
-        editable: false,
         data: initItems('Long Item Lorem Lorem', 10),
     });
 };
@@ -252,7 +247,6 @@ const dynamicMultipleSelect = () => {
         onitemselect(selection) {
             logTo('log-genmulti', `itemselect: ${formatObject(selection)}`);
         },
-        editable: false,
         multi: true,
         onchange(selection) {
             logTo('log-genmulti', `change: ${formatObject(selection)}`);
@@ -345,14 +339,12 @@ const useNativeSelect = () => {
         elem: 'selinp11single',
         placeholder: 'Use native select',
         useNativeSelect: true,
-        editable: false,
     });
     // Dynamic single select
     DropDown.create({
         elem: 'nativeGenerated',
         placeholder: 'Use native select',
         useNativeSelect: true,
-        editable: false,
         data: initItems('Item', 5),
     });
     // Multiple select
@@ -360,7 +352,6 @@ const useNativeSelect = () => {
         elem: 'selinp11',
         placeholder: 'Use native select',
         useNativeSelect: true,
-        editable: false,
     });
 };
 
@@ -379,7 +370,6 @@ const dynamicAddRemoveItems = () => {
     const dynamicDropDown = DropDown.create({
         elem: 'dynamicSel',
         placeholder: 'Dynamic Drop Down',
-        editable: false,
         multi: true,
     });
 

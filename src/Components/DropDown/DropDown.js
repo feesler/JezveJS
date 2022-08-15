@@ -63,7 +63,7 @@ const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 const defaultProps = {
     multi: false,
     listAttach: false,
-    editable: true,
+    editable: false,
     disabled: false,
     useNativeSelect: false,
     fullScreen: false,
