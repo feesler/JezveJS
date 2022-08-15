@@ -297,13 +297,17 @@ const parseDisabledMultiSelect = () => {
 
 // Built-in items filter
 const dynamicBuiltinFilter = () => {
-    DropDown.create({
+    const filterDropDown = DropDown.create({
         elem: 'selinp8',
-        oninput: true,
-        editable: true,
+        enableFilter: true,
         placeholder: 'Type to filter',
         data: initItems('Filter item', 100),
     });
+
+    const enableBtn = ge('enableFilterBtn')
+    if (enableBtn) {
+        enableBtn.addEventListener('click', toggleEnable.bind(filterDropDown));
+    }
 };
 
 // Custom render drop down
