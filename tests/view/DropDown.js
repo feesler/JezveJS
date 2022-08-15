@@ -1,4 +1,4 @@
-import { query, assert } from 'jezve-test';
+import { query, click, assert } from 'jezve-test';
 import { DropDown } from './component/DropDown.js';
 import { AppView } from './AppView.js';
 
@@ -69,22 +69,22 @@ export class DropDownView extends AppView {
     }
 
     async addItem() {
-        await click(this.parseContent.addItemBtn);
+        return this.performAction(() => click(this.content.addItemBtn));
     }
 
     async addDisabledItem() {
-        await click(this.parseContent.addDisabledItemBtn);
+        return this.performAction(() => click(this.content.addDisabledItemBtn));
     }
 
     async addHiddenItem() {
-        await click(this.parseContent.addHiddenItemBtn);
+        return this.performAction(() => click(this.content.addHiddenItemBtn));
     }
 
     async removeLastItem() {
-        await click(this.parseContent.delLastItemBtn);
+        return this.performAction(() => click(this.content.delLastItemBtn));
     }
 
     async removeAllItems() {
-        await click(this.parseContent.delAllItemsBtn);
+        return this.performAction(() => click(this.content.delAllItemsBtn));
     }
 }

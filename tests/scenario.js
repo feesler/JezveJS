@@ -99,5 +99,7 @@ export class Scenario {
             )));
 
         await DropDownTests.deselectTest('multiSelDropDown', '5');
+
+        await DropDownTests.addRemoveItemsTest();
     }
 }

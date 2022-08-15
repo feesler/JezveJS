@@ -101,14 +101,16 @@ export class DropDown extends TestComponent {
             id: await prop(item, 'value'),
             title: await prop(item, 'textContent'),
             selected: await prop(item, 'selected'),
+            disabled: await prop(item, 'disabled'),
         }));
 
         res.listContainer = await query(this.elem, '.dd__list');
         if (res.listContainer) {
-            const listItems = await queryAll(this.elem, '.dd__list li > div');
+            const listItems = await queryAll(this.elem, '.dd__list li');
             res.items = await asyncMap(listItems, async (item) => {
                 const listItem = {
                     text: await prop(item, 'textContent'),
+                    hidden: await prop(item, 'hidden'),
                     elem: item,
                 };
 
@@ -116,6 +118,7 @@ export class DropDown extends TestComponent {
                 if (option) {
                     listItem.id = option.id;
                     listItem.selected = option.selected;
+                    listItem.disabled = option.disabled;
                 }
 
                 return listItem;
@@ -145,6 +148,10 @@ export class DropDown extends TestComponent {
         return this.content.isMulti;
     }
 
+    get items() {
+        return this.content.items;
+    }
+
     getItem(itemId) {
         const strId = itemId.toString();
 
@@ -155,6 +162,14 @@ export class DropDown extends TestComponent {
         const strId = itemId.toString();
 
         return this.content.selectedItems.find((item) => item.id === strId);
+    }
+
+    getSelectedItems() {
+        return this.content.items.filter((item) => item.selected);
+    }
+
+    getSelectedValues() {
+        return this.getSelectedItems().map((item) => item.id);
     }
 
     async showList(show = true) {
@@ -264,13 +279,5 @@ export class DropDown extends TestComponent {
         }
 
         await this.showList(false);
-    }
-
-    getSelectedItems() {
-        return this.content.items.filter((item) => item.selected);
-    }
-
-    getSelectedValues() {
-        return this.getSelectedItems().map((item) => item.id);
     }
 }
