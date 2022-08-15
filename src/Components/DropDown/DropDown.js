@@ -274,28 +274,26 @@ export class DropDown extends Component {
 
         if (this.hostElem.tagName === 'SELECT') {
             this.selectElem = this.hostElem;
-            if (this.hostElem.multiple) {
+            if (this.selectElem.multiple) {
                 this.props.multi = true;
             }
 
-            if (this.hostElem.disabled) {
+            if (this.selectElem.disabled) {
                 this.state.disabled = true;
                 this.state.editable = false;
             }
 
-            insertAfter(this.elem, this.hostElem);
+            insertAfter(this.elem, this.selectElem);
             this.inputElem = ce('input', { type: 'text' });
         } else {
             insertAfter(this.elem, this.hostElem);
             this.inputElem = re(this.hostElem);
 
             this.selectElem = ce('select');
-            if (this.props.multi) {
-                this.selectElem.multiple = true;
-            }
         }
 
         if (this.props.multi) {
+            this.selectElem.multiple = true;
             this.elem.classList.add(MULTIPLE_CLASS);
         }
     }
