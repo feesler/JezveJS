@@ -9,7 +9,7 @@ import '../../css/common.scss';
 import '../css/app.scss';
 import './style.scss';
 
-function initItems(title, count) {
+const initItems = (title, count) => {
     const res = [];
 
     for (let ind = 1; ind < count; ind += 1) {
@@ -17,15 +17,15 @@ function initItems(title, count) {
     }
 
     return res;
-}
+};
 
 /** Test enable\disable feature */
-function toggleEnable(e) {
-    const btn = e.target;
+const toggleEnable = (e, dropDown) => {
+    const button = e.target;
 
-    this.enable(!!this.disabled);
-    btn.value = (this.disabled) ? 'Enable' : 'Disable';
-}
+    dropDown.enable(dropDown.disabled);
+    button.value = (dropDown.disabled) ? 'Enable' : 'Disable';
+};
 
 const customColorsMap = {
     1: 'dd__custom-list-item_blue',
@@ -35,7 +35,7 @@ const customColorsMap = {
     5: 'dd__custom-list-item_pink',
 };
 
-function renderCustomItem(item) {
+const renderCustomItem = (item) => {
     const colorClass = customColorsMap[item.id];
     const colorElem = ce('span', { className: `dd__custom-list-item_color ${colorClass}` });
     const titleElem = ce('span', {
@@ -59,9 +59,9 @@ function renderCustomItem(item) {
     }
 
     return elem;
-}
+};
 
-function renderCustomSelectionItem(item) {
+const renderCustomSelectionItem = (item) => {
     const deselectButton = ce('span', { className: 'dd__del-selection-item-btn' });
     deselectButton.addEventListener('click', this.delSelectItemHandler);
 
@@ -73,17 +73,9 @@ function renderCustomSelectionItem(item) {
             ce('span', { innerText: item.title.toLowerCase() }),
         ],
     );
-}
+};
 
-/** Test enable\disable feature */
-function toggleEnable2(e) {
-    const btn = e.target;
-
-    this.enable(!!this.disabled);
-    btn.value = (this.disabled) ? 'Enable' : 'Disable';
-}
-
-function formatObject(value) {
+const formatObject = (value) => {
     let entries;
 
     if (Array.isArray(value)) {
@@ -99,16 +91,16 @@ function formatObject(value) {
     }
 
     return value.toString();
-}
+};
 
-function logTo(target, value) {
+const logTo = (target, value) => {
     const elem = (typeof target === 'string') ? ge(target) : target;
     if (!elem) {
         return;
     }
 
     elem.value += `${value}\r\n`;
-}
+};
 
 // Standard inline drop down
 const initStandardInline = () => {
@@ -274,10 +266,8 @@ const parseDisabledSingleSelect = () => {
         placeholder: 'Multi select control',
     });
 
-    const enableSingleBtn = ge('enableSingleBtn');
-    if (enableSingleBtn) {
-        enableSingleBtn.addEventListener('click', toggleEnable.bind(disabledSingleDropDown));
-    }
+    const enableBtn = ge('enableSingleBtn');
+    enableBtn.addEventListener('click', (e) => toggleEnable(e, disabledSingleDropDown));
 };
 
 // Disabled multiple select drop down
@@ -290,9 +280,7 @@ const parseDisabledMultiSelect = () => {
     });
 
     const enableBtn = ge('enableBtn');
-    if (enableBtn) {
-        enableBtn.addEventListener('click', toggleEnable.bind(disabledDropDown));
-    }
+    enableBtn.addEventListener('click', (e) => toggleEnable(e, disabledDropDown));
 };
 
 // Built-in items filter
@@ -304,10 +292,8 @@ const dynamicBuiltinFilter = () => {
         data: initItems('Filter item', 100),
     });
 
-    const enableBtn = ge('enableFilterBtn')
-    if (enableBtn) {
-        enableBtn.addEventListener('click', toggleEnable.bind(filterDropDown));
-    }
+    const enableBtn = ge('enableFilterBtn');
+    enableBtn.addEventListener('click', (e) => toggleEnable(e, filterDropDown));
 };
 
 // Custom render drop down
@@ -326,10 +312,8 @@ const customRender = () => {
         renderSelectionItem: renderCustomSelectionItem,
     });
 
-    const enableBtn2 = ge('enableBtn2');
-    if (enableBtn2) {
-        enableBtn2.onclick = toggleEnable2.bind(customDropDown);
-    }
+    const enableBtn = ge('enableBtn2');
+    enableBtn.addEventListener('click', (e) => toggleEnable(e, customDropDown));
 };
 
 // useNativeSelect drop down
