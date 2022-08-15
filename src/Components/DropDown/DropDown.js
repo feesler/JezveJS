@@ -63,6 +63,7 @@ const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 const defaultProps = {
     multi: false,
     listAttach: false,
+    enableFilter: false,
     editable: false,
     disabled: false,
     useNativeSelect: false,
@@ -147,7 +148,6 @@ export class DropDown extends Component {
         }
 
         this.setMaxHeight(this.props.maxHeight);
-        this.setInputCallback(this.props.oninput);
 
         if ('renderItem' in this.props) {
             if (!isFunction(this.props.renderItem)) {
@@ -272,15 +272,14 @@ export class DropDown extends Component {
         this.elem = ce('div', { className: CONTAINER_CLASS });
         this.selectionElem = ce('div', { className: SELECTION_CLASS });
 
+        if (this.hostElem.disabled) {
+            this.state.disabled = true;
+        }
+
         if (this.hostElem.tagName === 'SELECT') {
             this.selectElem = this.hostElem;
             if (this.selectElem.multiple) {
                 this.props.multi = true;
-            }
-
-            if (this.selectElem.disabled) {
-                this.state.disabled = true;
-                this.state.editable = false;
             }
 
             insertAfter(this.elem, this.selectElem);
@@ -296,6 +295,10 @@ export class DropDown extends Component {
             this.selectElem.multiple = true;
             this.elem.classList.add(MULTIPLE_CLASS);
         }
+
+        if (this.props.enableFilter) {
+            this.state.editable = true;
+        }
     }
 
     /** Attach DropDown to specified element */
@@ -309,7 +312,9 @@ export class DropDown extends Component {
         this.elem.append(this.hostElem);
 
         this.hostElem.addEventListener('click', this.toggleHandler);
-        if (!this.isInputElement(this.hostElem)) {
+        if (this.isInputElement(this.hostElem)) {
+            this.state.editable = this.props.enableFilter;
+        } else {
             this.state.editable = false;
         }
 
@@ -325,25 +330,6 @@ export class DropDown extends Component {
         this.elem.append(this.hostElem, this.selectElem);
 
         return true;
-    }
-
-    /**
-     * Set callback for oninput event
-     * @param {boolean|Function} cb
-     *   if set as true: set default filter callback
-     *   if set as function: set specified function as callback
-     */
-    setInputCallback(cb) {
-        this.inputCallback = null;
-        if (!cb) {
-            this.inputCallback = null;
-        } else if (cb === true) {
-            this.inputCallback = this.defaultInputHandler;
-        } else if (isFunction(cb)) {
-            this.inputCallback = cb;
-        } else {
-            throw new Error('Invalid oninput handler specified');
-        }
     }
 
     /** Create combo element and return if success */
@@ -760,11 +746,13 @@ export class DropDown extends Component {
 
     /** Handler for 'input' event of text field  */
     onInput(e) {
-        if (isFunction(this.inputCallback)) {
-            return this.inputCallback(e);
+        if (this.props.enableFilter && this.inputElem) {
+            this.filter(this.inputElem.value);
         }
 
-        return true;
+        if (isFunction(this.props.oninput)) {
+            this.props.oninput(e);
+        }
     }
 
     /** Handler for 'clear selection' button click */
@@ -1050,17 +1038,12 @@ export class DropDown extends Component {
     }
 
     /** Enable/disable text input at combo element  */
-    makeEditable(val) {
+    makeEditable(editable = true) {
         if (this.props.listAttach) {
-            return false;
+            return;
         }
 
-        const editable = (typeof val !== 'undefined') ? val : true;
-        if (editable && this.state.disabled) {
-            return true;
-        }
-
-        this.state.editable = val;
+        this.state.editable = editable;
 
         if (this.props.placeholder) {
             this.inputElem.placeholder = this.props.placeholder;
@@ -1087,14 +1070,8 @@ export class DropDown extends Component {
                 : this.inputElem.value;
             this.staticElem.textContent = content;
 
-            if (!this.state.disabled) {
-                this.staticElem.addEventListener('click', this.toggleHandler);
-            }
+            this.staticElem.addEventListener('click', this.toggleHandler);
         }
-
-        this.setTabIndexes();
-
-        return true;
     }
 
     /** Setup tabindexes of component */
@@ -1417,17 +1394,6 @@ export class DropDown extends Component {
         }
 
         this.activateSelectedItem(selectedItems.length - 1);
-    }
-
-    /** Filter input handler */
-    defaultInputHandler() {
-        if (!this.inputElem) {
-            return false;
-        }
-
-        this.filter(this.inputElem.value);
-
-        return true;
     }
 
     /** Show all list items */
