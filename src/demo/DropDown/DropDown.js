@@ -305,6 +305,7 @@ const dynamicBuiltinFilter = () => {
     DropDown.create({
         elem: 'selinp8',
         oninput: true,
+        editable: true,
         placeholder: 'Type to filter',
         data: initItems('Filter item', 100),
     });
