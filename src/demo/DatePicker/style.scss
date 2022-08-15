@@ -3,15 +3,15 @@ input[type="text"] {
   padding: 5px;
 }
 
-.calBtn {
-  padding: 5px;
+.dp-input-group {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
 }
 
 .locales-container {
-    display: flex;
-    flex-flow: row wrap;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 2rem;
 }
 
-.locales-item + .locales-item {
-    margin-left: 2rem;
-}

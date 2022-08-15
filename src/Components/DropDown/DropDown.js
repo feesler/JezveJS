@@ -63,7 +63,7 @@ const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 const defaultProps = {
     multi: false,
     listAttach: false,
-    editable: true,
+    editable: false,
     disabled: false,
     useNativeSelect: false,
     fullScreen: false,
@@ -274,28 +274,26 @@ export class DropDown extends Component {
 
         if (this.hostElem.tagName === 'SELECT') {
             this.selectElem = this.hostElem;
-            if (this.hostElem.multiple) {
+            if (this.selectElem.multiple) {
                 this.props.multi = true;
             }
 
-            if (this.hostElem.disabled) {
+            if (this.selectElem.disabled) {
                 this.state.disabled = true;
                 this.state.editable = false;
             }
 
-            insertAfter(this.elem, this.hostElem);
+            insertAfter(this.elem, this.selectElem);
             this.inputElem = ce('input', { type: 'text' });
         } else {
             insertAfter(this.elem, this.hostElem);
             this.inputElem = re(this.hostElem);
 
             this.selectElem = ce('select');
-            if (this.props.multi) {
-                this.selectElem.multiple = true;
-            }
         }
 
         if (this.props.multi) {
+            this.selectElem.multiple = true;
             this.elem.classList.add(MULTIPLE_CLASS);
         }
     }
@@ -1719,17 +1717,6 @@ export class DropDown extends Component {
         return group;
     }
 
-    /** Remove elements of item */
-    detachItem(item) {
-        if (!item) {
-            return;
-        }
-
-        this.deselectItem(item.id);
-        re(item.optionElem);
-        re(item.contentElem);
-    }
-
     /** Remove item by id */
     removeItem(itemId) {
         const itemIndex = this.getItemIndex(itemId);
@@ -1737,17 +1724,18 @@ export class DropDown extends Component {
             return;
         }
 
-        const item = this.state.items[itemIndex];
-        this.detachItem(item);
-
-        this.state.items.splice(itemIndex, 1);
+        this.setState({
+            ...this.state,
+            items: this.state.items.filter((_, index) => (index !== itemIndex)),
+        });
     }
 
     /** Remove all items */
     removeAll() {
-        this.state.items.forEach((item) => this.detachItem(item));
-
-        this.state.items = [];
+        this.setState({
+            ...this.state,
+            items: [],
+        });
     }
 
     /** Set active state for specified list item */

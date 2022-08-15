@@ -44,6 +44,7 @@ export class OriginalDragAvatar extends DragAvatar {
     onDragCancel() {
         this.parentElem.appendChild(this.elem);
         this.elem.style.position = '';
+        this.elem.style.zIndex = '';
         this.elem.style.left = px(this.origLeft);
         this.elem.style.top = px(this.origTop);
     }

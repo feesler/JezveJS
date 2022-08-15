@@ -1,37 +1,18 @@
-.drop_area {
+.section-h200 {
+  height: 200px;
+}
+
+.sortable-squares {
   display: flex;
-  min-height: 200px;
-  background-color: #aaeeff;
-}
-
-.vstretch_drop_area {
-  display: flex;
-  background-color: #aaeeff;
-}
-
-.relative_area {
-  position: relative;
-}
-
-.sortable_drop_area {
   flex-flow: row wrap;
-  padding: 10px;
 }
 
-.inner_drop {
-  position: absolute;
-  top: 10px;
+.inner-drop {
+  position: relative;
   width: 180px;
   height: 180px;
+  margin: 0 16px 16px 0;
   background-color: #3388bb;
-}
-
-.left_inner_drop {
-  left: 10px;
-}
-
-.right_inner_drop {
-  right: 10px;
 }
 
 .square {
@@ -72,7 +53,7 @@
 .item_placeholder {
   width: 98px;
   height: 98px;
-  border: 1px dashed #ffffff;
+  border: 1px dashed #888888;
   background: none;
 }
 
@@ -80,16 +61,15 @@
   visibility: hidden;
 }
 
-.list_area {
-  display: inline-block;
-  float: left;
+.list-area {
+  display: inline-flex;
   margin-right: 20px;
   width: 300px;
+  flex-flow: column nowrap;
 }
 
 .output_area {
   display: inline-block;
-  float: left;
   border: 1px dashed #888888;
   height: 515px;
   width: 50%;

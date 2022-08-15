@@ -19,6 +19,7 @@ import '../../css/common.scss';
 import './style.scss';
 
 /* CSS classes */
+const CHARTS_CLASS = 'charts';
 const CONTENT_CLASS = 'chart__content';
 const WRAPPER_CLASS = 'chart__wrap';
 const VLEGEND_CLASS = 'vertical-legend';
@@ -128,7 +129,7 @@ export class BaseChart extends Component {
             { scroll: this.onScroll.bind(this) },
         );
 
-        this.chartsWrapObj = ce('div', { className: 'charts' }, [
+        this.chartsWrapObj = ce('div', { className: CHARTS_CLASS }, [
             ce('div', { className: WRAPPER_CLASS }, this.chartContent),
             ce('div', { className: VLEGEND_CLASS }, this.verticalLabels),
         ]);
