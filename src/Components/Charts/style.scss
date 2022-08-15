@@ -79,12 +79,18 @@
   fill: var(--linechart-item-fill);
   stroke: var(--linechart-item-border);
   stroke-width: 1.5;
+  display: none;
+}
+
+.linechart--nodes .linechart__item {
+  display: block;
 }
 
 /* LineChart line path */
 .linechart__path {
   stroke-width: 3;
   stroke: var(--linechart-line-color);
+  stroke-linejoin: round;
   fill: none;
 }
 
@@ -97,6 +103,7 @@
   &.linechart__item {
     fill: var(--linechart-active-item-fill);
     stroke: var(--linechart-active-item-border);
+    display: block;
   }
 }
 

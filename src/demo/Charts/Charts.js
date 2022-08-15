@@ -250,6 +250,7 @@ const autoScaleLinechart = () => {
         data: eurData,
         elem: 'linechart_autoscale',
         autoScale: true,
+        drawNodeCircles: true,
     });
 };
 

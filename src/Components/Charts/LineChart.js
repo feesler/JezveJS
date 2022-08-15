@@ -2,9 +2,15 @@ import { svg, insertBefore } from '../../js/common.js';
 import { BaseChart } from './BaseChart.js';
 
 /* CSS classes */
+const SHOW_NODES_CLASS = 'linechart--nodes';
 const PATH_CLASS = 'linechart__path';
 const ITEM_CLASS = 'linechart__item';
 const CATEGORY_CLASS = 'linechart--cat-';
+
+/** Default properties */
+const defaultProps = {
+    drawNodeCircles: false,
+};
 
 /**
  * Base chart component constructor
@@ -15,11 +21,24 @@ export class LineChart extends BaseChart {
     constructor(props) {
         super(props);
 
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+            visibilityOffset: 2,
+            scaleAroundAxis: false,
+        };
+
         this.paths = [];
-        this.props.visibilityOffset = 2;
-        this.props.scaleAroundAxis = false;
 
         this.init();
+    }
+
+    init() {
+        super.init();
+
+        if (this.props.drawNodeCircles) {
+            this.chartsWrapObj.classList.add(SHOW_NODES_CLASS);
+        }
     }
 
     /** Find item by event object */
