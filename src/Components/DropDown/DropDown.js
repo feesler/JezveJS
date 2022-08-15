@@ -1717,17 +1717,6 @@ export class DropDown extends Component {
         return group;
     }
 
-    /** Remove elements of item */
-    detachItem(item) {
-        if (!item) {
-            return;
-        }
-
-        this.deselectItem(item.id);
-        re(item.optionElem);
-        re(item.contentElem);
-    }
-
     /** Remove item by id */
     removeItem(itemId) {
         const itemIndex = this.getItemIndex(itemId);
@@ -1735,17 +1724,18 @@ export class DropDown extends Component {
             return;
         }
 
-        const item = this.state.items[itemIndex];
-        this.detachItem(item);
-
-        this.state.items.splice(itemIndex, 1);
+        this.setState({
+            ...this.state,
+            items: this.state.items.filter((_, index) => (index !== itemIndex)),
+        });
     }
 
     /** Remove all items */
     removeAll() {
-        this.state.items.forEach((item) => this.detachItem(item));
-
-        this.state.items = [];
+        this.setState({
+            ...this.state,
+            items: [],
+        });
     }
 
     /** Set active state for specified list item */
