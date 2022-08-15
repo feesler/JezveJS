@@ -28,6 +28,7 @@ export class OriginalDropTarget extends DropTarget {
 
         const elemToMove = avatarInfo.dragZoneElem;
         elemToMove.style.position = '';
+        elemToMove.style.zIndex = '';
 
         const offset = getOffset(this.elem);
 
