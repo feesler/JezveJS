@@ -21,8 +21,10 @@
 
 <h2>Standard inline drop down</h2>
 <section>
-	<input id="selinp" type="text">
-	<input id="selinp2" type="text">
+    <div>
+        <input id="selinp" type="text">
+        <input id="selinp2" type="text">
+    </div>
 </section>
 
 <h2>Stretch drop down 100% width</h2>
@@ -111,7 +113,7 @@
 
 <h2>Attach drop down to inline element</h2>
 <section>
-	some text text loream ispum lalalal <span id="inline" class="link_inline">click</span> lorem lorem
+	<div>some text text loream ispum lalalal <span id="inline" class="link_inline">click</span> lorem lorem</div>
 </section>
 
 <h2>Clipping test</h2>
@@ -156,8 +158,8 @@
 <h2>Generated multiple select drop down</h2>
 <section>
 	<input id="selinp6" type="text">
-	<div>
-		<input id="enableOptionBtn" class="btn admin_btn" type="button" value="Toggle enable item 3">
+	<div class="section-controls">
+		<input id="enableOptionBtn" class="btn" type="button" value="Toggle enable item 3">
 	</div>
 	<label>Events log</label><br>
 	<textarea id="log-genmulti" class="logs-container"></textarea>
@@ -174,7 +176,9 @@
             <option value="5">Item 5</option>
         </select>
     </div>
-	<input id="enableSingleBtn" class="btn admin_btn" type="button" value="Enable">
+    <div class="section-controls">
+	    <input id="enableSingleBtn" class="btn" type="button" value="Enable">
+    </div>
 </section>
 
 <h2>Disabled multiple select drop down</h2>
@@ -188,7 +192,9 @@
             <option value="5">Item 5</option>
         </select>
     </div>
-	<input id="enableBtn" class="btn admin_btn" type="button" value="Enable">
+    <div class="section-controls">
+	    <input id="enableBtn" class="btn" type="button" value="Enable">
+    </div>
 </section>
 
 <h2>Built-in items filter</h2>
@@ -207,9 +213,13 @@
             <option value="5" selected>Item 5</option>
         </select>
     </div>
-    <input id="enableBtn2" class="btn admin_btn" type="button" value="Disable"><br>
-    <label>Events log</label><br>
-    <div id="log-custom" class="logs-container"></div>
+    <div class="section-controls">
+        <input id="enableBtn2" class="btn" type="button" value="Disable"><br>
+    </div>
+    <div>
+        <label>Events log</label><br>
+        <div id="log-custom" class="logs-container"></div>
+    </div>
 </section>
 
 <h2>useNativeSelect option with single select</h2>
@@ -264,11 +274,11 @@
 <section>
     <select id="dynamicSel"></select>
     <div class="section-controls">
-        <button id="addBtn" class="btn admin_btn" type="button">Add item</button>
-        <button id="addDisBtn" class="btn admin_btn" type="button">Add disabled item</button>
-        <button id="addHiddenBtn" class="btn admin_btn" type="button">Add hidden item</button>
-        <button id="delBtn" class="btn admin_btn" type="button">Remove last item</button>
-        <button id="delAllBtn" class="btn admin_btn" type="button">Remove all items</button>
+        <button id="addBtn" class="btn" type="button">Add item</button>
+        <button id="addDisBtn" class="btn" type="button">Add disabled item</button>
+        <button id="addHiddenBtn" class="btn" type="button">Add hidden item</button>
+        <button id="delBtn" class="btn" type="button">Remove last item</button>
+        <button id="delAllBtn" class="btn" type="button">Remove all items</button>
     </div>
 </section>
 

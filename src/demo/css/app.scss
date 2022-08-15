@@ -85,6 +85,11 @@ h3 {
   border-radius: 0;
 }
 
+.btn:focus {
+  outline: 2px #aee5ff solid;
+  outline-offset: 0.1rem;
+}
+
 .inp {
   border: 1px solid #000000;
   padding: 4px 8px;
