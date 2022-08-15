@@ -152,6 +152,10 @@ section {
 
 .section-controls {
   margin-top: 1rem;
+
+  .btn {
+    margin-bottom: 6px;
+  }
 }
 
 @media (hover: hover) {
