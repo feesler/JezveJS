@@ -8,147 +8,116 @@ import '../../css/common.scss';
 import '../css/app.scss';
 import './style.scss';
 
-let calendarObj2 = null;
-let calendarObj3 = null;
-let calendarObj4 = null;
-let calendarObj5 = null;
-
-/** Date select callback */
-function onSelectDate(date) {
-    const datefield = ge('dateinp');
-    if (datefield) {
-        datefield.value = formatDate(date);
+const formatDateToInput = (date, inputId) => {
+    const input = ge(inputId);
+    if (input) {
+        input.value = formatDate(date);
     }
-}
+};
 
-/** Date select callback */
-function onSelectDate2(date) {
-    const datefield = ge('dateinp2');
-    if (datefield) {
-        datefield.value = formatDate(date);
-    }
-
-    calendarObj2.hide();
-}
-
-/** Show calendar block */
-function showCalendar2() {
-    calendarObj2.show();
-}
-
-/** Date range select callback */
-function onRangeSelect(range) {
-    const datefield = ge('rangeinp');
-    if (datefield) {
+const formatRangeToInput = (range, inputId) => {
+    const input = ge(inputId);
+    if (input) {
         const startFmt = formatDate(range.start);
         const endFmt = formatDate(range.end);
-        datefield.value = `${startFmt} - ${endFmt}`;
+        input.value = `${startFmt} - ${endFmt}`;
     }
+};
 
-    calendarObj3.hide();
-}
-
-/** Show range select calendar */
-function showCalendar3() {
-    calendarObj3.show();
-}
-
-/** Date range select callback */
-function onCBRangeSelect(range) {
-    const datefield = ge('cbinp');
-    if (datefield) {
-        const startFmt = formatDate(range.start);
-        const endFmt = formatDate(range.end);
-        datefield.value = `${startFmt} - ${endFmt}`;
-    }
-}
-
-/** Date select callback */
-function CBDateSelect(date) {
-    const statustext = ge('statustext');
-    if (statustext) {
-        statustext.textContent = `Date selected: ${formatDate(date)}`;
-    }
-}
-
-/** Show range select calendar */
-function showCalendar4() {
-    calendarObj4.show();
-}
-
-/** Show setSelection() test calendar */
-function showCalendar5() {
-    calendarObj5.show();
-}
-
-function onHide() {
-    const statustext = ge('statustext');
-    if (statustext) {
-        statustext.textContent = 'Loading...';
-    }
-}
-
-function init() {
+const initStatic = () => {
     DatePicker.create({
-        wrapper: 'calendar',
+        wrapper: 'dpStatic',
         static: true,
         animated: true,
-        ondateselect: onSelectDate,
+        ondateselect: (date) => formatDateToInput(date, 'staticDateInp'),
+    });
+};
+
+const initPopup = () => {
+    const datePicker = DatePicker.create({
+        wrapper: 'dpPopup',
+        relparent: 'dpPopupGroup',
+        ondateselect: (date) => {
+            formatDateToInput(date, 'popupDateInp');
+            datePicker.hide();
+        },
     });
 
-    calendarObj2 = DatePicker.create({
-        wrapper: 'calendar2',
-        relparent: 'dategroup2',
-        ondateselect: onSelectDate2,
-    });
-    const calbtn2 = ge('calbtn2');
-    calbtn2.onclick = showCalendar2;
+    const btn = ge('showPopupBtn');
+    btn.addEventListener('click', () => datePicker.show());
+};
 
-    calendarObj3 = DatePicker.create({
-        wrapper: 'calendar3',
-        relparent: 'dategroup3',
+const initRangeSelect = () => {
+    const datePicker = DatePicker.create({
+        wrapper: 'dpRange',
+        relparent: 'dpRangeGroup',
         range: true,
-        onrangeselect: onRangeSelect,
+        onrangeselect: (range) => {
+            formatRangeToInput(range, 'rangeInp');
+            datePicker.hide();
+        },
     });
-    const calbtn3 = ge('calbtn3');
-    calbtn3.onclick = showCalendar3;
 
-    calendarObj4 = DatePicker.create({
-        wrapper: 'calendar4',
-        relparent: 'dategroup4',
+    const btn = ge('showRangeBtn');
+    btn.addEventListener('click', () => datePicker.show());
+};
+
+const initCallbacks = () => {
+    const statustext = ge('statustext');
+    const datePicker = DatePicker.create({
+        wrapper: 'dpCallbacks',
+        relparent: 'dpCallbacksGroup',
         range: true,
-        ondateselect: CBDateSelect,
-        onrangeselect: onCBRangeSelect,
-        onhide: onHide,
+        ondateselect: (date) => {
+            statustext.textContent = `Date selected: ${formatDate(date)}`;
+        },
+        onrangeselect: (range) => formatRangeToInput(range, 'cbInp'),
+        onhide: () => {
+            statustext.textContent = 'Loading...';
+        },
     });
-    const calbtn4 = ge('calbtn4');
-    calbtn4.onclick = showCalendar4;
 
-    calendarObj5 = DatePicker.create({
-        wrapper: 'calendar5',
-        relparent: 'dategroup5',
+    const btn = ge('showCbBtn');
+    btn.addEventListener('click', () => datePicker.show());
+};
+
+const initSetSelection = () => {
+    const datePicker = DatePicker.create({
+        wrapper: 'dpSelection',
+        relparent: 'dpSelectionGroup',
         range: true,
     });
-    calendarObj5.setSelection('01.12.2020', '07.12.2020');
+    datePicker.setSelection('01.12.2020', '07.12.2020');
 
-    const calbtn5 = ge('calbtn5');
-    calbtn5.onclick = showCalendar5;
+    const btn = ge('showSelBtn');
+    btn.addEventListener('click', () => datePicker.show());
+};
 
+const initLocales = () => {
     DatePicker.create({
-        wrapper: 'calendar6',
+        wrapper: 'dpEnLocale',
         static: true,
         locales: ['en-US'],
     });
     DatePicker.create({
-        wrapper: 'calendar7',
+        wrapper: 'dpFrLocale',
         static: true,
         locales: ['fr'],
     });
     DatePicker.create({
-        wrapper: 'calendar8',
+        wrapper: 'dpRuLocale',
         static: true,
         locales: ['ru'],
     });
-}
+};
+
+const init = () => {
+    initStatic();
+    initPopup();
+    initRangeSelect();
+    initCallbacks();
+    initSetSelection();
+    initLocales();
+};
 
 onReady(init);
