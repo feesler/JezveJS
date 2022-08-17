@@ -2,6 +2,7 @@ import {
     isFunction,
     getCursorPos,
     setCursorPos,
+    selectText,
     isNum,
 } from '../../js/common.js';
 import '../../css/common.scss';
@@ -30,9 +31,11 @@ export class DateInput {
         };
 
         this.beforeInputHandler = this.validateInput.bind(this);
+        this.focusHandler = (e) => this.onFocus(e);
         this.elem.addEventListener('keypress', this.beforeInputHandler);
         this.elem.addEventListener('paste', this.beforeInputHandler);
         this.elem.addEventListener('beforeinput', this.beforeInputHandler);
+        this.elem.addEventListener('focus', this.focusHandler);
 
         this.elem.inputMode = 'decimal';
 
@@ -306,6 +309,10 @@ export class DateInput {
         if (isFunction(this.oninput)) {
             this.oninput(e);
         }
+    }
+
+    onFocus() {
+        selectText(this.elem, 0, 2);
     }
 
     /** Render component */
