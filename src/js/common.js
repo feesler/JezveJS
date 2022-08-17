@@ -372,9 +372,10 @@ export function getCursorPos(input) {
 /**
  * Set curson position for specified input element
  * @param {Element} input
- * @param {number} pos
+ * @param {number} startPos
+ * @param {number} endPos
  */
-export function setCursorPos(input, pos) {
+export function selectText(input, startPos, endPos) {
     if (!input) {
         return;
     }
@@ -382,12 +383,21 @@ export function setCursorPos(input, pos) {
     if (input.createTextRange) {
         const range = input.createTextRange();
         range.collapse(true);
-        range.moveEnd('character', pos);
-        range.moveStart('character', pos);
+        range.moveEnd('character', endPos);
+        range.moveStart('character', startPos);
         range.select();
     } else if (input.setSelectionRange) {
-        input.setSelectionRange(pos, pos);
+        input.setSelectionRange(startPos, endPos);
     }
+}
+
+/**
+ * Set curson position for specified input element
+ * @param {Element} input
+ * @param {number} pos
+ */
+export function setCursorPos(input, pos) {
+    selectText(input, pos, pos);
 }
 
 /** Check string is correct date in dd.mm.yyyy format */
