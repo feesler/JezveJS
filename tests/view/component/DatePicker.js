@@ -11,8 +11,19 @@ import {
     copyObject,
 } from 'jezve-test';
 
-const shortMonthTitles = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-const monthTitles = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+const monthTitles = [{
+    locale: 'en',
+    short: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+    long: ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'],
+}, {
+    locale: 'fr',
+    months: ['jan', 'fév', 'mar', 'avr', 'mai', 'jui', 'jui', 'aoû', 'sep', 'oct', 'nov', 'déc'],
+    long: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+}, {
+    locale: 'ru',
+    months: ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'],
+    long: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
+}];
 
 export class DatePicker extends TestComponent {
     async parseContent() {
@@ -54,13 +65,28 @@ export class DatePicker extends TestComponent {
         return res;
     }
 
+    getMonthByName(name, short) {
+        const lowerName = name.toLowerCase();
+
+        for (const localeData of monthTitles) {
+            const names = (short) ? localeData.short : localeData.long;
+            const index = names.indexOf(lowerName);
+            if (index !== -1) {
+                return { locale: localeData.locale, index };
+            }
+        }
+
+        return { index: -1 };
+    }
+
     parseHeader(title, viewType) {
         const res = {};
 
         if (viewType === 'month') {
             const [month, year] = title.split(' ');
 
-            res.month = monthTitles.indexOf(month.toLowerCase());
+            const monthInfo = this.getMonthByName(month, false);
+            res.month = monthInfo.index;
             assert(res.month !== -1, 'Invalid month string');
             res.year = parseInt(year, 10);
         } else if (viewType === 'year') {
@@ -151,7 +177,8 @@ export class DatePicker extends TestComponent {
             }
         }
 
-        await this.selectCell(shortMonthTitles[month]);
+        const cell = this.content.cells[month];
+        await this.selectCell(cell.title);
         await wait(() => this.isTitleChanged());
         await this.parse();
     }
