@@ -290,13 +290,35 @@ export class DateInput {
                 && (isNum(yearVal) || !yearVal.length);
 
             if (res) {
+                let [expectedDay, expectedMonth, expectedYear] = expectedParts;
+
+                delete this.state.selectNext;
+
+                // input day
+                if (expectedDay !== this.state.day) {
+                    if (dayVal < 10 && dayVal * 10 > 31) {
+                        expectedDay = `0${dayVal}`;
+                        this.state.selectNext = 1;
+                    }
+                }
+                // input month
+                if (expectedMonth !== this.state.month) {
+                    if (monthVal < 10 && monthVal * 10 > 12) {
+                        expectedMonth = `0${monthVal}`;
+                        this.state.selectNext = 2;
+                    }
+                }
+                // input year
+                if (expectedYear !== this.state.year) {
+                }
+
                 this.state = {
-                    day: expectedParts[0],
-                    month: expectedParts[1],
-                    year: expectedParts[2],
+                    ...this.state,
+                    day: expectedDay,
+                    month: expectedMonth,
+                    year: expectedYear,
                 };
                 this.render(this.state);
-                setCursorPos(this.elem, this.expectedCursorPos);
             }
         }
 
@@ -311,13 +333,34 @@ export class DateInput {
         }
     }
 
+    selectDatePart(index) {
+        const ind = parseInt(index, 10);
+        if (Number.isNaN(ind) || ind < 0 || ind > 2) {
+            return;
+        }
+
+        if (ind === 0) {
+            selectText(this.elem, 0, 2);
+        } else if (ind === 1) {
+            selectText(this.elem, 3, 5);
+        } else if (ind === 2) {
+            selectText(this.elem, 6, 10);
+        }
+    }
+
     onFocus() {
-        selectText(this.elem, 0, 2);
+        this.selectDatePart(0);
     }
 
     /** Render component */
     render(state) {
         this.elem.value = `${state.day}.${state.month}.${state.year}`;
+
+        if (state.selectNext) {
+            this.selectDatePart(state.selectNext);
+        } else {
+            setCursorPos(this.elem, this.expectedCursorPos);
+        }
     }
 
     /** Static alias for DateInput constructor */
