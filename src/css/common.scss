@@ -35,6 +35,13 @@ button {
   appearance: button; /* iOS Safari styling issue fix */
 }
 
+/* iOS safari fix for styling disabled inputs */
+input[disabled],
+textarea[disabled],
+select[disabled="disabled"] {
+  opacity: 1;
+}
+
 /* Firefox fix */
 button::-moz-focus-inner {
   padding: 0;
