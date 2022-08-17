@@ -110,13 +110,13 @@
 }
 
 /* Custom selected item */
-.dd__selection > .dd__custom-selection-item {
+.dd__custom-selection-item {
   background-color: #f3be78;
   border: 1px solid #eeb05e;
   border-radius: 5px;
 }
 
-.dd__container_disabled .dd__selection > .dd__custom-selection-item {
+.dd__container_disabled .dd__custom-selection-item {
   border-color: #c5c5c5;
 }
 
@@ -127,7 +127,7 @@
   border-color: #e79f40;
 }
 
-.dd__selection > .dd__custom-selection-item > .dd__del-selection-item-btn {
+.dd__custom-selection-item > .dd__del-selection-item-btn {
   color: #999999;
   padding: 0 3px 0 0;
   width: 24px;
@@ -135,8 +135,7 @@
 }
 
 .dd__container_enabled
-  .dd__selection
-  > .dd__custom-selection-item
+  .dd__custom-selection-item
   > .dd__del-selection-item-btn::after {
   content: "\2014";
 }
@@ -147,20 +146,18 @@
   }
 
   .dd__container_enabled
-    .dd__selection
-    > .dd__custom-selection-item
+    .dd__custom-selection-item
     > .dd__del-selection-item-btn:hover {
     color: #ffffff;
   }
 
-  .dd__container_enabled .dd__selection > .dd__custom-selection-item:hover {
+  .dd__container_enabled .dd__custom-selection-item:hover {
     background-color: #e6a34b;
     border-color: #e79f40;
   }
 
   .dd__container_enabled
-    .dd__selection
-    > .dd__custom-selection-item
+    .dd__custom-selection-item
     > .dd__del-selection-item-btn:hover::after {
     content: "|";
   }

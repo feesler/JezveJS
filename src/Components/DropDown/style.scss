@@ -111,7 +111,7 @@
   color: var(--dd-selection-item-text);
 }
 
-.dd__selection > .dd__selection-item > .dd__del-selection-item-btn {
+.dd__del-selection-item-btn {
   color: var(--dd-selection-item-btn);
   padding: 0 0 0 3px;
 }
@@ -207,7 +207,7 @@
   display: none;
   z-index: 1002;
 
-  > ul {
+  ul {
     padding: 0;
     margin: 0;
     width: 100%;
@@ -426,11 +426,11 @@
     fill: var(--dd-disabled-btn-fill);
   }
 
-  .dd__selection > .dd__selection-item > .dd__del-selection-item-btn {
+  .dd__del-selection-item-btn {
     display: none;
   }
 
-  .dd__selection > .dd__selection-item {
+  .dd__selection-item {
     color: var(--dd-disabled-selection-item-text);
     background-color: var(--dd-disabled-selection-item-bg);
   }
@@ -438,12 +438,11 @@
 
 /* Enabled */
 .dd__container.dd__container_enabled
-  .dd__selection
-  > .dd__selection-item.dd__selection-item_active {
+  .dd__selection-item.dd__selection-item_active {
   color: var(--dd-selection-item-hover-text);
   background-color: var(--dd-selection-item-hover-bg);
 
-  > .dd__del-selection-item-btn {
+  .dd__del-selection-item-btn {
     color: var(--dd-selection-item-hover-btn);
     cursor: pointer;
   }
@@ -469,18 +468,18 @@
       fill: var(--dd-btn-hover-fill);
     }
 
-    .dd__selection > .dd__selection-item {
+    .dd__selection-item {
       &:hover {
         color: var(--dd-selection-item-hover-text);
         background-color: var(--dd-selection-item-hover-bg);
 
-        > .dd__del-selection-item-btn {
+        .dd__del-selection-item-btn {
           color: var(--dd-selection-item-hover-btn);
           cursor: pointer;
         }
       }
 
-      > .dd__del-selection-item-btn:hover {
+      .dd__del-selection-item-btn:hover {
         color: var(--dd-selection-item-btn-hover);
       }
     }

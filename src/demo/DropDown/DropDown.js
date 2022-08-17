@@ -35,7 +35,7 @@ const customColorsMap = {
     5: 'dd__custom-list-item_pink',
 };
 
-const renderCustomItem = (item) => {
+function renderCustomItem(item) {
     const colorClass = customColorsMap[item.id];
     const colorElem = ce('span', { className: `dd__custom-list-item_color ${colorClass}` });
     const titleElem = ce('span', {
@@ -59,9 +59,9 @@ const renderCustomItem = (item) => {
     }
 
     return elem;
-};
+}
 
-const renderCustomSelectionItem = (item) => {
+function renderCustomSelectionItem(item) {
     const deselectButton = ce('span', { className: 'dd__del-selection-item-btn' });
     deselectButton.addEventListener('click', this.delSelectItemHandler);
 
@@ -73,7 +73,7 @@ const renderCustomSelectionItem = (item) => {
             ce('span', { innerText: item.title.toLowerCase() }),
         ],
     );
-};
+}
 
 const formatObject = (value) => {
     let entries;
