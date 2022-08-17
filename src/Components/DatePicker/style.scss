@@ -54,7 +54,7 @@
 .dp__header_nav {
   width: 10%;
 
-  > svg {
+  .dp__header_nav-icon {
     vertical-align: middle;
     fill: var(--dp-nav-fill);
     display: inline-block;
@@ -192,7 +192,7 @@
     color: var(--dp-active-color);
   }
 
-  .dp__header_nav:hover > svg {
+  .dp__header_nav:hover .dp__header_nav-icon {
     fill: var(--dp-nav-hover-fill);
   }
 

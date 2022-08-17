@@ -10,15 +10,26 @@ import '../../css/common.scss';
 import '../css/app.scss';
 import './style.scss';
 
-/** Create SVG icon element */
+const CUSTOM_BTN_CLASS = 'custom-header-btn';
+const CUSTOM_ICON_CLASS = 'custom-header-icon';
+
+/** Create SVG icon element for buttons of custom header */
 const createIcon = (icon) => {
     const useElem = svg('use');
-    const res = svg('svg', {}, useElem);
+    const res = svg('svg', { class: CUSTOM_ICON_CLASS }, useElem);
 
     useElem.href.baseVal = (icon) ? `#${icon}` : '';
 
     return res;
 };
+
+/** Create button for custom header */
+const createButton = (icon) => ce(
+    'button',
+    { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
+    createIcon(icon),
+    { click: (e) => e.stopPropagation() },
+);
 
 function initSimple() {
     const collapse = new Collapsible({
@@ -45,19 +56,8 @@ function initCustomHeader() {
         className: 'custom-title',
         textContent: 'Hover/focus to see controls',
     });
-
-    const updateBtn = ce(
-        'button',
-        { className: 'btn custom-header-btn', type: 'button' },
-        createIcon('update'),
-        { click: (e) => e.stopPropagation() },
-    );
-    const delBtn = ce(
-        'button',
-        { className: 'btn custom-header-btn', type: 'button' },
-        createIcon('del'),
-        { click: (e) => e.stopPropagation() },
-    );
+    const updateBtn = createButton('update');
+    const delBtn = createButton('del');
 
     const collapse = new Collapsible({
         header: [titleContainer, updateBtn, delBtn],

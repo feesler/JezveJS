@@ -11,9 +11,10 @@ import './style.scss';
 
 const CONTAINER_CLASS = 'checkbox';
 const CHECK_CLASS = 'checkbox__check';
+const ICON_CLASS = 'checkbox__icon';
 const LABEL_CLASS = 'checkbox__label';
-const CHECK_PATH = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z';
-const CHECK_VIEWBOX = '0 0 9.2604 9.2604';
+const ICON_PATH = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z';
+const ICON_VIEWBOX = '0 0 9.2604 9.2604';
 const defaultProps = {
     checked: false,
     disabled: false,
@@ -53,7 +54,11 @@ export class Checkbox extends Component {
     }
 
     createCheckPath() {
-        return svg('svg', { viewBox: CHECK_VIEWBOX }, svg('path', { d: CHECK_PATH }));
+        return svg(
+            'svg',
+            { class: ICON_CLASS, viewBox: ICON_VIEWBOX },
+            svg('path', { d: ICON_PATH }),
+        );
     }
 
     createLabel() {

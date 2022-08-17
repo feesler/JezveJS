@@ -37,7 +37,7 @@ export class LineChart extends BaseChart {
         super.init();
 
         if (this.props.drawNodeCircles) {
-            this.chartsWrapObj.classList.add(SHOW_NODES_CLASS);
+            this.chartContainer.classList.add(SHOW_NODES_CLASS);
         }
     }
 
@@ -48,7 +48,7 @@ export class LineChart extends BaseChart {
             return result;
         }
 
-        const x = e.clientX - this.containerOffset.left + this.chartContent.scrollLeft;
+        const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
         const groupIndex = Math.floor(x / this.barOuterWidth);
         if (groupIndex < 0 || groupIndex >= this.items.length) {
             return null;
@@ -109,7 +109,7 @@ export class LineChart extends BaseChart {
             item.elem.classList.add(categoryClass);
         }
 
-        this.container.appendChild(item.elem);
+        this.content.appendChild(item.elem);
 
         return item;
     }
@@ -173,7 +173,7 @@ export class LineChart extends BaseChart {
                 path.elem.classList.add(categoryClass);
             }
 
-            this.container.appendChild(path.elem);
+            this.content.appendChild(path.elem);
             // Insert path before circles
             const group = this.items[0];
             const groupItems = Array.isArray(group) ? group : [group];

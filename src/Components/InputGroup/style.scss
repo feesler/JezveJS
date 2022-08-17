@@ -168,20 +168,17 @@
     border-left-width: var(--ig-border-width);
   }
 
-  .input-group__btn > div {
-    text-align: center;
-    height: 30px;
-    line-height: 30px;
-    white-space: nowrap;
-  }
-
   /* Inner content of input group button */
   .input-group__btn-title {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     min-width: 2.3rem;
     box-sizing: border-box;
+    height: 30px;
+    line-height: 30px;
+    white-space: nowrap;
   }
 }
 

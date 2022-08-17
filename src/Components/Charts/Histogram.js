@@ -27,7 +27,7 @@ export class Histogram extends BaseChart {
             return result;
         }
 
-        const x = e.clientX - this.containerOffset.left + this.chartContent.scrollLeft;
+        const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
         const groupIndex = Math.floor(x / this.barOuterWidth);
         if (groupIndex < 0 || groupIndex >= this.items.length) {
             return null;
@@ -93,7 +93,7 @@ export class Histogram extends BaseChart {
             item.elem.classList.add(categoryClass);
         }
 
-        this.container.appendChild(item.elem);
+        this.content.appendChild(item.elem);
 
         return item;
     }

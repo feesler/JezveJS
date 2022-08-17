@@ -170,7 +170,7 @@
   background-color: var(--dd-bg-color);
   z-index: 1001;
 
-  > svg {
+  .dd__clear-icon {
     width: 14px;
     height: 14px;
     fill: var(--dd-btn-fill);
@@ -189,7 +189,7 @@
   cursor: pointer;
   background-color: var(--dd-bg-color);
 
-  path {
+  .dd__toggle-icon {
     fill: var(--dd-btn-fill);
     fill-opacity: 1;
     stroke: none;
@@ -246,7 +246,7 @@
   color: var(--dd-list-item-text);
   background-color: var(--dd-list-item-bg);
 
-  > svg {
+  .dd__check-icon {
     vertical-align: middle;
     display: inline-block;
     visibility: hidden;
@@ -257,12 +257,13 @@
   &.dd__list-item_active {
     color: var(--dd-active-list-item-text);
     background-color: var(--dd-active-list-item-bg);
-    > svg {
+
+    .dd__check-icon {
       fill: var(--dd-active-list-item-check);
     }
   }
 
-  &.dd__list-item_selected > svg {
+  &.dd__list-item_selected .dd__check-icon {
     visibility: visible;
   }
 }
@@ -421,8 +422,8 @@
     background-color: var(--dd-disabled-bg);
   }
 
-  .dd__clear-btn path,
-  .dd__toggle-btn path {
+  .dd__clear-icon,
+  .dd__toggle-icon {
     fill: var(--dd-disabled-btn-fill);
   }
 
@@ -464,8 +465,8 @@
 
 @media (hover: hover) {
   .dd__container.dd__container_enabled {
-    .dd__clear-btn:hover path,
-    .dd__toggle-btn:hover path {
+    .dd__clear-btn:hover .dd__clear-icon,
+    .dd__toggle-btn:hover .dd__toggle-icon {
       fill: var(--dd-btn-hover-fill);
     }
 

@@ -22,24 +22,25 @@
   display: flex;
   flex-flow: row nowrap;
   flex-basis: 100%;
-
-  svg {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    user-select: none;
-    overflow: hidden;
-  }
 }
 
-.chart__wrap {
+.chart__container {
   flex-basis: 100%;
   overflow: hidden;
 }
 
-.chart__content {
+.chart__scroller {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: auto;
+  overflow-x: auto;
+}
+
+/* Main content SVG element */
+.chart__content {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  user-select: none;
+  overflow: hidden;
 }
 
 /* Bar chart information popup */

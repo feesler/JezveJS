@@ -375,11 +375,11 @@ function stringContent() {
 
 function templateContent() {
     this.setContent(
-        ce(
-            'div',
-            { className: 'template_test' },
-            [ce('div'), ce('div'), ce('div')],
-        ),
+        ce('div', {}, [
+            ce('div', { className: 'template-test__item' }),
+            ce('div', { className: 'template-test__item' }),
+            ce('div', { className: 'template-test__item' }),
+        ]),
     );
     this.setControls({
         okBtn: { disabled: false },
