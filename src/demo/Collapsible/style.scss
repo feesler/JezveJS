@@ -66,7 +66,7 @@
   background: none;
   cursor: pointer;
 
-  > svg {
+  .custom-header-icon {
     width: 24px;
     height: 24px;
     fill: #ffffff;
@@ -74,7 +74,7 @@
   }
 }
 
-.collapsible-header:focus .custom-header-btn > svg {
+.collapsible-header:focus .custom-header-icon {
   opacity: 0.5;
 }
 
@@ -105,11 +105,11 @@
     border-color: #505050;
   }
 
-  .collapsible-header:hover .custom-header-btn > svg {
+  .collapsible-header:hover .custom-header-icon {
     opacity: 0.5;
   }
 
-  .custom .custom-header-btn:hover > svg {
+  .custom .custom-header-btn:hover .custom-header-icon {
     opacity: 1;
   }
 }

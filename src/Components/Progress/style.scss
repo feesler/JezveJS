@@ -14,7 +14,8 @@
   height: var(--progress-height);
   overflow: hidden;
 
-  > div {
+  .progress-container,
+  .progress-opacity {
     position: absolute;
     top: 0;
     left: 0;

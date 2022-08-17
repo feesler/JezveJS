@@ -34,7 +34,7 @@
   padding: 2px;
   margin: 0 6px 0 0;
 
-  svg {
+  .checkbox__icon {
     display: block;
     width: var(--checkbox-size);
     height: var(--checkbox-size);
@@ -42,7 +42,7 @@
   }
 }
 
-.checkbox input:checked + .checkbox__check svg {
+.checkbox input:checked + .checkbox__check .checkbox__icon {
   visibility: visible;
   fill: var(--checkbox-checked-fill);
 }
@@ -50,7 +50,7 @@
 .checkbox input:active + .checkbox__check {
   background-color: var(--checkbox-active-bg);
 
-  svg {
+  .checkbox__icon {
     fill: var(--checkbox-active-fill);
   }
 }
@@ -75,7 +75,7 @@
   .checkbox__check:hover {
     background-color: var(--checkbox-hover-bg);
 
-    svg {
+    .checkbox__icon {
       visibility: visible;
       fill: var(--checkbox-active-fill);
     }

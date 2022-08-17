@@ -29,6 +29,38 @@ import {
     isSameDate,
 } from '../../js/DateUtils.js';
 
+/* CSS classes */
+const CONTAINER_CLASS = 'dp__container';
+const WRAPPER_CLASS = 'dp__wrapper';
+const STATIC_WRAPPER_CLASS = 'dp__static-wrapper';
+/* Header */
+const HEADER_CLASS = 'dp__header';
+const HEADER_ITEM_CLASS = 'dp__header_item';
+const HEADER_TITLE_CLASS = 'dp__header_title';
+const HEADER_NAV_CLASS = 'dp__header_nav';
+const NAV_ICON_CLASS = 'dp__header_nav-icon';
+/* View */
+const VIEW_CLASS = 'dp__view';
+const VIEW_CONTAINER_CLASS = 'dp__view-container';
+const CELL_CLASS = 'dp__cell';
+const OTHER_CELL_CLASS = 'dp__other-month-cell';
+const YEAR_CELL_CLASS = 'dp__year-view__cell';
+const YEARRANGE_CELL_CLASS = 'dp__year-range-view__cell';
+const MONTH_CELL_CLASS = 'dp__month-view_cell';
+const DAY_CELL_CLASS = 'dp__day-cell';
+const WEEKDAY_CELL_CLASS = 'dp__weekday-cell';
+const TODAY_CELL_CLASS = 'dp__today-cell';
+const HIGHLIGHT_CELL_CLASS = 'dp__cell_hl';
+const ACTIVE_CELL_CLASS = 'dp__cell_act';
+/* Animation */
+const ANIMATED_CLASS = 'dp__animated-view';
+const LAYER_VIEW_CLASS = 'dp__layered-view';
+const TOP_FROM_CLASS = 'top_from';
+const BOTTOM_FROM_CLASS = 'bottom_from';
+const TOP_TO_CLASS = 'top_to';
+const BOTTOM_TO_CLASS = 'bottom_to';
+
+/* View types */
 const MONTH_VIEW = 1;
 const YEAR_VIEW = 2;
 const YEARRANGE_VIEW = 3;
@@ -89,12 +121,12 @@ export class DatePicker {
         }
 
         removeChilds(this.baseObj);
-        this.baseObj.classList.add('dp__container');
+        this.baseObj.classList.add(CONTAINER_CLASS);
 
-        this.wrapperObj = ce('div', { className: 'dp__wrapper' });
+        this.wrapperObj = ce('div', { className: WRAPPER_CLASS });
         this.isStatic = (params.static === true);
         if (this.isStatic) {
-            this.wrapperObj.classList.add('dp__static-wrapper');
+            this.wrapperObj.classList.add(STATIC_WRAPPER_CLASS);
         } else {
             show(this.wrapperObj, false);
         }
@@ -146,7 +178,7 @@ export class DatePicker {
             set: [],
             viewDate: date,
             title: `${startYear + 1}-${startYear + YEAR_RANGE_LENGTH}`,
-            viewContainer: ce('div', { className: 'dp__view-container' }),
+            viewContainer: ce('div', { className: VIEW_CONTAINER_CLASS }),
             nav: {
                 prev: new Date(rYear - YEAR_RANGE_LENGTH, 1, 1),
                 next: new Date(rYear + YEAR_RANGE_LENGTH, 1, 1),
@@ -159,13 +191,13 @@ export class DatePicker {
             const setObj = {
                 date: yearDate,
                 cell: ce('div', {
-                    className: 'dp__cell dp__year-range-view__cell',
+                    className: `${CELL_CLASS} ${YEARRANGE_CELL_CLASS}`,
                     textContent: yearDate.getFullYear(),
                 }),
             };
 
             if (i === 0 || i === YEAR_RANGE_LENGTH + 1) {
-                setObj.cell.classList.add('dp__other-month-cell');
+                setObj.cell.classList.add(OTHER_CELL_CLASS);
             }
 
             res.set.push(setObj);
@@ -192,7 +224,7 @@ export class DatePicker {
             set: [],
             viewDate: date,
             title: rYear,
-            viewContainer: ce('div', { className: 'dp__view-container' }),
+            viewContainer: ce('div', { className: VIEW_CONTAINER_CLASS }),
             nav: {
                 prev: new Date(rYear - 1, 1, 1),
                 next: new Date(rYear + 1, 1, 1),
@@ -205,7 +237,7 @@ export class DatePicker {
             const setObj = {
                 date: monthDate,
                 cell: ce('div', {
-                    className: 'dp__cell dp__year-view__cell',
+                    className: `${CELL_CLASS} ${YEAR_CELL_CLASS}`,
                     textContent: getShortMonthName(monthDate, this.locales),
                 }),
             };
@@ -235,7 +267,7 @@ export class DatePicker {
             set: [],
             viewDate: date,
             title: `${getLongMonthName(date, this.locales)} ${rYear}`,
-            viewContainer: ce('div', { className: 'dp__view-container' }),
+            viewContainer: ce('div', { className: VIEW_CONTAINER_CLASS }),
             nav: {
                 prev: new Date(rYear, rMonth - 1, 1),
                 next: new Date(rYear, rMonth + 1, 1),
@@ -246,7 +278,7 @@ export class DatePicker {
         const firstMonthDay = new Date(rYear, rMonth, 1);
         let week = getWeekDays(firstMonthDay);
         const headerElems = week.map((weekday) => ce('div', {
-            className: 'dp__cell dp__month-view_cell dp__weekday-cell',
+            className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${WEEKDAY_CELL_CLASS}`,
             textContent: getWeekdayShort(weekday, this.locales),
         }));
         addChilds(res.viewContainer, headerElems);
@@ -257,16 +289,16 @@ export class DatePicker {
                 const setObj = {
                     date: weekday,
                     cell: ce('div', {
-                        className: 'dp__cell dp__month-view_cell dp__day-cell',
+                        className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${DAY_CELL_CLASS}`,
                         textContent: weekday.getDate(),
                     }),
                 };
 
                 if (!isSameYearMonth(date, weekday)) {
-                    setObj.cell.classList.add('dp__other-month-cell');
+                    setObj.cell.classList.add(OTHER_CELL_CLASS);
                 }
                 if (isSameDate(weekday, today)) {
-                    setObj.cell.classList.add('dp__today-cell');
+                    setObj.cell.classList.add(TODAY_CELL_CLASS);
                 }
 
                 return setObj;
@@ -364,23 +396,31 @@ export class DatePicker {
      * Render header element
      */
     renderHead() {
-        this.titleEl = ce('div', { className: 'dp__header_item dp__header_title' });
+        this.titleEl = ce('div', { className: `${HEADER_ITEM_CLASS} ${HEADER_TITLE_CLASS}` });
 
         const prevIcon = svg(
             'svg',
-            { width: '25%', viewBox: '0 0 6 13' },
+            { class: NAV_ICON_CLASS, width: '25%', viewBox: '0 0 6 13' },
             svg('path', { d: 'm6 1-6 5.5 6 5.5z' }),
         );
-        this.navPrevElem = ce('div', { className: 'dp__header_item dp__header_nav' }, prevIcon);
+        this.navPrevElem = ce(
+            'div',
+            { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS}` },
+            prevIcon,
+        );
 
         const nextIcon = svg(
             'svg',
-            { width: '25%', viewBox: '0 0 6 13' },
+            { class: NAV_ICON_CLASS, width: '25%', viewBox: '0 0 6 13' },
             svg('path', { d: 'm0 1 6 5.5-6 5.5z' }),
         );
-        this.navNextElem = ce('div', { className: 'dp__header_item dp__header_nav' }, nextIcon);
+        this.navNextElem = ce(
+            'div',
+            { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS}` },
+            nextIcon,
+        );
 
-        const headTbl = ce('div', { className: 'dp__header' }, [
+        const headTbl = ce('div', { className: HEADER_CLASS }, [
             this.navPrevElem,
             this.titleEl,
             this.navNextElem,
@@ -484,7 +524,7 @@ export class DatePicker {
         this.wrapperObj.addEventListener('click', (e) => this.onViewClick(e));
         this.wrapperObj.addEventListener('wheel', (e) => this.onWheel(e));
 
-        this.cellsContainer = ce('div', { className: 'dp__view' });
+        this.cellsContainer = ce('div', { className: VIEW_CLASS });
         addChilds(this.wrapperObj, [this.renderHead(), this.cellsContainer]);
     }
 
@@ -495,7 +535,7 @@ export class DatePicker {
         }
 
         this.currView.set.forEach((dateObj) => {
-            dateObj.cell.classList.remove('dp__cell_hl');
+            dateObj.cell.classList.remove(HIGHLIGHT_CELL_CLASS);
         });
     }
 
@@ -506,7 +546,7 @@ export class DatePicker {
         }
 
         this.currView.set.forEach((dateObj) => {
-            dateObj.cell.classList.remove('dp__cell_hl', 'dp__cell_act');
+            dateObj.cell.classList.remove(HIGHLIGHT_CELL_CLASS, ACTIVE_CELL_CLASS);
         });
     }
 
@@ -524,7 +564,7 @@ export class DatePicker {
 
         this.currView.set.forEach((dateObj) => {
             if (this.inRange(dateObj.date, range)) {
-                dateObj.cell.classList.add('dp__cell_hl');
+                dateObj.cell.classList.add(HIGHLIGHT_CELL_CLASS);
             }
         }, this);
     }
@@ -533,7 +573,7 @@ export class DatePicker {
     activateCell(date) {
         const cell = this.findCell(date);
         if (cell) {
-            cell.classList.add('dp__cell_act');
+            cell.classList.add(ACTIVE_CELL_CLASS);
         }
     }
 
@@ -541,7 +581,7 @@ export class DatePicker {
     deactivateCell(date) {
         const cell = this.findCell(date);
         if (cell) {
-            cell.classList.remove('dp__cell_act');
+            cell.classList.remove(ACTIVE_CELL_CLASS);
         }
     }
 
@@ -682,8 +722,12 @@ export class DatePicker {
             return;
         }
 
-        this.cellsContainer.classList.remove('dp__animated-view');
-        this.nextView.viewContainer.classList.remove('dp__layered-view', 'bottom_to', 'top_to');
+        this.cellsContainer.classList.remove(ANIMATED_CLASS);
+        this.nextView.viewContainer.classList.remove(
+            LAYER_VIEW_CLASS,
+            BOTTOM_TO_CLASS,
+            TOP_TO_CLASS,
+        );
         this.nextView.viewContainer.style.left = '';
         transform(this.nextView.viewContainer, '');
         this.cellsContainer.style.width = '';
@@ -739,12 +783,12 @@ export class DatePicker {
         if (this.currView.type === view.type) {
             const leftToRight = this.currView.viewDate < view.viewDate;
 
-            this.currView.viewContainer.classList.add('dp__layered-view');
-            view.viewContainer.classList.add('dp__layered-view');
+            this.currView.viewContainer.classList.add(LAYER_VIEW_CLASS);
+            view.viewContainer.classList.add(LAYER_VIEW_CLASS);
             view.viewContainer.style.width = px(currTblWidth);
             view.viewContainer.style.left = px(leftToRight ? currTblWidth : -currTblWidth);
 
-            this.cellsContainer.classList.add('dp__animated-view');
+            this.cellsContainer.classList.add(ANIMATED_CLASS);
 
             this.cellsContainer.style.height = px(view.viewContainer.offsetHeight);
             const trMatrix = [1, 0, 0, 1, (leftToRight ? -currTblWidth : currTblWidth), 0];
@@ -782,7 +826,7 @@ export class DatePicker {
 
         const { cell } = cellObj;
 
-        view.viewContainer.classList.add('dp__layered-view', (goUp) ? 'bottom_to' : 'top_to');
+        view.viewContainer.classList.add(LAYER_VIEW_CLASS, (goUp) ? BOTTOM_TO_CLASS : TOP_TO_CLASS);
 
         const cellX = cell.offsetLeft;
         const cellY = cell.offsetTop;
@@ -801,12 +845,12 @@ export class DatePicker {
         transform(view.viewContainer, `matrix(${(goUp ? viewTrans : cellTrans).join()})`);
 
         this.currView.viewContainer.classList.add(
-            'dp__layered-view',
-            (goUp) ? 'top_from' : 'bottom_from',
+            LAYER_VIEW_CLASS,
+            (goUp) ? TOP_FROM_CLASS : BOTTOM_FROM_CLASS,
         );
 
         setTimeout(() => {
-            this.cellsContainer.classList.add('dp__animated-view');
+            this.cellsContainer.classList.add(ANIMATED_CLASS);
             this.cellsContainer.style.height = px(view.viewContainer.offsetHeight);
             view.viewContainer.style.opacity = 1;
             this.currView.viewContainer.style.opacity = 0;

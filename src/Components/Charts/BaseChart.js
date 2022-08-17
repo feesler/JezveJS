@@ -20,9 +20,11 @@ import './style.scss';
 
 /* CSS classes */
 const CHARTS_CLASS = 'charts';
+const CONTAINER_CLASS = 'chart__container';
+const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
-const WRAPPER_CLASS = 'chart__wrap';
-const VLEGEND_CLASS = 'vertical-legend';
+const VLABELS_CLASS = 'chart__vert-labels';
+const VLABELS_CONTAINER_CLASS = 'vertical-legend';
 const POPUP_CLASS = 'chart__popup';
 const ACTIVE_ITEM_CLASS = 'chart__item--active';
 const ANIMATE_CLASS = 'chart--animated';
@@ -78,11 +80,11 @@ export class BaseChart extends Component {
             throw new Error('Invalid chart properties');
         }
 
-        this.chartsWrapObj = null;
+        this.chartContainer = null;
         this.chart = null;
-        this.chartContent = null;
+        this.chartScroller = null;
         this.verticalLabels = null;
-        this.container = null;
+        this.content = null;
         this.labelsContainer = null;
         this.popup = null;
         this.items = [];
@@ -122,27 +124,28 @@ export class BaseChart extends Component {
     init() {
         this.verticalLabels = ce('div');
         this.chart = ce('div');
-        this.chartContent = ce(
+        this.chartScroller = ce(
             'div',
-            { className: CONTENT_CLASS },
+            { className: SCROLLER_CLASS },
             this.chart,
             { scroll: this.onScroll.bind(this) },
         );
 
-        this.chartsWrapObj = ce('div', { className: CHARTS_CLASS }, [
-            ce('div', { className: WRAPPER_CLASS }, this.chartContent),
-            ce('div', { className: VLEGEND_CLASS }, this.verticalLabels),
+        this.chartContainer = ce('div', { className: CHARTS_CLASS }, [
+            ce('div', { className: CONTAINER_CLASS }, this.chartScroller),
+            ce('div', { className: VLABELS_CONTAINER_CLASS }, this.verticalLabels),
         ]);
         if (this.props.autoScale && this.props.animate) {
-            this.chartsWrapObj.classList.add(ANIMATE_CLASS);
+            this.chartContainer.classList.add(ANIMATE_CLASS);
         }
 
-        this.elem.appendChild(this.chartsWrapObj);
+        this.elem.appendChild(this.chartContainer);
 
         const { height, marginTop } = this.props;
         this.state.chartHeight = height - this.state.hLabelsHeight - marginTop;
 
         this.labelsContainer = svg('svg', {
+            class: VLABELS_CLASS,
             width: this.state.vLabelsWidth,
             height: height + 20,
         });
@@ -166,16 +169,20 @@ export class BaseChart extends Component {
             events.mouseout = (e) => this.onItemOut(e);
         }
 
-        this.container = svg(
+        this.content = svg(
             'svg',
-            { width: this.state.chartWidth, height: this.props.height },
+            {
+                class: CONTENT_CLASS,
+                width: this.state.chartWidth,
+                height: this.props.height,
+            },
             null,
             events,
         );
 
-        this.chart.appendChild(this.container);
+        this.chart.appendChild(this.content);
 
-        this.containerOffset = getOffset(this.container);
+        this.contentOffset = getOffset(this.content);
 
         this.drawVLabels();
         this.updateBarWidth();
@@ -192,18 +199,8 @@ export class BaseChart extends Component {
         this.drawGrid();
 
         if (this.props.scrollToEnd) {
-            this.chartContent.scrollLeft = this.chartContent.scrollWidth;
+            this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
         }
-    }
-
-    /** Return charts content elemtnt */
-    getContent() {
-        return this.chartContent;
-    }
-
-    /** Return charts wrap element */
-    getWrapObject() {
-        return this.chartsWrapObj;
     }
 
     /** Returns count of data categories */
@@ -315,7 +312,7 @@ export class BaseChart extends Component {
         }
 
         this.removeElements(this.gridLines);
-        prependChild(this.container, lines);
+        prependChild(this.content, lines);
 
         this.gridLines = lines;
     }
@@ -352,8 +349,8 @@ export class BaseChart extends Component {
         const chartOffset = this.getChartOffset(this.chart);
         const paperWidth = Math.max(chartOffset - this.state.vLabelsWidth, contentWidth);
 
-        this.container.setAttribute('width', paperWidth);
-        this.container.setAttribute('height', this.props.height);
+        this.content.setAttribute('width', paperWidth);
+        this.content.setAttribute('height', this.props.height);
 
         this.state.chartWidth = Math.max(paperWidth, contentWidth);
     }
@@ -398,10 +395,10 @@ export class BaseChart extends Component {
         const res = [];
         const offs = this.props.visibilityOffset;
 
-        let itemsOnWidth = Math.round(this.chartContent.offsetWidth / barOuterWidth);
+        let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / barOuterWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
-        let firstItem = Math.floor(this.chartContent.scrollLeft / barOuterWidth);
+        let firstItem = Math.floor(this.chartScroller.scrollLeft / barOuterWidth);
         firstItem = Math.max(0, firstItem - offs);
 
         if (firstItem + itemsOnWidth >= this.items.length) {
@@ -478,7 +475,7 @@ export class BaseChart extends Component {
                     y: lblY,
                 }, tspan);
 
-                this.container.appendChild(txtEl);
+                this.content.appendChild(txtEl);
 
                 const labelRect = txtEl.getBoundingClientRect();
                 const currentOffset = labelShift + Math.ceil(labelRect.width);
@@ -499,7 +496,7 @@ export class BaseChart extends Component {
 
     /** Find item by event object */
     findItemByEvent(e) {
-        const x = e.clientX - this.containerOffset.left + this.chartContent.scrollLeft;
+        const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
         const index = Math.floor(x / this.barOuterWidth);
 
         if (index < 0 || index >= this.items.length) {
@@ -600,12 +597,12 @@ export class BaseChart extends Component {
             removeEmptyClick(this.emptyClickHandler);
         } else {
             this.popup = ce('div', { className: POPUP_CLASS });
-            this.chartsWrapObj.appendChild(this.popup);
+            this.chartContainer.appendChild(this.popup);
         }
 
         show(this.popup, true);
 
-        this.chartsWrapObj.style.position = 'relative';
+        this.chartContainer.style.position = 'relative';
 
         const content = this.renderPopupContent(item);
         if (typeof content === 'string') {
@@ -616,9 +613,9 @@ export class BaseChart extends Component {
         }
 
         const rectBBox = item.elem.getBBox();
-        const chartsBRect = this.chartContent.getBoundingClientRect();
+        const chartsBRect = this.chartScroller.getBoundingClientRect();
 
-        let popupX = rectBBox.x - this.chartContent.scrollLeft
+        let popupX = rectBBox.x - this.chartScroller.scrollLeft
             + (rectBBox.width - this.popup.offsetWidth) / 2;
         const popupY = rectBBox.y - this.popup.offsetHeight - 10;
 

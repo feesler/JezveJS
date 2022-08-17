@@ -53,9 +53,13 @@ const LIST_OPEN_CLASS = 'dd__open';
 const LIST_DROP_DOWN_CLASS = 'dd__list_drop-down';
 const LIST_DROP_UP_CLASS = 'dd__list_drop-up';
 const LIST_GROUP_CLASS = 'dd__list-group';
+const CHECK_ICON_CLASS = 'dd__check-icon';
 /* other */
 const COMBO_CLASS = 'dd__combo';
+const CLEAR_BTN_CLASS = 'dd__clear-btn';
+const CLEAR_ICON_CLASS = 'dd__clear-icon';
 const TOGGLE_BTN_CLASS = 'dd__toggle-btn';
+const TOGGLE_ICON_CLASS = 'dd__toggle-icon';
 const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 
@@ -360,10 +364,14 @@ export class DropDown extends Component {
 
     /** Create clear selection button */
     createClearButton() {
-        const closeIcon = svg('svg', {}, svg('path', { d: CLOSE_ICON }));
+        const closeIcon = svg(
+            'svg',
+            { class: CLEAR_ICON_CLASS },
+            svg('path', { d: CLOSE_ICON }),
+        );
         const res = ce(
             'div',
-            { className: 'dd__clear-btn' },
+            { className: CLEAR_BTN_CLASS },
             closeIcon,
             { click: () => this.onClear() },
         );
@@ -379,7 +387,7 @@ export class DropDown extends Component {
     createToggleButton() {
         const arrowIcon = svg(
             'svg',
-            { width: 24, height: 32 },
+            { class: TOGGLE_ICON_CLASS, width: 24, height: 32 },
             svg('path', { d: TOGGLE_ICON }),
         );
         const res = ce(
@@ -1151,7 +1159,12 @@ export class DropDown extends Component {
         if (this.props.multi) {
             const checkIcon = svg(
                 'svg',
-                { width: 17, height: 17, viewBox: '0 1 10 10' },
+                {
+                    class: CHECK_ICON_CLASS,
+                    width: 17,
+                    height: 17,
+                    viewBox: '0 1 10 10',
+                },
                 svg('path', { d: CHECK_ICON }),
             );
             const titleElem = ce('span', { title: item.title, textContent: item.title });
