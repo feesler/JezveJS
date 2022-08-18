@@ -71,10 +71,12 @@ export class Histogram extends BaseChart {
         categoryIndex = 0,
     }) {
         const { y0 } = this.state;
-        const y1 = this.grid.getY(value);
+
+        const fixedValue = value ?? 0;
+        const y1 = this.grid.getY(fixedValue);
 
         const item = {
-            value,
+            value: fixedValue,
             x: index * this.barOuterWidth + categoryIndex * width,
             y: Math.min(y0, y1),
             width,
