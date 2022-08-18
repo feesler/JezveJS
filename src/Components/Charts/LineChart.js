@@ -92,9 +92,10 @@ export class LineChart extends BaseChart {
     }
 
     createItem({ value, index, categoryIndex = 0 }) {
+        const fixedValue = value ?? 0;
         const item = {
-            value,
-            dot: this.getCoordinates(value, index),
+            value: fixedValue,
+            dot: this.getCoordinates(fixedValue, index),
         };
 
         item.elem = svg('circle', {
