@@ -523,47 +523,52 @@ export class BaseChart extends Component {
         }
     }
 
-    /** Chart content 'mousemove' event handler */
-    onMouseMove(e) {
-        const target = this.findItemByEvent(e);
-        if (this.activeTarget?.item === target.item) {
+    /** Activates specified target */
+    activateTarget(target, e) {
+        if (this.activeTarget?.item === target?.item) {
             return;
         }
-        if (this.activeTarget?.item && isFunction(this.props.onitemout)) {
-            if (this.props.activateOnHover) {
-                this.activeTarget.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
-            }
-            this.props.onitemout({ ...this.activeTarget, event: e });
-        }
+        this.deactivateTarget(e);
 
-        if (!target.item) {
+        if (!target?.item) {
             return;
         }
 
         this.activeTarget = target;
+
         if (this.props.activateOnHover) {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
-
         if (isFunction(this.props.onitemover)) {
             this.props.onitemover({ ...target, event: e });
         }
     }
 
-    /** Chart content 'mouseleave' event handler */
-    onMouseLeave(e) {
+    /** Deactivates specified target */
+    deactivateTarget(e) {
         const target = this.activeTarget;
         this.activeTarget = null;
-        if (!target) {
+        if (!target?.item) {
             return;
         }
+
         if (this.props.activateOnHover) {
             target.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
         }
-
         if (isFunction(this.props.onitemout)) {
             this.props.onitemout({ ...target, event: e });
         }
+    }
+
+    /** Chart content 'mousemove' event handler */
+    onMouseMove(e) {
+        const target = this.findItemByEvent(e);
+        this.activateTarget(target, e);
+    }
+
+    /** Chart content 'mouseleave' event handler */
+    onMouseLeave(e) {
+        this.deactivateTarget(e);
     }
 
     defaultPopupContent(target) {

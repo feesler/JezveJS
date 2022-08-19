@@ -196,10 +196,6 @@ const multiColumnHistogram = () => {
         showPopup: true,
         scrollThrottle: 50,
         activateOnHover: true,
-        onitemclick: onBarClick,
-        onscroll: onChartsScroll,
-        onitemover: onBarOver,
-        onitemout: onBarOut,
     });
 };
 
@@ -297,10 +293,6 @@ const multipleLinechart = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
-        onitemclick: onNodeClick,
-        onscroll: onChartsScroll,
-        onitemover: onNodeOver,
-        onitemout: onNodeOut,
     });
 };
 
