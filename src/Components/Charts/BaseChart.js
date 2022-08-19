@@ -159,15 +159,15 @@ export class BaseChart extends Component {
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
         const events = {
-            click: (e) => this.onItemClick(e),
+            click: (e) => this.onClick(e),
         };
         if (
             this.props.activateOnHover
             || isFunction(this.props.onitemover)
             || isFunction(this.props.onitemout)
         ) {
-            events.mousemove = (e) => this.onItemOver(e);
-            events.mouseout = (e) => this.onItemOut(e);
+            events.mousemove = (e) => this.onMouseMove(e);
+            events.mouseleave = (e) => this.onMouseLeave(e);
         }
 
         this.content = svg(
@@ -507,8 +507,8 @@ export class BaseChart extends Component {
         return { x, item, index };
     }
 
-    /** Chart item click event handler */
-    onItemClick(e) {
+    /** Chart content 'click' event handler */
+    onClick(e) {
         const target = this.findItemByEvent(e);
         if (!target.item) {
             return;
@@ -523,8 +523,8 @@ export class BaseChart extends Component {
         }
     }
 
-    /** Chart item mouse over event handler */
-    onItemOver(e) {
+    /** Chart content 'mousemove' event handler */
+    onMouseMove(e) {
         const target = this.findItemByEvent(e);
         if (this.activeTarget?.item === target.item) {
             return;
@@ -550,8 +550,8 @@ export class BaseChart extends Component {
         }
     }
 
-    /** Chart item mouse out from bar event handler */
-    onItemOut(e) {
+    /** Chart content 'mouseleave' event handler */
+    onMouseLeave(e) {
         const target = this.activeTarget;
         this.activeTarget = null;
         if (!target) {
