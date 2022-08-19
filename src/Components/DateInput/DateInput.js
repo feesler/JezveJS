@@ -290,7 +290,8 @@ export class DateInput {
                 && (isNum(yearVal) || !yearVal.length);
 
             if (res) {
-                let [expectedDay, expectedMonth, expectedYear] = expectedParts;
+                let [expectedDay, expectedMonth] = expectedParts;
+                const [, , expectedYear] = expectedParts;
 
                 delete this.state.selectNext;
 
@@ -307,9 +308,6 @@ export class DateInput {
                         expectedMonth = `0${monthVal}`;
                         this.state.selectNext = 2;
                     }
-                }
-                // input year
-                if (expectedYear !== this.state.year) {
                 }
 
                 this.state = {
