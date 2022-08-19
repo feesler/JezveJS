@@ -23,25 +23,29 @@ export class Histogram extends BaseChart {
     /** Find item by event object */
     findItemByEvent(e) {
         const result = super.findItemByEvent(e);
-        if (!Array.isArray(result)) {
+        if (!Array.isArray(result.item)) {
             return result;
         }
 
-        const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
-        const groupIndex = Math.floor(x / this.barOuterWidth);
-        if (groupIndex < 0 || groupIndex >= this.items.length) {
-            return null;
+        const groupX = this.barOuterWidth * result.index;
+        const innerX = result.x - groupX;
+        const barWidth = this.state.barWidth / result.item.length;
+        let item = null;
+        let index = Math.floor(innerX / barWidth);
+        if (index >= 0 && index < result.item.length) {
+            item = result.item[index];
+        } else {
+            index = -1;
         }
 
-        const groupX = this.barOuterWidth * groupIndex;
-        const innerX = x - groupX;
-        const barWidth = this.state.barWidth / result.length;
-        const index = Math.floor(innerX / barWidth);
-        if (index < 0 || index >= result.length) {
-            return null;
-        }
+        const res = {
+            item,
+            index,
+            group: result.item,
+            groupIndex: result.index,
+        };
 
-        return result[index];
+        return res;
     }
 
     /** Set new position of item */

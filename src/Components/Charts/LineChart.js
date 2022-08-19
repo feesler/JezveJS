@@ -44,26 +44,30 @@ export class LineChart extends BaseChart {
     /** Find item by event object */
     findItemByEvent(e) {
         const result = super.findItemByEvent(e);
-        if (!Array.isArray(result)) {
+        if (!Array.isArray(result.item)) {
             return result;
         }
 
-        const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
-        const groupIndex = Math.floor(x / this.barOuterWidth);
-        if (groupIndex < 0 || groupIndex >= this.items.length) {
-            return null;
-        }
-
         const y = e.offsetY;
-        const diffs = result.map((item, index) => ({ index, diff: Math.abs(y - item.dot.y) }));
+        const diffs = result.item.map((item, ind) => ({ ind, diff: Math.abs(y - item.dot.y) }));
         diffs.sort((a, b) => a.diff - b.diff);
 
-        const itemIndex = diffs[0].index;
-        if (itemIndex < 0 || itemIndex >= result.length) {
-            return null;
+        let item = null;
+        let index = diffs[0].ind;
+        if (index >= 0 && index < result.item.length) {
+            item = result.item[index];
+        } else {
+            index = -1;
         }
 
-        return result[itemIndex];
+        const res = {
+            item,
+            index,
+            group: result.item,
+            groupIndex: result.index,
+        };
+
+        return res;
     }
 
     getCoordinates(value, index) {

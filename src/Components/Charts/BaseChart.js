@@ -26,6 +26,7 @@ const CONTENT_CLASS = 'chart__content';
 const VLABELS_CLASS = 'chart__vert-labels';
 const VLABELS_CONTAINER_CLASS = 'vertical-legend';
 const POPUP_CLASS = 'chart__popup';
+const POPUP_LIST_CLASS = 'chart__popup-list';
 const ACTIVE_ITEM_CLASS = 'chart__item--active';
 const ANIMATE_CLASS = 'chart--animated';
 
@@ -158,15 +159,15 @@ export class BaseChart extends Component {
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
         const events = {
-            click: (e) => this.onItemClick(e),
+            click: (e) => this.onClick(e),
         };
         if (
             this.props.activateOnHover
             || isFunction(this.props.onitemover)
             || isFunction(this.props.onitemout)
         ) {
-            events.mousemove = (e) => this.onItemOver(e);
-            events.mouseout = (e) => this.onItemOut(e);
+            events.mousemove = (e) => this.onMouseMove(e);
+            events.mouseleave = (e) => this.onMouseLeave(e);
         }
 
         this.content = svg(
@@ -498,84 +499,91 @@ export class BaseChart extends Component {
     findItemByEvent(e) {
         const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
         const index = Math.floor(x / this.barOuterWidth);
-
         if (index < 0 || index >= this.items.length) {
-            return null;
+            return { x, item: null, index: -1 };
         }
 
-        return this.items[index];
+        const item = this.items[index];
+        return { x, item, index };
     }
 
-    /** Chart item click event handler */
-    onItemClick(e) {
-        const item = this.findItemByEvent(e);
-        if (!item) {
+    /** Chart content 'click' event handler */
+    onClick(e) {
+        const target = this.findItemByEvent(e);
+        if (!target.item) {
             return;
         }
 
         if (this.props.showPopup) {
-            this.showPopup(item);
+            this.showPopup(target);
         }
 
         if (isFunction(this.props.onitemclick)) {
-            this.props.onitemclick({ item, event: e });
+            this.props.onitemclick({ ...target, event: e });
         }
     }
 
-    /** Chart item mouse over event handler */
-    onItemOver(e) {
-        const item = this.findItemByEvent(e);
-        if (this.activeItem === item) {
+    /** Chart content 'mousemove' event handler */
+    onMouseMove(e) {
+        const target = this.findItemByEvent(e);
+        if (this.activeTarget?.item === target.item) {
             return;
         }
-        if (this.activeItem && isFunction(this.props.onitemout)) {
+        if (this.activeTarget?.item && isFunction(this.props.onitemout)) {
             if (this.props.activateOnHover) {
-                this.activeItem.elem.classList.remove(ACTIVE_ITEM_CLASS);
+                this.activeTarget.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
             }
-            this.props.onitemout({ item: this.activeItem, event: e });
+            this.props.onitemout({ ...this.activeTarget, event: e });
         }
 
-        if (!item) {
+        if (!target.item) {
             return;
         }
 
-        this.activeItem = item;
+        this.activeTarget = target;
         if (this.props.activateOnHover) {
-            item.elem.classList.add(ACTIVE_ITEM_CLASS);
+            target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
 
         if (isFunction(this.props.onitemover)) {
-            this.props.onitemover({ item, event: e });
+            this.props.onitemover({ ...target, event: e });
         }
     }
 
-    /** Chart item mouse out from bar event handler */
-    onItemOut(e) {
-        const item = this.activeItem;
-        this.activeItem = null;
-
-        if (!item) {
+    /** Chart content 'mouseleave' event handler */
+    onMouseLeave(e) {
+        const target = this.activeTarget;
+        this.activeTarget = null;
+        if (!target) {
             return;
         }
         if (this.props.activateOnHover) {
-            item.elem.classList.remove(ACTIVE_ITEM_CLASS);
+            target.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
         }
 
         if (isFunction(this.props.onitemout)) {
-            this.props.onitemout({ item, event: e });
+            this.props.onitemout({ ...target, event: e });
         }
     }
 
-    defaultPopupContent(item) {
-        return ce('span', { textContent: item.value });
+    defaultPopupContent(target) {
+        if (!target.group) {
+            return ce('span', { textContent: target.item.value });
+        }
+
+        return ce(
+            'ul',
+            { className: POPUP_LIST_CLASS },
+            target.group.map((item) => ce('li', { textContent: item.value })),
+        );
     }
 
-    renderPopupContent(item) {
+    renderPopupContent(target) {
         if (isFunction(this.props.renderPopup)) {
-            return this.props.renderPopup(item);
+            return this.props.renderPopup(target);
         }
 
-        return this.defaultPopupContent(item);
+        return this.defaultPopupContent(target);
     }
 
     hidePopup() {
@@ -588,8 +596,8 @@ export class BaseChart extends Component {
         removeEmptyClick(this.emptyClickHandler);
     }
 
-    showPopup(item) {
-        if (!item) {
+    showPopup(target) {
+        if (!target?.item) {
             return;
         }
 
@@ -604,7 +612,7 @@ export class BaseChart extends Component {
 
         this.chartContainer.style.position = 'relative';
 
-        const content = this.renderPopupContent(item);
+        const content = this.renderPopupContent(target);
         if (typeof content === 'string') {
             this.popup.textContent = content;
         } else {
@@ -612,7 +620,7 @@ export class BaseChart extends Component {
             this.popup.append(content);
         }
 
-        const rectBBox = item.elem.getBBox();
+        const rectBBox = target.item.elem.getBBox();
         const chartsBRect = this.chartScroller.getBoundingClientRect();
 
         let popupX = rectBBox.x - this.chartScroller.scrollLeft
@@ -628,7 +636,7 @@ export class BaseChart extends Component {
 
         setParam(this.popup.style, { left: px(popupX), top: px(popupY) });
 
-        setEmptyClick(this.emptyClickHandler, [item.elem, this.popup]);
+        setEmptyClick(this.emptyClickHandler, [target.item.elem, this.popup]);
     }
 
     /** Scale visible items of chart */
