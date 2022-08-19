@@ -148,6 +148,10 @@
     border-color: var(--ig-input-active-border);
   }
 
+  .input-group__inner-btn--active {
+    border-color: var(--ig-input-active-border);
+  }
+
   /* Disabled buttons */
   .input-group__btn[disabled] {
     cursor: default;
