@@ -53,6 +53,14 @@
   white-space: nowrap;
 }
 
+/* List for multiple values popup */
+.chart__popup-list {
+  display: flex;
+  flex-flow: column nowrap;
+  list-style-position: inside;
+  list-style-type: disc;
+}
+
 /* Chart grid line */
 .chart__grid-line {
   stroke-width: 1;

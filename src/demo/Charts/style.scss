@@ -79,3 +79,28 @@
 .test-chart-container .std_chart_wrap {
   width: 250px;
 }
+
+.custom-chart-popup__list {
+  display: flex;
+  flex-flow: column nowrap;
+  list-style-position: inside;
+  list-style-type: disc;
+}
+
+.custom-chart-popup__list li span {
+  position: relative;
+  left: -10px;
+  color: #000000;
+}
+
+.custom-chart-popup__list li:nth-child(1) {
+  color: var(--charts-color);
+}
+
+.custom-chart-popup__list li:nth-child(2) {
+  color: var(--charts-color-2);
+}
+
+.custom-chart-popup__list li:nth-child(3) {
+  color: var(--charts-color-3);
+}
