@@ -1,6 +1,7 @@
 /* Group of text input and button */
 .input-group {
   --ig-height: 2.3rem;
+  --ig-hor-padding: 0.75rem;
   --ig-border-width: 1px;
   --ig-border-radius: 5px;
   --ig-border-color: #ced4da;
@@ -53,6 +54,7 @@
 
   /* Input element */
   .input-group__input {
+    flex-shrink: 1;
     color: var(--ig-input-color);
     background-color: var(--ig-input-bg);
     padding: 0 0.5rem;
@@ -63,10 +65,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     position: relative;
     min-width: var(--ig-height);
     margin: 0;
-    padding: 0;
+    padding: 0 var(--ig-hor-padding);
     color: var(--ig-text-color);
     border-color: var(--ig-text-border);
     background-color: var(--ig-text-bg);
@@ -78,6 +81,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     position: relative;
   }
 
@@ -177,7 +181,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-width: 2.3rem;
+    padding: 0 var(--ig-hor-padding);
     box-sizing: border-box;
     height: 100%;
     line-height: 100%;
