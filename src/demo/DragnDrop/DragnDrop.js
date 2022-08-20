@@ -201,11 +201,15 @@ const initTableNoBody = () => {
 
 /** handles option */
 const initHandles = () => {
-    DefaultDragZone.create({ elem: ge('di1'), dragOriginal: true, handles: 'di1' });
+    DefaultDragZone.create({
+        elem: ge('di1'),
+        dragOriginal: true,
+        handles: 'di1',
+    });
     DefaultDragZone.create({
         elem: ge('di2'),
         dragOriginal: true,
-        handles: ['dh2_1', { elem: 'dh2_2' }],
+        handles: 'dh2_1',
     });
     DefaultDragZone.create({
         elem: ge('di3'),

@@ -1,5 +1,5 @@
 import { Component } from '../../js/Component.js';
-import { setEvents } from '../../js/common.js';
+import { ce, setEvents } from '../../js/common.js';
 import '../../css/common.scss';
 import './style.scss';
 
@@ -41,7 +41,8 @@ export class InputGroup extends Component {
             this.props.children = [this.props.children];
         }
 
-        this.elem.append(this.props.children);
+        this.elem = ce('div', { className: CONTAINER_CLASS });
+        this.elem.append(...this.props.children);
         this.queryInputs();
 
         this.setClassNames();

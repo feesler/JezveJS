@@ -122,9 +122,13 @@
 }
 
 .drag_item {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  position: absolute;
+  top: 0;
   padding: 10px 30px 10px 10px;
   background-color: #77bbff;
-  position: absolute;
 }
 
 .drag_item > input[type="text"],
@@ -133,26 +137,30 @@
   border: 1px solid #000000;
 }
 
-.drag_handle {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
+.drag-handle {
+  display: block;
+  width: 28px;
+  height: 28px;
+  margin-left: 0.5rem;
   background-color: #0088ff;
-  vertical-align: middle;
 }
 
-.drag_handle_small {
-  display: inline-block;
-  line-height: 25px;
-  width: 10px;
-  height: 10px;
-  background-color: #8888ff;
+.drag-handle-btn {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  margin: 0 0.5rem;
 }
 
-.drag_handle_small.green {
-  background-color: #22ff22;
+.drag-handle-btn__icon {
+  width: 20px;
+  height: 20px;
+  fill: #383838;
 }
 
-.drag_handle_small.red {
-  background-color: #ff2222;
+.red {
+  fill: #ff2222;
 }
