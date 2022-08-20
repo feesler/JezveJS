@@ -3,7 +3,6 @@ import {
     ce,
     svg,
     addChilds,
-    removeChilds,
     show,
     isDate,
     isFunction,
@@ -86,7 +85,6 @@ const defaultProps = {
 /**
  * Date picker constructor
  * @param {object} props:
- * @param {string|Element} props.wrapper - identifier or Element where date picker will be rendered
  * @param {string} props.relparent - identifier of relative alignment element
  * @param {Date} props.date - initial date to show
  * @param {boolean} props.static - if true, date picker will be statically placed
@@ -130,27 +128,17 @@ export class DatePicker extends Component {
     }
 
     init() {
-        const { wrapper, relparent } = this.props;
+        const { relparent } = this.props;
 
-        if (!wrapper) {
-            throw new Error('Wrapper element not specified');
-        }
+        this.elem = ce('div', { className: CONTAINER_CLASS });
 
-        this.baseObj = (typeof wrapper === 'string') ? ge(wrapper) : wrapper;
-        if (!this.baseObj) {
-            throw new Error('Invalid wrapper element');
-        }
-
-        removeChilds(this.baseObj);
-        this.baseObj.classList.add(CONTAINER_CLASS);
-
-        this.wrapperObj = ce('div', { className: WRAPPER_CLASS });
+        this.wrapper = ce('div', { className: WRAPPER_CLASS });
         if (this.props.static) {
-            this.wrapperObj.classList.add(STATIC_WRAPPER_CLASS);
+            this.wrapper.classList.add(STATIC_WRAPPER_CLASS);
         } else {
-            show(this.wrapperObj, false);
+            show(this.wrapper, false);
         }
-        this.baseObj.appendChild(this.wrapperObj);
+        this.elem.appendChild(this.wrapper);
 
         if (relparent) {
             this.relativeParent = (typeof relparent === 'string')
@@ -339,16 +327,16 @@ export class DatePicker extends Component {
     showView(val) {
         const toShow = (typeof val !== 'undefined') ? val : true;
 
-        show(this.wrapperObj, toShow);
+        show(this.wrapper, toShow);
 
         // check position of control in window and place it to be visible
         if (toShow && !this.props.static) {
-            const wrapperBottom = getOffset(this.wrapperObj).top + this.wrapperObj.offsetHeight;
+            const wrapperBottom = getOffset(this.wrapper).top + this.wrapper.offsetHeight;
             if (wrapperBottom > document.documentElement.clientHeight) {
                 const bottomOffset = (this.relativeParent) ? this.relativeParent.offsetHeight : 0;
-                this.wrapperObj.style.bottom = px(bottomOffset);
+                this.wrapper.style.bottom = px(bottomOffset);
             } else {
-                this.wrapperObj.style.bottom = '';
+                this.wrapper.style.bottom = '';
             }
         }
 
@@ -356,7 +344,7 @@ export class DatePicker extends Component {
         if (!this.props.static) {
             if (toShow) {
                 setEmptyClick(this.emptyClickHandler, [
-                    this.wrapperObj,
+                    this.wrapper,
                     this.relativeParent,
                 ]);
             } else {
@@ -384,7 +372,7 @@ export class DatePicker extends Component {
      * Check date picker is visible
      */
     visible() {
-        return isVisible(this.wrapperObj);
+        return isVisible(this.wrapper);
     }
 
     /**
@@ -500,7 +488,7 @@ export class DatePicker extends Component {
      * Create layout of component
      */
     createLayout() {
-        if (!this.wrapperObj) {
+        if (!this.wrapper) {
             return;
         }
 
@@ -512,11 +500,11 @@ export class DatePicker extends Component {
             },
         };
 
-        this.wrapperObj.addEventListener('click', (e) => this.onViewClick(e));
-        this.wrapperObj.addEventListener('wheel', (e) => this.onWheel(e));
+        this.wrapper.addEventListener('click', (e) => this.onViewClick(e));
+        this.wrapper.addEventListener('wheel', (e) => this.onWheel(e));
 
         this.cellsContainer = ce('div', { className: VIEW_CLASS });
-        addChilds(this.wrapperObj, [this.renderHead(), this.cellsContainer]);
+        addChilds(this.wrapper, [this.renderHead(), this.cellsContainer]);
     }
 
     /** Remove highlight from all cells */

@@ -3,6 +3,7 @@ import {
     onReady,
     formatDate,
     DatePicker,
+    insertAfter,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../css/app.scss';
@@ -25,48 +26,51 @@ const formatRangeToInput = (range, inputId) => {
 };
 
 const initStatic = () => {
-    DatePicker.create({
-        wrapper: 'dpStatic',
+    const datePicker = DatePicker.create({
         static: true,
         animated: true,
         ondateselect: (date) => formatDateToInput(date, 'staticDateInp'),
     });
+
+    insertAfter(datePicker.elem, ge('staticDateInp'));
 };
 
 const initPopup = () => {
+    const inpGroup = ge('dpPopupGroup');
     const datePicker = DatePicker.create({
-        wrapper: 'dpPopup',
-        relparent: 'dpPopupGroup',
+        relparent: inpGroup,
         ondateselect: (date) => {
             formatDateToInput(date, 'popupDateInp');
             datePicker.hide();
         },
     });
+    insertAfter(datePicker.elem, inpGroup);
 
     const btn = ge('showPopupBtn');
     btn.addEventListener('click', () => datePicker.show());
 };
 
 const initRangeSelect = () => {
+    const inpGroup = ge('dpRangeGroup');
     const datePicker = DatePicker.create({
-        wrapper: 'dpRange',
-        relparent: 'dpRangeGroup',
+        relparent: inpGroup,
         range: true,
         onrangeselect: (range) => {
             formatRangeToInput(range, 'rangeInp');
             datePicker.hide();
         },
     });
+    insertAfter(datePicker.elem, inpGroup);
 
     const btn = ge('showRangeBtn');
     btn.addEventListener('click', () => datePicker.show());
 };
 
 const initCallbacks = () => {
+    const inpGroup = ge('dpCallbacksGroup');
     const statustext = ge('statustext');
     const datePicker = DatePicker.create({
-        wrapper: 'dpCallbacks',
-        relparent: 'dpCallbacksGroup',
+        relparent: inpGroup,
         range: true,
         ondateselect: (date) => {
             statustext.textContent = `Date selected: ${formatDate(date)}`;
@@ -76,39 +80,43 @@ const initCallbacks = () => {
             statustext.textContent = 'Loading...';
         },
     });
+    insertAfter(datePicker.elem, inpGroup);
 
     const btn = ge('showCbBtn');
     btn.addEventListener('click', () => datePicker.show());
 };
 
 const initSetSelection = () => {
+    const inpGroup = ge('dpSelectionGroup');
     const datePicker = DatePicker.create({
-        wrapper: 'dpSelection',
-        relparent: 'dpSelectionGroup',
+        relparent: inpGroup,
         range: true,
     });
     datePicker.setSelection('01.12.2020', '07.12.2020');
+    insertAfter(datePicker.elem, inpGroup);
 
     const btn = ge('showSelBtn');
     btn.addEventListener('click', () => datePicker.show());
 };
 
 const initLocales = () => {
-    DatePicker.create({
-        wrapper: 'dpEnLocale',
+    const enDatePicker = DatePicker.create({
         static: true,
         locales: ['en-US'],
     });
-    DatePicker.create({
-        wrapper: 'dpFrLocale',
+    ge('dpEnLocale').append(enDatePicker.elem);
+
+    const frDatePicker = DatePicker.create({
         static: true,
         locales: ['fr'],
     });
-    DatePicker.create({
-        wrapper: 'dpRuLocale',
+    ge('dpFrLocale').append(frDatePicker.elem);
+
+    const ruDatePicker = DatePicker.create({
         static: true,
         locales: ['ru'],
     });
+    ge('dpRuLocale').append(ruDatePicker.elem);
 };
 
 const init = () => {
