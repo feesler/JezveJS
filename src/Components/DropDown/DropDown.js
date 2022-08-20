@@ -1112,6 +1112,7 @@ export class DropDown extends Component {
         this.setState({
             ...this.state,
             disabled: !val,
+            active: false,
         });
     }
 
