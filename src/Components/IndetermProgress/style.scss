@@ -1,0 +1,78 @@
+.indeterm-progress {
+  --progress-width: 300px;
+  --progress-height: 12px;
+  --progress-animation-time: 3s;
+  --progress-translate: calc(var(--progress-width) + 10px);
+  --progress-item-content: "\2022";
+  --progress-item-color: #0078d7;
+  --progress-item-width: 8px;
+  --progress-item-size: 15px;
+  --progress-item-delay: 0.2s;
+
+  position: relative;
+  width: var(--progress-width);
+  height: var(--progress-height);
+  overflow: hidden;
+
+  .indeterm-progress__circle {
+    position: absolute;
+    top: 0;
+    left: calc(var(--progress-item-width) * -1);
+    width: var(--progress-item-width);
+    height: var(--progress-height);
+    line-height: var(--progress-height);
+    transform: none;
+    transition-delay: 0s;
+    opacity: 0;
+  }
+
+  .indeterm-progress__circle::after {
+    content: var(--progress-item-content);
+    font-size: var(--progress-item-size);
+    color: var(--progress-item-color);
+  }
+}
+
+@keyframes progress-animation {
+  to {
+    transform: translateX(var(--progress-translate));
+  }
+}
+
+@keyframes opacity-animation {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.indeterm-progress.run .indeterm-progress__circle {
+  animation-name: progress-animation, opacity-animation;
+  animation-duration: var(--progress-animation-time);
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.1, 0.85, 0.85, 0.1);
+
+  &:nth-child(2) {
+    animation-delay: var(--progress-item-delay);
+  }
+
+  &:nth-child(3) {
+    animation-delay: calc(var(--progress-item-delay) * 2);
+  }
+
+  &:nth-child(4) {
+    animation-delay: calc(var(--progress-item-delay) * 3);
+  }
+
+  &:nth-child(5) {
+    animation-delay: calc(var(--progress-item-delay) * 4);
+  }
+}

@@ -24,6 +24,7 @@ export { Paginator } from '../Components/Paginator/Paginator.js';
 export { PieChart } from '../Components/PieChart/PieChart.js';
 export { Popup } from '../Components/Popup/Popup.js';
 export { Progress } from '../Components/Progress/Progress.js';
+export { IndetermProgress } from '../Components/IndetermProgress/IndetermProgress.js';
 export { Radio } from '../Components/Radio/Radio.js';
 export { Slider } from '../Components/Slider/Slider.js';
 export { Sortable } from '../Components/Sortable/Sortable.js';
