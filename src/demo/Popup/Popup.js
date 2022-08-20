@@ -11,56 +11,52 @@ import '../../css/common.scss';
 import '../css/app.scss';
 import './style.scss';
 
-const popupArr = [];
+const onClosePopup = () => { };
 
-function onClosePopup() {
-}
-
-function onPopupResult(res) {
+const onPopupResult = (res) => {
     const result = ge('result');
     if (result) {
         result.textContent = (res) ? 'OK Button' : 'Cancel Button';
     }
-}
+};
 
-function onPopupResultAndClose(res) {
+const onPopupResultAndClose = (popup, res) => {
     const result = ge('result');
     if (result) {
         result.textContent = (res) ? 'OK Button' : 'Cancel Button';
     }
 
-    this.close();
-}
+    popup.close();
+};
 
-function showPopup1() {
-    const ind = 1;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup1',
+let fullWidthPopup = null;
+const showFullWidthPopup = () => {
+    if (!fullWidthPopup) {
+        fullWidthPopup = Popup.create({
+            id: 'fullWidthPopup',
             title: 'Fullwidth popup',
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.<br>
             Control buttons are added and both will close popup.`,
         });
-        popupArr[ind].setControls({
-            okBtn: { onclick: onPopupResultAndClose.bind(popupArr[ind], true) },
-            cancelBtn: { onclick: onPopupResultAndClose.bind(popupArr[ind], false) },
+        fullWidthPopup.setControls({
+            okBtn: { onclick: () => onPopupResultAndClose(fullWidthPopup, true) },
+            cancelBtn: { onclick: () => onPopupResultAndClose(fullWidthPopup, false) },
         });
     }
 
-    popupArr[ind].show();
-}
+    fullWidthPopup.show();
+};
 
-function showPopup2() {
-    const placeholderMsg = 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.';
-    const ind = 2;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup2',
+const placeholderMsg = 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.';
+let closeBtnPopup = null;
+const showCloseBtnPopup = () => {
+    if (!closeBtnPopup) {
+        closeBtnPopup = Popup.create({
+            id: 'closeBtnPopup',
             title: 'Fullwidth popup',
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.<br>
-            Close button is added. Control buttons will not close popup.<br><br>${placeholderMsg}`,
+            Close button is added. Control buttons will not close popup.<br>
+            On small screen message will overflow and whole popup should be scrolled<br><br>${placeholderMsg}${placeholderMsg}`,
             btn: {
                 okBtn: { onclick: onPopupResult.bind(null, true) },
                 cancelBtn: { onclick: onPopupResult.bind(null, false) },
@@ -70,15 +66,36 @@ function showPopup2() {
         });
     }
 
-    popupArr[ind].show();
-}
+    closeBtnPopup.show();
+};
 
-function showPopup3() {
-    const ind = 3;
+let messageScrollPopup = null;
+const showMessageScrollPopup = () => {
+    if (!messageScrollPopup) {
+        messageScrollPopup = Popup.create({
+            id: 'messageScrollPopup',
+            title: 'Fullwidth popup',
+            content: `This popup is dynamically created and have content on the center of screen with fullwidth background.<br>
+            Close button is added. Control buttons will not close popup.<br>
+            On small screen message will overflow and whole popup should be scrolled<br><br>${placeholderMsg}${placeholderMsg}`,
+            btn: {
+                okBtn: { onclick: () => onPopupResult(true) },
+                cancelBtn: { onclick: () => onPopupResult(false) },
+                closeBtn: true,
+            },
+            onclose: onClosePopup,
+            className: 'scroll-message',
+        });
+    }
 
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup3',
+    messageScrollPopup.show();
+};
+
+let centerOnlyPopup = null;
+const showCenterOnlyPopup = () => {
+    if (!centerOnlyPopup) {
+        centerOnlyPopup = Popup.create({
+            id: 'centerOnlyPopup',
             title: 'Center popup',
             content: 'This popup is dynamically created and have only center background.',
             btn: { closeBtn: true },
@@ -87,15 +104,14 @@ function showPopup3() {
         });
     }
 
-    popupArr[ind].show();
-}
+    centerOnlyPopup.show();
+};
 
-function showPopup4() {
-    const ind = 4;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup4',
+let noDimPopup = null;
+const showNoDimPopup = () => {
+    if (!noDimPopup) {
+        noDimPopup = Popup.create({
+            id: 'noDimPopup',
             title: 'No dimming',
             content: 'This popup is dynamically created and doesn\'t dim page background.',
             btn: { closeBtn: true },
@@ -105,15 +121,14 @@ function showPopup4() {
         });
     }
 
-    popupArr[ind].show();
-}
+    noDimPopup.show();
+};
 
-function showPopup5() {
-    const ind = 5;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup5',
+let draggablePopup = null;
+const showDraggablePopup = () => {
+    if (!draggablePopup) {
+        draggablePopup = Popup.create({
+            id: 'draggablePopup',
             title: 'Draggable',
             content: 'This popup is dynamically created and draggable.',
             btn: { closeBtn: true },
@@ -122,23 +137,19 @@ function showPopup5() {
             nodim: true,
         });
 
-        const contentObj = popupArr[ind].contentElem;
-        const boxObj = popupArr[ind].boxElem;
-        if (contentObj && boxObj) {
-            this.popup5Zone = PopupDragZone.create({ elem: boxObj });
-            this.popup5Target = PopupDropTarget.create({ elem: contentObj });
-        }
+        const { boxElem, contentElem } = draggablePopup;
+        PopupDragZone.create({ elem: boxElem });
+        PopupDropTarget.create({ elem: contentElem });
     }
 
-    popupArr[ind].show();
-}
+    draggablePopup.show();
+};
 
-function showPopup6() {
-    const ind = 6;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup6',
+let notificationPopup = null;
+const showNotifyPopup = () => {
+    if (!notificationPopup) {
+        notificationPopup = Popup.create({
+            id: 'notificationPopup',
             content: 'This popup is dynamically created. It has no buttons and title and will be closed only on click on empty place.',
             onclose: onClosePopup,
             className: ['center_only', 'border_popup'],
@@ -147,15 +158,14 @@ function showPopup6() {
         });
     }
 
-    popupArr[ind].show();
-}
+    notificationPopup.show();
+};
 
-function showPopup7() {
-    const ind = 7;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup7',
+let successNotifyPopup = null;
+const showSuccessNotifyPopup = () => {
+    if (!successNotifyPopup) {
+        successNotifyPopup = Popup.create({
+            id: 'successNotifyPopup',
             content: 'Success message. Something created as expected.',
             onclose: onClosePopup,
             btn: { closeBtn: true },
@@ -165,15 +175,14 @@ function showPopup7() {
         });
     }
 
-    popupArr[ind].show();
-}
+    successNotifyPopup.show();
+};
 
-function showPopup8() {
-    const ind = 8;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup8',
+let errorNotifyPopup = null;
+const showErrorNotifyPopup = () => {
+    if (!errorNotifyPopup) {
+        errorNotifyPopup = Popup.create({
+            id: 'errorNotifyPopup',
             content: 'Error message. Fail to create something',
             onclose: onClosePopup,
             btn: { closeBtn: true },
@@ -183,49 +192,46 @@ function showPopup8() {
         });
     }
 
-    popupArr[ind].show();
-}
+    errorNotifyPopup.show();
+};
 
-function showPopup9() {
-    const ind = 9;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup9',
+let templatePopup = null;
+const showTemplatePopup = () => {
+    if (!templatePopup) {
+        templatePopup = Popup.create({
+            id: 'templatePopup',
             content: ge('template1'),
             btn: { closeBtn: true },
             onclose: onClosePopup,
         });
     }
 
-    popupArr[ind].show();
-}
+    templatePopup.show();
+};
 
-function showPopup10() {
-    const ind = 10;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup10',
+let template2Popup = null;
+const showTemplate2Popup = () => {
+    if (!template2Popup) {
+        template2Popup = Popup.create({
+            id: 'template2Popup',
             title: 'Extended template',
             content: ge('template2'),
             onclose: onClosePopup,
         });
-        popupArr[ind].setControls({
-            okBtn: { onclick: onPopupResultAndClose.bind(popupArr[ind], true) },
+        template2Popup.setControls({
+            okBtn: { onclick: () => onPopupResultAndClose(template2Popup, true) },
             closeBtn: true,
         });
     }
 
-    popupArr[ind].show();
-}
+    template2Popup.show();
+};
 
-function showPopup12() {
-    const ind = 12;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup12',
+let nestedChildPopup = null;
+const showNestedChildPopup = () => {
+    if (!nestedChildPopup) {
+        nestedChildPopup = Popup.create({
+            id: 'nestedChildPopup',
             title: 'Select something',
             content: ge('template4'),
             className: ['center_only', 'border_popup'],
@@ -233,8 +239,8 @@ function showPopup12() {
             onclose: onClosePopup,
         });
 
-        popupArr[ind].setControls({
-            okBtn: { onclick: onPopupResultAndClose.bind(popupArr[ind], true) },
+        nestedChildPopup.setControls({
+            okBtn: { onclick: () => onPopupResultAndClose(nestedChildPopup, true) },
             closeBtn: true,
         });
 
@@ -243,50 +249,48 @@ function showPopup12() {
         });
     }
 
-    popupArr[ind].show();
-}
+    nestedChildPopup.show();
+};
 
-function showPopup11() {
-    const ind = 11;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup11',
+let nestedParentPopup = null;
+const showNestedPopup = () => {
+    if (!nestedParentPopup) {
+        nestedParentPopup = Popup.create({
+            id: 'nestedParentPopup',
             title: 'Nested popups',
             content: ge('template3'),
             btn: {
-                okBtn: { value: 'Select', onclick: showPopup12 },
+                okBtn: { value: 'Select', onclick: showNestedChildPopup },
                 closeBtn: true,
             },
             onclose: onClosePopup,
         });
     }
 
-    popupArr[ind].show();
-}
+    nestedParentPopup.show();
+};
 
-function removeControls() {
-    this.setControls({
+const removeControls = (popup) => {
+    popup.setControls({
         okBtn: { disabled: false },
         cancelBtn: false,
         closeBtn: false,
     });
-}
+};
 
-function restoreControls() {
-    this.setControls({
+const restoreControls = (popup) => {
+    popup.setControls({
         okBtn: { disabled: true },
-        cancelBtn: { value: 'Remove', onclick: removeControls.bind(this) },
+        cancelBtn: { value: 'Remove', onclick: () => removeControls(popup) },
         closeBtn: true,
     });
-}
+};
 
-function showPopup13() {
-    const ind = 13;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup13',
+let controlsUpdatePopup = null;
+const showControlsUpdatePopup = () => {
+    if (!controlsUpdatePopup) {
+        controlsUpdatePopup = Popup.create({
+            id: 'controlsUpdatePopup',
             title: 'setControls() methods test',
             content: 'After click on Remove button it and Close button will disappear and Restore button will be enabled.<br>'
                 + 'After click on Restore button Close and Remove button will appear and Restore button will be disabled.',
@@ -300,47 +304,48 @@ function showPopup13() {
             onclose: onClosePopup,
         });
 
-        popupArr[ind].setControls({
-            okBtn: { onclick: restoreControls.bind(popupArr[ind]) },
-            cancelBtn: { onclick: removeControls.bind(popupArr[ind]) },
+        controlsUpdatePopup.setControls({
+            okBtn: { onclick: () => restoreControls(controlsUpdatePopup) },
+            cancelBtn: { onclick: () => removeControls(controlsUpdatePopup) },
         });
     }
 
-    popupArr[ind].show();
-}
+    controlsUpdatePopup.show();
+};
 
-function toggleTitle() {
-    if (this.titleState === 1) {
-        this.titleState = 2;
+/* eslint-disable no-param-reassign */
+const toggleTitle = (popup) => {
+    if (popup.titleState === 1) {
+        popup.titleState = 2;
 
         const elementTitle = ce('div', { className: 'element-title' }, [
             ce('button', { className: 'element-title__btn', innerHTML: '&#10004;' }),
             ce('span', { textContent: 'Element title' }),
         ]);
 
-        this.setTitle(elementTitle);
+        popup.setTitle(elementTitle);
     } else {
-        this.titleState = 1;
-        this.setTitle('String title');
+        popup.titleState = 1;
+        popup.setTitle('String title');
     }
-    this.setControls({ cancelBtn: { disabled: false } });
-}
+    popup.setControls({ cancelBtn: { disabled: false } });
+};
 
-function delTitle() {
-    this.titleState = -1;
+const delTitle = (popup) => {
+    popup.titleState = -1;
 
-    this.removeTitle();
-    this.setControls({
+    popup.removeTitle();
+    popup.setControls({
         okBtn: { disabled: false },
         cancelBtn: { disabled: true },
     });
-}
+};
+/* eslint-enable no-param-reassign */
 
-function showPopup14() {
-    const ind = 14;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
+let titleUpdatePopup = null;
+const showTitleUpdatePopup = () => {
+    if (!titleUpdatePopup) {
+        titleUpdatePopup = Popup.create({
             id: 'popup14',
             title: 'setTitle() method test',
             content: 'This popup is able to change its title.<br>',
@@ -354,45 +359,44 @@ function showPopup14() {
             onclose: onClosePopup,
         });
 
-        popupArr[ind].setControls({
-            okBtn: { onclick: toggleTitle.bind(popupArr[ind]) },
-            cancelBtn: { onclick: delTitle.bind(popupArr[ind]) },
+        titleUpdatePopup.setControls({
+            okBtn: { onclick: () => toggleTitle(titleUpdatePopup) },
+            cancelBtn: { onclick: () => delTitle(titleUpdatePopup) },
         });
 
-        popupArr[ind].titleState = 0;
+        titleUpdatePopup.titleState = 0;
     }
 
-    popupArr[ind].show();
-}
+    titleUpdatePopup.show();
+};
 
-function stringContent() {
-    this.setContent('This popup is able to change its content.');
-    this.setControls({
+const stringContent = (popup) => {
+    popup.setContent('This popup is able to change its content.');
+    popup.setControls({
         okBtn: { disabled: true },
         cancelBtn: { disabled: false },
     });
-}
+};
 
-function templateContent() {
-    this.setContent(
+const templateContent = (popup) => {
+    popup.setContent(
         ce('div', {}, [
             ce('div', { className: 'template-test__item' }),
             ce('div', { className: 'template-test__item' }),
             ce('div', { className: 'template-test__item' }),
         ]),
     );
-    this.setControls({
+    popup.setControls({
         okBtn: { disabled: false },
         cancelBtn: { disabled: true },
     });
-}
+};
 
-function showPopup15() {
-    const ind = 15;
-
-    if (!popupArr[ind]) {
-        popupArr[ind] = Popup.create({
-            id: 'popup15',
+let contentUpdatePopup = null;
+const showContentUpdatePopup = () => {
+    if (!contentUpdatePopup) {
+        contentUpdatePopup = Popup.create({
+            id: 'contentUpdatePopup',
             title: 'setContent() method test',
             content: 'This popup is able to change its content.',
             className: ['center_only', 'border_popup', 'controls_test'],
@@ -405,30 +409,31 @@ function showPopup15() {
             onclose: onClosePopup,
         });
 
-        popupArr[ind].setControls({
-            okBtn: { onclick: stringContent.bind(popupArr[ind]) },
-            cancelBtn: { onclick: templateContent.bind(popupArr[ind]) },
+        contentUpdatePopup.setControls({
+            okBtn: { onclick: () => stringContent(contentUpdatePopup) },
+            cancelBtn: { onclick: () => templateContent(contentUpdatePopup) },
         });
     }
 
-    popupArr[ind].show();
-}
+    contentUpdatePopup.show();
+};
 
-function init() {
-    ge('p1btn').onclick = showPopup1;
-    ge('p2btn').onclick = showPopup2;
-    ge('p3btn').onclick = showPopup3;
-    ge('p4btn').onclick = showPopup4;
-    ge('p5btn').onclick = showPopup5;
-    ge('p6btn').onclick = showPopup6;
-    ge('p7btn').onclick = showPopup7;
-    ge('p8btn').onclick = showPopup8;
-    ge('p9btn').onclick = showPopup9;
-    ge('p10btn').onclick = showPopup10;
-    ge('p11btn').onclick = showPopup11;
-    ge('p13btn').onclick = showPopup13;
-    ge('p14btn').onclick = showPopup14;
-    ge('p15btn').onclick = showPopup15;
-}
+const init = () => {
+    ge('showFullWidthBtn').onclick = showFullWidthPopup;
+    ge('showCloseBtn').onclick = showCloseBtnPopup;
+    ge('showMsgScrollBtn').onclick = showMessageScrollPopup;
+    ge('showCenterOnlyBtn').onclick = showCenterOnlyPopup;
+    ge('showNoDimBtn').onclick = showNoDimPopup;
+    ge('showDraggableBtn').onclick = showDraggablePopup;
+    ge('showNotifyBtn').onclick = showNotifyPopup;
+    ge('showSuccessNotifyBtn').onclick = showSuccessNotifyPopup;
+    ge('showErrorNotifyBtn').onclick = showErrorNotifyPopup;
+    ge('showTplBtn').onclick = showTemplatePopup;
+    ge('showTpl2Btn').onclick = showTemplate2Popup;
+    ge('showNestedBtn').onclick = showNestedPopup;
+    ge('showControlsUpdBtn').onclick = showControlsUpdatePopup;
+    ge('showTitleUpdBtn').onclick = showTitleUpdatePopup;
+    ge('showContentUpdBtn').onclick = showContentUpdatePopup;
+};
 
 onReady(init);

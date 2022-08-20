@@ -22,16 +22,10 @@
   background: none;
 }
 
-.popup__scroller {
-  display: table;
-  width: 100%;
-  height: 100%;
-}
-
 .popup__wrapper {
   display: flex;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   flex-direction: row;
   align-items: center;
 }

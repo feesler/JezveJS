@@ -89,7 +89,6 @@ export class Popup extends Component {
         this.boxElem = ce('div', { className: BOX_CLASS });
         this.contentElem = ce('div', { className: CONTENT_CLASS }, this.boxElem);
         this.wrapperElem = ce('div', { className: WRAPPER_CLASS }, this.contentElem);
-        this.scrollerElem = ce('div', { className: SCROLLER_CLASS }, this.wrapperElem);
 
         this.setClassNames();
 
@@ -101,7 +100,7 @@ export class Popup extends Component {
         this.setControls(this.props.btn);
         show(this.messageElem, true);
 
-        this.elem.appendChild(this.scrollerElem);
+        this.elem.appendChild(this.wrapperElem);
 
         document.body.appendChild(this.elem);
     }
