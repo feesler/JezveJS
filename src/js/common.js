@@ -291,11 +291,16 @@ export function show(elem, val) {
  * @param {Element|string} elem - element or id to show/hide
  * @param {boolean} val - if set to true then element will be enabled, disable otherwise
  */
-export function enable(elem, val) {
-    const robj = (typeof elem === 'string') ? ge(elem) : elem;
+export function enable(elem, val = true) {
+    const relem = (typeof elem === 'string') ? ge(elem) : elem;
+    if (!relem) {
+        return;
+    }
 
-    if (robj) {
-        robj.disabled = (!val);
+    if (val) {
+        relem.removeAttribute('disabled');
+    } else {
+        relem.setAttribute('disabled', true);
     }
 }
 
