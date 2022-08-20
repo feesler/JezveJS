@@ -11,6 +11,20 @@
   }
 }
 
+.scroll-message {
+  .popup__content {
+    max-height: 100vh;
+  }
+
+  .popup__content-box {
+    overflow: hidden;
+  }
+
+  .popup__message {
+    overflow-y: auto;
+  }
+}
+
 /* Bordered popup */
 .border_popup .popup__content-box {
   border: 1px solid #000000;
