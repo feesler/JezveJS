@@ -73,7 +73,7 @@ const defaultProps = {
     relparent: null,
     date: new Date(),
     static: false,
-    range: true,
+    range: false,
     locales: [],
     animated: false,
     onrangeselect: null,
@@ -112,6 +112,7 @@ export class DatePicker extends Component {
         };
 
         this.state = {
+            viewType: MONTH_VIEW,
             date: isDate(this.props.date) ? this.props.date : new Date(),
             animation: false,
             curRange: { start: null, end: null },
@@ -147,7 +148,7 @@ export class DatePicker extends Component {
         }
 
         this.createLayout();
-        this.showMonth(this.state.date);
+        this.render(this.state);
     }
 
     /**
@@ -428,8 +429,7 @@ export class DatePicker extends Component {
      */
     onWheel(e) {
         if (
-            !this.currView
-            || !this.currView.callback
+            !this.currView?.nav
             || this.state.animation
             || e.deltaY === 0
         ) {
@@ -437,50 +437,63 @@ export class DatePicker extends Component {
         }
 
         const dir = (e.wheelDelta > 0);
-        if (!isFunction(this.currView.callback.nav) || !this.currView.nav) {
-            return;
-        }
-
         const nav = (dir) ? this.currView.nav.prev : this.currView.nav.next;
-        setTimeout(() => this.currView.callback.nav(nav));
+        setTimeout(() => this.setViewDate(nav));
 
         e.preventDefault();
     }
 
     /** View 'click' event delegate */
     onViewClick(e) {
-        if (!this.currView || !this.currView.callback || this.state.animation) {
+        if (!this.currView || this.state.animation) {
             return;
         }
 
         if (this.titleEl.contains(e.target)) {
-            if (!isFunction(this.currView.callback.hdr)) {
-                return;
-            }
-
-            setTimeout(() => this.currView.callback.hdr(this.currView.viewDate));
+            setTimeout(() => this.navigateUp());
         } else if (this.navPrevElem.contains(e.target)) {
-            if (!isFunction(this.currView.callback.nav) || !this.currView.nav) {
-                return;
-            }
-
-            setTimeout(() => this.currView.callback.nav(this.currView.nav.prev));
+            setTimeout(() => this.setViewDate(this.currView.nav.prev));
         } else if (this.navNextElem.contains(e.target)) {
-            if (!isFunction(this.currView.callback.nav) || !this.currView.nav) {
-                return;
-            }
-
-            setTimeout(() => this.currView.callback.nav(this.currView.nav.next));
+            setTimeout(() => this.setViewDate(this.currView.nav.next));
         } else {
             // check main cells
-            if (!isFunction(this.currView.callback.cell)) {
-                return;
-            }
-
             const setObj = this.currView.set.find((item) => item.cell === e.target);
             if (setObj) {
-                setTimeout(() => this.currView.callback.cell(setObj.date));
+                setTimeout(() => this.onCellClick(setObj.date));
             }
+        }
+    }
+
+    onCellClick(date) {
+        const { viewType } = this.state;
+        if (viewType === MONTH_VIEW) {
+            this.onDayClick(date);
+        } else if (viewType === YEAR_VIEW) {
+            this.showMonth(date);
+        } else if (viewType === YEARRANGE_VIEW) {
+            this.showYear(date);
+        }
+    }
+
+    setViewDate(date) {
+        this.setState({
+            ...this.state,
+            date,
+        });
+    }
+
+    navigateUp() {
+        const { viewType } = this.state;
+        if (viewType === MONTH_VIEW) {
+            this.setState({
+                ...this.state,
+                viewType: YEAR_VIEW,
+            });
+        } else if (viewType === YEAR_VIEW) {
+            this.setState({
+                ...this.state,
+                viewType: YEARRANGE_VIEW,
+            });
         }
     }
 
@@ -723,10 +736,9 @@ export class DatePicker extends Component {
      * @param {object} newView - view object
      * @param {object} callbacks - set of view callbacks
      */
-    applyView(newView, callbacks) {
+    applyView(newView) {
         this.currView = newView;
         this.setTitle(this.currView.title);
-        this.currView.callback = callbacks;
     }
 
     /**
@@ -734,10 +746,10 @@ export class DatePicker extends Component {
      * @param {object} newView - view object
      * @param {object} callbacks - set of view callbacks
      */
-    setView(newView, callbacks) {
+    setView(newView) {
         const view = newView;
 
-        if (!this.cellsContainer || !view || !callbacks) {
+        if (!this.cellsContainer || !view) {
             return;
         }
 
@@ -746,7 +758,7 @@ export class DatePicker extends Component {
             if (this.currView.viewContainer && !this.props.animated) {
                 re(this.currView.viewContainer);
             }
-            this.applyView(view, callbacks);
+            this.applyView(view);
             return;
         }
 
@@ -775,7 +787,6 @@ export class DatePicker extends Component {
             transform(view.viewContainer, `matrix(${trMatrix.join()})`);
 
             this.nextView = view;
-            this.nextCallbacks = callbacks;
 
             this.cellsContainer.addEventListener('transitionend', this.transitionHandler);
             return;
@@ -840,7 +851,6 @@ export class DatePicker extends Component {
             );
 
             this.nextView = view;
-            this.nextCallbacks = callbacks;
 
             this.cellsContainer.addEventListener('transitionend', this.transitionHandler);
         });
@@ -851,18 +861,11 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of month to show
      */
     showMonth(date) {
-        const viewObj = this.createMonthView(date);
-        this.setView(viewObj, {
-            cell: (d) => this.onDayClick(d),
-            nav: (d) => this.showMonth(d),
-            hdr: (d) => this.showYear(d),
+        this.setState({
+            ...this.state,
+            viewType: MONTH_VIEW,
+            date,
         });
-
-        this.activateCell(this.state.actDate);
-
-        if (this.props.range) {
-            this.highLightRange(this.state.curRange);
-        }
     }
 
     /**
@@ -870,11 +873,10 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of year to show
      */
     showYear(date) {
-        const viewObj = this.createYearView(date);
-        this.setView(viewObj, {
-            cell: (d) => this.showMonth(d),
-            nav: (d) => this.showYear(d),
-            hdr: (d) => this.showYearRange(d),
+        this.setState({
+            ...this.state,
+            viewType: YEAR_VIEW,
+            date,
         });
     }
 
@@ -883,11 +885,78 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of year range to show
      */
     showYearRange(date) {
-        const viewObj = this.createYearRangeView(date);
-        this.setView(viewObj, {
-            cell: (d) => this.showYear(d),
-            nav: (d) => this.showYearRange(d),
-            hdr: null,
+        this.setState({
+            ...this.state,
+            viewType: YEARRANGE_VIEW,
+            date,
         });
+    }
+
+    setState(state) {
+        if (this.state === state) {
+            return;
+        }
+
+        const prevState = this.state;
+        this.state = state;
+        this.render(this.state, prevState);
+    }
+
+    renderView(state) {
+        if (state.viewType === MONTH_VIEW) {
+            return this.createMonthView(state.date);
+        }
+
+        if (state.viewType === YEAR_VIEW) {
+            return this.createYearView(state.date);
+        }
+
+        if (state.viewType === YEARRANGE_VIEW) {
+            return this.createYearRangeView(state.date);
+        }
+
+        throw new Error('Invalid view type');
+    }
+
+    getYearDecade(date) {
+        return Math.floor(date.getFullYear() / 10);
+    }
+
+    isViewUpdated(state, prevState) {
+        if (state.viewType !== prevState.viewType) {
+            return true;
+        }
+        if (state.viewType === MONTH_VIEW) {
+            return !isSameYearMonth(state.date, prevState.date);
+        }
+        if (state.viewType === YEAR_VIEW) {
+            return state.date.getFullYear() !== prevState.date.getFullYear();
+        }
+        if (state.viewType === YEARRANGE_VIEW) {
+            const decade = this.getYearDecade(state.date);
+            const prevDecade = this.getYearDecade(prevState.date);
+            return decade !== prevDecade;
+        }
+
+        throw new Error('Invalid view type');
+    }
+
+    render(state, prevState = {}) {
+        if (!state) {
+            throw new Error('Invalid state');
+        }
+
+        if (this.isViewUpdated(state, prevState)) {
+            const view = this.renderView(state);
+            this.setView(view);
+
+            if (state.viewType === MONTH_VIEW) {
+                this.activateCell(this.state.actDate);
+
+                if (this.props.range) {
+                    this.highLightRange(this.state.curRange);
+                }
+            }
+        }
     }
 }
