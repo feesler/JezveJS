@@ -310,8 +310,6 @@ export class DropDown extends Component {
         this.elem = ce('div', { className: ATTACHED_CLASS });
 
         insertAfter(this.elem, this.hostElem);
-        this.elem.style.width = px(this.hostElem.offsetWidth);
-        this.elem.style.height = px(this.hostElem.offsetHeight);
 
         this.elem.append(this.hostElem);
 
