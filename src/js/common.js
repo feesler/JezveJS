@@ -26,7 +26,7 @@ export const isObject = (obj) => (
 );
 
 /** Return deep copy of object */
-export function copyObject(item) {
+export const copyObject = (item) => {
     if (Array.isArray(item)) {
         return item.map(copyObject);
     }
@@ -42,7 +42,7 @@ export function copyObject(item) {
     }
 
     return item;
-}
+};
 
 /* eslint-disable no-param-reassign */
 /**
@@ -50,7 +50,7 @@ export function copyObject(item) {
  * @param {*} obj - object to assign properties to
  * @param {*} params - object to obtain properties from
  */
-export function setParam(obj, params) {
+export const setParam = (obj, params) => {
     if (!obj || !params || typeof params !== 'object') {
         return;
     }
@@ -75,11 +75,11 @@ export function setParam(obj, params) {
             }
         }
     });
-}
+};
 /* eslint-enable no-param-reassign */
 
 /** Set attributes to specified element */
-export function setAttributes(element, attrs) {
+export const setAttributes = (element, attrs) => {
     if (!element || !isObject(attrs)) {
         return;
     }
@@ -87,14 +87,14 @@ export function setAttributes(element, attrs) {
     Object.keys(attrs).forEach((key) => {
         element.setAttribute(key, attrs[key]);
     });
-}
+};
 
 /**
  * Append child to specified element
  * @param {Element} elem - element to append child to
  * @param {Element[]} childs - element or array of elements to append
  */
-export function addChilds(elem, childs) {
+export const addChilds = (elem, childs) => {
     if (!elem || !childs) {
         return;
     }
@@ -105,14 +105,14 @@ export function addChilds(elem, childs) {
             elem.appendChild(child);
         }
     });
-}
+};
 
 /**
  * Set up event handlers for specified element
  * @param {Element} elem - element to set event handlers
  * @param {Object} events - event handlers object
  */
-export function setEvents(elem, events) {
+export const setEvents = (elem, events) => {
     if (!elem || !events) {
         return;
     }
@@ -120,14 +120,14 @@ export function setEvents(elem, events) {
     Object.keys(events).forEach((eventName) => {
         elem.addEventListener(eventName, events[eventName]);
     });
-}
+};
 
 /**
  * Remove event handlers from specified element
  * @param {Element} elem - element to remove event handlers from
  * @param {Object} events - event handlers object
  */
-export function removeEvents(elem, events) {
+export const removeEvents = (elem, events) => {
     if (!elem || !events) {
         return;
     }
@@ -135,7 +135,7 @@ export function removeEvents(elem, events) {
     Object.keys(events).forEach((eventName) => {
         elem.removeEventListener(eventName, events[eventName]);
     });
-}
+};
 
 /**
  * Create specified DOM element and set parameters if specified
@@ -144,7 +144,7 @@ export function removeEvents(elem, events) {
  * @param {Element[]} children - element or array of elements to append to created element
  * @param {Object} events - event handlers object
  */
-export function ce(tagName, params, children, events) {
+export const ce = (tagName, params, children, events) => {
     if (typeof tagName !== 'string') {
         return null;
     }
@@ -165,7 +165,7 @@ export function ce(tagName, params, children, events) {
     }
 
     return elem;
-}
+};
 
 /**
  * Create new SVG namespace element, set attributes
@@ -174,7 +174,7 @@ export function ce(tagName, params, children, events) {
  * @param {Element[]} children
  * @param {Object} events - event handlers object
  */
-export function svg(tagName, attributes, children, events) {
+export const svg = (tagName, attributes, children, events) => {
     if (typeof tagName !== 'string') {
         return null;
     }
@@ -192,39 +192,37 @@ export function svg(tagName, attributes, children, events) {
     }
 
     return elem;
-}
+};
 
 /** Remove specified element from DOM and return it */
-export function re(elem) {
-    const removedElem = (typeof elem === 'string') ? ge(elem) : elem;
-
-    if (removedElem && removedElem.parentNode) {
-        return removedElem.parentNode.removeChild(removedElem);
+export const re = (target) => {
+    const elem = (typeof target === 'string') ? ge(target) : target;
+    if (elem?.parentNode) {
+        return elem.parentNode.removeChild(elem);
     }
 
     return null;
-}
+};
 
 /** Check is specified string is number */
-export function isNum(val) {
+export const isNum = (val) => {
     const fval = parseFloat(val);
     if (fval === 0) {
         return true;
     }
 
     return !!(val / val);
-}
+};
 
 /** Check parameter is integer */
-export function isInt(x) {
+export const isInt = (x) => {
     const y = parseInt(x, 10);
-
     if (Number.isNaN(y)) {
         return false;
     }
 
     return x === y && x.toString() === y.toString();
-}
+};
 
 /** Check bit flag is set */
 /* eslint-disable no-bitwise */
@@ -232,7 +230,7 @@ export const hasFlag = (x, flag) => ((x & flag) === flag);
 /* eslint-enable no-bitwise */
 
 /** Return current computed style of element */
-export function computedStyle(elem) {
+export const computedStyle = (elem) => {
     if (!elem) {
         return null;
     }
@@ -242,18 +240,18 @@ export function computedStyle(elem) {
     }
 
     return elem.currentStyle;
-}
+};
 
 /**
  * Return visibility of specified element
- * @param {Element|string} elem - element to check visibility of
+ * @param {Element|string} target - element to check visibility of
  * @param {boolean} recursive - if set to true will check visibility of all parent nodes
  */
-export function isVisible(elem, recursive) {
-    let robj = (typeof elem === 'string') ? ge(elem) : elem;
+export const isVisible = (target, recursive) => {
+    let elem = (typeof target === 'string') ? ge(target) : target;
 
-    while (robj && robj.nodeType && robj.nodeType !== 9) {
-        const cstyle = computedStyle(robj);
+    while (elem && elem.nodeType && elem.nodeType !== 9) {
+        const cstyle = computedStyle(elem);
         if (!cstyle || cstyle.display === 'none' || cstyle.visibility === 'hidden') {
             return false;
         }
@@ -262,50 +260,50 @@ export function isVisible(elem, recursive) {
             break;
         }
 
-        robj = robj.parentNode;
+        elem = elem.parentNode;
     }
 
-    return !!robj;
-}
+    return !!elem;
+};
 
 /**
  * Show/hide specified element
- * @param {Element|string} elem - element or id to show/hide
+ * @param {Element|string} target - element or id to show/hide
  * @param {*} val - if set to true then element will be shown, hidden otherwise
  */
-export function show(elem, val) {
-    const domElem = (typeof elem === 'string') ? ge(elem) : elem;
-    if (!domElem || !domElem.classList) {
+export const show = (target, val = true) => {
+    const elem = (typeof target === 'string') ? ge(target) : target;
+    if (!elem) {
         return;
     }
 
     if (val) {
-        domElem.removeAttribute('hidden');
+        elem.removeAttribute('hidden');
     } else {
-        domElem.setAttribute('hidden', '');
+        elem.setAttribute('hidden', '');
     }
-}
+};
 
 /**
  * Enable or disable specified element
- * @param {Element|string} elem - element or id to show/hide
+ * @param {Element|string} target - element or id to show/hide
  * @param {boolean} val - if set to true then element will be enabled, disable otherwise
  */
-export function enable(elem, val = true) {
-    const relem = (typeof elem === 'string') ? ge(elem) : elem;
-    if (!relem) {
+export const enable = (target, val = true) => {
+    const elem = (typeof target === 'string') ? ge(target) : target;
+    if (!elem) {
         return;
     }
 
     if (val) {
-        relem.removeAttribute('disabled');
+        elem.removeAttribute('disabled');
     } else {
-        relem.setAttribute('disabled', true);
+        elem.setAttribute('disabled', true);
     }
-}
+};
 
 /** Return caret position in specified input control */
-export function getCaretPos(elem) {
+export const getCaretPos = (elem) => {
     if (!elem) {
         return 0;
     }
@@ -326,13 +324,13 @@ export function getCaretPos(elem) {
     }
 
     return 0;
-}
+};
 
 /**
  * Return curson/selection position for specified input element
  * @param {Element} input
  */
-export function getCursorPos(input) {
+export const getCursorPos = (input) => {
     if (!input) {
         return null;
     }
@@ -372,7 +370,7 @@ export function getCursorPos(input) {
     }
 
     return null;
-}
+};
 
 /**
  * Set curson position for specified input element
@@ -380,7 +378,7 @@ export function getCursorPos(input) {
  * @param {number} startPos
  * @param {number} endPos
  */
-export function selectText(input, startPos, endPos) {
+export const selectText = (input, startPos, endPos) => {
     if (!input) {
         return;
     }
@@ -394,19 +392,17 @@ export function selectText(input, startPos, endPos) {
     } else if (input.setSelectionRange) {
         input.setSelectionRange(startPos, endPos);
     }
-}
+};
 
 /**
  * Set curson position for specified input element
  * @param {Element} input
  * @param {number} pos
  */
-export function setCursorPos(input, pos) {
-    selectText(input, pos, pos);
-}
+export const setCursorPos = (input, pos) => selectText(input, pos, pos);
 
 /** Check string is correct date in dd.mm.yyyy format */
-export function checkDate(str) {
+export const checkDate = (str) => {
     if (typeof str !== 'string' || !str.length) {
         return false;
     }
@@ -425,27 +421,27 @@ export function checkDate(str) {
     }
 
     return true;
-}
+};
 
 /** Return text of selected option of select object */
-export function selectedText(selectObj) {
-    if (!selectObj || !selectObj.options || selectObj.selectedIndex === -1) {
+export const selectedText = (selectObj) => {
+    if (!selectObj?.options || selectObj.selectedIndex === -1) {
         return -1;
     }
 
     const option = selectObj.options[selectObj.selectedIndex];
 
     return (option.textContent) ? option.textContent : option.innerText;
-}
+};
 
 /** Return value of selected option of select object */
-export function selectedValue(selectObj) {
-    if (!selectObj || !selectObj.options || selectObj.selectedIndex === -1) {
+export const selectedValue = (selectObj) => {
+    if (!selectObj?.options || selectObj.selectedIndex === -1) {
         return -1;
     }
 
     return selectObj.options[selectObj.selectedIndex].value;
-}
+};
 
 /**
  * Select item with specified value if exist
@@ -454,8 +450,8 @@ export function selectedValue(selectObj) {
  * @param {boolean} selBool - if set to false then deselect option, select otherwise
  */
 /* eslint-disable no-param-reassign */
-export function selectByValue(selectObj, selValue, selBool) {
-    if (!selectObj || !selectObj.options || typeof selValue === 'undefined') {
+export const selectByValue = (selectObj, selValue, selBool) => {
+    if (!selectObj?.options || typeof selValue === 'undefined') {
         return false;
     }
 
@@ -473,20 +469,20 @@ export function selectByValue(selectObj, selValue, selBool) {
     }
 
     return false;
-}
+};
 /* eslint-enable no-param-reassign */
 
 /** Insert element before specified */
-export function insertBefore(elem, refElem) {
+export const insertBefore = (elem, refElem) => {
     if (!refElem || !refElem.parentNode) {
         return null;
     }
 
     return refElem.parentNode.insertBefore(elem, refElem);
-}
+};
 
 /** Insert one DOM element after specified */
-export function insertAfter(elem, refElem) {
+export const insertAfter = (elem, refElem) => {
     const parent = refElem.parentNode;
     const next = refElem.nextSibling;
 
@@ -495,10 +491,10 @@ export function insertAfter(elem, refElem) {
     }
 
     return parent.appendChild(elem);
-}
+};
 
 /** Insert element as first child */
-export function prependChild(parent, elem) {
+export const prependChild = (parent, elem) => {
     if (!elem || !parent) {
         return;
     }
@@ -513,10 +509,10 @@ export function prependChild(parent, elem) {
     } else {
         elems.forEach((el) => parent.appendChild(el));
     }
-}
+};
 
 /** Remove all child nodes of specified element */
-export function removeChilds(elem) {
+export const removeChilds = (elem) => {
     if (!elem) {
         return;
     }
@@ -524,53 +520,7 @@ export function removeChilds(elem) {
     while (elem.childNodes.length > 0) {
         elem.removeChild(elem.childNodes[0]);
     }
-}
-
-/* eslint-disable no-param-reassign */
-/** Fix IE event object */
-export function fixEvent(e, _this) {
-    e = e || window.event;
-
-    if (!e.currentTarget) {
-        e.currentTarget = _this;
-    }
-    if (!e.target) {
-        e.target = e.srcElement;
-    }
-
-    if (!e.relatedTarget) {
-        if (e.type === 'mouseover') {
-            e.relatedTarget = e.fromElement;
-        }
-        if (e.type === 'mouseout') {
-            e.relatedTarget = e.toElement;
-        }
-    }
-
-    if (e.pageX === null && e.clientX !== null) {
-        const html = document.documentElement;
-        const { body } = document;
-
-        e.pageX = e.clientX + (html.scrollLeft || (body && body.scrollLeft) || 0);
-        e.pageX -= html.clientLeft || 0;
-
-        e.pageY = e.clientY + (html.scrollTop || (body && body.scrollTop) || 0);
-        e.pageY -= html.clientTop || 0;
-    }
-
-    if (!e.which && e.button) {
-        if (e.button & 1) {
-            e.which = 1;
-        } else if (e.button & 2) {
-            e.which = 3;
-        } else {
-            e.which = (e.button & 4) ? 2 : 0;
-        }
-    }
-
-    return e;
-}
-/* eslint-enable no-param-reassign */
+};
 
 const clickHandlersMap = [];
 
@@ -580,7 +530,7 @@ const clickHandlersMap = [];
  * @param {Function} callback - event handler
  * @param {Element[]} elem - elements to skip handler if click occurs on it
  */
-export function onEmptyClick(e, callback, elem) {
+const onEmptyClick = (e, callback, elem) => {
     let notExcluded = true;
     const elems = Array.isArray(elem) ? elem : [elem];
 
@@ -603,10 +553,10 @@ export function onEmptyClick(e, callback, elem) {
     if (notExcluded) {
         callback();
     }
-}
+};
 
 /** Set event handler for click by empty place */
-export function setEmptyClick(callback, elem) {
+export const setEmptyClick = (callback, elem) => {
     if (!document.documentElement || !isFunction(callback)) {
         return;
     }
@@ -620,10 +570,10 @@ export function setEmptyClick(callback, elem) {
             handler,
         );
     });
-}
+};
 
 /** Remove previously set event handler for click by empty place */
-export function removeEmptyClick(callback) {
+export const removeEmptyClick = (callback) => {
     const ind = clickHandlersMap.findIndex((item) => item.callback === callback);
     if (ind === -1) {
         return;
@@ -636,10 +586,10 @@ export function removeEmptyClick(callback) {
     );
 
     clickHandlersMap.splice(ind, 1);
-}
+};
 
 /** Calculate offset of element by sum of offsets of parents */
-export function getOffsetSum(elem) {
+export const getOffsetSum = (elem) => {
     let el = elem;
     let top = 0;
     let left = 0;
@@ -651,10 +601,10 @@ export function getOffsetSum(elem) {
     }
 
     return { top, left };
-}
+};
 
 /** Calculate offset of element using getBoundingClientRect() method */
-export function getOffsetRect(elem) {
+export const getOffsetRect = (elem) => {
     const box = elem.getBoundingClientRect();
     const { body } = document;
     const docElem = document.documentElement;
@@ -670,19 +620,19 @@ export function getOffsetRect(elem) {
         top: Math.round(top),
         left: Math.round(left),
     };
-}
+};
 
 /** Calculate offset of element */
-export function getOffset(elem) {
+export const getOffset = (elem) => {
     if (elem.getBoundingClientRect) {
         return getOffsetRect(elem);
     }
 
     return getOffsetSum(elem);
-}
+};
 
 /** Compare position of two node in the document */
-export function comparePosition(a, b) {
+export const comparePosition = (a, b) => {
     if (a.compareDocumentPosition) {
         return a.compareDocumentPosition(b);
     }
@@ -691,10 +641,10 @@ export function comparePosition(a, b) {
         + ((a.sourceIndex >= 0 && b.sourceIndex >= 0)
             ? (a.sourceIndex < b.sourceIndex && 4) + (a.sourceIndex > b.sourceIndex && 2)
             : 1);
-}
+};
 
 /** Return page scroll */
-export function getPageScroll() {
+export const getPageScroll = () => {
     if (typeof window.pageXOffset !== 'undefined') {
         return {
             left: pageXOffset,
@@ -712,33 +662,31 @@ export function getPageScroll() {
     left -= html.clientLeft;
 
     return { top, left };
-}
+};
 
 /** Check object is empty */
-export function isEmpty(obj) {
+export const isEmpty = (obj) => {
     if (typeof obj === 'object') {
         return Object.keys(obj).length === 0;
     }
 
     return true;
-}
+};
 
 /** Return count of children of object */
-export function childCount(obj) {
+export const childCount = (obj) => {
     if (typeof obj === 'object') {
         return Object.keys(obj).length;
     }
 
     return 0;
-}
+};
 
 /** Return string for value in pixels */
-export function px(val) {
-    return `${parseInt(val, 10)}px`;
-}
+export const px = (val) => `${parseInt(val, 10)}px`;
 
 /** Join parameters and values of object to URL */
-export function urlJoin(obj) {
+export const urlJoin = (obj) => {
     const arr = [];
 
     if (!isObject(obj)) {
@@ -763,10 +711,10 @@ export function urlJoin(obj) {
     });
 
     return arr.join('&');
-}
+};
 
 /** Cross-browser find head element */
-export function head() {
+export const head = () => {
     if (document) {
         if (document.head) {
             return document.head;
@@ -777,11 +725,11 @@ export function head() {
     }
 
     return null;
-}
+};
 
 /* eslint-disable no-param-reassign */
 /** Set cross-browser transform value */
-export function transform(elem, value) {
+export const transform = (elem, value) => {
     if (!elem || !elem.style) {
         return;
     }
@@ -795,11 +743,11 @@ export function transform(elem, value) {
     } else if (typeof elem.style.transform !== 'undefined') {
         elem.style.transform = value;
     }
-}
+};
 /* eslint-enable no-param-reassign */
 
 /** Return fixed DPI value */
-export function getRealDPI() {
+export const getRealDPI = () => {
     if (window.devicePixelRatio) {
         return window.devicePixelRatio;
     }
@@ -809,85 +757,14 @@ export function getRealDPI() {
     }
 
     return screen.availWidth / document.documentElement.clientWidth;
-}
-
-/** Bind DOM ready event handler */
-function bindReady(handler) {
-    let called = false;
-
-    function ready() {
-        if (called) {
-            return;
-        }
-        called = true;
-        handler();
-    }
-
-    function tryScroll() {
-        if (called) {
-            return;
-        }
-        if (!document.body) {
-            return;
-        }
-        try {
-            document.documentElement.doScroll('left');
-            ready();
-        } catch (e) {
-            setTimeout(tryScroll, 0);
-        }
-    }
-
-    if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', () => {
-            ready();
-        }, false);
-    } else if (document.attachEvent) {
-        if (document.documentElement.doScroll && window === window.top) {
-            tryScroll();
-        }
-
-        document.attachEvent('onreadystatechange', () => {
-            if (document.readyState === 'complete') {
-                ready();
-            }
-        });
-    }
-
-    if (window.addEventListener) {
-        window.addEventListener('load', ready, false);
-    } else if (window.attachEvent) {
-        window.attachEvent('onload', ready);
-    }
-}
+};
 
 /** Add new DOM ready event handler to the queue */
-export function onReady(handler) {
-    if (!onReady.readyList.length) {
-        bindReady(() => {
-            for (let i = 0; i < onReady.readyList.length; i += 1) {
-                onReady.readyList[i]();
-            }
-        });
-    }
-
-    onReady.readyList.push(handler);
-}
-
-/** List of DOM ready handlers */
-onReady.readyList = [];
+export const onReady = (handler) => {
+    document.addEventListener('DOMContentLoaded', handler, false);
+};
 
 /* eslint-disable no-param-reassign */
-/** Extend child prototype by parent */
-export function extend(Child, Parent) {
-    function F() { }
-
-    F.prototype = Parent.prototype;
-    Child.prototype = new F();
-    Child.prototype.constructor = Child;
-    Child.parent = Parent.prototype;
-}
-
 /** Extends Error with specified class constructor */
 export function extendError(Class) {
     Class.prototype = Object.create(Error.prototype, {
@@ -899,12 +776,7 @@ export function extendError(Class) {
         },
     });
 
-    if (Object.setPrototypeOf) {
-        Object.setPrototypeOf(Class, Error);
-    } else {
-        /* eslint-disable-next-line no-proto */
-        Class.__proto__ = Error;
-    }
+    Object.setPrototypeOf(Class, Error);
 }
 /* eslint-enable no-param-reassign */
 
