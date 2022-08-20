@@ -361,6 +361,7 @@
 /* Attached drop down list */
 .dd__container_attached {
   position: static;
+  width: fit-content;
 
   &.dd__container_active {
     outline: 2px var(--dd-active-outline) solid;
