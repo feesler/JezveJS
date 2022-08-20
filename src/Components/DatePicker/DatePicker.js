@@ -3,7 +3,6 @@ import {
     ce,
     svg,
     addChilds,
-    removeChilds,
     show,
     isDate,
     isFunction,
@@ -15,6 +14,7 @@ import {
     re,
     px,
 } from '../../js/common.js';
+import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
 import {
@@ -69,96 +69,85 @@ const YEAR_RANGE_LENGTH = 10;
 
 const toCSSValue = (val) => (+val.toFixed(4));
 
+const defaultProps = {
+    relparent: null,
+    date: new Date(),
+    static: false,
+    range: true,
+    locales: [],
+    animated: false,
+    onrangeselect: null,
+    ondateselect: null,
+    onshow: null,
+    onhide: null,
+};
+
 /**
  * Date picker constructor
- * @param {object} params:
- * @param {string|Element} params.wrapper - identifier or Element where date picker will be rendered
- * @param {boolean} params.static - if true, date picker will be statically placed
- * @param {boolean} range - if true turn on date range select mode
- * @param {function} onrangeselect - date range select callback
- * @param {function} ondateselect - single date select callback
- * @param {function} onshow - dynamic date picker shown callback
- * @param {function} onhide - dynamic date picker hidden callback
- * @param {boolean} animated - animate transitions between views if possible
- * @param {string} relparent - identifier of relative alignment element
- * @param {Date} date - initial date to show
+ * @param {object} props:
+ * @param {string} props.relparent - identifier of relative alignment element
+ * @param {Date} props.date - initial date to show
+ * @param {boolean} props.static - if true, date picker will be statically placed
+ * @param {boolean} props.range - if true turn on date range select mode
+ * @param {String|[]} props.locales - locales to render component
+ * @param {boolean} props.animated - animate transitions between views if possible
+ * @param {function} props.onrangeselect - date range select callback
+ * @param {function} props.ondateselect - single date select callback
+ * @param {function} props.onshow - dynamic date picker shown callback
+ * @param {function} props.onhide - dynamic date picker hidden callback
  */
-export class DatePicker {
-    /** Static alias for DatePicker constructor */
-    static create(params) {
-        return new DatePicker(params);
+export class DatePicker extends Component {
+    static create(props = {}) {
+        const instance = new DatePicker(props);
+        instance.init();
+        return instance;
     }
 
-    constructor(params) {
-        this.baseObj = null;
-        this.wrapperObj = null;
-        this.isStatic = false;
-        this.relativeParent = null;
-        this.dateCallback = null;
-        this.rangeCallback = null;
-        this.showCallback = null;
-        this.hideCallback = null;
+    constructor(props) {
+        super(props);
+
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+        };
+
+        this.state = {
+            date: isDate(this.props.date) ? this.props.date : new Date(),
+            animation: false,
+            curRange: { start: null, end: null },
+            selRange: { start: null, end: null },
+            actDate: null,
+        };
+
         this.currView = null;
         this.nextView = null;
         this.nextCallbacks = null;
-        this.actDate = null;
-        this.rangeMode = false;
-        this.curRange = { start: null, end: null };
-        this.selRange = { start: null, end: null };
-        this.titleEl = null;
-        this.cellsContainer = null;
-        this.isAnimated = true;
-        this.animation = false;
-        this.locales = params.locales || [];
-
-        if (!('wrapper' in params)) {
-            throw new Error('Wrapper element not specified');
-        }
-
-        this.baseObj = (typeof params.wrapper === 'string') ? ge(params.wrapper) : params.wrapper;
-        if (!this.baseObj) {
-            throw new Error('Invalid wrapper element');
-        }
-
-        removeChilds(this.baseObj);
-        this.baseObj.classList.add(CONTAINER_CLASS);
-
-        this.wrapperObj = ce('div', { className: WRAPPER_CLASS });
-        this.isStatic = (params.static === true);
-        if (this.isStatic) {
-            this.wrapperObj.classList.add(STATIC_WRAPPER_CLASS);
-        } else {
-            show(this.wrapperObj, false);
-        }
-        this.baseObj.appendChild(this.wrapperObj);
-
-        if (params.range === true) {
-            this.rangeMode = true;
-        }
-        if (this.rangeMode && isFunction(params.onrangeselect)) {
-            this.rangeCallback = params.onrangeselect;
-        }
-
-        this.dateCallback = params.ondateselect;
-
-        this.showCallback = params.onshow || null;
-        this.hideCallback = params.onhide || null;
-        this.isAnimated = (document.addEventListener && params.animated) || false;
-
-        if (params.relparent) {
-            this.relativeParent = (typeof params.relparent === 'string')
-                ? ge(params.relparent)
-                : params.relparent;
-        }
 
         this.transitionHandler = (e) => this.onTransitionEnd(e);
         this.emptyClickHandler = () => this.showView(false);
+    }
 
-        /* Prepare date */
-        const date = isDate(params.date) ? params.date : new Date();
+    init() {
+        const { relparent } = this.props;
+
+        this.elem = ce('div', { className: CONTAINER_CLASS });
+
+        this.wrapper = ce('div', { className: WRAPPER_CLASS });
+        if (this.props.static) {
+            this.wrapper.classList.add(STATIC_WRAPPER_CLASS);
+        } else {
+            show(this.wrapper, false);
+        }
+        this.elem.appendChild(this.wrapper);
+
+        if (relparent) {
+            this.relativeParent = (typeof relparent === 'string')
+                ? ge(relparent)
+                : relparent;
+        }
 
         this.createLayout();
-        this.showMonth(date);
+        this.showMonth(this.state.date);
     }
 
     /**
@@ -238,7 +227,7 @@ export class DatePicker {
                 date: monthDate,
                 cell: ce('div', {
                     className: `${CELL_CLASS} ${YEAR_CELL_CLASS}`,
-                    textContent: getShortMonthName(monthDate, this.locales),
+                    textContent: getShortMonthName(monthDate, this.props.locales),
                 }),
             };
 
@@ -261,12 +250,13 @@ export class DatePicker {
         const today = new Date();
         const rMonth = date.getMonth();
         const rYear = date.getFullYear();
+        const monthLong = getLongMonthName(date, this.props.locales);
 
         const res = {
             type: MONTH_VIEW,
             set: [],
             viewDate: date,
-            title: `${getLongMonthName(date, this.locales)} ${rYear}`,
+            title: `${monthLong} ${rYear}`,
             viewContainer: ce('div', { className: VIEW_CONTAINER_CLASS }),
             nav: {
                 prev: new Date(rYear, rMonth - 1, 1),
@@ -279,7 +269,7 @@ export class DatePicker {
         let week = getWeekDays(firstMonthDay);
         const headerElems = week.map((weekday) => ce('div', {
             className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${WEEKDAY_CELL_CLASS}`,
-            textContent: getWeekdayShort(weekday, this.locales),
+            textContent: getWeekdayShort(weekday, this.props.locales),
         }));
         addChilds(res.viewContainer, headerElems);
 
@@ -337,24 +327,24 @@ export class DatePicker {
     showView(val) {
         const toShow = (typeof val !== 'undefined') ? val : true;
 
-        show(this.wrapperObj, toShow);
+        show(this.wrapper, toShow);
 
         // check position of control in window and place it to be visible
-        if (toShow && !this.isStatic) {
-            const wrapperBottom = getOffset(this.wrapperObj).top + this.wrapperObj.offsetHeight;
+        if (toShow && !this.props.static) {
+            const wrapperBottom = getOffset(this.wrapper).top + this.wrapper.offsetHeight;
             if (wrapperBottom > document.documentElement.clientHeight) {
                 const bottomOffset = (this.relativeParent) ? this.relativeParent.offsetHeight : 0;
-                this.wrapperObj.style.bottom = px(bottomOffset);
+                this.wrapper.style.bottom = px(bottomOffset);
             } else {
-                this.wrapperObj.style.bottom = '';
+                this.wrapper.style.bottom = '';
             }
         }
 
         // set automatic hide on empty click
-        if (!this.isStatic) {
+        if (!this.props.static) {
             if (toShow) {
                 setEmptyClick(this.emptyClickHandler, [
-                    this.wrapperObj,
+                    this.wrapper,
                     this.relativeParent,
                 ]);
             } else {
@@ -362,11 +352,11 @@ export class DatePicker {
             }
         }
 
-        if (toShow && isFunction(this.showCallback)) {
-            this.showCallback();
+        if (toShow && isFunction(this.props.onshow)) {
+            this.props.onshow();
         }
-        if (!toShow && isFunction(this.hideCallback)) {
-            this.hideCallback();
+        if (!toShow && isFunction(this.props.onhide)) {
+            this.props.onhide();
         }
     }
 
@@ -379,17 +369,10 @@ export class DatePicker {
     }
 
     /**
-     * Hide date picker
-     */
-    hide() {
-        this.show(false);
-    }
-
-    /**
      * Check date picker is visible
      */
     visible() {
-        return isVisible(this.wrapperObj);
+        return isVisible(this.wrapper);
     }
 
     /**
@@ -447,7 +430,7 @@ export class DatePicker {
         if (
             !this.currView
             || !this.currView.callback
-            || this.animation
+            || this.state.animation
             || e.deltaY === 0
         ) {
             return;
@@ -461,16 +444,12 @@ export class DatePicker {
         const nav = (dir) ? this.currView.nav.prev : this.currView.nav.next;
         setTimeout(() => this.currView.callback.nav(nav));
 
-        if (e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
     }
 
     /** View 'click' event delegate */
     onViewClick(e) {
-        if (!this.currView || !this.currView.callback || this.animation) {
+        if (!this.currView || !this.currView.callback || this.state.animation) {
             return;
         }
 
@@ -509,7 +488,7 @@ export class DatePicker {
      * Create layout of component
      */
     createLayout() {
-        if (!this.wrapperObj) {
+        if (!this.wrapper) {
             return;
         }
 
@@ -521,11 +500,11 @@ export class DatePicker {
             },
         };
 
-        this.wrapperObj.addEventListener('click', (e) => this.onViewClick(e));
-        this.wrapperObj.addEventListener('wheel', (e) => this.onWheel(e));
+        this.wrapper.addEventListener('click', (e) => this.onViewClick(e));
+        this.wrapper.addEventListener('wheel', (e) => this.onWheel(e));
 
         this.cellsContainer = ce('div', { className: VIEW_CLASS });
-        addChilds(this.wrapperObj, [this.renderHead(), this.cellsContainer]);
+        addChilds(this.wrapper, [this.renderHead(), this.cellsContainer]);
     }
 
     /** Remove highlight from all cells */
@@ -601,18 +580,18 @@ export class DatePicker {
 
     /** Day cell click inner callback */
     onDayClick(date) {
-        if (this.actDate !== null) {
-            this.deactivateCell(this.actDate);
+        if (this.state.actDate !== null) {
+            this.deactivateCell(this.state.actDate);
         }
 
-        this.actDate = date;
-        this.activateCell(this.actDate);
+        this.state.actDate = date;
+        this.activateCell(this.state.actDate);
 
-        if (isFunction(this.dateCallback)) {
-            this.dateCallback(date);
+        if (isFunction(this.props.ondateselect)) {
+            this.props.ondateselect(date);
         }
 
-        if (this.rangeMode) {
+        if (this.props.range) {
             this.onRangeSelect(date);
         }
     }
@@ -621,29 +600,29 @@ export class DatePicker {
     onRangeSelect(date) {
         this.cleanHL();
 
-        this.curRange = { start: null, end: null };
-        if (!this.selRange.start) {
-            this.selRange.start = date;
+        this.state.curRange = { start: null, end: null };
+        if (!this.state.selRange.start) {
+            this.state.selRange.start = date;
         } else {
-            this.selRange.end = date;
+            this.state.selRange.end = date;
         }
 
         // Check swap in needed
-        if (this.selRange.start - this.selRange.end > 0) {
-            const tdate = this.selRange.end;
-            this.selRange.end = this.selRange.start;
-            this.selRange.start = tdate;
+        if (this.state.selRange.start - this.state.selRange.end > 0) {
+            const tdate = this.state.selRange.end;
+            this.state.selRange.end = this.state.selRange.start;
+            this.state.selRange.start = tdate;
         }
 
-        if (this.selRange.start && this.selRange.end) {
-            this.curRange = { start: this.selRange.start, end: this.selRange.end };
-            this.selRange = { start: null, end: null };
+        if (this.state.selRange.start && this.state.selRange.end) {
+            this.state.curRange = { ...this.state.selRange };
+            this.state.selRange = { start: null, end: null };
 
             this.cleanAll();
-            this.highLightRange(this.curRange);
+            this.highLightRange(this.state.curRange);
 
-            if (isFunction(this.rangeCallback)) {
-                this.rangeCallback(this.curRange);
+            if (isFunction(this.props.onrangeselect)) {
+                this.props.onrangeselect(this.state.curRange);
             }
         }
     }
@@ -684,29 +663,29 @@ export class DatePicker {
         const dateTo = this.convDate(endDate);
         if (dateTo) {
             /* Date range selection */
-            this.curRange = { start: null, end: null };
-            this.selRange = { start: date, end: dateTo };
+            this.state.curRange = { start: null, end: null };
+            this.state.selRange = { start: date, end: dateTo };
 
             // Check swap in needed
-            if (this.selRange.start - this.selRange.end > 0) {
-                const tdate = this.selRange.end;
-                this.selRange.end = this.selRange.start;
-                this.selRange.start = tdate;
+            if (this.state.selRange.start - this.state.selRange.end > 0) {
+                const tdate = this.state.selRange.end;
+                this.state.selRange.end = this.state.selRange.start;
+                this.state.selRange.start = tdate;
             }
 
-            this.curRange = { start: this.selRange.start, end: this.selRange.end };
-            this.selRange = { start: null, end: null };
+            this.state.curRange = { ...this.state.selRange };
+            this.state.selRange = { start: null, end: null };
 
             this.cleanAll();
-            this.highLightRange(this.curRange);
+            this.highLightRange(this.state.curRange);
         } else {
             /* Single day selection */
-            if (this.actDate !== null) {
-                this.deactivateCell(this.actDate);
+            if (this.state.actDate !== null) {
+                this.deactivateCell(this.state.actDate);
             }
 
-            this.actDate = date;
-            this.activateCell(this.actDate);
+            this.state.actDate = date;
+            this.activateCell(this.state.actDate);
         }
 
         this.showMonth(date);
@@ -735,7 +714,7 @@ export class DatePicker {
         re(this.currView.viewContainer);
         this.applyView(this.nextView, this.nextCallbacks);
 
-        this.animation = false;
+        this.state.animation = false;
         this.cellsContainer.removeEventListener('transitionend', this.transitionHandler);
     }
 
@@ -762,16 +741,16 @@ export class DatePicker {
             return;
         }
 
-        if (!this.currView.viewContainer || !this.isAnimated) {
+        if (!this.currView.viewContainer || !this.props.animated) {
             this.cellsContainer.appendChild(view.viewContainer);
-            if (this.currView.viewContainer && !this.isAnimated) {
+            if (this.currView.viewContainer && !this.props.animated) {
                 re(this.currView.viewContainer);
             }
             this.applyView(view, callbacks);
             return;
         }
 
-        this.animation = true;
+        this.state.animation = true;
 
         const currTblWidth = this.cellsContainer.offsetWidth;
         const currTblHeight = this.cellsContainer.offsetHeight;
@@ -879,10 +858,10 @@ export class DatePicker {
             hdr: (d) => this.showYear(d),
         });
 
-        this.activateCell(this.actDate);
+        this.activateCell(this.state.actDate);
 
-        if (this.rangeMode) {
-            this.highLightRange(this.curRange);
+        if (this.props.range) {
+            this.highLightRange(this.state.curRange);
         }
     }
 

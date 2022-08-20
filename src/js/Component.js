@@ -54,6 +54,10 @@ export class Component {
         if (!Array.isArray(this.props.className)) {
             this.props.className = [this.props.className];
         }
-        this.elem.classList.add(...this.props.className);
+        const classNames = this.props.className
+            .flatMap((cln) => cln.split(' '))
+            .filter((cln) => cln.length > 0);
+
+        this.elem.classList.add(...classNames);
     }
 }

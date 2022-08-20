@@ -24,6 +24,7 @@ export default {
         DragAvatar: './src/Components/DragnDrop/DragAvatar.js',
         DragZone: './src/Components/DragnDrop/DragZone.js',
         DropTarget: './src/Components/DragnDrop/DropTarget.js',
+        IndetermProgress: './src/Components/IndetermProgress/IndetermProgress.js',
         InputGroup: './src/Components/InputGroup/InputGroup.js',
         Sortable: './src/Components/Sortable/Sortable.js',
         Histogram: './src/Components/Charts/Histogram.js',

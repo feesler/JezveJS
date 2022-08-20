@@ -28,17 +28,21 @@ npm test
 
 <h2 align="left">Components</h2>
 
+- Input
+    - DateInput
+    - DecimalInput
+    - InputGroup
 - Charts
     - Histogram
     - LineChart
     - PieChart
 - Checkbox
 - Collapsible
-- DateInput
 - DatePicker
 - Debug
-- DecimalInput
 - DropDown
+- IndetermProgress
+- Offcanvas
 - Paginator
 - Popup
 - Progress
@@ -50,7 +54,4 @@ npm test
 <h2 align="left">Utilities</h2>
 
 - DragnDrop
-    - DragAvatar
-    - DragZone
-    - DropTarget
 - Sortable

@@ -15,48 +15,48 @@ export class DatePickerView extends AppView {
         res.staticDateInp = { elem: await query('#staticDateInp') };
         res.staticDatePicker = await DatePicker.create(
             this,
-            await query('#dpStatic'),
+            await query('#staticDateInp + .dp__container'),
         );
 
         res.popupDateInp = { elem: await query('#popupDateInp') };
         res.showPopupBtn = await query('#showPopupBtn');
         res.popupDatePicker = await DatePicker.create(
             this,
-            await query('#dpPopup'),
+            await query('#dpPopupGroup + .dp__container'),
         );
 
         res.rangeInp = { elem: await query('#rangeInp') };
         res.showRangeBtn = await query('#showRangeBtn');
         res.rangeDatePicker = await DatePicker.create(
             this,
-            await query('#dpRange'),
+            await query('#dpRangeGroup + .dp__container'),
         );
 
         res.cbInp = { elem: await query('#cbInp') };
         res.showCbBtn = await query('#showCbBtn');
         res.callbacksDatePicker = await DatePicker.create(
             this,
-            await query('#dpCallbacks'),
+            await query('#dpCallbacksGroup + .dp__container'),
         );
 
         res.setSelInp = { elem: await query('#setSelInp') };
         res.showSelBtn = await query('#showSelBtn');
         res.selDatePicker = await DatePicker.create(
             this,
-            await query('#dpSelection'),
+            await query('#dpSelectionGroup + .dp__container'),
         );
 
         res.enLocaleDatePicker = await DatePicker.create(
             this,
-            await query('#dpEnLocale'),
+            await query('#dpEnLocale .dp__container'),
         );
         res.frLocaleDatePicker = await DatePicker.create(
             this,
-            await query('#dpFrLocale'),
+            await query('#dpFrLocale .dp__container'),
         );
         res.ruLocaleDatePicker = await DatePicker.create(
             this,
-            await query('#dpRuLocale'),
+            await query('#dpRuLocale .dp__container'),
         );
 
         assert(

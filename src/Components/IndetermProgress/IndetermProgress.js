@@ -4,16 +4,18 @@ import '../../css/common.scss';
 import './style.scss';
 
 /** CSS classes */
-const CONTAINER_CLASS = 'progress';
-const PROGRESS_BAR_CLASS = 'progress-bar';
+const PROGRESS_CLASS = 'indeterm-progress';
+const CIRCLE_CLASS = 'indeterm-progress__circle';
+const RUN_CLASS = 'run';
 
 const defaultProps = {
-    value: 0,
+    circlesCount: 5,
+    run: true,
 };
 
-export class Progress extends Component {
+export class IndetermProgress extends Component {
     static create(props = {}) {
-        const instance = new Progress(props);
+        const instance = new IndetermProgress(props);
         instance.init();
         return instance;
     }
@@ -26,42 +28,38 @@ export class Progress extends Component {
             ...this.props,
         };
 
-        this.props.value = this.normalizeValue(this.props.value);
         this.state = { ...this.props };
     }
 
-    get value() {
-        return this.state.value;
+    get running() {
+        return this.state.run;
     }
 
     init() {
-        this.bar = ce('div', { className: PROGRESS_BAR_CLASS });
-        this.elem = ce('div', { className: CONTAINER_CLASS }, this.bar);
+        this.elem = ce('div', { className: PROGRESS_CLASS });
+
+        this.circles = [];
+        for (let i = 0; i < this.props.circlesCount; i += 1) {
+            this.circles.push(ce('div', { className: CIRCLE_CLASS }));
+        }
+        this.elem.append(...this.circles);
+
         this.setClassNames();
 
         this.render(this.state);
     }
 
-    normalizeValue(value) {
-        let res = parseInt(value, 10);
-        if (Number.isNaN(res)) {
-            throw new Error('Invalid progress value');
-        }
-
-        res = Math.max(0, res);
-        res = Math.min(100, res);
-        return res;
-    }
-
-    setProgress(progress) {
-        const value = this.normalizeValue(progress);
-        if (this.state.value === value) {
-            return;
-        }
-
+    start() {
         this.setState({
             ...this.state,
-            value,
+            run: true,
+        });
+    }
+
+    stop() {
+        this.setState({
+            ...this.state,
+            run: false,
         });
     }
 
@@ -81,6 +79,10 @@ export class Progress extends Component {
             throw new Error('Invalid state');
         }
 
-        this.bar.style.width = `${state.value}%`;
+        if (state.run) {
+            this.elem.classList.add(RUN_CLASS);
+        } else {
+            this.elem.classList.remove(RUN_CLASS);
+        }
     }
 }

@@ -1872,14 +1872,6 @@ export class DropDown extends Component {
         const optGroups = [];
         const options = [];
 
-        // Add disabled option for iOS
-        if (!this.props.multi) {
-            const zeroItem = this.getItem(0);
-            if (!zeroItem) {
-                options.push(this.createOption({ id: 0, title: '', disabled: true }));
-            }
-        }
-
         state.items.forEach((item) => {
             const option = this.createOption(item);
 
