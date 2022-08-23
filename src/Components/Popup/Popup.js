@@ -23,25 +23,35 @@ const CONTAINER_CLASS = 'popup';
 const CONTENT_CLASS = 'popup__content';
 const BOX_CLASS = 'popup__content-box';
 const WRAPPER_CLASS = 'popup__wrapper';
-const SCROLLER_CLASS = 'popup__scroller';
 const CLOSE_BTN_CLASS = 'close-btn';
 const CLOSE_ICON_CLASS = 'close-btn__icon';
-const NO_DIM_CLASS = 'nodim';
 const MESSAGE_CLASS = 'popup__message';
 const HEADER_CLASS = 'popup__header';
 const TITLE_CLASS = 'popup__title';
 const CONTROLS_CLASS = 'popup__controls';
 const SUBMIT_BTN_CLASS = 'btn submit-btn';
 const CANCEL_BTN_CLASS = 'btn cancel-btn';
+const NO_DIM_CLASS = 'popup--nodim';
+const SCROLL_MESSAGE_CLASS = 'popup--scroll-message';
 
 /* Icons */
 const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
+
+const defaultProps = {
+    nodim: false,
+    scrollMessage: false,
+    onclose: null,
+    className: null,
+    title: null,
+    btn: null,
+};
 
 /**
  * Popup component constructor
  * @param {Object} params:
  * @param {String} params.id - identifier of element will be created for popup
  * @param {boolean} params.nodim - option to not dim background on popup appear
+ * @param {boolean} params.scrollMessage - scroll message content instead of entire popup
  * @param {Function} params.onclose - popup close event handler
  * @param {String|String[]} params.className - list of additional CSS classes for popup
  * @param {String} params.title - title of popup
@@ -58,9 +68,10 @@ export class Popup extends Component {
     constructor(...args) {
         super(...args);
 
-        if (!this.props) {
-            return false;
-        }
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+        };
 
         // check popup with same id is already exist
         if ('id' in this.props) {
@@ -78,9 +89,11 @@ export class Popup extends Component {
         if (this.props.nodim === true) {
             this.elem.classList.add(NO_DIM_CLASS);
         }
+        if (this.props.scrollMessage === true) {
+            this.elem.classList.add(SCROLL_MESSAGE_CLASS);
+        }
 
         this.emptyClickHandler = () => this.close();
-        this.onCloseHandler = (isFunction(this.props.onclose)) ? this.props.onclose : null;
 
         if (!this.setContent(this.props.content)) {
             return false;
@@ -149,8 +162,8 @@ export class Popup extends Component {
     close() {
         this.hide();
 
-        if (isFunction(this.onCloseHandler)) {
-            this.onCloseHandler();
+        if (isFunction(this.props.onclose)) {
+            this.props.onclose();
         }
     }
 
