@@ -7,7 +7,6 @@ import {
     setParam,
     re,
     insertAfter,
-    insertBefore,
     prependChild,
     show,
     setEmptyClick,
@@ -95,25 +94,23 @@ export class Popup extends Component {
 
         this.emptyClickHandler = () => this.close();
 
+        this.headerElem = ce('div', { className: HEADER_CLASS });
+        this.messageElem = ce('div', { className: MESSAGE_CLASS });
+        this.boxElem = ce('div', { className: BOX_CLASS }, [
+            this.headerElem,
+            this.messageElem,
+        ]);
+        this.contentElem = ce('div', { className: CONTENT_CLASS }, this.boxElem);
+        this.wrapperElem = ce('div', { className: WRAPPER_CLASS }, this.contentElem);
+        this.elem.appendChild(this.wrapperElem);
+
+        this.setTitle(this.props.title);
         if (!this.setContent(this.props.content)) {
             return false;
         }
-
-        this.boxElem = ce('div', { className: BOX_CLASS });
-        this.contentElem = ce('div', { className: CONTENT_CLASS }, this.boxElem);
-        this.wrapperElem = ce('div', { className: WRAPPER_CLASS }, this.contentElem);
+        this.setControls(this.props.btn);
 
         this.setClassNames();
-
-        this.headerElem = ce('div', { className: HEADER_CLASS });
-
-        prependChild(this.boxElem, this.messageElem);
-        prependChild(this.boxElem, this.headerElem);
-        this.setTitle(this.props.title);
-        this.setControls(this.props.btn);
-        show(this.messageElem, true);
-
-        this.elem.appendChild(this.wrapperElem);
 
         document.body.appendChild(this.elem);
     }
@@ -199,20 +196,13 @@ export class Popup extends Component {
             return false;
         }
 
-        const newMessageObj = (typeof content === 'string')
-            ? ce(
-                'div',
-                { className: MESSAGE_CLASS },
-                ce('div', { innerHTML: content }),
-            )
-            : content;
-
-        if (this.messageElem) {
-            insertBefore(newMessageObj, this.messageElem);
-            re(this.messageElem);
+        if (typeof content === 'string') {
+            this.messageElem.textContent = content;
+        } else {
+            removeChilds(this.messageElem);
+            const elems = Array.isArray(content) ? content : [content];
+            this.messageElem.append(...elems);
         }
-
-        this.messageElem = newMessageObj;
 
         return true;
     }
