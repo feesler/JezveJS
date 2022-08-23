@@ -69,7 +69,6 @@
 	<section class="row-section">
         <div class="section-controls">
             <input id="showTplBtn" class="btn" type="button" value="Show">
-            <input id="showTpl2Btn" class="btn" type="button" value="Show another">
         </div>
 	</section>
 
@@ -107,16 +106,8 @@
 	</div>
 </div>
 
-<div id="template1" hidden>
-	<div><span>This popup is created from template</span></div>
-	<div>
-		<label for="newname">Name</label>
-		<div class="stretch_input"><input id="newname" name="name" type="text"></div>
-	</div>
-</div>
-
-<div id="template2" hidden>
-	<div><span>This popup is also created from template. Controls and title are added.</span></div>
+<div id="formTemplate" hidden>
+	<div><span>This popup is created from template. Controls and title are added.</span></div>
 	<div>
 		<label for="updname">New name</label>
 		<div class="stretch_input"><input id="updname" name="name" type="text"></div>
@@ -127,12 +118,12 @@
 	</div>
 </div>
 
-<div id="template3" hidden>
+<div id="nestedParentTemplate" hidden>
 	<div><span>This popup will launch another popup.</span></div>
 	<div><span id="valueresult"></span></div>
 </div>
 
-<div id="template4" hidden>
+<div id="nestedChildTemplate" hidden>
 	<div><span>This popup is also created from template and launched from another popup.</span></div>
 	<div>
 		<label for="valueselect">Values:</label>

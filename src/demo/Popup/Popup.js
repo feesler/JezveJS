@@ -5,6 +5,7 @@ import {
     onReady,
     Popup,
     setEvents,
+    show,
 } from '../../js/index.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
@@ -219,49 +220,39 @@ const initNotifyPopup = () => {
 let templatePopup = null;
 const showTemplatePopup = () => {
     if (!templatePopup) {
+        const content = ge('formTemplate');
         templatePopup = Popup.create({
             id: 'templatePopup',
-            content: ge('template1'),
+            title: 'Template',
+            content,
             btn: { closeBtn: true },
+        });
+        show(content, true);
+        templatePopup.setControls({
+            okBtn: { onclick: () => onPopupResultAndClose(templatePopup, true) },
+            closeBtn: true,
         });
     }
 
     templatePopup.show();
 };
 
-let template2Popup = null;
-const showTemplate2Popup = () => {
-    if (!template2Popup) {
-        template2Popup = Popup.create({
-            id: 'template2Popup',
-            title: 'Extended template',
-            content: ge('template2'),
-        });
-        template2Popup.setControls({
-            okBtn: { onclick: () => onPopupResultAndClose(template2Popup, true) },
-            closeBtn: true,
-        });
-    }
-
-    template2Popup.show();
-};
-
 const initTemplatePopup = () => {
     setEvents(ge('showTplBtn'), { click: showTemplatePopup });
-    setEvents(ge('showTpl2Btn'), { click: showTemplate2Popup });
 };
 
 let nestedChildPopup = null;
 const showNestedChildPopup = () => {
     if (!nestedChildPopup) {
+        const content = ge('nestedChildTemplate');
         nestedChildPopup = Popup.create({
             id: 'nestedChildPopup',
             title: 'Select something',
-            content: ge('template4'),
+            content,
             className: ['center_only', 'border_popup'],
             nodim: true,
         });
-
+        show(content, true);
         nestedChildPopup.setControls({
             okBtn: { onclick: () => onPopupResultAndClose(nestedChildPopup, true) },
             closeBtn: true,
@@ -278,15 +269,17 @@ const showNestedChildPopup = () => {
 let nestedParentPopup = null;
 const showNestedPopup = () => {
     if (!nestedParentPopup) {
+        const content = ge('nestedParentTemplate');
         nestedParentPopup = Popup.create({
             id: 'nestedParentPopup',
             title: 'Nested popups',
-            content: ge('template3'),
+            content,
             btn: {
                 okBtn: { value: 'Select', onclick: showNestedChildPopup },
                 closeBtn: true,
             },
         });
+        show(content, true);
     }
 
     nestedParentPopup.show();
