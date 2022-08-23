@@ -290,11 +290,12 @@
   white-space: nowrap;
   cursor: pointer;
 
-  label {
+  .dd__list-group__label {
     text-align: left;
     font-size: 0.8rem;
     font-weight: 600;
     padding: 6px 10px;
+    margin: 0;
     color: var(--dd-list-group-text);
     background-color: var(--dd-list-group-bg);
   }

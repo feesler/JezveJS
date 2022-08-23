@@ -53,6 +53,7 @@ const LIST_OPEN_CLASS = 'dd__open';
 const LIST_DROP_DOWN_CLASS = 'dd__list_drop-down';
 const LIST_DROP_UP_CLASS = 'dd__list_drop-up';
 const LIST_GROUP_CLASS = 'dd__list-group';
+const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
 const CHECK_ICON_CLASS = 'dd__check-icon';
 /* other */
 const COMBO_CLASS = 'dd__combo';
@@ -1673,7 +1674,10 @@ export class DropDown extends Component {
                 'div',
                 { className: LIST_GROUP_CLASS },
                 [
-                    ce('label', { textContent: group.title }),
+                    ce('label', {
+                        className: LIST_GROUP_LABEL_CLASS,
+                        textContent: group.title,
+                    }),
                     listElem,
                 ],
             ),
