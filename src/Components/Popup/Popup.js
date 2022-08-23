@@ -94,7 +94,6 @@ export class Popup extends Component {
         }
 
         this.emptyClickHandler = () => this.close();
-        this.onCloseHandler = (isFunction(this.props.onclose)) ? this.props.onclose : null;
 
         if (!this.setContent(this.props.content)) {
             return false;
@@ -163,8 +162,8 @@ export class Popup extends Component {
     close() {
         this.hide();
 
-        if (isFunction(this.onCloseHandler)) {
-            this.onCloseHandler();
+        if (isFunction(this.props.onclose)) {
+            this.props.onclose();
         }
     }
 
