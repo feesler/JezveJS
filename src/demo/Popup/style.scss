@@ -40,6 +40,9 @@
 
 /* Message popups */
 .popup.msg {
+  --popup-close-btn: #ffffff;
+  --popup-close-btn-hover: #c0c0c0;
+
   top: 70px;
   right: 12px;
   left: auto;
@@ -73,7 +76,7 @@
     min-width: 200px;
     color: #ffffff;
     right: 0;
-    padding: 15px 30px 15px 20px;
+    padding: 15px 35px 15px 20px;
     box-sizing: border-box;
   }
 

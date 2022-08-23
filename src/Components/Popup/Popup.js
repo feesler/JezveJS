@@ -7,7 +7,6 @@ import {
     setParam,
     re,
     insertAfter,
-    insertBefore,
     prependChild,
     show,
     setEmptyClick,
