@@ -23,6 +23,12 @@
   width: 100%;
 }
 
+/* Custom group style */
+.dd__styled-group {
+  --dd-list-group-padding: 10px;
+  --dd-list-group-text: #004fff;
+}
+
 .bluebox {
   width: 100px;
   height: 100px;

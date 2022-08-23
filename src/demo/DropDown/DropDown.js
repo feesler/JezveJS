@@ -178,6 +178,7 @@ const dynamicOptGroups = () => {
     const groupsDropDown = DropDown.create({
         elem: 'optgroupsdyn',
         data: initItems('Visible item', 3),
+        className: 'dd__styled-group',
     });
     const customGroup = groupsDropDown.addGroup('Hidden');
     const hiddenGroupItems = initItems('Hidden item', 3);
