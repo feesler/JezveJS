@@ -151,9 +151,9 @@ const showDraggablePopup = () => {
             nodim: true,
         });
 
-        const { boxElem, contentElem } = draggablePopup;
+        const { boxElem, wrapperElem } = draggablePopup;
         PopupDragZone.create({ elem: boxElem });
-        PopupDropTarget.create({ elem: contentElem });
+        PopupDropTarget.create({ elem: wrapperElem });
     }
 
     draggablePopup.show();
