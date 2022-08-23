@@ -18,10 +18,6 @@
   z-index: 2010;
 }
 
-.nodim {
-  background: none;
-}
-
 .popup__wrapper {
   display: flex;
   width: 100%;
@@ -88,6 +84,30 @@
 .popup__controls {
   padding: 29px 0 8px;
   display: inline-block;
+}
+
+/** Don't dim background */
+.popup--nodim {
+  background: none;
+}
+
+/** Scroll message instead of whole popup */
+.popup--scroll-message {
+  overflow-y: hidden;
+
+  .popup__wrapper {
+    height: 100%;
+  }
+
+  .popup__content,
+  .popup__content-box {
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .popup__message {
+    overflow-y: auto;
+  }
 }
 
 @media (hover: hover) {

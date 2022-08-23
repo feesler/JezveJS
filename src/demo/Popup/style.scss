@@ -11,24 +11,6 @@
   }
 }
 
-.scroll-message {
-  overflow-y: hidden;
-
-  .popup__wrapper {
-    height: 100%;
-  }
-
-  .popup__content,
-  .popup__content-box {
-    max-height: 100%;
-    overflow: hidden;
-  }
-
-  .popup__message {
-    overflow-y: auto;
-  }
-}
-
 /* Bordered popup */
 .border_popup .popup__content-box {
   border: 1px solid #000000;

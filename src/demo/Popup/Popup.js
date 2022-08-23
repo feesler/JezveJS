@@ -78,13 +78,13 @@ const showMessageScrollPopup = () => {
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.<br>
             Close button is added. Control buttons will not close popup.<br>
             On small screen message will overflow and whole popup should be scrolled<br><br>${placeholderMsg}${placeholderMsg}`,
+            scrollMessage: true,
             btn: {
                 okBtn: { onclick: () => onPopupResult(true) },
                 cancelBtn: { onclick: () => onPopupResult(false) },
                 closeBtn: true,
             },
             onclose: onClosePopup,
-            className: 'scroll-message',
         });
     }
 
