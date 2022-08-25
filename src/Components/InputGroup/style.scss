@@ -10,6 +10,11 @@
   --ig-input-color: #000000;
   --ig-input-bg: #ffffff;
 
+  /* Disabled input element */
+  --ig-input-disabled-color: #a0a0a0;
+  --ig-input-disabled-bg: #eeeeee;
+  --ig-input-disabled-border: #ced4da;
+
   /* Focused input */
   --ig-input-active-border: #49b3ff;
 
@@ -58,6 +63,12 @@
     color: var(--ig-input-color);
     background-color: var(--ig-input-bg);
     padding: 0 0.5rem;
+  }
+
+  .input-group__input[disabled] {
+    color: var(--ig-input-disabled-color);
+    background-color: var(--ig-input-disabled-bg);
+    border-color: var(--ig-input-disabled-border);
   }
 
   /* Input group text */
@@ -148,10 +159,7 @@
   }
 
   /* Highlight border of inner buttons for focused input */
-  .input-group__input:focus ~ .input-group__inner-btn {
-    border-color: var(--ig-input-active-border);
-  }
-
+  .input-group__input:focus ~ .input-group__inner-btn,
   .input-group__inner-btn--active {
     border-color: var(--ig-input-active-border);
   }
