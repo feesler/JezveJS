@@ -6,6 +6,7 @@
   --dd-selection-text: #000000;
   --dd-input-text: #000000;
   --dd-placeholder: #808080;
+  --dd-list-z-index: 1000;
 
   /* Active component */
   --dd-active-border: #000000;
@@ -57,6 +58,7 @@
 
   /* Fullscreen mode */
   --dd-fullscreen-bg: #ffffff;
+  --dd-fullscreen-z-index: 3000;
 }
 
 /* Container of drop down control */
@@ -168,7 +170,7 @@
   right: 24px;
   bottom: 0;
   background-color: var(--dd-bg-color);
-  z-index: 1001;
+  z-index: 2;
 
   .dd__clear-icon {
     width: 14px;
@@ -206,7 +208,7 @@
   position: absolute;
   max-width: 100%;
   display: none;
-  z-index: 1002;
+  z-index: var(--dd-list-z-index);
 
   ul {
     padding: 0;
@@ -320,7 +322,7 @@
   opacity: 0;
   height: 100%;
   width: 100%;
-  z-index: 1000;
+  z-index: 1;
 }
 
 .dd__container.dd__container_native.dd__editable select {
@@ -336,10 +338,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1010;
+    z-index: var(--dd-fullscreen-z-index);
 
     .dd__background {
-      z-index: 1100;
+      z-index: calc(var(--dd-fullscreen-z-index) + 100);
       display: block;
       position: absolute;
       top: 0;
@@ -351,7 +353,7 @@
     }
 
     .dd__combo {
-      z-index: 1200;
+      z-index: calc(var(--dd-fullscreen-z-index) + 200);
       position: absolute;
       top: 2px;
       left: 2px;
@@ -360,7 +362,7 @@
     }
 
     .dd__list {
-      z-index: 1200;
+      z-index: calc(var(--dd-fullscreen-z-index) + 200);
       border: var(--dd-border-width) solid var(--dd-border-color);
     }
   }
