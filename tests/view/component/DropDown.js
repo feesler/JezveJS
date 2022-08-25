@@ -5,6 +5,7 @@ import {
     queryAll,
     hasClass,
     prop,
+    attr,
     isVisible,
     click,
     closest,
@@ -54,7 +55,8 @@ export class DropDown extends TestComponent {
         }
         assert(res.toggleBtn, 'Select button not found');
 
-        res.disabled = await hasClass(this.elem, 'dd__container_disabled');
+        const disabledAttr = await attr(this.elem, 'disabled');
+        res.disabled = disabledAttr != null;
 
         if (!res.isAttached) {
             res.statSel = await query(this.elem, '.dd__single-selection');

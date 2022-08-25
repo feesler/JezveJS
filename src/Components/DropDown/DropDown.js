@@ -16,6 +16,7 @@ import {
     setEvents,
     removeEvents,
     deepMeet,
+    enable,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -32,8 +33,6 @@ const CONTAINER_CLASS = 'dd__container';
 const MULTIPLE_CLASS = 'dd__container_multiple';
 const ACTIVE_CLASS = 'dd__container_active';
 const ATTACHED_CLASS = 'dd__container_attached';
-const DISABLED_CLASS = 'dd__container_disabled';
-const ENABLED_CLASS = 'dd__container_enabled';
 const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
 const FULLSCREEN_BG_CLASS = 'dd__background';
@@ -1959,13 +1958,10 @@ export class DropDown extends Component {
             this.elem.classList.remove(ACTIVE_CLASS);
         }
 
+        enable(this.elem, !state.disabled);
         if (state.disabled) {
-            this.elem.classList.add(DISABLED_CLASS);
-            this.elem.classList.remove(ENABLED_CLASS);
             this.removeInputHandlers(this.elem);
         } else {
-            this.elem.classList.remove(DISABLED_CLASS);
-            this.elem.classList.add(ENABLED_CLASS);
             this.assignInputHandlers(this.elem);
         }
 
