@@ -1,6 +1,7 @@
 .checkbox {
-  --checkbox-size: 14px;
+  --checkbox-size: 20px;
   --checkbox-border: #cccccc;
+  --checkbox-border-width: 1px;
   --checkbox-bg: #ffffff;
   --checkbox-text: #000000;
   --checkbox-hover-bg: #cccccc;
@@ -10,11 +11,12 @@
   --checkbox-active-fill: #ffffff;
   --checkbox-checked-fill: #5082aa;
   --checkbox-label-size: 16px;
+  --checkbox-icon-size: 14px;
 
   display: inline-flex;
   flex-flow: row nowrap;
   align-items: center;
-  padding: 2px;
+  padding: 0;
   margin: 0 12px 0 0;
   white-space: nowrap;
   cursor: pointer;
@@ -25,19 +27,20 @@
 }
 
 .checkbox__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: var(--checkbox-size);
   height: var(--checkbox-size);
-  display: inline-block;
-  vertical-align: bottom;
   border: 1px solid var(--checkbox-border);
   background-color: var(--checkbox-bg);
-  padding: 2px;
+  padding: 0;
   margin: 0 6px 0 0;
 
   .checkbox__icon {
     display: block;
-    width: var(--checkbox-size);
-    height: var(--checkbox-size);
+    width: var(--checkbox-icon-size);
+    height: var(--checkbox-icon-size);
     visibility: hidden;
   }
 }
