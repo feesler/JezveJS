@@ -1,11 +1,11 @@
 /* Circle */
 .checkbox.checkbox-circle .checkbox__check {
   border-radius: 100vh;
-  padding: 4px;
 }
 
 /* Large */
 .checkbox.checkbox-large .checkbox__check {
   --checkbox-size: 28px;
+  --checkbox-icon-size: 24px;
   --checkbox-bg: #97ff77;
 }
