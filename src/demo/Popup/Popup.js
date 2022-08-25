@@ -35,8 +35,8 @@ const showFullWidthPopup = () => {
         fullWidthPopup = Popup.create({
             id: 'fullWidthPopup',
             title: 'Fullwidth popup',
-            content: `This popup is dynamically created and have content on the center of screen with fullwidth background.<br>
-            Control buttons are added and both will close popup.`,
+            content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
+                Control buttons are added and both will close popup.`,
         });
         fullWidthPopup.setControls({
             okBtn: { onclick: () => onPopupResultAndClose(fullWidthPopup, true) },
@@ -58,9 +58,11 @@ const showCloseBtnPopup = () => {
         closeBtnPopup = Popup.create({
             id: 'closeBtnPopup',
             title: 'Fullwidth popup',
-            content: `This popup is dynamically created and have content on the center of screen with fullwidth background.<br>
-            Close button is added. Control buttons will not close popup.<br>
-            On small screen message will overflow and whole popup should be scrolled<br><br>${placeholderMsg}${placeholderMsg}`,
+            content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
+                Close button is added. Control buttons will not close popup.
+                On small screen message will overflow and whole popup should be scrolled
+
+                ${placeholderMsg}${placeholderMsg}`,
             btn: {
                 okBtn: { onclick: onPopupResult.bind(null, true) },
                 cancelBtn: { onclick: onPopupResult.bind(null, false) },
@@ -82,9 +84,11 @@ const showMessageScrollPopup = () => {
         messageScrollPopup = Popup.create({
             id: 'messageScrollPopup',
             title: 'Fullwidth popup',
-            content: `This popup is dynamically created and have content on the center of screen with fullwidth background.<br>
-            Close button is added. Control buttons will not close popup.<br>
-            On small screen message will overflow and whole popup should be scrolled<br><br>${placeholderMsg}${placeholderMsg}`,
+            content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
+                Close button is added. Control buttons will not close popup.
+                On small screen message will overflow and whole popup should be scrolled
+
+                ${placeholderMsg}${placeholderMsg}`,
             scrollMessage: true,
             btn: {
                 okBtn: { onclick: () => onPopupResult(true) },
@@ -311,8 +315,8 @@ const showControlsUpdatePopup = () => {
         controlsUpdatePopup = Popup.create({
             id: 'controlsUpdatePopup',
             title: 'setControls() methods test',
-            content: 'After click on Remove button it and Close button will disappear and Restore button will be enabled.<br>'
-                + 'After click on Restore button Close and Remove button will appear and Restore button will be disabled.',
+            content: `After click on Remove button it and Close button will disappear and Restore button will be enabled.
+                After click on Restore button Close and Remove button will appear and Restore button will be disabled.`,
             className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
             btn: {
@@ -370,7 +374,7 @@ const showTitleUpdatePopup = () => {
         titleUpdatePopup = Popup.create({
             id: 'popup14',
             title: 'setTitle() method test',
-            content: 'This popup is able to change its title.<br>',
+            content: 'This popup is able to change its title.',
             className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
             btn: {

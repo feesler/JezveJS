@@ -197,7 +197,8 @@ export class Popup extends Component {
         }
 
         if (typeof content === 'string') {
-            this.messageElem.textContent = content;
+            const preparedContent = content.replaceAll(/\r?\n/g, '<br>');
+            this.messageElem.innerHTML = preparedContent;
         } else {
             removeChilds(this.messageElem);
             const elems = Array.isArray(content) ? content : [content];
