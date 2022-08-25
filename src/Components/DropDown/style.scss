@@ -128,6 +128,17 @@
   color: var(--dd-selection-item-btn);
 }
 
+/* Active selection item */
+.dd__selection-item_active {
+  color: var(--dd-selection-item-hover-text);
+  background-color: var(--dd-selection-item-hover-bg);
+
+  .dd__del-selection-item-btn {
+    color: var(--dd-selection-item-hover-btn);
+    cursor: pointer;
+  }
+}
+
 /* Single selection */
 .dd__single-selection {
   display: flex;
@@ -430,7 +441,8 @@
 }
 
 /* Disabled drop down */
-.dd__container.dd__container_disabled {
+.dd__container[disabled],
+.dd__container_attached[disabled] {
   pointer-events: none;
 
   .dd__combo {
@@ -441,6 +453,7 @@
   .dd__single-selection {
     color: var(--dd-disabled-selection-color);
     background-color: var(--dd-disabled-bg);
+    user-select: none;
   }
 
   .dd__input {
@@ -470,18 +483,7 @@
   .dd__selection-item {
     color: var(--dd-disabled-selection-item-text);
     background-color: var(--dd-disabled-selection-item-bg);
-  }
-}
-
-/* Enabled */
-.dd__container.dd__container_enabled
-  .dd__selection-item.dd__selection-item_active {
-  color: var(--dd-selection-item-hover-text);
-  background-color: var(--dd-selection-item-hover-bg);
-
-  .dd__del-selection-item-btn {
-    color: var(--dd-selection-item-hover-btn);
-    cursor: pointer;
+    user-select: none;
   }
 }
 
@@ -499,26 +501,24 @@
 }
 
 @media (hover: hover) {
-  .dd__container.dd__container_enabled {
-    .dd__clear-btn:hover .dd__clear-icon,
-    .dd__toggle-btn:hover .dd__toggle-icon {
-      fill: var(--dd-btn-hover-fill);
+  .dd__clear-btn:hover .dd__clear-icon,
+  .dd__toggle-btn:hover .dd__toggle-icon {
+    fill: var(--dd-btn-hover-fill);
+  }
+
+  .dd__selection-item {
+    &:hover {
+      color: var(--dd-selection-item-hover-text);
+      background-color: var(--dd-selection-item-hover-bg);
+
+      .dd__del-selection-item-btn {
+        color: var(--dd-selection-item-hover-btn);
+        cursor: pointer;
+      }
     }
 
-    .dd__selection-item {
-      &:hover {
-        color: var(--dd-selection-item-hover-text);
-        background-color: var(--dd-selection-item-hover-bg);
-
-        .dd__del-selection-item-btn {
-          color: var(--dd-selection-item-hover-btn);
-          cursor: pointer;
-        }
-      }
-
-      .dd__del-selection-item-btn:hover {
-        color: var(--dd-selection-item-btn-hover);
-      }
+    .dd__del-selection-item-btn:hover {
+      color: var(--dd-selection-item-btn-hover);
     }
   }
 }
