@@ -1674,7 +1674,7 @@ export class DropDown extends Component {
                 'div',
                 { className: LIST_GROUP_CLASS },
                 [
-                    ce('label', {
+                    ce('div', {
                         className: LIST_GROUP_LABEL_CLASS,
                         textContent: group.title,
                     }),
