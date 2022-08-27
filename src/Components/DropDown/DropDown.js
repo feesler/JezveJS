@@ -1081,8 +1081,8 @@ export class DropDown extends Component {
     }
 
     /** Setup tabindexes of component */
-    setTabIndexes() {
-        if (this.state.disabled) {
+    setTabIndexes(state) {
+        if (state.disabled) {
             this.elem.removeAttribute('tabindex');
             if (this.inputElem) {
                 this.inputElem.removeAttribute('tabindex');
@@ -1092,13 +1092,13 @@ export class DropDown extends Component {
             this.selectElem.setAttribute('tabindex', 0);
             this.elem.setAttribute('tabindex', -1);
             if (this.inputElem) {
-                this.inputElem.setAttribute('tabindex', (this.state.editable) ? 0 : -1);
+                this.inputElem.setAttribute('tabindex', (state.editable) ? 0 : -1);
             }
         } else {
             this.selectElem.setAttribute('tabindex', -1);
-            this.elem.setAttribute('tabindex', (this.state.editable) ? -1 : 0);
+            this.elem.setAttribute('tabindex', (state.editable) ? -1 : 0);
             if (this.inputElem) {
-                this.inputElem.setAttribute('tabindex', (this.state.editable) ? 0 : -1);
+                this.inputElem.setAttribute('tabindex', (state.editable) ? 0 : -1);
             }
         }
     }
@@ -1965,7 +1965,7 @@ export class DropDown extends Component {
             this.assignInputHandlers(this.elem);
         }
 
-        this.setTabIndexes();
+        this.setTabIndexes(state);
 
         this.selectElem.disabled = state.disabled;
         if (this.inputElem) {
