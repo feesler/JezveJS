@@ -1,7 +1,7 @@
 .dd__container,
 .dd__container_attached {
-  --dd-bg-color: #f2f2f2;
-  --dd-border-color: #b0b0b0;
+  --dd-bg-color: #ffffff;
+  --dd-border-color: #dfdfdf;
   --dd-border-width: 1px;
   --dd-border-radius: 3px;
   --dd-list-border-radius: 5px;
@@ -12,7 +12,7 @@
 
   /* Active component */
   --dd-active-border: #888888;
-  --dd-active-bg: #f2f2f2;
+  --dd-active-bg: #ffffff;
   --dd-active-outline: #aee5ff;
 
   /* Clear and toggle buttons */
@@ -42,7 +42,7 @@
 
   /* List item */
   --dd-list-item-text: #000000;
-  --dd-list-item-bg: #f2f2f2;
+  --dd-list-item-bg: #ffffff;
   --dd-list-item-check: #000000;
 
   /* Active list item */
@@ -478,6 +478,10 @@
 
   .dd__del-selection-item-btn {
     display: none;
+  }
+
+  .dd__selection {
+    background-color: var(--dd-disabled-bg);
   }
 
   .dd__selection-item {
