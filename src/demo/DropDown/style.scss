@@ -1,3 +1,22 @@
+.inline-container {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1rem;
+}
+
+.dd__container--ellipsis {
+  overflow: hidden;
+
+  .dd__single-selection {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    flex-shrink: 1;
+    line-height: 30px;
+  }
+}
+
 .logs-container {
   display: inline-flex;
   padding: 4px;

@@ -112,6 +112,7 @@ const initStandardInline = () => {
 
     DropDown.create({
         elem: 'selinp2',
+        className: 'dd__container--ellipsis',
         maxHeight: 6,
         placeholder: 'Select item 2',
         data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
