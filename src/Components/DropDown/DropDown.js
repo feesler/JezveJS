@@ -25,7 +25,7 @@ import './style.scss';
 /* Icons */
 const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
 const CHECK_ICON = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z';
-const TOGGLE_ICON = 'm5.5 12 6.5 6 6.5-6z';
+const TOGGLE_ICON = 'm0.6 0.88-0.35 0.35 1.6 1.6 1.6-1.6-0.35-0.35-1.2 1.2z';
 
 /* CSS classes */
 /* Container */
@@ -378,7 +378,7 @@ export class DropDown extends Component {
     createToggleButton() {
         const arrowIcon = svg(
             'svg',
-            { class: TOGGLE_ICON_CLASS, width: 24, height: 32 },
+            { class: TOGGLE_ICON_CLASS, viewBox: '0 0 3.7 3.7' },
             svg('path', { d: TOGGLE_ICON }),
         );
         const res = ce(
