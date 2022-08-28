@@ -153,19 +153,6 @@ export class DropDown extends Component {
 
         this.setMaxHeight(this.props.maxHeight);
 
-        if ('renderItem' in this.props) {
-            if (!isFunction(this.props.renderItem)) {
-                throw new Error('Invalid renderItem handler specified');
-            }
-            this.renderItemCallback = this.props.renderItem;
-        }
-        if ('renderSelectionItem' in this.props) {
-            if (!isFunction(this.props.renderSelectionItem)) {
-                throw new Error('Invalid renderSelectionItem handler specified');
-            }
-            this.renderSelectionItemCallback = this.props.renderSelectionItem;
-        }
-
         this.emptyClickHandler = () => this.showList(false);
         this.toggleHandler = () => this.toggleList();
         this.inputHandler = (e) => this.onInput(e);
@@ -1178,8 +1165,8 @@ export class DropDown extends Component {
 
     /** Render list item element */
     renderItem(item) {
-        const renderCallback = isFunction(this.renderItemCallback)
-            ? this.renderItemCallback
+        const renderCallback = isFunction(this.props.renderItem)
+            ? this.props.renderItem
             : this.defaultItem;
 
         const contentElem = renderCallback.call(this, item);
@@ -1233,8 +1220,8 @@ export class DropDown extends Component {
         const selectionChanged = !deepMeet(prevSelectedItems, selectedItems);
 
         if (selectionChanged) {
-            const renderCallback = isFunction(this.renderSelectionItemCallback)
-                ? this.renderSelectionItemCallback
+            const renderCallback = isFunction(this.props.renderSelectionItem)
+                ? this.props.renderSelectionItem
                 : this.defaultSelectionItem;
             const selectedElems = selectedItems.map((item) => {
                 const elem = renderCallback.call(this, item);
