@@ -123,9 +123,13 @@
 
 .dd__del-selection-item-btn {
   padding: 0 0 0 7px;
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: var(--dd-selection-item-btn);
+  cursor: pointer;
+}
+
+.dd__del-selection-item-icon {
+  width: 12px;
+  height: 12px;
+  fill: var(--dd-selection-item-btn);
 }
 
 /* Active selection item */
@@ -133,9 +137,8 @@
   color: var(--dd-selection-item-hover-text);
   background-color: var(--dd-selection-item-hover-bg);
 
-  .dd__del-selection-item-btn {
-    color: var(--dd-selection-item-hover-btn);
-    cursor: pointer;
+  .dd__del-selection-item-icon {
+    fill: var(--dd-selection-item-hover-btn);
   }
 }
 
@@ -515,14 +518,13 @@
       color: var(--dd-selection-item-hover-text);
       background-color: var(--dd-selection-item-hover-bg);
 
-      .dd__del-selection-item-btn {
-        color: var(--dd-selection-item-hover-btn);
-        cursor: pointer;
+      .dd__del-selection-item-icon {
+        fill: var(--dd-selection-item-hover-btn);
       }
     }
 
-    .dd__del-selection-item-btn:hover {
-      color: var(--dd-selection-item-btn-hover);
+    .dd__del-selection-item-btn:hover .dd__del-selection-item-icon {
+      fill: var(--dd-selection-item-btn-hover);
     }
   }
 }

@@ -43,6 +43,7 @@ const SINGLE_SELECTION_CLASS = 'dd__single-selection';
 const SELECTION_ITEM_CLASS = 'dd__selection-item';
 const SELECTION_ITEM_ACTIVE_CLASS = 'dd__selection-item_active';
 const SELECTION_ITEM_DEL_BTN_CLASS = 'dd__del-selection-item-btn';
+const SELECTION_ITEM_DEL_ICON_CLASS = 'dd__del-selection-item-icon';
 /* List */
 const LIST_CLASS = 'dd__list';
 const LIST_ITEM_CLASS = 'dd__list-item';
@@ -347,13 +348,18 @@ export class DropDown extends Component {
         return res;
     }
 
-    /** Create clear selection button */
-    createClearButton() {
-        const closeIcon = svg(
+    /** Returns close icon SVG element */
+    createCloseIcon(className) {
+        return svg(
             'svg',
-            { class: CLEAR_ICON_CLASS },
+            { class: className, viewBox: '0 0 14 14' },
             svg('path', { d: CLOSE_ICON }),
         );
+    }
+
+    /** Create clear selection button */
+    createClearButton() {
+        const closeIcon = this.createCloseIcon(CLEAR_ICON_CLASS);
         const res = ce(
             'div',
             { className: CLEAR_BTN_CLASS },
@@ -1193,10 +1199,11 @@ export class DropDown extends Component {
 
     /** Return selected item element for specified item object */
     defaultSelectionItem(item) {
+        const closeIcon = this.createCloseIcon(SELECTION_ITEM_DEL_ICON_CLASS);
         const deselectButton = ce(
             'span',
-            { className: SELECTION_ITEM_DEL_BTN_CLASS, innerHTML: '&times;' },
-            null,
+            { className: SELECTION_ITEM_DEL_BTN_CLASS },
+            closeIcon,
             { click: (e) => this.onDeleteSelectedItem(e) },
         );
 
