@@ -4,6 +4,10 @@
   gap: 1rem;
 }
 
+.dd__container--no-shrink {
+  flex-shrink: 0;
+}
+
 .dd__container--ellipsis {
   overflow: hidden;
 

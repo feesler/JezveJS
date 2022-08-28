@@ -106,6 +106,7 @@ const logTo = (target, value) => {
 const initStandardInline = () => {
     DropDown.create({
         elem: 'selinp',
+        className: 'dd__container--no-shrink',
         placeholder: 'Select item',
         data: initItems('Item', 10),
     });
