@@ -106,6 +106,7 @@ const logTo = (target, value) => {
 const initStandardInline = () => {
     DropDown.create({
         elem: 'selinp',
+        className: 'dd__container--no-shrink',
         placeholder: 'Select item',
         data: initItems('Item', 10),
     });
@@ -285,9 +286,9 @@ const parseDisabledMultiSelect = () => {
     enableBtn.addEventListener('click', (e) => toggleEnable(e, disabledDropDown));
 };
 
-// Built-in items filter
-const dynamicBuiltinFilter = () => {
-    const filterDropDown = DropDown.create({
+// Built-in items filter with single select
+const singleSelectFilter = () => {
+    const dropDown = DropDown.create({
         elem: 'selinp8',
         enableFilter: true,
         placeholder: 'Type to filter',
@@ -295,7 +296,21 @@ const dynamicBuiltinFilter = () => {
     });
 
     const enableBtn = ge('enableFilterBtn');
-    enableBtn.addEventListener('click', (e) => toggleEnable(e, filterDropDown));
+    enableBtn.addEventListener('click', (e) => toggleEnable(e, dropDown));
+};
+
+// Built-in items filter with multiple select
+const multiSelectFilter = () => {
+    const dropDown = DropDown.create({
+        elem: 'multiSelFilterInp',
+        enableFilter: true,
+        multi: true,
+        placeholder: 'Type to filter',
+        data: initItems('Filter item', 100),
+    });
+
+    const enableBtn = ge('enableMultiFilterBtn');
+    enableBtn.addEventListener('click', (e) => toggleEnable(e, dropDown));
 };
 
 // Custom render drop down
@@ -431,7 +446,8 @@ const init = () => {
     parseDisabledSingleSelect();
     parseDisabledMultiSelect();
 
-    dynamicBuiltinFilter();
+    singleSelectFilter();
+    multiSelectFilter();
 
     customRender();
     useNativeSelect();

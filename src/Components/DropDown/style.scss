@@ -123,9 +123,13 @@
 
 .dd__del-selection-item-btn {
   padding: 0 0 0 7px;
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: var(--dd-selection-item-btn);
+  cursor: pointer;
+}
+
+.dd__del-selection-item-icon {
+  width: 12px;
+  height: 12px;
+  fill: var(--dd-selection-item-btn);
 }
 
 /* Active selection item */
@@ -133,9 +137,8 @@
   color: var(--dd-selection-item-hover-text);
   background-color: var(--dd-selection-item-hover-bg);
 
-  .dd__del-selection-item-btn {
-    color: var(--dd-selection-item-hover-btn);
-    cursor: pointer;
+  .dd__del-selection-item-icon {
+    fill: var(--dd-selection-item-hover-btn);
   }
 }
 
@@ -203,6 +206,10 @@
 
 /* Select Drop Down button */
 .dd__toggle-btn {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
   width: 24px;
   height: 100%;
   max-height: 2rem;
@@ -214,6 +221,8 @@
   background-color: var(--dd-bg-color);
 
   .dd__toggle-icon {
+    width: 16px;
+    height: 16px;
     fill: var(--dd-btn-fill);
     fill-opacity: 1;
     stroke: none;
@@ -466,16 +475,15 @@
     }
   }
 
-  .dd__clear-btn,
   .dd__toggle-btn {
     background-color: var(--dd-disabled-bg);
   }
 
-  .dd__clear-icon,
   .dd__toggle-icon {
     fill: var(--dd-disabled-btn-fill);
   }
 
+  .dd__clear-btn,
   .dd__del-selection-item-btn {
     display: none;
   }
@@ -515,14 +523,13 @@
       color: var(--dd-selection-item-hover-text);
       background-color: var(--dd-selection-item-hover-bg);
 
-      .dd__del-selection-item-btn {
-        color: var(--dd-selection-item-hover-btn);
-        cursor: pointer;
+      .dd__del-selection-item-icon {
+        fill: var(--dd-selection-item-hover-btn);
       }
     }
 
-    .dd__del-selection-item-btn:hover {
-      color: var(--dd-selection-item-btn-hover);
+    .dd__del-selection-item-btn:hover .dd__del-selection-item-icon {
+      fill: var(--dd-selection-item-btn-hover);
     }
   }
 }
