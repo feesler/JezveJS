@@ -135,7 +135,6 @@ export class DropDown extends Component {
             inputString: null,
             filtered: false,
             filteredCount: 0,
-            manFilter: false,
             editable: this.props.editable,
             disabled: this.props.disabled,
             items: [],
@@ -411,18 +410,7 @@ export class DropDown extends Component {
         e.stopPropagation();
 
         const item = this.getItemByElem(e.target);
-        if (!item || item.disabled) {
-            return;
-        }
-
-        this.toggleItem(item.id);
-
-        this.sendItemSelectEvent();
-        this.state.changed = true;
-
-        if (!this.props.multi) {
-            this.showList(false);
-        }
+        this.handleItemSelect(item);
     }
 
     /** Handler of 'change' event of native select */
@@ -457,15 +445,7 @@ export class DropDown extends Component {
         if (this.isSelectedItemElement(e.target)) {
             e.target.classList.add(SELECTION_ITEM_ACTIVE_CLASS);
         } else if (e.target === this.inputElem) {
-            this.activateSelectedItem(-1);
-        } else if (e.target === this.elem) {
-            if (e.relatedTarget === this.inputElem) {
-                return;
-            }
-
-            if (this.state.editable && this.inputElem) {
-                this.inputElem.focus();
-            }
+            this.activateInput();
         }
 
         this.state.focusedElem = e.target;
@@ -473,8 +453,8 @@ export class DropDown extends Component {
 
     /** 'blur' event handler */
     onBlur(e) {
-        if (!this.isChildTarget(e.relatedTarget)) {
-            this.showList(false);
+        const lostFocus = !this.isChildTarget(e.relatedTarget);
+        if (lostFocus) {
             this.activate(false);
         }
 
@@ -652,7 +632,7 @@ export class DropDown extends Component {
 
                 if (index === selectedItems.length - 1) {
                     this.activateSelectedItem(-1);
-                    setTimeout(this.inputElem.focus.bind(this.inputElem));
+                    setTimeout(() => this.inputElem.focus());
                 } else {
                     this.activateSelectedItem(index + 1);
                 }
@@ -691,16 +671,7 @@ export class DropDown extends Component {
                 newItem = availItems[availItems.length - 1];
             }
         } else if (e.code === 'Enter' || e.key === 'Enter') {
-            if (activeItem) {
-                this.toggleItem(activeItem.id);
-                this.sendItemSelectEvent();
-                this.state.changed = true;
-
-                if (!this.props.multi) {
-                    this.showList(false);
-                }
-            }
-
+            this.handleItemSelect(activeItem);
             e.preventDefault();
         } else if (e.code === 'Escape') {
             this.showList(false);
@@ -745,8 +716,8 @@ export class DropDown extends Component {
 
     /** Handler for 'input' event of text field  */
     onInput(e) {
-        if (this.props.enableFilter && this.inputElem) {
-            this.filter(this.inputElem.value);
+        if (this.props.enableFilter) {
+            this.filter(e.target.value);
         }
 
         if (isFunction(this.props.oninput)) {
@@ -770,6 +741,30 @@ export class DropDown extends Component {
         });
 
         this.sendChangeEvent();
+    }
+
+    /** Handles user item select event */
+    handleItemSelect(item) {
+        if (!item || item.disabled) {
+            return;
+        }
+
+        this.toggleItem(item.id);
+        this.sendItemSelectEvent();
+        this.state.changed = true;
+
+        if (!this.props.multi) {
+            this.showList(false);
+        }
+
+        if (this.props.enableFilter && this.state.filtered) {
+            this.state.inputString = null;
+            this.showAllItems();
+        }
+
+        if (!this.props.multi) {
+            setTimeout(() => this.elem.focus());
+        }
     }
 
     /* List items methods */
@@ -1115,7 +1110,7 @@ export class DropDown extends Component {
             return;
         }
         // Flush filter
-        if (!this.state.visible && this.state.filtered && !this.state.manFilter) {
+        if (!this.state.visible && this.state.filtered) {
             this.showAllItems();
         }
 
@@ -1128,9 +1123,41 @@ export class DropDown extends Component {
             return;
         }
 
+        if (!val) {
+            this.showList(false);
+        }
+
         this.setState({
             ...this.state,
             active: val,
+            actSelItemIndex: -1,
+            filtered: false,
+            filteredCount: 0,
+            inputString: null,
+            items: this.state.items.map((item) => ({
+                ...item,
+                active: false,
+                hidden: false,
+            })),
+        });
+    }
+
+    activateInput() {
+        if (!this.state.editable || !this.props.enableFilter || this.state.disabled) {
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            actSelItemIndex: -1,
+            inputString: '',
+            filtered: false,
+            filteredCount: 0,
+            items: this.state.items.map((item) => ({
+                ...item,
+                active: false,
+                hidden: false,
+            })),
         });
     }
 
@@ -1221,6 +1248,9 @@ export class DropDown extends Component {
         }
 
         this.renderSingleSelection(state);
+        if (!this.props.multi) {
+            return;
+        }
 
         const prevSelectedItems = this.getSelectedItems(prevState);
         const selectedItems = this.getSelectedItems(state);
@@ -1252,9 +1282,11 @@ export class DropDown extends Component {
             this.selectedElems = selectedElems;
         }
 
-        if (this.state.actSelItemIndex !== -1 && !this.state.disabled) {
-            setTimeout(() => this.selectedElems[this.state.actSelItemIndex].focus());
-        }
+        setTimeout(() => {
+            if (this.state.actSelItemIndex !== -1 && !this.state.disabled) {
+                this.selectedElems[this.state.actSelItemIndex].focus();
+            }
+        });
     }
 
     /** Return selected items data for 'itemselect' and 'change' events */
@@ -1321,7 +1353,6 @@ export class DropDown extends Component {
 
         this.setState({
             ...this.state,
-            inputString: null,
             items: this.state.items.map((item) => ({
                 ...item,
                 selected: (this.props.multi)
@@ -1377,19 +1408,26 @@ export class DropDown extends Component {
             return;
         }
 
-        if (index === -1) {
-            this.state.actSelItemIndex = -1;
-            return;
-        }
-
         // Check correctness of index
-        const selectedItems = this.getSelectedItems(this.state);
-        if (index < 0 || index >= selectedItems.length) {
-            return;
+        if (index !== -1) {
+            const selectedItems = this.getSelectedItems(this.state);
+            if (index < 0 || index >= selectedItems.length) {
+                return;
+            }
         }
 
-        this.state.actSelItemIndex = index;
-        this.setActive(null);
+        this.setState({
+            ...this.state,
+            actSelItemIndex: index,
+            inputString: null,
+            filtered: false,
+            filteredCount: 0,
+            items: this.state.items.map((item) => ({
+                ...item,
+                active: false,
+                hidden: false,
+            })),
+        });
     }
 
     /** Activate last(right) selected item */
@@ -1411,43 +1449,46 @@ export class DropDown extends Component {
             items: this.state.items.map((item) => ({
                 ...item,
                 hidden: false,
+                active: false,
             })),
         });
     }
 
     /** Show only items containing specified string */
     filter(fstr) {
-        let found = false;
-        const lfstr = fstr.toLowerCase();
+        if (this.state.inputString === fstr) {
+            return;
+        }
 
         this.state.inputString = fstr;
 
-        if (lfstr.length === 0) {
+        if (fstr.length === 0) {
             this.showAllItems();
-        } else {
-            const filteredItems = this.state.items.filter(
-                (item) => item.title.toLowerCase().includes(lfstr),
-            );
-            const filteredIds = filteredItems.map((item) => item.id);
-            found = filteredItems.length > 0;
-
-            const items = (found)
-                ? this.state.items.map((item) => ({
-                    ...item,
-                    hidden: !filteredIds.includes(item.id),
-                }))
-                : this.state.items;
-
-            this.setState({
-                ...this.state,
-                filtered: found,
-                filteredCount: filteredItems.length,
-                visible: found,
-                items,
-            });
+            return;
         }
 
-        return found;
+        const lfstr = fstr.toLowerCase();
+        const filteredItems = this.state.items.filter(
+            (item) => item.title.toLowerCase().includes(lfstr),
+        );
+        const filteredIds = filteredItems.map((item) => item.id);
+        const found = filteredItems.length > 0;
+
+        const items = (found)
+            ? this.state.items.map((item) => ({
+                ...item,
+                hidden: !filteredIds.includes(item.id),
+                active: false,
+            }))
+            : this.state.items;
+
+        this.setState({
+            ...this.state,
+            filtered: found,
+            filteredCount: filteredItems.length,
+            visible: found,
+            items,
+        });
     }
 
     /**
@@ -1730,18 +1771,6 @@ export class DropDown extends Component {
                 active: item === itemToActivate,
             })),
         });
-
-        if (this.state.blockScroll) {
-            return;
-        }
-
-        if (!itemToActivate || !this.state.items.length) {
-            return;
-        }
-
-        if (this.state.editable) {
-            setTimeout(() => this.inputElem.focus());
-        }
     }
 
     /** Enable/disable list item by id */
@@ -1827,7 +1856,24 @@ export class DropDown extends Component {
 
     /** Set text for single selection */
     renderSingleSelection(state) {
-        if (this.props.multi || this.props.listAttach) {
+        if (this.props.listAttach) {
+            return;
+        }
+
+        if (this.props.multi) {
+            if (state.editable) {
+                this.inputElem.placeholder = this.props.placeholder;
+                if (state.inputString == null) {
+                    this.inputElem.value = '';
+                } else {
+                    this.inputElem.value = state.inputString;
+                }
+            } else {
+                this.staticElem.textContent = this.props.placeholder;
+                this.staticElem.title = this.props.placeholder;
+                this.staticElem.classList.add(PLACEHOLDER_CLASS);
+            }
+
             return;
         }
 
@@ -1835,19 +1881,26 @@ export class DropDown extends Component {
         const str = (selectedItems.length > 0)
             ? selectedItems[0].title
             : '';
+        const usePlaceholder = (str.length === 0);
 
-        if (str.length > 0) {
-            if (state.editable && this.inputElem && state.inputString == null) {
+        if (state.editable && this.inputElem) {
+            this.inputElem.placeholder = (usePlaceholder) ? this.props.placeholder : str;
+
+            if (state.inputString == null) {
                 this.inputElem.value = str;
-            } else if (!state.editable && this.staticElem) {
-                this.staticElem.textContent = str;
-                this.staticElem.title = str;
+            } else {
+                this.inputElem.value = state.inputString;
+            }
+        } else if (!state.editable && this.staticElem) {
+            const staticText = (usePlaceholder) ? this.props.placeholder : str;
+
+            this.staticElem.textContent = staticText;
+            this.staticElem.title = staticText;
+            if (usePlaceholder) {
+                this.staticElem.classList.add(PLACEHOLDER_CLASS);
+            } else {
                 this.staticElem.classList.remove(PLACEHOLDER_CLASS);
             }
-        } else {
-            this.staticElem.textContent = this.props.placeholder;
-            this.staticElem.title = '';
-            this.staticElem.classList.add(PLACEHOLDER_CLASS);
         }
     }
 
@@ -1919,7 +1972,7 @@ export class DropDown extends Component {
         this.listElem.append(...listElems);
     }
 
-    renderList(state) {
+    renderList(state, prevState = {}) {
         // Skip render if currently native select is visible
         if (isVisible(this.selectElem, true)) {
             return;
@@ -1930,10 +1983,9 @@ export class DropDown extends Component {
         if (state.visible) {
             this.calculatePosition(state);
 
-            if (state.editable) {
-                setTimeout(() => this.inputElem.focus());
+            if (!prevState.visible) {
+                this.listElem.scrollTop = 0;
             }
-            this.list.scrollTop = 0;
         } else {
             this.elem.classList.remove(LIST_OPEN_CLASS);
             if (this.props.fullScreen) {
@@ -1970,7 +2022,7 @@ export class DropDown extends Component {
         }
 
         this.renderSelection(state, prevState);
-        this.renderSelect(state);
-        this.renderList(state);
+        this.renderSelect(state, prevState);
+        this.renderList(state, prevState);
     }
 }
