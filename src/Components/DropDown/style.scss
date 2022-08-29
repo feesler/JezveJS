@@ -475,16 +475,15 @@
     }
   }
 
-  .dd__clear-btn,
   .dd__toggle-btn {
     background-color: var(--dd-disabled-bg);
   }
 
-  .dd__clear-icon,
   .dd__toggle-icon {
     fill: var(--dd-disabled-btn-fill);
   }
 
+  .dd__clear-btn,
   .dd__del-selection-item-btn {
     display: none;
   }

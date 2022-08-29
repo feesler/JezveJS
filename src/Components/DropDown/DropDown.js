@@ -1280,6 +1280,8 @@ export class DropDown extends Component {
             removeChilds(this.selectionElem);
             this.selectionElem.append(...selectedElems);
             this.selectedElems = selectedElems;
+
+            show(this.clearBtn, selectedItems.length > 0);
         }
 
         setTimeout(() => {
