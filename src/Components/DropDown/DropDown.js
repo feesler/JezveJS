@@ -473,15 +473,20 @@ export class DropDown extends Component {
             return false;
         }
 
-        if (e.type === 'keydown' && (
-            !this.isSelectedItemElement(e.target)
-            || !e.target.classList.contains(SELECTION_ITEM_ACTIVE_CLASS)
-        )) {
+        if (
+            e.type === 'keydown'
+            && (
+                !this.isSelectedItemElement(e.target)
+                || !e.target.classList.contains(SELECTION_ITEM_ACTIVE_CLASS)
+            )
+        ) {
             return true;
         }
 
-        if (e.type === 'click'
-            && !e.target.classList.contains(SELECTION_ITEM_DEL_BTN_CLASS)) {
+        if (
+            e.type === 'click'
+            && !e.target.closest(`.${SELECTION_ITEM_DEL_BTN_CLASS}`)
+        ) {
             return true;
         }
 
@@ -489,7 +494,6 @@ export class DropDown extends Component {
         if (!selectedItems.length) {
             return true;
         }
-
         const index = this.getSelectedItemIndex(e.target);
         if (index === -1) {
             return true;
@@ -1669,18 +1673,23 @@ export class DropDown extends Component {
 
     /** Returns new item object */
     createItem(props = {}) {
-        if (!props || !('id' in props)) {
-            throw new Error('Item id not specified');
+        const id = props?.id ?? null;
+        if (id == null) {
+            throw new Error('Invalid item id');
         }
 
+        const defaultItemProps = {
+            selected: false,
+            hidden: false,
+            disabled: false,
+            group: null,
+        };
+
         const item = {
+            ...defaultItemProps,
+            ...props,
             id: props.id.toString(),
-            title: props.title,
-            selected: props.selected,
-            hidden: props.hidden,
-            disabled: props.disabled,
             active: false,
-            group: props.group,
         };
 
         return item;
