@@ -8,10 +8,16 @@ import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
 
+const CONTAINER_CLASS = 'collapsible';
+const CONTENT_CLASS = 'collapsible-content';
 const EXPANDED_CLASS = 'collapsible__expanded';
+const HEADER_CLASS = 'collapsible-header';
+
 const defaultProps = {
     expanded: false,
     header: 'Show',
+    content: null,
+    onStateChange: null,
 };
 
 export class Collapsible extends Component {
@@ -23,41 +29,34 @@ export class Collapsible extends Component {
             ...this.props,
         };
 
+        this.state = {
+            expanded: this.props.expanded,
+        };
+
         this.init();
         this.render(this.state);
     }
 
     init() {
-        this.stateChangeHandler = this.props.onStateChange;
-
-        this.state = {
-            expanded: this.props.expanded,
-        };
-
         this.headerContainer = ce(
-            'button',
-            { className: 'collapsible-header' },
+            'div',
+            { className: HEADER_CLASS },
             null,
             { click: () => this.toggle() },
         );
         this.setHeader(this.props.header);
 
-        this.contentContainer = ce('div', { className: 'collapsible-content' });
+        this.contentContainer = ce('div', { className: CONTENT_CLASS });
         this.setContent(this.props.content);
 
         this.elem = ce('div', {
-            className: 'collapsible',
+            className: CONTAINER_CLASS,
         }, [
             this.headerContainer,
             this.contentContainer,
         ]);
 
-        if (this.props.className) {
-            if (!Array.isArray(this.props.className)) {
-                this.props.className = [this.props.className];
-            }
-            this.elem.classList.add(...this.props.className);
-        }
+        this.setClassNames();
     }
 
     setState(state) {
@@ -67,8 +66,8 @@ export class Collapsible extends Component {
 
         this.state = state;
 
-        if (isFunction(this.stateChangeHandler)) {
-            this.stateChangeHandler(this.state.expanded);
+        if (isFunction(this.props.onStateChange)) {
+            this.props.onStateChange(this.state.expanded);
         }
 
         this.render(this.state);
