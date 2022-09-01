@@ -5,6 +5,7 @@ const defaultProps = {
     digits: undefined,
     oninput: null,
     allowNegative: true,
+    allowMultipleLeadingZeros: false,
 };
 
 /**
@@ -156,10 +157,18 @@ export class DecimalInput {
         return /^-?\d*\.?\d*$/g.test(value);
     }
 
+    isMultipleLeadingZeros(value) {
+        return /^-?00/g.test(value);
+    }
+
     /** Validate specified value */
     isValidValue(value) {
         const fixed = this.fixFloat(value);
         if (!this.isNumber(fixed)) {
+            return false;
+        }
+
+        if (!this.props.allowMultipleLeadingZeros && this.isMultipleLeadingZeros(fixed)) {
             return false;
         }
 
