@@ -22,10 +22,18 @@ const initOnlyPositive = () => {
     });
 };
 
+const initLeadingZeros = () => {
+    DecimalInput.create({
+        elem: ge('decInputZeros'),
+        allowMultipleLeadingZeros: true,
+    });
+};
+
 const init = () => {
     initDefault();
     initDigitsLimit();
     initOnlyPositive();
+    initLeadingZeros();
 };
 
 onReady(init);

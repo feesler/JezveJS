@@ -67,6 +67,7 @@ function initCustomHeader() {
             titleContainer.textContent = (expanded) ? 'Hide' : 'Show';
         },
     });
+    collapse.headerContainer.tabIndex = 0;
 
     ge('custom-collapse').appendChild(collapse.elem);
 }
@@ -81,6 +82,7 @@ function initMethods() {
 
     setEvents(ge('expand-btn'), { click: () => collapse.expand() });
     setEvents(ge('collapse-btn'), { click: () => collapse.collapse() });
+    setEvents(ge('toggle-btn'), { click: () => collapse.toggle() });
 }
 
 onReady(() => {

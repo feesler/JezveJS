@@ -98,7 +98,7 @@ export class SortableDropTarget extends DropTarget {
             insertBefore(dragInfo.dragZoneElem, this.targetElem);
         }
 
-        avatar.saveSortTarget(this.targetElem);
+        avatar.saveSortTarget(this);
     }
 
     onDragEnd(avatar, e) {
@@ -109,18 +109,43 @@ export class SortableDropTarget extends DropTarget {
 
         this.hideHoverIndication();
 
-        const avatarInfo = avatar.getDragInfo(e);
-
-        avatar.onDragEnd();
-
-        if (avatarInfo.sortTarget) {
-            const newPos = avatar.getSortPosition();
-            if (avatarInfo.initialPos.prev !== newPos.prev
-                && avatarInfo.initialPos.next !== newPos.next) {
-                avatarInfo.dragZone.onInsertAt(avatarInfo.dragZoneElem, avatarInfo.sortTarget);
-            }
-        }
+        this.applySort(avatar, e);
 
         this.targetElem = null;
+    }
+
+    onDragCancel(avatar, e) {
+        if (e.type === 'keydown') {
+            this.cancelSort(avatar, e);
+        } else {
+            this.applySort(avatar, e);
+        }
+    }
+
+    applySort(avatar, e) {
+        const avatarInfo = avatar.getDragInfo(e);
+        avatar.onDragEnd();
+
+        if (!avatarInfo.sortTarget) {
+            return;
+        }
+
+        const newPos = avatar.getSortPosition();
+        if (avatarInfo.initialPos.prev !== newPos.prev
+            && avatarInfo.initialPos.next !== newPos.next) {
+            avatarInfo.dragZone.onInsertAt(avatarInfo.dragZoneElem, avatarInfo.sortTarget);
+        }
+    }
+
+    cancelSort(avatar, e) {
+        const avatarInfo = avatar.getDragInfo(e);
+        avatar.onDragEnd();
+
+        const { initialPos, dragZoneElem } = avatarInfo;
+        if (initialPos.prev) {
+            insertAfter(dragZoneElem, initialPos.prev);
+        } else {
+            insertBefore(dragZoneElem, initialPos.next);
+        }
     }
 }

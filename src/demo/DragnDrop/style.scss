@@ -76,6 +76,9 @@
 }
 
 .list_item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
   width: 100% !important;
   padding: 5px;
   margin: 0 0 10px 0;
@@ -141,8 +144,8 @@
   display: block;
   width: 28px;
   height: 28px;
-  margin-left: 0.5rem;
-  background-color: #0088ff;
+  margin-right: 0.5rem;
+  background-color: #00a354;
 }
 
 .drag-handle-btn {

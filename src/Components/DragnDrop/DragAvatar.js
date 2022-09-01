@@ -95,8 +95,8 @@ export class DragAvatar {
         this.scrollDocument(client);
     }
 
-    /** Drop fail handler */
-    onDragCancel() { }
+    /** Drop cancel handler */
+    onDragCancel(e) { }
 
     /** Success drop handler */
     onDragEnd() { }

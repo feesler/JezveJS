@@ -1,10 +1,11 @@
-import { isFunction, getCursorPos, isNum } from '../../js/common.js';
+import { isFunction, getCursorPos, isInt } from '../../js/common.js';
 import '../../css/common.scss';
 
 const defaultProps = {
     digits: undefined,
     oninput: null,
     allowNegative: true,
+    allowMultipleLeadingZeros: false,
 };
 
 /**
@@ -30,7 +31,7 @@ export class DecimalInput {
 
         this.useFixed = (typeof this.props.digits !== 'undefined');
         if (this.useFixed) {
-            if (!isNum(this.props.digits)) {
+            if (!isInt(this.props.digits)) {
                 throw new Error('Invalid digits property specified');
             }
         }
@@ -152,10 +153,22 @@ export class DecimalInput {
         return res;
     }
 
+    isNumber(value) {
+        return /^-?\d*\.?\d*$/g.test(value);
+    }
+
+    isMultipleLeadingZeros(value) {
+        return /^-?00/g.test(value);
+    }
+
     /** Validate specified value */
     isValidValue(value) {
         const fixed = this.fixFloat(value);
-        if (!isNum(fixed)) {
+        if (!this.isNumber(fixed)) {
+            return false;
+        }
+
+        if (!this.props.allowMultipleLeadingZeros && this.isMultipleLeadingZeros(fixed)) {
             return false;
         }
 

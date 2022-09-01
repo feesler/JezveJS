@@ -47,7 +47,7 @@
     cursor: pointer;
   }
 
-  .collapsible-header:focus {
+  .collapsible-header:focus-within {
     background-color: #1d93fa;
   }
 }
@@ -70,11 +70,11 @@
     width: 24px;
     height: 24px;
     fill: #ffffff;
-    opacity: 0;
+    opacity: 0.5;
   }
 }
 
-.collapsible-header:focus .custom-header-icon {
+.collapsible-header:focus-within .custom-header-icon {
   opacity: 0.5;
 }
 
@@ -84,18 +84,15 @@
   background-color: #94bde0;
 }
 
-.methods-container {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: flex-start;
-}
-
 .methods {
   display: inline-flex;
-  margin-right: 15px;
 }
 
 @media (hover: hover) {
+  .custom-header-btn .custom-header-icon {
+    opacity: 0;
+  }
+
   .custom.collapsible-header:hover {
     background-color: #1d93fa;
   }

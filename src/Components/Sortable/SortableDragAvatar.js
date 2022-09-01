@@ -51,7 +51,11 @@ export class SortableDragAvatar extends DragAvatar {
         this.dragZoneElem.classList.remove(this.dragZone.getPlaceholder());
     }
 
-    onDragCancel() {
+    onDragCancel(e) {
+        if (this.dropTarget) {
+            this.dropTarget.onDragCancel(this, e);
+        }
+
         this.destroy();
     }
 
@@ -60,7 +64,8 @@ export class SortableDragAvatar extends DragAvatar {
     }
 
     saveSortTarget(dropTarget) {
-        this.sortTarget = dropTarget;
+        this.dropTarget = dropTarget;
+        this.sortTarget = dropTarget.targetElem;
     }
 
     getSortPosition() {
@@ -71,12 +76,11 @@ export class SortableDragAvatar extends DragAvatar {
     }
 
     // Return drag information object for DropTarget
-    getDragInfo(event) {
+    getDragInfo() {
+        const info = super.getDragInfo();
+
         return {
-            elem: this.elem,
-            dragZoneElem: this.dragZoneElem,
-            dragZone: this.dragZone,
-            mouseShift: { x: this.shiftX, y: this.shiftY },
+            ...info,
             sortTarget: this.sortTarget,
             initialPos: this.initialPos,
         };

@@ -252,7 +252,7 @@ const renderListItemWithHandle = (title = 'Item') => ce(
     'div',
     { className: 'list_item' },
     [
-        ce('div', { className: 'drag_handle' }),
+        ce('div', { className: 'drag-handle' }),
         ce('span', { textContent: title }),
         ce('input', { type: 'text' }),
     ],
@@ -271,7 +271,7 @@ const initQueryHandles = () => {
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         group: 'list_hnd',
-        handles: [{ query: '.drag_handle', includeChilds: true }],
+        handles: [{ query: '.drag-handle', includeChilds: true }],
     });
 };
 
