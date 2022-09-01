@@ -408,8 +408,7 @@
     }
 
     .dd__list {
-      z-index: calc(var(--dd-fullscreen-z-index) + 200);
-      border: var(--dd-border-width) solid var(--dd-border-color);
+      z-index: calc(var(--dd-fullscreen-z-index) + 201);
     }
   }
 }
