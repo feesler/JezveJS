@@ -229,7 +229,7 @@ export class DragMaster {
             if (this.dropTarget) {
                 this.dropTarget.onDragEnd(this.avatar, e);
             } else {
-                this.avatar.onDragCancel();
+                this.avatar.onDragCancel(e);
             }
         }
 
@@ -247,7 +247,7 @@ export class DragMaster {
     onKey(e) {
         if (e.code === 'Escape') {
             if (this.avatar) {
-                this.avatar.onDragCancel();
+                this.avatar.onDragCancel(e);
             }
 
             this.cleanUp();
