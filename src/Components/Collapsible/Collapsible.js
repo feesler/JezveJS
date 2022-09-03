@@ -3,6 +3,7 @@ import {
     ce,
     removeChilds,
     addChilds,
+    setEvents,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -15,12 +16,17 @@ const HEADER_CLASS = 'collapsible-header';
 
 const defaultProps = {
     expanded: false,
+    toggleOnClick: true,
     header: 'Show',
     content: null,
     onStateChange: null,
 };
 
 export class Collapsible extends Component {
+    static create(props) {
+        return new Collapsible(props);
+    }
+
     constructor(props) {
         super(props);
 
@@ -38,12 +44,10 @@ export class Collapsible extends Component {
     }
 
     init() {
-        this.headerContainer = ce(
-            'div',
-            { className: HEADER_CLASS },
-            null,
-            { click: () => this.toggle() },
-        );
+        this.headerContainer = ce('div', { className: HEADER_CLASS });
+        if (this.props.toggleOnClick) {
+            setEvents(this.headerContainer, { click: () => this.toggle() });
+        }
         this.setHeader(this.props.header);
 
         this.contentContainer = ce('div', { className: CONTENT_CLASS });

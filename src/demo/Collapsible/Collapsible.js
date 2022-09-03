@@ -31,27 +31,27 @@ const createButton = (icon) => ce(
     { click: (e) => e.stopPropagation() },
 );
 
-function initSimple() {
-    const collapse = new Collapsible({
+const initSimple = () => {
+    const collapse = Collapsible.create({
         content: 'Content',
         className: 'simple',
         onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
     });
 
-    ge('simple-collapse').appendChild(collapse.elem);
-}
+    ge('simple-collapse').append(collapse.elem);
+};
 
-function initStyled() {
-    const collapse = new Collapsible({
+const initStyled = () => {
+    const collapse = Collapsible.create({
         content: ge('styled-content'),
         className: 'styled',
         onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
     });
 
-    ge('styled-collapse').appendChild(collapse.elem);
-}
+    ge('styled-collapse').append(collapse.elem);
+};
 
-function initCustomHeader() {
+const initCustomHeader = () => {
     const titleContainer = ce('div', {
         className: 'custom-title',
         textContent: 'Hover/focus to see controls',
@@ -59,7 +59,7 @@ function initCustomHeader() {
     const updateBtn = createButton('update');
     const delBtn = createButton('del');
 
-    const collapse = new Collapsible({
+    const collapse = Collapsible.create({
         header: [titleContainer, updateBtn, delBtn],
         content: 'Custom header',
         className: 'custom',
@@ -69,25 +69,48 @@ function initCustomHeader() {
     });
     collapse.headerContainer.tabIndex = 0;
 
-    ge('custom-collapse').appendChild(collapse.elem);
-}
+    ge('custom-collapse').append(collapse.elem);
+};
 
-function initMethods() {
-    const collapse = new Collapsible({
+const initDisabledToggle = () => {
+    const titleContainer = ce('div', {
+        className: 'custom-title',
+        textContent: 'Toggle only by click button',
+    });
+    const toggleBtn = ce(
+        'button',
+        { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
+        createIcon('toggle-ext'),
+    );
+
+    const collapse = Collapsible.create({
+        toggleOnClick: false,
+        header: [titleContainer, toggleBtn],
+        content: 'Content',
+        className: 'disabled-toggle',
+    });
+    setEvents(toggleBtn, { click: () => collapse?.toggle() });
+
+    ge('disabledToggle').append(collapse.elem);
+};
+
+const initMethods = () => {
+    const collapse = Collapsible.create({
         className: 'methods',
         header: 'Header',
         content: 'Content',
     });
-    ge('methods-collapse').appendChild(collapse.elem);
+    ge('methods-collapse').append(collapse.elem);
 
     setEvents(ge('expand-btn'), { click: () => collapse.expand() });
     setEvents(ge('collapse-btn'), { click: () => collapse.collapse() });
     setEvents(ge('toggle-btn'), { click: () => collapse.toggle() });
-}
+};
 
 onReady(() => {
     initSimple();
     initStyled();
     initCustomHeader();
+    initDisabledToggle();
     initMethods();
 });

@@ -36,7 +36,8 @@
   list-style-type: none;
 }
 
-.custom {
+.custom,
+.disabled-toggle {
   display: inline-flex;
   min-width: 300px;
   background-color: #55b0ff;
@@ -49,6 +50,12 @@
 
   .collapsible-header:focus-within {
     background-color: #1d93fa;
+  }
+
+  .collapsible-content {
+    padding: 8px;
+    justify-content: center;
+    background-color: #94bde0;
   }
 }
 
@@ -74,14 +81,20 @@
   }
 }
 
-.collapsible-header:focus-within .custom-header-icon {
-  opacity: 0.5;
+.disabled-toggle {
+  .custom-header-icon {
+    opacity: 0.5;
+  }
+
+  &.collapsible__expanded {
+    .custom-header-icon {
+      transform: rotate(180deg);
+    }
+  }
 }
 
-.custom .collapsible-content {
-  padding: 8px;
-  justify-content: center;
-  background-color: #94bde0;
+.collapsible-header:focus-within .custom-header-icon {
+  opacity: 0.5;
 }
 
 .methods {
@@ -89,24 +102,27 @@
 }
 
 @media (hover: hover) {
-  .custom-header-btn .custom-header-icon {
-    opacity: 0;
-  }
-
-  .custom.collapsible-header:hover {
-    background-color: #1d93fa;
-  }
-
   .styled .collapsible-header:hover {
     background-color: #2e2e2e;
     border-color: #505050;
   }
 
-  .collapsible-header:hover .custom-header-icon {
+  .custom .custom-header-icon {
+    opacity: 0;
+  }
+
+  .custom-header-btn:hover .custom-header-icon {
+    opacity: 1;
+  }
+
+  .custom .collapsible-header:hover .custom-header-icon {
     opacity: 0.5;
   }
 
-  .custom .custom-header-btn:hover .custom-header-icon {
-    opacity: 1;
+  .custom,
+  .disabled-toggle {
+    .collapsible-header:hover {
+      background-color: #1d93fa;
+    }
   }
 }
