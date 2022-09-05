@@ -321,44 +321,82 @@ export class DatePicker extends Component {
         return (date - range.start >= 0 && date - range.end <= 0);
     }
 
+    sendShowEvents(value = true) {
+        if (value && isFunction(this.props.onshow)) {
+            this.props.onshow();
+        }
+        if (!value && isFunction(this.props.onhide)) {
+            this.props.onhide();
+        }
+    }
+
     /**
      * Show/hide date picker view
      * @param {boolean} val - if true then show view, hide otherwise
      */
-    showView(val) {
-        const toShow = (typeof val !== 'undefined') ? val : true;
+    showView(value = true) {
+        show(this.wrapper, value);
 
-        show(this.wrapper, toShow);
+        if (this.props.static) {
+            this.sendShowEvents();
+            return;
+        }
 
         // check position of control in window and place it to be visible
-        if (toShow && !this.props.static) {
-            const wrapperBottom = getOffset(this.wrapper).top + this.wrapper.offsetHeight;
-            if (wrapperBottom > document.documentElement.clientHeight) {
+        if (value) {
+            const html = document.documentElement;
+            const screenBottom = html.scrollTop + html.clientHeight;
+            const container = getOffset(this.elem);
+            container.width = this.elem.offsetWidth;
+            container.height = this.elem.offsetHeight;
+
+            const totalHeight = container.height + this.wrapper.offsetHeight;
+            const bottom = container.top + totalHeight;
+
+            if (bottom > html.scrollHeight) {
                 const bottomOffset = (this.relativeParent) ? this.relativeParent.offsetHeight : 0;
                 this.wrapper.style.bottom = px(bottomOffset);
-            } else {
-                this.wrapper.style.bottom = '';
+            } else if (bottom > screenBottom) {
+                html.scrollTop += bottom - screenBottom;
             }
+
+            // Check element wider than screen
+            const width = this.wrapper.offsetWidth;
+            if (width >= html.clientWidth) {
+                this.wrapper.style.width = px(html.clientWidth);
+                this.wrapper.style.left = px(0);
+            } else {
+                // Check element overflows screen to the right
+                // if rendered from the left of container
+                const leftOffset = container.left - html.scrollLeft;
+                if (leftOffset + width > html.clientWidth) {
+                    const left = container.left + container.width - width;
+                    if (left < 0) {
+                        this.wrapper.style.right = px(left);
+                    } else {
+                        this.wrapper.style.right = px(0);
+                    }
+                } else {
+                    this.wrapper.style.left = px(0);
+                }
+            }
+        } else {
+            this.wrapper.style.bottom = '';
+            this.wrapper.style.left = '';
+            this.wrapper.style.right = '';
         }
 
         // set automatic hide on empty click
-        if (!this.props.static) {
-            if (toShow) {
-                setEmptyClick(this.emptyClickHandler, [
-                    this.wrapper,
-                    this.relativeParent,
-                ]);
-            } else {
-                removeEmptyClick(this.emptyClickHandler);
-            }
+        if (value) {
+            setEmptyClick(this.emptyClickHandler, [
+                this.wrapper,
+                this.relativeParent,
+            ]);
+        } else {
+            removeEmptyClick(this.emptyClickHandler);
         }
 
-        if (toShow && isFunction(this.props.onshow)) {
-            this.props.onshow();
-        }
-        if (!toShow && isFunction(this.props.onhide)) {
-            this.props.onhide();
-        }
+        this.sendShowEvents();
     }
 
     /**

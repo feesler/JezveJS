@@ -50,6 +50,16 @@ const initPopup = () => {
     btn.addEventListener('click', () => datePicker.show());
 };
 
+const initPosition = () => {
+    const btn = ge('showPosBtn');
+    const datePicker = DatePicker.create({
+        relparent: btn,
+    });
+    insertAfter(datePicker.elem, btn);
+
+    btn.addEventListener('click', () => datePicker.show());
+};
+
 const initRangeSelect = () => {
     const inpGroup = ge('dpRangeGroup');
     const datePicker = DatePicker.create({
@@ -122,6 +132,7 @@ const initLocales = () => {
 const init = () => {
     initStatic();
     initPopup();
+    initPosition();
     initRangeSelect();
     initCallbacks();
     initSetSelection();
