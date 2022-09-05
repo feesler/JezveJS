@@ -338,7 +338,7 @@ export class DatePicker extends Component {
         show(this.wrapper, value);
 
         if (this.props.static) {
-            this.sendShowEvents();
+            this.sendShowEvents(value);
             return;
         }
 
@@ -396,7 +396,7 @@ export class DatePicker extends Component {
             removeEmptyClick(this.emptyClickHandler);
         }
 
-        this.sendShowEvents();
+        this.sendShowEvents(value);
     }
 
     /**
@@ -488,16 +488,16 @@ export class DatePicker extends Component {
         }
 
         if (this.titleEl.contains(e.target)) {
-            setTimeout(() => this.navigateUp());
+            this.navigateUp();
         } else if (this.navPrevElem.contains(e.target)) {
-            setTimeout(() => this.setViewDate(this.currView.nav.prev));
+            this.setViewDate(this.currView.nav.prev);
         } else if (this.navNextElem.contains(e.target)) {
-            setTimeout(() => this.setViewDate(this.currView.nav.next));
+            this.setViewDate(this.currView.nav.next);
         } else {
             // check main cells
             const setObj = this.currView.set.find((item) => item.cell === e.target);
             if (setObj) {
-                setTimeout(() => this.onCellClick(setObj.date));
+                this.onCellClick(setObj.date);
             }
         }
     }

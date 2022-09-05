@@ -33,6 +33,7 @@ export class DatePickerView extends AppView {
         );
 
         res.cbInp = { elem: await query('#cbInp') };
+        res.cbStatusText = { elem: await query('#statustext') };
         res.showCbBtn = await query('#showCbBtn');
         res.callbacksDatePicker = await DatePicker.create(
             this,
@@ -69,6 +70,7 @@ export class DatePickerView extends AppView {
             && res.showRangeBtn
             && res.rangeDatePicker
             && res.cbInp.elem
+            && res.cbStatusText.elem
             && res.showCbBtn
             && res.callbacksDatePicker
             && res.setSelInp.elem
@@ -84,6 +86,7 @@ export class DatePickerView extends AppView {
         res.popupDateInp.value = await prop(res.popupDateInp.elem, 'value');
         res.rangeInp.value = await prop(res.rangeInp.elem, 'value');
         res.cbInp.value = await prop(res.cbInp.elem, 'value');
+        res.cbStatusText.title = await prop(res.cbStatusText.elem, 'textContent');
         res.setSelInp.value = await prop(res.setSelInp.elem, 'value');
 
         return res;
@@ -137,18 +140,22 @@ export class DatePickerView extends AppView {
         return this.clickShowButton('showRangeBtn', 'rangeDatePicker');
     }
 
-    async selectDateRange({ start, end }) {
+    async selectDateRange({ start, end }, input, datePicker) {
         assert.isDate(start, 'Invalid date');
         assert.isDate(end, 'Invalid date');
 
         const rangeFmt = `${formatDate(start)} - ${formatDate(end)}`;
         const expected = {
-            rangeInp: { value: rangeFmt },
+            [input]: { value: rangeFmt },
         };
 
-        await this.performAction(() => this.content.rangeDatePicker.selectRange(start, end));
+        await this.performAction(() => this.content[datePicker].selectRange(start, end));
 
         return this.checkState(expected);
+    }
+
+    async toggleCallbacks() {
+        return this.clickShowButton('showCbBtn', 'callbacksDatePicker');
     }
 
     async showSetSelection() {
