@@ -118,6 +118,10 @@ export default {
             import: './src/demo/Progress/Progress.js',
             filename: 'demo/js/[name].[fullhash].js',
         },
+        sliderDemo: {
+            import: './src/demo/Slider/Slider.js',
+            filename: 'demo/js/[name].[fullhash].js',
+        },
         switchDemo: {
             import: './src/demo/Switch/Switch.js',
             filename: 'demo/js/[name].[fullhash].js',
@@ -274,6 +278,12 @@ export default {
             template: 'src/demo/Progress/progress.html',
             filename: 'demo/progress.html',
             chunks: ['polyfills', 'progressDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/Slider/Slider.html',
+            filename: 'demo/slider.html',
+            chunks: ['polyfills', 'sliderDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
