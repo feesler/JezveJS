@@ -86,6 +86,9 @@ const initCallbacks = () => {
             statustext.textContent = `Date selected: ${formatDate(date)}`;
         },
         onrangeselect: (range) => formatRangeToInput(range, 'cbInp'),
+        onshow: () => {
+            statustext.textContent = 'Select range...';
+        },
         onhide: () => {
             statustext.textContent = 'Loading...';
         },
@@ -93,7 +96,7 @@ const initCallbacks = () => {
     insertAfter(datePicker.elem, inpGroup);
 
     const btn = ge('showCbBtn');
-    btn.addEventListener('click', () => datePicker.show());
+    btn.addEventListener('click', () => datePicker.show(!datePicker.visible()));
 };
 
 const initSetSelection = () => {

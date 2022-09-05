@@ -15,7 +15,60 @@ export const selectDatePopup = async (date) => {
 export const selectDateRange = async (range) => {
     const rangeFmt = `${formatDate(range.start)} - ${formatDate(range.end)}`;
     await test('Show date picker', () => App.view.showRange());
-    await test(`Select range (${rangeFmt})`, () => App.view.selectDateRange(range));
+    await test(`Select range (${rangeFmt})`, () => (
+        App.view.selectDateRange(range, 'rangeInp', 'rangeDatePicker')
+    ));
+};
+
+export const testCallbacks = async (range) => {
+    await test('Initial state', () => {
+        App.view.expectedState = {
+            cbStatusText: {
+                title: 'Waiting',
+            },
+        };
+
+        return App.view.checkState();
+    });
+
+    await test('Show date picker', async () => {
+        await App.view.toggleCallbacks();
+
+        App.view.expectedState = {
+            cbStatusText: {
+                title: 'Select range...',
+            },
+        };
+
+        return App.view.checkState();
+    });
+
+    const startFmt = formatDate(range.start);
+    const endFmt = formatDate(range.end);
+    const rangeFmt = `${startFmt} - ${endFmt}`;
+    await test(`Select range (${rangeFmt})`, async () => {
+        await App.view.selectDateRange(range, 'cbInp', 'callbacksDatePicker');
+
+        App.view.expectedState = {
+            cbStatusText: {
+                title: `Date selected: ${endFmt}`,
+            },
+        };
+
+        return App.view.checkState();
+    });
+
+    await test('Close date picker', async () => {
+        await App.view.toggleCallbacks();
+
+        App.view.expectedState = {
+            cbStatusText: {
+                title: 'Loading...',
+            },
+        };
+
+        return App.view.checkState();
+    });
 };
 
 const getHighlightCells = (start, end, monthDays) => {

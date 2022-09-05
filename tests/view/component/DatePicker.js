@@ -110,7 +110,7 @@ export class DatePicker extends TestComponent {
         const cell = this.content.cells.find((item) => item.title.toLowerCase() === lval);
         assert(cell, 'Specified cell not found');
 
-        await click(cell.elem);
+        return click(cell.elem);
     }
 
     async isTitleChanged() {
