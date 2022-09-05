@@ -20,6 +20,7 @@
 /* View wrapper */
 .dp__wrapper {
   position: absolute;
+  min-width: 300px;
   overflow: hidden;
   background-color: var(--dp-bg-color);
   color: var(--dp-text-color);
@@ -174,7 +175,7 @@
 @media screen and (min-width: 768px) {
   .dp__container,
   .dp__view-container {
-    max-width: 19rem;
+    width: 19rem;
   }
 
   .dp__day-cell {
