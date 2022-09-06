@@ -131,7 +131,7 @@ export class Scenario {
         setBlock('Callbacks', 2);
         await DatePickerTests.testCallbacks({
             start: App.dates.monthAgo,
-            end: App.dates.weekAfter,
+            end: App.dates.yearAgo,
         });
 
         setBlock('setSelection() method', 2);

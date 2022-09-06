@@ -466,6 +466,8 @@ export class DatePicker extends Component {
      * @param {Event} e - wheel event object
      */
     onWheel(e) {
+        e.preventDefault();
+
         if (
             !this.currView?.nav
             || this.state.animation
@@ -476,13 +478,13 @@ export class DatePicker extends Component {
 
         const dir = (e.wheelDelta > 0);
         const nav = (dir) ? this.currView.nav.prev : this.currView.nav.next;
-        setTimeout(() => this.setViewDate(nav));
-
-        e.preventDefault();
+        this.setViewDate(nav);
     }
 
     /** View 'click' event delegate */
     onViewClick(e) {
+        e.stopPropagation();
+
         if (!this.currView || this.state.animation) {
             return;
         }
