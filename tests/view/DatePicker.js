@@ -144,7 +144,9 @@ export class DatePickerView extends AppView {
         assert.isDate(start, 'Invalid date');
         assert.isDate(end, 'Invalid date');
 
-        const rangeFmt = `${formatDate(start)} - ${formatDate(end)}`;
+        const minDate = (start < end) ? start : end;
+        const maxDate = (start < end) ? end : start;
+        const rangeFmt = `${formatDate(minDate)} - ${formatDate(maxDate)}`;
         const expected = {
             [input]: { value: rangeFmt },
         };
