@@ -469,8 +469,8 @@ export class DropDown extends Component {
 
     /** Click by delete button of selected item event handler */
     onDeleteSelectedItem(e) {
-        if (!e || !e.target || !this.props.multi) {
-            return false;
+        if (!e?.target || !this.props.multi) {
+            return;
         }
 
         if (
@@ -480,30 +480,29 @@ export class DropDown extends Component {
                 || !e.target.classList.contains(SELECTION_ITEM_ACTIVE_CLASS)
             )
         ) {
-            return true;
+            return;
         }
 
         if (
             e.type === 'click'
             && !e.target.closest(`.${SELECTION_ITEM_DEL_BTN_CLASS}`)
         ) {
-            return true;
+            return;
         }
 
         const selectedItems = this.getSelectedItems(this.state);
         if (!selectedItems.length) {
-            return true;
+            return;
         }
         const index = this.getSelectedItemIndex(e.target);
         if (index === -1) {
-            return true;
+            return;
         }
 
-        // Focus host input if deselect last(right) selected item
+        // Focus input or container if deselect last(right) selected item
         // Activate next selected item otherwise
         if (e.type === 'click' || index === selectedItems.length - 1) {
             this.activateSelectedItem(-1);
-            setTimeout(() => this.inputElem.focus());
         } else {
             this.activateSelectedItem(index);
         }
@@ -516,8 +515,6 @@ export class DropDown extends Component {
         this.sendItemSelectEvent();
         this.state.changed = true;
         this.sendChangeEvent();
-
-        return true;
     }
 
     /** 'scroll' event of list element handler */
@@ -1289,7 +1286,11 @@ export class DropDown extends Component {
         }
 
         setTimeout(() => {
-            if (this.state.actSelItemIndex !== -1 && !this.state.disabled) {
+            if (this.state.disabled || !this.state.active) {
+                return;
+            }
+
+            if (this.state.actSelItemIndex !== -1) {
                 this.selectedElems[this.state.actSelItemIndex].focus();
             }
         });
@@ -1434,6 +1435,16 @@ export class DropDown extends Component {
                 hidden: false,
             })),
         });
+
+        if (this.state.actSelItemIndex === -1) {
+            setTimeout(() => {
+                if (this.props.enableFilter) {
+                    this.inputElem.focus();
+                } else {
+                    this.elem.focus();
+                }
+            });
+        }
     }
 
     /** Activate last(right) selected item */
