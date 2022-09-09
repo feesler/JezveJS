@@ -90,6 +90,10 @@ export class Offcanvas extends Component {
         this.setState({ ...this.state, closed: true });
     }
 
+    toggle() {
+        this.setState({ ...this.state, closed: !this.state.closed });
+    }
+
     setState(state) {
         if (state.closed === this.state.closed) {
             return;

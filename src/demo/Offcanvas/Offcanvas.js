@@ -11,6 +11,8 @@ const initDefault = () => {
 
     const btn = ge('showDefaultBtn');
     btn.addEventListener('click', () => offcanvas.open());
+    const toggleBtn = ge('toggleTopBtn');
+    toggleBtn.addEventListener('click', () => offcanvas.toggle());
 };
 
 const initRight = () => {
