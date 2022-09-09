@@ -578,7 +578,6 @@ export class DropDown extends Component {
                         this.activateSelectedItem(1);
                     } else {
                         this.activateSelectedItem(-1);
-                        setTimeout(() => this.inputElem.focus());
                     }
                 } else {
                     // Activate previous selected item
@@ -635,7 +634,6 @@ export class DropDown extends Component {
 
                 if (index === selectedItems.length - 1) {
                     this.activateSelectedItem(-1);
-                    setTimeout(() => this.inputElem.focus());
                 } else {
                     this.activateSelectedItem(index + 1);
                 }
@@ -767,6 +765,8 @@ export class DropDown extends Component {
 
         if (!this.props.multi) {
             setTimeout(() => this.elem.focus());
+        } else if (this.props.enableFilter) {
+            setTimeout(() => this.inputElem.focus());
         }
     }
 
