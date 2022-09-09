@@ -41,8 +41,10 @@
 }
 
 .dp__header_item {
-  display: inline-block;
-  box-sizing: border-box;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
   height: 2rem;
   line-height: 2rem;
   cursor: pointer;
@@ -56,9 +58,14 @@
   width: 10%;
 
   .dp__header_nav-icon {
+    width: 25%;
     vertical-align: middle;
     fill: var(--dp-nav-fill);
     display: inline-block;
+  }
+
+  &.dp__header_nav-next .dp__header_nav-icon {
+    rotate: 180deg;
   }
 }
 

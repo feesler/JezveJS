@@ -304,6 +304,7 @@ const multiSelectFilter = () => {
     const dropDown = DropDown.create({
         elem: 'multiSelFilterInp',
         enableFilter: true,
+        noResultsMessage: 'Nothing found',
         multi: true,
         placeholder: 'Type to filter',
         data: initItems('Filter item', 100),

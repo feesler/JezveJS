@@ -38,6 +38,7 @@ const HEADER_CLASS = 'dp__header';
 const HEADER_ITEM_CLASS = 'dp__header_item';
 const HEADER_TITLE_CLASS = 'dp__header_title';
 const HEADER_NAV_CLASS = 'dp__header_nav';
+const HEADER_NEXT_NAV_CLASS = 'dp__header_nav-next';
 const NAV_ICON_CLASS = 'dp__header_nav-icon';
 /* View */
 const VIEW_CLASS = 'dp__view';
@@ -414,32 +415,28 @@ export class DatePicker extends Component {
         return isVisible(this.wrapper);
     }
 
+    renderNavIcon() {
+        return svg(
+            'svg',
+            { class: NAV_ICON_CLASS, viewBox: '0 0 2.1 3.4' },
+            svg('path', { d: 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z' }),
+        );
+    }
+
     /**
      * Render header element
      */
     renderHead() {
         this.titleEl = ce('div', { className: `${HEADER_ITEM_CLASS} ${HEADER_TITLE_CLASS}` });
-
-        const prevIcon = svg(
-            'svg',
-            { class: NAV_ICON_CLASS, width: '25%', viewBox: '0 0 6 13' },
-            svg('path', { d: 'm6 1-6 5.5 6 5.5z' }),
-        );
         this.navPrevElem = ce(
             'div',
             { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS}` },
-            prevIcon,
-        );
-
-        const nextIcon = svg(
-            'svg',
-            { class: NAV_ICON_CLASS, width: '25%', viewBox: '0 0 6 13' },
-            svg('path', { d: 'm0 1 6 5.5-6 5.5z' }),
+            this.renderNavIcon(),
         );
         this.navNextElem = ce(
             'div',
-            { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS}` },
-            nextIcon,
+            { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS} ${HEADER_NEXT_NAV_CLASS}` },
+            this.renderNavIcon(),
         );
 
         const headTbl = ce('div', { className: HEADER_CLASS }, [
@@ -697,7 +694,7 @@ export class DatePicker extends Component {
             return null;
         }
 
-        return new Date(parts[2], parts[1] - 1, parts[0]);
+        return new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
     }
 
     /**
