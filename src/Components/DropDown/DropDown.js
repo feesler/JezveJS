@@ -55,6 +55,7 @@ const LIST_DROP_UP_CLASS = 'dd__list_drop-up';
 const LIST_GROUP_CLASS = 'dd__list-group';
 const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
 const CHECK_ICON_CLASS = 'dd__check-icon';
+const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const COMBO_CLASS = 'dd__combo';
 const CLEAR_BTN_CLASS = 'dd__clear-btn';
@@ -69,6 +70,7 @@ const defaultProps = {
     multi: false,
     listAttach: false,
     enableFilter: false,
+    noResultsMessage: 'No items',
     editable: false,
     disabled: false,
     useNativeSelect: false,
@@ -965,6 +967,10 @@ export class DropDown extends Component {
             );
         }
 
+        if (state.filtered && state.filteredCount === 0) {
+            this.list.style.height = '';
+        }
+
         // Check horizontal offset of drop down list
         const minWidth = (combo) ? combo.width : container.width;
         this.list.style.minWidth = px(minWidth);
@@ -1489,21 +1495,17 @@ export class DropDown extends Component {
             (item) => item.title.toLowerCase().includes(lfstr),
         );
         const filteredIds = filteredItems.map((item) => item.id);
-        const found = filteredItems.length > 0;
-
-        const items = (found)
-            ? this.state.items.map((item) => ({
-                ...item,
-                hidden: !filteredIds.includes(item.id),
-                active: false,
-            }))
-            : this.state.items;
+        const items = this.state.items.map((item) => ({
+            ...item,
+            hidden: !filteredIds.includes(item.id),
+            active: false,
+        }));
 
         this.setState({
             ...this.state,
-            filtered: found,
+            filtered: true,
             filteredCount: filteredItems.length,
-            visible: found,
+            visible: true,
             items,
         });
     }
@@ -1967,7 +1969,7 @@ export class DropDown extends Component {
         this.selectElem.append(...options);
     }
 
-    renderListContent(state) {
+    renderListItems(state) {
         const optGroups = [];
         const listElems = [];
 
@@ -1989,6 +1991,24 @@ export class DropDown extends Component {
                 listElems.push(itemElem);
             }
         });
+
+        return listElems;
+    }
+
+    renderNotFound() {
+        const contentElem = ce('div', {
+            className: NOT_FOUND_CLASS,
+            textContent: this.props.noResultsMessage,
+        });
+        const elem = ce('li', {}, contentElem);
+
+        return [elem];
+    }
+
+    renderListContent(state) {
+        const listElems = (state.filtered && state.filteredCount === 0)
+            ? this.renderNotFound()
+            : this.renderListItems(state);
 
         removeChilds(this.listElem);
         this.listElem.append(...listElems);

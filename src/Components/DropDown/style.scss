@@ -59,6 +59,9 @@
   --dd-list-group-text: #0072c6;
   --dd-list-group-bg: #f2f2f2;
 
+  /* Not found message */
+  --dd-not-found-text: #505050;
+
   /* Fullscreen mode */
   --dd-fullscreen-bg: #ffffff;
   --dd-fullscreen-z-index: 3000;
@@ -353,6 +356,21 @@
   ul {
     padding: 0 0 0 var(--dd-list-group-padding);
   }
+}
+
+/* Not found message */
+.dd__not-found-message {
+  padding: 10px;
+  font-size: 1rem;
+  text-align: center;
+  border-width: 0;
+  border-style: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--dd-not-found-text);
+  background-color: var(--dd-list-item-bg);
 }
 
 .dd__container_attached select,
