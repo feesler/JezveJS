@@ -89,7 +89,7 @@ export const testSetSelection = async () => {
         const expected = {
             selDatePicker: {
                 visible: true,
-                cells: getHighlightCells(1, 6, 31),
+                cells: getHighlightCells(1, 7, 31),
                 current: {
                     month: 11,
                     year: 2020,

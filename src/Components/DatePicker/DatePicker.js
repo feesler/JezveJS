@@ -697,7 +697,7 @@ export class DatePicker extends Component {
             return null;
         }
 
-        return new Date(parts[2], parts[1] - 1, parts[0]);
+        return new Date(Date.UTC(parts[2], parts[1] - 1, parts[0]));
     }
 
     /**
