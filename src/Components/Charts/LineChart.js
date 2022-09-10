@@ -114,7 +114,7 @@ export class LineChart extends BaseChart {
             item.elem.classList.add(categoryClass);
         }
 
-        this.content.appendChild(item.elem);
+        this.content.append(item.elem);
 
         return item;
     }
@@ -186,7 +186,7 @@ export class LineChart extends BaseChart {
                 path.elem.classList.add(categoryClass);
             }
 
-            this.content.appendChild(path.elem);
+            this.content.append(path.elem);
             // Insert path before circles
             const group = this.items[0];
             const groupItems = Array.isArray(group) ? group : [group];
@@ -201,7 +201,7 @@ export class LineChart extends BaseChart {
                 repeatCount: '1',
                 calcMode: 'linear',
             });
-            path.elem.appendChild(path.animateElem);
+            path.elem.append(path.animateElem);
 
             this.paths[categoryIndex] = path;
         }

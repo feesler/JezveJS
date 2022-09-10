@@ -53,7 +53,7 @@ const chartData3 = {
         data: [200, 200.1, 20.02, 200.5, 114, 220, 200, 201, 20, 45.7, 99.1, 100],
     }],
     series: [
-        ['09.22', 12], ['10.22', 12], ['11.22', 12],
+        ['09.22', 12],
     ],
 };
 
@@ -149,7 +149,7 @@ const callbacksHistogram = () => {
         showPopup: true,
         scrollThrottle: 50,
         activateOnHover: true,
-        renderPopup: (item) => `$ ${item.value}`,
+        renderPopup: (target) => `$ ${target.item.value}`,
         onitemclick: onBarClick,
         onscroll: onChartsScroll,
         onitemover: onBarOver,

@@ -57,6 +57,11 @@ const defaultProps = {
     onitemclick: null,
     onitemover: null,
     onitemout: null,
+    // Data
+    data: {
+        values: [],
+        series: [],
+    },
 };
 
 /**
@@ -68,18 +73,14 @@ export class BaseChart extends Component {
     constructor(props) {
         super(props);
 
+        if (!this.elem) {
+            throw new Error('Invalid chart container');
+        }
+
         this.props = {
             ...defaultProps,
             ...this.props,
         };
-
-        if (!this.elem
-            || !this.props
-            || !this.props.data
-            || !this.props.data.values
-            || !this.props.data.series) {
-            throw new Error('Invalid chart properties');
-        }
 
         this.chartContainer = null;
         this.chart = null;
@@ -112,7 +113,6 @@ export class BaseChart extends Component {
             chartWidth: 0,
             chartHeight: 0,
             lastHLabelOffset: 0,
-            data: this.props.data,
         };
     }
 
@@ -124,12 +124,8 @@ export class BaseChart extends Component {
     init() {
         this.verticalLabels = ce('div');
         this.chart = ce('div');
-        this.chartScroller = ce(
-            'div',
-            { className: SCROLLER_CLASS },
-            this.chart,
-            { scroll: this.onScroll.bind(this) },
-        );
+        this.chartScroller = ce('div', { className: SCROLLER_CLASS }, this.chart);
+        this.chartScroller.addEventListener('scroll', (e) => this.onScroll(e), { passive: true });
 
         this.chartContainer = ce('div', { className: CHARTS_CLASS }, [
             ce('div', { className: CONTAINER_CLASS }, this.chartScroller),
@@ -139,7 +135,7 @@ export class BaseChart extends Component {
             this.chartContainer.classList.add(ANIMATE_CLASS);
         }
 
-        this.elem.appendChild(this.chartContainer);
+        this.elem.append(this.chartContainer);
 
         const { height, marginTop } = this.props;
         this.state.chartHeight = height - this.state.hLabelsHeight - marginTop;
@@ -149,7 +145,7 @@ export class BaseChart extends Component {
             width: this.state.vLabelsWidth,
             height: height + 20,
         });
-        this.verticalLabels.appendChild(this.labelsContainer);
+        this.verticalLabels.append(this.labelsContainer);
 
         // Create main chart content
         const events = {
@@ -164,18 +160,8 @@ export class BaseChart extends Component {
             events.mouseleave = (e) => this.onMouseLeave(e);
         }
 
-        this.content = svg(
-            'svg',
-            {
-                class: CONTENT_CLASS,
-                width: this.state.chartWidth,
-                height: this.props.height,
-            },
-            null,
-            events,
-        );
-
-        this.chart.appendChild(this.content);
+        this.content = svg('svg', { class: CONTENT_CLASS }, null, events);
+        this.chart.append(this.content);
 
         this.contentOffset = getOffset(this.content);
 
@@ -183,6 +169,10 @@ export class BaseChart extends Component {
     }
 
     setData(data) {
+        if (!data?.values || !data?.series) {
+            throw new Error('Invalid data');
+        }
+
         this.state.data = data;
         this.state.columnsCount = this.getColumnsCount();
 
@@ -449,7 +439,7 @@ export class BaseChart extends Component {
                 y: Math.round(curY),
             }, tspan);
 
-            this.labelsContainer.appendChild(el);
+            this.labelsContainer.append(el);
             this.vertLabels.push(el);
 
             const labelRect = el.getBoundingClientRect();
@@ -486,7 +476,7 @@ export class BaseChart extends Component {
                     y: lblY,
                 }, tspan);
 
-                this.content.appendChild(txtEl);
+                this.content.append(txtEl);
 
                 const labelRect = txtEl.getBoundingClientRect();
                 const currentOffset = labelShift + Math.ceil(labelRect.width);
@@ -621,7 +611,7 @@ export class BaseChart extends Component {
             removeEmptyClick(this.emptyClickHandler);
         } else {
             this.popup = ce('div', { className: POPUP_CLASS });
-            this.chartContainer.appendChild(this.popup);
+            this.chartContainer.append(this.popup);
         }
 
         show(this.popup, true);

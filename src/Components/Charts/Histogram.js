@@ -99,7 +99,7 @@ export class Histogram extends BaseChart {
             item.elem.classList.add(categoryClass);
         }
 
-        this.content.appendChild(item.elem);
+        this.content.append(item.elem);
 
         return item;
     }
