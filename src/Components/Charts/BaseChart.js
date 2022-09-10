@@ -52,11 +52,17 @@ const defaultProps = {
     renderPopup: null,
     scrollThrottle: false,
     activateOnHover: false,
+    renderYAxisLabel: null,
     // Callbacks
     onscroll: null,
     onitemclick: null,
     onitemover: null,
     onitemout: null,
+    // Data
+    data: {
+        values: [],
+        series: [],
+    },
 };
 
 /**
@@ -68,18 +74,14 @@ export class BaseChart extends Component {
     constructor(props) {
         super(props);
 
+        if (!this.elem) {
+            throw new Error('Invalid chart container');
+        }
+
         this.props = {
             ...defaultProps,
             ...this.props,
         };
-
-        if (!this.elem
-            || !this.props
-            || !this.props.data
-            || !this.props.data.values
-            || !this.props.data.series) {
-            throw new Error('Invalid chart properties');
-        }
 
         this.chartContainer = null;
         this.chart = null;
@@ -89,9 +91,11 @@ export class BaseChart extends Component {
         this.labelsContainer = null;
         this.popup = null;
         this.items = [];
+        this.itemsGroup = null;
         this.grid = null;
-        this.gridLines = [];
-        this.vertLabels = [];
+        this.gridGroup = null;
+        this.vertLabelsGroup = null;
+        this.xAxisLabelsGroup = null;
 
         if (!this.props.autoScale) {
             this.scaleFunc = null;
@@ -112,9 +116,7 @@ export class BaseChart extends Component {
             chartWidth: 0,
             chartHeight: 0,
             lastHLabelOffset: 0,
-            data: this.props.data,
         };
-        this.state.columnsCount = this.getColumnsCount();
     }
 
     get barOuterWidth() {
@@ -125,12 +127,8 @@ export class BaseChart extends Component {
     init() {
         this.verticalLabels = ce('div');
         this.chart = ce('div');
-        this.chartScroller = ce(
-            'div',
-            { className: SCROLLER_CLASS },
-            this.chart,
-            { scroll: this.onScroll.bind(this) },
-        );
+        this.chartScroller = ce('div', { className: SCROLLER_CLASS }, this.chart);
+        this.chartScroller.addEventListener('scroll', (e) => this.onScroll(e), { passive: true });
 
         this.chartContainer = ce('div', { className: CHARTS_CLASS }, [
             ce('div', { className: CONTAINER_CLASS }, this.chartScroller),
@@ -140,7 +138,7 @@ export class BaseChart extends Component {
             this.chartContainer.classList.add(ANIMATE_CLASS);
         }
 
-        this.elem.appendChild(this.chartContainer);
+        this.elem.append(this.chartContainer);
 
         const { height, marginTop } = this.props;
         this.state.chartHeight = height - this.state.hLabelsHeight - marginTop;
@@ -150,14 +148,9 @@ export class BaseChart extends Component {
             width: this.state.vLabelsWidth,
             height: height + 20,
         });
-        this.verticalLabels.appendChild(this.labelsContainer);
+        this.verticalLabels.append(this.labelsContainer);
 
-        // create grid
-        this.calculateGrid(this.state.data.values);
-
-        this.state.chartContentWidth = this.state.columnsCount * this.barOuterWidth;
-        this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
-
+        // Create main chart content
         const events = {
             click: (e) => this.onClick(e),
         };
@@ -170,26 +163,34 @@ export class BaseChart extends Component {
             events.mouseleave = (e) => this.onMouseLeave(e);
         }
 
-        this.content = svg(
-            'svg',
-            {
-                class: CONTENT_CLASS,
-                width: this.state.chartWidth,
-                height: this.props.height,
-            },
-            null,
-            events,
-        );
-
-        this.chart.appendChild(this.content);
+        this.content = svg('svg', { class: CONTENT_CLASS }, null, events);
+        this.chart.append(this.content);
 
         this.contentOffset = getOffset(this.content);
+
+        this.setData(this.props.data);
+    }
+
+    setData(data) {
+        if (!data?.values || !data?.series) {
+            throw new Error('Invalid data');
+        }
+
+        this.state.data = data;
+        this.state.columnsCount = this.getColumnsCount();
+
+        // create grid
+        this.calculateGrid(this.state.data.values);
+
+        this.state.chartContentWidth = this.state.columnsCount * this.barOuterWidth;
+        this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
         this.drawVLabels();
         this.updateBarWidth();
         this.updateChartWidth();
 
         // create bars
+        this.resetItems();
         this.createItems();
         this.scaleVisible();
 
@@ -285,12 +286,12 @@ export class BaseChart extends Component {
     drawGrid() {
         const width = this.state.chartWidth;
         let step = 0;
-        const lines = [];
 
         if (!this.grid.steps) {
             return;
         }
 
+        const gridGroup = svg('g');
         let curY = this.grid.yFirst;
         while (step <= this.grid.steps) {
             let rY = Math.round(curY);
@@ -306,16 +307,15 @@ export class BaseChart extends Component {
                 d: linePath,
             });
 
-            lines.push(el);
+            gridGroup.append(el);
 
             curY += this.grid.yStep;
             step += 1;
         }
 
-        this.removeElements(this.gridLines);
-        prependChild(this.content, lines);
-
-        this.gridLines = lines;
+        this.gridGroup?.remove();
+        prependChild(this.content, gridGroup);
+        this.gridGroup = gridGroup;
     }
 
     /** Save total width of chart block with labels */
@@ -366,7 +366,7 @@ export class BaseChart extends Component {
         this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
         if (this.state.barWidth > 10) {
             this.state.barMargin = this.state.barWidth / 5;
-            this.state.barWidth -= this.state.barMargin * 4;
+            this.state.barWidth -= this.state.barMargin;
         } else {
             this.state.barMargin = 0;
         }
@@ -426,24 +426,28 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.removeElements(this.vertLabels);
+        this.vertLabelsGroup?.remove();
+        this.vertLabelsGroup = svg('g');
+        this.labelsContainer.append(this.vertLabelsGroup);
 
-        this.vertLabels = [];
+        const formatFunction = isFunction(this.props.renderYAxisLabel)
+            ? this.props.renderYAxisLabel
+            : (value) => value.toString();
+
         while (step <= this.grid.steps) {
             const isZero = Math.abs(this.grid.toPrec(val)) === 0;
             const tVal = (isZero) ? 0 : this.grid.toPrecString(val);
 
             const tspan = svg('tspan', { dy: dyOffset });
             const prop = ('innerHTML' in tspan) ? 'innerHTML' : 'textContent';
-            tspan[prop] = tVal.toString();
+            tspan[prop] = formatFunction(tVal);
             const el = svg('text', {
                 className: 'chart__text',
                 x: xOffset,
                 y: Math.round(curY),
             }, tspan);
 
-            this.labelsContainer.appendChild(el);
-            this.vertLabels.push(el);
+            this.vertLabelsGroup.append(el);
 
             const labelRect = el.getBoundingClientRect();
             labelsWidth = Math.max(labelsWidth, Math.ceil(labelRect.width) + 10);
@@ -463,6 +467,10 @@ export class BaseChart extends Component {
         const dyOffset = 5.5;
         const lblY = this.props.height - (this.state.hLabelsHeight / 2);
 
+        this.xAxisLabelsGroup?.remove();
+        this.xAxisLabelsGroup = svg('g');
+        this.content.append(this.xAxisLabelsGroup);
+
         this.state.data.series.forEach((val) => {
             const [itemDate, itemsCount] = val;
 
@@ -476,7 +484,7 @@ export class BaseChart extends Component {
                     y: lblY,
                 }, tspan);
 
-                this.content.appendChild(txtEl);
+                this.xAxisLabelsGroup.append(txtEl);
 
                 const labelRect = txtEl.getBoundingClientRect();
                 const currentOffset = labelShift + Math.ceil(labelRect.width);
@@ -610,7 +618,7 @@ export class BaseChart extends Component {
             removeEmptyClick(this.emptyClickHandler);
         } else {
             this.popup = ce('div', { className: POPUP_CLASS });
-            this.chartContainer.appendChild(this.popup);
+            this.chartContainer.append(this.popup);
         }
 
         show(this.popup, true);
@@ -677,6 +685,14 @@ export class BaseChart extends Component {
 
     /** Create items with default scale */
     createItems() {
+    }
+
+    /** Remove all items from chart */
+    resetItems() {
+        this.itemsGroup?.remove();
+        this.itemsGroup = svg('g');
+        this.content.append(this.itemsGroup);
+        this.items = [];
     }
 
     /** Update vertical scale of items */

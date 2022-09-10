@@ -46,10 +46,6 @@ export default {
             import: './src/demo/ChartGrid/ChartGrid.js',
             filename: 'demo/js/[name].[fullhash].js',
         },
-        chartsDemo: {
-            import: './src/demo/Charts/Charts.js',
-            filename: 'demo/js/[name].[fullhash].js',
-        },
         checkboxDemo: {
             import: './src/demo/Checkbox/Checkbox.js',
             filename: 'demo/js/[name].[fullhash].js',
@@ -94,8 +90,16 @@ export default {
             import: './src/demo/EmptyClick/EmptyClick.js',
             filename: 'demo/js/[name].[fullhash].js',
         },
+        histogramDemo: {
+            import: './src/demo/Histogram/Histogram.js',
+            filename: 'demo/js/[name].[fullhash].js',
+        },
         inputGroupDemo: {
             import: './src/demo/InputGroup/InputGroup.js',
+            filename: 'demo/js/[name].[fullhash].js',
+        },
+        linechartDemo: {
+            import: './src/demo/LineChart/LineChart.js',
             filename: 'demo/js/[name].[fullhash].js',
         },
         offcanvasDemo: {
@@ -173,12 +177,6 @@ export default {
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
-            template: 'src/demo/Charts/charts.html',
-            filename: 'demo/charts.html',
-            chunks: ['polyfills', 'chartsDemo'],
-            minify: htmlMinifyOptions,
-        }),
-        new HtmlWebpackPlugin({
             template: 'src/demo/Checkbox/checkbox.html',
             filename: 'demo/checkbox.html',
             chunks: ['polyfills', 'checkboxDemo'],
@@ -245,9 +243,21 @@ export default {
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({
+            template: 'src/demo/Histogram/histogram.html',
+            filename: 'demo/histogram.html',
+            chunks: ['polyfills', 'histogramDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
             template: 'src/demo/InputGroup/inputgroup.html',
             filename: 'demo/inputgroup.html',
             chunks: ['polyfills', 'inputGroupDemo'],
+            minify: htmlMinifyOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/demo/LineChart/linechart.html',
+            filename: 'demo/linechart.html',
+            chunks: ['polyfills', 'linechartDemo'],
             minify: htmlMinifyOptions,
         }),
         new HtmlWebpackPlugin({

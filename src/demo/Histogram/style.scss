@@ -1,0 +1,29 @@
+.charts {
+  --charts-color: #20a0ff;
+  --charts-color-2: #ff0077;
+  --charts-color-3: #00d647;
+
+  /* Active chart item */
+  --charts-active-color: #00bfff;
+  --charts-active-color-2: #ff3392;
+  --charts-active-color-3: #00ff55;
+}
+
+section {
+  max-width: 1000px;
+}
+
+.histogram__bar {
+  --historgam-bar-color: var(--charts-color);
+  --historgam-active-bar-color: var(--charts-active-color);
+}
+
+.histogram--cat-1 {
+  --historgam-bar-color: var(--charts-color-2);
+  --historgam-active-bar-color: var(--charts-active-color-2);
+}
+
+.histogram--cat-2 {
+  --historgam-bar-color: var(--charts-color-3);
+  --historgam-active-bar-color: var(--charts-active-color-3);
+}
