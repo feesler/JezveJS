@@ -114,7 +114,7 @@ export class LineChart extends BaseChart {
             item.elem.classList.add(categoryClass);
         }
 
-        this.content.append(item.elem);
+        this.itemsGroup.append(item.elem);
 
         return item;
     }
@@ -126,7 +126,7 @@ export class LineChart extends BaseChart {
             return;
         }
 
-        this.removeAllItems();
+        this.paths = [];
         const [firstSet] = dataSets;
         firstSet.forEach((_, index) => {
             const group = dataSets.map(
@@ -140,14 +140,6 @@ export class LineChart extends BaseChart {
         });
 
         this.renderPaths();
-    }
-
-    /** Remove all items from chart */
-    removeAllItems() {
-        super.removeAllItems();
-        const pathElems = this.paths.map((path) => path.elem);
-        this.removeElements(pathElems);
-        this.paths = [];
     }
 
     formatPath(points) {
@@ -186,7 +178,7 @@ export class LineChart extends BaseChart {
                 path.elem.classList.add(categoryClass);
             }
 
-            this.content.append(path.elem);
+            this.itemsGroup.append(path.elem);
             // Insert path before circles
             const group = this.items[0];
             const groupItems = Array.isArray(group) ? group : [group];

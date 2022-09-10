@@ -90,9 +90,11 @@ export class BaseChart extends Component {
         this.labelsContainer = null;
         this.popup = null;
         this.items = [];
+        this.itemsGroup = null;
         this.grid = null;
-        this.gridLines = [];
-        this.vertLabels = [];
+        this.gridGroup = null;
+        this.vertLabelsGroup = null;
+        this.xAxisLabelsGroup = null;
 
         if (!this.props.autoScale) {
             this.scaleFunc = null;
@@ -187,6 +189,7 @@ export class BaseChart extends Component {
         this.updateChartWidth();
 
         // create bars
+        this.resetItems();
         this.createItems();
         this.scaleVisible();
 
@@ -282,12 +285,12 @@ export class BaseChart extends Component {
     drawGrid() {
         const width = this.state.chartWidth;
         let step = 0;
-        const lines = [];
 
         if (!this.grid.steps) {
             return;
         }
 
+        const gridGroup = svg('g');
         let curY = this.grid.yFirst;
         while (step <= this.grid.steps) {
             let rY = Math.round(curY);
@@ -303,16 +306,15 @@ export class BaseChart extends Component {
                 d: linePath,
             });
 
-            lines.push(el);
+            gridGroup.append(el);
 
             curY += this.grid.yStep;
             step += 1;
         }
 
-        this.removeElements(this.gridLines);
-        prependChild(this.content, lines);
-
-        this.gridLines = lines;
+        this.gridGroup?.remove();
+        prependChild(this.content, gridGroup);
+        this.gridGroup = gridGroup;
     }
 
     /** Save total width of chart block with labels */
@@ -423,9 +425,10 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.removeElements(this.vertLabels);
+        this.vertLabelsGroup?.remove();
+        this.vertLabelsGroup = svg('g');
+        this.labelsContainer.append(this.vertLabelsGroup);
 
-        this.vertLabels = [];
         while (step <= this.grid.steps) {
             const isZero = Math.abs(this.grid.toPrec(val)) === 0;
             const tVal = (isZero) ? 0 : this.grid.toPrecString(val);
@@ -439,8 +442,7 @@ export class BaseChart extends Component {
                 y: Math.round(curY),
             }, tspan);
 
-            this.labelsContainer.append(el);
-            this.vertLabels.push(el);
+            this.vertLabelsGroup.append(el);
 
             const labelRect = el.getBoundingClientRect();
             labelsWidth = Math.max(labelsWidth, Math.ceil(labelRect.width) + 10);
@@ -460,8 +462,9 @@ export class BaseChart extends Component {
         const dyOffset = 5.5;
         const lblY = this.props.height - (this.state.hLabelsHeight / 2);
 
-        this.removeElements(this.xAxisLabels);
-        this.xAxisLabels = [];
+        this.xAxisLabelsGroup?.remove();
+        this.xAxisLabelsGroup = svg('g');
+        this.content.append(this.xAxisLabelsGroup);
 
         this.state.data.series.forEach((val) => {
             const [itemDate, itemsCount] = val;
@@ -476,7 +479,7 @@ export class BaseChart extends Component {
                     y: lblY,
                 }, tspan);
 
-                this.content.append(txtEl);
+                this.xAxisLabelsGroup.append(txtEl);
 
                 const labelRect = txtEl.getBoundingClientRect();
                 const currentOffset = labelShift + Math.ceil(labelRect.width);
@@ -487,7 +490,6 @@ export class BaseChart extends Component {
                     txtEl.remove();
                 } else {
                     lastOffset = currentOffset;
-                    this.xAxisLabels.push(txtEl);
                 }
             }
             labelShift += itemsCount * this.barOuterWidth;
@@ -681,9 +683,10 @@ export class BaseChart extends Component {
     }
 
     /** Remove all items from chart */
-    removeAllItems() {
-        const elems = this.items.flat().map((item) => item.elem);
-        this.removeElements(elems);
+    resetItems() {
+        this.itemsGroup?.remove();
+        this.itemsGroup = svg('g');
+        this.content.append(this.itemsGroup);
         this.items = [];
     }
 
