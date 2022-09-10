@@ -114,7 +114,7 @@ export class Histogram extends BaseChart {
         this.state.y0 = this.grid.getY(0);
         const width = this.state.barWidth / dataSets.length;
 
-        this.items = [];
+        this.removeAllItems();
         const [firstSet] = dataSets;
         firstSet.forEach((_, index) => {
             const group = dataSets.map(

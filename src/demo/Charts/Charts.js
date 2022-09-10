@@ -4,6 +4,7 @@ import {
     LineChart,
     ge,
     ce,
+    setEvents,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../css/app.scss';
@@ -47,6 +48,17 @@ const chartData2 = {
     ],
 };
 
+const chartData3 = {
+    values: [{
+        data: [100, 10.1, 100.2, 10.5, 50, 1200, 99, 57.4, 10.02, 100.5, 10.50, 37],
+    }, {
+        data: [200, 200.1, 20.02, 200.5, 114, 220, 200, 201, 20, 45.7, 99.1, 100],
+    }],
+    series: [
+        ['09.22', 12], ['10.22', 12], ['11.22', 12],
+    ],
+};
+
 const chartMultiData = {
     values: [{
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
@@ -54,7 +66,7 @@ const chartMultiData = {
         data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150],
     }],
     series: [
-        ['10.22', 4], ['11.22', 4], ['12.22', 5],
+        ['10.22', 4], ['11.22', 4],
     ],
 };
 
@@ -241,6 +253,19 @@ const negativeAndPositiveHistogram = () => {
     });
 };
 
+const setDataHistogram = () => {
+    const histogram = Histogram.create({
+        data: chartData,
+        elem: 'chart_setdata',
+        autoScale: true,
+    });
+
+    const setData1Btn = ge('setData1Btn');
+    setEvents(setData1Btn, { click: () => histogram.setData(chartData2) });
+    const setData2Btn = ge('setData2Btn');
+    setEvents(setData2Btn, { click: () => histogram.setData(chartData3) });
+};
+
 const defaultLinechart = () => {
     LineChart.create({
         data: chartData,
@@ -336,6 +361,19 @@ const negativeAndPositiveLinechart = () => {
     });
 };
 
+const setDataLinechart = () => {
+    const linechart = LineChart.create({
+        data: negPosData,
+        elem: 'linechart_setdata',
+        autoScale: true,
+    });
+
+    const setData1Btn = ge('setLineData1Btn');
+    setEvents(setData1Btn, { click: () => linechart.setData(chartData2) });
+    const setData2Btn = ge('setLineData2Btn');
+    setEvents(setData2Btn, { click: () => linechart.setData(chartData3) });
+};
+
 const init = () => {
     // Histogram
     defaultHistogram();
@@ -349,6 +387,7 @@ const init = () => {
     onlyPositiveHistogram();
     onlyNegativeHistogram();
     negativeAndPositiveHistogram();
+    setDataHistogram();
 
     // LineChart
     defaultLinechart();
@@ -362,6 +401,7 @@ const init = () => {
     onlyPositiveLinechart();
     onlyNegativeLinechart();
     negativeAndPositiveLinechart();
+    setDataLinechart();
 };
 
 onReady(init);

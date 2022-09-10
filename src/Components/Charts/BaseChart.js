@@ -114,7 +114,6 @@ export class BaseChart extends Component {
             lastHLabelOffset: 0,
             data: this.props.data,
         };
-        this.state.columnsCount = this.getColumnsCount();
     }
 
     get barOuterWidth() {
@@ -152,12 +151,7 @@ export class BaseChart extends Component {
         });
         this.verticalLabels.appendChild(this.labelsContainer);
 
-        // create grid
-        this.calculateGrid(this.state.data.values);
-
-        this.state.chartContentWidth = this.state.columnsCount * this.barOuterWidth;
-        this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
-
+        // Create main chart content
         const events = {
             click: (e) => this.onClick(e),
         };
@@ -184,6 +178,19 @@ export class BaseChart extends Component {
         this.chart.appendChild(this.content);
 
         this.contentOffset = getOffset(this.content);
+
+        this.setData(this.props.data);
+    }
+
+    setData(data) {
+        this.state.data = data;
+        this.state.columnsCount = this.getColumnsCount();
+
+        // create grid
+        this.calculateGrid(this.state.data.values);
+
+        this.state.chartContentWidth = this.state.columnsCount * this.barOuterWidth;
+        this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
         this.drawVLabels();
         this.updateBarWidth();
@@ -463,6 +470,9 @@ export class BaseChart extends Component {
         const dyOffset = 5.5;
         const lblY = this.props.height - (this.state.hLabelsHeight / 2);
 
+        this.removeElements(this.xAxisLabels);
+        this.xAxisLabels = [];
+
         this.state.data.series.forEach((val) => {
             const [itemDate, itemsCount] = val;
 
@@ -487,6 +497,7 @@ export class BaseChart extends Component {
                     txtEl.remove();
                 } else {
                     lastOffset = currentOffset;
+                    this.xAxisLabels.push(txtEl);
                 }
             }
             labelShift += itemsCount * this.barOuterWidth;
@@ -677,6 +688,13 @@ export class BaseChart extends Component {
 
     /** Create items with default scale */
     createItems() {
+    }
+
+    /** Remove all items from chart */
+    removeAllItems() {
+        const elems = this.items.flat().map((item) => item.elem);
+        this.removeElements(elems);
+        this.items = [];
     }
 
     /** Update vertical scale of items */

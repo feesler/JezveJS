@@ -126,7 +126,7 @@ export class LineChart extends BaseChart {
             return;
         }
 
-        this.items = [];
+        this.removeAllItems();
         const [firstSet] = dataSets;
         firstSet.forEach((_, index) => {
             const group = dataSets.map(
@@ -140,6 +140,14 @@ export class LineChart extends BaseChart {
         });
 
         this.renderPaths();
+    }
+
+    /** Remove all items from chart */
+    removeAllItems() {
+        super.removeAllItems();
+        const pathElems = this.paths.map((path) => path.elem);
+        this.removeElements(pathElems);
+        this.paths = [];
     }
 
     formatPath(points) {
