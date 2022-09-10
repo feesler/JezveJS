@@ -1,10 +1,9 @@
 import {
     onReady,
-    Histogram,
-    LineChart,
     ge,
     ce,
     setEvents,
+    LineChart,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../css/app.scss';
@@ -104,28 +103,12 @@ const negPosData = {
     series: [['x1', 5]],
 };
 
-function setHistogramEvent(str) {
-    ge('histogram_events').textContent = str;
+function setLinechartEvent(str) {
+    ge('linechart_events').textContent = str;
 }
 
 function onChartsScroll() {
-    setHistogramEvent('Histogram scroll');
-}
-
-function onBarClick({ item }) {
-    setHistogramEvent(`Clicked bar, value=${item.value}`);
-}
-
-function onBarOver({ item }) {
-    setHistogramEvent(`Mouse over bar, value=${item.value}`);
-}
-
-function onBarOut({ item }) {
-    setHistogramEvent(`Mouse out bar, value=${item.value}`);
-}
-
-function setLinechartEvent(str) {
-    ge('linechart_events').textContent = str;
+    setLinechartEvent('LineChart scroll');
 }
 
 function onNodeClick({ item }) {
@@ -140,50 +123,6 @@ function onNodeOut({ item }) {
     setLinechartEvent(`Mouse out node, value=${item.value}`);
 }
 
-const defaultHistogram = () => {
-    Histogram.create({
-        data: chartData,
-        elem: 'chart',
-    });
-};
-
-const fitToWidthHistogram = () => {
-    Histogram.create({
-        data: chartData,
-        elem: 'chart_fittowidth',
-        fitToWidth: true,
-    });
-};
-
-const autoScaleHistogram = () => {
-    Histogram.create({
-        data: chartData2,
-        elem: 'chart_autoscale',
-        autoScale: true,
-        scrollThrottle: 200,
-    });
-};
-
-const callbacksHistogram = () => {
-    Histogram.create({
-        data: chartData2,
-        elem: 'chart_callbacks',
-        height: 320,
-        marginTop: 35,
-        scrollToEnd: true,
-        autoScale: true,
-        animate: true,
-        showPopup: true,
-        scrollThrottle: 50,
-        activateOnHover: true,
-        renderPopup: (item) => `$ ${item.value}`,
-        onitemclick: onBarClick,
-        onscroll: onChartsScroll,
-        onitemover: onBarOver,
-        onitemout: onBarOut,
-    });
-};
-
 const renderMultiColumnPopup = (target) => {
     if (!target.group) {
         return ce('span', { textContent: target.item.value });
@@ -196,74 +135,6 @@ const renderMultiColumnPopup = (target) => {
             (item) => ce('li', {}, ce('span', { textContent: item.value })),
         ),
     );
-};
-
-const multiColumnHistogram = () => {
-    Histogram.create({
-        data: chartMultiData,
-        elem: 'chart_multicolumn',
-        height: 320,
-        marginTop: 35,
-        autoScale: true,
-        showPopup: true,
-        scrollThrottle: 50,
-        activateOnHover: true,
-    });
-};
-
-const noDataHistogram = () => {
-    Histogram.create({
-        data: noData,
-        elem: 'chart_no_data',
-        autoScale: true,
-    });
-};
-
-const singleNegativeHistogram = () => {
-    Histogram.create({
-        data: singleNegData,
-        elem: 'chart_single_neg',
-        autoScale: true,
-        onitemover: onBarOver,
-        onitemout: onBarOut,
-    });
-};
-
-const onlyPositiveHistogram = () => {
-    Histogram.create({
-        data: posData,
-        elem: 'chart_pos',
-        autoScale: true,
-    });
-};
-
-const onlyNegativeHistogram = () => {
-    Histogram.create({
-        data: negData,
-        elem: 'chart_neg',
-        autoScale: true,
-    });
-};
-
-const negativeAndPositiveHistogram = () => {
-    Histogram.create({
-        data: negPosData,
-        elem: 'chart_negpos',
-        autoScale: true,
-    });
-};
-
-const setDataHistogram = () => {
-    const histogram = Histogram.create({
-        data: chartData,
-        elem: 'chart_setdata',
-        autoScale: true,
-    });
-
-    const setData1Btn = ge('setData1Btn');
-    setEvents(setData1Btn, { click: () => histogram.setData(chartData2) });
-    const setData2Btn = ge('setData2Btn');
-    setEvents(setData2Btn, { click: () => histogram.setData(chartData3) });
 };
 
 const defaultLinechart = () => {
@@ -334,6 +205,7 @@ const singleNegativeLinechart = () => {
         data: singleNegData,
         elem: 'linechart_single_neg',
         autoScale: true,
+        drawNodeCircles: true,
     });
 };
 
@@ -375,21 +247,6 @@ const setDataLinechart = () => {
 };
 
 const init = () => {
-    // Histogram
-    defaultHistogram();
-    fitToWidthHistogram();
-    autoScaleHistogram();
-    callbacksHistogram();
-    multiColumnHistogram();
-    // Different data tests
-    noDataHistogram();
-    singleNegativeHistogram();
-    onlyPositiveHistogram();
-    onlyNegativeHistogram();
-    negativeAndPositiveHistogram();
-    setDataHistogram();
-
-    // LineChart
     defaultLinechart();
     fitToWidthLinechart();
     autoScaleLinechart();
