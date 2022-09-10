@@ -52,6 +52,7 @@ const defaultProps = {
     renderPopup: null,
     scrollThrottle: false,
     activateOnHover: false,
+    renderYAxisLabel: null,
     // Callbacks
     onscroll: null,
     onitemclick: null,
@@ -429,13 +430,17 @@ export class BaseChart extends Component {
         this.vertLabelsGroup = svg('g');
         this.labelsContainer.append(this.vertLabelsGroup);
 
+        const formatFunction = isFunction(this.props.renderYAxisLabel)
+            ? this.props.renderYAxisLabel
+            : (value) => value.toString();
+
         while (step <= this.grid.steps) {
             const isZero = Math.abs(this.grid.toPrec(val)) === 0;
             const tVal = (isZero) ? 0 : this.grid.toPrecString(val);
 
             const tspan = svg('tspan', { dy: dyOffset });
             const prop = ('innerHTML' in tspan) ? 'innerHTML' : 'textContent';
-            tspan[prop] = tVal.toString();
+            tspan[prop] = formatFunction(tVal);
             const el = svg('text', {
                 className: 'chart__text',
                 x: xOffset,

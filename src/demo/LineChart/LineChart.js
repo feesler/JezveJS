@@ -161,6 +161,9 @@ const autoScaleLinechart = () => {
     });
 };
 
+const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
+
 const callbacksLinechart = () => {
     LineChart.create({
         data: chartData,
@@ -171,6 +174,8 @@ const callbacksLinechart = () => {
         autoScale: true,
         animate: true,
         showPopup: true,
+        renderPopup: (target) => formatAsUSD(target.item.value),
+        renderYAxisLabel: formatDecimalValue,
         activateOnHover: true,
         onitemclick: onNodeClick,
         onscroll: onChartsScroll,

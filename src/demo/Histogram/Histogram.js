@@ -137,6 +137,9 @@ const autoScaleHistogram = () => {
     });
 };
 
+const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
+
 const callbacksHistogram = () => {
     Histogram.create({
         data: chartData2,
@@ -149,7 +152,8 @@ const callbacksHistogram = () => {
         showPopup: true,
         scrollThrottle: 50,
         activateOnHover: true,
-        renderPopup: (target) => `$ ${target.item.value}`,
+        renderPopup: (target) => formatAsUSD(target.item.value),
+        renderYAxisLabel: formatDecimalValue,
         onitemclick: onBarClick,
         onscroll: onChartsScroll,
         onitemover: onBarOver,
