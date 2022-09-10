@@ -373,7 +373,7 @@ export class BaseChart extends Component {
         this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
         if (this.state.barWidth > 10) {
             this.state.barMargin = this.state.barWidth / 5;
-            this.state.barWidth -= this.state.barMargin * 4;
+            this.state.barWidth -= this.state.barMargin;
         } else {
             this.state.barMargin = 0;
         }
