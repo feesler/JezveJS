@@ -1,11 +1,14 @@
 import { ge, onReady, PieChart } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 /* eslint-disable no-unused-vars */
 
 function init() {
+    initNavigation();
+
     const hovtitle = ge('hovtitle');
 
     PieChart.create({

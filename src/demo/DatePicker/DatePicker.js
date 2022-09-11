@@ -6,8 +6,9 @@ import {
     insertAfter,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const formatDateToInput = (date, inputId) => {
     const input = ge(inputId);
@@ -133,6 +134,8 @@ const initLocales = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initStatic();
     initPopup();
     initPosition();

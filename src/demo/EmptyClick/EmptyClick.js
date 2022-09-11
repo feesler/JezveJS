@@ -4,8 +4,9 @@ import {
     removeEmptyClick,
     onReady,
 } from '../../js/index.js';
+import { initNavigation } from '../common/app.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
 
 let count = 0;
@@ -41,6 +42,8 @@ const initMenu = () => {
 };
 
 function init() {
+    initNavigation();
+
     initSimple();
     initMenu();
 }

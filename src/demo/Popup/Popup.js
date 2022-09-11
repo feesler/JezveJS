@@ -10,8 +10,9 @@ import {
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const onPopupResult = (res) => {
     const result = ge('result');
@@ -451,6 +452,8 @@ const initContentUpdatePopup = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initFullWidthPopup();
     initCloseBtnPopup();
     initMessageScrollPopup();

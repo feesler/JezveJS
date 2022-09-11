@@ -8,8 +8,9 @@ import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 /* eslint-disable-next-line no-unused-vars */
 function onSort(srcElem, destElem) {
@@ -297,6 +298,8 @@ const initSingleItem = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initOriginalAvatar();
     initClonedAvatar();
 

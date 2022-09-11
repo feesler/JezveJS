@@ -1,6 +1,7 @@
 import { ge, onReady, DecimalInput } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
+import { initNavigation } from '../common/app.js';
 
 const initDefault = () => {
     DecimalInput.create({ elem: ge('decInput') });
@@ -30,6 +31,8 @@ const initLeadingZeros = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initDefault();
     initDigitsLimit();
     initOnlyPositive();

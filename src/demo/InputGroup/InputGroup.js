@@ -4,8 +4,9 @@ import {
     onReady,
     InputGroup,
 } from '../../js/index.js';
+import { initNavigation } from '../common/app.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
 
 const initParsed = () => {
@@ -32,6 +33,8 @@ const initDynamic = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initParsed();
     initDynamic();
 };

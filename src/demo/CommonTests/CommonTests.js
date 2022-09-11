@@ -8,8 +8,9 @@ import {
     onReady,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 let restbl = null;
 let totalRes = null;
@@ -187,6 +188,8 @@ function onStartClick() {
 
 /** Page initialization */
 function init() {
+    initNavigation();
+
     const startbtn = ge('startbtn');
     totalRes = ge('totalRes');
     okRes = ge('okRes');

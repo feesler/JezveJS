@@ -1,8 +1,11 @@
 import { onReady, Debug } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
+import { initNavigation } from '../common/app.js';
 
 function init() {
+    initNavigation();
+
     const debug = new Debug();
 
     debug.create();
