@@ -4,10 +4,13 @@ import {
     onReady,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 function init() {
+    initNavigation();
+
     const realDPI = getRealDPI();
     const testpic = ge('testpic');
 

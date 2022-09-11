@@ -6,8 +6,9 @@ import {
     DropDown,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const initItems = (title, count) => {
     const res = [];
@@ -426,6 +427,8 @@ const dynamicAddRemoveItems = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initStandardInline();
     initStandardStretch();
 

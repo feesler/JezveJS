@@ -7,8 +7,9 @@ import {
     Collapsible,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const CUSTOM_BTN_CLASS = 'custom-header-btn';
 const CUSTOM_ICON_CLASS = 'custom-header-icon';
@@ -108,6 +109,8 @@ const initMethods = () => {
 };
 
 onReady(() => {
+    initNavigation();
+
     initSimple();
     initStyled();
     initCustomHeader();

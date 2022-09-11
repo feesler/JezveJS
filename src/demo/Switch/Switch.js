@@ -1,7 +1,8 @@
 import { ge, onReady, Switch } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');
@@ -37,6 +38,8 @@ const initLarge = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initParsed();
     initDynamic();
     initLarge();

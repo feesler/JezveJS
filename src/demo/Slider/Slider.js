@@ -5,8 +5,9 @@ import {
     Slider,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const createSlideContent = (text) => (
     ce('div', { className: 'slide-content', textContent: text })
@@ -36,6 +37,8 @@ const initDefaultSlider = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initDefaultSlider();
 };
 

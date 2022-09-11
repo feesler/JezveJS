@@ -1,8 +1,9 @@
 import { ge, onReady } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
 import { Offcanvas } from '../../Components/Offcanvas/Offcanvas.js';
+import { initNavigation } from '../common/app.js';
 
 const initDefault = () => {
     const offcanvas = Offcanvas.create({
@@ -56,6 +57,8 @@ const initResponsive = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initDefault();
     initRight();
     initTop();

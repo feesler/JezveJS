@@ -7,8 +7,9 @@ import {
     LineChart,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const assert = {
     equal(a, b) {
@@ -89,6 +90,8 @@ function initLineChart(data) {
 }
 
 function init() {
+    initNavigation();
+
     runTests();
 
     initHistogram({

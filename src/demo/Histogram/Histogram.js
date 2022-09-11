@@ -4,8 +4,9 @@ import {
     setEvents,
     Histogram,
 } from '../../js/index.js';
+import { initNavigation } from '../common/app.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
 
 /* eslint-disable no-unused-vars */
@@ -230,6 +231,8 @@ const setDataHistogram = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     defaultHistogram();
     fitToWidthHistogram();
     autoScaleHistogram();

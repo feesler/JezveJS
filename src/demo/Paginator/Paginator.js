@@ -4,8 +4,9 @@ import {
     Paginator,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 function initSimple() {
     const paginator = Paginator.create({
@@ -19,7 +20,7 @@ function initStyled() {
     const paginator = Paginator.create({
         className: 'styled',
         pagesCount: 10,
-        onChange: () => {},
+        onChange: () => { },
     });
 
     ge('styled').appendChild(paginator.elem);
@@ -30,7 +31,7 @@ function initArrows() {
         className: 'styled',
         pagesCount: 10,
         arrows: true,
-        onChange: () => {},
+        onChange: () => { },
     });
 
     ge('arrows').appendChild(paginator.elem);
@@ -40,7 +41,7 @@ function initActiveLink() {
     const paginator = Paginator.create({
         pagesCount: 10,
         allowActiveLink: true,
-        onChange: () => {},
+        onChange: () => { },
     });
 
     ge('active-link').appendChild(paginator.elem);
@@ -51,7 +52,7 @@ function initCustomURL() {
         pagesCount: 10,
         url: 'https://test.url/content/',
         pageParam: 'p',
-        onChange: () => {},
+        onChange: () => { },
     });
 
     ge('custom-url').appendChild(paginator.elem);
@@ -61,7 +62,7 @@ function initDisabledURL() {
     const paginator = Paginator.create({
         pagesCount: 10,
         url: null,
-        onChange: () => {},
+        onChange: () => { },
     });
 
     ge('no-url').appendChild(paginator.elem);
@@ -83,7 +84,7 @@ function initPrerendered() {
     Paginator.fromElement(ge('prerendered'), {
         url: null,
         breakLimit: 4,
-        onChange: () => {},
+        onChange: () => { },
     });
 }
 
@@ -91,7 +92,7 @@ function initSingleItem() {
     const paginatorOn = Paginator.create({
         url: null,
         pagesCount: 1,
-        onChange: () => {},
+        onChange: () => { },
         showSingleItem: true,
     });
     ge('single-on').appendChild(paginatorOn.elem);
@@ -99,13 +100,15 @@ function initSingleItem() {
     const paginatorOff = Paginator.create({
         url: null,
         pagesCount: 1,
-        onChange: () => {},
+        onChange: () => { },
         showSingleItem: false,
     });
     ge('single-off').appendChild(paginatorOff.elem);
 }
 
 onReady(() => {
+    initNavigation();
+
     initSimple();
     initStyled();
     initArrows();

@@ -121,14 +121,38 @@ h3 {
   }
 }
 
-.nav-header__menu-item {
-  display: inline;
-  padding: 0 10px 0 0;
-  font-size: 14px;
+/* Navigation toggle button */
+.nav-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  cursor: pointer;
+  background: none;
+  border: 0 none;
+  border-radius: 100vh;
 }
 
-.nav-header__menu-item-active {
-  font-weight: bold;
+.nav-toggle-icon {
+  width: 24px;
+  height: 24px;
+  fill: #dddddd;
+}
+
+.nav-menu-container {
+  padding: 12px;
+}
+
+.nav-menu li {
+  margin-left: 16px;
+  list-style-type: none;
+
+  a,
+  a:visited {
+    text-decoration: none;
+    font-size: 18px;
+    color: #0072c6;
+  }
 }
 
 /* Admin action button */
@@ -166,5 +190,10 @@ section {
 @media (hover: hover) {
   .nav-header__logo > a:hover {
     color: #ffffff;
+  }
+
+  .nav-menu li a:hover {
+    text-decoration: underline;
+    color: #0093ff;
   }
 }

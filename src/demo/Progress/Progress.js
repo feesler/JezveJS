@@ -6,8 +6,9 @@ import {
     Spinner,
 } from '../../js/index.js';
 import '../../css/common.scss';
-import '../css/app.scss';
+import '../common/app.scss';
 import './style.scss';
+import { initNavigation } from '../common/app.js';
 
 const initDefaultProgress = () => {
     const section = ge('defaultProgress');
@@ -83,6 +84,8 @@ const initSpinner = () => {
 };
 
 const init = () => {
+    initNavigation();
+
     initDefaultProgress();
     initStyledProgress();
 
