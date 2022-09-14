@@ -13,7 +13,7 @@ export class PopupDropTarget extends DropTarget {
 
     onDragEnd(avatar, e) {
         if (!this.targetElem || !(avatar instanceof PopupDragAvatar)) {
-            avatar.onDragCancel();
+            avatar.onDragCancel(e);
             return;
         }
 

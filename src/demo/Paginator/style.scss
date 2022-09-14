@@ -1,4 +1,6 @@
 .styled {
+  gap: 2px;
+
   .paginator-item {
     padding: 0.25rem 0.5rem;
     margin: 0;
@@ -15,15 +17,12 @@
   }
 
   .paginator-arrow {
+    width: 26px;
     fill: #93beff;
   }
 
   .paginator-arrow[disabled] {
     fill: #dbdbdb;
-  }
-
-  .paginator-item + .paginator-item {
-    margin-left: 2px;
   }
 }
 

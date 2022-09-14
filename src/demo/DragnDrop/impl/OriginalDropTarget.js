@@ -17,7 +17,7 @@ export class OriginalDropTarget extends DropTarget {
 
     onDragEnd(avatar, e) {
         if (!this.targetElem || !(avatar instanceof OriginalDragAvatar)) {
-            avatar.onDragCancel();
+            avatar.onDragCancel(e);
             return;
         }
 

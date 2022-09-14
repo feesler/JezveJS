@@ -38,35 +38,35 @@ const initSortable = () => {
     });
 };
 
+const writeLog = (elem, text) => {
+    elem?.append(ce('div', { textContent: text }));
+};
+
+const getItemIdByElem = (elem) => {
+    if (!elem) {
+        return null;
+    }
+
+    const text = elem.textContent.trim();
+    return parseInt(text.substr(5), 10);
+};
+
 // Sortable list
 const onListSort = (srcElem, destElem) => {
     const listSortOut = ge('listsort_out');
-    if (!listSortOut) {
-        return;
-    }
 
     if (!srcElem) {
-        listSortOut.innerHTML += 'Missing source item<br>';
+        writeLog(listSortOut, 'Missing source item');
         return;
     }
     if (!destElem) {
-        listSortOut.innerHTML += 'Missing destination item<br>';
+        writeLog(listSortOut, 'Missing destination item');
         return;
     }
 
-    let srcId;
-    let el = srcElem.firstElementChild;
-    if (el) {
-        srcId = parseInt(el.innerHTML.substr(5), 10);
-    }
-
-    let destId;
-    el = destElem.firstElementChild;
-    if (el) {
-        destId = parseInt(el.innerHTML.substr(5), 10);
-    }
-
-    listSortOut.innerHTML += `srcId: ${srcId}; destId: ${destId}<br>`;
+    const srcId = getItemIdByElem(srcElem);
+    const destId = getItemIdByElem(destElem);
+    writeLog(listSortOut, `srcId: ${srcId}; destId: ${destId}`);
 };
 
 const renderListItem = (title = 'Item') => ce(
@@ -95,34 +95,21 @@ const initSortableList = () => {
 // Exchangable lists
 const onExchange = (srcElem, destElem) => {
     const exchOut = ge('exch_out');
-    if (!exchOut) {
-        return;
-    }
 
     if (!srcElem) {
-        exchOut.innerHTML += 'Missing source item<br>';
+        writeLog(exchOut, 'Missing source item');
         return;
     }
     if (!destElem) {
-        exchOut.innerHTML += 'Missing destination item<br>';
+        writeLog(exchOut, 'Missing destination item');
         return;
     }
 
-    let srcId;
-    let el = srcElem.firstElementChild;
-    if (el) {
-        srcId = parseInt(el.innerHTML.substr(5), 10);
-    }
-
-    let destId;
-    el = destElem.firstElementChild;
-    if (el) {
-        destId = parseInt(el.innerHTML.substr(5), 10);
-    }
-
+    const srcId = getItemIdByElem(srcElem);
+    const destId = getItemIdByElem(destElem);
     const destParent = destElem.parentNode.id;
 
-    exchOut.innerHTML += `srcId: ${srcId}; destId: ${destId}; parent: ${destParent}<br>`;
+    writeLog(exchOut, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent}`);
 };
 
 const renderDestListItem = (title = 'Item', isPlaceholder = false) => ce(
@@ -161,11 +148,39 @@ const initExchangable = () => {
     });
 };
 
+const getTableRowIdByElem = (elem) => {
+    if (!elem) {
+        return null;
+    }
+
+    const firstCell = elem.querySelector('tr > td');
+    return parseInt(firstCell.textContent, 10);
+};
+
+// Sortable list
+const onTableSort = (srcElem, destElem) => {
+    const logElem = ge('table-log');
+
+    if (!srcElem) {
+        writeLog(logElem, 'Missing source item');
+        return;
+    }
+    if (!destElem) {
+        writeLog(logElem, 'Missing destination item');
+        return;
+    }
+
+    const srcId = getTableRowIdByElem(srcElem);
+    const destId = getTableRowIdByElem(destElem);
+
+    writeLog(logElem, `srcId: ${srcId}; destId: ${destId}`);
+};
+
 /** Sortable table with TBODY per each row */
 const initTableEachBody = () => {
     Sortable.create({
         elem: 'table_sortable',
-        oninsertat: onSort,
+        oninsertat: onTableSort,
         selector: 'tbody',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl',
