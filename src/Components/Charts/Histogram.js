@@ -3,7 +3,7 @@ import { BaseChart } from './BaseChart.js';
 
 /* CSS classes */
 const BAR_CLASS = 'histogram__bar';
-const CATEGORY_CLASS = 'histogram--cat-';
+const CATEGORY_CLASS = 'histogram_category-';
 
 /**
  * Base chart component constructor
