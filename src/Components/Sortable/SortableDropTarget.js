@@ -103,7 +103,7 @@ export class SortableDropTarget extends DropTarget {
 
     onDragEnd(avatar, e) {
         if (!this.targetElem || !(avatar instanceof SortableDragAvatar)) {
-            avatar.onDragCancel();
+            avatar.onDragCancel(e);
             return;
         }
 
@@ -115,7 +115,7 @@ export class SortableDropTarget extends DropTarget {
     }
 
     onDragCancel(avatar, e) {
-        if (e.type === 'keydown') {
+        if (e?.type === 'keydown') {
             this.cancelSort(avatar, e);
         } else {
             this.applySort(avatar, e);
