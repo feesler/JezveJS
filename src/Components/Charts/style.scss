@@ -91,7 +91,7 @@
   display: none;
 }
 
-.linechart--nodes .linechart__item {
+.linechart__nodes .linechart__item {
   display: block;
 }
 
@@ -104,7 +104,7 @@
 }
 
 /* Active items */
-.chart__item--active {
+.chart__item_active {
   &.histogram__bar {
     fill: var(--historgam-active-bar-color);
   }
@@ -117,7 +117,7 @@
 }
 
 /* Animation */
-.chart--animated {
+.chart_animated {
   --chart-animation-duration: 0.5s;
 
   .histogram__bar {

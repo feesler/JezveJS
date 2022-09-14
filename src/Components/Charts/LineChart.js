@@ -2,10 +2,10 @@ import { svg, insertBefore } from '../../js/common.js';
 import { BaseChart } from './BaseChart.js';
 
 /* CSS classes */
-const SHOW_NODES_CLASS = 'linechart--nodes';
+const SHOW_NODES_CLASS = 'linechart__nodes';
 const PATH_CLASS = 'linechart__path';
 const ITEM_CLASS = 'linechart__item';
-const CATEGORY_CLASS = 'linechart--cat-';
+const CATEGORY_CLASS = 'linechart_category-';
 
 /** Default properties */
 const defaultProps = {

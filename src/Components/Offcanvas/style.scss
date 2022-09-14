@@ -18,40 +18,40 @@
   background-color: var(--offcanvas-bg);
 }
 
-.offcanvas--right {
+.offcanvas_right {
   left: auto;
   right: 0;
   top: 0;
   bottom: 0;
 }
 
-.offcanvas--top {
+.offcanvas_top {
   left: 0;
   right: 0;
   top: 0;
   bottom: auto;
 }
 
-.offcanvas--bottom {
+.offcanvas_bottom {
   left: 0;
   right: 0;
   top: auto;
   bottom: 0;
 }
 
-.offcanvas--closed {
+.offcanvas_closed {
   transform: translateX(-100%);
 }
 
-.offcanvas--right.offcanvas--closed {
+.offcanvas_right.offcanvas_closed {
   transform: translateX(100%);
 }
 
-.offcanvas--top.offcanvas--closed {
+.offcanvas_top.offcanvas_closed {
   transform: translateY(-100%);
 }
 
-.offcanvas--bottom.offcanvas--closed {
+.offcanvas_bottom.offcanvas_closed {
   transform: translateY(100%);
 }
 

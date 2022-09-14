@@ -107,14 +107,14 @@ const logTo = (target, value) => {
 const initStandardInline = () => {
     DropDown.create({
         elem: 'selinp',
-        className: 'dd__container--no-shrink',
+        className: 'dd__container_no-shrink',
         placeholder: 'Select item',
         data: initItems('Item', 10),
     });
 
     DropDown.create({
         elem: 'selinp2',
-        className: 'dd__container--ellipsis',
+        className: 'dd__container_ellipsis',
         maxHeight: 6,
         placeholder: 'Select item 2',
         data: initItems('Long item test Lorem ipsum dolor sit amet', 10),

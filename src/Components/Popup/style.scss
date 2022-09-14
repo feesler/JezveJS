@@ -89,12 +89,12 @@
 }
 
 /** Don't dim background */
-.popup--nodim {
+.popup_nodim {
   background: none;
 }
 
 /** Scroll message instead of whole popup */
-.popup--scroll-message {
+.popup_scroll-message {
   overflow-y: hidden;
 
   .popup__wrapper {

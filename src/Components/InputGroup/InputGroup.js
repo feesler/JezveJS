@@ -6,7 +6,7 @@ import './style.scss';
 /** CSS classes */
 const CONTAINER_CLASS = 'input-group';
 const INNER_BUTTON_CLASS = 'input-group__inner-btn';
-const INNER_BTN_ACTIVE_CLASS = 'input-group__inner-btn--active';
+const INNER_BTN_ACTIVE_CLASS = 'input-group__inner-btn_active';
 
 const textInputTypes = [
     'date',

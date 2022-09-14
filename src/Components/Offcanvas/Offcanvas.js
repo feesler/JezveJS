@@ -5,11 +5,11 @@ import { ce, removeChilds, show } from '../../js/common.js';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'offcanvas';
-const RIGHT_CONTAINER_CLASS = 'offcanvas--right';
-const TOP_CONTAINER_CLASS = 'offcanvas--top';
-const BOTTOM_CONTAINER_CLASS = 'offcanvas--bottom';
+const RIGHT_CONTAINER_CLASS = 'offcanvas_right';
+const TOP_CONTAINER_CLASS = 'offcanvas_top';
+const BOTTOM_CONTAINER_CLASS = 'offcanvas_bottom';
 const CONTENT_CLASS = 'offcanvas__content';
-const CLOSED_CLASS = 'offcanvas--closed';
+const CLOSED_CLASS = 'offcanvas_closed';
 const BACKGROUND_CLASS = 'offcanvas__bg';
 
 const defaultProps = {

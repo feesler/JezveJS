@@ -4,11 +4,11 @@
   gap: 1rem;
 }
 
-.dd__container--no-shrink {
+.dd__container_no-shrink {
   flex-shrink: 0;
 }
 
-.dd__container--ellipsis {
+.dd__container_ellipsis {
   overflow: hidden;
 
   .dd__single-selection {

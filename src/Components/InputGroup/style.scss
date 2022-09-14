@@ -160,7 +160,7 @@
 
   /* Highlight border of inner buttons for focused input */
   .input-group__input:focus ~ .input-group__inner-btn,
-  .input-group__inner-btn--active {
+  .input-group__inner-btn_active {
     border-color: var(--ig-input-active-border);
   }
 

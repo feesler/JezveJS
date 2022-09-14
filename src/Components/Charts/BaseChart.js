@@ -27,8 +27,8 @@ const VLABELS_CLASS = 'chart__vert-labels';
 const VLABELS_CONTAINER_CLASS = 'vertical-legend';
 const POPUP_CLASS = 'chart__popup';
 const POPUP_LIST_CLASS = 'chart__popup-list';
-const ACTIVE_ITEM_CLASS = 'chart__item--active';
-const ANIMATE_CLASS = 'chart--animated';
+const ACTIVE_ITEM_CLASS = 'chart__item_active';
+const ANIMATE_CLASS = 'chart_animated';
 
 /** Default properties */
 const defaultProps = {

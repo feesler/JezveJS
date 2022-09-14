@@ -30,8 +30,8 @@ const TITLE_CLASS = 'popup__title';
 const CONTROLS_CLASS = 'popup__controls';
 const SUBMIT_BTN_CLASS = 'btn submit-btn';
 const CANCEL_BTN_CLASS = 'btn cancel-btn';
-const NO_DIM_CLASS = 'popup--nodim';
-const SCROLL_MESSAGE_CLASS = 'popup--scroll-message';
+const NO_DIM_CLASS = 'popup_nodim';
+const SCROLL_MESSAGE_CLASS = 'popup_scroll-message';
 
 /* Icons */
 const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
