@@ -63,16 +63,23 @@
 
 .list-area {
   display: inline-flex;
-  margin-right: 20px;
-  width: 300px;
   flex-flow: column nowrap;
+  max-width: 300px;
+  width: 100%;
 }
 
-.output_area {
-  display: inline-block;
+.exch-lists-container {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 15px;
+}
+
+.output-area {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 5px;
   border: 1px dashed #888888;
-  height: 515px;
-  width: 50%;
+  margin-top: 1rem;
 }
 
 .list_item {

@@ -52,18 +52,20 @@
 	</section>
 
 	<h2>Sortable list</h2>
-	<section class="row-section">
+	<section>
 		<div id="list_sortable" class="list-area"></div>
-		<div id="listsort_out" class="output_area"></div>
+		<div id="listsort_out" class="output-area"></div>
 	</section>
 
 	<h2>Exchangable list</h2>
 	<h3>Example of usage of same <i>group</i> identifier<br>
 	Left list uses default dragClass option <i>(.drag)</i>. Right list use own dragClass.</h3>
-	<section class="row-section">
-		<div id="list_exch_1" class="list-area"></div>
-		<div id="list_exch_2" class="list-area"></div>
-		<div id="exch_out" class="output_area"></div>
+	<section>
+        <div class="exch-lists-container">
+            <div id="list_exch_1" class="list-area"></div>
+            <div id="list_exch_2" class="list-area"></div>
+        </div>
+		<div id="exch_out" class="output-area"></div>
 	</section>
 
 	<h2>Sortable table with TBODY per each row</h2>
@@ -77,6 +79,7 @@
 			<tbody class="tbl_list_item"><tr><td><div>6</div></td><td><div>4500</div></td><td><div>some text</div></td></tr></tbody>
 			<tbody class="tbl_list_item"><tr><td><div>7</div></td><td><div>200</div></td><td><div>some text</div></td></tr></tbody>
 		</table>
+        <div id="table-log" class="output-area"></div>
 	</section>
 
 	<h2>Sortable table with single TBODY for all rows</h2>
