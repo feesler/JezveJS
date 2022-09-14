@@ -29,3 +29,13 @@ a.paginator-item {
 .paginator-arrow[disabled] {
   pointer-events: none;
 }
+
+.paginator-arrow__icon {
+  display: block;
+  width: 8px;
+  height: 21px;
+}
+
+.paginator-arrow__next .paginator-arrow__icon {
+  rotate: 180deg;
+}

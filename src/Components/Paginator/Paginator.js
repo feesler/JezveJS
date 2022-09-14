@@ -25,6 +25,7 @@ const CONTAINER_CLASS = 'paginator';
 const ITEM_CLASS = 'paginator-item';
 const ACTIVE_ITEM_CLASS = 'paginator-item__active';
 const ARROW_CLASS = 'paginator-arrow';
+const ARROW_ICON_CLASS = 'paginator-arrow__icon';
 const ARROW_CLASS_PREV = 'paginator-arrow__prev';
 const ARROW_CLASS_NEXT = 'paginator-arrow__next';
 
@@ -240,17 +241,9 @@ export class Paginator extends Component {
             });
         }
 
-        let res;
-        if (item.navigation) {
-            res = (item.navigation === 'prev')
-                ? this.renderPrevArrow()
-                : this.renderNextArrow();
-        } else {
-            res = ce('a', {
-                className: ITEM_CLASS,
-                textContent: item.page,
-            });
-        }
+        const res = (item.navigation)
+            ? this.renderArrow(item.navigation === 'next')
+            : ce('a', { className: ITEM_CLASS, textContent: item.page });
 
         if (item.page) {
             res.setAttribute('data-page', item.page);
@@ -271,19 +264,18 @@ export class Paginator extends Component {
         return res;
     }
 
-    renderPrevArrow() {
-        return ce(
-            'a',
-            { className: `${ITEM_CLASS} ${ARROW_CLASS} ${ARROW_CLASS_PREV}` },
-            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm6 1-6 5.5 6 5.5z' })),
+    renderArrow(isNext = false) {
+        const arrowIcon = svg(
+            'svg',
+            { class: ARROW_ICON_CLASS, viewBox: '0 0 2.1 3.4' },
+            svg('path', { d: 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z' }),
         );
-    }
 
-    renderNextArrow() {
+        const arrowNavClass = (isNext) ? ARROW_CLASS_NEXT : ARROW_CLASS_PREV;
         return ce(
             'a',
-            { className: `${ITEM_CLASS} ${ARROW_CLASS} ${ARROW_CLASS_NEXT}` },
-            svg('svg', { viewBox: '0 0 6 13' }, svg('path', { d: 'm0 1 6 5.5-6 5.5z' })),
+            { className: `${ITEM_CLASS} ${ARROW_CLASS} ${arrowNavClass}` },
+            arrowIcon,
         );
     }
 
