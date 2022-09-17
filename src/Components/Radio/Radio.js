@@ -1,8 +1,8 @@
 import {
     isFunction,
-    ce,
     setEvents,
     removeChilds,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -51,7 +51,7 @@ export class Radio extends Component {
     }
 
     createLabel() {
-        return ce('span', { className: LABEL_CLASS });
+        return createElement('span', { props: { className: LABEL_CLASS } });
     }
 
     init() {
@@ -65,19 +65,20 @@ export class Radio extends Component {
             label: this.props.label,
         };
 
-        this.input = ce('input', {
-            type: 'radio',
-            name: this.props.name,
-            checked: this.state.checked,
-            value: this.props.value,
+        this.input = createElement('input', {
+            props: {
+                type: 'radio',
+                name: this.props.name,
+                checked: this.state.checked,
+                value: this.props.value,
+            },
         });
-        this.checkIcon = ce('span', { className: CHECK_CLASS });
+        this.checkIcon = createElement('span', { props: { className: CHECK_CLASS } });
         this.label = this.createLabel();
-        this.elem = ce(
-            'label',
-            { className: CONTAINER_CLASS },
-            [this.input, this.checkIcon, this.label],
-        );
+        this.elem = createElement('label', {
+            props: { className: CONTAINER_CLASS },
+            children: [this.input, this.checkIcon, this.label],
+        });
 
         this.setClassNames();
         this.setHandlers();

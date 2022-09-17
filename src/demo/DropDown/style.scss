@@ -88,6 +88,17 @@
 }
 
 /* Custom list item */
+.dd__custom {
+  --dd-bg-color: #181818;
+  --dd-active-bg: #202020;
+  --dd-list-item-text: #dddddd;
+  --dd-list-item-bg: #202020;
+  --dd-selection-item-border-radius: 5px;
+  --dd-selection-item-bg: #ffcf00;
+  --dd-selection-item-hover-bg: #ff7c00;
+  --dd-selection-item-text: #000000;
+}
+
 .dd__custom-list-item {
   display: flex;
   flex-flow: row nowrap;
@@ -101,6 +112,41 @@
   width: 30px;
   height: 30px;
   margin-right: 1rem;
+}
+
+.dd__custom-list-item_title {
+  font-size: 1.25rem;
+}
+
+.dd__custom-list-item_check {
+  display: none;
+  width: 20px;
+  height: 25px;
+  line-height: 20px;
+  font-size: 30px;
+}
+
+.dd__list-item_selected .dd__custom-list-item_check {
+  display: block;
+}
+
+/* Custom selected item */
+.dd__custom-selection-item {
+  .dd__del-selection-item-btn {
+    color: #000000;
+    padding: 0 3px 0 0;
+    width: 24px;
+    text-align: center;
+  }
+
+  .dd__del-selection-item-btn::after {
+    content: "\2014";
+    font-weight: 400;
+  }
+}
+
+.dd__container[disabled] .dd__custom-selection-item {
+  border-color: #c5c5c5;
 }
 
 .dd__custom-list-item_blue {
@@ -123,48 +169,28 @@
   background-color: #ff006a;
 }
 
-.dd__custom-list-item_title {
-  font-size: 1.25rem;
+.dd__custom-list-item_purple {
+  background-color: #800080;
 }
 
-.dd__custom-list-item_check {
-  display: none;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  font-size: 30px;
+.dd__custom-list-item_orange {
+  background-color: #ff7b00;
 }
 
-.dd__list-item_selected .dd__custom-list-item_check {
-  display: block;
+.dd__custom-list-item_grey {
+  background-color: #9b9b9b;
 }
 
-/* Custom selected item */
-.dd__custom-selection-item {
-  background-color: #f3be78;
-  border: 1px solid #eeb05e;
-  border-radius: 5px;
-
-  &.dd__selection-item_active {
-    background-color: #e6a34b;
-    border-color: #e79f40;
-  }
-
-  .dd__del-selection-item-btn {
-    color: #999999;
-    padding: 0 3px 0 0;
-    width: 24px;
-    text-align: center;
-  }
-
-  .dd__del-selection-item-btn::after {
-    content: "\2014";
-    font-weight: 400;
-  }
+.dd__custom-list-item_brown {
+  background-color: #752f00;
 }
 
-.dd__container[disabled] .dd__custom-selection-item {
-  border-color: #c5c5c5;
+.dd__custom-list-item_cyan {
+  background-color: #00e0e0;
+}
+
+.dd__custom-list-item_magenta {
+  background-color: #ff00ff;
 }
 
 @media (hover: hover) {
@@ -174,8 +200,8 @@
 
   .dd__custom-selection-item {
     &:hover {
-      background-color: #e6a34b;
-      border-color: #e79f40;
+      background-color: #ff7c00;
+      border-color: #ff7c00;
     }
 
     .dd__del-selection-item-btn:hover {

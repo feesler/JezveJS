@@ -1,4 +1,4 @@
-import { ce } from '../../js/common.js';
+import { createElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
@@ -25,7 +25,7 @@ export class Spinner extends Component {
     init() {
         this.state = {};
 
-        this.elem = ce('div', { className: SPINNER_CLASS });
+        this.elem = createElement('div', { props: { className: SPINNER_CLASS } });
         this.setClassNames();
 
         this.render(this.state);

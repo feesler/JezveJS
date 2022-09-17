@@ -1,4 +1,4 @@
-import { ce } from '../../js/common.js';
+import { createElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
@@ -36,11 +36,11 @@ export class IndetermProgress extends Component {
     }
 
     init() {
-        this.elem = ce('div', { className: PROGRESS_CLASS });
+        this.elem = createElement('div', { props: { className: PROGRESS_CLASS } });
 
         this.circles = [];
         for (let i = 0; i < this.props.circlesCount; i += 1) {
-            this.circles.push(ce('div', { className: CIRCLE_CLASS }));
+            this.circles.push(createElement('div', { props: { className: CIRCLE_CLASS } }));
         }
         this.elem.append(...this.circles);
 

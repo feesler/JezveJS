@@ -1,10 +1,10 @@
 import {
     addChilds,
-    ce,
     svg,
     isFunction,
     removeChilds,
     setEvents,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import './style.scss';
@@ -56,7 +56,7 @@ export class Paginator extends Component {
     }
 
     init() {
-        this.elem = ce('div', { className: CONTAINER_CLASS });
+        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
         this.setHandlers();
         this.setClassNames();
 
@@ -64,7 +64,7 @@ export class Paginator extends Component {
     }
 
     parse(elem) {
-        if (!elem || !elem.classList || !elem.classList.contains(CONTAINER_CLASS)) {
+        if (!elem?.classList?.contains(CONTAINER_CLASS)) {
             throw new Error('Invalid element');
         }
 
@@ -231,19 +231,21 @@ export class Paginator extends Component {
 
     renderItem(item) {
         if (item.ellipsis) {
-            return ce('span', { className: ITEM_CLASS, textContent: '...' });
+            return createElement('span', { props: { className: ITEM_CLASS, textContent: '...' } });
         }
 
         if (item.active && !this.state.allowActiveLink) {
-            return ce('span', {
-                className: `${ITEM_CLASS} ${ACTIVE_ITEM_CLASS}`,
-                textContent: item.page,
+            return createElement('span', {
+                props: {
+                    className: `${ITEM_CLASS} ${ACTIVE_ITEM_CLASS}`,
+                    textContent: item.page,
+                },
             });
         }
 
         const res = (item.navigation)
             ? this.renderArrow(item.navigation === 'next')
-            : ce('a', { className: ITEM_CLASS, textContent: item.page });
+            : createElement('a', { props: { className: ITEM_CLASS, textContent: item.page } });
 
         if (item.page) {
             res.setAttribute('data-page', item.page);
@@ -272,11 +274,10 @@ export class Paginator extends Component {
         );
 
         const arrowNavClass = (isNext) ? ARROW_CLASS_NEXT : ARROW_CLASS_PREV;
-        return ce(
-            'a',
-            { className: `${ITEM_CLASS} ${ARROW_CLASS} ${arrowNavClass}` },
-            arrowIcon,
-        );
+        return createElement('a', {
+            props: { className: `${ITEM_CLASS} ${ARROW_CLASS} ${arrowNavClass}` },
+            children: arrowIcon,
+        });
     }
 
     render(state) {

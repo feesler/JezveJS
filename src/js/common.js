@@ -44,6 +44,15 @@ export const copyObject = (item) => {
     return item;
 };
 
+/** Returns parameter if it is array, else wrap value to array */
+export const asArray = (value) => {
+    if (value === null || value === undefined) {
+        return [];
+    }
+
+    return Array.isArray(value) ? value : [value];
+};
+
 /* eslint-disable no-param-reassign */
 /**
  * Assign properties from second object to first
@@ -78,6 +87,33 @@ export const setParam = (obj, params) => {
 };
 /* eslint-enable no-param-reassign */
 
+/**
+ * Assign properties from second object to first
+ * @param {Object} obj - object to assign properties to
+ * @param {Object} props - object to obtain properties from
+ */
+export const setProps = (obj, props) => {
+    if (!obj || !props || typeof props !== 'object') {
+        return;
+    }
+
+    const res = obj;
+    Object.keys(props).forEach((key) => {
+        const val = props[key];
+        if (Array.isArray(val)) {
+            res[key] = val.map((item) => item);
+        } else if (isObject(val)) {
+            if (res[key] === null || typeof res[key] === 'undefined') {
+                res[key] = {};
+            }
+
+            setProps(res[key], val);
+        } else {
+            res[key] = val;
+        }
+    });
+};
+
 /** Set attributes to specified element */
 export const setAttributes = (element, attrs) => {
     if (!element || !isObject(attrs)) {
@@ -99,12 +135,8 @@ export const addChilds = (elem, childs) => {
         return;
     }
 
-    const ch = Array.isArray(childs) ? childs : [childs];
-    ch.forEach((child) => {
-        if (child) {
-            elem.appendChild(child);
-        }
-    });
+    const children = asArray(childs);
+    elem.append(...children);
 };
 
 /**
@@ -162,6 +194,41 @@ export const ce = (tagName, params, children, events) => {
     }
     if (events) {
         setEvents(elem, events);
+    }
+
+    return elem;
+};
+
+/**
+ * Create specified DOM element and set parameters if specified
+ * @param {string} tagName - tag name of element to create
+ * @param {Object} options
+ * @param {Object} options.attrs - attributes to set for created element
+ * @param {Object} options.props - properties to set for created element
+ * @param {Element[]} options.children - element or array of elements to append to created element
+ * @param {Object} options.events - event handlers object
+ */
+export const createElement = (tagName, options = {}) => {
+    if (typeof tagName !== 'string') {
+        return null;
+    }
+
+    const elem = document.createElement(tagName);
+    if (!elem) {
+        return null;
+    }
+
+    if (options?.props) {
+        setProps(elem, options?.props);
+    }
+    if (options?.attrs) {
+        setAttributes(elem, options.attrs);
+    }
+    if (options?.children) {
+        addChilds(elem, options?.children);
+    }
+    if (options?.events) {
+        setEvents(elem, options.events);
     }
 
     return elem;

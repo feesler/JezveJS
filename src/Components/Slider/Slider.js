@@ -1,9 +1,9 @@
 import {
     isFunction,
     ge,
-    ce,
     setParam,
     px,
+    createElement,
 } from '../../js/common.js';
 import '../../css/common.scss';
 
@@ -266,14 +266,14 @@ export class Slider {
             return false;
         }
 
-        const slDiv = ce('div', { id: slideId });
+        const slDiv = createElement('div', { props: { id: slideId } });
         if (!slDiv) {
             return false;
         }
 
         this.setupSlide(slDiv);
 
-        this.inslide.appendChild(slDiv);
+        this.inslide.append(slDiv);
         this.updateInslide();
 
         return true;

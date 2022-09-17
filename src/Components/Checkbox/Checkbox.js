@@ -1,9 +1,9 @@
 import {
     isFunction,
-    ce,
     svg,
     setEvents,
     removeChilds,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -62,7 +62,7 @@ export class Checkbox extends Component {
     }
 
     createLabel() {
-        return ce('span', { className: LABEL_CLASS });
+        return createElement('span', { props: { className: LABEL_CLASS } });
     }
 
     init() {
@@ -72,15 +72,19 @@ export class Checkbox extends Component {
             label: this.props.label,
         };
 
-        this.input = ce('input', { type: 'checkbox', checked: this.state.checked });
+        this.input = createElement('input', {
+            props: { type: 'checkbox', checked: this.state.checked },
+        });
         const checkSVG = this.createCheckPath();
-        this.checkIcon = ce('span', { className: CHECK_CLASS }, checkSVG);
+        this.checkIcon = createElement('span', {
+            props: { className: CHECK_CLASS },
+            children: checkSVG,
+        });
         this.label = this.createLabel();
-        this.elem = ce(
-            'label',
-            { className: CONTAINER_CLASS },
-            [this.input, this.checkIcon, this.label],
-        );
+        this.elem = createElement('label', {
+            props: { className: CONTAINER_CLASS },
+            children: [this.input, this.checkIcon, this.label],
+        });
 
         this.setClassNames();
         this.setHandlers();

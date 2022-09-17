@@ -1,7 +1,7 @@
 import {
     onReady,
     ge,
-    ce,
+    createElement,
     setEvents,
     LineChart,
 } from '../../js/index.js';
@@ -126,16 +126,17 @@ function onNodeOut({ item }) {
 
 const renderMultiColumnPopup = (target) => {
     if (!target.group) {
-        return ce('span', { textContent: target.item.value });
+        return createElement('span', { props: { textContent: target.item.value } });
     }
 
-    return ce(
-        'ul',
-        { className: 'custom-chart-popup__list' },
-        target.group.map(
-            (item) => ce('li', {}, ce('span', { textContent: item.value })),
+    return createElement('ul', {
+        props: { className: 'custom-chart-popup__list' },
+        children: target.group.map(
+            (item) => createElement('li', {
+                children: createElement('span', { props: { textContent: item.value } }),
+            }),
         ),
-    );
+    });
 };
 
 const defaultLinechart = () => {

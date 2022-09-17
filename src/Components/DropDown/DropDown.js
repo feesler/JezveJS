@@ -1,6 +1,6 @@
 import {
     isFunction,
-    ce,
+    createElement,
     svg,
     removeChilds,
     re,
@@ -186,18 +186,21 @@ export class DropDown extends Component {
         if (this.props.fullScreen) {
             this.elem.classList.add(FULLSCREEN_CLASS);
 
-            this.backgroundElem = ce('div', { className: FULLSCREEN_BG_CLASS });
-            this.elem.appendChild(this.backgroundElem);
+            this.backgroundElem = createElement('div', {
+                props: { className: FULLSCREEN_BG_CLASS },
+            });
+            this.elem.append(this.backgroundElem);
         }
 
-        this.listElem = ce('ul', {}, null, { scroll: (e) => this.onScroll(e) });
-        this.list = ce(
-            'div',
-            { className: LIST_CLASS },
-            this.listElem,
-        );
+        this.listElem = createElement('ul', {
+            events: { scroll: (e) => this.onScroll(e) },
+        });
+        this.list = createElement('div', {
+            props: { className: LIST_CLASS },
+            children: this.listElem,
+        });
 
-        this.elem.appendChild(this.list);
+        this.elem.append(this.list);
 
         this.selectElem.addEventListener('change', (e) => this.onChange(e));
         this.assignInputHandlers(this.selectElem);
@@ -262,8 +265,8 @@ export class DropDown extends Component {
         }
 
         // Create container
-        this.elem = ce('div', { className: CONTAINER_CLASS });
-        this.selectionElem = ce('div', { className: SELECTION_CLASS });
+        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
+        this.selectionElem = createElement('div', { props: { className: SELECTION_CLASS } });
 
         if (this.hostElem.disabled) {
             this.state.disabled = true;
@@ -276,12 +279,12 @@ export class DropDown extends Component {
             }
 
             insertAfter(this.elem, this.selectElem);
-            this.inputElem = ce('input', { type: 'text' });
+            this.inputElem = createElement('input', { props: { type: 'text' } });
         } else {
             insertAfter(this.elem, this.hostElem);
             this.inputElem = re(this.hostElem);
 
-            this.selectElem = ce('select');
+            this.selectElem = createElement('select');
         }
 
         if (this.props.multi) {
@@ -296,7 +299,7 @@ export class DropDown extends Component {
 
     /** Attach DropDown to specified element */
     attachToElement() {
-        this.elem = ce('div', { className: ATTACHED_CLASS });
+        this.elem = createElement('div', { props: { className: ATTACHED_CLASS } });
 
         insertAfter(this.elem, this.hostElem);
 
@@ -313,7 +316,7 @@ export class DropDown extends Component {
             this.staticElem.addEventListener('click', this.toggleHandler);
         }
 
-        this.selectElem = ce('select');
+        this.selectElem = createElement('select');
         if (this.props.multi) {
             this.selectElem.multiple = true;
         }
@@ -330,12 +333,12 @@ export class DropDown extends Component {
         }
 
         // Create single selection element
-        this.staticElem = ce('span', { className: SINGLE_SELECTION_CLASS });
+        this.staticElem = createElement('span', { props: { className: SINGLE_SELECTION_CLASS } });
         show(this.staticElem, !this.state.editable);
 
         this.toggleBtn = this.createToggleButton();
 
-        const res = ce('div', { className: COMBO_CLASS });
+        const res = createElement('div', { props: { className: COMBO_CLASS } });
         if (this.props.multi) {
             res.append(this.selectionElem);
         }
@@ -361,12 +364,11 @@ export class DropDown extends Component {
     /** Create clear selection button */
     createClearButton() {
         const closeIcon = this.createCloseIcon(CLEAR_ICON_CLASS);
-        const res = ce(
-            'div',
-            { className: CLEAR_BTN_CLASS },
-            closeIcon,
-            { click: () => this.onClear() },
-        );
+        const res = createElement('div', {
+            props: { className: CLEAR_BTN_CLASS },
+            children: closeIcon,
+            events: { click: () => this.onClear() },
+        });
 
         if (this.state.disabled) {
             res.disabled = true;
@@ -382,12 +384,11 @@ export class DropDown extends Component {
             { class: TOGGLE_ICON_CLASS, viewBox: '0 0 3.7 3.7' },
             svg('path', { d: TOGGLE_ICON }),
         );
-        const res = ce(
-            'div',
-            { className: TOGGLE_BTN_CLASS },
-            arrowIcon,
-            { click: this.toggleHandler },
-        );
+        const res = createElement('div', {
+            props: { className: TOGGLE_BTN_CLASS },
+            children: arrowIcon,
+            events: { click: this.toggleHandler },
+        });
 
         if (this.state.disabled) {
             res.disabled = true;
@@ -1180,7 +1181,7 @@ export class DropDown extends Component {
 
     /** Renturns default list item container */
     defaultItem(item) {
-        const elem = ce('div', { className: LIST_ITEM_CLASS });
+        const elem = createElement('div', { props: { className: LIST_ITEM_CLASS } });
 
         if (this.props.multi) {
             const checkIcon = svg(
@@ -1193,7 +1194,9 @@ export class DropDown extends Component {
                 },
                 svg('path', { d: CHECK_ICON }),
             );
-            const titleElem = ce('span', { title: item.title, textContent: item.title });
+            const titleElem = createElement('span', {
+                props: { title: item.title, textContent: item.title },
+            });
             elem.append(checkIcon, titleElem);
         } else {
             elem.title = item.title;
@@ -1221,11 +1224,16 @@ export class DropDown extends Component {
             contentElem.classList.add(LIST_ITEM_ACTIVE_CLASS);
         }
 
-        const elem = ce('li', {}, contentElem, { click: (e) => this.onListItemClick(e) });
-        elem.setAttribute('data-id', item.id);
+        const elemOptions = {
+            attrs: { 'data-id': item.id },
+            children: contentElem,
+            events: { click: (e) => this.onListItemClick(e) },
+        };
         if (item.disabled) {
-            elem.setAttribute('disabled', '');
+            elemOptions.attrs.disabled = '';
         }
+
+        const elem = createElement('li', elemOptions);
         show(elem, !item.hidden);
 
         return elem;
@@ -1234,18 +1242,16 @@ export class DropDown extends Component {
     /** Return selected item element for specified item object */
     defaultSelectionItem(item) {
         const closeIcon = this.createCloseIcon(SELECTION_ITEM_DEL_ICON_CLASS);
-        const deselectButton = ce(
-            'span',
-            { className: SELECTION_ITEM_DEL_BTN_CLASS },
-            closeIcon,
-            { click: (e) => this.onDeleteSelectedItem(e) },
-        );
+        const deselectButton = createElement('span', {
+            props: { className: SELECTION_ITEM_DEL_BTN_CLASS },
+            children: closeIcon,
+            events: { click: (e) => this.onDeleteSelectedItem(e) },
+        });
 
-        return ce(
-            'span',
-            { className: SELECTION_ITEM_CLASS, textContent: item.title },
-            deselectButton,
-        );
+        return createElement('span', {
+            props: { className: SELECTION_ITEM_CLASS, textContent: item.title },
+            children: deselectButton,
+        });
     }
 
     /** Render selection elements */
@@ -1527,7 +1533,9 @@ export class DropDown extends Component {
             return;
         }
 
-        const optgroup = ce('optgroup', { hidden: true, disabled: true });
+        const optgroup = createElement('optgroup', {
+            props: { hidden: true, disabled: true },
+        });
         prependChild(elem, optgroup);
     }
 
@@ -1632,17 +1640,24 @@ export class DropDown extends Component {
 
     /** Returns option element */
     createOption(item) {
-        const option = ce('option', {
-            value: item.id,
-            textContent: item.title,
-            selected: item.selected,
-        });
+        const optionProps = {
+            props: {
+                value: item.id,
+                textContent: item.title,
+                selected: item.selected,
+            },
+        };
         if (item.disabled) {
-            option.setAttribute('disabled', '');
+            optionProps.attrs = { disabled: '' };
         }
 
+        const option = createElement('option', optionProps);
+
         if (item.hidden) {
-            return ce('div', { className: OPTION_WRAPPER_CLASS }, option);
+            return createElement('div', {
+                props: { className: OPTION_WRAPPER_CLASS },
+                children: option,
+            });
         }
 
         return option;
@@ -1650,11 +1665,12 @@ export class DropDown extends Component {
 
     /** Returns option group element */
     createOptGroup(label, disabled = false) {
-        const optGroup = ce('optgroup', { label });
+        const groupProps = { props: { label } };
         if (disabled) {
-            optGroup.setAttribute('disabled', '');
+            groupProps.attrs = { disabled: '' };
         }
 
+        const optGroup = createElement('optgroup', groupProps);
         return optGroup;
     }
 
@@ -1725,20 +1741,21 @@ export class DropDown extends Component {
 
     /** Render list group element */
     renderGroupItem(group) {
-        const listElem = ce('ul');
+        const listElem = createElement('ul');
         const res = {
             listElem,
-            elem: ce(
-                'div',
-                { className: LIST_GROUP_CLASS },
-                [
-                    ce('div', {
-                        className: LIST_GROUP_LABEL_CLASS,
-                        textContent: group.title,
+            elem: createElement('div', {
+                props: { className: LIST_GROUP_CLASS },
+                children: [
+                    createElement('div', {
+                        props: {
+                            className: LIST_GROUP_LABEL_CLASS,
+                            textContent: group.title,
+                        },
                     }),
                     listElem,
                 ],
-            ),
+            }),
         };
 
         return res;
@@ -1996,11 +2013,13 @@ export class DropDown extends Component {
     }
 
     renderNotFound() {
-        const contentElem = ce('div', {
-            className: NOT_FOUND_CLASS,
-            textContent: this.props.noResultsMessage,
+        const contentElem = createElement('div', {
+            props: {
+                className: NOT_FOUND_CLASS,
+                textContent: this.props.noResultsMessage,
+            },
         });
-        const elem = ce('li', {}, contentElem);
+        const elem = createElement('li', { children: contentElem });
 
         return [elem];
     }
