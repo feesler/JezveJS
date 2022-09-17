@@ -1,5 +1,5 @@
 import {
-    ce,
+    createElement,
     ge,
     onReady,
     Slider,
@@ -9,9 +9,9 @@ import '../common/app.scss';
 import './style.scss';
 import { initNavigation } from '../common/app.js';
 
-const createSlideContent = (text) => (
-    ce('div', { className: 'slide-content', textContent: text })
-);
+const createSlideContent = (text) => createElement('div', {
+    props: { className: 'slide-content', textContent: text },
+});
 
 const initDefaultSlider = () => {
     const slider = new Slider();

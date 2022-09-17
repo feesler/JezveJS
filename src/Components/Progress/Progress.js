@@ -1,4 +1,4 @@
-import { ce } from '../../js/common.js';
+import { createElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
@@ -35,8 +35,11 @@ export class Progress extends Component {
     }
 
     init() {
-        this.bar = ce('div', { className: PROGRESS_BAR_CLASS });
-        this.elem = ce('div', { className: CONTAINER_CLASS }, this.bar);
+        this.bar = createElement('div', { props: { className: PROGRESS_BAR_CLASS } });
+        this.elem = createElement('div', {
+            props: { className: CONTAINER_CLASS },
+            children: this.bar,
+        });
         this.setClassNames();
 
         this.render(this.state);

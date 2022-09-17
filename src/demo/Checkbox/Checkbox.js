@@ -1,9 +1,9 @@
 import {
-    ce,
     ge,
     onReady,
     Checkbox,
     Radio,
+    createElement,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../common/app.scss';
@@ -28,7 +28,9 @@ const initDynamic = () => {
     const dynamicCheckbox = Checkbox.create({
         className: 'checkbox-circle',
         onChange: (checked) => addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
-        label: ce('a', { href: '#', textContent: 'Custom label content' }),
+        label: createElement('a', {
+            props: { href: '#', textContent: 'Custom label content' },
+        }),
     });
     ge('dynamicContainer').appendChild(dynamicCheckbox.elem);
 

@@ -1,10 +1,10 @@
 import {
     ge,
-    ce,
     onReady,
     ChartGrid,
     Histogram,
     LineChart,
+    createElement,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../common/app.scss';
@@ -61,12 +61,17 @@ function initChartContainer(data) {
 
     const dataDescr = data.values.join(', ');
 
-    res.descrElem = ce('div', { className: 'test-chart__descr', textContent: dataDescr });
-    res.chartElem = ce('div', { className: 'std_chart_wrap' });
-    res.elem = ce('div', { className: 'test-chart-container' }, [
-        res.descrElem,
-        res.chartElem,
-    ]);
+    res.descrElem = createElement('div', {
+        props: { className: 'test-chart__descr', textContent: dataDescr },
+    });
+    res.chartElem = createElement('div', { props: { className: 'std_chart_wrap' } });
+    res.elem = createElement('div', {
+        props: { className: 'test-chart-container' },
+        children: [
+            res.descrElem,
+            res.chartElem,
+        ],
+    });
 
     testCharts.appendChild(res.elem);
 

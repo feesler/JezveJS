@@ -1,6 +1,4 @@
-import {
-    ce, setEvents,
-} from '../../js/index.js';
+import { createElement, setEvents } from '../../js/index.js';
 import { Offcanvas } from '../../Components/Offcanvas/Offcanvas.js';
 
 const navigationMenu = [{
@@ -48,23 +46,27 @@ const navigationMenu = [{
 }];
 
 const renderMenuItem = ({ title, url }) => (
-    ce('li', {}, ce('a', { href: url, textContent: title }))
+    createElement('li', {
+        children: createElement('a', { props: { href: url, textContent: title } }),
+    })
 );
 
 const renderNavSection = ({ title, items }) => {
-    const header = ce('h2', { textContent: title });
-    const menu = ce(
-        'ul',
-        { className: 'nav-menu' },
-        items.map((item) => renderMenuItem(item)),
-    );
+    const header = createElement('h2', { props: { textContent: title } });
+    const menu = createElement('ul', {
+        props: { className: 'nav-menu' },
+        children: items.map((item) => renderMenuItem(item)),
+    });
 
     return [header, menu];
 };
 
 const renderNavigationMenu = () => {
     const sections = navigationMenu.map((item) => renderNavSection(item)).flat();
-    return ce('div', { className: 'nav-menu-container' }, sections);
+    return createElement('div', {
+        props: { className: 'nav-menu-container' },
+        children: sections,
+    });
 };
 
 export const initNavigation = () => {

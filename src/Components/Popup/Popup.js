@@ -1,9 +1,7 @@
 import {
     isFunction,
     ge,
-    ce,
     svg,
-    addChilds,
     setParam,
     re,
     insertAfter,
@@ -12,6 +10,7 @@ import {
     setEmptyClick,
     removeEmptyClick,
     removeChilds,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -79,7 +78,7 @@ export class Popup extends Component {
                 throw new Error(`Element with id ${this.props.id} already exist`);
             }
         }
-        this.elem = ce('div', { className: CONTAINER_CLASS });
+        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
         show(this.elem, false);
         if ('id' in this.props) {
             this.elem.id = this.props.id;
@@ -94,15 +93,24 @@ export class Popup extends Component {
 
         this.emptyClickHandler = () => this.close();
 
-        this.headerElem = ce('div', { className: HEADER_CLASS });
-        this.messageElem = ce('div', { className: MESSAGE_CLASS });
-        this.boxElem = ce('div', { className: BOX_CLASS }, [
-            this.headerElem,
-            this.messageElem,
-        ]);
-        this.contentElem = ce('div', { className: CONTENT_CLASS }, this.boxElem);
-        this.wrapperElem = ce('div', { className: WRAPPER_CLASS }, this.contentElem);
-        this.elem.appendChild(this.wrapperElem);
+        this.headerElem = createElement('div', { props: { className: HEADER_CLASS } });
+        this.messageElem = createElement('div', { props: { className: MESSAGE_CLASS } });
+        this.boxElem = createElement('div', {
+            props: { className: BOX_CLASS },
+            children: [
+                this.headerElem,
+                this.messageElem,
+            ],
+        });
+        this.contentElem = createElement('div', {
+            props: { className: CONTENT_CLASS },
+            children: this.boxElem,
+        });
+        this.wrapperElem = createElement('div', {
+            props: { className: WRAPPER_CLASS },
+            children: this.contentElem,
+        });
+        this.elem.append(this.wrapperElem);
 
         this.setTitle(this.props.title);
         if (!this.setContent(this.props.content)) {
@@ -112,7 +120,7 @@ export class Popup extends Component {
 
         this.setClassNames();
 
-        document.body.appendChild(this.elem);
+        document.body.append(this.elem);
     }
 
     destroy() {
@@ -176,12 +184,11 @@ export class Popup extends Component {
             svg('path', { d: CLOSE_ICON }),
         );
 
-        this.closeBtn = ce(
-            'button',
-            { className: CLOSE_BTN_CLASS, type: 'button' },
-            icon,
-            { click: () => this.close() },
-        );
+        this.closeBtn = createElement('button', {
+            props: { className: CLOSE_BTN_CLASS, type: 'button' },
+            children: icon,
+            events: { click: () => this.close() },
+        });
         this.headerElem.append(this.closeBtn);
     }
 
@@ -215,7 +222,7 @@ export class Popup extends Component {
         }
 
         if (!this.titleElem) {
-            this.titleElem = ce('h1', { className: TITLE_CLASS });
+            this.titleElem = createElement('h1', { props: { className: TITLE_CLASS } });
             prependChild(this.headerElem, this.titleElem);
         }
 
@@ -243,7 +250,7 @@ export class Popup extends Component {
         );
         if (newHasControls) {
             if (!this.controlsElem) {
-                this.controlsElem = ce('div', { className: CONTROLS_CLASS });
+                this.controlsElem = createElement('div', { props: { className: CONTROLS_CLASS } });
             }
         } else {
             re(this.controlsElem);
@@ -256,10 +263,12 @@ export class Popup extends Component {
                 this.okBtn = null;
             } else {
                 if (!this.okBtn) {
-                    this.okBtn = ce('input', {
-                        className: SUBMIT_BTN_CLASS,
-                        type: 'button',
-                        value: 'ok',
+                    this.okBtn = createElement('input', {
+                        props: {
+                            className: SUBMIT_BTN_CLASS,
+                            type: 'button',
+                            value: 'ok',
+                        },
                     });
                 }
 
@@ -273,11 +282,13 @@ export class Popup extends Component {
                 this.cancelBtn = null;
             } else {
                 if (!this.cancelBtn) {
-                    this.cancelBtn = ce('input', {
-                        className: CANCEL_BTN_CLASS,
-                        type: 'button',
-                        value: 'cancel',
-                        onclick: this.close.bind(this),
+                    this.cancelBtn = createElement('input', {
+                        props: {
+                            className: CANCEL_BTN_CLASS,
+                            type: 'button',
+                            value: 'cancel',
+                            onclick: () => this.close(),
+                        },
                     });
                 }
 
@@ -286,7 +297,12 @@ export class Popup extends Component {
         }
 
         if (newHasControls) {
-            addChilds(this.controlsElem, [this.okBtn, this.cancelBtn]);
+            if (this.okBtn) {
+                this.controlsElem.append(this.okBtn);
+            }
+            if (this.cancelBtn) {
+                this.controlsElem.append(this.cancelBtn);
+            }
             insertAfter(this.controlsElem, this.messageElem);
         }
 

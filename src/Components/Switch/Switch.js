@@ -1,7 +1,7 @@
 import {
     isFunction,
-    ce,
     setEvents,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -52,13 +52,14 @@ export class Switch extends Component {
             disabled: this.props.disabled,
         };
 
-        this.checkbox = ce('input', { type: 'checkbox', checked: this.state.checked });
-        this.slider = ce('div', { className: SLIDER_CLASS });
-        this.elem = ce(
-            'label',
-            { className: CONTAINER_CLASS },
-            [this.checkbox, this.slider],
-        );
+        this.checkbox = createElement('input', {
+            props: { type: 'checkbox', checked: this.state.checked },
+        });
+        this.slider = createElement('div', { props: { className: SLIDER_CLASS } });
+        this.elem = createElement('label', {
+            props: { className: CONTAINER_CLASS },
+            children: [this.checkbox, this.slider],
+        });
 
         this.setClassNames();
         this.setHandlers();

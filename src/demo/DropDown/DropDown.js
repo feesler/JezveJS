@@ -1,7 +1,7 @@
 import {
     isObject,
     ge,
-    ce,
+    createElement,
     onReady,
     DropDown,
 } from '../../js/index.js';
@@ -44,24 +44,26 @@ const customColorsMap = {
 
 function renderCustomItem(item) {
     const colorClass = customColorsMap[item.id];
-    const colorElem = ce('span', { className: `dd__custom-list-item_color ${colorClass}` });
-    const titleElem = ce('span', {
-        className: 'dd__custom-list-item_title',
-        title: item.title,
-        textContent: item.title,
+    const colorElem = createElement('span', {
+        props: { className: `dd__custom-list-item_color ${colorClass}` },
+    });
+    const titleElem = createElement('span', {
+        props: {
+            className: 'dd__custom-list-item_title',
+            title: item.title,
+            textContent: item.title,
+        },
     });
 
-    const elem = ce(
-        'div',
-        { className: 'dd__list-item dd__custom-list-item' },
-        [colorElem, titleElem],
-    );
+    const elem = createElement('div', {
+        props: { className: 'dd__list-item dd__custom-list-item' },
+        children: [colorElem, titleElem],
+    });
 
     if (this.props.multi) {
-        const checkIcon = ce(
-            'span',
-            { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
-        );
+        const checkIcon = createElement('span', {
+            props: { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
+        });
         colorElem.append(checkIcon);
     }
 
@@ -69,17 +71,18 @@ function renderCustomItem(item) {
 }
 
 function renderCustomSelectionItem(item) {
-    const deselectButton = ce('span', { className: 'dd__del-selection-item-btn' });
-    deselectButton.addEventListener('click', this.delSelectItemHandler);
+    const deselectButton = createElement('span', {
+        props: { className: 'dd__del-selection-item-btn' },
+        events: { click: this.delSelectItemHandler },
+    });
 
-    return ce(
-        'span',
-        { className: 'dd__selection-item dd__custom-selection-item' },
-        [
+    return createElement('span', {
+        props: { className: 'dd__selection-item dd__custom-selection-item' },
+        children: [
             deselectButton,
-            ce('span', { innerText: item.title.toLowerCase() }),
+            createElement('span', { props: { innerText: item.title.toLowerCase() } }),
         ],
-    );
+    });
 }
 
 const formatObject = (value) => {

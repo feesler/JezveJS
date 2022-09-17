@@ -1,6 +1,6 @@
 import {
     ge,
-    ce,
+    createElement,
     onReady,
     InputGroup,
 } from '../../js/index.js';
@@ -17,13 +17,17 @@ const initParsed = () => {
 const initDynamic = () => {
     const container = ge('dynContainer');
 
-    const input = ce('input', {
-        className: 'input-group__input stretch-input',
-        type: 'text',
+    const input = createElement('input', {
+        props: {
+            className: 'input-group__input stretch-input',
+            type: 'text',
+        },
     });
-    const text = ce('div', {
-        className: 'input-group__text',
-        textContent: '$',
+    const text = createElement('div', {
+        props: {
+            className: 'input-group__text',
+            textContent: '$',
+        },
     });
     const inputGroup = InputGroup.create({
         children: [input, text],

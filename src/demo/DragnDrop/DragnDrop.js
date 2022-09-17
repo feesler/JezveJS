@@ -1,6 +1,6 @@
 import {
     ge,
-    ce,
+    createElement,
     onReady,
     Sortable,
 } from '../../js/index.js';
@@ -39,7 +39,7 @@ const initSortable = () => {
 };
 
 const writeLog = (elem, text) => {
-    elem?.append(ce('div', { textContent: text }));
+    elem?.append(createElement('div', { props: { textContent: text } }));
 };
 
 const getItemIdByElem = (elem) => {
@@ -69,11 +69,10 @@ const onListSort = (srcElem, destElem) => {
     writeLog(listSortOut, `srcId: ${srcId}; destId: ${destId}`);
 };
 
-const renderListItem = (title = 'Item') => ce(
-    'div',
-    { className: 'list_item' },
-    ce('span', { textContent: title }),
-);
+const renderListItem = (title = 'Item') => createElement('div', {
+    props: { className: 'list_item' },
+    children: createElement('span', { props: { textContent: title } }),
+});
 
 const initSortableList = () => {
     const listSortable = ge('list_sortable');
@@ -112,11 +111,10 @@ const onExchange = (srcElem, destElem) => {
     writeLog(exchOut, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent}`);
 };
 
-const renderDestListItem = (title = 'Item', isPlaceholder = false) => ce(
-    'div',
-    { className: `list_item ${isPlaceholder ? 'list_item_placeholder' : 'list_item_2'}` },
-    ce('span', { textContent: title }),
-);
+const renderDestListItem = (title = 'Item', isPlaceholder = false) => createElement('div', {
+    props: { className: `list_item ${isPlaceholder ? 'list_item_placeholder' : 'list_item_2'}` },
+    children: createElement('span', { props: { textContent: title } }),
+});
 
 const initExchangable = () => {
     const listExch1 = ge('list_exch_1');
@@ -238,14 +236,13 @@ const initHandles = () => {
     OriginalDropTarget.create({ elem: ge('drop_area2') });
 };
 
-const renderListItemWithInput = (title = 'Item') => ce(
-    'div',
-    { className: 'list_item' },
-    [
-        ce('span', { textContent: title }),
-        ce('input', { type: 'text' }),
+const renderListItemWithInput = (title = 'Item') => createElement('div', {
+    props: { className: 'list_item' },
+    children: [
+        createElement('span', { props: { textContent: title } }),
+        createElement('input', { props: { type: 'text' } }),
     ],
-);
+});
 
 /** Sortable with rootOnlyHandle option */
 const initRootOnlyHandle = () => {
@@ -264,15 +261,14 @@ const initRootOnlyHandle = () => {
     });
 };
 
-const renderListItemWithHandle = (title = 'Item') => ce(
-    'div',
-    { className: 'list_item' },
-    [
-        ce('div', { className: 'drag-handle' }),
-        ce('span', { textContent: title }),
-        ce('input', { type: 'text' }),
+const renderListItemWithHandle = (title = 'Item') => createElement('div', {
+    props: { className: 'list_item' },
+    children: [
+        createElement('div', { props: { className: 'drag-handle' } }),
+        createElement('span', { props: { textContent: title } }),
+        createElement('input', { props: { type: 'text' } }),
     ],
-);
+});
 
 /** Sortable with query handles */
 const initQueryHandles = () => {

@@ -1,4 +1,4 @@
-import { ce, re } from '../../js/common.js';
+import { createElement, re } from '../../js/common.js';
 import '../../css/common.scss';
 import './debug.scss';
 
@@ -37,7 +37,7 @@ export class Debug {
         if (this.contobj) {
             return;
         }
-        this.contobj = ce('div', { className: 'debug' });
+        this.contobj = createElement('div', { props: { className: 'debug' } });
         if (!this.contobj) {
             return;
         }
@@ -47,15 +47,25 @@ export class Debug {
         this.contobj.classList.add.apply(null, posOpt.split(' '));
 
         // Debug log window
-        this.dbgdiv = this.contobj.appendChild(ce('div', { className: 'log' }));
+        const logElem = createElement('div', { props: { className: 'log' } });
+        this.dbgdiv = this.contobj.append(logElem);
 
         // Container of controls
-        this.contobj.appendChild(ce('div', { className: 'controls' }, [
-            ce('input', { type: 'button', value: 'Clear', onclick: () => this.clearDebug() }),
-            ce('input', { type: 'button', value: 'Close', onclick: () => this.closeDebug() }),
-        ]));
+        this.contobj.append(createElement('div', {
+            props: { className: 'controls' },
+            children: [
+                createElement('input', {
+                    props: { type: 'button', value: 'Clear' },
+                    events: { click: () => this.clearDebug() },
+                }),
+                createElement('input', {
+                    props: { type: 'button', value: 'Close' },
+                    events: { click: () => this.closeDebug() },
+                }),
+            ],
+        }));
 
-        document.body.appendChild(this.contobj);
+        document.body.append(this.contobj);
     }
 
     addControl(text, callback) {
@@ -68,19 +78,18 @@ export class Debug {
             return;
         }
 
-        controls.appendChild(ce('input', { type: 'button', value: text, onclick: callback }));
+        controls.append(createElement('input', {
+            props: { type: 'button', value: text },
+            events: { click: callback },
+        }));
     }
 
     addInfo(text) {
-        if (!this.contobj || !this.contobj.firstElementChild) {
-            return;
-        }
-
-        const controls = this.contobj.firstElementChild.nextElementSibling;
+        const controls = this.contobj?.firstElementChild?.nextElementSibling;
         if (!controls) {
             return;
         }
 
-        controls.appendChild(ce('span', { innerHTML: text }));
+        controls.append(createElement('span', { props: { innerHTML: text } }));
     }
 }

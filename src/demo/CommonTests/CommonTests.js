@@ -1,11 +1,11 @@
 import {
     ge,
-    ce,
     isDate,
     isFunction,
     isVisible,
     show,
     onReady,
+    createElement,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../common/app.scss';
@@ -32,27 +32,26 @@ function addResult(descr, res, message) {
     okRes.textContent = results.ok;
     failRes.textContent = results.fail;
 
-    const resultRow = ce(
-        'tr',
-        {},
-        [
-            ce('td', { textContent: descr }),
-            ce('td', { textContent: (res ? 'OK' : 'FAIL') }),
-            ce('td', { textContent: msg }),
+    const resultRow = createElement('tr', {
+        children: [
+            createElement('td', { props: { textContent: descr } }),
+            createElement('td', { props: { textContent: (res ? 'OK' : 'FAIL') } }),
+            createElement('td', { props: { textContent: msg } }),
         ],
-    );
+    });
 
-    restbl.appendChild(resultRow);
+    restbl.append(resultRow);
 }
 
 function addBlock(descr, category) {
-    const blockRow = ce(
-        'tr',
-        { className: `res-block-${category}` },
-        ce('td', { colSpan: 3, textContent: descr }),
-    );
+    const blockRow = createElement('tr', {
+        props: { className: `res-block-${category}` },
+        children: createElement('td', {
+            props: { colSpan: 3, textContent: descr },
+        }),
+    });
 
-    restbl.appendChild(blockRow);
+    restbl.append(blockRow);
 }
 
 // Run action, check state and add result to the list
@@ -101,24 +100,31 @@ function domTests() {
     addBlock('DOM', 1);
 
     const view = ge('testview');
-    const testDiv = ce('div', null, null, {
-        click() {
-            setEventResult('click');
-        },
-        mouseover() {
-            setEventResult('mouseover');
-        },
-        mouseout() {
-            setEventResult('mouseout');
+    const testDiv = createElement('div', {
+        events: {
+            click() {
+                setEventResult('click');
+            },
+            mouseover() {
+                setEventResult('mouseover');
+            },
+            mouseout() {
+                setEventResult('mouseout');
+            },
         },
     });
 
-    view.appendChild(testDiv);
+    view.append(testDiv);
     show(testDiv, false);
 
-    let childDiv = ce('div', {}, [ce('div', { id: 'child1' }), ce('div', { id: 'child2' })]);
+    let childDiv = createElement('div', {
+        children: [
+            createElement('div', { props: { id: 'child1' } }),
+            createElement('div', { props: { id: 'child2' } }),
+        ],
+    });
 
-    testDiv.appendChild(childDiv);
+    testDiv.append(childDiv);
     childDiv = ge('child2');
 
     test('contains', () => testDiv.contains(childDiv));
@@ -148,7 +154,7 @@ function domTests() {
     });
 
     test('isVisible', () => {
-        const noRootElem = ce('div');
+        const noRootElem = createElement('div');
 
         if (!isVisible('visibleElem')) {
             throw new Error('Wrong visibility of visible element');

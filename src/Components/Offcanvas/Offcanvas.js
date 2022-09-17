@@ -1,7 +1,7 @@
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
-import { ce, removeChilds, show } from '../../js/common.js';
+import { createElement, removeChilds, show } from '../../js/common.js';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'offcanvas';
@@ -38,16 +38,15 @@ export class Offcanvas extends Component {
             closed: this.props.closed,
         };
 
-        this.contentElem = ce('div', { className: CONTENT_CLASS });
+        this.contentElem = createElement('div', { props: { className: CONTENT_CLASS } });
         if (this.props.content) {
             this.setContent(this.props.content);
         }
 
-        this.elem = ce(
-            'div',
-            { className: CONTAINER_CLASS },
-            [this.contentElem],
-        );
+        this.elem = createElement('div', {
+            props: { className: CONTAINER_CLASS },
+            children: [this.contentElem],
+        });
 
         if (this.props.placement === 'right') {
             this.elem.classList.add(RIGHT_CONTAINER_CLASS);
@@ -57,12 +56,10 @@ export class Offcanvas extends Component {
             this.elem.classList.add(BOTTOM_CONTAINER_CLASS);
         }
 
-        this.backgroundElem = ce(
-            'div',
-            { className: BACKGROUND_CLASS },
-            null,
-            { click: () => this.close() },
-        );
+        this.backgroundElem = createElement('div', {
+            props: { className: BACKGROUND_CLASS },
+            events: { click: () => this.close() },
+        });
 
         this.setClassNames();
 

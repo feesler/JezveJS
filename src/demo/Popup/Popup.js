@@ -1,6 +1,6 @@
 import {
     ge,
-    ce,
+    createElement,
     selectedValue,
     onReady,
     Popup,
@@ -345,10 +345,15 @@ const toggleTitle = (popup) => {
     if (popup.titleState === 1) {
         popup.titleState = 2;
 
-        const elementTitle = ce('div', { className: 'element-title' }, [
-            ce('button', { className: 'element-title__btn', innerHTML: '&#10004;' }),
-            ce('span', { textContent: 'Element title' }),
-        ]);
+        const elementTitle = createElement('div', {
+            props: { className: 'element-title' },
+            children: [
+                createElement('button', {
+                    props: { className: 'element-title__btn', innerHTML: '&#10004;' },
+                }),
+                createElement('span', { props: { textContent: 'Element title' } }),
+            ],
+        });
 
         popup.setTitle(elementTitle);
     } else {
@@ -410,11 +415,13 @@ const stringContent = (popup) => {
 
 const templateContent = (popup) => {
     popup.setContent(
-        ce('div', {}, [
-            ce('div', { className: 'template-test__item' }),
-            ce('div', { className: 'template-test__item' }),
-            ce('div', { className: 'template-test__item' }),
-        ]),
+        createElement('div', {
+            children: [
+                createElement('div', { props: { className: 'template-test__item' } }),
+                createElement('div', { props: { className: 'template-test__item' } }),
+                createElement('div', { props: { className: 'template-test__item' } }),
+            ],
+        }),
     );
     popup.setControls({
         okBtn: { disabled: false },

@@ -1,5 +1,4 @@
 import {
-    ce,
     svg,
     setParam,
     isFunction,
@@ -12,6 +11,7 @@ import {
     removeChilds,
     px,
     throttle,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from './ChartGrid.js';
@@ -125,15 +125,27 @@ export class BaseChart extends Component {
 
     /** Initialization of chart */
     init() {
-        this.verticalLabels = ce('div');
-        this.chart = ce('div');
-        this.chartScroller = ce('div', { className: SCROLLER_CLASS }, this.chart);
+        this.verticalLabels = createElement('div');
+        this.chart = createElement('div');
+        this.chartScroller = createElement('div', {
+            props: { className: SCROLLER_CLASS },
+            children: this.chart,
+        });
         this.chartScroller.addEventListener('scroll', (e) => this.onScroll(e), { passive: true });
 
-        this.chartContainer = ce('div', { className: CHARTS_CLASS }, [
-            ce('div', { className: CONTAINER_CLASS }, this.chartScroller),
-            ce('div', { className: VLABELS_CONTAINER_CLASS }, this.verticalLabels),
-        ]);
+        this.chartContainer = createElement('div', {
+            props: { className: CHARTS_CLASS },
+            children: [
+                createElement('div', {
+                    props: { className: CONTAINER_CLASS },
+                    children: this.chartScroller,
+                }),
+                createElement('div', {
+                    props: { className: VLABELS_CONTAINER_CLASS },
+                    children: this.verticalLabels,
+                }),
+            ],
+        });
         if (this.props.autoScale && this.props.animate) {
             this.chartContainer.classList.add(ANIMATE_CLASS);
         }
@@ -581,14 +593,15 @@ export class BaseChart extends Component {
 
     defaultPopupContent(target) {
         if (!target.group) {
-            return ce('span', { textContent: target.item.value });
+            return createElement('span', { props: { textContent: target.item.value } });
         }
 
-        return ce(
-            'ul',
-            { className: POPUP_LIST_CLASS },
-            target.group.map((item) => ce('li', { textContent: item.value })),
-        );
+        return createElement('ul', {
+            props: { className: POPUP_LIST_CLASS },
+            children: target.group.map((item) => createElement('li', {
+                props: { textContent: item.value },
+            })),
+        });
     }
 
     renderPopupContent(target) {
@@ -617,7 +630,7 @@ export class BaseChart extends Component {
         if (this.popup) {
             removeEmptyClick(this.emptyClickHandler);
         } else {
-            this.popup = ce('div', { className: POPUP_CLASS });
+            this.popup = createElement('div', { props: { className: POPUP_CLASS } });
             this.chartContainer.append(this.popup);
         }
 

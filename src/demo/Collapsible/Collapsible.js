@@ -1,10 +1,10 @@
 import {
     ge,
-    ce,
     svg,
     setEvents,
     onReady,
     Collapsible,
+    createElement,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../common/app.scss';
@@ -25,12 +25,11 @@ const createIcon = (icon) => {
 };
 
 /** Create button for custom header */
-const createButton = (icon) => ce(
-    'button',
-    { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
-    createIcon(icon),
-    { click: (e) => e.stopPropagation() },
-);
+const createButton = (icon) => createElement('button', {
+    props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
+    children: createIcon(icon),
+    events: { click: (e) => e.stopPropagation() },
+});
 
 const initSimple = () => {
     const collapse = Collapsible.create({
@@ -53,9 +52,11 @@ const initStyled = () => {
 };
 
 const initCustomHeader = () => {
-    const titleContainer = ce('div', {
-        className: 'custom-title',
-        textContent: 'Hover/focus to see controls',
+    const titleContainer = createElement('div', {
+        props: {
+            className: 'custom-title',
+            textContent: 'Hover/focus to see controls',
+        },
     });
     const updateBtn = createButton('update');
     const delBtn = createButton('del');
@@ -74,15 +75,16 @@ const initCustomHeader = () => {
 };
 
 const initDisabledToggle = () => {
-    const titleContainer = ce('div', {
-        className: 'custom-title',
-        textContent: 'Toggle only by click button',
+    const titleContainer = createElement('div', {
+        props: {
+            className: 'custom-title',
+            textContent: 'Toggle only by click button',
+        },
     });
-    const toggleBtn = ce(
-        'button',
-        { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
-        createIcon('toggle-ext'),
-    );
+    const toggleBtn = createElement('button', {
+        props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
+        children: createIcon('toggle-ext'),
+    });
 
     const collapse = Collapsible.create({
         toggleOnClick: false,

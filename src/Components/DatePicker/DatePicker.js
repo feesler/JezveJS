@@ -1,6 +1,5 @@
 import {
     ge,
-    ce,
     svg,
     addChilds,
     show,
@@ -13,6 +12,7 @@ import {
     getOffset,
     re,
     px,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -132,15 +132,15 @@ export class DatePicker extends Component {
     init() {
         const { relparent } = this.props;
 
-        this.elem = ce('div', { className: CONTAINER_CLASS });
+        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
 
-        this.wrapper = ce('div', { className: WRAPPER_CLASS });
+        this.wrapper = createElement('div', { props: { className: WRAPPER_CLASS } });
         if (this.props.static) {
             this.wrapper.classList.add(STATIC_WRAPPER_CLASS);
         } else {
             show(this.wrapper, false);
         }
-        this.elem.appendChild(this.wrapper);
+        this.elem.append(this.wrapper);
 
         if (relparent) {
             this.relativeParent = (typeof relparent === 'string')
@@ -169,7 +169,7 @@ export class DatePicker extends Component {
             set: [],
             viewDate: date,
             title: `${startYear + 1}-${startYear + YEAR_RANGE_LENGTH}`,
-            viewContainer: ce('div', { className: VIEW_CONTAINER_CLASS }),
+            viewContainer: createElement('div', { props: { className: VIEW_CONTAINER_CLASS } }),
             nav: {
                 prev: new Date(rYear - YEAR_RANGE_LENGTH, 1, 1),
                 next: new Date(rYear + YEAR_RANGE_LENGTH, 1, 1),
@@ -181,9 +181,11 @@ export class DatePicker extends Component {
             const yearDate = new Date(startYear + i, 0, 1);
             const setObj = {
                 date: yearDate,
-                cell: ce('div', {
-                    className: `${CELL_CLASS} ${YEARRANGE_CELL_CLASS}`,
-                    textContent: yearDate.getFullYear(),
+                cell: createElement('div', {
+                    props: {
+                        className: `${CELL_CLASS} ${YEARRANGE_CELL_CLASS}`,
+                        textContent: yearDate.getFullYear(),
+                    },
                 }),
             };
 
@@ -215,7 +217,7 @@ export class DatePicker extends Component {
             set: [],
             viewDate: date,
             title: rYear,
-            viewContainer: ce('div', { className: VIEW_CONTAINER_CLASS }),
+            viewContainer: createElement('div', { props: { className: VIEW_CONTAINER_CLASS } }),
             nav: {
                 prev: new Date(rYear - 1, 1, 1),
                 next: new Date(rYear + 1, 1, 1),
@@ -227,9 +229,11 @@ export class DatePicker extends Component {
             const monthDate = new Date(rYear, i, 1);
             const setObj = {
                 date: monthDate,
-                cell: ce('div', {
-                    className: `${CELL_CLASS} ${YEAR_CELL_CLASS}`,
-                    textContent: getShortMonthName(monthDate, this.props.locales),
+                cell: createElement('div', {
+                    props: {
+                        className: `${CELL_CLASS} ${YEAR_CELL_CLASS}`,
+                        textContent: getShortMonthName(monthDate, this.props.locales),
+                    },
                 }),
             };
 
@@ -259,7 +263,7 @@ export class DatePicker extends Component {
             set: [],
             viewDate: date,
             title: `${monthLong} ${rYear}`,
-            viewContainer: ce('div', { className: VIEW_CONTAINER_CLASS }),
+            viewContainer: createElement('div', { props: { className: VIEW_CONTAINER_CLASS } }),
             nav: {
                 prev: new Date(rYear, rMonth - 1, 1),
                 next: new Date(rYear, rMonth + 1, 1),
@@ -269,9 +273,11 @@ export class DatePicker extends Component {
         // header
         const firstMonthDay = new Date(rYear, rMonth, 1);
         let week = getWeekDays(firstMonthDay);
-        const headerElems = week.map((weekday) => ce('div', {
-            className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${WEEKDAY_CELL_CLASS}`,
-            textContent: getWeekdayShort(weekday, this.props.locales),
+        const headerElems = week.map((weekday) => createElement('div', {
+            props: {
+                className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${WEEKDAY_CELL_CLASS}`,
+                textContent: getWeekdayShort(weekday, this.props.locales),
+            },
         }));
         addChilds(res.viewContainer, headerElems);
 
@@ -280,9 +286,11 @@ export class DatePicker extends Component {
             const dateElems = week.map((weekday) => {
                 const setObj = {
                     date: weekday,
-                    cell: ce('div', {
-                        className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${DAY_CELL_CLASS}`,
-                        textContent: weekday.getDate(),
+                    cell: createElement('div', {
+                        props: {
+                            className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${DAY_CELL_CLASS}`,
+                            textContent: weekday.getDate(),
+                        },
                     }),
                 };
 
@@ -427,23 +435,26 @@ export class DatePicker extends Component {
      * Render header element
      */
     renderHead() {
-        this.titleEl = ce('div', { className: `${HEADER_ITEM_CLASS} ${HEADER_TITLE_CLASS}` });
-        this.navPrevElem = ce(
-            'div',
-            { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS}` },
-            this.renderNavIcon(),
-        );
-        this.navNextElem = ce(
-            'div',
-            { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS} ${HEADER_NEXT_NAV_CLASS}` },
-            this.renderNavIcon(),
-        );
+        this.titleEl = createElement('div', {
+            props: { className: `${HEADER_ITEM_CLASS} ${HEADER_TITLE_CLASS}` },
+        });
+        this.navPrevElem = createElement('div', {
+            props: { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS}` },
+            children: this.renderNavIcon(),
+        });
+        this.navNextElem = createElement('div', {
+            props: { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS} ${HEADER_NEXT_NAV_CLASS}` },
+            children: this.renderNavIcon(),
+        });
 
-        const headTbl = ce('div', { className: HEADER_CLASS }, [
-            this.navPrevElem,
-            this.titleEl,
-            this.navNextElem,
-        ]);
+        const headTbl = createElement('div', {
+            props: { className: HEADER_CLASS },
+            children: [
+                this.navPrevElem,
+                this.titleEl,
+                this.navNextElem,
+            ],
+        });
 
         return headTbl;
     }
@@ -553,7 +564,7 @@ export class DatePicker extends Component {
         this.wrapper.addEventListener('click', (e) => this.onViewClick(e));
         this.wrapper.addEventListener('wheel', (e) => this.onWheel(e));
 
-        this.cellsContainer = ce('div', { className: VIEW_CLASS });
+        this.cellsContainer = createElement('div', { props: { className: VIEW_CLASS } });
         addChilds(this.wrapper, [this.renderHead(), this.cellsContainer]);
     }
 
