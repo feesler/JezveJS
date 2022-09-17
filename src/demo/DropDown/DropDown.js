@@ -199,6 +199,16 @@ const dynamicOptGroups = () => {
     );
 };
 
+// Create drop down without host element in DOM
+const createUnattached = () => {
+    const dropDown = DropDown.create({
+        data: initItems('Item', 10),
+    });
+
+    const unattachedSection = ge('unattachedSection');
+    unattachedSection.append(dropDown.elem);
+};
+
 // Attach drop down to block element
 const attachToBlockElement = () => {
     DropDown.create({
@@ -448,6 +458,7 @@ const init = () => {
     initParseOptGroups();
     dynamicOptGroups();
 
+    createUnattached();
     attachToBlockElement();
     attachToInlineElement();
 
