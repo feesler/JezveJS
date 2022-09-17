@@ -34,6 +34,12 @@ const customColorsMap = {
     3: 'dd__custom-list-item_green',
     4: 'dd__custom-list-item_yellow',
     5: 'dd__custom-list-item_pink',
+    6: 'dd__custom-list-item_purple',
+    7: 'dd__custom-list-item_orange',
+    8: 'dd__custom-list-item_grey',
+    9: 'dd__custom-list-item_brown',
+    10: 'dd__custom-list-item_cyan',
+    11: 'dd__custom-list-item_magenta',
 };
 
 function renderCustomItem(item) {
@@ -319,7 +325,7 @@ const multiSelectFilter = () => {
 const customRender = () => {
     const customDropDown = DropDown.create({
         elem: 'selinp10',
-        className: 'dd_stretch',
+        className: 'dd__custom dd_stretch',
         placeholder: 'Multi select control',
         onitemselect(selection) {
             logTo('log-custom', `itemselect: ${formatObject(selection)}`);
