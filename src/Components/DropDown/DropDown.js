@@ -104,13 +104,8 @@ const defaultProps = {
  * @param {Object} props.data - array of item objects { id, title }
  */
 export class DropDown extends Component {
-    /** Static alias for DropDown constructor */
     static create(params) {
-        try {
-            return new DropDown(params);
-        } catch (e) {
-            return null;
-        }
+        return new DropDown(params);
     }
 
     constructor(props = {}) {
@@ -121,14 +116,11 @@ export class DropDown extends Component {
             ...this.props,
         };
 
-        if (!this.props.elem) {
-            throw new Error('Element not specified');
-        }
-        if (!this.elem || !this.elem.parentNode) {
-            throw new Error('Invalid element specified');
-        }
         this.hostElem = this.elem;
         this.elem = null;
+        if (!this.hostElem) {
+            this.props.listAttach = false;
+        }
 
         this.state = {
             active: false,
@@ -260,6 +252,9 @@ export class DropDown extends Component {
 
     /** Attach DropDown component to specified input element */
     attachToInput() {
+        if (!this.hostElem) {
+            this.hostElem = createElement('select');
+        }
         if (!this.isInputElement(this.hostElem)) {
             throw new Error('Invalid element specified');
         }
@@ -278,11 +273,17 @@ export class DropDown extends Component {
                 this.props.multi = true;
             }
 
-            insertAfter(this.elem, this.selectElem);
+            if (this.selectElem.parentNode) {
+                insertAfter(this.elem, this.selectElem);
+            }
             this.inputElem = createElement('input', { props: { type: 'text' } });
         } else {
-            insertAfter(this.elem, this.hostElem);
-            this.inputElem = re(this.hostElem);
+            if (this.hostElem.parentNode) {
+                insertAfter(this.elem, this.hostElem);
+                this.inputElem = re(this.hostElem);
+            } else {
+                this.inputElem = this.hostElem;
+            }
 
             this.selectElem = createElement('select');
         }
