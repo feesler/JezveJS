@@ -75,6 +75,7 @@ export const addItemTest = async () => {
         });
 
         await App.view.addItem();
+        await App.view.performAction(() => App.view.content.dynamicDropDown.showList());
 
         const { items } = App.view.content.dynamicDropDown;
 
@@ -96,6 +97,7 @@ export const addDisabledItem = async () => {
         });
 
         await App.view.addDisabledItem();
+        await App.view.performAction(() => App.view.content.dynamicDropDown.showList());
 
         const { items } = App.view.content.dynamicDropDown;
         assert.deepMeet(items, expected);
@@ -116,6 +118,7 @@ export const addHiddenItem = async () => {
         });
 
         await App.view.addHiddenItem();
+        await App.view.performAction(() => App.view.content.dynamicDropDown.showList());
 
         const { items } = App.view.content.dynamicDropDown;
         assert.deepMeet(items, expected);

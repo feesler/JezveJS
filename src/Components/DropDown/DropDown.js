@@ -827,12 +827,25 @@ export class DropDown extends Component {
 
     /** Return array of visible(not hidden) list items */
     getVisibleItems(state = this.state) {
-        return state.items.filter((item) => !item.hidden);
+        return state.items.filter((item) => (
+            (state.filtered)
+                ? (item.matchFilter && !item.hidden)
+                : !item.hidden
+        ));
+    }
+
+    isAvailableItem(item, state = this.state) {
+        return (
+            !!item
+            && !item.hidden
+            && !item.disabled
+            && ((state.filtered) ? item.matchFilter : true)
+        );
     }
 
     /** Return array of visible and enabled list items */
     getAvailableItems(state = this.state) {
-        return state.items.filter((item) => (!item.hidden && !item.disabled));
+        return state.items.filter((item) => this.isAvailableItem(item, state));
     }
 
     /**
@@ -844,7 +857,7 @@ export class DropDown extends Component {
         let item = this.getItem(itemId);
         while (item) {
             item = this.getPrevItem(item.id);
-            if (item && !item.hidden && !item.disabled) {
+            if (this.isAvailableItem(item)) {
                 return item;
             }
         }
@@ -861,7 +874,7 @@ export class DropDown extends Component {
         let item = this.getItem(itemId);
         while (item) {
             item = this.getNextItem(item.id);
-            if (item && !item.hidden && !item.disabled) {
+            if (this.isAvailableItem(item)) {
                 return item;
             }
         }
@@ -1145,7 +1158,6 @@ export class DropDown extends Component {
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
-                hidden: false,
             })),
         });
     }
@@ -1164,7 +1176,6 @@ export class DropDown extends Component {
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
-                hidden: false,
             })),
         });
     }
@@ -1234,8 +1245,6 @@ export class DropDown extends Component {
         }
 
         const elem = createElement('li', elemOptions);
-        show(elem, !item.hidden);
-
         return elem;
     }
 
@@ -1444,7 +1453,6 @@ export class DropDown extends Component {
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
-                hidden: false,
             })),
         });
 
@@ -1477,7 +1485,6 @@ export class DropDown extends Component {
             filteredCount: 0,
             items: this.state.items.map((item) => ({
                 ...item,
-                hidden: false,
                 active: false,
             })),
         });
@@ -1503,7 +1510,7 @@ export class DropDown extends Component {
         const filteredIds = filteredItems.map((item) => item.id);
         const items = this.state.items.map((item) => ({
             ...item,
-            hidden: !filteredIds.includes(item.id),
+            matchFilter: filteredIds.includes(item.id),
             active: false,
         }));
 
@@ -1992,6 +1999,12 @@ export class DropDown extends Component {
 
         state.items.forEach((item) => {
             const itemElem = this.renderItem(item);
+
+            if (state.filtered) {
+                show(itemElem, item.matchFilter && !item.hidden);
+            } else {
+                show(itemElem, !item.hidden);
+            }
 
             if (item.group) {
                 let group = optGroups.find((groupItem) => groupItem.group === item.group);
