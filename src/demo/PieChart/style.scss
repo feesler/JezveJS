@@ -36,6 +36,23 @@
   }
 }
 
+.std_chart_wrap {
+  position: relative;
+  width: fit-content;
+}
+
+.info-bottom {
+  height: 1rem;
+}
+
+.info-inner {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: calc(50% - 25px);
+  top: calc(50% - 25px);
+}
+
 @media (hover: hover) {
   .middle_pie {
     .pie__sector-1:hover {

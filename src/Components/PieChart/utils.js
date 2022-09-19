@@ -30,4 +30,11 @@ export const hexColor = (val) => {
 };
 
 /** Format float value for SVG */
-export const svgValue = (val, prec = 5) => parseFloat(val).toFixed(prec);
+export const svgValue = (val, prec = 5) => (
+    parseFloat(parseFloat(val).toFixed(prec))
+);
+
+/** Format circular arc command for SVG path element */
+export const circularArc = (radius, large, clockwise, dx, dy) => (
+    `a${radius} ${radius} 0 ${large} ${clockwise} ${dx} ${dy}`
+);

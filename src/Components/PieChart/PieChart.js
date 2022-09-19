@@ -7,7 +7,12 @@ import {
     asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import { toRadian, hexColor, svgValue } from './utils.js';
+import {
+    toRadian,
+    hexColor,
+    svgValue,
+    circularArc,
+} from './utils.js';
 import '../../css/common.scss';
 import './style.scss';
 
@@ -19,6 +24,7 @@ const SECTOR_CATEGORY_CLASS = 'pie__sector-';
 /** Default properties */
 const defaultProps = {
     radius: 150,
+    innerRadius: 0,
     offset: 0,
     data: null,
     colors: [],
@@ -53,6 +59,12 @@ export class PieChart extends Component {
             throw new Error(`Invalid radius specified: ${this.props.radius}`);
         }
         this.props.radius = radius;
+
+        const innerRadius = parseFloat(this.props.innerRadius);
+        if (Number.isNaN(innerRadius) || innerRadius < 0 || innerRadius >= radius) {
+            throw new Error(`Invalid innerRadius specified: ${this.props.innerRadius}`);
+        }
+        this.props.innerRadius = innerRadius;
 
         const offset = parseFloat(this.props.offset);
         if (Number.isNaN(offset)) {
@@ -173,10 +185,7 @@ export class PieChart extends Component {
      * @param {number} start - start angle of sector in degrees
      * @param {number} arc - angle of sector arc in degrees
      */
-    drawSector(x, y, r, start, arc, offset) {
-        const rotate = 0;
-        const clockwise = 1;
-
+    drawSector(x, y, r, ir, start, arc, offset) {
         // center of circle point
         let cx = parseFloat(x);
         let cy = parseFloat(y);
@@ -187,6 +196,10 @@ export class PieChart extends Component {
         const cr = parseFloat(r);
         if (Number.isNaN(cr) || cr === 0.0) {
             throw new Error(`Invalid radius: ${r}`);
+        }
+        const icr = parseFloat(ir);
+        if (Number.isNaN(icr) || icr < 0 || icr > cr) {
+            throw new Error(`Invalid radius: ${ir}`);
         }
 
         const a = toRadian(arc);
@@ -206,32 +219,67 @@ export class PieChart extends Component {
             cy += offsy;
         }
 
-        // arc start point
+        const fcr = svgValue(cr);
+        // Outer arc start point
         const sx = cx + cr * Math.cos(a + b);
         const sy = cy - cr * Math.sin(a + b);
-        // arc end point
+        const fsx = svgValue(sx);
+        const fsy = svgValue(sy);
+        // Outer arc end point
         const ex = cx + cr * Math.cos(b);
         const ey = cy - cr * Math.sin(b);
-
         // shift from arc start point to arc end point
-        const dx = ex - sx;
-        const dy = ey - sy;
+        const dx = svgValue(ex - sx);
+        const dy = svgValue(ey - sy);
 
-        // shift from arc end point to center of circle
-        const lx = cx - ex;
-        const ly = cy - ey;
+        let pathCommand;
 
-        const pathCommand = `m${svgValue(sx)} ${svgValue(sy)} a${svgValue(cr)}
-            ${svgValue(cr)} ${rotate} ${large} ${clockwise} ${svgValue(dx)}
-            ${svgValue(dy)} l${svgValue(lx)} ${svgValue(ly)}z`;
+        const outerArc = circularArc(fcr, large, 1, dx, dy);
+        const outer = `m${fsx} ${fsy} ${outerArc}`;
+
+        // Use inner radius
+        if (icr > 0) {
+            const ficr = svgValue(icr);
+            // Outer arc start point
+            const isx = cx + icr * Math.cos(a + b);
+            const isy = cy - icr * Math.sin(a + b);
+            // Outer arc end point
+            const iex = cx + icr * Math.cos(b);
+            const iey = cy - icr * Math.sin(b);
+            // shift from arc start point to arc end point
+            const idx = svgValue(isx - iex);
+            const idy = svgValue(isy - iey);
+
+            // shift from outer arc end point to inner arc end point
+            const elx = svgValue(iex - ex);
+            const ely = svgValue(iey - ey);
+            // shift from inner arc start point to outer arc start point
+            const slx = svgValue(sx - isx);
+            const sly = svgValue(sy - isy);
+
+            const innerArc = circularArc(ficr, large, 0, idx, idy);
+            const inner = `l${elx} ${ely} ${innerArc}`;
+
+            pathCommand = `${outer} ${inner} l${slx} ${sly}z`;
+        } else {
+            // shift from arc end point to center of circle
+            const lx = svgValue(cx - ex);
+            const ly = svgValue(cy - ey);
+
+            pathCommand = `${outer} l${lx} ${ly}z`;
+        }
 
         return svg('path', { d: pathCommand });
     }
 
     /** Draw pie chart */
-    drawPie(width, height, radius, data) {
+    drawPie(width, height, radius, innerRadius, data) {
         const r = parseFloat(radius);
         if (Number.isNaN(r) || r === 0.0) {
+            throw new Error('Invalid radius');
+        }
+        const ir = parseFloat(innerRadius);
+        if (Number.isNaN(ir) || ir < 0 || ir > r) {
             throw new Error('Invalid radius');
         }
 
@@ -261,6 +309,7 @@ export class PieChart extends Component {
                 width / 2,
                 height / 2,
                 r,
+                ir,
                 sector.start,
                 sector.arc,
                 sector.offset,
@@ -293,13 +342,14 @@ export class PieChart extends Component {
 
     /** Renders currenct state of pie chart */
     render(state) {
-        const { radius, offset } = this.props;
+        const { radius, innerRadius, offset } = this.props;
         const { data } = state;
 
         this.drawPie(
             (radius + offset) * 2,
             (radius + offset) * 2,
             radius,
+            innerRadius,
             data,
         );
     }
