@@ -1,115 +1,144 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
-<title>Jezve JS | Checkbox</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+    <title>Jezve JS | Checkbox</title>
 </head>
+
 <body>
-<div class="page">
-	<div class="page-wrapper">
+    <div class="page">
+        <div class="page-wrapper">
 
-		<div class="nav-header">
-            <button class="nav-toggle-btn">
-                <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                </svg>
-            </button>
+            <div class="nav-header">
+                <button class="nav-toggle-btn">
+                    <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                    </svg>
+                </button>
 
-			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
-		</div>
+                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+            </div>
 
-		<div class="page-container">
-			<div class="page-content">
-				<div class="page-content-wrap">
-                    <h1>Checkbox</h1>
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="page-content-wrap">
+                        <h1>Checkbox</h1>
 
-                    <h2>Parse component from DOM</h2>
-                    <section class="row-section">
-                        <label id="defaultCheckboxNoLabel" class="checkbox">
-                            <input type="checkbox" checked>
-                            <span class="checkbox__check">
-                                <svg class="checkbox__icon" viewBox="0 0 9.2604 9.2604" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z"/>
-                                </svg>
-                            </span>
-                        </label>
+                        <h2>Parse component from DOM</h2>
+                        <section class="row-section">
+                            <label id="defaultCheckboxNoLabel" class="checkbox">
+                                <input type="checkbox" checked>
+                                <span class="checkbox__check">
+                                    <svg class="checkbox__icon">
+                                        <use xlink:href="#check-icon"></use>
+                                    </svg>
+                                </span>
+                            </label>
 
-                        <label id="defaultCheckboxLabel" class="checkbox">
-                            <input type="checkbox" checked>
-                            <span class="checkbox__check">
-                                <svg class="checkbox__icon" viewBox="0 0 9.2604 9.2604" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z"/>
-                                </svg>
-                            </span>
-                            <span class="checkbox__label">Label</span>
-                        </label>
-                    </section>
+                            <label id="defaultCheckboxLabel" class="checkbox">
+                                <input type="checkbox" checked>
+                                <span class="checkbox__check">
+                                    <svg class="checkbox__icon">
+                                        <use xlink:href="#close-icon"></use>
+                                    </svg>
+                                </span>
+                                <span class="checkbox__label">Label</span>
+                            </label>
 
-                    <h2>Dynamically create component with 'checkbox-circle' className option and custom label option</h2>
-                    <section>
-                        <div id="dynamicContainer"></div>
-                        <div class="section-controls">
-                            <button id="checkBtn" class="btn" type="button">Check</button>
-                            <button id="uncheckBtn" class="btn" type="button">Uncheck</button>
-                            <button id="toggleBtn" class="btn" type="button">Toggle</button>
-                            <button id="enableBtn" class="btn" type="button">Enable</button>
-                            <button id="disableBtn" class="btn" type="button">Disable</button>
+                            <label id="circleCheckboxLabel" class="checkbox checkbox-circle">
+                                <input type="checkbox" checked>
+                                <span class="checkbox__check">
+                                    <svg class="checkbox__icon">
+                                        <use xlink:href="#check-icon"></use>
+                                    </svg>
+                                </span>
+                                <span class="checkbox__label">
+                                    <a href="#">Custom label content</a>
+                                </span>
+                            </label>
+                        </section>
+
+                        <h2>Dynamically create component with 'checkbox-circle' className option and custom label option
+                        </h2>
+                        <section>
+                            <div id="dynamicContainer"></div>
+                            <div class="section-controls">
+                                <button id="checkBtn" class="btn" type="button">Check</button>
+                                <button id="uncheckBtn" class="btn" type="button">Uncheck</button>
+                                <button id="toggleBtn" class="btn" type="button">Toggle</button>
+                                <button id="enableBtn" class="btn" type="button">Enable</button>
+                                <button id="disableBtn" class="btn" type="button">Disable</button>
+                            </div>
+                        </section>
+
+                        <h2>Large + styled background</h2>
+                        <section>
+                            <div id="largeContainer"></div>
+                        </section>
+
+                        <h1>Radio</h1>
+
+                        <h2>Parse component from DOM</h2>
+                        <section>
+                            <label id="defaultRadio1" class="radio">
+                                <input name="radio1" type="radio" value="1" checked>
+                                <span class="radio__check"></span>
+                                <span class="radio__label">Value 1</span>
+                            </label>
+                            <label id="defaultRadio2" class="radio">
+                                <input name="radio1" type="radio" value="2">
+                                <span class="radio__check"></span>
+                                <span class="radio__label">Value 2</span>
+                            </label>
+                            <label id="defaultRadio3" class="radio">
+                                <input name="radio1" type="radio" value="3">
+                                <span class="radio__check"></span>
+                                <span class="radio__label">Value 3</span>
+                            </label>
+                            <label id="defaultRadio4" class="radio">
+                                <input name="radio1" type="radio" value="4" disabled>
+                                <span class="radio__check"></span>
+                                <span class="radio__label">Value 4</span>
+                            </label>
+                        </section>
+
+                        <h2>Dynamically create Radio</h2>
+                        <section>
+                            <div id="dynamicRadioContainer"></div>
+                            <div class="section-controls">
+                                <button id="checkRadioBtn" class="btn" type="button">Check</button>
+                                <button id="uncheckRadioBtn" class="btn" type="button">Uncheck</button>
+                                <button id="enableRadioBtn" class="btn" type="button">Enable</button>
+                                <button id="disableRadioBtn" class="btn" type="button">Disable</button>
+                            </div>
+                        </section>
+
+                        <div>
+                            <label>Events log</label><br>
+                            <textarea id="eventsLog" class="logs-container"></textarea>
                         </div>
-                    </section>
-
-                    <h2>Large + styled background</h2>
-                    <section>
-                        <div id="largeContainer"></div>
-                    </section>
-
-                    <h1>Radio</h1>
-
-                    <h2>Parse component from DOM</h2>
-                    <section>
-                        <label id="defaultRadio1" class="radio">
-                            <input name="radio1" type="radio" value="1" checked>
-                            <span class="radio__check"></span>
-                            <span class="radio__label">Value 1</span>
-                        </label>
-                        <label id="defaultRadio2" class="radio">
-                            <input name="radio1" type="radio" value="2">
-                            <span class="radio__check"></span>
-                            <span class="radio__label">Value 2</span>
-                        </label>
-                        <label id="defaultRadio3" class="radio">
-                            <input name="radio1" type="radio" value="3">
-                            <span class="radio__check"></span>
-                            <span class="radio__label">Value 3</span>
-                        </label>
-                        <label id="defaultRadio4" class="radio">
-                            <input name="radio1" type="radio" value="4" disabled>
-                            <span class="radio__check"></span>
-                            <span class="radio__label">Value 4</span>
-                        </label>
-                    </section>
-
-                    <h2>Dynamically create Radio</h2>
-                    <section>
-                        <div id="dynamicRadioContainer"></div>
-                        <div class="section-controls">
-                            <button id="checkRadioBtn" class="btn" type="button">Check</button>
-                            <button id="uncheckRadioBtn" class="btn" type="button">Uncheck</button>
-                            <button id="enableRadioBtn" class="btn" type="button">Enable</button>
-                            <button id="disableRadioBtn" class="btn" type="button">Disable</button>
-                        </div>
-                    </section>
-
-                    <div>
-                        <label>Events log</label><br>
-                        <textarea id="eventsLog" class="logs-container"></textarea>
                     </div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <svg width="0" height="0" display="none" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="check-icon" viewBox="0 0 9.2604 9.2604">
+            <path
+                d="M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z" />
+        </symbol>
+
+        <symbol id="close-icon" viewBox="0 0 14 14">
+            <path
+                d="M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z" />
+        </symbol>
+
+    </svg>
 </body>
+
 </html>

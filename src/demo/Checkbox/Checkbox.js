@@ -3,7 +3,6 @@ import {
     onReady,
     Checkbox,
     Radio,
-    createElement,
 } from '../../js/index.js';
 import '../../css/common.scss';
 import '../common/app.scss';
@@ -22,15 +21,15 @@ const initParsed = () => {
     Checkbox.fromElement(ge('defaultCheckboxLabel'), {
         onChange: (checked) => addEventLog(`Parsed Checkbox with label change. checked: ${checked}`),
     });
+    Checkbox.fromElement(ge('circleCheckboxLabel'), {
+        onChange: (checked) => addEventLog(`Parsed Checkbox with custom label change. checked: ${checked}`),
+    });
 };
 
 const initDynamic = () => {
     const dynamicCheckbox = Checkbox.create({
-        className: 'checkbox-circle',
+        label: 'Checkbox methods',
         onChange: (checked) => addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
-        label: createElement('a', {
-            props: { href: '#', textContent: 'Custom label content' },
-        }),
     });
     ge('dynamicContainer').appendChild(dynamicCheckbox.elem);
 
