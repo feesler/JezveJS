@@ -69,7 +69,7 @@
   color: var(--checkbox-text);
 }
 
-.checkbox input[disabled] + .checkbox__label {
+.checkbox input[disabled] ~ .checkbox__label {
   pointer-events: none;
   color: var(--checkbox-disabled-text);
 }

@@ -75,7 +75,7 @@
   color: var(--radio-text);
 }
 
-.radio input[disabled] + .radio__label {
+.radio input[disabled] ~ .radio__label {
   pointer-events: none;
   color: var(--radio-disabled-text);
 }
