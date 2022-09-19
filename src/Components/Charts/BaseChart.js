@@ -53,6 +53,7 @@ const defaultProps = {
     scrollThrottle: false,
     activateOnHover: false,
     renderYAxisLabel: null,
+    stacked: false,
     // Callbacks
     onscroll: null,
     onitemclick: null,
@@ -198,6 +199,7 @@ export class BaseChart extends Component {
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
         this.drawVLabels();
+        this.drawGrid();
         this.updateBarWidth();
         this.updateChartWidth();
 
@@ -209,8 +211,6 @@ export class BaseChart extends Component {
         // create horizontal labels
         this.createHLabels();
         this.updateChartWidth();
-
-        this.drawGrid();
 
         if (this.props.scrollToEnd) {
             this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
@@ -225,11 +225,11 @@ export class BaseChart extends Component {
         }
 
         const [firstItem] = values;
-        if (isObject(firstItem)) {
-            return values.length;
+        if (!isObject(firstItem)) {
+            return 1;
         }
 
-        return 1;
+        return values.length;
     }
 
     /** Returns count of data columns */
@@ -240,12 +240,12 @@ export class BaseChart extends Component {
         }
 
         const [firstItem] = values;
-        if (isObject(firstItem)) {
-            const valuesLength = values.map((item) => item.data.length);
-            return Math.max(...valuesLength);
+        if (!isObject(firstItem)) {
+            return values.length;
         }
 
-        return values.length;
+        const valuesLength = values.map((item) => item.data.length);
+        return Math.max(...valuesLength);
     }
 
     /** Returns array of data sets */
@@ -256,11 +256,30 @@ export class BaseChart extends Component {
         }
 
         const [firstItem] = values;
-        if (isObject(firstItem)) {
-            return values.map((item) => item.data);
+        if (!isObject(firstItem)) {
+            return [values];
         }
 
-        return [values];
+        return values.map((item) => item.data);
+    }
+
+    /** Returns longest data set */
+    getLongestDataSet() {
+        const { values } = this.state.data;
+        if (values.length === 0) {
+            return values;
+        }
+
+        const [firstItem] = values;
+        if (!isObject(firstItem)) {
+            return values;
+        }
+
+        const resIndex = values.reduce((res, item, index) => (
+            (values[res].data.length < item.data.length) ? index : res
+        ), 0);
+
+        return values[resIndex].data;
     }
 
     formatCoord(value, asPixels = false) {
@@ -280,6 +299,7 @@ export class BaseChart extends Component {
             minStep: this.props.minGridStep,
             maxStep: this.props.maxGridStep,
             valuesMargin: this.props.gridValuesMargin,
+            stacked: this.props.stacked,
         });
 
         grid.calculate(values);
@@ -348,7 +368,7 @@ export class BaseChart extends Component {
             return null;
         }
 
-        return items.flat().map((item) => item.value);
+        return items.flat().map((item) => item.value + item.valueOffset);
     }
 
     /** Update width of chart block */

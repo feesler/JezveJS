@@ -18,6 +18,10 @@ const defaultProps = {
  * @param {string|Element} props.elem - base element for component
  */
 export class LineChart extends BaseChart {
+    static create(props) {
+        return new LineChart(props);
+    }
+
     constructor(props) {
         super(props);
 
@@ -95,12 +99,24 @@ export class LineChart extends BaseChart {
         point.dot.y = y;
     }
 
-    createItem({ value, index, categoryIndex = 0 }) {
+    createItem({
+        value,
+        index,
+        categoryIndex = 0,
+        valueOffset = 0,
+    }) {
         const fixedValue = value ?? 0;
+        const fixedOffset = valueOffset ?? 0;
+
         const item = {
             value: fixedValue,
-            dot: this.getCoordinates(fixedValue, index),
+            valueOffset: fixedOffset,
+            dot: this.getCoordinates(fixedValue + fixedOffset, index),
         };
+
+        if (Number.isNaN(item.dot.x) || Number.isNaN(item.dot.y)) {
+            throw new Error('Invalid values');
+        }
 
         item.elem = svg('circle', {
             class: ITEM_CLASS,
@@ -127,15 +143,26 @@ export class LineChart extends BaseChart {
         }
 
         this.paths = [];
-        const [firstSet] = dataSets;
-        firstSet.forEach((_, index) => {
-            const group = dataSets.map(
-                (data, categoryIndex) => this.createItem({
-                    value: data[index],
+        const longestSet = this.getLongestDataSet();
+        longestSet.forEach((_, index) => {
+            const group = [];
+            let valueOffset = 0;
+
+            dataSets.forEach((data, categoryIndex) => {
+                const value = data[index] ?? 0;
+                const item = this.createItem({
+                    value,
                     index,
                     categoryIndex,
-                }),
-            );
+                    valueOffset,
+                });
+                group.push(item);
+
+                if (this.props.stacked) {
+                    valueOffset += value;
+                }
+            });
+
             this.items.push(group);
         });
 
@@ -243,15 +270,10 @@ export class LineChart extends BaseChart {
 
         // update height of bars
         items.flat().forEach((item) => {
-            const y = this.grid.getY(item.value);
+            const y = this.grid.getY(item.value + item.valueOffset);
             this.setItemPos(item, y);
         });
 
         this.renderPaths();
-    }
-
-    /** Global Charts object public methods */
-    static create(props) {
-        return new LineChart(props);
     }
 }
