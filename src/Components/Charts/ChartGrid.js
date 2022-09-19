@@ -6,6 +6,7 @@ const defaultProps = {
     valuesMargin: 0,
     minStep: 0,
     maxStep: 0,
+    stacked: false,
 };
 
 /**
@@ -260,11 +261,23 @@ export class ChartGrid {
         }
 
         const [firstItem] = values;
-        if (isObject(firstItem)) {
-            return values.map((item) => item.data).flat();
+        if (!isObject(firstItem)) {
+            return values;
         }
 
-        return values;
+        const dataValues = values.map((item) => item.data);
+        if (this.props.stacked) {
+            const resIndex = dataValues.reduce((res, item, index) => (
+                (dataValues[res].length < item.length) ? index : res
+            ), 0);
+
+            const longestData = dataValues[resIndex];
+            return longestData.map((_, index) => (
+                dataValues.reduce((res, data) => (res + (data[index] ?? 0)), 0)
+            ));
+        }
+
+        return dataValues.flat();
     }
 
     /** Calculate grid parameters for specified values */

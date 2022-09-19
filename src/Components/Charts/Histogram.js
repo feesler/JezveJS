@@ -11,6 +11,10 @@ const CATEGORY_CLASS = 'histogram_category-';
  * @param {string|Element} props.elem - base element for component
  */
 export class Histogram extends BaseChart {
+    static create(props) {
+        return new Histogram(props);
+    }
+
     constructor(props) {
         super(props);
 
@@ -27,11 +31,20 @@ export class Histogram extends BaseChart {
             return result;
         }
 
-        const groupX = this.barOuterWidth * result.index;
-        const innerX = result.x - groupX;
-        const barWidth = this.state.barWidth / result.item.length;
         let item = null;
-        let index = Math.floor(innerX / barWidth);
+        let index = -1;
+
+        if (this.props.stacked) {
+            const y = e.offsetY;
+            index = result.item.findIndex((bar) => (y >= bar.y && y < bar.y + bar.height));
+        } else {
+            const groupX = this.barOuterWidth * result.index;
+            const innerX = result.x - groupX;
+            const barWidth = this.state.barWidth / result.item.length;
+
+            index = Math.floor(innerX / barWidth);
+        }
+
         if (index >= 0 && index < result.item.length) {
             item = result.item[index];
         } else {
@@ -73,19 +86,35 @@ export class Histogram extends BaseChart {
         width,
         index,
         categoryIndex = 0,
+        valueOffset = 0,
     }) {
-        const { y0 } = this.state;
-
         const fixedValue = value ?? 0;
-        const y1 = this.grid.getY(fixedValue);
+        const fixedOffset = valueOffset ?? 0;
+
+        const y0 = this.grid.getY(fixedOffset);
+        const y1 = this.grid.getY(fixedValue + fixedOffset);
 
         const item = {
             value: fixedValue,
-            x: index * this.barOuterWidth + categoryIndex * width,
+            valueOffset: fixedOffset,
+            x: index * this.barOuterWidth,
             y: Math.min(y0, y1),
             width,
             height: Math.abs(y0 - y1),
         };
+
+        if (!this.props.stacked) {
+            item.x += categoryIndex * width;
+        }
+
+        if (
+            Number.isNaN(item.x)
+            || Number.isNaN(item.y)
+            || Number.isNaN(item.width)
+            || Number.isNaN(item.height)
+        ) {
+            throw new Error('Invalid values');
+        }
 
         item.elem = svg('rect', {
             class: BAR_CLASS,
@@ -111,19 +140,30 @@ export class Histogram extends BaseChart {
             return;
         }
 
-        this.state.y0 = this.grid.getY(0);
-        const width = this.state.barWidth / dataSets.length;
+        const width = (this.props.stacked)
+            ? this.state.barWidth
+            : this.state.barWidth / dataSets.length;
 
-        const [firstSet] = dataSets;
-        firstSet.forEach((_, index) => {
-            const group = dataSets.map(
-                (data, categoryIndex) => this.createItem({
-                    value: data[index],
+        const longestSet = this.getLongestDataSet();
+        longestSet.forEach((_, index) => {
+            const group = [];
+            let valueOffset = 0;
+
+            dataSets.forEach((data, categoryIndex) => {
+                const value = data[index] ?? 0;
+                const item = this.createItem({
+                    value,
                     width,
                     index,
                     categoryIndex,
-                }),
-            );
+                    valueOffset,
+                });
+                group.push(item);
+
+                if (this.props.stacked) {
+                    valueOffset += value;
+                }
+            });
             this.items.push(group);
         });
     }
@@ -134,18 +174,13 @@ export class Histogram extends BaseChart {
             return;
         }
 
-        const y0 = this.grid.getY(0);
         items.flat().forEach((item) => {
-            const y1 = this.grid.getY(item.value);
+            const y0 = this.grid.getY(item.valueOffset);
+            const y1 = this.grid.getY(item.value + item.valueOffset);
             const newY = Math.min(y0, y1);
             const barHeight = Math.abs(y0 - y1);
 
             this.setItemPos(item, newY, barHeight);
         });
-    }
-
-    /** Global Charts object public methods */
-    static create(props) {
-        return new Histogram(props);
     }
 }
