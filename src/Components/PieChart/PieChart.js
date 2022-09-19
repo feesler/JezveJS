@@ -3,82 +3,153 @@ import {
     isObject,
     isFunction,
     copyObject,
-    removeChilds,
+    setEvents,
+    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
+import {
+    toRadian,
+    hexColor,
+    svgValue,
+    circularArc,
+} from './utils.js';
 import '../../css/common.scss';
 import './style.scss';
 
-/* eslint-disable no-bitwise */
+/** CSS classes */
+const PIE_CHART_CLASS = 'pie-chart';
+const SECTOR_CLASS = 'pie__sector';
+const SECTOR_CATEGORY_CLASS = 'pie__sector-';
+
+/** Default properties */
+const defaultProps = {
+    radius: 150,
+    innerRadius: 0,
+    offset: 0,
+    data: null,
+    colors: [],
+    className: null,
+    onitemclick: null,
+    onitemover: null,
+    onitemout: null,
+};
 
 /**
- * Pie chart component class
- * @param {Object} props
- * @param {string|Element} props.elem - base element for component
+ * Pie chart component
  */
 export class PieChart extends Component {
+    static create(props) {
+        return new PieChart(props);
+    }
+
     constructor(props) {
         super(props);
 
-        if (!Array.isArray(this.props.data)) {
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+        };
+
+        this.state = {};
+        this.sectors = [];
+        this.sectorsGroup = null;
+
+        const radius = parseFloat(this.props.radius);
+        if (Number.isNaN(radius) || radius === 0) {
+            throw new Error(`Invalid radius specified: ${this.props.radius}`);
+        }
+        this.props.radius = radius;
+
+        const innerRadius = parseFloat(this.props.innerRadius);
+        if (Number.isNaN(innerRadius) || innerRadius < 0 || innerRadius >= radius) {
+            throw new Error(`Invalid innerRadius specified: ${this.props.innerRadius}`);
+        }
+        this.props.innerRadius = innerRadius;
+
+        const offset = parseFloat(this.props.offset);
+        if (Number.isNaN(offset)) {
+            throw new Error(`Invalid offset specified: ${this.props.offset}`);
+        }
+        this.props.offset = offset;
+
+        this.init();
+    }
+
+    init() {
+        const { radius, offset } = this.props;
+        const size = (radius + offset) * 2;
+
+        this.elem = svg('svg', {
+            class: PIE_CHART_CLASS,
+            width: size,
+            height: size,
+        });
+
+        this.setClassNames();
+
+        this.setData(this.props.data);
+    }
+
+    setData(data) {
+        if (!Array.isArray(data)) {
             throw new Error('Expected data array');
         }
-        this.data = this.props.data.map((item) => {
-            let value;
-            const res = {};
 
-            if (isObject(item)) {
-                if (!('value' in item)) {
-                    throw new Error('Value property expected');
-                }
+        if (this.state.data === data) {
+            return;
+        }
 
-                value = item.value;
-                res.title = item.title.toString();
-                if (item.offset) {
-                    res.offset = parseFloat(item.offset);
-                }
-            } else {
-                value = item;
+        this.state.data = data.map((item) => {
+            const res = isObject(item) ? { ...item } : { value: item };
+
+            if (!('value' in res)) {
+                throw new Error('Value property expected');
             }
+            const value = parseFloat(res.value);
+            if (Number.isNaN(value)) {
+                throw new Error(`Invalid data value: ${res.value}`);
+            }
+            res.value = value;
 
-            res.value = parseFloat(value);
-            if (Number.isNaN(res.value)) {
-                throw new Error(`Invalid data value: ${value}`);
+            if ('offset' in res) {
+                const offset = parseFloat(res.offset);
+                if (Number.isNaN(offset)) {
+                    throw new Error(`Invalid offset value: ${res.offset}`);
+                }
+                res.offset = offset;
             }
 
             return res;
         });
 
-        if (!('radius' in this.props)) {
-            throw new Error('Radius not specified');
-        }
-        this.radius = parseFloat(this.props.radius);
-        if (Number.isNaN(this.radius) || this.radius === 0) {
-            throw new Error(`Invalid radius specified: ${this.props.radius}`);
-        }
+        this.render(this.state);
+    }
 
-        this.offset = 0;
-        if ('offset' in this.props) {
-            this.offset = parseFloat(this.props.offset);
-            if (Number.isNaN(this.offset)) {
-                throw new Error(`Invalid offset specified: ${this.props.offset}`);
-            }
+    /** Sector item click event handler */
+    onItemClick(e, sector) {
+        if (!isFunction(this.props.onitemclick)) {
+            return;
         }
 
-        if ('colors' in this.props) {
-            this.colors = this.props.colors;
-        } else {
-            this.colors = [];
+        this.props.onitemclick({ sector, event: e });
+    }
+
+    /** Sector item mouse over event handler */
+    onItemOver(e, sector) {
+        if (!isFunction(this.props.onitemover)) {
+            return;
         }
 
-        this.extraClass = this.props.extraClass;
+        this.props.onitemover({ sector, event: e });
+    }
 
-        this.itemClickHandler = isFunction(this.props.onitemclick) ? this.props.onitemclick : null;
-        this.itemOverHandler = isFunction(this.props.onitemover) ? this.props.onitemover : null;
-        this.itemOutHandler = isFunction(this.props.onitemout) ? this.props.onitemout : null;
+    /** Sector item mouse out from bar event handler */
+    onItemOut(e, sector) {
+        if (!isFunction(this.props.onitemout)) {
+            return;
+        }
 
-        this.sectors = [];
-        this.render();
+        this.props.onitemout({ sector, event: e });
     }
 
     /** Calculate sum of array values */
@@ -90,47 +161,20 @@ export class PieChart extends Component {
         return data.reduce((res, item) => (res + item.value), 0);
     }
 
-    /** Convert degrees to radians */
-    toRadian(val) {
-        const fval = parseFloat(val);
-        if (Number.isNaN(fval)) {
-            throw new Error('Invalid value');
-        }
-
-        return (fval % 360) * (Math.PI / 180);
-    }
-
-    /** Format value as hexadecimal */
-    toHex(val) {
-        const v = parseInt(val, 10);
-        if (Number.isNaN(v)) {
-            throw new Error('Invalid data');
-        }
-
-        return ((v < 0x10) ? '0' : '') + v.toString(16);
-    }
-
-    /** Format color as hexadecimal */
-    hexColor(val) {
-        const r = (val & 0xFF0000) >> 16;
-        const g = (val & 0x00FF00) >> 8;
-        const b = (val & 0x0000FF);
-
-        return `#${this.toHex(r)}${this.toHex(g)}${this.toHex(b)}`;
-    }
-
     /** Format color as hexadecimal */
     getNextColor(val) {
+        const { colors } = this.props;
+
         if (!val) {
-            return this.colors[0];
+            return colors[0];
         }
 
-        const ind = this.colors.indexOf(val);
-        if (ind === -1 || ind === this.colors.length - 1) {
-            return this.colors[0];
+        const ind = colors.indexOf(val);
+        if (ind === -1 || ind === colors.length - 1) {
+            return colors[0];
         }
 
-        return this.colors[ind + 1];
+        return colors[ind + 1];
     }
 
     /**
@@ -141,11 +185,7 @@ export class PieChart extends Component {
      * @param {number} start - start angle of sector in degrees
      * @param {number} arc - angle of sector arc in degrees
      */
-    drawSector(x, y, r, start, arc, offset) {
-        const prec = 5;
-        const rotate = 0;
-        const clockwise = 1;
-
+    drawSector(x, y, r, ir, start, arc, offset) {
         // center of circle point
         let cx = parseFloat(x);
         let cy = parseFloat(y);
@@ -157,9 +197,13 @@ export class PieChart extends Component {
         if (Number.isNaN(cr) || cr === 0.0) {
             throw new Error(`Invalid radius: ${r}`);
         }
+        const icr = parseFloat(ir);
+        if (Number.isNaN(icr) || icr < 0 || icr > cr) {
+            throw new Error(`Invalid radius: ${ir}`);
+        }
 
-        const a = this.toRadian(arc);
-        const b = this.toRadian(start);
+        const a = toRadian(arc);
+        const b = toRadian(start);
         const large = (a < Math.PI) ? 0 : 1;
 
         if (typeof offset !== 'undefined') {
@@ -175,32 +219,67 @@ export class PieChart extends Component {
             cy += offsy;
         }
 
-        // arc start point
+        const fcr = svgValue(cr);
+        // Outer arc start point
         const sx = cx + cr * Math.cos(a + b);
         const sy = cy - cr * Math.sin(a + b);
-        // arc end point
+        const fsx = svgValue(sx);
+        const fsy = svgValue(sy);
+        // Outer arc end point
         const ex = cx + cr * Math.cos(b);
         const ey = cy - cr * Math.sin(b);
+        // shift from arc start point to arc end point
+        const dx = svgValue(ex - sx);
+        const dy = svgValue(ey - sy);
 
-        // shift from arc start point to acr end point
-        const dx = ex - sx;
-        const dy = ey - sy;
+        let pathCommand;
 
-        // shift from arc end point to center of circle
-        const lx = cx - ex;
-        const ly = cy - ey;
+        const outerArc = circularArc(fcr, large, 1, dx, dy);
+        const outer = `m${fsx} ${fsy} ${outerArc}`;
 
-        const pathCommand = `m${sx.toFixed(prec)} ${sy.toFixed(prec)} a${cr.toFixed(prec)}
-        ${cr.toFixed(prec)} ${rotate} ${large} ${clockwise} ${dx.toFixed(prec)}
-        ${dy.toFixed(prec)} l${lx.toFixed(prec)} ${ly.toFixed(prec)}z`;
+        // Use inner radius
+        if (icr > 0) {
+            const ficr = svgValue(icr);
+            // Outer arc start point
+            const isx = cx + icr * Math.cos(a + b);
+            const isy = cy - icr * Math.sin(a + b);
+            // Outer arc end point
+            const iex = cx + icr * Math.cos(b);
+            const iey = cy - icr * Math.sin(b);
+            // shift from arc start point to arc end point
+            const idx = svgValue(isx - iex);
+            const idy = svgValue(isy - iey);
+
+            // shift from outer arc end point to inner arc end point
+            const elx = svgValue(iex - ex);
+            const ely = svgValue(iey - ey);
+            // shift from inner arc start point to outer arc start point
+            const slx = svgValue(sx - isx);
+            const sly = svgValue(sy - isy);
+
+            const innerArc = circularArc(ficr, large, 0, idx, idy);
+            const inner = `l${elx} ${ely} ${innerArc}`;
+
+            pathCommand = `${outer} ${inner} l${slx} ${sly}z`;
+        } else {
+            // shift from arc end point to center of circle
+            const lx = svgValue(cx - ex);
+            const ly = svgValue(cy - ey);
+
+            pathCommand = `${outer} l${lx} ${ly}z`;
+        }
 
         return svg('path', { d: pathCommand });
     }
 
     /** Draw pie chart */
-    drawPie(width, height, radius, data) {
+    drawPie(width, height, radius, innerRadius, data) {
         const r = parseFloat(radius);
         if (Number.isNaN(r) || r === 0.0) {
+            throw new Error('Invalid radius');
+        }
+        const ir = parseFloat(innerRadius);
+        if (Number.isNaN(ir) || ir < 0 || ir > r) {
             throw new Error('Invalid radius');
         }
 
@@ -208,21 +287,21 @@ export class PieChart extends Component {
             throw new Error('Invalid data');
         }
 
-        let values = Array.isArray(data) ? data : [data];
+        let values = asArray(data);
         const total = this.arraySum(values);
         if (total === 0) {
             throw new Error('Invalid data');
         }
 
-        values = values.map((item) => {
-            const sector = item;
-            sector.arc = 360 * (sector.value / total);
-            return sector;
-        });
+        values = values.map((item) => ({
+            ...item,
+            arc: 360 * (item.value / total),
+        }));
         values.sort((a, b) => (a.value - b.value));
 
         let start = 0;
         let prevColor;
+        const sectorsGroup = svg('g');
         this.sectors = values.map((item, ind) => {
             const sector = copyObject(item);
             sector.start = start;
@@ -230,102 +309,48 @@ export class PieChart extends Component {
                 width / 2,
                 height / 2,
                 r,
+                ir,
                 sector.start,
                 sector.arc,
                 sector.offset,
             );
-            sector.elem.classList.add('pie__sector', `pie__sector-${ind + 1}`);
+            sector.elem.classList.add(SECTOR_CLASS, `${SECTOR_CATEGORY_CLASS}${ind + 1}`);
 
-            if (this.colors.length > 0) {
+            if (this.props.colors.length > 0) {
                 sector.color = this.getNextColor(prevColor);
                 prevColor = sector.color;
-                sector.elem.setAttribute('fill', this.hexColor(sector.color));
+                sector.elem.setAttribute('fill', hexColor(sector.color));
             }
 
-            function clickHandler(e) {
-                this.onItemClick.call(this, e, sector);
-            }
-
-            function mouseOverHandler(e) {
-                this.onItemOver.call(this, e, sector);
-            }
-
-            function mouseOutHandler(e) {
-                this.onItemOut.call(this, e, sector);
-            }
-
-            sector.elem.addEventListener('mouseover', mouseOverHandler.bind(this));
-            sector.elem.addEventListener('mouseout', mouseOutHandler.bind(this));
-            sector.elem.addEventListener('click', clickHandler.bind(this));
+            setEvents(sector.elem, {
+                click: (e) => this.onItemClick(e, sector),
+                mouseover: (e) => this.onItemOver(e, sector),
+                mouseout: (e) => this.onItemOut(e, sector),
+            });
 
             start += sector.arc;
 
+            sectorsGroup.append(sector.elem);
+
             return sector;
-        }, this);
-
-        const res = svg('svg', {
-            class: 'pie-chart',
-            width,
-            height,
-        });
-        this.sectors.forEach((sector) => {
-            res.appendChild(sector.elem);
         });
 
-        if (this.extraClass) {
-            res.classList.add(this.extraClass);
-        }
-
-        return res;
+        this.sectorsGroup?.remove();
+        this.elem.append(sectorsGroup);
+        this.sectorsGroup = sectorsGroup;
     }
 
-    /** Draw currenct state of pie chart */
-    render() {
-        this.container = this.drawPie(
-            (this.radius + this.offset) * 2,
-            (this.radius + this.offset) * 2,
-            this.radius,
-            this.data,
+    /** Renders currenct state of pie chart */
+    render(state) {
+        const { radius, innerRadius, offset } = this.props;
+        const { data } = state;
+
+        this.drawPie(
+            (radius + offset) * 2,
+            (radius + offset) * 2,
+            radius,
+            innerRadius,
+            data,
         );
-
-        removeChilds(this.elem);
-        this.elem.appendChild(this.container);
-    }
-
-    /** Sector item click event handler */
-    onItemClick(e, sector) {
-        if (!isFunction(this.itemClickHandler)) {
-            return;
-        }
-
-        this.itemClickHandler.call(this, e, sector);
-    }
-
-    /** Sector item mouse over event handler */
-    onItemOver(e, sector) {
-        if (!isFunction(this.itemOverHandler)) {
-            return;
-        }
-
-        this.itemOverHandler.call(this, e, sector);
-    }
-
-    /** Sector item mouse out from bar event handler */
-    onItemOut(e, sector) {
-        if (!isFunction(this.itemOutHandler)) {
-            return;
-        }
-
-        this.itemOutHandler.call(this, e, sector);
-    }
-
-    /** Static alias for PieChart constructor */
-    static create(props) {
-        try {
-            return new PieChart(props);
-        } catch (e) {
-            console.error(e);
-            return null;
-        }
     }
 }
