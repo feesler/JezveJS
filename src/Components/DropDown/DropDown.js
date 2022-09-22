@@ -50,8 +50,6 @@ const LIST_ITEM_CLASS = 'dd__list-item';
 const LIST_ITEM_ACTIVE_CLASS = 'dd__list-item_active';
 const SELECTED_LIST_ITEM_CLASS = 'dd__list-item_selected';
 const LIST_OPEN_CLASS = 'dd__open';
-const LIST_DROP_DOWN_CLASS = 'dd__list_drop-down';
-const LIST_DROP_UP_CLASS = 'dd__list_drop-up';
 const LIST_GROUP_CLASS = 'dd__list-group';
 const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
 const CHECK_ICON_CLASS = 'dd__check-icon';
@@ -955,7 +953,6 @@ export class DropDown extends Component {
 
         if (this.props.fullScreen && isVisible(this.backgroundElem)) {
             document.body.style.overflow = 'hidden';
-            this.list.classList.add(LIST_DROP_DOWN_CLASS);
 
             this.list.style.left = px(combo.left);
             this.list.style.top = px(combo.top - offset.top + combo.height - border);
@@ -965,10 +962,8 @@ export class DropDown extends Component {
         } else {
             // Check vertical offset of drop down list
             if (listBottom > scrollHeight) {
-                this.list.classList.add(LIST_DROP_UP_CLASS);
                 this.list.style.top = px(container.top - offset.top - listHeight + border);
             } else {
-                this.list.classList.add(LIST_DROP_DOWN_CLASS);
                 if (listBottom > screenBottom) {
                     html.scrollTop += listBottom - screenBottom;
                 }
@@ -2066,9 +2061,6 @@ export class DropDown extends Component {
             if (this.props.fullScreen) {
                 document.body.style.overflow = '';
             }
-
-            this.list.classList.remove(LIST_DROP_DOWN_CLASS);
-            this.list.classList.remove(LIST_DROP_UP_CLASS);
         }
     }
 
