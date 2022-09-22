@@ -16,6 +16,13 @@ const initDigitsLimit = () => {
     dd.value = 2;
 };
 
+const initInteger = () => {
+    DecimalInput.create({
+        elem: ge('decInputInteger'),
+        digits: 0,
+    });
+};
+
 const initOnlyPositive = () => {
     DecimalInput.create({
         elem: ge('decInputPositive'),
@@ -35,6 +42,7 @@ const init = () => {
 
     initDefault();
     initDigitsLimit();
+    initInteger();
     initOnlyPositive();
     initLeadingZeros();
 };
