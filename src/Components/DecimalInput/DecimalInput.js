@@ -179,6 +179,11 @@ export class DecimalInput {
 
         if (this.useFixed) {
             const intPart = Math.trunc(float).toString();
+
+            if (this.props.digits === 0) {
+                return fixed.length <= intPart.length;
+            }
+
             const dotOffset = (float < 0) ? 2 : 1;
             return fixed.length <= intPart.length + this.props.digits + dotOffset;
         }
