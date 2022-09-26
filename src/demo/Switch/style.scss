@@ -23,9 +23,10 @@
 
 /* Large */
 .switch.large-switch {
---switch-width: 68px;
---switch-height: 40px;
---switch-slider-size: 32px;
---switch-slider-top: 4px;
---switch-checked-slider-left: 34px;
+  --switch-width: 68px;
+  --switch-height: 40px;
+  --switch-slider-size: 32px;
+  --switch-slider-top: 4px;
+  --switch-slider-left: 4px;
+  --switch-checked-slider-left: 32px;
 }
