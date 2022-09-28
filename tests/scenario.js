@@ -9,6 +9,7 @@ import {
 } from 'jezve-test';
 import * as DropDownTests from './run/DropDown.js';
 import * as DatePickerTests from './run/DatePicker.js';
+import * as PaginatorTests from './run/Paginator.js';
 import { App } from './app.js';
 
 export class Scenario {
@@ -45,6 +46,7 @@ export class Scenario {
     async runFullScenario() {
         await this.dropDownTests();
         await this.datePickerTests();
+        await this.paginatorTests();
     }
 
     async dropDownTests() {
@@ -136,5 +138,19 @@ export class Scenario {
 
         setBlock('setSelection() method', 2);
         await DatePickerTests.testSetSelection();
+    }
+
+    async paginatorTests() {
+        const pageUrl = `${baseUrl()}demo/paginator.html`;
+        await goTo(pageUrl);
+
+        setBlock('Paginator component', 1);
+        await PaginatorTests.goToNextPage('styledPaginator');
+        await PaginatorTests.goToPrevPage('styledPaginator');
+        await PaginatorTests.goToLastPage('styledPaginator');
+        await PaginatorTests.goToFirstPage('styledPaginator');
+
+        await PaginatorTests.goToNextPage('handlerPaginator');
+        await PaginatorTests.goToLastPage('handlerPaginator');
     }
 }

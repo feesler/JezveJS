@@ -1,6 +1,7 @@
 import { MainView } from './view/main.js';
 import { DropDownView } from './view/DropDown.js';
 import { DatePickerView } from './view/DatePicker.js';
+import { PaginatorView } from './view/Paginator.js';
 
 /** Process request url and return view class if match */
 export async function route(env, url) {
@@ -45,6 +46,9 @@ export async function route(env, url) {
     }
     if (part === 'datepicker') {
         return DatePickerView;
+    }
+    if (part === 'paginator') {
+        return PaginatorView;
     }
 
     throw new Error(`Unknown route: ${reqUrl.pathname}`);
