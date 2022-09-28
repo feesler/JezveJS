@@ -130,6 +130,37 @@ export class DropDown extends TestComponent {
         return res;
     }
 
+    buildModel(cont) {
+        const res = {
+            isAttached: cont.isAttached,
+            disabled: cont.disabled,
+            editable: cont.editable,
+            textValue: cont.textValue,
+            isMulti: cont.isMulti,
+        };
+
+        if (res.isMulti) {
+            res.value = cont.value.map((item) => ({
+                id: item.id,
+                title: item.title,
+            }));
+        } else {
+            res.value = cont.value;
+        }
+
+        if (cont.items) {
+            res.items = cont.items.map((item) => ({
+                id: item.id,
+                selected: item.selected,
+                disabled: item.disabled,
+                hidden: item.hidden,
+                text: item.text,
+            }));
+        }
+
+        return res;
+    }
+
     get disabled() {
         return this.content.disabled;
     }
