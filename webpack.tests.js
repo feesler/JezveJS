@@ -1,3 +1,4 @@
+import webpack from 'webpack';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -20,7 +21,7 @@ export default {
             filename: '[name].[fullhash].js',
         },
         testsMain: {
-            import: './tests/index.browser.js',
+            import: './tests/index.js',
             filename: '[name].[fullhash].js',
         },
     },
@@ -58,6 +59,10 @@ export default {
             chunks: ['polyfills', 'TestsView', 'testsMain'],
             minify: htmlMinifyOptions,
         }),
+        new webpack.NormalModuleReplacementPlugin(
+            /jezve-test\/NodeEnvironment/,
+            'jezve-test\/BrowserEnvironment'
+        ),
     ],
     optimization: {
         minimize: false,

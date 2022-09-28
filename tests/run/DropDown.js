@@ -64,7 +64,7 @@ export async function deselectTest(ddname, value) {
 
 export const addItemTest = async () => {
     await test('[DropDown] Add item', async () => {
-        const expected = App.view.content.dynamicDropDown.items;
+        const expected = App.view.content.dynamicDropDown.model.items;
         const newId = expected.length + 1;
         expected.push({
             id: newId.toString(),
@@ -77,7 +77,7 @@ export const addItemTest = async () => {
         await App.view.addItem();
         await App.view.performAction(() => App.view.content.dynamicDropDown.showList());
 
-        const { items } = App.view.content.dynamicDropDown;
+        const { items } = App.view.content.dynamicDropDown.model;
 
         assert.deepMeet(items, expected);
         return true;
@@ -86,7 +86,7 @@ export const addItemTest = async () => {
 
 export const addDisabledItem = async () => {
     await test('[DropDown] Add disabled item', async () => {
-        const expected = App.view.content.dynamicDropDown.items;
+        const expected = App.view.content.dynamicDropDown.model.items;
         const newId = expected.length + 1;
         expected.push({
             id: newId.toString(),
@@ -99,7 +99,7 @@ export const addDisabledItem = async () => {
         await App.view.addDisabledItem();
         await App.view.performAction(() => App.view.content.dynamicDropDown.showList());
 
-        const { items } = App.view.content.dynamicDropDown;
+        const { items } = App.view.content.dynamicDropDown.model;
         assert.deepMeet(items, expected);
         return true;
     });
@@ -107,7 +107,7 @@ export const addDisabledItem = async () => {
 
 export const addHiddenItem = async () => {
     await test('[DropDown] Add hidden item', async () => {
-        const expected = App.view.content.dynamicDropDown.items;
+        const expected = App.view.content.dynamicDropDown.model.items;
         const newId = expected.length + 1;
         expected.push({
             id: newId.toString(),
@@ -120,7 +120,7 @@ export const addHiddenItem = async () => {
         await App.view.addHiddenItem();
         await App.view.performAction(() => App.view.content.dynamicDropDown.showList());
 
-        const { items } = App.view.content.dynamicDropDown;
+        const { items } = App.view.content.dynamicDropDown.model;
         assert.deepMeet(items, expected);
         return true;
     });
@@ -128,12 +128,12 @@ export const addHiddenItem = async () => {
 
 export const removeLastItem = async () => {
     await test('[DropDown] Remove last item', async () => {
-        const expected = App.view.content.dynamicDropDown.items;
+        const expected = App.view.content.dynamicDropDown.model.items;
         expected.splice(expected.length - 1);
 
         await App.view.removeLastItem();
 
-        const { items } = App.view.content.dynamicDropDown;
+        const { items } = App.view.content.dynamicDropDown.model;
         assert.deepMeet(items, expected);
         return true;
     });
@@ -145,7 +145,7 @@ export const removeAllItems = async () => {
 
         await App.view.removeAllItems();
 
-        const { items } = App.view.content.dynamicDropDown;
+        const { items } = App.view.content.dynamicDropDown.model;
         assert.deepMeet(items, expected);
         return true;
     });
