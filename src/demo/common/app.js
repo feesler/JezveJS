@@ -1,47 +1,50 @@
 import { createElement, setEvents } from '../../js/index.js';
 import { Offcanvas } from '../../Components/Offcanvas/Offcanvas.js';
 
+const BASE_URL = 'https://localtest/jezvejs/dist/';
+const DEMO_URL = `${BASE_URL}demo/`;
+
 const navigationMenu = [{
     title: 'jezveJS tests',
     items: [{
-        title: 'Tests', url: '../tests/index.html',
+        title: 'Tests', url: `${BASE_URL}tests/index.html`,
     }],
 }, {
     title: 'Utils',
     items: [
-        { title: 'Common', url: './common.html' },
-        { title: 'DPI test', url: './dpitest.html' },
-        { title: 'Empty click', url: './emptyclick.html' },
-        { title: 'Drag\'n\'Drop and Sortable', url: './dragndrop.html' },
+        { title: 'Common', url: `${DEMO_URL}common.html` },
+        { title: 'DPI test', url: `${DEMO_URL}dpitest.html` },
+        { title: 'Empty click', url: `${DEMO_URL}emptyclick.html` },
+        { title: 'Drag\'n\'Drop and Sortable', url: `${DEMO_URL}dragndrop.html` },
     ],
 }, {
     title: 'Input',
     items: [
-        { title: 'Input group', url: './inputgroup.html' },
-        { title: 'Decimal input', url: './decimal.html' },
-        { title: 'Date input', url: './dateinput.html' },
+        { title: 'Input group', url: `${DEMO_URL}inputgroup.html` },
+        { title: 'Decimal input', url: `${DEMO_URL}decimal.html` },
+        { title: 'Date input', url: `${DEMO_URL}dateinput.html` },
     ],
 }, {
     title: 'Charts',
     items: [
-        { title: 'Histogram', url: './histogram.html' },
-        { title: 'Line chart', url: './linechart.html' },
-        { title: 'Pie chart', url: './piechart.html' },
-        { title: 'Chart grid tests', url: './chartgrid.html' },
+        { title: 'Histogram', url: `${DEMO_URL}histogram.html` },
+        { title: 'Line chart', url: `${DEMO_URL}linechart.html` },
+        { title: 'Pie chart', url: `${DEMO_URL}piechart.html` },
+        { title: 'Chart grid tests', url: `${DEMO_URL}chartgrid.html` },
     ],
 }, {
     title: 'Components',
     items: [
-        { title: 'Checkbox and Radio', url: './checkbox.html' },
-        { title: 'Collapsible', url: './collapsible.html' },
-        { title: 'Date Picker', url: './datepicker.html' },
-        { title: 'Drop Down', url: './dropdown.html' },
-        { title: 'Offcanvas', url: './offcanvas.html' },
-        { title: 'Paginator', url: './paginator.html' },
-        { title: 'Popup', url: './popup.html' },
-        { title: 'Progress and Spinner', url: './progress.html' },
-        { title: 'Slider', url: './slider.html' },
-        { title: 'Switch', url: './switch.html' },
+        { title: 'Checkbox and Radio', url: `${DEMO_URL}checkbox.html` },
+        { title: 'Collapsible', url: `${DEMO_URL}collapsible.html` },
+        { title: 'Date Picker', url: `${DEMO_URL}datepicker.html` },
+        { title: 'Drop Down', url: `${DEMO_URL}dropdown.html` },
+        { title: 'Offcanvas', url: `${DEMO_URL}offcanvas.html` },
+        { title: 'Paginator', url: `${DEMO_URL}paginator.html` },
+        { title: 'Popup', url: `${DEMO_URL}popup.html` },
+        { title: 'Progress and Spinner', url: `${DEMO_URL}progress.html` },
+        { title: 'Slider', url: `${DEMO_URL}slider.html` },
+        { title: 'Switch', url: `${DEMO_URL}switch.html` },
     ],
 }];
 
