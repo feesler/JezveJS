@@ -863,12 +863,11 @@ export const deepMeet = (obj, expectedObj) => {
         return false;
     }
 
-    if (!isObject(expectedObj) && !Array.isArray(expectedObj)) {
-        if (obj === expectedObj) {
-            return true;
-        }
-
-        return false;
+    if (
+        (!isObject(obj) && !Array.isArray(obj))
+        || (!isObject(expectedObj) && !Array.isArray(expectedObj))
+    ) {
+        return (obj === expectedObj);
     }
 
     if (obj === expectedObj) {
