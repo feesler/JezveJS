@@ -1,4 +1,5 @@
 import { Runner } from 'jezve-test';
+import { commonTests } from './common.js';
 import { datePickerTests } from './DatePicker.js';
 import { dropDownTests } from './DropDown.js';
 import { paginatorTests } from './Paginator.js';
@@ -35,6 +36,7 @@ export class Scenario {
     /* eslint-enable no-empty-function */
 
     async runFullScenario() {
+        await commonTests();
         await dropDownTests();
         await datePickerTests();
         await paginatorTests();
