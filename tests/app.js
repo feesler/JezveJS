@@ -6,7 +6,7 @@ import {
     baseUrl,
 } from 'jezve-test';
 import { config } from './config.js';
-import { Scenario } from './scenario.js';
+import { Scenario } from './scenario/index.js';
 
 class Application extends TestApplication {
     constructor() {
