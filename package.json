@@ -18,6 +18,7 @@
   "homepage": "https://github.com/feesler/JezveJS#readme",
   "scripts": {
     "test": "node ./tests/index.js",
+    "test-partial": "node ./tests/index.js -p",
     "all": "npm-run-all lint build test",
     "lint": "npm-run-all lint-src lint-tests lint-css",
     "lint-src": "eslint --quiet ./src/**/*.js",
