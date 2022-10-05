@@ -274,6 +274,10 @@ export const re = (target) => {
 /** Check is specified string is number */
 export const isNum = (val) => {
     const fval = parseFloat(val);
+    if (Number.isNaN(fval)) {
+        return false;
+    }
+
     if (fval === 0) {
         return true;
     }
