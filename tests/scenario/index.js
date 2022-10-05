@@ -1,4 +1,4 @@
-import { Runner } from 'jezve-test';
+import { Runner, isFullScenario } from 'jezve-test';
 import { commonTests } from './common.js';
 import { datePickerTests } from './DatePicker.js';
 import { dropDownTests } from './DropDown.js';
@@ -21,19 +21,17 @@ export class Scenario {
     }
 
     async run() {
-        this.fullTest = true;
-
-        if (this.fullTest) {
+        const fullTest = isFullScenario();
+        if (fullTest) {
             await this.runFullScenario();
         } else {
             await this.runTestScenario();
         }
     }
 
-    /* eslint-disable no-empty-function */
     async runTestScenario() {
+        await commonTests();
     }
-    /* eslint-enable no-empty-function */
 
     async runFullScenario() {
         await commonTests();
