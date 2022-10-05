@@ -863,10 +863,15 @@ export const deepMeet = (obj, expectedObj) => {
         return false;
     }
 
+    // compare as primitive types
     if (
         (!isObject(obj) && !Array.isArray(obj))
         || (!isObject(expectedObj) && !Array.isArray(expectedObj))
     ) {
+        if (Number.isNaN(expectedObj)) {
+            return Number.isNaN(obj);
+        }
+
         return (obj === expectedObj);
     }
 
@@ -874,28 +879,16 @@ export const deepMeet = (obj, expectedObj) => {
         return true;
     }
 
-    let value;
-    let expected;
     const expectedKeys = Object.getOwnPropertyNames(expectedObj);
-    /* eslint-disable-next-line no-restricted-syntax */
-    for (const vKey of expectedKeys) {
-        if (obj === null || !(vKey in obj)) {
+    return expectedKeys.every((key) => {
+        if (!(key in obj)) {
             return false;
         }
 
-        expected = expectedObj[vKey];
-        value = obj[vKey];
-        if (isObject(expected) || Array.isArray(expected)) {
-            const res = deepMeet(value, expected);
-            if (res !== true) {
-                return false;
-            }
-        } else if (value !== expected) {
-            return false;
-        }
-    }
-
-    return true;
+        const expected = expectedObj[key];
+        const value = obj[key];
+        return deepMeet(value, expected);
+    });
 };
 
 /**
