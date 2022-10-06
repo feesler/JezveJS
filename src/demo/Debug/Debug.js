@@ -1,4 +1,5 @@
-import { onReady, Debug } from '../../js/index.js';
+import { onReady } from '../../js/index.js';
+import { Debug } from '../../Components/Debug/Debug.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import { initNavigation } from '../common/app.js';

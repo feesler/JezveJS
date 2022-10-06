@@ -2,8 +2,8 @@ import {
     re,
     getOffset,
     px,
-    DragAvatar,
 } from '../../../js/index.js';
+import { DragAvatar } from '../../../Components/DragnDrop/DragAvatar.js';
 
 /**
  * Original drag avatar

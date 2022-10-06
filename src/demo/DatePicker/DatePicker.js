@@ -2,9 +2,9 @@ import {
     ge,
     onReady,
     formatDate,
-    DatePicker,
     insertAfter,
 } from '../../js/index.js';
+import { DatePicker } from '../../Components/DatePicker/DatePicker.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

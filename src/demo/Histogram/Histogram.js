@@ -2,8 +2,8 @@ import {
     onReady,
     ge,
     setEvents,
-    Histogram,
 } from '../../js/index.js';
+import { Histogram } from '../../Components/Charts/Histogram.js';
 import { initNavigation } from '../common/app.js';
 import '../../css/common.scss';
 import '../common/app.scss';

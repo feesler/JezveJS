@@ -3,9 +3,9 @@ import {
     svg,
     setEvents,
     onReady,
-    Collapsible,
     createElement,
 } from '../../js/index.js';
+import { Collapsible } from '../../Components/Collapsible/Collapsible.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

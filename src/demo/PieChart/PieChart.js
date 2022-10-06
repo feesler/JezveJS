@@ -1,4 +1,5 @@
-import { ge, onReady, PieChart } from '../../js/index.js';
+import { ge, onReady } from '../../js/index.js';
+import { PieChart } from '../../Components/PieChart/PieChart.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

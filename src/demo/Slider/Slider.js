@@ -2,8 +2,8 @@ import {
     createElement,
     ge,
     onReady,
-    Slider,
 } from '../../js/index.js';
+import { Slider } from '../../Components/Slider/Slider.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

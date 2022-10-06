@@ -1,8 +1,5 @@
-import {
-    ge,
-    onReady,
-    Paginator,
-} from '../../js/index.js';
+import { ge, onReady } from '../../js/index.js';
+import { Paginator } from '../../Components/Paginator/Paginator.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';
