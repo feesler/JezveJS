@@ -3,8 +3,8 @@ import {
     ge,
     createElement,
     onReady,
-    DropDown,
 } from '../../js/index.js';
+import { DropDown } from '../../Components/DropDown/DropDown.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

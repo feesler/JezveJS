@@ -1,10 +1,7 @@
-import {
-    ge,
-    onReady,
-    Progress,
-    IndetermProgress,
-    Spinner,
-} from '../../js/index.js';
+import { ge, onReady } from '../../js/index.js';
+import { Progress } from '../../Components/Progress/Progress.js';
+import { IndetermProgress } from '../../Components/IndetermProgress/IndetermProgress.js';
+import { Spinner } from '../../Components/Spinner/Spinner.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

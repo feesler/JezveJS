@@ -1,11 +1,11 @@
 import {
     ge,
     onReady,
-    ChartGrid,
-    Histogram,
-    LineChart,
     createElement,
 } from '../../js/index.js';
+import { ChartGrid } from '../../Components/Charts/ChartGrid.js';
+import { Histogram } from '../../Components/Charts/Histogram.js';
+import { LineChart } from '../../Components/Charts/LineChart.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

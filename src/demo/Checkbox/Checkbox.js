@@ -1,9 +1,6 @@
-import {
-    ge,
-    onReady,
-    Checkbox,
-    Radio,
-} from '../../js/index.js';
+import { ge, onReady } from '../../js/index.js';
+import { Checkbox } from '../../Components/Checkbox/Checkbox.js';
+import { Radio } from '../../Components/Radio/Radio.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import './style.scss';

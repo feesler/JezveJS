@@ -1,4 +1,5 @@
-import { ge, onReady, DecimalInput } from '../../js/index.js';
+import { ge, onReady } from '../../js/index.js';
+import { DecimalInput } from '../../Components/DecimalInput/DecimalInput.js';
 import '../../css/common.scss';
 import '../common/app.scss';
 import { initNavigation } from '../common/app.js';

@@ -3,8 +3,8 @@ import {
     ge,
     createElement,
     setEvents,
-    LineChart,
 } from '../../js/index.js';
+import { LineChart } from '../../Components/Charts/LineChart.js';
 import { initNavigation } from '../common/app.js';
 import '../../css/common.scss';
 import '../common/app.scss';

@@ -2,8 +2,8 @@ import {
     ge,
     createElement,
     onReady,
-    InputGroup,
 } from '../../js/index.js';
+import { InputGroup } from '../../Components/InputGroup/InputGroup.js';
 import { initNavigation } from '../common/app.js';
 import '../../css/common.scss';
 import '../common/app.scss';
