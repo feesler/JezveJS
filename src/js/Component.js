@@ -23,6 +23,16 @@ export class Component {
     /** Parse DOM to obtain child elements and build state of component */
     parse() { }
 
+    /** Update state of component and render changes */
+    setState(state) {
+        if (this.state === state) {
+            return;
+        }
+
+        this.render(state, this.state);
+        this.state = state;
+    }
+
     /** Render component state */
     render() { }
 
