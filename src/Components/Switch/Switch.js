@@ -113,9 +113,7 @@ export class Switch extends Component {
             return;
         }
 
-        this.state = state;
-
-        this.render(this.state);
+        super.setState(state);
     }
 
     /** Set checked state */

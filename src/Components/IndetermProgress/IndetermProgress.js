@@ -50,27 +50,11 @@ export class IndetermProgress extends Component {
     }
 
     start() {
-        this.setState({
-            ...this.state,
-            run: true,
-        });
+        this.setState({ ...this.state, run: true });
     }
 
     stop() {
-        this.setState({
-            ...this.state,
-            run: false,
-        });
-    }
-
-    setState(state) {
-        if (this.state === state) {
-            return;
-        }
-
-        this.state = state;
-
-        this.render(this.state);
+        this.setState({ ...this.state, run: false });
     }
 
     /** Render component state */

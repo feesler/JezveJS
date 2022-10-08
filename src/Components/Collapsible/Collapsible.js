@@ -69,13 +69,11 @@ export class Collapsible extends Component {
             return;
         }
 
-        this.state = state;
-
         if (isFunction(this.props.onStateChange)) {
-            this.props.onStateChange(this.state.expanded);
+            this.props.onStateChange(state.expanded);
         }
 
-        this.render(this.state);
+        super.setState(state);
     }
 
     setHeader(header) {

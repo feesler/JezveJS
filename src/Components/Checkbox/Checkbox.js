@@ -148,9 +148,7 @@ export class Checkbox extends Component {
             return;
         }
 
-        this.state = state;
-
-        this.render(this.state);
+        super.setState(state);
     }
 
     /** Set label content */
