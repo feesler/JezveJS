@@ -1,4 +1,4 @@
-import { ge, onReady } from '../../js/index.js';
+import { ge, onReady, setEvents } from '../../js/index.js';
 import { Checkbox } from '../../Components/Checkbox/Checkbox.js';
 import { Radio } from '../../Components/Radio/Radio.js';
 import '../../css/common.scss';
@@ -28,13 +28,20 @@ const initDynamic = () => {
         label: 'Checkbox methods',
         onChange: (checked) => addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
     });
-    ge('dynamicContainer').appendChild(dynamicCheckbox.elem);
+    const form = ge('dynamicContainer');
+    form.append(dynamicCheckbox.elem);
 
-    ge('checkBtn').addEventListener('click', () => dynamicCheckbox.check(true));
-    ge('uncheckBtn').addEventListener('click', () => dynamicCheckbox.check(false));
-    ge('toggleBtn').addEventListener('click', () => dynamicCheckbox.toggle());
-    ge('enableBtn').addEventListener('click', () => dynamicCheckbox.enable(true));
-    ge('disableBtn').addEventListener('click', () => dynamicCheckbox.enable(false));
+    setEvents(ge('checkBtn'), { click: () => dynamicCheckbox.check(true) });
+    setEvents(ge('uncheckBtn'), { click: () => dynamicCheckbox.check(false) });
+    setEvents(ge('toggleBtn'), { click: () => dynamicCheckbox.toggle() });
+    setEvents(ge('enableBtn'), { click: () => dynamicCheckbox.enable(true) });
+    setEvents(ge('disableBtn'), { click: () => dynamicCheckbox.enable(false) });
+    setEvents(ge('changePropBtn'), {
+        click: () => {
+            dynamicCheckbox.input.checked = false;
+        },
+    });
+    setEvents(ge('resetBtn'), { click: () => form.reset() });
 };
 
 const initLarge = () => {
@@ -61,7 +68,7 @@ const initParsedRadio = () => {
 };
 
 const initDynamicRadio = () => {
-    const container = ge('dynamicRadioContainer');
+    const form = ge('dynamicRadioContainer');
 
     const dynamicRadio1 = Radio.create({
         name: 'radio2',
@@ -78,12 +85,19 @@ const initDynamicRadio = () => {
         label: 'Value 3',
         onChange: (checked) => addEventLog(`Dynamic Radio 3 change. checked: ${checked}`),
     });
-    container.append(dynamicRadio1.elem, dynamicRadio2.elem, dynamicRadio3.elem);
+    form.append(dynamicRadio1.elem, dynamicRadio2.elem, dynamicRadio3.elem);
 
-    ge('checkRadioBtn').addEventListener('click', () => dynamicRadio3.check(true));
-    ge('uncheckRadioBtn').addEventListener('click', () => dynamicRadio3.check(false));
-    ge('enableRadioBtn').addEventListener('click', () => dynamicRadio3.enable(true));
-    ge('disableRadioBtn').addEventListener('click', () => dynamicRadio3.enable(false));
+    setEvents(ge('checkRadioBtn'), { click: () => dynamicRadio3.check(true) });
+    setEvents(ge('uncheckRadioBtn'), { click: () => dynamicRadio3.check(false) });
+    setEvents(ge('toggleRadioBtn'), { click: () => dynamicRadio3.toggle() });
+    setEvents(ge('enableRadioBtn'), { click: () => dynamicRadio3.enable(true) });
+    setEvents(ge('disableRadioBtn'), { click: () => dynamicRadio3.enable(false) });
+    setEvents(ge('changeRadioPropBtn'), {
+        click: () => {
+            dynamicRadio3.input.checked = false;
+        },
+    });
+    setEvents(ge('resetRadioBtn'), { click: () => form.reset() });
 };
 
 const init = () => {

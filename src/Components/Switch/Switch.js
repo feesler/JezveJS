@@ -2,17 +2,15 @@ import {
     isFunction,
     setEvents,
     createElement,
+    enable,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
 
+/* CSS classes */
 const CONTAINER_CLASS = 'switch';
 const SLIDER_CLASS = 'switch-slider';
-const defaultProps = {
-    checked: false,
-    disabled: false,
-};
 
 export class Switch extends Component {
     static create(props = {}) {
@@ -27,44 +25,23 @@ export class Switch extends Component {
         return instance;
     }
 
-    constructor(props) {
-        super(props);
-
-        this.props = {
-            ...defaultProps,
-            ...this.props,
-        };
-
-        this.onChangeHandler = this.props.onChange;
-    }
-
     get checked() {
-        return this.state.checked;
+        return this.input.checked;
     }
 
     get disabled() {
-        return this.state.disabled;
+        return this.input.disabled;
     }
 
     init() {
-        this.state = {
-            checked: this.props.checked,
-            disabled: this.props.disabled,
-        };
-
-        this.checkbox = createElement('input', {
-            props: { type: 'checkbox', checked: this.state.checked },
-        });
+        this.input = createElement('input', { props: { type: 'checkbox' } });
         this.slider = createElement('div', { props: { className: SLIDER_CLASS } });
         this.elem = createElement('label', {
             props: { className: CONTAINER_CLASS },
-            children: [this.checkbox, this.slider],
+            children: [this.input, this.slider],
         });
 
-        this.setClassNames();
-        this.setHandlers();
-
-        this.render(this.state);
+        this.postInit();
     }
 
     parse(elem) {
@@ -73,86 +50,49 @@ export class Switch extends Component {
         }
 
         this.elem = elem;
-        this.checkbox = elem.querySelector('input[type="checkbox"]');
+        this.input = elem.querySelector('input[type="checkbox"]');
         this.slider = elem.querySelector(`.${SLIDER_CLASS}`);
-        if (!this.checkbox || !this.slider) {
+        if (!this.input || !this.slider) {
             throw new Error('Invalid structure of switch');
         }
 
-        this.state = {
-            checked: this.checkbox.checked,
-            disabled: elem.hasAttribute('disabled'),
-        };
+        this.postInit();
+    }
 
+    postInit() {
         this.setClassNames();
-        this.setHandlers();
+        setEvents(this.input, { change: (e) => this.onChange(e) });
 
-        this.render(this.state);
-    }
-
-    setHandlers() {
-        setEvents(this.checkbox, { change: (e) => this.onChange(e) });
-    }
-
-    onChange(e) {
-        this.setState({
-            ...this.state,
-            checked: e.target.checked,
-        });
-
-        if (isFunction(this.onChangeHandler)) {
-            this.onChangeHandler(this.state.checked);
+        // Apply props
+        if ('checked' in this.props) {
+            this.check(this.props.checked);
+        }
+        if ('disabled' in this.props) {
+            this.enable(!this.props.disabled);
+        }
+        if (typeof this.props.name === 'string') {
+            this.input.name = this.props.name;
         }
     }
 
-    setState(state) {
-        if (
-            state.checked === this.state.checked
-            && state.disabled === this.state.disabled
-        ) {
-            return;
+    onChange() {
+        if (isFunction(this.props.onChange)) {
+            this.props.onChange(this.checked);
         }
-
-        this.state = state;
-
-        this.render(this.state);
     }
 
     /** Set checked state */
     check(value) {
-        this.setState({
-            ...this.state,
-            checked: !!value,
-        });
+        this.input.checked = !!value;
     }
 
     /** Toggle checked state */
     toggle() {
-        this.setState({
-            ...this.state,
-            checked: !this.state.checked,
-        });
+        this.input.checked = !this.checked;
     }
 
     /** Enable/disable component */
     enable(value) {
-        this.setState({
-            ...this.state,
-            disabled: !value,
-        });
-    }
-
-    /** Render component state */
-    render(state) {
-        if (!state) {
-            throw new Error('Invalid state');
-        }
-
-        this.checkbox.checked = state.checked;
-        if (state.disabled) {
-            this.elem.setAttribute('disabled', true);
-        } else {
-            this.elem.removeAttribute('disabled');
-        }
+        enable(this.input, value);
     }
 }

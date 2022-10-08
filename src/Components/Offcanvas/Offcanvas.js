@@ -96,9 +96,7 @@ export class Offcanvas extends Component {
             return;
         }
 
-        this.state = state;
-
-        this.render(this.state);
+        super.setState(state);
     }
 
     /** Render component state */

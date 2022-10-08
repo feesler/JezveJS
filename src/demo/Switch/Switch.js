@@ -1,4 +1,4 @@
-import { ge, onReady } from '../../js/index.js';
+import { ge, setEvents, onReady } from '../../js/index.js';
 import { Switch } from '../../Components/Switch/Switch.js';
 import '../../css/common.scss';
 import '../common/app.scss';
@@ -18,16 +18,23 @@ const initParsed = () => {
 
 const initDynamic = () => {
     const dynamicSwitch = Switch.create({
-        className: 'gray-switch',
+        className: 'blue-switch',
         onChange: (checked) => addEventLog(`Dynamic Switch change. checked: ${checked}`),
     });
-    ge('dynamicContainer').appendChild(dynamicSwitch.elem);
+    const form = ge('dynamicContainer');
+    form.appendChild(dynamicSwitch.elem);
 
-    ge('checkBtn').addEventListener('click', () => dynamicSwitch.check(true));
-    ge('uncheckBtn').addEventListener('click', () => dynamicSwitch.check(false));
-    ge('toggleBtn').addEventListener('click', () => dynamicSwitch.toggle());
-    ge('enableBtn').addEventListener('click', () => dynamicSwitch.enable(true));
-    ge('disableBtn').addEventListener('click', () => dynamicSwitch.enable(false));
+    setEvents(ge('checkBtn'), { click: () => dynamicSwitch.check(true) });
+    setEvents(ge('uncheckBtn'), { click: () => dynamicSwitch.check(false) });
+    setEvents(ge('toggleBtn'), { click: () => dynamicSwitch.toggle() });
+    setEvents(ge('enableBtn'), { click: () => dynamicSwitch.enable(true) });
+    setEvents(ge('disableBtn'), { click: () => dynamicSwitch.enable(false) });
+    setEvents(ge('changePropBtn'), {
+        click: () => {
+            dynamicSwitch.input.checked = false;
+        },
+    });
+    setEvents(ge('resetBtn'), { click: () => form.reset() });
 };
 
 const initLarge = () => {

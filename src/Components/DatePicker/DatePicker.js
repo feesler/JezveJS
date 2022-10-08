@@ -940,16 +940,6 @@ export class DatePicker extends Component {
         });
     }
 
-    setState(state) {
-        if (this.state === state) {
-            return;
-        }
-
-        const prevState = this.state;
-        this.state = state;
-        this.render(this.state, prevState);
-    }
-
     renderView(state) {
         if (state.viewType === MONTH_VIEW) {
             return this.createMonthView(state.date);

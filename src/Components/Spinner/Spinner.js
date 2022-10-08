@@ -23,28 +23,9 @@ export class Spinner extends Component {
     }
 
     init() {
-        this.state = {};
-
         this.elem = createElement('div', { props: { className: SPINNER_CLASS } });
         this.setClassNames();
 
         this.render(this.state);
-    }
-
-    setState(state) {
-        if (this.state === state) {
-            return;
-        }
-
-        this.state = state;
-
-        this.render(this.state);
-    }
-
-    /** Render component state */
-    render(state) {
-        if (!state) {
-            throw new Error('Invalid state');
-        }
     }
 }

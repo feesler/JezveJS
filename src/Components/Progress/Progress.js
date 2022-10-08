@@ -68,16 +68,6 @@ export class Progress extends Component {
         });
     }
 
-    setState(state) {
-        if (this.state === state) {
-            return;
-        }
-
-        this.state = state;
-
-        this.render(this.state);
-    }
-
     /** Render component state */
     render(state) {
         if (!state) {

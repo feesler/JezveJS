@@ -1948,15 +1948,6 @@ export class DropDown extends Component {
         }
     }
 
-    setState(state) {
-        if (this.state === state) {
-            return;
-        }
-
-        this.render(state, this.state);
-        this.state = state;
-    }
-
     getGroupItems(state, group) {
         return state.items.filter((item) => item && item.group === group);
     }
