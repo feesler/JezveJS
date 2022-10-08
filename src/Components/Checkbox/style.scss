@@ -5,14 +5,22 @@
   --checkbox-bg: #ffffff;
   --checkbox-text: #000000;
   --checkbox-hover-bg: #cccccc;
-  --checkbox-disabled-bg: #dddddd;
-  --checkbox-disabled-text: #888888;
-  --checkbox-active-bg: #1e82cc;
-  --checkbox-active-fill: #ffffff;
-  --checkbox-checked-fill: #5082aa;
   --checkbox-label-size: 16px;
   --checkbox-icon-size: 14px;
+
+  /* Checked state */
+  --checkbox-checked-fill: #5082aa;
+
+  /* Active state */
+  --checkbox-active-bg: #1e82cc;
+  --checkbox-active-fill: #ffffff;
+
+  /* Focused state */
   --checkbox-focus-outline-color: #aee5ff;
+
+  /* Disabled state */
+  --checkbox-disabled-bg: #dddddd;
+  --checkbox-disabled-text: #888888;
 
   position: relative;
   display: inline-flex;
@@ -21,7 +29,6 @@
   padding: 0;
   margin: 0 12px 0 0;
   white-space: nowrap;
-  cursor: pointer;
 
   input {
     position: absolute;
@@ -39,10 +46,11 @@
   justify-content: center;
   width: var(--checkbox-size);
   height: var(--checkbox-size);
-  border: 1px solid var(--checkbox-border);
-  background-color: var(--checkbox-bg);
   padding: 0;
   margin: 0 6px 0 0;
+  border: 1px solid var(--checkbox-border);
+  background-color: var(--checkbox-bg);
+  cursor: pointer;
 
   .checkbox__icon {
     display: block;
@@ -52,6 +60,7 @@
   }
 }
 
+/* Focused state */
 .checkbox input:focus + .checkbox__check {
   outline-width: 2px;
   outline-style: solid;
@@ -59,11 +68,13 @@
   outline-offset: 0.1rem;
 }
 
+/* Checked state */
 .checkbox input:checked + .checkbox__check .checkbox__icon {
   visibility: visible;
   fill: var(--checkbox-checked-fill);
 }
 
+/* Active state */
 .checkbox input:active + .checkbox__check {
   background-color: var(--checkbox-active-bg);
 
@@ -72,6 +83,7 @@
   }
 }
 
+/* Disabled state */
 .checkbox input[disabled] + .checkbox__check {
   pointer-events: none;
   background: var(--checkbox-disabled-bg);

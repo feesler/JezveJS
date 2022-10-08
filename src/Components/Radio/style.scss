@@ -4,13 +4,21 @@
   --radio-bg: #ffffff;
   --radio-text: #000000;
   --radio-hover-bg: #cccccc;
-  --radio-disabled-bg: #dddddd;
-  --radio-disabled-text: #888888;
-  --radio-active-bg: #1e82cc;
+  --radio-label-size: 16px;
+
+  /* Checked state */
   --radio-check-color: #ffffff;
   --radio-checked-bg: #1e82cc;
-  --radio-label-size: 16px;
+
+  /* Active state */
+  --radio-active-bg: #1e82cc;
+
+  /* Focused state */
   --radio-focus-outline-color: #aee5ff;
+
+  /* Disabled state */
+  --radio-disabled-bg: #dddddd;
+  --radio-disabled-text: #888888;
 
   position: relative;
   display: inline-flex;
@@ -19,7 +27,6 @@
   padding: 2px;
   margin: 0 12px 0 0;
   white-space: nowrap;
-  cursor: pointer;
 
   input {
     position: absolute;
@@ -42,6 +49,7 @@
   border: 1px solid var(--radio-border);
   background-color: var(--radio-bg);
   border-radius: 100vh;
+  cursor: pointer;
 
   &::after {
     content: "";

@@ -40,8 +40,8 @@
   left: 0;
   right: 0;
   background-color: var(--switch-bg);
-  cursor: pointer;
   border-radius: 100vh;
+  cursor: pointer;
 
   /* Sliding disc */
   &::before {
