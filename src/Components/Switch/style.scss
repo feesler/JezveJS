@@ -14,13 +14,21 @@
   --switch-checked-bg: #0d9c00;
   --switch-checked-hover-bg: #10c200;
 
+  /* Focused state */
+  --switch-focus-outline-color: #aee5ff;
+
   display: flex;
   position: relative;
   width: var(--switch-width);
   height: var(--switch-height);
 
   input {
-    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
   }
 }
 
@@ -47,6 +55,14 @@
     background-color: var(--switch-slider-color);
     border-radius: 100vh;
   }
+}
+
+/* Focused state */
+.switch input:focus + .switch-slider {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--switch-focus-outline-color);
+  outline-offset: 0.1rem;
 }
 
 /* Checked state */

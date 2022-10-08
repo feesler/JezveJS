@@ -12,7 +12,9 @@
   --checkbox-checked-fill: #5082aa;
   --checkbox-label-size: 16px;
   --checkbox-icon-size: 14px;
+  --checkbox-focus-outline-color: #aee5ff;
 
+  position: relative;
   display: inline-flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -22,7 +24,12 @@
   cursor: pointer;
 
   input {
-    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
   }
 }
 
@@ -43,6 +50,13 @@
     height: var(--checkbox-icon-size);
     visibility: hidden;
   }
+}
+
+.checkbox input:focus + .checkbox__check {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--checkbox-focus-outline-color);
+  outline-offset: 0.1rem;
 }
 
 .checkbox input:checked + .checkbox__check .checkbox__icon {
