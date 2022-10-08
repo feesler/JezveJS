@@ -75,7 +75,7 @@
 }
 
 /* Disabled state */
-.switch[disabled] {
+.switch input[disabled] + .switch-slider {
   pointer-events: none;
   opacity: 0.8;
 }
