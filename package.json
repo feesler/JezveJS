@@ -1,6 +1,6 @@
 {
     "name": "jezvejs",
-    "version": "1.38.0",
+    "version": "1.38.1",
     "type": "module",
     "module": "src/js/index.js",
     "files": [
@@ -20,10 +20,10 @@
         "test": "node ./tests/index.js",
         "test-partial": "node ./tests/index.js -p",
         "all": "npm-run-all lint build test",
-        "lint": "npm-run-all lint-src lint-tests lint-css",
+        "lint": "npm-run-all lint-src lint-tests lint-style",
         "lint-src": "eslint --quiet ./src/**/*.js",
         "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/",
-        "lint-css": "npx stylelint src/**/*.scss",
+        "lint-style": "npx stylelint src/**/*.scss",
         "debug": "node --inspect-brk ./tests/index.js",
         "build": "npx webpack --config ./webpack.prod.js",
         "build-dev": "npx webpack --config ./webpack.dev.js",
