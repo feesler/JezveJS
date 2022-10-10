@@ -1,0 +1,29 @@
+{
+    "name": "jezvejs-test",
+    "version": "1.0.1",
+    "description": "JezveJS library test components",
+    "type": "module",
+    "module": "index.js",
+    "files": [
+        "src",
+        "index.js"
+    ],
+    "main": "index.js",
+    "exports": {
+        ".": "./index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/feesler/JezveJS.git",
+        "directory": "packages/jezvejs-test"
+    },
+    "author": "Henry Feesler",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/feesler/JezveJS/issues"
+    },
+    "homepage": "https://github.com/feesler/JezveJS#readme",
+    "dependencies": {
+        "jezve-test": "^0.21.2"
+    }
+}

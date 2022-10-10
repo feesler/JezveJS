@@ -5,6 +5,7 @@ const __dirname = dirname(__filename);
 
 export default {
     target: 'browserslist',
+    context: resolve(__dirname, './packages/jezvejs'),
     entry: {
         index: './src/js/index.js',
 

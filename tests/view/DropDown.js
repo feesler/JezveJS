@@ -1,5 +1,5 @@
 import { query, click, assert } from 'jezve-test';
-import { DropDown } from './component/DropDown.js';
+import { DropDown } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
 export class DropDownView extends AppView {

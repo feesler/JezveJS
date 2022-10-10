@@ -1,21 +1,8 @@
 import {
-    isFunction,
     isDate,
     isNum,
     isObject,
 } from 'jezve-test';
-
-export async function asyncMap(data, func) {
-    if (!Array.isArray(data)) {
-        throw new Error('Invalid data type');
-    }
-    if (!isFunction(func)) {
-        throw new Error('Invalid function type');
-    }
-
-    const tasks = data.map(func);
-    return Promise.all(tasks);
-}
 
 /** Convert date string from DD.MM.YYYY to timestamp */
 export function convDate(dateStr) {

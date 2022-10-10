@@ -3,7 +3,7 @@ import {
     query,
     prop,
 } from 'jezve-test';
-import { Paginator } from './component/Paginator.js';
+import { Paginator } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
 const paginatorsList = [

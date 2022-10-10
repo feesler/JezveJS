@@ -1,5 +1,5 @@
 import { assert, test } from 'jezve-test';
-import { deepMeet } from '../../src/js/common.js';
+import { deepMeet } from '../../packages/jezvejs/src/js/common.js';
 
 export const deepMeetTest = async ({
     descr,
