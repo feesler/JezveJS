@@ -4,9 +4,9 @@ import {
     prop,
     click,
 } from 'jezve-test';
-import { DatePicker } from './component/DatePicker.js';
+import { DatePicker } from 'jezvejs-test';
 import { AppView } from './AppView.js';
-import { formatDate } from '../../src/js/DateUtils.js';
+import { formatDate } from '../../packages/jezvejs/src/js/DateUtils.js';
 
 export class DatePickerView extends AppView {
     async parseContent() {

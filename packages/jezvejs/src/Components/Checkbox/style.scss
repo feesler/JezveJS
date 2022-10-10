@@ -1,0 +1,112 @@
+.checkbox {
+  --checkbox-size: 20px;
+  --checkbox-border: #cccccc;
+  --checkbox-border-width: 1px;
+  --checkbox-bg: #ffffff;
+  --checkbox-text: #000000;
+  --checkbox-hover-bg: #cccccc;
+  --checkbox-label-size: 16px;
+  --checkbox-icon-size: 14px;
+
+  /* Checked state */
+  --checkbox-checked-fill: #5082aa;
+
+  /* Active state */
+  --checkbox-active-bg: #1e82cc;
+  --checkbox-active-fill: #ffffff;
+
+  /* Focused state */
+  --checkbox-focus-outline-color: #aee5ff;
+
+  /* Disabled state */
+  --checkbox-disabled-bg: #dddddd;
+  --checkbox-disabled-text: #888888;
+
+  position: relative;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  padding: 0;
+  margin: 0 12px 0 0;
+  white-space: nowrap;
+
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 0;
+    opacity: 0;
+  }
+}
+
+.checkbox__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  padding: 0;
+  margin: 0 6px 0 0;
+  border: 1px solid var(--checkbox-border);
+  background-color: var(--checkbox-bg);
+  cursor: pointer;
+
+  .checkbox__icon {
+    display: block;
+    width: var(--checkbox-icon-size);
+    height: var(--checkbox-icon-size);
+    visibility: hidden;
+  }
+}
+
+/* Focused state */
+.checkbox input:focus + .checkbox__check {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: var(--checkbox-focus-outline-color);
+  outline-offset: 0.1rem;
+}
+
+/* Checked state */
+.checkbox input:checked + .checkbox__check .checkbox__icon {
+  visibility: visible;
+  fill: var(--checkbox-checked-fill);
+}
+
+/* Active state */
+.checkbox input:active + .checkbox__check {
+  background-color: var(--checkbox-active-bg);
+
+  .checkbox__icon {
+    fill: var(--checkbox-active-fill);
+  }
+}
+
+/* Disabled state */
+.checkbox input[disabled] + .checkbox__check {
+  pointer-events: none;
+  background: var(--checkbox-disabled-bg);
+  opacity: 0.5;
+}
+
+.checkbox__label {
+  font-size: var(--checkbox-label-size);
+  color: var(--checkbox-text);
+}
+
+.checkbox input[disabled] ~ .checkbox__label {
+  pointer-events: none;
+  color: var(--checkbox-disabled-text);
+}
+
+@media (hover: hover) {
+  .checkbox__check:hover {
+    background-color: var(--checkbox-hover-bg);
+
+    .checkbox__icon {
+      visibility: visible;
+      fill: var(--checkbox-active-fill);
+    }
+  }
+}
