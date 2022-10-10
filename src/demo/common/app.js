@@ -1,71 +1,79 @@
 import { createElement, setEvents } from '../../js/index.js';
 import { Offcanvas } from '../../Components/Offcanvas/Offcanvas.js';
 
-const BASE_URL = 'https://localtest/jezvejs/dist/';
-const DEMO_URL = `${BASE_URL}demo/`;
-
 const navigationMenu = [{
     title: 'jezveJS tests',
     items: [{
-        title: 'Tests', url: `${BASE_URL}tests/index.html`,
+        title: 'Tests', url: 'tests/index.html',
     }],
 }, {
     title: 'Utils',
     items: [
-        { title: 'Common', url: `${DEMO_URL}common.html` },
-        { title: 'DPI test', url: `${DEMO_URL}dpitest.html` },
-        { title: 'Empty click', url: `${DEMO_URL}emptyclick.html` },
-        { title: 'Drag\'n\'Drop and Sortable', url: `${DEMO_URL}dragndrop.html` },
+        { title: 'Common', url: 'demo/common.html' },
+        { title: 'DPI test', url: 'demo/dpitest.html' },
+        { title: 'Empty click', url: 'demo/emptyclick.html' },
+        { title: 'Drag\'n\'Drop and Sortable', url: 'demo/dragndrop.html' },
     ],
 }, {
     title: 'Input',
     items: [
-        { title: 'Input group', url: `${DEMO_URL}inputgroup.html` },
-        { title: 'Decimal input', url: `${DEMO_URL}decimal.html` },
-        { title: 'Date input', url: `${DEMO_URL}dateinput.html` },
+        { title: 'Input group', url: 'demo/inputgroup.html' },
+        { title: 'Decimal input', url: 'demo/decimal.html' },
+        { title: 'Date input', url: 'demo/dateinput.html' },
     ],
 }, {
     title: 'Charts',
     items: [
-        { title: 'Histogram', url: `${DEMO_URL}histogram.html` },
-        { title: 'Line chart', url: `${DEMO_URL}linechart.html` },
-        { title: 'Pie chart', url: `${DEMO_URL}piechart.html` },
-        { title: 'Chart grid tests', url: `${DEMO_URL}chartgrid.html` },
+        { title: 'Histogram', url: 'demo/histogram.html' },
+        { title: 'Line chart', url: 'demo/linechart.html' },
+        { title: 'Pie chart', url: 'demo/piechart.html' },
+        { title: 'Chart grid tests', url: 'demo/chartgrid.html' },
     ],
 }, {
     title: 'Components',
     items: [
-        { title: 'Checkbox and Radio', url: `${DEMO_URL}checkbox.html` },
-        { title: 'Collapsible', url: `${DEMO_URL}collapsible.html` },
-        { title: 'Date Picker', url: `${DEMO_URL}datepicker.html` },
-        { title: 'Drop Down', url: `${DEMO_URL}dropdown.html` },
-        { title: 'Offcanvas', url: `${DEMO_URL}offcanvas.html` },
-        { title: 'Paginator', url: `${DEMO_URL}paginator.html` },
-        { title: 'Popup', url: `${DEMO_URL}popup.html` },
-        { title: 'Progress and Spinner', url: `${DEMO_URL}progress.html` },
-        { title: 'Slider', url: `${DEMO_URL}slider.html` },
-        { title: 'Switch', url: `${DEMO_URL}switch.html` },
+        { title: 'Checkbox and Radio', url: 'demo/checkbox.html' },
+        { title: 'Collapsible', url: 'demo/collapsible.html' },
+        { title: 'Date Picker', url: 'demo/datepicker.html' },
+        { title: 'Drop Down', url: 'demo/dropdown.html' },
+        { title: 'Offcanvas', url: 'demo/offcanvas.html' },
+        { title: 'Paginator', url: 'demo/paginator.html' },
+        { title: 'Popup', url: 'demo/popup.html' },
+        { title: 'Progress and Spinner', url: 'demo/progress.html' },
+        { title: 'Slider', url: 'demo/slider.html' },
+        { title: 'Switch', url: 'demo/switch.html' },
     ],
 }];
 
-const renderMenuItem = ({ title, url }) => (
+const getBaseURL = () => {
+    const { origin } = window.location;
+    const res = `${origin}/jezvejs/`;
+    return origin.includes('localtest') ? `${res}dist/` : res;
+};
+
+const renderMenuItem = ({ title, url }, baseURL) => (
     createElement('li', {
-        children: createElement('a', { props: { href: url, textContent: title } }),
+        children: createElement('a', {
+            props: {
+                href: `${baseURL}${url}`,
+                textContent: title,
+            },
+        }),
     })
 );
 
-const renderNavSection = ({ title, items }) => {
+const renderNavSection = ({ title, items }, baseURL) => {
     const header = createElement('h2', { props: { textContent: title } });
     const menu = createElement('ul', {
         props: { className: 'nav-menu' },
-        children: items.map((item) => renderMenuItem(item)),
+        children: items.map((item) => renderMenuItem(item, baseURL)),
     });
 
     return [header, menu];
 };
 
-const renderNavigationMenu = () => {
-    const sections = navigationMenu.map((item) => renderNavSection(item)).flat();
+const renderNavigationMenu = (baseURL) => {
+    const sections = navigationMenu.map((item) => renderNavSection(item, baseURL)).flat();
     return createElement('div', {
         props: { className: 'nav-menu-container' },
         children: sections,
@@ -73,7 +81,8 @@ const renderNavigationMenu = () => {
 };
 
 export const initNavigation = () => {
-    const navMenu = renderNavigationMenu();
+    const baseURL = getBaseURL();
+    const navMenu = renderNavigationMenu(baseURL);
 
     const offcanvas = Offcanvas.create({
         content: navMenu,
