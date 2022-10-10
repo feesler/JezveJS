@@ -17,7 +17,7 @@ export default {
         polyfills: './src/js/polyfill/index.js',
 
         TestsView: {
-            import: './tests/browser/TestsView.js',
+            import: './demo/src/Tests/TestsView.js',
             filename: '[name].[fullhash].js',
         },
         testsMain: {
@@ -54,7 +54,7 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'tests/browser/index.html',
+            template: 'demo/src/Tests/index.html',
             filename: 'index.html',
             chunks: ['polyfills', 'TestsView', 'testsMain'],
             minify: htmlMinifyOptions,
