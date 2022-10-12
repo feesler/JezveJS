@@ -36,6 +36,7 @@
         "build-demo": "npx webpack --progress --config ./webpack.demo.js --config ./webpack.prod.js --merge",
         "build-local": "npx webpack --progress --config ./webpack.demo.js --config ./webpack.prod.js --config ./webpack.local.js --merge",
         "build-demo-dev": "npx webpack --progress --config ./webpack.demo.js  --config ./webpack.dev.js --merge",
+        "build-local-dev": "npx webpack --progress --config ./webpack.demo.js  --config ./webpack.dev.js --config ./webpack.local.js --merge",
         "build-tests": "npx webpack --progress --config ./webpack.tests.js",
         "serve": "webpack serve -c ./webpack.dev.js"
     },

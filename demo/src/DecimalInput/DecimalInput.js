@@ -1,10 +1,18 @@
 import 'jezvejs/style';
-import { ge, onReady } from 'jezvejs';
+import { ge, onReady, setEvents } from 'jezvejs';
 import { DecimalInput } from 'jezvejs/DecimalInput';
 import '../common/app.scss';
 import { initNavigation } from '../common/app.js';
 
+const onSubmitForm = (e) => {
+    e.preventDefault();
+
+    ge('formStatus').textContent = 'Form submit event fired';
+};
+
 const initDefault = () => {
+    setEvents(ge('decForm'), { submit: (e) => onSubmitForm(e) });
+
     DecimalInput.create({ elem: ge('decInput') });
 };
 
