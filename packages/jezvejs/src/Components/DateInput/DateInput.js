@@ -253,7 +253,6 @@ export class DateInput {
     /** Before input events('keypress', 'paste', 'beforeinput) handler */
     validateInput(e) {
         let expectedContent;
-        let res;
 
         const inputContent = this.getInputContent(e);
         if (!inputContent || inputContent.length === 0) {
@@ -265,9 +264,6 @@ export class DateInput {
                 return;
             }
 
-            e.preventDefault();
-            e.stopPropagation();
-
             if (e.inputType === 'deleteContentBackward') {
                 expectedContent = this.backspaceHandler();
             } else if (e.inputType === 'deleteContentForward') {
@@ -277,51 +273,66 @@ export class DateInput {
             expectedContent = this.replaceSelection(inputContent);
         }
 
-        const expectedParts = expectedContent.split('.');
+        e.preventDefault();
+        e.stopPropagation();
+
+        const expectedParts = expectedContent.split(this.formatChars);
         if (expectedParts.length !== 3) {
-            res = false;
-        } else {
-            const dayVal = expectedParts[0].replaceAll(/_/g, '');
-            const monthVal = expectedParts[1].replaceAll(/_/g, '');
-            const yearVal = expectedParts[2].replaceAll(/_/g, '');
+            return;
+        }
 
-            res = ((isNum(dayVal) && dayVal > 0 && dayVal <= 31) || !dayVal.length)
-                && ((isNum(monthVal) && monthVal > 0 && monthVal <= 12) || !monthVal.length)
-                && (isNum(yearVal) || !yearVal.length);
+        const search = new RegExp(`${this.guideChar}`, 'g');
+        const dayStr = expectedParts[0].replaceAll(search, '');
+        const monthStr = expectedParts[1].replaceAll(search, '');
+        const yearStr = expectedParts[2].replaceAll(search, '');
 
-            if (res) {
-                let [expectedDay, expectedMonth] = expectedParts;
-                const [, , expectedYear] = expectedParts;
+        const dayVal = parseInt(dayStr, 10);
+        const monthVal = parseInt(monthStr, 10);
+        const yearVal = parseInt(yearStr, 10);
 
-                delete this.state.selectNext;
+        if (dayStr.length > 0 && (!isNum(dayStr) || !(dayVal >= 0 && dayVal <= 31))) {
+            return;
+        }
+        if (dayStr.length === 2 && dayVal === 0) {
+            return;
+        }
+        if (monthStr.length > 0 && (!isNum(monthStr) || !(monthVal >= 0 && dayVal <= 31))) {
+            return;
+        }
+        if (monthStr.length === 2 && monthVal === 0) {
+            return;
+        }
+        if (yearStr.length > 0 && !isNum(yearVal)) {
+            return;
+        }
 
-                // input day
-                if (expectedDay !== this.state.day) {
-                    if (dayVal < 10 && dayVal * 10 > 31) {
-                        expectedDay = `0${dayVal}`;
-                        this.state.selectNext = 1;
-                    }
-                }
-                // input month
-                if (expectedMonth !== this.state.month) {
-                    if (monthVal < 10 && monthVal * 10 > 12) {
-                        expectedMonth = `0${monthVal}`;
-                        this.state.selectNext = 2;
-                    }
-                }
+        let [expectedDay, expectedMonth] = expectedParts;
+        const [, , expectedYear] = expectedParts;
 
-                this.state = {
-                    ...this.state,
-                    day: expectedDay,
-                    month: expectedMonth,
-                    year: expectedYear,
-                };
-                this.render(this.state);
+        delete this.state.selectNext;
+
+        // input day
+        if (expectedDay !== this.state.day) {
+            if (dayVal < 10 && dayVal * 10 > 31) {
+                expectedDay = `0${dayVal}`;
+                this.state.selectNext = 1;
+            }
+        }
+        // input month
+        if (expectedMonth !== this.state.month) {
+            if (monthVal < 10 && monthVal * 10 > 12) {
+                expectedMonth = `0${monthVal}`;
+                this.state.selectNext = 2;
             }
         }
 
-        e.preventDefault();
-        e.stopPropagation();
+        this.state = {
+            ...this.state,
+            day: expectedDay,
+            month: expectedMonth,
+            year: expectedYear,
+        };
+        this.render(this.state);
     }
 
     /** 'input' event handler */
