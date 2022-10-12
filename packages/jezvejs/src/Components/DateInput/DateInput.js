@@ -1,28 +1,47 @@
 import {
     isFunction,
+    setEvents,
     getCursorPos,
     setCursorPos,
-    selectText,
     isNum,
+    removeEvents,
 } from '../../js/common.js';
 import '../../css/common.scss';
+
+const DAY_LENGTH = 2;
+const MONTH_LENGTH = 2;
+const YEAR_LENGTH = 4;
 
 /**
  * Decimal value input
  * @param {Object} props
  */
 export class DateInput {
+    static create(props) {
+        return new DateInput(props);
+    }
+
     constructor(props) {
         this.props = props;
-
-        if (!props.elem) {
+        if (!this.props?.elem) {
             throw new Error('Invalid input element specified');
         }
 
-        this.elem = props.elem;
+        this.init();
+    }
+
+    init() {
+        this.elem = this.props.elem;
 
         this.guideChar = '_';
         this.formatChars = '.';
+        this.maxLength = DAY_LENGTH + MONTH_LENGTH + YEAR_LENGTH + (this.formatChars.length * 2);
+
+        this.formatMask = ['dd', 'mm', 'yyyy'].join(this.formatChars);
+
+        this.dayRange = this.getGroupRange('d');
+        this.monthRange = this.getGroupRange('m');
+        this.yearRange = this.getGroupRange('y');
 
         this.state = {
             day: '__',
@@ -30,37 +49,31 @@ export class DateInput {
             year: '____',
         };
 
-        this.beforeInputHandler = this.validateInput.bind(this);
-        this.focusHandler = (e) => this.onFocus(e);
-        this.elem.addEventListener('keypress', this.beforeInputHandler);
-        this.elem.addEventListener('paste', this.beforeInputHandler);
-        this.elem.addEventListener('beforeinput', this.beforeInputHandler);
-        this.elem.addEventListener('focus', this.focusHandler);
+        this.beforeInputHandler = (e) => this.validateInput(e);
+        this.eventHandlers = {
+            keypress: this.beforeInputHandler,
+            paste: this.beforeInputHandler,
+            beforeinput: this.beforeInputHandler,
+        };
 
         this.elem.inputMode = 'decimal';
+        this.elem.placeholder = this.formatMask;
 
-        if (isFunction(props.oninput)) {
-            this.inputHandler = this.handleInput.bind(this);
-            this.oninput = props.oninput;
-            this.elem.addEventListener('input', this.inputHandler);
+        if (isFunction(this.props.oninput)) {
+            this.eventHandlers.input = (e) => this.handleInput(e);
         }
 
+        setEvents(this.elem, this.eventHandlers);
         this.render(this.state);
     }
 
     /** Component destructor: free resources */
     destroy() {
-        if (this.beforeInputHandler) {
-            this.elem.removeEventListener('keypress', this.beforeInputHandler);
-            this.elem.removeEventListener('paste', this.beforeInputHandler);
-            this.elem.removeEventListener('beforeinput', this.beforeInputHandler);
-            this.beforeInputHandler = null;
+        if (this.eventHandlers) {
+            removeEvents(this.elem, this.eventHandlers);
+            this.eventHandlers = null;
         }
-
-        if (this.inputHandler) {
-            this.elem.removeEventListener('input', this.inputHandler);
-            this.inputHandler = null;
-        }
+        this.beforeInputHandler = null;
     }
 
     get value() {
@@ -73,46 +86,74 @@ export class DateInput {
         }
     }
 
+    /** Returns range of specified group('d', 'm' or 'y') for current format */
+    getGroupRange(group) {
+        const res = {
+            start: this.formatMask.indexOf(group),
+        };
+        res.end = this.formatMask.indexOf(this.formatChars, res.start + 1);
+        if (res.end === -1) {
+            res.end = this.maxLength;
+        }
+        return res;
+    }
+
     /**
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
      */
     replaceSelection(text) {
         const range = getCursorPos(this.elem);
+        const selRangeLength = Math.abs(range.end - range.start);
 
-        const origValue = this.elem.value;
+        const origValue = (this.elem.value.length > 0)
+            ? this.elem.value
+            : this.formatDateString(this.state);
+
         const beforeSelection = origValue.substr(0, range.start);
         const afterSelection = origValue.substr(range.end);
         let selection = origValue.substr(range.start);
         let textValue = this.removeMaskChars(text);
-        let value = this.removeMaskChars(text + afterSelection);
+
+        this.cursorPos = beforeSelection.length;
+
+        // Replace leading guide characters after selection with remain text
+        let textCharsRemain = textValue.length - selRangeLength;
+        let after = this.removeMaskChars(afterSelection);
+        while (textCharsRemain > 0 && after.substr(0, 1) === this.guideChar) {
+            after = after.substr(1);
+            textCharsRemain -= 1;
+        }
+        if (textCharsRemain > 0) {
+            return origValue;
+        }
+
+        let value = this.removeMaskChars(text + after);
         let res = beforeSelection;
-        let char;
-
-        this.expectedCursorPos = beforeSelection.length;
-
         while (selection.length > 0) {
             const maskChar = selection.charAt(0);
-            selection = selection.substr(1);
+            selection = selection.substring(1);
 
             if (this.formatChars.includes(maskChar)) {
                 res += maskChar;
-
                 if (textValue.length > 0) {
-                    this.expectedCursorPos += 1;
+                    this.cursorPos += 1;
+                }
+
+                continue;
+            }
+
+            if (value.length > 0) {
+                const char = value.charAt(0);
+                value = value.substring(1);
+
+                res += char;
+                if (textValue.length > 0) {
+                    this.cursorPos += 1;
+                    textValue = textValue.substring(1);
                 }
             } else {
-                if (value.length > 0) {
-                    char = value.charAt(0);
-                    value = value.substr(1);
-                    if (textValue.length > 0) {
-                        this.expectedCursorPos += 1;
-                        textValue = textValue.substr(1);
-                    }
-                } else {
-                    char = this.guideChar;
-                }
-                res += char;
+                res += this.guideChar;
             }
         }
 
@@ -144,7 +185,7 @@ export class DateInput {
 
         let selection = origValue.substr(range.start);
         let res = beforeSelection;
-        this.expectedCursorPos = beforeSelection.length;
+        this.cursorPos = beforeSelection.length;
         while (selection.length) {
             maskChar = selection.charAt(0);
             selection = selection.substr(1);
@@ -190,7 +231,7 @@ export class DateInput {
             }
         } while (beforeSelection.length);
 
-        this.expectedCursorPos = beforeSelection.length;
+        this.cursorPos = beforeSelection.length;
 
         const res = beforeSelection + afterSelection;
 
@@ -221,13 +262,13 @@ export class DateInput {
         const beforeSelection = origValue.substr(0, range.start);
         let afterSelection = origValue.substr(range.end);
         let selection = origValue.substr(range.start);
-        this.expectedCursorPos = beforeSelection.length;
+        this.cursorPos = beforeSelection.length;
         let res = beforeSelection;
 
         afterSelection = this.removeMaskChars(afterSelection);
         // Remove first character from part after selection
         if (afterSelection.length > 0) {
-            afterSelection = afterSelection.substr(1);
+            afterSelection = this.guideChar + afterSelection.substr(1);
         }
 
         while (selection.length) {
@@ -236,6 +277,10 @@ export class DateInput {
 
             if (this.formatChars.includes(maskChar)) {
                 res += maskChar;
+
+                if (this.cursorPos === res.length) {
+                    this.cursorPos += 1;
+                }
             } else {
                 if (afterSelection.length > 0) {
                     char = afterSelection.charAt(0);
@@ -296,7 +341,7 @@ export class DateInput {
         if (dayStr.length === 2 && dayVal === 0) {
             return;
         }
-        if (monthStr.length > 0 && (!isNum(monthStr) || !(monthVal >= 0 && dayVal <= 31))) {
+        if (monthStr.length > 0 && (!isNum(monthStr) || !(monthVal >= 0 && monthVal <= 12))) {
             return;
         }
         if (monthStr.length === 2 && monthVal === 0) {
@@ -309,20 +354,54 @@ export class DateInput {
         let [expectedDay, expectedMonth] = expectedParts;
         const [, , expectedYear] = expectedParts;
 
-        delete this.state.selectNext;
-
         // input day
         if (expectedDay !== this.state.day) {
-            if (dayVal < 10 && dayVal * 10 > 31) {
+            const firstChar = expectedDay.substring(0, 1);
+            if (
+                firstChar !== this.guideChar
+                && firstChar !== '0'
+                && dayVal < 10
+                && dayVal * 10 > 31
+            ) {
                 expectedDay = `0${dayVal}`;
-                this.state.selectNext = 1;
+                this.cursorPos += 1;
+            }
+            // Move cursor beyond the groups separator
+            if (
+                this.cursorPos === this.dayRange.end
+                && this.cursorPos < this.maxLength
+            ) {
+                this.cursorPos += 1;
             }
         }
         // input month
         if (expectedMonth !== this.state.month) {
-            if (monthVal < 10 && monthVal * 10 > 12) {
+            const firstChar = expectedMonth.substring(0, 1);
+            if (
+                firstChar !== this.guideChar
+                && firstChar !== '0'
+                && monthVal < 10
+                && monthVal * 10 > 12
+            ) {
                 expectedMonth = `0${monthVal}`;
-                this.state.selectNext = 2;
+                this.cursorPos += 1;
+            }
+            // Move cursor beyond the groups separator
+            if (
+                this.cursorPos === this.monthRange.end
+                && this.cursorPos < this.maxLength
+            ) {
+                this.cursorPos += 1;
+            }
+        }
+        // input year
+        if (expectedYear !== this.state.year) {
+            // Move cursor beyond the groups separator
+            if (
+                this.cursorPos === this.yearRange.end
+                && this.cursorPos < this.maxLength
+            ) {
+                this.cursorPos += 1;
             }
         }
 
@@ -337,47 +416,29 @@ export class DateInput {
 
     /** 'input' event handler */
     handleInput(e) {
-        if (isFunction(this.oninput)) {
-            this.oninput(e);
+        if (isFunction(this.props.oninput)) {
+            this.props.oninput(e);
         }
     }
 
-    selectDatePart(index) {
-        const ind = parseInt(index, 10);
-        if (Number.isNaN(ind) || ind < 0 || ind > 2) {
-            return;
-        }
+    formatDateString({ day, month, year }) {
+        const groups = [
+            [day, this.dayRange.start],
+            [month, this.monthRange.start],
+            [year, this.yearRange.start],
+        ].sort((a, b) => a[1] - b[1]);
 
-        if (ind === 0) {
-            selectText(this.elem, 0, 2);
-        } else if (ind === 1) {
-            selectText(this.elem, 3, 5);
-        } else if (ind === 2) {
-            selectText(this.elem, 6, 10);
-        }
-    }
-
-    onFocus() {
-        this.selectDatePart(0);
+        return groups.map((group) => group[0]).join(this.formatChars);
     }
 
     /** Render component */
     render(state) {
-        this.elem.value = `${state.day}.${state.month}.${state.year}`;
-
-        if (state.selectNext) {
-            this.selectDatePart(state.selectNext);
+        if (state.day === '__' && state.month === '__' && state.year === '____') {
+            this.elem.value = '';
         } else {
-            setCursorPos(this.elem, this.expectedCursorPos);
-        }
-    }
-
-    /** Static alias for DateInput constructor */
-    static create(props) {
-        if (!props || !props.elem) {
-            return null;
+            this.elem.value = this.formatDateString(state);
         }
 
-        return new DateInput(props);
+        setCursorPos(this.elem, this.cursorPos);
     }
 }
