@@ -119,7 +119,7 @@ export class DecimalInput {
         if (e.type === 'beforeinput') {
             return e.data;
         }
-        if (e.type === 'keypress') {
+        if (e.type === 'keypress' && e.keyCode !== 13) {
             return e.key;
         }
 
