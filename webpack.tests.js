@@ -14,10 +14,10 @@ export default {
     devtool: 'inline-source-map',
     target: ['web', 'es5'],
     entry: {
-        polyfills: './src/js/polyfill/index.js',
+        polyfills: './packages/jezvejs/src/js/polyfill/index.js',
 
         TestsView: {
-            import: './demo/src/Tests/TestsView.js',
+            import: './demo/src/Views/Tests/TestsView.js',
             filename: '[name].[fullhash].js',
         },
         testsMain: {
@@ -54,7 +54,7 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'demo/src/Tests/index.html',
+            template: 'demo/src/Views/Tests/index.html',
             filename: 'index.html',
             chunks: ['polyfills', 'TestsView', 'testsMain'],
             minify: htmlMinifyOptions,
