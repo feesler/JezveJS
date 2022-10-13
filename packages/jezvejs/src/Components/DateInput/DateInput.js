@@ -11,6 +11,8 @@ import '../../css/common.scss';
 const defaultProps = {
     guideChar: '_',
     locales: [],
+    name: null,
+    form: null,
 };
 
 /**
@@ -56,21 +58,26 @@ export class DateInput {
             ...this.emptyState,
         };
 
+        this.elem.inputMode = 'decimal';
+        this.elem.placeholder = this.props.placeholder ?? this.formatMask;
+        if (typeof this.props.name === 'string') {
+            this.input.name = this.props.name;
+        }
+        if (typeof this.props.form === 'string') {
+            this.input.form = this.props.form;
+        }
+
         this.beforeInputHandler = (e) => this.validateInput(e);
         this.eventHandlers = {
             keypress: this.beforeInputHandler,
             paste: this.beforeInputHandler,
             beforeinput: this.beforeInputHandler,
         };
-
-        this.elem.inputMode = 'decimal';
-        this.elem.placeholder = this.formatMask;
-
         if (isFunction(this.props.oninput)) {
             this.eventHandlers.input = (e) => this.handleInput(e);
         }
-
         setEvents(this.elem, this.eventHandlers);
+
         this.render(this.state);
     }
 

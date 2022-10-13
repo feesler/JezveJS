@@ -98,6 +98,9 @@ export class Checkbox extends Component {
         if (typeof this.props.name === 'string') {
             this.input.name = this.props.name;
         }
+        if (typeof this.props.form === 'string') {
+            this.input.form = this.props.form;
+        }
         if ('label' in this.props) {
             this.setLabel(this.props.label);
         }

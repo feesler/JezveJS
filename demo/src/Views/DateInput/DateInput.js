@@ -15,6 +15,10 @@ const initDefault = () => {
     DateInput.create({ elem: ge('dateinput') });
 };
 
+const initPlaceholder = () => {
+    DateInput.create({ elem: ge('dateInputPh'), placeholder: 'Input date' });
+};
+
 const initLocales = () => {
     DateInput.create({ elem: ge('usDateInput'), locales: ['en-US'] });
     DateInput.create({ elem: ge('koDateInput'), locales: ['ko-KR'] });
@@ -23,7 +27,9 @@ const initLocales = () => {
 
 const init = () => {
     initNavigation();
+
     initDefault();
+    initPlaceholder();
     initLocales();
 };
 
