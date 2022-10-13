@@ -28,7 +28,7 @@
         "lint-demo-src": "eslint --quiet ./demo/src/**/*.js",
         "lint-demo-style": "npx stylelint demo/src/**/*.scss",
         "debug": "node --inspect-brk ./tests/index.js",
-        "build": "npm-run-all build-src build-demo",
+        "build": "npm-run-all build-src build-local",
         "build-dev": "npm-run-all build-src-dev build-demo-dev",
         "build-all": "npm-run-all build build-tests",
         "build-src": "npx webpack --progress -c ./webpack.common.js -c ./webpack.prod.js -m",
