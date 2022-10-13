@@ -8,9 +8,10 @@ import {
 } from '../../js/common.js';
 import '../../css/common.scss';
 
-const DAY_LENGTH = 2;
-const MONTH_LENGTH = 2;
-const YEAR_LENGTH = 4;
+const defaultProps = {
+    guideChar: '_',
+    locales: [],
+};
 
 /**
  * Decimal value input
@@ -21,8 +22,12 @@ export class DateInput {
         return new DateInput(props);
     }
 
-    constructor(props) {
-        this.props = props;
+    constructor(props = {}) {
+        this.props = {
+            ...defaultProps,
+            ...props,
+        };
+
         if (!this.props?.elem) {
             throw new Error('Invalid input element specified');
         }
@@ -33,20 +38,22 @@ export class DateInput {
     init() {
         this.elem = this.props.elem;
 
-        this.guideChar = '_';
-        this.formatChars = '.';
-        this.maxLength = DAY_LENGTH + MONTH_LENGTH + YEAR_LENGTH + (this.formatChars.length * 2);
+        this.separator = '.';
+        this.getDateFormat();
 
-        this.formatMask = ['dd', 'mm', 'yyyy'].join(this.formatChars);
+        const { dayRange, monthRange, yearRange } = this;
+        this.maxLength = (
+            dayRange.length + monthRange.length + yearRange.length + (this.separator.length * 2)
+        );
 
-        this.dayRange = this.getGroupRange('d');
-        this.monthRange = this.getGroupRange('m');
-        this.yearRange = this.getGroupRange('y');
+        this.emptyState = {
+            day: ''.padStart(dayRange.length, this.props.guideChar),
+            month: ''.padStart(monthRange.length, this.props.guideChar),
+            year: ''.padStart(yearRange.length, this.props.guideChar),
+        };
 
         this.state = {
-            day: '__',
-            month: '__',
-            year: '____',
+            ...this.emptyState,
         };
 
         this.beforeInputHandler = (e) => this.validateInput(e);
@@ -86,12 +93,63 @@ export class DateInput {
         }
     }
 
+    getDateFormat() {
+        const formatter = Intl.DateTimeFormat(this.props.locales);
+        const parts = formatter.formatToParts();
+
+        let currentPos = 0;
+        let order = 0;
+        parts.forEach(({ type, value }) => {
+            if (type === 'day') {
+                this.dayRange = { start: currentPos, length: 2, order };
+                this.dayRange.end = this.dayRange.start + this.dayRange.length;
+                currentPos += this.dayRange.length;
+                order += 1;
+            }
+            if (type === 'month') {
+                this.monthRange = { start: currentPos, length: 2, order };
+                this.monthRange.end = this.monthRange.start + this.monthRange.length;
+                currentPos += this.monthRange.length;
+                order += 1;
+            }
+            if (type === 'year') {
+                this.yearRange = { start: currentPos, length: value.length, order };
+                this.yearRange.end = this.yearRange.start + this.yearRange.length;
+                currentPos += this.yearRange.length;
+                order += 1;
+            }
+            if (type === 'literal') {
+                if (!this.separator) {
+                    this.separator = value;
+                }
+                currentPos += value.length;
+            }
+        });
+
+        const yearLength = this.yearRange.end - this.yearRange.start;
+        this.formatMask = this.formatDateString({
+            day: 'dd',
+            month: 'mm',
+            year: ''.padStart(yearLength, 'y'),
+        });
+    }
+
+    formatDateString({ day, month, year }) {
+        const groups = [
+            [day, this.dayRange.start],
+            [month, this.monthRange.start],
+            [year, this.yearRange.start],
+        ].sort((a, b) => a[1] - b[1]);
+
+        return groups.map((group) => group[0]).join(this.separator);
+    }
+
     /** Returns range of specified group('d', 'm' or 'y') for current format */
     getGroupRange(group) {
         const res = {
             start: this.formatMask.indexOf(group),
         };
-        res.end = this.formatMask.indexOf(this.formatChars, res.start + 1);
+        res.end = this.formatMask.indexOf(this.separator, res.start + 1);
         if (res.end === -1) {
             res.end = this.maxLength;
         }
@@ -120,7 +178,7 @@ export class DateInput {
         // Replace leading guide characters after selection with remain text
         let textCharsRemain = textValue.length - selRangeLength;
         let after = this.removeMaskChars(afterSelection);
-        while (textCharsRemain > 0 && after.substr(0, 1) === this.guideChar) {
+        while (textCharsRemain > 0 && after.substr(0, 1) === this.props.guideChar) {
             after = after.substr(1);
             textCharsRemain -= 1;
         }
@@ -134,7 +192,7 @@ export class DateInput {
             const maskChar = selection.charAt(0);
             selection = selection.substring(1);
 
-            if (this.formatChars.includes(maskChar)) {
+            if (this.separator.includes(maskChar)) {
                 res += maskChar;
                 if (textValue.length > 0) {
                     this.cursorPos += 1;
@@ -153,7 +211,7 @@ export class DateInput {
                     textValue = textValue.substring(1);
                 }
             } else {
-                res += this.guideChar;
+                res += this.props.guideChar;
             }
         }
 
@@ -189,16 +247,16 @@ export class DateInput {
         while (selection.length) {
             maskChar = selection.charAt(0);
             selection = selection.substr(1);
-            if (this.formatChars.includes(maskChar)) {
+            if (this.separator.includes(maskChar)) {
                 res += maskChar;
             } else {
                 do {
                     char = afterSelection.charAt(0);
                     afterSelection = afterSelection.substr(1);
-                } while (this.formatChars.includes(char) && afterSelection.length > 0);
+                } while (this.separator.includes(char) && afterSelection.length > 0);
 
-                if (this.formatChars.includes(char) && !afterSelection.length) {
-                    char = this.guideChar;
+                if (this.separator.includes(char) && !afterSelection.length) {
+                    char = this.props.guideChar;
                 }
                 res += char;
             }
@@ -223,10 +281,10 @@ export class DateInput {
         do {
             char = beforeSelection.charAt(beforeSelection.length - 1);
             beforeSelection = beforeSelection.substr(0, beforeSelection.length - 1);
-            if (this.formatChars.includes(char)) {
+            if (this.separator.includes(char)) {
                 afterSelection = char + afterSelection;
             } else {
-                afterSelection = this.guideChar + afterSelection;
+                afterSelection = this.props.guideChar + afterSelection;
                 break;
             }
         } while (beforeSelection.length);
@@ -243,7 +301,7 @@ export class DateInput {
     }
 
     removeMaskChars(str) {
-        const escaped = this.escapeRegExp(this.formatChars);
+        const escaped = this.escapeRegExp(this.separator);
         const expr = new RegExp(escaped, 'g');
 
         return str.replaceAll(expr, '');
@@ -268,14 +326,14 @@ export class DateInput {
         afterSelection = this.removeMaskChars(afterSelection);
         // Remove first character from part after selection
         if (afterSelection.length > 0) {
-            afterSelection = this.guideChar + afterSelection.substr(1);
+            afterSelection = this.props.guideChar + afterSelection.substr(1);
         }
 
         while (selection.length) {
             const maskChar = selection.charAt(0);
             selection = selection.substr(1);
 
-            if (this.formatChars.includes(maskChar)) {
+            if (this.separator.includes(maskChar)) {
                 res += maskChar;
 
                 if (this.cursorPos === res.length) {
@@ -286,7 +344,7 @@ export class DateInput {
                     char = afterSelection.charAt(0);
                     afterSelection = afterSelection.substr(1);
                 } else {
-                    char = this.guideChar;
+                    char = this.props.guideChar;
                 }
                 res += char;
             }
@@ -321,15 +379,19 @@ export class DateInput {
         e.preventDefault();
         e.stopPropagation();
 
-        const expectedParts = expectedContent.split(this.formatChars);
+        const expectedParts = expectedContent.split(this.separator);
         if (expectedParts.length !== 3) {
             return;
         }
 
-        const search = new RegExp(`${this.guideChar}`, 'g');
-        const dayStr = expectedParts[0].replaceAll(search, '');
-        const monthStr = expectedParts[1].replaceAll(search, '');
-        const yearStr = expectedParts[2].replaceAll(search, '');
+        let expectedDay = expectedParts[this.dayRange.order];
+        let expectedMonth = expectedParts[this.monthRange.order];
+        const expectedYear = expectedParts[this.yearRange.order];
+
+        const search = new RegExp(`${this.props.guideChar}`, 'g');
+        const dayStr = expectedDay.replaceAll(search, '');
+        const monthStr = expectedMonth.replaceAll(search, '');
+        const yearStr = expectedYear.replaceAll(search, '');
 
         const dayVal = parseInt(dayStr, 10);
         const monthVal = parseInt(monthStr, 10);
@@ -351,14 +413,11 @@ export class DateInput {
             return;
         }
 
-        let [expectedDay, expectedMonth] = expectedParts;
-        const [, , expectedYear] = expectedParts;
-
         // input day
         if (expectedDay !== this.state.day) {
             const firstChar = expectedDay.substring(0, 1);
             if (
-                firstChar !== this.guideChar
+                firstChar !== this.props.guideChar
                 && firstChar !== '0'
                 && dayVal < 10
                 && dayVal * 10 > 31
@@ -366,19 +425,13 @@ export class DateInput {
                 expectedDay = `0${dayVal}`;
                 this.cursorPos += 1;
             }
-            // Move cursor beyond the groups separator
-            if (
-                this.cursorPos === this.dayRange.end
-                && this.cursorPos < this.maxLength
-            ) {
-                this.cursorPos += 1;
-            }
+            this.moveCursor('dayRange');
         }
         // input month
         if (expectedMonth !== this.state.month) {
             const firstChar = expectedMonth.substring(0, 1);
             if (
-                firstChar !== this.guideChar
+                firstChar !== this.props.guideChar
                 && firstChar !== '0'
                 && monthVal < 10
                 && monthVal * 10 > 12
@@ -386,23 +439,11 @@ export class DateInput {
                 expectedMonth = `0${monthVal}`;
                 this.cursorPos += 1;
             }
-            // Move cursor beyond the groups separator
-            if (
-                this.cursorPos === this.monthRange.end
-                && this.cursorPos < this.maxLength
-            ) {
-                this.cursorPos += 1;
-            }
+            this.moveCursor('monthRange');
         }
         // input year
         if (expectedYear !== this.state.year) {
-            // Move cursor beyond the groups separator
-            if (
-                this.cursorPos === this.yearRange.end
-                && this.cursorPos < this.maxLength
-            ) {
-                this.cursorPos += 1;
-            }
+            this.moveCursor('yearRange');
         }
 
         this.state = {
@@ -414,6 +455,16 @@ export class DateInput {
         this.render(this.state);
     }
 
+    /** Move cursor beyond the groups separator */
+    moveCursor(group) {
+        if (
+            this.cursorPos === this[group].end
+            && this.cursorPos < this.maxLength
+        ) {
+            this.cursorPos += 1;
+        }
+    }
+
     /** 'input' event handler */
     handleInput(e) {
         if (isFunction(this.props.oninput)) {
@@ -421,19 +472,17 @@ export class DateInput {
         }
     }
 
-    formatDateString({ day, month, year }) {
-        const groups = [
-            [day, this.dayRange.start],
-            [month, this.monthRange.start],
-            [year, this.yearRange.start],
-        ].sort((a, b) => a[1] - b[1]);
-
-        return groups.map((group) => group[0]).join(this.formatChars);
+    isEmptyState(state) {
+        return (
+            state.day === this.emptyState.day
+            && state.month === this.emptyState.month
+            && state.year === this.emptyState.year
+        );
     }
 
     /** Render component */
     render(state) {
-        if (state.day === '__' && state.month === '__' && state.year === '____') {
+        if (this.isEmptyState(state)) {
             this.elem.value = '';
         } else {
             this.elem.value = this.formatDateString(state);

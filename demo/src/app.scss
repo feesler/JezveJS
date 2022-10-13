@@ -187,6 +187,14 @@ section {
   }
 }
 
+/* Locales container */
+.locales-container {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 2rem;
+}
+
+
 @media (hover: hover) {
   .nav-header__logo > a:hover {
     color: #ffffff;
