@@ -73,6 +73,9 @@ export class Switch extends Component {
         if (typeof this.props.name === 'string') {
             this.input.name = this.props.name;
         }
+        if (typeof this.props.form === 'string') {
+            this.input.form = this.props.form;
+        }
     }
 
     onChange() {

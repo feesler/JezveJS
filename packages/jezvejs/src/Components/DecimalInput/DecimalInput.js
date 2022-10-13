@@ -1,4 +1,10 @@
-import { isFunction, getCursorPos, isInt } from '../../js/common.js';
+import {
+    isFunction,
+    getCursorPos,
+    isInt,
+    setEvents,
+    removeEvents,
+} from '../../js/common.js';
 import '../../css/common.scss';
 
 const defaultProps = {
@@ -6,6 +12,9 @@ const defaultProps = {
     oninput: null,
     allowNegative: true,
     allowMultipleLeadingZeros: false,
+    placeholder: null,
+    name: null,
+    form: null,
 };
 
 /**
@@ -27,6 +36,10 @@ export class DecimalInput {
             throw new Error('Invalid input element specified');
         }
 
+        this.init();
+    }
+
+    init() {
         this.elem = this.props.elem;
 
         this.useFixed = (typeof this.props.digits !== 'undefined');
@@ -36,35 +49,38 @@ export class DecimalInput {
             }
         }
 
-        this.beforeInputHandler = this.validateInput.bind(this);
-        this.elem.addEventListener('keypress', this.beforeInputHandler);
-        this.elem.addEventListener('paste', this.beforeInputHandler);
-        this.elem.addEventListener('beforeinput', this.beforeInputHandler);
-
         this.elem.inputMode = 'decimal';
-
-        if (isFunction(this.props.oninput)) {
-            this.inputHandler = this.handleInput.bind(this);
-            this.oninput = this.props.oninput;
-            this.elem.addEventListener('input', this.inputHandler);
+        if (this.props.placeholder) {
+            this.elem.placeholder = this.props.placeholder;
         }
+        if (typeof this.props.name === 'string') {
+            this.input.name = this.props.name;
+        }
+        if (typeof this.props.form === 'string') {
+            this.input.form = this.props.form;
+        }
+
+        this.beforeInputHandler = (e) => this.validateInput(e);
+        this.eventHandlers = {
+            keypress: this.beforeInputHandler,
+            paste: this.beforeInputHandler,
+            beforeinput: this.beforeInputHandler,
+        };
+        if (isFunction(this.props.oninput)) {
+            this.eventHandlers.input = (e) => this.handleInput(e);
+        }
+        setEvents(this.elem, this.eventHandlers);
 
         this.observeInputValue();
     }
 
     /** Component destructor: free resources */
     destroy() {
-        if (this.beforeInputHandler) {
-            this.elem.removeEventListener('keypress', this.beforeInputHandler);
-            this.elem.removeEventListener('paste', this.beforeInputHandler);
-            this.elem.removeEventListener('beforeinput', this.beforeInputHandler);
-            this.beforeInputHandler = null;
+        if (this.eventHandlers) {
+            removeEvents(this.elem, this.eventHandlers);
+            this.eventHandlers = null;
         }
-
-        if (this.inputHandler) {
-            this.elem.removeEventListener('input', this.inputHandler);
-            this.inputHandler = null;
-        }
+        this.beforeInputHandler = null;
     }
 
     get value() {

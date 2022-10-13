@@ -1,0 +1,207 @@
+/* Main layout */
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  height: 100%;
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main layout */
+.page {
+  display: table;
+  border-collapse: collapse;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+
+.page-wrapper {
+  display: table-cell;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+  position: static;
+}
+
+/* Main content */
+.page-container {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+}
+
+.page-content {
+  display: table-cell;
+  min-height: 100%;
+  height: 100%;
+}
+
+.page-content-wrap {
+  padding: 65px 12px 50px 12px;
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-weight: normal;
+  padding: 10px 0 5px 0;
+}
+
+h1 {
+  font-size: 22px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+.btn,
+.btn:visited {
+  font-weight: normal;
+  font-size: 16px;
+  display: inline-block;
+  color: #ffffff;
+  background-color: #0072c6;
+  text-decoration: none;
+  border: 0 none;
+  width: fit-content;
+  padding: 4px 22px;
+  margin-right: 15px;
+  vertical-align: middle;
+  overflow: visible;
+  border-radius: 0;
+}
+
+.btn:focus {
+  outline: 2px #aee5ff solid;
+  outline-offset: 0.1rem;
+}
+
+.inp {
+  border: 1px solid #000000;
+  padding: 4px 8px;
+}
+
+/* Navigation */
+.nav-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  padding: 12px;
+  height: 65px;
+  z-index: 2000;
+  box-sizing: border-box;
+  background-color: #404040;
+  color: #ffffff;
+}
+
+.nav-header__logo {
+  padding: 0;
+
+  > a {
+    text-decoration: none;
+    color: #dddddd;
+  }
+}
+
+/* Navigation toggle button */
+.nav-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  cursor: pointer;
+  background: none;
+  border: 0 none;
+  border-radius: 100vh;
+}
+
+.nav-toggle-icon {
+  width: 24px;
+  height: 24px;
+  fill: #dddddd;
+}
+
+.nav-menu-container {
+  padding: 12px;
+}
+
+.nav-menu li {
+  margin-left: 16px;
+  list-style-type: none;
+
+  a,
+  a:visited {
+    text-decoration: none;
+    font-size: 18px;
+    color: #0072c6;
+  }
+}
+
+/* Admin action button */
+.adm_act_btn {
+  padding: 3px 10px;
+  background-color: #44aaff;
+  color: #ffffff;
+}
+
+.adm_act_btn:disabled {
+  background-color: #708290;
+}
+
+section {
+  display: flex;
+  flex-flow: column nowrap;
+  position: relative;
+  padding: 2rem 1rem;
+  margin: 8px 0 16px 0;
+  background-color: #f5f5f5;
+}
+
+.row-section {
+  flex-flow: row nowrap;
+}
+
+.section-controls {
+  margin-top: 1rem;
+
+  .btn {
+    margin-bottom: 6px;
+  }
+}
+
+/* Locales container */
+.locales-container {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 2rem;
+}
+
+
+@media (hover: hover) {
+  .nav-header__logo > a:hover {
+    color: #ffffff;
+  }
+
+  .nav-menu li a:hover {
+    text-decoration: underline;
+    color: #0093ff;
+  }
+}

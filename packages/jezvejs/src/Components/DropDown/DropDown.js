@@ -65,6 +65,8 @@ const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 
 /** Default properties */
 const defaultProps = {
+    name: null,
+    form: null,
     multi: false,
     listAttach: false,
     enableFilter: false,
@@ -167,6 +169,12 @@ export class DropDown extends Component {
         }
 
         this.selectElem.tabIndex = -1;
+        if (typeof this.props.name === 'string') {
+            this.selectElem.name = this.props.name;
+        }
+        if (typeof this.props.form === 'string') {
+            this.selectElem.form = this.props.form;
+        }
 
         this.setClassNames();
 
