@@ -226,8 +226,8 @@ export class DecimalInput {
 
     /** 'input' event handler */
     handleInput(e) {
-        if (isFunction(this.oninput)) {
-            this.oninput(e);
+        if (isFunction(this.props.oninput)) {
+            this.props.oninput(e);
         }
     }
 
