@@ -13,21 +13,16 @@ export default {
     mode: 'development',
     devtool: 'inline-source-map',
     target: ['web', 'es5'],
+    context: resolve(__dirname, '..'),
     entry: {
         polyfills: './packages/jezvejs/src/js/polyfill/index.js',
 
-        TestsView: {
-            import: './demo/src/Views/Tests/TestsView.js',
-            filename: '[name].[fullhash].js',
-        },
-        testsMain: {
-            import: './tests/index.js',
-            filename: '[name].[fullhash].js',
-        },
+        TestsView: './demo/src/Views/Tests/TestsView.js',
+        testsMain: './tests/index.js',
     },
     output: {
-        filename: 'index.js',
-        path: resolve(__dirname, 'dist/tests'),
+        filename: '[name].[fullhash].js',
+        path: resolve(__dirname, '../dist/tests'),
         clean: true
     },
     module: {
