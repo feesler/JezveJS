@@ -18,7 +18,8 @@ body {
 }
 
 /* WebKit focus fix */
-*:focus {
+*:focus,
+*:focus-visible {
   outline: none;
 }
 
