@@ -8,6 +8,7 @@ import {
 } from '../../js/common.js';
 import '../../css/common.scss';
 
+const DEFAULT_SEPARATOR = '.';
 const defaultProps = {
     guideChar: '_',
     locales: [],
@@ -39,8 +40,6 @@ export class DateInput {
 
     init() {
         this.elem = this.props.elem;
-
-        this.separator = '.';
         this.getDateFormat();
 
         const { dayRange, monthRange, yearRange } = this;
@@ -104,6 +103,7 @@ export class DateInput {
         const formatter = Intl.DateTimeFormat(this.props.locales);
         const parts = formatter.formatToParts();
 
+        this.separator = null;
         let currentPos = 0;
         let order = 0;
         parts.forEach(({ type, value }) => {
@@ -132,6 +132,10 @@ export class DateInput {
                 currentPos += value.length;
             }
         });
+
+        if (!this.separator) {
+            this.separator = DEFAULT_SEPARATOR;
+        }
 
         const yearLength = this.yearRange.end - this.yearRange.start;
         this.formatMask = this.formatDateString({
@@ -468,7 +472,7 @@ export class DateInput {
             this.cursorPos === this[group].end
             && this.cursorPos < this.maxLength
         ) {
-            this.cursorPos += 1;
+            this.cursorPos += this.separator.length;
         }
     }
 
