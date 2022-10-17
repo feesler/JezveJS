@@ -58,7 +58,7 @@
 }
 
 /* Focused state */
-.switch input:focus + .switch-slider {
+.switch input:focus-visible + .switch-slider {
   outline-width: 2px;
   outline-style: solid;
   outline-color: var(--switch-focus-outline-color);

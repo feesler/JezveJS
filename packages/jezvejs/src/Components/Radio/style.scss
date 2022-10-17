@@ -67,7 +67,7 @@
   }
 }
 
-.radio input:focus + .radio__check {
+.radio input:focus-visible + .radio__check {
   outline-width: 2px;
   outline-style: solid;
   outline-color: var(--radio-focus-outline-color);

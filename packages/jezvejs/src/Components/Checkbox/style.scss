@@ -61,7 +61,7 @@
 }
 
 /* Focused state */
-.checkbox input:focus + .checkbox__check {
+.checkbox input:focus-visible + .checkbox__check {
   outline-width: 2px;
   outline-style: solid;
   outline-color: var(--checkbox-focus-outline-color);
