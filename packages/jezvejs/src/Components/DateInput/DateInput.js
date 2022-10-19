@@ -52,6 +52,7 @@ export class DateInput {
             month: ''.padStart(monthRange.length, this.props.guideChar),
             year: ''.padStart(yearRange.length, this.props.guideChar),
         };
+        this.emptyStateValue = this.formatDateString(this.emptyState);
 
         this.state = {
             ...this.emptyState,
@@ -76,6 +77,7 @@ export class DateInput {
             this.eventHandlers.input = (e) => this.handleInput(e);
         }
         setEvents(this.elem, this.eventHandlers);
+        this.observeInputValue();
 
         this.render(this.state);
     }
@@ -97,6 +99,32 @@ export class DateInput {
         if (this.elem) {
             this.elem.value = val;
         }
+    }
+
+    /** Define setter for 'value' property of input to prevent invalid values */
+    observeInputValue() {
+        const self = this;
+        const elementPrototype = Object.getPrototypeOf(this.elem);
+        const descriptor = Object.getOwnPropertyDescriptor(elementPrototype, 'value');
+
+        Object.defineProperty(this.elem, 'value', {
+            get() {
+                return descriptor.get.call(this);
+            },
+            set(value) {
+                if (value === this.value) {
+                    return;
+                }
+
+                const content = self.replaceSelection(value, true);
+                const state = self.handleExpectedContent(content);
+                if (state !== self.state) {
+                    const fixedValue = self.renderValue(state);
+                    descriptor.set.call(this, fixedValue);
+                    self.state = state;
+                }
+            },
+        });
     }
 
     getDateFormat() {
@@ -171,23 +199,53 @@ export class DateInput {
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
      */
-    replaceSelection(text) {
-        const range = getCursorPos(this.elem);
-        const selRangeLength = Math.abs(range.end - range.start);
-
+    replaceSelection(text, replaceAll = false) {
         const origValue = (this.elem.value.length > 0)
             ? this.elem.value
             : this.formatDateString(this.state);
 
+        const range = (replaceAll)
+            ? { start: 0, end: origValue.length }
+            : getCursorPos(this.elem);
+        const selRangeLength = Math.abs(range.end - range.start);
+
         const beforeSelection = origValue.substr(0, range.start);
         const afterSelection = origValue.substr(range.end);
         let selection = origValue.substr(range.start);
-        let textValue = this.removeMaskChars(text);
 
-        this.cursorPos = beforeSelection.length;
+        let fixedText = text;
+        if (replaceAll) {
+            if (text.length === 0) {
+                return text;
+            }
+
+            const expectedParts = text.split(this.separator);
+            if (expectedParts.length !== 3) {
+                return origValue;
+            }
+
+            let day = expectedParts[this.dayRange.order];
+            let month = expectedParts[this.monthRange.order];
+            const year = expectedParts[this.yearRange.order];
+
+            if (day.length === 1) {
+                day = `0${day}`;
+            }
+            if (month.length === 1) {
+                month = `0${month}`;
+            }
+
+            fixedText = this.formatDateString({ day, month, year });
+        }
+
+        let textValue = this.removeMaskChars(fixedText);
+
+        if (!replaceAll) {
+            this.cursorPos = beforeSelection.length;
+        }
 
         // Replace leading guide characters after selection with remain text
-        let textCharsRemain = textValue.length - selRangeLength;
+        let textCharsRemain = fixedText.length - selRangeLength;
         let after = this.removeMaskChars(afterSelection);
         while (textCharsRemain > 0 && after.substr(0, 1) === this.props.guideChar) {
             after = after.substr(1);
@@ -197,7 +255,7 @@ export class DateInput {
             return origValue;
         }
 
-        let value = this.removeMaskChars(text + after);
+        let value = this.removeMaskChars(fixedText + after);
         let res = beforeSelection;
         while (selection.length > 0) {
             const maskChar = selection.charAt(0);
@@ -205,7 +263,7 @@ export class DateInput {
 
             if (this.separator.includes(maskChar)) {
                 res += maskChar;
-                if (textValue.length > 0) {
+                if (!replaceAll && textValue.length > 0) {
                     this.cursorPos += 1;
                 }
 
@@ -218,7 +276,9 @@ export class DateInput {
 
                 res += char;
                 if (textValue.length > 0) {
-                    this.cursorPos += 1;
+                    if (!replaceAll) {
+                        this.cursorPos += 1;
+                    }
                     textValue = textValue.substring(1);
                 }
             } else {
@@ -390,9 +450,24 @@ export class DateInput {
         e.preventDefault();
         e.stopPropagation();
 
-        const expectedParts = expectedContent.split(this.separator);
+        const state = this.handleExpectedContent(expectedContent);
+        if (state !== this.state) {
+            this.state = state;
+            this.render(this.state);
+        }
+    }
+
+    handleExpectedContent(content) {
+        if (content === '' || content === this.emptyStateValue) {
+            return {
+                ...this.state,
+                ...this.emptyState,
+            };
+        }
+
+        const expectedParts = content.split(this.separator);
         if (expectedParts.length !== 3) {
-            return;
+            return this.state;
         }
 
         let expectedDay = expectedParts[this.dayRange.order];
@@ -409,19 +484,19 @@ export class DateInput {
         const yearVal = parseInt(yearStr, 10);
 
         if (dayStr.length > 0 && (!isNum(dayStr) || !(dayVal >= 0 && dayVal <= 31))) {
-            return;
+            return this.state;
         }
         if (dayStr.length === 2 && dayVal === 0) {
-            return;
+            return this.state;
         }
         if (monthStr.length > 0 && (!isNum(monthStr) || !(monthVal >= 0 && monthVal <= 12))) {
-            return;
+            return this.state;
         }
         if (monthStr.length === 2 && monthVal === 0) {
-            return;
+            return this.state;
         }
         if (yearStr.length > 0 && !isNum(yearVal)) {
-            return;
+            return this.state;
         }
 
         // input day
@@ -457,13 +532,12 @@ export class DateInput {
             this.moveCursor('yearRange');
         }
 
-        this.state = {
+        return {
             ...this.state,
             day: expectedDay,
             month: expectedMonth,
             year: expectedYear,
         };
-        this.render(this.state);
     }
 
     /** Move cursor beyond the groups separator */
@@ -491,13 +565,13 @@ export class DateInput {
         );
     }
 
+    renderValue(state) {
+        return this.isEmptyState(state) ? '' : this.formatDateString(state);
+    }
+
     /** Render component */
     render(state) {
-        if (this.isEmptyState(state)) {
-            this.elem.value = '';
-        } else {
-            this.elem.value = this.formatDateString(state);
-        }
+        this.elem.value = this.renderValue(state);
 
         setCursorPos(this.elem, this.cursorPos);
     }
