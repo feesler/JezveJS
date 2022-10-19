@@ -42,6 +42,8 @@ export class DatePickerView extends AppView {
 
         res.setSelInp = { elem: await query('#setSelInp') };
         res.showSelBtn = await query('#showSelBtn');
+        res.setSelBtn = await query('#select-btn');
+        res.clearSelBtn = await query('#clear-btn');
         res.selDatePicker = await DatePicker.create(
             this,
             await query('#dpSelectionGroup + .dp__container'),
@@ -75,6 +77,8 @@ export class DatePickerView extends AppView {
             && res.callbacksDatePicker
             && res.setSelInp.elem
             && res.showSelBtn
+            && res.setSelBtn
+            && res.clearSelBtn
             && res.selDatePicker
             && res.enLocaleDatePicker
             && res.frLocaleDatePicker
@@ -160,7 +164,15 @@ export class DatePickerView extends AppView {
         return this.clickShowButton('showCbBtn', 'callbacksDatePicker');
     }
 
-    async showSetSelection() {
+    async toggleSetSelection() {
         return this.clickShowButton('showSelBtn', 'selDatePicker');
+    }
+
+    async clearSelection() {
+        await this.performAction(() => click(this.content.clearSelBtn));
+    }
+
+    async updateSelection() {
+        await this.performAction(() => click(this.content.setSelBtn));
     }
 }

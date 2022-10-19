@@ -84,12 +84,51 @@ const getHighlightCells = (start, end, monthDays) => {
 };
 
 export const testSetSelection = async () => {
-    await test('Show date picker', () => App.view.showSetSelection());
-    await test('setSelection() method', () => {
+    await test('Initial setSelection() method', async () => {
+        await App.view.toggleSetSelection();
+
         const expected = {
             selDatePicker: {
                 visible: true,
                 cells: getHighlightCells(1, 7, 31),
+                current: {
+                    month: 11,
+                    year: 2020,
+                },
+            },
+        };
+
+        return App.view.checkState(expected);
+    });
+
+    await test('clearSelection() method', async () => {
+        await App.view.toggleSetSelection();
+        await App.view.clearSelection();
+        await App.view.toggleSetSelection();
+
+        const expected = {
+            selDatePicker: {
+                visible: true,
+                cells: getHighlightCells(-1, -1, 31),
+                current: {
+                    month: 11,
+                    year: 2020,
+                },
+            },
+        };
+
+        return App.view.checkState(expected);
+    });
+
+    await test('Update setSelection() method', async () => {
+        await App.view.toggleSetSelection();
+        await App.view.updateSelection();
+        await App.view.toggleSetSelection();
+
+        const expected = {
+            selDatePicker: {
+                visible: true,
+                cells: getHighlightCells(8, 14, 31),
                 current: {
                     month: 11,
                     year: 2020,
