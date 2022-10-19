@@ -123,7 +123,6 @@ const initStandardInline = () => {
     DropDown.create({
         elem: 'selinp2',
         className: 'dd__container_ellipsis',
-        maxHeight: 6,
         placeholder: 'Select item 2',
         data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
     });
@@ -188,13 +187,18 @@ const initParseOptGroups = () => {
 const dynamicOptGroups = () => {
     const groupsDropDown = DropDown.create({
         elem: 'optgroupsdyn',
-        data: initItems('Visible item', 3),
         className: 'dd__styled-group',
     });
-    const customGroup = groupsDropDown.addGroup('Hidden');
+    const visibleGroup = groupsDropDown.addGroup('Visible');
+    const visibleGroupItems = initItems('Visible item', 3);
+    visibleGroupItems.forEach(
+        (item) => groupsDropDown.addItem({ ...item, group: visibleGroup }),
+    );
+
+    const hiddenGroup = groupsDropDown.addGroup('Hidden');
     const hiddenGroupItems = initItems('Hidden item', 3);
     hiddenGroupItems.forEach(
-        (item) => groupsDropDown.addItem({ ...item, id: item.id + 2, group: customGroup }),
+        (item) => groupsDropDown.addItem({ ...item, id: item.id + 2, group: hiddenGroup }),
     );
 };
 

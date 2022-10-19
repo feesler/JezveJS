@@ -752,6 +752,17 @@ export class DatePicker extends Component {
         this.showMonth(date);
     }
 
+    /** Clears selected items range */
+    clearSelection() {
+        this.cleanAll();
+        this.setState({
+            ...this.state,
+            curRange: { start: null, end: null },
+            selRange: { start: null, end: null },
+            actDate: null,
+        });
+    }
+
     /**
      * 'transitionend' event handler
      * @param {*} e - Event object

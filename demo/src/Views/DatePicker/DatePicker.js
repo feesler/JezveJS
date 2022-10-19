@@ -1,6 +1,7 @@
 import 'jezvejs/style';
 import {
     ge,
+    setEvents,
     onReady,
     formatDate,
     insertAfter,
@@ -46,8 +47,7 @@ const initPopup = () => {
     });
     insertAfter(datePicker.elem, inpGroup);
 
-    const btn = ge('showPopupBtn');
-    btn.addEventListener('click', () => datePicker.show());
+    setEvents(ge('showPopupBtn'), { click: () => datePicker.show() });
 };
 
 const initPosition = () => {
@@ -72,8 +72,7 @@ const initRangeSelect = () => {
     });
     insertAfter(datePicker.elem, inpGroup);
 
-    const btn = ge('showRangeBtn');
-    btn.addEventListener('click', () => datePicker.show());
+    setEvents(ge('showRangeBtn'), { click: () => datePicker.show() });
 };
 
 const initCallbacks = () => {
@@ -95,8 +94,7 @@ const initCallbacks = () => {
     });
     insertAfter(datePicker.elem, inpGroup);
 
-    const btn = ge('showCbBtn');
-    btn.addEventListener('click', () => datePicker.show(!datePicker.visible()));
+    setEvents(ge('showCbBtn'), { click: () => datePicker.show(!datePicker.visible()) });
 };
 
 const initSetSelection = () => {
@@ -108,8 +106,11 @@ const initSetSelection = () => {
     datePicker.setSelection('01.12.2020', '07.12.2020');
     insertAfter(datePicker.elem, inpGroup);
 
-    const btn = ge('showSelBtn');
-    btn.addEventListener('click', () => datePicker.show());
+    setEvents(ge('showSelBtn'), { click: () => datePicker.show() });
+    setEvents(ge('select-btn'), {
+        click: () => datePicker.setSelection('08.12.2020', '14.12.2020'),
+    });
+    setEvents(ge('clear-btn'), { click: () => datePicker.clearSelection() });
 };
 
 const initLocales = () => {
