@@ -8,7 +8,7 @@
   --dd-selection-text: #000000;
   --dd-input-text: #000000;
   --dd-placeholder: #808080;
-  --dd-list-z-index: 1000;
+  --dd-list-z-index: 9999;
 
   /* Active component */
   --dd-active-border: #888888;
@@ -39,6 +39,9 @@
   --dd-selection-item-hover-bg: #1e82cc;
   --dd-selection-item-hover-btn: #166096;
   --dd-selection-item-btn-hover: #ffffff;
+
+  /* List */
+  --dd-max-list-height: 300px;
 
   /* List item */
   --dd-list-item-text: #000000;
@@ -239,6 +242,7 @@
   display: none;
   box-sizing: border-box;
   max-width: 100%;
+  max-height: var(--dd-max-list-height);
   margin: 5px 0;
   overflow-y: auto;
   background-color: var(--dd-bg-color);

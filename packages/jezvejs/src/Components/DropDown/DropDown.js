@@ -63,6 +63,10 @@ const TOGGLE_ICON_CLASS = 'dd__toggle-icon';
 const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 
+/* List position constants */
+const SCREEN_PADDING = 5;
+const LIST_MARGIN = 5;
+
 /** Default properties */
 const defaultProps = {
     name: null,
@@ -79,7 +83,6 @@ const defaultProps = {
     onitemselect: null,
     onchange: null,
     oninput: null,
-    maxHeight: 5,
     className: null,
 };
 
@@ -93,7 +96,6 @@ const defaultProps = {
  *     small devices(less 768px width) to view list and edit selection
  * @param {boolean} props.fullScreen - if set true component will show fullscreen popup
  * @param {string} props.placeholder - placeholder text for component
- * @param {number} props.maxHeight - maximum count of items to show in drop down list
  * @param {Function} props.onitemselect - item selected event handler
  * @param {Function} props.onchange - selection changed event handler
  * @param {boolean|Function} props.oninput - text input event handler
@@ -144,8 +146,6 @@ export class DropDown extends Component {
         if (this.state.disabled) {
             this.state.editable = false;
         }
-
-        this.setMaxHeight(this.props.maxHeight);
 
         this.emptyClickHandler = () => this.showList(false);
         this.toggleHandler = () => this.toggleList();
@@ -239,15 +239,6 @@ export class DropDown extends Component {
     /** Return disabled state */
     get disabled() {
         return this.state.disabled;
-    }
-
-    /** Set maximum height of list element as count of items to be visible */
-    setMaxHeight(value) {
-        const maxHeight = parseInt(value, 10);
-        if (Number.isNaN(maxHeight) || maxHeight <= 0) {
-            throw new Error('Invalid maxHeight parameter');
-        }
-        this.state.maxHeight = maxHeight;
     }
 
     /** Check specified element is in input elements group */
@@ -923,26 +914,17 @@ export class DropDown extends Component {
 
         const html = document.documentElement;
         const { scrollHeight } = html;
+        const screenTop = html.scrollTop;
         const screenBottom = html.scrollTop + html.clientHeight;
 
         this.elem.classList.add(LIST_OPEN_CLASS);
 
-        let listHeight = 0;
-        const visibleItems = this.getVisibleItems(state);
-        if (visibleItems.length > 0) {
-            const [visibleItem] = visibleItems;
-            const visibleElem = this.getListItemElem(visibleItem.id);
-            const itemHeight = parseInt(visibleElem.offsetHeight, 10);
-            const itemsToShow = Math.min(state.maxHeight, visibleItems.length);
-            listHeight = itemsToShow * itemHeight;
-        }
+        let listHeight = this.list.offsetHeight;
 
         let border = 0;
         if (!this.props.listAttach) {
             border = (this.comboElem.offsetHeight - this.comboElem.scrollHeight) / 2;
         }
-
-        this.list.style.height = px(0);
 
         const offset = getOffset(this.list.offsetParent);
         const container = getOffset(this.elem);
@@ -956,8 +938,8 @@ export class DropDown extends Component {
             }
             : null;
 
-        const totalListHeight = container.height + listHeight;
-        const listBottom = container.top + totalListHeight;
+        let totalListHeight = container.height + listHeight;
+        let listBottom = container.top + totalListHeight;
 
         if (this.props.fullScreen && isVisible(this.backgroundElem)) {
             document.body.style.overflow = 'hidden';
@@ -968,21 +950,33 @@ export class DropDown extends Component {
             const fullScreenListHeight = html.clientHeight - combo.height;
             this.list.style.height = px(fullScreenListHeight / 2);
         } else {
+            const padding = SCREEN_PADDING * 2;
+            // Check list taller than screen
+            if (totalListHeight > html.clientHeight) {
+                listHeight = html.clientHeight - container.height - (padding + LIST_MARGIN);
+                this.list.style.height = px(listHeight);
+
+                totalListHeight = container.height + listHeight;
+                listBottom = container.top + totalListHeight;
+            }
+
             // Check vertical offset of drop down list
             if (listBottom > scrollHeight) {
-                this.list.style.top = px(container.top - offset.top - listHeight + border);
+                const listTop = container.top - offset.top - listHeight - padding;
+                const listOffsetTop = offset.top + listTop;
+                if (listOffsetTop < screenTop) {
+                    html.scrollTop -= (screenTop - listOffsetTop);
+                }
+
+                this.list.style.top = px(container.top - offset.top - listHeight - padding);
             } else {
-                if (listBottom > screenBottom) {
-                    html.scrollTop += listBottom - screenBottom;
+                if (listBottom + (SCREEN_PADDING * 2) > screenBottom) {
+                    html.scrollTop += listBottom - screenBottom + padding;
                 }
                 this.list.style.top = px(
                     container.top - offset.top + container.height - border,
                 );
             }
-
-            this.list.style.height = px(
-                listHeight + this.list.offsetHeight - this.list.scrollHeight,
-            );
         }
 
         if (state.filtered && state.filteredCount === 0) {
@@ -2060,6 +2054,9 @@ export class DropDown extends Component {
             if (this.props.fullScreen) {
                 document.body.style.overflow = '';
             }
+
+            this.list.style.height = '';
+            this.list.style.top = '';
         }
     }
 
