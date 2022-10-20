@@ -2,7 +2,7 @@ import {
     isFunction,
     ge,
     svg,
-    setParam,
+    setProps,
     re,
     insertAfter,
     prependChild,
@@ -272,7 +272,7 @@ export class Popup extends Component {
                     });
                 }
 
-                setParam(this.okBtn, controls.okBtn);
+                setProps(this.okBtn, controls.okBtn);
             }
         }
 
@@ -292,7 +292,7 @@ export class Popup extends Component {
                     });
                 }
 
-                setParam(this.cancelBtn, controls.cancelBtn);
+                setProps(this.cancelBtn, controls.cancelBtn);
             }
         }
 

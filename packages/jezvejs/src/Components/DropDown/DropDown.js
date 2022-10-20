@@ -1356,24 +1356,21 @@ export class DropDown extends Component {
     toggleItem(itemId) {
         const item = this.getItem(itemId);
         if (!item) {
-            throw new Error(`Item ${itemId} not found`);
+            return;
         }
 
         if (item.selected && this.props.multi) {
-            return this.deselectItem(itemId);
+            this.deselectItem(itemId);
+        } else {
+            this.selectItem(itemId);
         }
-
-        return this.selectItem(itemId);
     }
 
     /** Select specified item */
     selectItem(itemId) {
         const strId = itemId.toString();
         const itemToSelect = this.getItem(strId);
-        if (!itemToSelect) {
-            throw new Error(`Item ${itemId} not found`);
-        }
-        if (itemToSelect.selected) {
+        if (!itemToSelect || itemToSelect.selected) {
             return;
         }
 
@@ -1396,11 +1393,7 @@ export class DropDown extends Component {
 
         const strId = itemId.toString();
         const itemToDeselect = this.getItem(strId);
-        if (!itemToDeselect) {
-            throw new Error(`Item ${itemId} not found`);
-        }
-
-        if (!itemToDeselect.selected) {
+        if (!itemToDeselect?.selected) {
             return;
         }
 

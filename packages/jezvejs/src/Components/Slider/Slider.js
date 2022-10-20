@@ -1,7 +1,7 @@
 import {
     isFunction,
     ge,
-    setParam,
+    setProps,
     px,
     createElement,
 } from '../../js/common.js';
@@ -85,7 +85,7 @@ export class Slider {
             return false;
         }
 
-        setParam(this.slider.style, {
+        setProps(this.slider.style, {
             width: px(this.swidth),
             height: px(this.sheight),
             styleFloat: 'left',
@@ -98,7 +98,7 @@ export class Slider {
             return false;
         }
 
-        setParam(this.inslide.style, { position: 'absolute', top: '0px', left: '0px' });
+        setProps(this.inslide.style, { position: 'absolute', top: '0px', left: '0px' });
 
         this.type = params.vert || false;
 
@@ -245,7 +245,7 @@ export class Slider {
             return;
         }
 
-        setParam(slideObj, {
+        setProps(slideObj, {
             className: 'slide',
             style: {
                 width: px(this.swidth),

@@ -1,6 +1,5 @@
 import {
     svg,
-    setParam,
     isFunction,
     isObject,
     show,
@@ -680,7 +679,8 @@ export class BaseChart extends Component {
             popupX = chartsBRect.width - this.popup.offsetWidth;
         }
 
-        setParam(this.popup.style, { left: px(popupX), top: px(popupY) });
+        this.popup.style.left = px(popupX);
+        this.popup.style.top = px(popupY);
 
         setEmptyClick(this.emptyClickHandler, [target.item.elem, this.popup]);
     }

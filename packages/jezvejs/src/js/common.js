@@ -53,40 +53,6 @@ export const asArray = (value) => {
     return Array.isArray(value) ? value : [value];
 };
 
-/* eslint-disable no-param-reassign */
-/**
- * Assign properties from second object to first
- * @param {*} obj - object to assign properties to
- * @param {*} params - object to obtain properties from
- */
-export const setParam = (obj, params) => {
-    if (!obj || !params || typeof params !== 'object') {
-        return;
-    }
-
-    Object.keys(params).forEach((key) => {
-        const val = params[key];
-        if (Array.isArray(val)) {
-            obj[key] = val.map((item) => item);
-        } else if (isObject(val)) {
-            if (obj[key] === null || typeof obj[key] === 'undefined') {
-                obj[key] = {};
-            }
-
-            setParam(obj[key], val);
-        } else {
-            try {
-                obj[key] = val;
-            } catch (e) {
-                if (obj.setAttribute) {
-                    obj.setAttribute(key, val);
-                }
-            }
-        }
-    });
-};
-/* eslint-enable no-param-reassign */
-
 /**
  * Assign properties from second object to first
  * @param {Object} obj - object to assign properties to
@@ -167,36 +133,6 @@ export const removeEvents = (elem, events) => {
     Object.keys(events).forEach((eventName) => {
         elem.removeEventListener(eventName, events[eventName]);
     });
-};
-
-/**
- * Create specified DOM element and set parameters if specified
- * @param {string} tagName - tag name of element to create
- * @param {Object} params - properties to set for created element
- * @param {Element[]} children - element or array of elements to append to created element
- * @param {Object} events - event handlers object
- */
-export const ce = (tagName, params, children, events) => {
-    if (typeof tagName !== 'string') {
-        return null;
-    }
-
-    const elem = document.createElement(tagName);
-    if (!elem) {
-        return null;
-    }
-
-    if (params) {
-        setParam(elem, params);
-    }
-    if (children) {
-        addChilds(elem, children);
-    }
-    if (events) {
-        setEvents(elem, events);
-    }
-
-    return elem;
 };
 
 /**
