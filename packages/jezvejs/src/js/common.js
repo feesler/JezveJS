@@ -172,36 +172,6 @@ export const removeEvents = (elem, events) => {
 /**
  * Create specified DOM element and set parameters if specified
  * @param {string} tagName - tag name of element to create
- * @param {Object} params - properties to set for created element
- * @param {Element[]} children - element or array of elements to append to created element
- * @param {Object} events - event handlers object
- */
-export const ce = (tagName, params, children, events) => {
-    if (typeof tagName !== 'string') {
-        return null;
-    }
-
-    const elem = document.createElement(tagName);
-    if (!elem) {
-        return null;
-    }
-
-    if (params) {
-        setParam(elem, params);
-    }
-    if (children) {
-        addChilds(elem, children);
-    }
-    if (events) {
-        setEvents(elem, events);
-    }
-
-    return elem;
-};
-
-/**
- * Create specified DOM element and set parameters if specified
- * @param {string} tagName - tag name of element to create
  * @param {Object} options
  * @param {Object} options.attrs - attributes to set for created element
  * @param {Object} options.props - properties to set for created element
