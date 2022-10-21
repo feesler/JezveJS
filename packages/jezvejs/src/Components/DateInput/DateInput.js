@@ -6,6 +6,7 @@ import {
     isNum,
     removeEvents,
 } from '../../js/common.js';
+import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
 const DEFAULT_SEPARATOR = '.';
@@ -14,21 +15,25 @@ const defaultProps = {
     locales: [],
     name: null,
     form: null,
+    placeholder: null,
+    oninput: null,
 };
 
 /**
  * Decimal value input
  * @param {Object} props
  */
-export class DateInput {
+export class DateInput extends Component {
     static create(props) {
         return new DateInput(props);
     }
 
-    constructor(props = {}) {
+    constructor(props) {
+        super(props);
+
         this.props = {
             ...defaultProps,
-            ...props,
+            ...this.props,
         };
 
         if (!this.props?.elem) {
@@ -78,7 +83,9 @@ export class DateInput {
         }
         setEvents(this.elem, this.eventHandlers);
         this.observeInputValue();
+        this.setClassNames();
 
+        this.handleValue(this.value);
         this.render(this.state);
     }
 
@@ -116,15 +123,16 @@ export class DateInput {
                     return;
                 }
 
-                const content = self.replaceSelection(value, true);
-                const state = self.handleExpectedContent(content);
-                if (state !== self.state) {
-                    const fixedValue = self.renderValue(state);
-                    descriptor.set.call(this, fixedValue);
-                    self.state = state;
-                }
+                descriptor.set.call(this, self.handleValue(value));
             },
         });
+    }
+
+    handleValue(value) {
+        const content = this.replaceSelection(value, true);
+        this.state = this.handleExpectedContent(content);
+
+        return this.renderValue(this.state);
     }
 
     getDateFormat() {
@@ -199,7 +207,8 @@ export class DateInput {
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
      */
-    replaceSelection(text, replaceAll = false) {
+    replaceSelection(text, all = false) {
+        const replaceAll = (this.elem.value.length === 0) || all;
         const origValue = (this.elem.value.length > 0)
             ? this.elem.value
             : this.formatDateString(this.state);
@@ -557,7 +566,7 @@ export class DateInput {
         }
     }
 
-    isEmptyState(state) {
+    isEmptyState(state = this.state) {
         return (
             state.day === this.emptyState.day
             && state.month === this.emptyState.month
@@ -565,7 +574,7 @@ export class DateInput {
         );
     }
 
-    renderValue(state) {
+    renderValue(state = this.state) {
         return this.isEmptyState(state) ? '' : this.formatDateString(state);
     }
 
