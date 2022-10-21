@@ -78,9 +78,6 @@ export class DateInput extends Component {
             paste: this.beforeInputHandler,
             beforeinput: this.beforeInputHandler,
         };
-        if (isFunction(this.props.oninput)) {
-            this.eventHandlers.input = (e) => this.handleInput(e);
-        }
         setEvents(this.elem, this.eventHandlers);
         this.observeInputValue();
         this.setClassNames();
@@ -129,6 +126,10 @@ export class DateInput extends Component {
     }
 
     handleValue(value) {
+        if (this.skipValidation) {
+            return value;
+        }
+
         const content = this.replaceSelection(value, true);
         this.state = this.handleExpectedContent(content);
 
@@ -207,27 +208,26 @@ export class DateInput extends Component {
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
      */
-    replaceSelection(text, all = false) {
-        const replaceAll = (this.elem.value.length === 0) || all;
-        const origValue = (this.elem.value.length > 0)
-            ? this.elem.value
+    replaceSelection(text, replaceAll = false) {
+        if (replaceAll && text.length === 0) {
+            return text;
+        }
+
+        const origValue = (this.value.length > 0)
+            ? this.value
             : this.formatDateString(this.state);
 
         const range = (replaceAll)
             ? { start: 0, end: origValue.length }
             : getCursorPos(this.elem);
-        const selRangeLength = Math.abs(range.end - range.start);
 
-        const beforeSelection = origValue.substr(0, range.start);
-        const afterSelection = origValue.substr(range.end);
-        let selection = origValue.substr(range.start);
+        const beforeSelection = origValue.substring(0, range.start);
+        const afterSelection = origValue.substring(range.end);
+        const selection = origValue.substring(range.start, range.end);
 
+        // Fix length of day and month values: prepend leading zero
         let fixedText = text;
         if (replaceAll) {
-            if (text.length === 0) {
-                return text;
-            }
-
             const expectedParts = text.split(this.separator);
             if (expectedParts.length !== 3) {
                 return origValue;
@@ -247,28 +247,34 @@ export class DateInput extends Component {
             fixedText = this.formatDateString({ day, month, year });
         }
 
-        let textValue = this.removeMaskChars(fixedText);
-
+        let textValue = this.removeSeparators(fixedText);
         if (!replaceAll) {
             this.cursorPos = beforeSelection.length;
         }
 
+        // Append input/paste text with guide characters to the length of selection
+        const digitsSelection = this.removeSeparators(selection);
+        if (textValue.length < digitsSelection.length) {
+            fixedText = fixedText.padEnd(digitsSelection.length, this.props.guideChar);
+        }
+
         // Replace leading guide characters after selection with remain text
-        let textCharsRemain = fixedText.length - selRangeLength;
-        let after = this.removeMaskChars(afterSelection);
+        let textCharsRemain = textValue.length - digitsSelection.length;
+        let after = this.removeSeparators(afterSelection);
         while (textCharsRemain > 0 && after.substr(0, 1) === this.props.guideChar) {
-            after = after.substr(1);
+            after = after.substring(1);
             textCharsRemain -= 1;
         }
         if (textCharsRemain > 0) {
             return origValue;
         }
 
-        let value = this.removeMaskChars(fixedText + after);
+        let value = this.removeSeparators(fixedText + after);
         let res = beforeSelection;
-        while (selection.length > 0) {
-            const maskChar = selection.charAt(0);
-            selection = selection.substring(1);
+        let valueToReplace = selection + afterSelection;
+        while (valueToReplace.length > 0) {
+            const maskChar = valueToReplace.charAt(0);
+            valueToReplace = valueToReplace.substring(1);
 
             if (this.separator.includes(maskChar)) {
                 res += maskChar;
@@ -317,30 +323,22 @@ export class DateInput extends Component {
         const range = getCursorPos(this.elem);
         const origValue = this.elem.value;
         const beforeSelection = origValue.substr(0, range.start);
-        let afterSelection = origValue.substr(range.end);
-        let char;
-        let maskChar;
+        const afterSelection = origValue.substring(range.end);
+        let selection = origValue.substring(range.start, range.end);
 
-        let selection = origValue.substr(range.start);
         let res = beforeSelection;
         this.cursorPos = beforeSelection.length;
         while (selection.length) {
-            maskChar = selection.charAt(0);
+            const char = selection.charAt(0);
             selection = selection.substr(1);
-            if (this.separator.includes(maskChar)) {
-                res += maskChar;
-            } else {
-                do {
-                    char = afterSelection.charAt(0);
-                    afterSelection = afterSelection.substr(1);
-                } while (this.separator.includes(char) && afterSelection.length > 0);
-
-                if (this.separator.includes(char) && !afterSelection.length) {
-                    char = this.props.guideChar;
-                }
+            if (this.separator.includes(char)) {
                 res += char;
+            } else {
+                res += this.props.guideChar;
             }
         }
+
+        res += afterSelection;
 
         return res;
     }
@@ -348,8 +346,6 @@ export class DateInput extends Component {
     /** Backspace key handler */
     backspaceHandler() {
         const range = getCursorPos(this.elem);
-        let char;
-
         if (range.start !== range.end) {
             return this.deleteSelection();
         }
@@ -359,7 +355,7 @@ export class DateInput extends Component {
         let afterSelection = origValue.substr(range.end);
 
         do {
-            char = beforeSelection.charAt(beforeSelection.length - 1);
+            const char = beforeSelection.charAt(beforeSelection.length - 1);
             beforeSelection = beforeSelection.substr(0, beforeSelection.length - 1);
             if (this.separator.includes(char)) {
                 afterSelection = char + afterSelection;
@@ -380,7 +376,7 @@ export class DateInput extends Component {
         return str.replaceAll(/\./g, '\\.');
     }
 
-    removeMaskChars(str) {
+    removeSeparators(str) {
         const escaped = this.escapeRegExp(this.separator);
         const expr = new RegExp(escaped, 'g');
 
@@ -403,7 +399,7 @@ export class DateInput extends Component {
         this.cursorPos = beforeSelection.length;
         let res = beforeSelection;
 
-        afterSelection = this.removeMaskChars(afterSelection);
+        afterSelection = this.removeSeparators(afterSelection);
         // Remove first character from part after selection
         if (afterSelection.length > 0) {
             afterSelection = this.props.guideChar + afterSelection.substr(1);
@@ -443,14 +439,12 @@ export class DateInput extends Component {
                 return;
             }
 
-            if (!['deleteContentBackward', 'deleteContentForward'].includes(e.inputType)) {
-                return;
-            }
-
             if (e.inputType === 'deleteContentBackward') {
                 expectedContent = this.backspaceHandler();
-            } else if (e.inputType === 'deleteContentForward') {
+            } else if (e.inputType === 'deleteContentForward' || e.inputType === 'deleteByCut') {
                 expectedContent = this.deleteHandler();
+            } else {
+                return;
             }
         } else {
             expectedContent = this.replaceSelection(inputContent);
@@ -460,10 +454,9 @@ export class DateInput extends Component {
         e.stopPropagation();
 
         const state = this.handleExpectedContent(expectedContent);
-        if (state !== this.state) {
-            this.state = state;
-            this.render(this.state);
-        }
+        this.setState(state);
+
+        this.sendInputEvent();
     }
 
     handleExpectedContent(content) {
@@ -559,11 +552,15 @@ export class DateInput extends Component {
         }
     }
 
-    /** 'input' event handler */
-    handleInput(e) {
-        if (isFunction(this.props.oninput)) {
-            this.props.oninput(e);
+    /** Send simulated 'input' event */
+    sendInputEvent() {
+        if (!isFunction(this.props.oninput)) {
+            return;
         }
+
+        this.props.oninput({
+            target: this.elem,
+        });
     }
 
     isEmptyState(state = this.state) {
@@ -580,7 +577,9 @@ export class DateInput extends Component {
 
     /** Render component */
     render(state) {
+        this.skipValidation = true;
         this.elem.value = this.renderValue(state);
+        this.skipValidation = false;
 
         setCursorPos(this.elem, this.cursorPos);
     }
