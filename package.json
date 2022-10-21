@@ -29,7 +29,7 @@
         "lint-demo-style": "npx stylelint demo/src/**/*.scss",
         "debug": "node --inspect-brk ./tests/index.js",
         "build": "npm-run-all build-src build-local",
-        "build-dev": "npm-run-all build-src-dev build-demo-dev",
+        "build-dev": "npm-run-all build-src-dev build-local-dev",
         "build-all": "npm-run-all build build-tests",
         "build-src": "npx webpack --progress -c ./config/common.js -c ./config/prod.js -m",
         "build-src-dev": "npx webpack --progress -c ./config/common.js -c ./config/dev.js -m",
