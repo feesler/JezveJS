@@ -14,6 +14,8 @@ const defaultProps = {
     locales: [],
     name: null,
     form: null,
+    placeholder: null,
+    oninput: null,
 };
 
 /**
@@ -79,6 +81,7 @@ export class DateInput {
         setEvents(this.elem, this.eventHandlers);
         this.observeInputValue();
 
+        this.handleValue(this.value);
         this.render(this.state);
     }
 
@@ -116,15 +119,16 @@ export class DateInput {
                     return;
                 }
 
-                const content = self.replaceSelection(value, true);
-                const state = self.handleExpectedContent(content);
-                if (state !== self.state) {
-                    const fixedValue = self.renderValue(state);
-                    descriptor.set.call(this, fixedValue);
-                    self.state = state;
-                }
+                descriptor.set.call(this, self.handleValue(value));
             },
         });
+    }
+
+    handleValue(value) {
+        const content = this.replaceSelection(value, true);
+        this.state = this.handleExpectedContent(content);
+
+        return this.renderValue(this.state);
     }
 
     getDateFormat() {
@@ -557,7 +561,7 @@ export class DateInput {
         }
     }
 
-    isEmptyState(state) {
+    isEmptyState(state = this.state) {
         return (
             state.day === this.emptyState.day
             && state.month === this.emptyState.month
@@ -565,7 +569,7 @@ export class DateInput {
         );
     }
 
-    renderValue(state) {
+    renderValue(state = this.state) {
         return this.isEmptyState(state) ? '' : this.formatDateString(state);
     }
 
