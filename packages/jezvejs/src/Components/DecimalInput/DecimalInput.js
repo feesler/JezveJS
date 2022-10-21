@@ -5,6 +5,7 @@ import {
     setEvents,
     removeEvents,
 } from '../../js/common.js';
+import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
 const defaultProps = {
@@ -25,11 +26,13 @@ const defaultProps = {
  * @param {Function} props.oninput - 'input' event handler
  * @param {Function} props.allowNegative - enables input negative values
  */
-export class DecimalInput {
+export class DecimalInput extends Component {
     constructor(props) {
+        super(props);
+
         this.props = {
             ...defaultProps,
-            ...props,
+            ...this.props,
         };
 
         if (!this.props.elem) {
@@ -72,6 +75,7 @@ export class DecimalInput {
         setEvents(this.elem, this.eventHandlers);
 
         this.observeInputValue();
+        this.setClassNames();
     }
 
     /** Component destructor: free resources */

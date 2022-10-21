@@ -6,6 +6,7 @@ import {
     isNum,
     removeEvents,
 } from '../../js/common.js';
+import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
 const DEFAULT_SEPARATOR = '.';
@@ -22,15 +23,17 @@ const defaultProps = {
  * Decimal value input
  * @param {Object} props
  */
-export class DateInput {
+export class DateInput extends Component {
     static create(props) {
         return new DateInput(props);
     }
 
-    constructor(props = {}) {
+    constructor(props) {
+        super(props);
+
         this.props = {
             ...defaultProps,
-            ...props,
+            ...this.props,
         };
 
         if (!this.props?.elem) {
@@ -80,6 +83,7 @@ export class DateInput {
         }
         setEvents(this.elem, this.eventHandlers);
         this.observeInputValue();
+        this.setClassNames();
 
         this.handleValue(this.value);
         this.render(this.state);
