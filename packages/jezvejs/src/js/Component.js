@@ -1,4 +1,9 @@
-import { ge, show, isVisible } from './common.js';
+import {
+    ge,
+    show,
+    enable,
+    isVisible,
+} from './common.js';
 
 /**
  * Base component constructor
@@ -54,6 +59,19 @@ export class Component {
     /** Hide base element of component */
     hide() {
         this.show(false);
+    }
+
+    /**
+     * Enable/disable base element of component
+     * @param {boolean} val - if true component will be enabled, disabled otherwise. Default is true
+     */
+    enable(value = true) {
+        enable(this.elem, value);
+    }
+
+    /** Disable base element of component */
+    disable() {
+        this.enable(false);
     }
 
     setClassNames() {
