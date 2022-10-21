@@ -3,6 +3,10 @@ import { ge, onReady, setEvents } from 'jezvejs';
 import { DateInput } from 'jezvejs/DateInput';
 import { initNavigation } from '../../app.js';
 
+const onInput = (e) => {
+    ge('inputStatus').textContent = e.target.value;
+};
+
 const onSubmitForm = (e) => {
     e.preventDefault();
 
@@ -12,7 +16,10 @@ const onSubmitForm = (e) => {
 const initDefault = () => {
     setEvents(ge('dateForm'), { submit: (e) => onSubmitForm(e) });
 
-    DateInput.create({ elem: ge('dateinput') });
+    DateInput.create({
+        elem: ge('dateinput'),
+        oninput: (e) => onInput(e),
+    });
 };
 
 const initPlaceholder = () => {

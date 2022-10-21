@@ -78,9 +78,6 @@ export class DateInput extends Component {
             paste: this.beforeInputHandler,
             beforeinput: this.beforeInputHandler,
         };
-        if (isFunction(this.props.oninput)) {
-            this.eventHandlers.input = (e) => this.handleInput(e);
-        }
         setEvents(this.elem, this.eventHandlers);
         this.observeInputValue();
         this.setClassNames();
@@ -460,10 +457,9 @@ export class DateInput extends Component {
         e.stopPropagation();
 
         const state = this.handleExpectedContent(expectedContent);
-        if (state !== this.state) {
-            this.state = state;
-            this.render(this.state);
-        }
+        this.setState(state);
+
+        this.sendInputEvent();
     }
 
     handleExpectedContent(content) {
@@ -559,11 +555,15 @@ export class DateInput extends Component {
         }
     }
 
-    /** 'input' event handler */
-    handleInput(e) {
-        if (isFunction(this.props.oninput)) {
-            this.props.oninput(e);
+    /** Send simulated 'input' event */
+    sendInputEvent() {
+        if (!isFunction(this.props.oninput)) {
+            return;
         }
+
+        this.props.oninput({
+            target: this.elem,
+        });
     }
 
     isEmptyState(state = this.state) {
