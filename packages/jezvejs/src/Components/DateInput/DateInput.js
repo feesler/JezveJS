@@ -66,10 +66,10 @@ export class DateInput extends Component {
         this.elem.inputMode = 'decimal';
         this.elem.placeholder = this.props.placeholder ?? this.formatMask;
         if (typeof this.props.name === 'string') {
-            this.input.name = this.props.name;
+            this.elem.name = this.props.name;
         }
         if (typeof this.props.form === 'string') {
-            this.input.form = this.props.form;
+            this.elem.form = this.props.form;
         }
 
         this.beforeInputHandler = (e) => this.validateInput(e);
