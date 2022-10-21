@@ -207,7 +207,8 @@ export class DateInput extends Component {
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
      */
-    replaceSelection(text, replaceAll = false) {
+    replaceSelection(text, all = false) {
+        const replaceAll = (this.elem.value.length === 0) || all;
         const origValue = (this.elem.value.length > 0)
             ? this.elem.value
             : this.formatDateString(this.state);
