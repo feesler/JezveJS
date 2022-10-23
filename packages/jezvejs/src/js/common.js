@@ -305,7 +305,7 @@ export const enable = (target, val = true) => {
     if (val) {
         elem.removeAttribute('disabled');
     } else {
-        elem.setAttribute('disabled', true);
+        elem.setAttribute('disabled', '');
     }
 };
 
