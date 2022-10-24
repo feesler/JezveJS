@@ -84,6 +84,8 @@ export class DateInput extends Component {
 
         this.handleValue(this.value);
         this.render(this.state);
+        // Remove focus after getCursorPos() calls
+        this.elem.blur();
     }
 
     /** Component destructor: free resources */
