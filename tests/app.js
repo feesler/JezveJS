@@ -1,5 +1,4 @@
 import {
-    setupTest,
     formatDate,
     TestApplication,
     goTo,
@@ -35,8 +34,6 @@ class Application extends TestApplication {
 
         this.dateList = [...Object.values(this.dates)];
         this.fmtDateList = [...Object.values(this.fmtDates)];
-
-        setupTest(this.environment);
     }
 
     async startTests() {
