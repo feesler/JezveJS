@@ -6,10 +6,6 @@ import { OriginalDragAvatar } from './OriginalDragAvatar.js';
  * Default drag zone
  */
 export class DefaultDragZone extends DragZone {
-    static create(...args) {
-        return new DefaultDragZone(...args);
-    }
-
     makeAvatar() {
         const avatarProps = {
             dragZone: this,

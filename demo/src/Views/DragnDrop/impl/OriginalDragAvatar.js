@@ -8,10 +8,6 @@ import { DragAvatar } from 'jezvejs/DragAvatar';
  * @param {*} dragElem
  */
 export class OriginalDragAvatar extends DragAvatar {
-    static create(...args) {
-        return new OriginalDragAvatar(...args);
-    }
-
     /* eslint-disable-next-line no-unused-vars */
     initFromEvent(downX, downY, e) {
         this.dragZoneElem = this.dragZone.getElement();

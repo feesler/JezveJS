@@ -18,10 +18,6 @@ const defaultProps = {
  * @param {string|Element} props.elem - base element for component
  */
 export class LineChart extends BaseChart {
-    static create(props) {
-        return new LineChart(props);
-    }
-
     constructor(props) {
         super(props);
 

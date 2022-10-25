@@ -23,10 +23,6 @@ const defaultProps = {
 };
 
 export class Collapsible extends Component {
-    static create(props) {
-        return new Collapsible(props);
-    }
-
     constructor(props) {
         super(props);
 

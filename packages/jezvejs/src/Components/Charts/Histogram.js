@@ -11,10 +11,6 @@ const CATEGORY_CLASS = 'histogram_category-';
  * @param {string|Element} props.elem - base element for component
  */
 export class Histogram extends BaseChart {
-    static create(props) {
-        return new Histogram(props);
-    }
-
     constructor(props) {
         super(props);
 

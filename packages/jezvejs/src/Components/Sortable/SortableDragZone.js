@@ -19,10 +19,6 @@ const defaultProps = {
 
 /** Sortable drag zone */
 export class SortableDragZone extends DragZone {
-    static create(...args) {
-        return new SortableDragZone(...args);
-    }
-
     constructor(...args) {
         super(...args);
 

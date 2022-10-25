@@ -106,10 +106,6 @@ const defaultProps = {
  * @param {Object} props.data - array of item objects { id, title }
  */
 export class DropDown extends Component {
-    static create(params) {
-        return new DropDown(params);
-    }
-
     constructor(props = {}) {
         super(props);
 

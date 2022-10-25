@@ -20,16 +20,14 @@ const ICON_PATH = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.5
 const ICON_VIEWBOX = '0 0 9.2604 9.2604';
 
 export class Checkbox extends Component {
-    static create(props = {}) {
-        const instance = new Checkbox(props);
-        instance.init();
-        return instance;
-    }
+    constructor(props) {
+        super(props);
 
-    static fromElement(elem, props = {}) {
-        const instance = new Checkbox(props);
-        instance.parse(elem);
-        return instance;
+        if (this.elem) {
+            this.parse(this.elem);
+        } else {
+            this.init();
+        }
     }
 
     get checked() {
@@ -68,15 +66,14 @@ export class Checkbox extends Component {
         this.postInit();
     }
 
-    parse(elem) {
-        if (!elem?.classList?.contains(CONTAINER_CLASS)) {
+    parse() {
+        if (!this.elem?.classList?.contains(CONTAINER_CLASS)) {
             throw new Error('Invalid element');
         }
 
-        this.elem = elem;
-        this.input = elem.querySelector('input[type="checkbox"]');
-        this.checkIcon = elem.querySelector(`.${CHECK_CLASS}`);
-        this.label = elem.querySelector(`.${LABEL_CLASS}`);
+        this.input = this.elem.querySelector('input[type="checkbox"]');
+        this.checkIcon = this.elem.querySelector(`.${CHECK_CLASS}`);
+        this.label = this.elem.querySelector(`.${LABEL_CLASS}`);
         if (!this.input || !this.checkIcon) {
             throw new Error('Invalid structure of checkbox');
         }

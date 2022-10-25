@@ -10,7 +10,7 @@ import { DragMaster } from './DragMaster.js';
  */
 export class DragAvatar {
     static create(...args) {
-        return new DragAvatar(...args);
+        return new this(...args);
     }
 
     constructor(props = {}) {

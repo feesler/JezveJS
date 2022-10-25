@@ -24,16 +24,14 @@ const textInputTypes = [
 ];
 
 export class InputGroup extends Component {
-    static create(props = {}) {
-        const instance = new InputGroup(props);
-        instance.init();
-        return instance;
-    }
+    constructor(props) {
+        super(props);
 
-    static fromElement(elem, props = {}) {
-        const instance = new InputGroup(props);
-        instance.parse(elem);
-        return instance;
+        if (this.elem) {
+            this.parse();
+        } else {
+            this.init();
+        }
     }
 
     init() {
@@ -49,12 +47,11 @@ export class InputGroup extends Component {
         this.setHandlers();
     }
 
-    parse(elem) {
-        if (!elem?.classList?.contains(CONTAINER_CLASS)) {
+    parse() {
+        if (!this.elem?.classList?.contains(CONTAINER_CLASS)) {
             throw new Error('Invalid element');
         }
 
-        this.elem = elem;
         this.queryInputs();
 
         this.setClassNames();

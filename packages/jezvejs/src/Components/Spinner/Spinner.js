@@ -7,12 +7,6 @@ const SPINNER_CLASS = 'spinner';
 const defaultProps = {};
 
 export class Spinner extends Component {
-    static create(props = {}) {
-        const instance = new Spinner(props);
-        instance.init();
-        return instance;
-    }
-
     constructor(props) {
         super(props);
 
@@ -20,6 +14,8 @@ export class Spinner extends Component {
             ...defaultProps,
             ...this.props,
         };
+
+        this.init();
     }
 
     init() {

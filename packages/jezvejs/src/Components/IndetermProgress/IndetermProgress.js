@@ -14,12 +14,6 @@ const defaultProps = {
 };
 
 export class IndetermProgress extends Component {
-    static create(props = {}) {
-        const instance = new IndetermProgress(props);
-        instance.init();
-        return instance;
-    }
-
     constructor(props) {
         super(props);
 
@@ -29,6 +23,8 @@ export class IndetermProgress extends Component {
         };
 
         this.state = { ...this.props };
+
+        this.init();
     }
 
     get running() {

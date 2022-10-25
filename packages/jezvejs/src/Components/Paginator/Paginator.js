@@ -30,18 +30,6 @@ const ARROW_CLASS_PREV = 'paginator-arrow__prev';
 const ARROW_CLASS_NEXT = 'paginator-arrow__next';
 
 export class Paginator extends Component {
-    static create(props = {}) {
-        const instance = new Paginator(props);
-        instance.init();
-        return instance;
-    }
-
-    static fromElement(elem, props = {}) {
-        const instance = new Paginator(props);
-        instance.parse(elem);
-        return instance;
-    }
-
     constructor(props) {
         super(props);
 
@@ -53,6 +41,12 @@ export class Paginator extends Component {
         this.state = {
             ...this.props,
         };
+
+        if (this.elem) {
+            this.parse();
+        } else {
+            this.init();
+        }
     }
 
     init() {
@@ -63,16 +57,15 @@ export class Paginator extends Component {
         this.render(this.state);
     }
 
-    parse(elem) {
-        if (!elem?.classList?.contains(CONTAINER_CLASS)) {
+    parse() {
+        if (!this.elem?.classList?.contains(CONTAINER_CLASS)) {
             throw new Error('Invalid element');
         }
 
-        this.elem = elem;
         this.setHandlers();
         this.setClassNames();
 
-        const items = Array.from(elem.querySelectorAll(`.${ITEM_CLASS}`));
+        const items = Array.from(this.elem.querySelectorAll(`.${ITEM_CLASS}`));
         items.forEach((item) => {
             if (item.classList.contains(ARROW_CLASS)) {
                 this.state.arrows = true;

@@ -24,10 +24,6 @@ const defaultProps = {
  * @param {Object} props
  */
 export class DateInput extends Component {
-    static create(props) {
-        return new DateInput(props);
-    }
-
     constructor(props) {
         super(props);
 

@@ -18,12 +18,6 @@ const defaultProps = {
 };
 
 export class Offcanvas extends Component {
-    static create(props = {}) {
-        const instance = new Offcanvas(props);
-        instance.init();
-        return instance;
-    }
-
     constructor(props) {
         super(props);
 
@@ -31,6 +25,8 @@ export class Offcanvas extends Component {
             ...defaultProps,
             ...this.props,
         };
+
+        this.init();
     }
 
     init() {

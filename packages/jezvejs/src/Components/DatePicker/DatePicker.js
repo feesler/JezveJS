@@ -98,12 +98,6 @@ const defaultProps = {
  * @param {function} props.onhide - dynamic date picker hidden callback
  */
 export class DatePicker extends Component {
-    static create(props = {}) {
-        const instance = new DatePicker(props);
-        instance.init();
-        return instance;
-    }
-
     constructor(props) {
         super(props);
 
@@ -127,6 +121,8 @@ export class DatePicker extends Component {
 
         this.transitionHandler = (e) => this.onTransitionEnd(e);
         this.emptyClickHandler = () => this.showView(false);
+
+        this.init();
     }
 
     init() {
