@@ -13,7 +13,7 @@ const defaultProps = {
  */
 export class DragZone {
     static create(...args) {
-        return new DragZone(...args);
+        return new this(...args);
     }
 
     constructor(props = {}) {

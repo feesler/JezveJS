@@ -38,10 +38,6 @@ const defaultProps = {
  * Pie chart component
  */
 export class PieChart extends Component {
-    static create(props) {
-        return new PieChart(props);
-    }
-
     constructor(props) {
         super(props);
 

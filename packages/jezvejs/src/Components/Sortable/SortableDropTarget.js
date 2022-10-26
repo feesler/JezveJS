@@ -15,10 +15,6 @@ const defaultProps = {
 
 // Sortable drop target
 export class SortableDropTarget extends DropTarget {
-    static create(...args) {
-        return new SortableDropTarget(...args);
-    }
-
     constructor(...args) {
         super(...args);
 

@@ -15,16 +15,14 @@ const CHECK_CLASS = 'radio__check';
 const LABEL_CLASS = 'radio__label';
 
 export class Radio extends Component {
-    static create(props = {}) {
-        const instance = new Radio(props);
-        instance.init();
-        return instance;
-    }
+    constructor(props) {
+        super(props);
 
-    static fromElement(elem, props = {}) {
-        const instance = new Radio(props);
-        instance.parse(elem);
-        return instance;
+        if (this.elem) {
+            this.parse(this.elem);
+        } else {
+            this.init();
+        }
     }
 
     get checked() {

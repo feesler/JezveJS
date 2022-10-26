@@ -7,7 +7,7 @@
  */
 export class DropTarget {
     static create(...args) {
-        return new DropTarget(...args);
+        return new this(...args);
     }
 
     constructor(props = {}) {

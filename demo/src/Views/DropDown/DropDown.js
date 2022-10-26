@@ -2,11 +2,12 @@ import 'jezvejs/style';
 import {
     isObject,
     ge,
-    createElement,
     onReady,
 } from 'jezvejs';
 import { DropDown } from 'jezvejs/DropDown';
 import { initNavigation } from '../../app.js';
+import { CustomListItem } from './impl/CustomListItem.js';
+import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
 import './style.scss';
 
 const initItems = (title, count) => {
@@ -26,63 +27,6 @@ const toggleEnable = (e, dropDown) => {
     dropDown.enable(dropDown.disabled);
     button.value = (dropDown.disabled) ? 'Enable' : 'Disable';
 };
-
-const customColorsMap = {
-    1: 'dd__custom-list-item_blue',
-    2: 'dd__custom-list-item_red',
-    3: 'dd__custom-list-item_green',
-    4: 'dd__custom-list-item_yellow',
-    5: 'dd__custom-list-item_pink',
-    6: 'dd__custom-list-item_purple',
-    7: 'dd__custom-list-item_orange',
-    8: 'dd__custom-list-item_grey',
-    9: 'dd__custom-list-item_brown',
-    10: 'dd__custom-list-item_cyan',
-    11: 'dd__custom-list-item_magenta',
-};
-
-function renderCustomItem(item) {
-    const colorClass = customColorsMap[item.id];
-    const colorElem = createElement('span', {
-        props: { className: `dd__custom-list-item_color ${colorClass}` },
-    });
-    const titleElem = createElement('span', {
-        props: {
-            className: 'dd__custom-list-item_title',
-            title: item.title,
-            textContent: item.title,
-        },
-    });
-
-    const elem = createElement('div', {
-        props: { className: 'dd__list-item dd__custom-list-item' },
-        children: [colorElem, titleElem],
-    });
-
-    if (this.props.multi) {
-        const checkIcon = createElement('span', {
-            props: { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
-        });
-        colorElem.append(checkIcon);
-    }
-
-    return elem;
-}
-
-function renderCustomSelectionItem(item) {
-    const deselectButton = createElement('span', {
-        props: { className: 'dd__del-selection-item-btn' },
-        events: { click: this.delSelectItemHandler },
-    });
-
-    return createElement('span', {
-        props: { className: 'dd__selection-item dd__custom-selection-item' },
-        children: [
-            deselectButton,
-            createElement('span', { props: { innerText: item.title.toLowerCase() } }),
-        ],
-    });
-}
 
 const formatObject = (value) => {
     let entries;
@@ -198,8 +142,11 @@ const dynamicOptGroups = () => {
     const hiddenGroup = groupsDropDown.addGroup('Hidden');
     const hiddenGroupItems = initItems('Hidden item', 3);
     hiddenGroupItems.forEach(
-        (item) => groupsDropDown.addItem({ ...item, id: item.id + 2, group: hiddenGroup }),
+        (item) => groupsDropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
     );
+
+    groupsDropDown.addItem({ id: 3, title: 'Visible item 3', group: visibleGroup });
+    groupsDropDown.addItem({ id: 6, title: 'Hidden item 3', group: hiddenGroup });
 };
 
 // Create drop down without host element in DOM
@@ -349,8 +296,7 @@ const customRender = () => {
         onchange(selection) {
             logTo('log-custom', `change: ${formatObject(selection)}`);
         },
-        renderItem: renderCustomItem,
-        renderSelectionItem: renderCustomSelectionItem,
+        components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
     });
 
     const enableBtn = ge('enableBtn2');

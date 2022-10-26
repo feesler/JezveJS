@@ -10,10 +10,6 @@ import { DragAvatar } from 'jezvejs/DragAvatar';
  * Drag original element instead of clone
  */
 export class PopupDragAvatar extends DragAvatar {
-    static create(...args) {
-        return new PopupDragAvatar(...args);
-    }
-
     /* eslint-disable-next-line no-unused-vars */
     initFromEvent(downX, downY, e) {
         this.dragZoneElem = this.dragZone.getElement();

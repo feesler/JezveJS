@@ -11,6 +11,14 @@ import {
  * @param {string|Element} props.elem - base element for component
  */
 export class Component {
+    static create(props) {
+        return new this(props);
+    }
+
+    static fromElement(elem, props = {}) {
+        return new this({ elem, ...props });
+    }
+
     constructor(props = {}) {
         this.props = props;
 

@@ -13,16 +13,14 @@ const CONTAINER_CLASS = 'switch';
 const SLIDER_CLASS = 'switch-slider';
 
 export class Switch extends Component {
-    static create(props = {}) {
-        const instance = new Switch(props);
-        instance.init();
-        return instance;
-    }
+    constructor(props) {
+        super(props);
 
-    static fromElement(elem, props = {}) {
-        const instance = new Switch(props);
-        instance.parse(elem);
-        return instance;
+        if (this.elem) {
+            this.parse(this.elem);
+        } else {
+            this.init();
+        }
     }
 
     get checked() {

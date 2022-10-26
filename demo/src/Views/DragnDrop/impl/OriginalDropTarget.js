@@ -8,10 +8,6 @@ import { OriginalDragAvatar } from './OriginalDragAvatar.js';
  * Accept only OriginalDragAvatar
  */
 export class OriginalDropTarget extends DropTarget {
-    static create(...args) {
-        return new OriginalDropTarget(...args);
-    }
-
     onDragEnd(avatar, e) {
         if (!this.targetElem || !(avatar instanceof OriginalDragAvatar)) {
             avatar.onDragCancel(e);

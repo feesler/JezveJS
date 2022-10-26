@@ -12,12 +12,6 @@ const defaultProps = {
 };
 
 export class Progress extends Component {
-    static create(props = {}) {
-        const instance = new Progress(props);
-        instance.init();
-        return instance;
-    }
-
     constructor(props) {
         super(props);
 
@@ -28,6 +22,8 @@ export class Progress extends Component {
 
         this.props.value = this.normalizeValue(this.props.value);
         this.state = { ...this.props };
+
+        this.init();
     }
 
     get value() {

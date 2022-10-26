@@ -59,10 +59,6 @@ const defaultProps = {
  * @param {Object|false} params.btn.closeBtn - properties object. Remove if false
  */
 export class Popup extends Component {
-    static create(props) {
-        return new Popup(props);
-    }
-
     constructor(...args) {
         super(...args);
 

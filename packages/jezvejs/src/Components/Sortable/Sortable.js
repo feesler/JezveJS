@@ -18,10 +18,6 @@ import { SortableDropTarget } from './SortableDropTarget.js';
  * @param {String|String[]} props.handles - CSS selectors for available drag start handles
  */
 export class Sortable {
-    static create(...args) {
-        return new Sortable(...args);
-    }
-
     constructor(props = {}) {
         this.elem = (typeof props.elem === 'string') ? ge(props.elem) : props.elem;
         if (!this.elem) {

@@ -234,13 +234,4 @@ export class DecimalInput extends Component {
             this.props.oninput(e);
         }
     }
-
-    /** Static alias for DecimalInput constructor */
-    static create(props) {
-        if (!props || !props.elem) {
-            return null;
-        }
-
-        return new DecimalInput(props);
-    }
 }
