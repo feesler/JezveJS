@@ -21,10 +21,10 @@ import {
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
+import { DropDownListItem } from './ListItem.js';
 
 /* Icons */
 const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
-const CHECK_ICON = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z';
 const TOGGLE_ICON = 'm0.6 0.88-0.35 0.35 1.6 1.6 1.6-1.6-0.35-0.35-1.2 1.2z';
 
 /* CSS classes */
@@ -46,13 +46,9 @@ const SELECTION_ITEM_DEL_BTN_CLASS = 'dd__del-selection-item-btn';
 const SELECTION_ITEM_DEL_ICON_CLASS = 'dd__del-selection-item-icon';
 /* List */
 const LIST_CLASS = 'dd__list';
-const LIST_ITEM_CLASS = 'dd__list-item';
-const LIST_ITEM_ACTIVE_CLASS = 'dd__list-item_active';
-const SELECTED_LIST_ITEM_CLASS = 'dd__list-item_selected';
 const LIST_OPEN_CLASS = 'dd__open';
 const LIST_GROUP_CLASS = 'dd__list-group';
 const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
-const CHECK_ICON_CLASS = 'dd__check-icon';
 const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const COMBO_CLASS = 'dd__combo';
@@ -84,6 +80,9 @@ const defaultProps = {
     onchange: null,
     oninput: null,
     className: null,
+    components: {
+        ListItem: DropDownListItem,
+    },
 };
 
 /**
@@ -112,6 +111,10 @@ export class DropDown extends Component {
         this.props = {
             ...defaultProps,
             ...this.props,
+            components: {
+                ...defaultProps.components,
+                ...(this.props.components ?? {}),
+            },
         };
 
         this.hostElem = this.elem;
@@ -119,6 +122,8 @@ export class DropDown extends Component {
         if (!this.hostElem) {
             this.props.listAttach = false;
         }
+
+        this.listItems = [];
 
         this.state = {
             active: false,
@@ -146,8 +151,6 @@ export class DropDown extends Component {
         this.emptyClickHandler = () => this.showList(false);
         this.toggleHandler = () => this.toggleList();
         this.inputHandler = (e) => this.onInput(e);
-        this.touchStartHandler = (e) => this.onTouchStart(e);
-        this.moveHandler = (e) => this.onMouseMove(e);
         this.inpHandlers = {
             focus: (e) => this.onFocus(e),
             blur: (e) => this.onBlur(e),
@@ -187,8 +190,14 @@ export class DropDown extends Component {
         }
 
         this.listElem = createElement('ul', {
-            events: { scroll: (e) => this.onScroll(e) },
+            events: {
+                scroll: (e) => this.onScroll(e),
+                touchstart: (e) => this.onTouchStart(e),
+                mousemove: (e) => this.onMouseMove(e),
+                click: (e) => this.onListItemClick(e),
+            },
         });
+
         this.list = createElement('div', {
             props: { className: LIST_CLASS },
             children: this.listElem,
@@ -883,10 +892,7 @@ export class DropDown extends Component {
 
     /** Return list item object which list element contains specified element */
     getItemByElem(elem) {
-        if (!elem) {
-            return null;
-        }
-        const li = elem.closest('li');
+        const li = elem?.closest('li');
         if (!li) {
             return null;
         }
@@ -1182,64 +1188,6 @@ export class DropDown extends Component {
     /** Check specified element is child of component */
     isChildTarget(elem) {
         return elem && this.elem.contains(elem);
-    }
-
-    /** Renturns default list item container */
-    defaultItem(item) {
-        const elem = createElement('div', { props: { className: LIST_ITEM_CLASS } });
-
-        if (this.props.multi) {
-            const checkIcon = svg(
-                'svg',
-                {
-                    class: CHECK_ICON_CLASS,
-                    width: 17,
-                    height: 17,
-                    viewBox: '0 1 10 10',
-                },
-                svg('path', { d: CHECK_ICON }),
-            );
-            const titleElem = createElement('span', {
-                props: { title: item.title, textContent: item.title },
-            });
-            elem.append(checkIcon, titleElem);
-        } else {
-            elem.title = item.title;
-            elem.textContent = item.title;
-        }
-
-        return elem;
-    }
-
-    /** Render list item element */
-    renderItem(item) {
-        const renderCallback = isFunction(this.props.renderItem)
-            ? this.props.renderItem
-            : this.defaultItem;
-
-        const contentElem = renderCallback.call(this, item);
-        setEvents(contentElem, {
-            touchstart: this.touchStartHandler,
-            mousemove: this.moveHandler,
-        });
-        if (this.props.multi && item.selected) {
-            contentElem.classList.add(SELECTED_LIST_ITEM_CLASS);
-        }
-        if (item.active) {
-            contentElem.classList.add(LIST_ITEM_ACTIVE_CLASS);
-        }
-
-        const elemOptions = {
-            attrs: { 'data-id': item.id },
-            children: contentElem,
-            events: { click: (e) => this.onListItemClick(e) },
-        };
-        if (item.disabled) {
-            elemOptions.attrs.disabled = '';
-        }
-
-        const elem = createElement('li', elemOptions);
-        return elem;
     }
 
     /** Return selected item element for specified item object */
@@ -1971,12 +1919,41 @@ export class DropDown extends Component {
         this.selectElem.append(...options);
     }
 
+    getListItemById(itemId) {
+        const strId = itemId.toString();
+        return this.listItems.find((item) => item.id === strId);
+    }
+
+    /** Render list item element */
+    renderItem(props) {
+        const ListItemComponent = this.props.components.ListItem;
+        const item = ListItemComponent.create(props);
+
+        item.elem.setAttribute('data-id', item.id);
+
+        return item;
+    }
+
     renderListItems(state) {
         const optGroups = [];
         const listElems = [];
+        const listItems = [];
 
         state.items.forEach((item) => {
-            const itemElem = this.renderItem(item);
+            const itemProps = {
+                ...item,
+                multi: this.props.multi,
+            };
+
+            let listItem = this.getListItemById(item.id);
+            if (listItem) {
+                listItem.setState(itemProps);
+            } else {
+                listItem = this.renderItem(itemProps);
+            }
+
+            listItems.push(listItem);
+            const itemElem = listItem.elem;
 
             if (state.filtered) {
                 show(itemElem, item.matchFilter && !item.hidden);
@@ -1999,6 +1976,8 @@ export class DropDown extends Component {
                 listElems.push(itemElem);
             }
         });
+
+        this.listItems = listItems;
 
         return listElems;
     }

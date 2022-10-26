@@ -8,6 +8,7 @@ import {
 import { DropDown } from 'jezvejs/DropDown';
 import { initNavigation } from '../../app.js';
 import './style.scss';
+import { CustomListItem } from './CustomListItem.js';
 
 const initItems = (title, count) => {
     const res = [];
@@ -26,48 +27,6 @@ const toggleEnable = (e, dropDown) => {
     dropDown.enable(dropDown.disabled);
     button.value = (dropDown.disabled) ? 'Enable' : 'Disable';
 };
-
-const customColorsMap = {
-    1: 'dd__custom-list-item_blue',
-    2: 'dd__custom-list-item_red',
-    3: 'dd__custom-list-item_green',
-    4: 'dd__custom-list-item_yellow',
-    5: 'dd__custom-list-item_pink',
-    6: 'dd__custom-list-item_purple',
-    7: 'dd__custom-list-item_orange',
-    8: 'dd__custom-list-item_grey',
-    9: 'dd__custom-list-item_brown',
-    10: 'dd__custom-list-item_cyan',
-    11: 'dd__custom-list-item_magenta',
-};
-
-function renderCustomItem(item) {
-    const colorClass = customColorsMap[item.id];
-    const colorElem = createElement('span', {
-        props: { className: `dd__custom-list-item_color ${colorClass}` },
-    });
-    const titleElem = createElement('span', {
-        props: {
-            className: 'dd__custom-list-item_title',
-            title: item.title,
-            textContent: item.title,
-        },
-    });
-
-    const elem = createElement('div', {
-        props: { className: 'dd__list-item dd__custom-list-item' },
-        children: [colorElem, titleElem],
-    });
-
-    if (this.props.multi) {
-        const checkIcon = createElement('span', {
-            props: { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
-        });
-        colorElem.append(checkIcon);
-    }
-
-    return elem;
-}
 
 function renderCustomSelectionItem(item) {
     const deselectButton = createElement('span', {
@@ -349,7 +308,7 @@ const customRender = () => {
         onchange(selection) {
             logTo('log-custom', `change: ${formatObject(selection)}`);
         },
-        renderItem: renderCustomItem,
+        components: { ListItem: CustomListItem },
         renderSelectionItem: renderCustomSelectionItem,
     });
 
