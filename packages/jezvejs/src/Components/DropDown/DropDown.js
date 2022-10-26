@@ -19,9 +19,10 @@ import {
     enable,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
+import { DropDownListItem } from './ListItem.js';
+import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
 import '../../css/common.scss';
 import './style.scss';
-import { DropDownListItem } from './ListItem.js';
 
 /* Icons */
 const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
@@ -39,11 +40,6 @@ const FULLSCREEN_BG_CLASS = 'dd__background';
 /* Selection */
 const SELECTION_CLASS = 'dd__selection';
 const SINGLE_SELECTION_CLASS = 'dd__single-selection';
-/* Selection item */
-const SELECTION_ITEM_CLASS = 'dd__selection-item';
-const SELECTION_ITEM_ACTIVE_CLASS = 'dd__selection-item_active';
-const SELECTION_ITEM_DEL_BTN_CLASS = 'dd__del-selection-item-btn';
-const SELECTION_ITEM_DEL_ICON_CLASS = 'dd__del-selection-item-icon';
 /* List */
 const LIST_CLASS = 'dd__list';
 const LIST_OPEN_CLASS = 'dd__open';
@@ -82,6 +78,7 @@ const defaultProps = {
     className: null,
     components: {
         ListItem: DropDownListItem,
+        MultiSelectionItem: DropDownMultiSelectionItem,
     },
 };
 
@@ -100,7 +97,7 @@ const defaultProps = {
  * @param {boolean|Function} props.oninput - text input event handler
  *    If set to true list items will be filtered by input value
  * @param {Function} props.components.ListItem - custom list item component
- * @param {Function} props.renderSelectionItem - callback for custom selected item render
+ * @param {Function} props.components.MultiSelectionItem - custom selected item component
  * @param {string} props.className - additional CSS classes
  * @param {Object} props.data - array of item objects { id, title }
  */
@@ -125,6 +122,7 @@ export class DropDown extends Component {
 
         this.listItems = [];
         this.optGroups = [];
+        this.selectionItems = [];
 
         this.state = {
             active: false,
@@ -264,7 +262,10 @@ export class DropDown extends Component {
 
         // Create container
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-        this.selectionElem = createElement('div', { props: { className: SELECTION_CLASS } });
+        this.selectionElem = createElement('div', {
+            props: { className: SELECTION_CLASS },
+            events: { click: (e) => this.onDeleteSelectedItem(e) },
+        });
 
         if (this.hostElem.disabled) {
             this.state.disabled = true;
@@ -449,8 +450,9 @@ export class DropDown extends Component {
 
         this.activate(true);
 
-        if (this.isSelectedItemElement(e.target)) {
-            e.target.classList.add(SELECTION_ITEM_ACTIVE_CLASS);
+        const index = this.getSelectedItemIndex(e.target);
+        if (index !== -1) {
+            this.activateSelectedItem(index);
         } else if (e.target === this.inputElem) {
             this.activateInput();
         }
@@ -467,8 +469,6 @@ export class DropDown extends Component {
 
         if (e.target === this.selectElem) {
             this.sendChangeEvent();
-        } else if (this.isSelectedItemElement(e.target)) {
-            e.target.classList.remove(SELECTION_ITEM_ACTIVE_CLASS);
         }
 
         this.state.focusedElem = null;
@@ -480,29 +480,21 @@ export class DropDown extends Component {
             return;
         }
 
-        if (
-            e.type === 'keydown'
-            && (
-                !this.isSelectedItemElement(e.target)
-                || !e.target.classList.contains(SELECTION_ITEM_ACTIVE_CLASS)
-            )
-        ) {
+        const index = this.getSelectedItemIndex(e.target);
+        if (index === -1) {
             return;
         }
 
+        const SelectionItemComponent = this.props.components.MultiSelectionItem;
         if (
             e.type === 'click'
-            && !e.target.closest(`.${SELECTION_ITEM_DEL_BTN_CLASS}`)
+            && !e.target.closest(`.${SelectionItemComponent.buttonClass}`)
         ) {
             return;
         }
 
         const selectedItems = this.getSelectedItems(this.state);
         if (!selectedItems.length) {
-            return;
-        }
-        const index = this.getSelectedItemIndex(e.target);
-        if (index === -1) {
             return;
         }
 
@@ -1191,19 +1183,9 @@ export class DropDown extends Component {
         return elem && this.elem.contains(elem);
     }
 
-    /** Return selected item element for specified item object */
-    defaultSelectionItem(item) {
-        const closeIcon = this.createCloseIcon(SELECTION_ITEM_DEL_ICON_CLASS);
-        const deselectButton = createElement('span', {
-            props: { className: SELECTION_ITEM_DEL_BTN_CLASS },
-            children: closeIcon,
-            events: { click: (e) => this.onDeleteSelectedItem(e) },
-        });
-
-        return createElement('span', {
-            props: { className: SELECTION_ITEM_CLASS, textContent: item.title },
-            children: deselectButton,
-        });
+    getSelectionItemById(itemId) {
+        const strId = itemId.toString();
+        return this.selectionItems.find((item) => item.id === strId);
     }
 
     /** Render selection elements */
@@ -1219,32 +1201,50 @@ export class DropDown extends Component {
 
         const prevSelectedItems = this.getSelectedItems(prevState);
         const selectedItems = this.getSelectedItems(state);
-        const selectionChanged = !deepMeet(prevSelectedItems, selectedItems);
+        const selectionChanged = (
+            !deepMeet(prevSelectedItems, selectedItems)
+            || state.actSelItemIndex !== prevState.actSelItemIndex
+        );
 
         if (selectionChanged) {
-            const renderCallback = isFunction(this.props.renderSelectionItem)
-                ? this.props.renderSelectionItem
-                : this.defaultSelectionItem;
-            const selectedElems = selectedItems.map((item) => {
-                const elem = renderCallback.call(this, item);
-                if (!elem) {
-                    return null;
+            const SelectionItemComponent = this.props.components.MultiSelectionItem;
+            const selectionItems = [];
+
+            selectedItems.forEach((item, index) => {
+                const props = { ...item, active: state.actSelItemIndex === index };
+
+                let selItem = this.getSelectionItemById(item.id);
+                if (selItem) {
+                    selItem.setState(props);
+                } else {
+                    selItem = SelectionItemComponent.create(props);
+                    if (selectionItems.length === 0) {
+                        prependChild(this.selectionElem, selItem.elem);
+                    } else {
+                        const lastItem = selectionItems[selectionItems.length - 1];
+                        insertAfter(selItem.elem, lastItem.elem);
+                    }
+
+                    selItem.elem.tabIndex = -1;
+                    selItem.elem.dataset.id = item.id;
+                    this.assignInputHandlers(selItem.elem);
                 }
 
-                elem.tabIndex = -1;
-                elem.dataset.id = item.id;
-                this.assignInputHandlers(elem);
-
-                return elem;
+                selectionItems.push(selItem);
             });
 
-            // Remove input handlers to avoid 'blur' event on remove elements from DOM tree
-            const prevSelElems = Array.from(this.selectionElem.querySelectorAll(`.${SELECTION_ITEM_CLASS}`));
-            prevSelElems.forEach((selelem) => this.removeInputHandlers(selelem));
+            // Remove items not included in new state
+            this.selectionItems.forEach((item) => {
+                if (selectionItems.includes(item)) {
+                    return;
+                }
 
-            removeChilds(this.selectionElem);
-            this.selectionElem.append(...selectedElems);
-            this.selectedElems = selectedElems;
+                // Remove input handlers to avoid 'blur' event on remove element
+                this.removeInputHandlers(item.elem);
+                re(item.elem);
+            });
+
+            this.selectionItems = selectionItems;
 
             show(this.clearBtn, selectedItems.length > 0);
         }
@@ -1255,7 +1255,8 @@ export class DropDown extends Component {
             }
 
             if (this.state.actSelItemIndex !== -1) {
-                this.selectedElems[this.state.actSelItemIndex].focus();
+                const item = this.selectionItems[this.state.actSelItemIndex];
+                item.elem.focus();
             }
         });
     }
@@ -1353,7 +1354,8 @@ export class DropDown extends Component {
 
     /** Return index of selected item contains specified element */
     getSelectedItemIndex(elem) {
-        const selItemElem = elem.closest(`.${SELECTION_ITEM_CLASS}`);
+        const SelectionItemComponent = this.props.components.MultiSelectionItem;
+        const selItemElem = elem?.closest(`.${SelectionItemComponent.className}`);
         if (!selItemElem) {
             return -1;
         }

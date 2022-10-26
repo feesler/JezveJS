@@ -2,13 +2,13 @@ import 'jezvejs/style';
 import {
     isObject,
     ge,
-    createElement,
     onReady,
 } from 'jezvejs';
 import { DropDown } from 'jezvejs/DropDown';
 import { initNavigation } from '../../app.js';
+import { CustomListItem } from './impl/CustomListItem.js';
+import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
 import './style.scss';
-import { CustomListItem } from './CustomListItem.js';
 
 const initItems = (title, count) => {
     const res = [];
@@ -27,21 +27,6 @@ const toggleEnable = (e, dropDown) => {
     dropDown.enable(dropDown.disabled);
     button.value = (dropDown.disabled) ? 'Enable' : 'Disable';
 };
-
-function renderCustomSelectionItem(item) {
-    const deselectButton = createElement('span', {
-        props: { className: 'dd__del-selection-item-btn' },
-        events: { click: this.delSelectItemHandler },
-    });
-
-    return createElement('span', {
-        props: { className: 'dd__selection-item dd__custom-selection-item' },
-        children: [
-            deselectButton,
-            createElement('span', { props: { innerText: item.title.toLowerCase() } }),
-        ],
-    });
-}
 
 const formatObject = (value) => {
     let entries;
@@ -311,8 +296,7 @@ const customRender = () => {
         onchange(selection) {
             logTo('log-custom', `change: ${formatObject(selection)}`);
         },
-        components: { ListItem: CustomListItem },
-        renderSelectionItem: renderCustomSelectionItem,
+        components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
     });
 
     const enableBtn = ge('enableBtn2');
