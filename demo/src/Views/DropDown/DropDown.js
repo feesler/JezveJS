@@ -157,8 +157,11 @@ const dynamicOptGroups = () => {
     const hiddenGroup = groupsDropDown.addGroup('Hidden');
     const hiddenGroupItems = initItems('Hidden item', 3);
     hiddenGroupItems.forEach(
-        (item) => groupsDropDown.addItem({ ...item, id: item.id + 2, group: hiddenGroup }),
+        (item) => groupsDropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
     );
+
+    groupsDropDown.addItem({ id: 3, title: 'Visible item 3', group: visibleGroup });
+    groupsDropDown.addItem({ id: 6, title: 'Hidden item 3', group: hiddenGroup });
 };
 
 // Create drop down without host element in DOM

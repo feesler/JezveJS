@@ -99,7 +99,7 @@ const defaultProps = {
  * @param {Function} props.onchange - selection changed event handler
  * @param {boolean|Function} props.oninput - text input event handler
  *    If set to true list items will be filtered by input value
- * @param {Function} props.renderItem - callback for custom list item render
+ * @param {Function} props.components.ListItem - custom list item component
  * @param {Function} props.renderSelectionItem - callback for custom selected item render
  * @param {string} props.className - additional CSS classes
  * @param {Object} props.data - array of item objects { id, title }
@@ -124,6 +124,7 @@ export class DropDown extends Component {
         }
 
         this.listItems = [];
+        this.optGroups = [];
 
         this.state = {
             active: false,
@@ -776,20 +777,20 @@ export class DropDown extends Component {
 
     /* List items methods */
     /** Return list item object by id */
-    getItem(itemId) {
+    getItem(itemId, state = this.state) {
         const strId = itemId.toString();
-        return this.state.items.find((item) => item.id === strId);
+        return state.items.find((item) => item.id === strId);
     }
 
     /** Return active list item */
-    getActiveItem() {
-        return this.state.items.find((item) => item.active);
+    getActiveItem(state = this.state) {
+        return state.items.find((item) => item.active);
     }
 
     /** Return index of list item by id */
-    getItemIndex(itemId) {
+    getItemIndex(itemId, state = this.state) {
         const strId = itemId.toString();
-        return this.state.items.findIndex((item) => item.id === strId);
+        return state.items.findIndex((item) => item.id === strId);
     }
 
     /**
@@ -1626,16 +1627,22 @@ export class DropDown extends Component {
      * @param {string} props.disabled - optional disabled item flag
      */
     addItem(props) {
-        const item = this.createItem(props);
-        if (!item) {
+        const newItem = this.createItem(props);
+        if (!newItem) {
             return;
         }
 
-        const newItems = this.processSingleSelection([
-            ...this.state.items,
-            item,
-        ]);
+        const items = [...this.state.items];
+        const lastGroupItemInd = (newItem.group)
+            ? items.findLastIndex((item) => item.group === newItem.group)
+            : -1;
+        if (lastGroupItemInd !== -1) {
+            items.splice(lastGroupItemInd + 1, 0, newItem);
+        } else {
+            items.push(newItem);
+        }
 
+        const newItems = this.processSingleSelection(items);
         this.setState({
             ...this.state,
             items: newItems,
@@ -1645,8 +1652,12 @@ export class DropDown extends Component {
     /** Returns new item object */
     createItem(props = {}) {
         const id = props?.id ?? null;
-        if (id == null) {
+        if (id === null) {
             throw new Error('Invalid item id');
+        }
+        const item = this.getItem(id);
+        if (item) {
+            throw new Error('Item already exist');
         }
 
         const defaultItemProps = {
@@ -1656,14 +1667,14 @@ export class DropDown extends Component {
             group: null,
         };
 
-        const item = {
+        const res = {
             ...defaultItemProps,
             ...props,
             id: props.id.toString(),
             active: false,
         };
 
-        return item;
+        return res;
     }
 
     /**
@@ -1934,10 +1945,38 @@ export class DropDown extends Component {
         return item;
     }
 
-    renderListItems(state) {
+    renderNotFound() {
+        if (!this.notFoundElem) {
+            const contentElem = createElement('div', {
+                props: {
+                    className: NOT_FOUND_CLASS,
+                    textContent: this.props.noResultsMessage,
+                },
+            });
+            this.notFoundElem = createElement('li', { children: contentElem });
+
+            this.listElem.append(this.notFoundElem);
+        }
+
+        show(this.notFoundElem, true);
+    }
+
+    renderListContent(state, prevState) {
         const optGroups = [];
-        const listElems = [];
         const listItems = [];
+        let lastItem = null;
+        let lastGroupElem = null;
+        let lastItemElem = null;
+
+        if (state.items === prevState.items) {
+            return;
+        }
+
+        if (state.filtered && state.filteredCount === 0) {
+            this.renderNotFound();
+        } else {
+            show(this.notFoundElem, false);
+        }
 
         state.items.forEach((item) => {
             const itemProps = {
@@ -1945,7 +1984,9 @@ export class DropDown extends Component {
                 multi: this.props.multi,
             };
 
+            let itemContainer = this.listElem;
             let listItem = this.getListItemById(item.id);
+            const isNewItem = !listItem;
             if (listItem) {
                 listItem.setState(itemProps);
             } else {
@@ -1953,63 +1994,80 @@ export class DropDown extends Component {
             }
 
             listItems.push(listItem);
-            const itemElem = listItem.elem;
 
             if (state.filtered) {
-                show(itemElem, item.matchFilter && !item.hidden);
+                show(listItem.elem, item.matchFilter && !item.hidden);
             } else {
-                show(itemElem, !item.hidden);
+                show(listItem.elem, !item.hidden);
             }
 
+            const groupChanged = (lastItem?.group !== item.group);
             if (item.group) {
                 let group = optGroups.find((groupItem) => groupItem.group === item.group);
+                if (!group) {
+                    group = this.optGroups.find((groupItem) => groupItem.group === item.group);
+                }
                 if (!group) {
                     group = {
                         group: item.group,
                         elems: this.renderGroupItem(item.group),
                     };
-                    optGroups.push(group);
-                    listElems.push(group.elems.elem);
+
+                    const lastElem = (lastItem?.group && groupChanged)
+                        ? lastGroupElem
+                        : lastItemElem;
+                    if (lastElem) {
+                        insertAfter(group.elems.elem, lastElem);
+                    } else {
+                        this.listElem.append(group.elems.elem);
+                    }
+                    if (groupChanged) {
+                        lastItemElem = null;
+                    }
                 }
-                group.elems.listElem.append(itemElem);
-            } else {
-                listElems.push(itemElem);
+                if (!optGroups.includes(group)) {
+                    optGroups.push(group);
+                }
+                lastGroupElem = group.elems.elem;
+                itemContainer = group.elems.listElem;
+            }
+
+            if (isNewItem) {
+                if (lastItemElem && !groupChanged) {
+                    insertAfter(listItem.elem, lastItemElem);
+                } else {
+                    itemContainer.append(listItem.elem);
+                }
+            }
+
+            lastItemElem = listItem.elem;
+            lastItem = item;
+        });
+
+        // Remove items not included in new state
+        this.listItems.forEach((item) => {
+            if (!listItems.includes(item)) {
+                re(item.elem);
+            }
+        });
+        // Remove groups not included in new state
+        this.optGroups.forEach((item) => {
+            if (!optGroups.includes(item)) {
+                re(item.elem);
             }
         });
 
         this.listItems = listItems;
-
-        return listElems;
+        this.optGroups = optGroups;
     }
 
-    renderNotFound() {
-        const contentElem = createElement('div', {
-            props: {
-                className: NOT_FOUND_CLASS,
-                textContent: this.props.noResultsMessage,
-            },
-        });
-        const elem = createElement('li', { children: contentElem });
-
-        return [elem];
-    }
-
-    renderListContent(state) {
-        const listElems = (state.filtered && state.filteredCount === 0)
-            ? this.renderNotFound()
-            : this.renderListItems(state);
-
-        removeChilds(this.listElem);
-        this.listElem.append(...listElems);
-    }
-
-    renderList(state, prevState = {}) {
+    renderList(state, prevState) {
         // Skip render if currently native select is visible
         if (isVisible(this.selectElem, true)) {
             return;
         }
 
-        this.renderListContent(state);
+        this.renderListContent(state, prevState);
 
         if (state.visible) {
             this.calculatePosition(state);
