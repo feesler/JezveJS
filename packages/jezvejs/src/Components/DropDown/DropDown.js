@@ -17,6 +17,7 @@ import {
     removeEvents,
     deepMeet,
     enable,
+    computedStyle,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { DropDownListItem } from './ListItem.js';
@@ -897,6 +898,17 @@ export class DropDown extends Component {
         return this.listElem.querySelector(`[data-id="${id}"]`);
     }
 
+    /** Find parent element of list without offsetParent and check it has position: fixed */
+    isInsideFixedContainer() {
+        let elem = this.list;
+        while (elem.offsetParent) {
+            elem = elem.offsetParent;
+        }
+
+        const style = computedStyle(elem);
+        return style.position === 'fixed';
+    }
+
     /** Calculate height, vertical and horizontal offset of list element */
     calculatePosition(state) {
         if (isVisible(this.selectElem, true)) {
@@ -910,12 +922,12 @@ export class DropDown extends Component {
         const html = document.documentElement;
         const { scrollHeight } = html;
         const screenTop = html.scrollTop;
-        const screenBottom = html.scrollTop + html.clientHeight;
+        const screenBottom = screenTop + html.clientHeight;
 
         this.elem.classList.add(LIST_OPEN_CLASS);
 
+        const scrollAvailable = !this.isInsideFixedContainer();
         let listHeight = this.list.offsetHeight;
-
         let border = 0;
         if (!this.props.listAttach) {
             border = (this.comboElem.offsetHeight - this.comboElem.scrollHeight) / 2;
@@ -955,18 +967,38 @@ export class DropDown extends Component {
                 listBottom = container.top + totalListHeight;
             }
 
+            const listTop = container.top - listHeight - padding;
+            const topSpace = container.top - screenTop;
+            const bottomSpace = screenBottom - container.top + container.height;
+
             // Check vertical offset of drop down list
-            if (listBottom > scrollHeight) {
-                const listTop = container.top - offset.top - listHeight - padding;
-                const listOffsetTop = offset.top + listTop;
-                if (listOffsetTop < screenTop) {
-                    html.scrollTop -= (screenTop - listOffsetTop);
+            if (
+                listBottom > scrollHeight
+                && (
+                    scrollAvailable
+                    || (!scrollAvailable && topSpace > bottomSpace)
+                )
+            ) {
+                const listOverflow = screenTop - listTop;
+                if (listOverflow > 0) {
+                    if (scrollAvailable) {
+                        html.scrollTop -= listOverflow;
+                    } else {
+                        listHeight -= listOverflow;
+                        this.list.style.height = px(listHeight);
+                    }
                 }
 
                 this.list.style.top = px(container.top - offset.top - listHeight - padding);
             } else {
-                if (listBottom + (SCREEN_PADDING * 2) > screenBottom) {
-                    html.scrollTop += listBottom - screenBottom + padding;
+                const listOverflow = listBottom + padding - screenBottom;
+                if (listOverflow > 0) {
+                    if (scrollAvailable) {
+                        html.scrollTop += listOverflow;
+                    } else {
+                        listHeight -= listOverflow;
+                        this.list.style.height = px(listHeight);
+                    }
                 }
                 this.list.style.top = px(
                     container.top - offset.top + container.height - border,
