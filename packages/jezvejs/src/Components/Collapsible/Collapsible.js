@@ -61,15 +61,16 @@ export class Collapsible extends Component {
     }
 
     setState(state) {
-        if (state.expanded === this.state.expanded) {
+        const newState = isFunction(state) ? state(this.state) : state;
+        if (newState.expanded === this.state.expanded) {
             return;
         }
 
         if (isFunction(this.props.onStateChange)) {
-            this.props.onStateChange(state.expanded);
+            this.props.onStateChange(newState.expanded);
         }
 
-        super.setState(state);
+        super.setState(newState);
     }
 
     setHeader(header) {
