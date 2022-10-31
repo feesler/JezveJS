@@ -38,6 +38,8 @@ const ATTACHED_CLASS = 'dd__container_attached';
 const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
 const FULLSCREEN_BG_CLASS = 'dd__background';
+const EDITABLE_CLASS = 'dd__editable';
+const INPUT_CLASS = 'dd__editable';
 /* Selection */
 const SELECTION_CLASS = 'dd__selection';
 const SINGLE_SELECTION_CLASS = 'dd__single-selection';
@@ -1092,18 +1094,16 @@ export class DropDown extends Component {
         show(this.staticElem, !this.state.editable);
         show(this.inputElem, this.state.editable);
 
+        this.elem.classList.toggle(EDITABLE_CLASS, !!this.state.editable);
+        this.inputElem.classList.toggle(INPUT_CLASS, !!this.state.editable);
         if (this.state.editable) {
-            this.elem.classList.add('dd__editable');
             this.inputElem.addEventListener('input', this.inputHandler);
-            this.inputElem.classList.add('dd__input');
             this.inputElem.value = this.staticElem.textContent;
             this.assignInputHandlers(this.inputElem);
             this.inputElem.autocomplete = 'off';
         } else {
-            this.elem.classList.remove('dd__editable');
             this.removeInputHandlers(this.inputElem);
             this.inputElem.removeEventListener('input', this.inputHandler);
-            this.inputElem.classList.remove('dd__input');
 
             const content = (this.props.placeholder && this.inputElem.value.length === 0)
                 ? this.props.placeholder
@@ -1924,11 +1924,7 @@ export class DropDown extends Component {
 
             this.staticElem.textContent = staticText;
             this.staticElem.title = staticText;
-            if (usePlaceholder) {
-                this.staticElem.classList.add(PLACEHOLDER_CLASS);
-            } else {
-                this.staticElem.classList.remove(PLACEHOLDER_CLASS);
-            }
+            this.staticElem.classList.toggle(PLACEHOLDER_CLASS, usePlaceholder);
         }
     }
 
@@ -2121,11 +2117,7 @@ export class DropDown extends Component {
     }
 
     render(state, prevState = {}) {
-        if (state.active) {
-            this.elem.classList.add(ACTIVE_CLASS);
-        } else {
-            this.elem.classList.remove(ACTIVE_CLASS);
-        }
+        this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
 
         enable(this.elem, !state.disabled);
         if (state.disabled) {

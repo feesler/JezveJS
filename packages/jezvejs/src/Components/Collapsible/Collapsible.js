@@ -122,10 +122,6 @@ export class Collapsible extends Component {
             throw new Error('Invalid state');
         }
 
-        if (state.expanded) {
-            this.elem.classList.add(EXPANDED_CLASS);
-        } else {
-            this.elem.classList.remove(EXPANDED_CLASS);
-        }
+        this.elem.classList.toggle(EXPANDED_CLASS, !!state.expanded);
     }
 }

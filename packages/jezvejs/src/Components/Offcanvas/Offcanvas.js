@@ -107,12 +107,7 @@ export class Offcanvas extends Component {
             throw new Error('Invalid state');
         }
 
-        if (state.closed) {
-            this.elem.classList.add(CLOSED_CLASS);
-        } else {
-            this.elem.classList.remove(CLOSED_CLASS);
-        }
-
+        this.elem.classList.toggle(CLOSED_CLASS, !!state.closed);
         show(this.backgroundElem, !state.closed);
     }
 }
