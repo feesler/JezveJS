@@ -59,6 +59,7 @@ function test(descr, action) {
     let errorMessage = '';
 
     try {
+        /* eslint-disable-next-line no-console */
         console.log(`Test: ${descr}`);
         res = action();
     } catch (e) {
