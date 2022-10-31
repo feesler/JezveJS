@@ -1,7 +1,12 @@
+import {
+    isFunction,
+    createElement,
+    removeChilds,
+    show,
+} from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './style.scss';
-import { createElement, removeChilds, show } from '../../js/common.js';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'offcanvas';
@@ -88,11 +93,12 @@ export class Offcanvas extends Component {
     }
 
     setState(state) {
-        if (state.closed === this.state.closed) {
+        const newState = isFunction(state) ? state(this.state) : state;
+        if (newState.closed === this.state.closed) {
             return;
         }
 
-        super.setState(state);
+        super.setState(newState);
     }
 
     /** Render component state */
@@ -101,12 +107,7 @@ export class Offcanvas extends Component {
             throw new Error('Invalid state');
         }
 
-        if (state.closed) {
-            this.elem.classList.add(CLOSED_CLASS);
-        } else {
-            this.elem.classList.remove(CLOSED_CLASS);
-        }
-
+        this.elem.classList.toggle(CLOSED_CLASS, !!state.closed);
         show(this.backgroundElem, !state.closed);
     }
 }

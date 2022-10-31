@@ -193,6 +193,15 @@
   background-color: #ff00ff;
 }
 
+/* Popup */
+.top-popup .popup__wrapper {
+  align-items: flex-start;
+}
+
+.bottom-popup .popup__wrapper {
+  align-items: flex-end;
+}
+
 @media (hover: hover) {
   .link_inline_cont:hover .link_inline {
     text-decoration: underline;

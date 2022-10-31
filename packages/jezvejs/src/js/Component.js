@@ -3,6 +3,7 @@ import {
     show,
     enable,
     isVisible,
+    isFunction,
 } from './common.js';
 
 /**
@@ -38,12 +39,13 @@ export class Component {
 
     /** Update state of component and render changes */
     setState(state) {
-        if (this.state === state) {
+        const newState = isFunction(state) ? state(this.state) : state;
+        if (this.state === newState) {
             return;
         }
 
-        this.render(state, this.state);
-        this.state = state;
+        this.render(newState, this.state);
+        this.state = newState;
     }
 
     /** Render component state */

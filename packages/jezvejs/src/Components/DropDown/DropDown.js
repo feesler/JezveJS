@@ -17,6 +17,7 @@ import {
     removeEvents,
     deepMeet,
     enable,
+    computedStyle,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { DropDownListItem } from './ListItem.js';
@@ -37,6 +38,8 @@ const ATTACHED_CLASS = 'dd__container_attached';
 const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
 const FULLSCREEN_BG_CLASS = 'dd__background';
+const EDITABLE_CLASS = 'dd__editable';
+const INPUT_CLASS = 'dd__editable';
 /* Selection */
 const SELECTION_CLASS = 'dd__selection';
 const SINGLE_SELECTION_CLASS = 'dd__single-selection';
@@ -897,6 +900,17 @@ export class DropDown extends Component {
         return this.listElem.querySelector(`[data-id="${id}"]`);
     }
 
+    /** Find parent element of list without offsetParent and check it has position: fixed */
+    isInsideFixedContainer() {
+        let elem = this.list;
+        while (elem.offsetParent) {
+            elem = elem.offsetParent;
+        }
+
+        const style = computedStyle(elem);
+        return style.position === 'fixed';
+    }
+
     /** Calculate height, vertical and horizontal offset of list element */
     calculatePosition(state) {
         if (isVisible(this.selectElem, true)) {
@@ -910,12 +924,12 @@ export class DropDown extends Component {
         const html = document.documentElement;
         const { scrollHeight } = html;
         const screenTop = html.scrollTop;
-        const screenBottom = html.scrollTop + html.clientHeight;
+        const screenBottom = screenTop + html.clientHeight;
 
         this.elem.classList.add(LIST_OPEN_CLASS);
 
+        const scrollAvailable = !this.isInsideFixedContainer();
         let listHeight = this.list.offsetHeight;
-
         let border = 0;
         if (!this.props.listAttach) {
             border = (this.comboElem.offsetHeight - this.comboElem.scrollHeight) / 2;
@@ -955,18 +969,38 @@ export class DropDown extends Component {
                 listBottom = container.top + totalListHeight;
             }
 
+            const listTop = container.top - listHeight - padding;
+            const topSpace = container.top - screenTop;
+            const bottomSpace = screenBottom - container.top + container.height;
+
             // Check vertical offset of drop down list
-            if (listBottom > scrollHeight) {
-                const listTop = container.top - offset.top - listHeight - padding;
-                const listOffsetTop = offset.top + listTop;
-                if (listOffsetTop < screenTop) {
-                    html.scrollTop -= (screenTop - listOffsetTop);
+            if (
+                listBottom > scrollHeight
+                && (
+                    scrollAvailable
+                    || (!scrollAvailable && topSpace > bottomSpace)
+                )
+            ) {
+                const listOverflow = screenTop - listTop;
+                if (listOverflow > 0) {
+                    if (scrollAvailable) {
+                        html.scrollTop -= listOverflow;
+                    } else {
+                        listHeight -= listOverflow;
+                        this.list.style.height = px(listHeight);
+                    }
                 }
 
                 this.list.style.top = px(container.top - offset.top - listHeight - padding);
             } else {
-                if (listBottom + (SCREEN_PADDING * 2) > screenBottom) {
-                    html.scrollTop += listBottom - screenBottom + padding;
+                const listOverflow = listBottom + padding - screenBottom;
+                if (listOverflow > 0) {
+                    if (scrollAvailable) {
+                        html.scrollTop += listOverflow;
+                    } else {
+                        listHeight -= listOverflow;
+                        this.list.style.height = px(listHeight);
+                    }
                 }
                 this.list.style.top = px(
                     container.top - offset.top + container.height - border,
@@ -1060,18 +1094,16 @@ export class DropDown extends Component {
         show(this.staticElem, !this.state.editable);
         show(this.inputElem, this.state.editable);
 
+        this.elem.classList.toggle(EDITABLE_CLASS, !!this.state.editable);
+        this.inputElem.classList.toggle(INPUT_CLASS, !!this.state.editable);
         if (this.state.editable) {
-            this.elem.classList.add('dd__editable');
             this.inputElem.addEventListener('input', this.inputHandler);
-            this.inputElem.classList.add('dd__input');
             this.inputElem.value = this.staticElem.textContent;
             this.assignInputHandlers(this.inputElem);
             this.inputElem.autocomplete = 'off';
         } else {
-            this.elem.classList.remove('dd__editable');
             this.removeInputHandlers(this.inputElem);
             this.inputElem.removeEventListener('input', this.inputHandler);
-            this.inputElem.classList.remove('dd__input');
 
             const content = (this.props.placeholder && this.inputElem.value.length === 0)
                 ? this.props.placeholder
@@ -1892,11 +1924,7 @@ export class DropDown extends Component {
 
             this.staticElem.textContent = staticText;
             this.staticElem.title = staticText;
-            if (usePlaceholder) {
-                this.staticElem.classList.add(PLACEHOLDER_CLASS);
-            } else {
-                this.staticElem.classList.remove(PLACEHOLDER_CLASS);
-            }
+            this.staticElem.classList.toggle(PLACEHOLDER_CLASS, usePlaceholder);
         }
     }
 
@@ -2089,11 +2117,7 @@ export class DropDown extends Component {
     }
 
     render(state, prevState = {}) {
-        if (state.active) {
-            this.elem.classList.add(ACTIVE_CLASS);
-        } else {
-            this.elem.classList.remove(ACTIVE_CLASS);
-        }
+        this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
 
         enable(this.elem, !state.disabled);
         if (state.disabled) {

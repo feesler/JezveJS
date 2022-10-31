@@ -59,10 +59,6 @@ export class IndetermProgress extends Component {
             throw new Error('Invalid state');
         }
 
-        if (state.run) {
-            this.elem.classList.add(RUN_CLASS);
-        } else {
-            this.elem.classList.remove(RUN_CLASS);
-        }
+        this.elem.classList.toggle(RUN_CLASS, !!state.run);
     }
 }

@@ -2,13 +2,16 @@ import 'jezvejs/style';
 import {
     isObject,
     ge,
+    setEvents,
     onReady,
 } from 'jezvejs';
 import { DropDown } from 'jezvejs/DropDown';
+import { Popup } from 'jezvejs/Popup';
 import { initNavigation } from '../../app.js';
 import { CustomListItem } from './impl/CustomListItem.js';
 import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
 import './style.scss';
+import { show } from '../../../../packages/jezvejs/src/js/common.js';
 
 const initItems = (title, count) => {
     const res = [];
@@ -394,6 +397,56 @@ const dynamicAddRemoveItems = () => {
     }
 };
 
+let popup = null;
+
+const setPopupAlign = (align) => {
+    if (!popup) {
+        return;
+    }
+
+    popup.elem.classList.toggle('top-popup', align === 'top');
+    popup.elem.classList.toggle('bottom-popup', align === 'bottom');
+};
+
+const createPopup = () => {
+    if (popup) {
+        return;
+    }
+
+    const dropDown = DropDown.create({
+        placeholder: 'Select item',
+        data: initItems('Popup item', 50),
+    });
+    ge('popupDropDownContainer').append(dropDown.elem);
+
+    setEvents(ge('popupControls'), {
+        click: (e) => setPopupAlign(e?.target?.dataset?.align),
+    });
+
+    const popupContent = ge('popupContent');
+    popup = Popup.create({
+        id: 'popup',
+        title: 'Popup',
+        content: popupContent,
+        btn: {
+            closeBtn: true,
+        },
+    });
+    show(popupContent, true);
+};
+
+const showPopup = () => {
+    createPopup();
+
+    popup.show();
+};
+
+// DropDown inside Popup
+const popupOverflow = () => {
+    const popupBtn = ge('popupBtn');
+    setEvents(popupBtn, { click: () => showPopup() });
+};
+
 const init = () => {
     initNavigation();
 
@@ -427,6 +480,8 @@ const init = () => {
     fullScreen();
 
     dynamicAddRemoveItems();
+
+    popupOverflow();
 };
 
 onReady(init);
