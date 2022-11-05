@@ -117,17 +117,13 @@ export class LineChart extends BaseChart {
             throw new Error('Invalid values');
         }
 
+        const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
         item.elem = svg('circle', {
-            class: ITEM_CLASS,
+            class: [ITEM_CLASS, categoryClass].join(' '),
             cx: item.dot.x,
             cy: item.dot.y,
             r: 4,
         });
-
-        if (categoryIndex > 0) {
-            const categoryClass = `${CATEGORY_CLASS}${categoryIndex}`;
-            item.elem.classList.add(categoryClass);
-        }
 
         this.itemsGroup.append(item.elem);
 
@@ -194,15 +190,12 @@ export class LineChart extends BaseChart {
         if (this.paths && this.paths[categoryIndex]) {
             path = this.paths[categoryIndex];
         } else {
+            const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
             path = {
-                elem: svg('path', {}),
+                elem: svg('path', {
+                    class: [PATH_CLASS, categoryClass].join(' '),
+                }),
             };
-
-            path.elem.classList.add(PATH_CLASS);
-            if (categoryIndex > 0) {
-                const categoryClass = `${CATEGORY_CLASS}${categoryIndex}`;
-                path.elem.classList.add(categoryClass);
-            }
 
             this.itemsGroup.append(path.elem);
             // Insert path before circles

@@ -118,17 +118,14 @@ export class Histogram extends BaseChart {
             throw new Error('Invalid values');
         }
 
+        const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
         item.elem = svg('rect', {
-            class: BAR_CLASS,
+            class: [BAR_CLASS, categoryClass].join(' '),
             x: item.x,
             y: item.y,
             width: item.width,
             height: item.height,
         });
-        if (categoryIndex > 0) {
-            const categoryClass = `${CATEGORY_CLASS}${categoryIndex}`;
-            item.elem.classList.add(categoryClass);
-        }
 
         this.itemsGroup.append(item.elem);
 
