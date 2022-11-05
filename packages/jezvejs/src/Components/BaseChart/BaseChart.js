@@ -249,18 +249,15 @@ export class BaseChart extends Component {
     }
 
     /** Returns array of data sets */
-    getDataSets() {
+    getDataSets(extended = false) {
         const { values } = this.state.data;
-        if (values.length === 0) {
-            return [];
-        }
-
         const [firstItem] = values;
         if (!isObject(firstItem)) {
-            return [values];
+            const data = values;
+            return (extended) ? [{ data }] : data;
         }
 
-        return values.map((item) => item.data);
+        return (extended) ? values : values.map((item) => item.data);
     }
 
     /** Returns longest data set */

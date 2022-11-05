@@ -20,3 +20,25 @@ section {
     --historgam-active-bar-color: var(--charts-active-color-#{$i});
   }
 }
+
+.custom-chart-popup__list {
+  display: flex;
+  flex-flow: column nowrap;
+  list-style-position: inside;
+  list-style-type: disc;
+}
+
+.custom-chart-popup__list li {
+  b,
+  span {
+    position: relative;
+    left: -10px;
+    color: #000000;
+  }
+}
+
+@for $i from 1 through length($colors) {
+  .custom-chart-popup__list li:nth-child(#{$i}) {
+    color: var(--charts-color-#{$i});
+  }
+}
