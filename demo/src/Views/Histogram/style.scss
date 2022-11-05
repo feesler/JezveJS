@@ -1,14 +1,13 @@
-.charts {
-  --charts-color-1: #20a0ff;
-  --charts-color-2: #ff0077;
-  --charts-color-3: #00d647;
-  --charts-color-4: #e2de00;
+@use "sass:list";
 
-  /* Active chart item */
-  --charts-active-color-1: #00bfff;
-  --charts-active-color-2: #ff3392;
-  --charts-active-color-3: #00ff55;
-  --charts-active-color-4: #fcf93d;
+$colors: #20a0ff, #ff0077, #00d647, #e2de00;
+$active-colors: #00bfff, #ff3392, #00ff55, #fcf93d;
+
+.charts {
+  @for $i from 1 through length($colors) {
+    --charts-color-#{$i}: #{list.nth($colors, $i)};
+    --charts-active-color-#{$i}: #{list.nth($active-colors, $i)};
+  }
 }
 
 section {
@@ -20,17 +19,9 @@ section {
   --historgam-active-bar-color: var(--charts-active-color-1);
 }
 
-.histogram_category-1 {
-  --historgam-bar-color: var(--charts-color-2);
-  --historgam-active-bar-color: var(--charts-active-color-2);
-}
-
-.histogram_category-2 {
-  --historgam-bar-color: var(--charts-color-3);
-  --historgam-active-bar-color: var(--charts-active-color-3);
-}
-
-.histogram_category-3 {
-  --historgam-bar-color: var(--charts-color-4);
-  --historgam-active-bar-color: var(--charts-active-color-4);
+@for $i from 2 through length($colors) {
+  .histogram_category-#{$i - 1} {
+    --historgam-bar-color: var(--charts-color-#{$i});
+    --historgam-active-bar-color: var(--charts-active-color-#{$i});
+  }
 }
