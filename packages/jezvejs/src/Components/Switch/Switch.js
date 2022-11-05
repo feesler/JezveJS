@@ -12,9 +12,26 @@ import './style.scss';
 const CONTAINER_CLASS = 'switch';
 const SLIDER_CLASS = 'switch-slider';
 
+const defaultProps = {
+    id: undefined,
+    name: undefined,
+    form: undefined,
+    checked: undefined,
+    disabled: undefined,
+    onChange: null,
+};
+
 export class Switch extends Component {
-    constructor(props) {
-        super(props);
+    static userProps = {
+        elem: ['id'],
+        input: ['name', 'form', 'checked'],
+    };
+
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
 
         if (this.elem) {
             this.parse(this.elem);
@@ -62,18 +79,10 @@ export class Switch extends Component {
         setEvents(this.input, { change: (e) => this.onChange(e) });
 
         // Apply props
-        if ('checked' in this.props) {
-            this.check(this.props.checked);
-        }
-        if ('disabled' in this.props) {
+        if (typeof this.props.disabled !== 'undefined') {
             this.enable(!this.props.disabled);
         }
-        if (typeof this.props.name === 'string') {
-            this.input.name = this.props.name;
-        }
-        if (typeof this.props.form === 'string') {
-            this.input.form = this.props.form;
-        }
+        this.setUserProps();
     }
 
     onChange() {

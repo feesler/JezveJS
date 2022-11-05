@@ -5,6 +5,7 @@ import {
     enable,
     removeChilds,
     createElement,
+    re,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -19,9 +20,27 @@ const LABEL_CLASS = 'checkbox__label';
 const ICON_PATH = 'M1.08 4.93a.28.28 0 000 .4l2.35 2.34c.1.11.29.11.4 0l4.59-4.59a.28.28 0 000-.4l-.6-.6a.28.28 0 00-.4 0l-3.8 3.8-1.54-1.55a.28.28 0 00-.4 0z';
 const ICON_VIEWBOX = '0 0 9.2604 9.2604';
 
+const defaultProps = {
+    id: undefined,
+    name: undefined,
+    form: undefined,
+    checked: undefined,
+    disabled: undefined,
+    label: undefined,
+    onChange: null,
+};
+
 export class Checkbox extends Component {
-    constructor(props) {
-        super(props);
+    static userProps = {
+        elem: ['id'],
+        input: ['name', 'form', 'checked'],
+    };
+
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
 
         if (this.elem) {
             this.parse(this.elem);
@@ -46,10 +65,6 @@ export class Checkbox extends Component {
         );
     }
 
-    createLabel() {
-        return createElement('span', { props: { className: LABEL_CLASS } });
-    }
-
     init() {
         this.input = createElement('input', { props: { type: 'checkbox' } });
         const checkSVG = this.createCheckPath();
@@ -57,10 +72,9 @@ export class Checkbox extends Component {
             props: { className: CHECK_CLASS },
             children: checkSVG,
         });
-        this.label = this.createLabel();
         this.elem = createElement('label', {
             props: { className: CONTAINER_CLASS },
-            children: [this.input, this.checkIcon, this.label],
+            children: [this.input, this.checkIcon],
         });
 
         this.postInit();
@@ -86,19 +100,12 @@ export class Checkbox extends Component {
         setEvents(this.input, { change: (e) => this.onChange(e) });
 
         // Apply props
-        if ('checked' in this.props) {
-            this.check(this.props.checked);
-        }
-        if ('disabled' in this.props) {
+        if (typeof this.props.disabled !== 'undefined') {
             this.enable(!this.props.disabled);
         }
-        if (typeof this.props.name === 'string') {
-            this.input.name = this.props.name;
-        }
-        if (typeof this.props.form === 'string') {
-            this.input.form = this.props.form;
-        }
-        if ('label' in this.props) {
+        this.setUserProps();
+
+        if (typeof this.props.label !== 'undefined') {
             this.setLabel(this.props.label);
         }
     }
@@ -114,12 +121,19 @@ export class Checkbox extends Component {
         if (!value && !this.label) {
             return;
         }
-
+        // Remove label element if value is empty
+        if (!value && this.label) {
+            re(this.label);
+            this.label = null;
+            return;
+        }
+        // Create label element
         if (value && !this.label) {
-            this.label = this.createLabel();
+            this.label = createElement('span', { props: { className: LABEL_CLASS } });
+            this.elem.append(this.label);
         }
 
-        if (typeof value === 'string' || value == null) {
+        if (typeof value === 'string') {
             this.label.textContent = value;
         } else if (value instanceof Element) {
             removeChilds(this.label);

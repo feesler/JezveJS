@@ -9,13 +9,15 @@ import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
 const defaultProps = {
+    id: undefined,
+    name: undefined,
+    form: undefined,
+    placeholder: undefined,
+    value: undefined,
     digits: undefined,
     oninput: null,
     allowNegative: true,
     allowMultipleLeadingZeros: false,
-    placeholder: null,
-    name: null,
-    form: null,
 };
 
 /**
@@ -27,23 +29,23 @@ const defaultProps = {
  * @param {Function} props.allowNegative - enables input negative values
  */
 export class DecimalInput extends Component {
-    constructor(props) {
-        super(props);
+    static userProps = {
+        elem: ['id', 'name', 'form', 'placeholder', 'value'],
+    };
 
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
-
-        if (!this.props.elem) {
-            throw new Error('Invalid input element specified');
-        }
+            ...props,
+        });
 
         this.init();
     }
 
     init() {
-        this.elem = this.props.elem;
+        if (!this.elem) {
+            throw new Error('Invalid input element specified');
+        }
 
         this.useFixed = (typeof this.props.digits !== 'undefined');
         if (this.useFixed) {
@@ -53,15 +55,7 @@ export class DecimalInput extends Component {
         }
 
         this.elem.inputMode = 'decimal';
-        if (this.props.placeholder) {
-            this.elem.placeholder = this.props.placeholder;
-        }
-        if (typeof this.props.name === 'string') {
-            this.elem.name = this.props.name;
-        }
-        if (typeof this.props.form === 'string') {
-            this.elem.form = this.props.form;
-        }
+        this.setUserProps();
 
         this.beforeInputHandler = (e) => this.validateInput(e);
         this.eventHandlers = {
