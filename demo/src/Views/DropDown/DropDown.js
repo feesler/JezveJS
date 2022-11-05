@@ -4,6 +4,7 @@ import {
     ge,
     setEvents,
     onReady,
+    show,
 } from 'jezvejs';
 import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
@@ -11,7 +12,6 @@ import { initNavigation } from '../../app.js';
 import { CustomListItem } from './impl/CustomListItem.js';
 import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
 import './style.scss';
-import { show } from '../../../../packages/jezvejs/src/js/common.js';
 
 const initItems = (title, count) => {
     const res = [];

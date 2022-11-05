@@ -1,29 +1,44 @@
-.charts {
-  --charts-color: #20a0ff;
-  --charts-color-2: #ff0077;
-  --charts-color-3: #00d647;
+@use "sass:list";
 
-  /* Active chart item */
-  --charts-active-color: #00bfff;
-  --charts-active-color-2: #ff3392;
-  --charts-active-color-3: #00ff55;
+$colors: #20a0ff, #ff0077, #00d647, #e2de00;
+$active-colors: #00bfff, #ff3392, #00ff55, #fcf93d;
+
+.charts {
+  @for $i from 1 through length($colors) {
+    --charts-color-#{$i}: #{list.nth($colors, $i)};
+    --charts-active-color-#{$i}: #{list.nth($active-colors, $i)};
+  }
 }
 
 section {
   max-width: 1000px;
 }
 
-.histogram__bar {
-  --historgam-bar-color: var(--charts-color);
-  --historgam-active-bar-color: var(--charts-active-color);
+@for $i from 1 through length($colors) {
+  .histogram_category-#{$i} {
+    --historgam-bar-color: var(--charts-color-#{$i});
+    --historgam-active-bar-color: var(--charts-active-color-#{$i});
+  }
 }
 
-.histogram_category-1 {
-  --historgam-bar-color: var(--charts-color-2);
-  --historgam-active-bar-color: var(--charts-active-color-2);
+.custom-chart-popup__list {
+  display: flex;
+  flex-flow: column nowrap;
+  list-style-position: inside;
+  list-style-type: disc;
 }
 
-.histogram_category-2 {
-  --historgam-bar-color: var(--charts-color-3);
-  --historgam-active-bar-color: var(--charts-active-color-3);
+.custom-chart-popup__list li {
+  b,
+  span {
+    position: relative;
+    left: -10px;
+    color: #000000;
+  }
+}
+
+@for $i from 1 through length($colors) {
+  .custom-chart-popup__list li:nth-child(#{$i}) {
+    color: var(--charts-color-#{$i});
+  }
 }

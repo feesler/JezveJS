@@ -1,9 +1,16 @@
-import { svg } from '../../js/common.js';
+import { asArray, svg } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
+import './style.scss';
 
 /* CSS classes */
+const CONTAINER_CLASS = 'histogram';
 const BAR_CLASS = 'histogram__bar';
 const CATEGORY_CLASS = 'histogram_category-';
+
+/** Default properties */
+const defaultProps = {
+    columnGap: 0,
+};
 
 /**
  * Base chart component constructor
@@ -14,8 +21,13 @@ export class Histogram extends BaseChart {
     constructor(props) {
         super(props);
 
-        this.props.visibilityOffset = 1;
-        this.props.scaleAroundAxis = true;
+        this.props = {
+            ...defaultProps,
+            ...this.props,
+            visibilityOffset: 1,
+            scaleAroundAxis: true,
+            className: [CONTAINER_CLASS, ...asArray(this.props.className)],
+        };
 
         this.init();
     }
@@ -31,8 +43,14 @@ export class Histogram extends BaseChart {
         let index = -1;
 
         if (this.props.stacked) {
+            const { x } = result;
             const y = e.offsetY;
-            index = result.item.findIndex((bar) => (y >= bar.y && y < bar.y + bar.height));
+            index = result.item.findIndex((bar) => (
+                x >= bar.x
+                && x < bar.x + bar.width
+                && y >= bar.y
+                && y < bar.y + bar.height
+            ));
         } else {
             const groupX = this.barOuterWidth * result.index;
             const innerX = result.x - groupX;
@@ -81,6 +99,7 @@ export class Histogram extends BaseChart {
         value,
         width,
         index,
+        columnIndex = 0,
         categoryIndex = 0,
         valueOffset = 0,
     }) {
@@ -99,9 +118,7 @@ export class Histogram extends BaseChart {
             height: Math.abs(y0 - y1),
         };
 
-        if (!this.props.stacked) {
-            item.x += categoryIndex * width;
-        }
+        item.x += columnIndex * (width + this.props.columnGap);
 
         if (
             Number.isNaN(item.x)
@@ -112,52 +129,83 @@ export class Histogram extends BaseChart {
             throw new Error('Invalid values');
         }
 
+        const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
         item.elem = svg('rect', {
-            class: BAR_CLASS,
+            class: [BAR_CLASS, categoryClass].join(' '),
             x: item.x,
             y: item.y,
             width: item.width,
             height: item.height,
         });
-        if (categoryIndex > 0) {
-            const categoryClass = `${CATEGORY_CLASS}${categoryIndex}`;
-            item.elem.classList.add(categoryClass);
-        }
 
         this.itemsGroup.append(item.elem);
 
         return item;
     }
 
+    getStackedGroups(dataSets) {
+        if (!this.props.stacked) {
+            return [];
+        }
+
+        return dataSets.reduce((res, item) => {
+            const group = item.group ?? null;
+            return res.includes(group) ? res : [...res, group];
+        }, []);
+    }
+
     /** Create items with default scale */
     createItems() {
-        const dataSets = this.getDataSets();
+        const dataSets = this.getDataSets(true);
         if (dataSets.length === 0) {
             return;
         }
 
-        const width = (this.props.stacked)
-            ? this.state.barWidth
-            : this.state.barWidth / dataSets.length;
+        const stackedGroups = this.getStackedGroups(dataSets);
+        const columnsInGroup = (this.props.stacked)
+            ? Math.max(stackedGroups.length, 1)
+            : dataSets.length;
+        const gapsWidth = this.props.columnGap * (columnsInGroup - 1);
+        const width = (this.state.barWidth - gapsWidth) / columnsInGroup;
 
         const longestSet = this.getLongestDataSet();
         longestSet.forEach((_, index) => {
             const group = [];
-            let valueOffset = 0;
+            const posValueOffset = Array(columnsInGroup).fill(0);
+            const negValueOffset = Array(columnsInGroup).fill(0);
 
-            dataSets.forEach((data, categoryIndex) => {
-                const value = data[index] ?? 0;
+            dataSets.forEach((dataSet, categoryIndex) => {
+                const value = dataSet.data[index] ?? 0;
+
+                let columnIndex = 0;
+                if (this.props.stacked) {
+                    const groupName = dataSet.group ?? null;
+                    columnIndex = stackedGroups.indexOf(groupName);
+                } else {
+                    columnIndex = categoryIndex;
+                }
+
+                const valueOffset = (value >= 0)
+                    ? posValueOffset[columnIndex]
+                    : negValueOffset[columnIndex];
+
                 const item = this.createItem({
                     value,
                     width,
                     index,
+                    columnIndex,
                     categoryIndex,
                     valueOffset,
                 });
                 group.push(item);
 
-                if (this.props.stacked) {
-                    valueOffset += value;
+                if (!this.props.stacked) {
+                    return;
+                }
+                if (value >= 0) {
+                    posValueOffset[columnIndex] += value;
+                } else {
+                    negValueOffset[columnIndex] += value;
                 }
             });
             this.items.push(group);

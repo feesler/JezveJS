@@ -1,37 +1,26 @@
-.charts {
-  --charts-color: #20a0ff;
-  --charts-color-2: #ff0077;
-  --charts-color-3: #00d647;
+@use "sass:list";
 
-  /* Active chart item */
-  --charts-active-color: #00bfff;
-  --charts-active-color-2: #ff3392;
-  --charts-active-color-3: #00ff55;
+$colors: #20a0ff, #ff0077, #00d647, #e2de00;
+$active-colors: #00bfff, #ff3392, #00ff55, #fcf93d;
+
+.charts {
+  @for $i from 1 through length($colors) {
+    --charts-color-#{$i}: #{list.nth($colors, $i)};
+    --charts-active-color-#{$i}: #{list.nth($active-colors, $i)};
+  }
 }
 
 section {
   max-width: 1000px;
 }
 
-.linechart__item {
-  --linechart-item-border: var(--charts-color);
-  --linechart-line-color: var(--charts-color);
-  --linechart-active-item-fill: var(--charts-active-color);
-  --linechart-active-item-border: var(--charts-active-color);
-}
-
-.linechart_category-1 {
-  --linechart-item-border: var(--charts-color-2);
-  --linechart-line-color: var(--charts-color-2);
-  --linechart-active-item-fill: var(--charts-active-color-2);
-  --linechart-active-item-border: var(--charts-active-color-2);
-}
-
-.linechart_category-2 {
-  --linechart-item-border: var(--charts-color-3);
-  --linechart-line-color: var(--charts-color-3);
-  --linechart-active-item-fill: var(--charts-active-color-3);
-  --linechart-active-item-border: var(--charts-active-color-3);
+@for $i from 1 through length($colors) {
+  .linechart_category-#{$i} {
+    --linechart-item-border: var(--charts-color-#{$i});
+    --linechart-line-color: var(--charts-color-#{$i});
+    --linechart-active-item-fill: var(--charts-active-color-#{$i});
+    --linechart-active-item-border: var(--charts-active-color-#{$i});
+  }
 }
 
 .custom-chart-popup__list {
@@ -47,14 +36,8 @@ section {
   color: #000000;
 }
 
-.custom-chart-popup__list li:nth-child(1) {
-  color: var(--charts-color);
-}
-
-.custom-chart-popup__list li:nth-child(2) {
-  color: var(--charts-color-2);
-}
-
-.custom-chart-popup__list li:nth-child(3) {
-  color: var(--charts-color-3);
+@for $i from 1 through length($colors) {
+  .custom-chart-popup__list li:nth-child(#{$i}) {
+    color: var(--charts-color-#{$i});
+  }
 }

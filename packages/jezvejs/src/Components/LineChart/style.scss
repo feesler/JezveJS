@@ -1,0 +1,51 @@
+/* Linechart */
+.linechart {
+  --linechart-item-fill: #ffffff;
+  --linechart-item-border: #20a0ff;
+  --linechart-line-color: #20a0ff;
+  --linechart-active-item-fill: #00bfff;
+  --linechart-active-item-border: #00bfff;
+}
+
+/* LineChart circle item */
+.linechart__item {
+  fill: var(--linechart-item-fill);
+  stroke: var(--linechart-item-border);
+  stroke-width: 1.5;
+  display: none;
+}
+
+.linechart__nodes .linechart__item {
+  display: block;
+}
+
+/* LineChart line path */
+.linechart__path {
+  stroke-width: 3;
+  stroke: var(--linechart-line-color);
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* Active items */
+.chart__item_active.linechart__item {
+  display: block;
+  fill: var(--linechart-active-item-fill);
+  stroke: var(--linechart-active-item-border);
+}
+
+/* Animation */
+.chart_animated {
+  .linechart__item,
+  .linechart__path {
+    transition-duration: var(--chart-animation-duration);
+  }
+
+  .linechart__item {
+    transition-property: cy;
+  }
+
+  .linechart__path {
+    transition-property: d;
+  }
+}

@@ -3,6 +3,7 @@ import {
     onReady,
     ge,
     setEvents,
+    createElement,
 } from 'jezvejs';
 import { Histogram } from 'jezvejs/Histogram';
 import { initNavigation } from '../../app.js';
@@ -62,9 +63,45 @@ const chartMultiData = {
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
     }, {
         data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
+    }, {
+        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
     }],
     series: [
-        ['10.22', 4], ['11.22', 4],
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
+    ],
+};
+
+const chartNegMultiData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+    }, {
+        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
+    }, {
+        data: [-553, -200, -5500, 0, -58, -347, -1302, -12, -780, -5600, -460, -150, -2000, -2000],
+    }, {
+        data: [-50, -200, -550, -100, -850, -1220, -1302, -900, -780, -1800, -2210, -2500, -2100],
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
+    ],
+};
+
+const chartGroupedData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, -1050, -1200, 1000, 1001, 1002, -1005, 1050, 1200],
+        group: 'first',
+    }, {
+        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, 2500, -2100, 2200],
+        group: 'first',
+    }, {
+        data: [553, 200, 5500, 0, 58, 347, 1302, -12, -780, 5600, 460, 150, 2000, 2000],
+        group: 'second',
+    }, {
+        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
+        group: 'second',
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
 };
 
@@ -112,6 +149,23 @@ function onBarOver({ item }) {
 function onBarOut({ item }) {
     setHistogramEvent(`Mouse out bar, value=${item.value}`);
 }
+
+const renderMultiColumnPopup = (target) => {
+    if (!target.group) {
+        return createElement('span', { props: { textContent: target.item.value } });
+    }
+
+    return createElement('ul', {
+        props: { className: 'custom-chart-popup__list' },
+        children: target.group.map(
+            (item, index) => createElement('li', {
+                children: createElement(((target.index === index) ? 'b' : 'span'), {
+                    props: { textContent: item.value },
+                }),
+            }),
+        ),
+    });
+};
 
 const defaultHistogram = () => {
     Histogram.create({
@@ -169,6 +223,7 @@ const multiColumnHistogram = () => {
         marginTop: 35,
         autoScale: true,
         showPopup: true,
+        renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
     });
@@ -182,6 +237,40 @@ const stackedHistogram = () => {
         marginTop: 35,
         autoScale: true,
         showPopup: true,
+        renderPopup: renderMultiColumnPopup,
+        scrollThrottle: 50,
+        activateOnHover: true,
+        stacked: true,
+    });
+};
+
+const stackedNegativeHistogram = () => {
+    Histogram.create({
+        data: chartNegMultiData,
+        elem: 'stacked-neg-histogram',
+        height: 320,
+        marginTop: 35,
+        autoScale: true,
+        showPopup: true,
+        renderPopup: renderMultiColumnPopup,
+        scrollThrottle: 50,
+        activateOnHover: true,
+        stacked: true,
+    });
+};
+
+const stackedGroupedHistogram = () => {
+    Histogram.create({
+        data: chartGroupedData,
+        elem: 'stacked-grouped-histogram',
+        height: 320,
+        marginTop: 35,
+        barWidth: 50,
+        barMargin: 15,
+        columnGap: 5,
+        autoScale: true,
+        showPopup: true,
+        renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
         stacked: true,
@@ -252,6 +341,8 @@ const init = () => {
     callbacksHistogram();
     multiColumnHistogram();
     stackedHistogram();
+    stackedNegativeHistogram();
+    stackedGroupedHistogram();
     // Different data tests
     noDataHistogram();
     singleNegativeHistogram();

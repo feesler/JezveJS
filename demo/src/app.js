@@ -48,8 +48,16 @@ const navigationMenu = [{
 
 const getBaseURL = () => {
     const { origin } = window.location;
-    const res = `${origin}/jezvejs/`;
-    return origin.includes('localtest') ? `${res}dist/` : res;
+    const res = `${origin}/`;
+
+    if (origin.includes('localtest')) {
+        return `${res}jezvejs/dist/`;
+    }
+    if (origin.includes('localhost')) {
+        return res;
+    }
+
+    return `${res}jezvejs/`;
 };
 
 const renderMenuItem = ({ title, url }, baseURL) => (
