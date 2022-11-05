@@ -149,10 +149,13 @@ export class Histogram extends BaseChart {
         const longestSet = this.getLongestDataSet();
         longestSet.forEach((_, index) => {
             const group = [];
-            let valueOffset = 0;
+            let posValueOffset = 0;
+            let negValueOffset = 0;
 
             dataSets.forEach((data, categoryIndex) => {
                 const value = data[index] ?? 0;
+                const valueOffset = (value >= 0) ? posValueOffset : negValueOffset;
+
                 const item = this.createItem({
                     value,
                     width,
@@ -162,8 +165,13 @@ export class Histogram extends BaseChart {
                 });
                 group.push(item);
 
-                if (this.props.stacked) {
-                    valueOffset += value;
+                if (!this.props.stacked) {
+                    return;
+                }
+                if (value >= 0) {
+                    posValueOffset += value;
+                } else {
+                    negValueOffset += value;
                 }
             });
             this.items.push(group);

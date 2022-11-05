@@ -62,9 +62,26 @@ const chartMultiData = {
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
     }, {
         data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
+    }, {
+        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
     }],
     series: [
-        ['10.22', 4], ['11.22', 4],
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
+    ],
+};
+
+const chartNegMultiData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+    }, {
+        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
+    }, {
+        data: [-553, -200, -5500, 0, -58, -347, -1302, -12, -780, -5600, -460, -150, -2000, -2000],
+    }, {
+        data: [-50, -200, -550, -100, -850, -1220, -1302, -900, -780, -1800, -2210, -2500, -2100],
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
 };
 
@@ -188,6 +205,20 @@ const stackedHistogram = () => {
     });
 };
 
+const stackedNegativeHistogram = () => {
+    Histogram.create({
+        data: chartNegMultiData,
+        elem: 'stacked-neg-histogram',
+        height: 320,
+        marginTop: 35,
+        autoScale: true,
+        showPopup: true,
+        scrollThrottle: 50,
+        activateOnHover: true,
+        stacked: true,
+    });
+};
+
 const noDataHistogram = () => {
     Histogram.create({
         data: noData,
@@ -252,6 +283,7 @@ const init = () => {
     callbacksHistogram();
     multiColumnHistogram();
     stackedHistogram();
+    stackedNegativeHistogram();
     // Different data tests
     noDataHistogram();
     singleNegativeHistogram();

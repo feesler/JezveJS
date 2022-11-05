@@ -1,12 +1,14 @@
 .charts {
-  --charts-color: #20a0ff;
+  --charts-color-1: #20a0ff;
   --charts-color-2: #ff0077;
   --charts-color-3: #00d647;
+  --charts-color-4: #e2de00;
 
   /* Active chart item */
-  --charts-active-color: #00bfff;
+  --charts-active-color-1: #00bfff;
   --charts-active-color-2: #ff3392;
   --charts-active-color-3: #00ff55;
+  --charts-active-color-4: #fcf93d;
 }
 
 section {
@@ -14,8 +16,8 @@ section {
 }
 
 .histogram__bar {
-  --historgam-bar-color: var(--charts-color);
-  --historgam-active-bar-color: var(--charts-active-color);
+  --historgam-bar-color: var(--charts-color-1);
+  --historgam-active-bar-color: var(--charts-active-color-1);
 }
 
 .histogram_category-1 {
@@ -26,4 +28,9 @@ section {
 .histogram_category-2 {
   --historgam-bar-color: var(--charts-color-3);
   --historgam-active-bar-color: var(--charts-active-color-3);
+}
+
+.histogram_category-3 {
+  --historgam-bar-color: var(--charts-color-4);
+  --historgam-active-bar-color: var(--charts-active-color-4);
 }
