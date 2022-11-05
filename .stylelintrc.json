@@ -1,14 +1,19 @@
 {
-  "extends": [
-    "stylelint-config-standard",
-    "stylelint-config-prettier"
-  ],
-  "rules": {
-    "color-hex-length": "long",
-    "property-no-vendor-prefix": true,
-    "value-no-vendor-prefix": true,
-    "selector-no-vendor-prefix": true,
-    "at-rule-no-vendor-prefix": true,
-    "media-feature-name-no-vendor-prefix": true
-  }
+    "extends": [
+        "stylelint-config-standard-scss",
+        "stylelint-config-prettier-scss"
+    ],
+    "rules": {
+        "color-hex-length": "long",
+        "property-no-vendor-prefix": true,
+        "value-no-vendor-prefix": true,
+        "selector-no-vendor-prefix": true,
+        "at-rule-no-vendor-prefix": true,
+        "media-feature-name-no-vendor-prefix": true,
+        "selector-class-pattern": null,
+        "color-function-notation": null,
+        "alpha-value-notation": null,
+        "declaration-block-no-redundant-longhand-properties": null,
+        "shorthand-property-no-redundant-values": null
+    }
 }
