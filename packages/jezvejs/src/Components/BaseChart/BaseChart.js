@@ -13,7 +13,7 @@ import {
     createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import { ChartGrid } from './ChartGrid.js';
+import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 import '../../css/common.scss';
 import './style.scss';
 
