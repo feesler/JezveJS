@@ -4,6 +4,7 @@ import {
     removeChilds,
     enable,
     createElement,
+    re,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -14,9 +15,28 @@ const CONTAINER_CLASS = 'radio';
 const CHECK_CLASS = 'radio__check';
 const LABEL_CLASS = 'radio__label';
 
+const defaultProps = {
+    id: undefined,
+    name: undefined,
+    form: undefined,
+    checked: undefined,
+    disabled: undefined,
+    value: undefined,
+    label: undefined,
+    onChange: null,
+};
+
 export class Radio extends Component {
-    constructor(props) {
-        super(props);
+    static userProps = {
+        elem: ['id'],
+        input: ['name', 'form', 'checked', 'value'],
+    };
+
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
 
         if (this.elem) {
             this.parse(this.elem);
@@ -33,10 +53,6 @@ export class Radio extends Component {
         return this.input.disabled;
     }
 
-    createLabel() {
-        return createElement('span', { props: { className: LABEL_CLASS } });
-    }
-
     init() {
         if (!this.props.name) {
             throw new Error('Name not specified');
@@ -44,10 +60,9 @@ export class Radio extends Component {
 
         this.input = createElement('input', { props: { type: 'radio' } });
         this.checkIcon = createElement('span', { props: { className: CHECK_CLASS } });
-        this.label = this.createLabel();
         this.elem = createElement('label', {
             props: { className: CONTAINER_CLASS },
-            children: [this.input, this.checkIcon, this.label],
+            children: [this.input, this.checkIcon],
         });
 
         this.postInit();
@@ -74,22 +89,12 @@ export class Radio extends Component {
         setEvents(this.input, { change: (e) => this.onChange(e) });
 
         // Apply props
-        if ('checked' in this.props) {
-            this.check(this.props.checked);
-        }
-        if ('disabled' in this.props) {
+        if (typeof this.props.disabled !== 'undefined') {
             this.enable(!this.props.disabled);
         }
-        if (typeof this.props.name === 'string') {
-            this.input.name = this.props.name;
-        }
-        if (typeof this.props.form === 'string') {
-            this.input.form = this.props.form;
-        }
-        if ('value' in this.props) {
-            this.input.value = this.props.value;
-        }
-        if ('label' in this.props) {
+        this.setUserProps();
+
+        if (typeof this.props.label !== 'undefined') {
             this.setLabel(this.props.label);
         }
     }
@@ -105,12 +110,19 @@ export class Radio extends Component {
         if (!value && !this.label) {
             return;
         }
-
+        // Remove label element if value is empty
+        if (!value && this.label) {
+            re(this.label);
+            this.label = null;
+            return;
+        }
+        // Create label element
         if (value && !this.label) {
-            this.label = this.createLabel();
+            this.label = createElement('span', { props: { className: LABEL_CLASS } });
+            this.elem.append(this.label);
         }
 
-        if (typeof value === 'string' || value == null) {
+        if (typeof value === 'string') {
             this.label.textContent = value;
         } else if (value instanceof Element) {
             removeChilds(this.label);

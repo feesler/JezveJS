@@ -1,5 +1,6 @@
 export * from './src/js/index.js';
-export * from './src/Components/Charts/index.js';
+export { BaseChart } from './src/Components/BaseChart/BaseChart.js';
+export { ChartGrid } from './src/Components/ChartGrid/ChartGrid.js';
 export { Checkbox } from './src/Components/Checkbox/Checkbox.js';
 export { Collapsible } from './src/Components/Collapsible/Collapsible.js';
 export { DateInput } from './src/Components/DateInput/DateInput.js';
@@ -8,8 +9,10 @@ export { Debug } from './src/Components/Debug/Debug.js';
 export { DecimalInput } from './src/Components/DecimalInput/DecimalInput.js';
 export * from './src/Components/DragnDrop/index.js';
 export { DropDown } from './src/Components/DropDown/DropDown.js';
+export { Histogram } from './src/Components/Histogram/Histogram.js';
 export { IndetermProgress } from './src/Components/IndetermProgress/IndetermProgress.js';
 export { InputGroup } from './src/Components/InputGroup/InputGroup.js';
+export { LineChart } from './src/Components/LineChart/LineChart.js';
 export { Offcanvas } from './src/Components/Offcanvas/Offcanvas.js';
 export { Paginator } from './src/Components/Paginator/Paginator.js';
 export { PieChart } from './src/Components/PieChart/PieChart.js';

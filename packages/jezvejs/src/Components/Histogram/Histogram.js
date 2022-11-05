@@ -1,5 +1,5 @@
 import { svg } from '../../js/common.js';
-import { BaseChart } from './BaseChart.js';
+import { BaseChart } from '../BaseChart/BaseChart.js';
 
 /* CSS classes */
 const BAR_CLASS = 'histogram__bar';

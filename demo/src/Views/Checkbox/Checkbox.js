@@ -24,6 +24,8 @@ const initParsed = () => {
 
 const initDynamic = () => {
     const dynamicCheckbox = Checkbox.create({
+        id: 'dynCheckbox',
+        name: 'check1',
         label: 'Checkbox methods',
         onChange: (checked) => addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
     });
@@ -70,17 +72,21 @@ const initDynamicRadio = () => {
     const form = ge('dynamicRadioContainer');
 
     const dynamicRadio1 = Radio.create({
+        id: 'dynRadio',
         name: 'radio2',
+        value: '1',
         label: 'Value 1',
         onChange: (checked) => addEventLog(`Dynamic Radio 1 change. checked: ${checked}`),
     });
     const dynamicRadio2 = Radio.create({
         name: 'radio2',
+        value: '2',
         label: 'Value 2',
         onChange: (checked) => addEventLog(`Dynamic Radio 2 change. checked: ${checked}`),
     });
     const dynamicRadio3 = Radio.create({
         name: 'radio2',
+        value: '2',
         label: 'Value 3',
         onChange: (checked) => addEventLog(`Dynamic Radio 3 change. checked: ${checked}`),
     });

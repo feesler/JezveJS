@@ -13,9 +13,9 @@ const DEFAULT_SEPARATOR = '.';
 const defaultProps = {
     guideChar: '_',
     locales: [],
-    name: null,
-    form: null,
-    placeholder: null,
+    name: undefined,
+    form: undefined,
+    placeholder: undefined,
     oninput: null,
 };
 
@@ -24,23 +24,24 @@ const defaultProps = {
  * @param {Object} props
  */
 export class DateInput extends Component {
-    constructor(props) {
-        super(props);
+    static userProps = {
+        elem: ['id', 'name', 'form', 'placeholder'],
+    };
 
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
-
-        if (!this.props?.elem) {
-            throw new Error('Invalid input element specified');
-        }
+            ...props,
+        });
 
         this.init();
     }
 
     init() {
-        this.elem = this.props.elem;
+        if (!this.elem) {
+            throw new Error('Invalid input element specified');
+        }
+
         this.getDateFormat();
 
         const { dayRange, monthRange, yearRange } = this;
@@ -60,13 +61,8 @@ export class DateInput extends Component {
         };
 
         this.elem.inputMode = 'decimal';
-        this.elem.placeholder = this.props.placeholder ?? this.formatMask;
-        if (typeof this.props.name === 'string') {
-            this.elem.name = this.props.name;
-        }
-        if (typeof this.props.form === 'string') {
-            this.elem.form = this.props.form;
-        }
+        this.props.placeholder = this.props.placeholder ?? this.formatMask;
+        this.setUserProps();
 
         this.beforeInputHandler = (e) => this.validateInput(e);
         this.eventHandlers = {

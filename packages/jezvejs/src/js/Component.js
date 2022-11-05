@@ -4,6 +4,8 @@ import {
     enable,
     isVisible,
     isFunction,
+    isObject,
+    asArray,
 } from './common.js';
 
 /**
@@ -12,6 +14,9 @@ import {
  * @param {string|Element} props.elem - base element for component
  */
 export class Component {
+    /** Object with map of available props to set to elements of component */
+    static userProps = {};
+
     static create(props) {
         return new this(props);
     }
@@ -36,20 +41,6 @@ export class Component {
 
     /** Parse DOM to obtain child elements and build state of component */
     parse() { }
-
-    /** Update state of component and render changes */
-    setState(state) {
-        const newState = isFunction(state) ? state(this.state) : state;
-        if (this.state === newState) {
-            return;
-        }
-
-        this.render(newState, this.state);
-        this.state = newState;
-    }
-
-    /** Render component state */
-    render() { }
 
     /** Check root element of component is visible */
     isVisible() {
@@ -85,17 +76,50 @@ export class Component {
     }
 
     setClassNames() {
-        if (!this.props.className) {
+        this.props.className = asArray(this.props.className);
+        if (!this.props.className.length === 0) {
             return;
         }
 
-        if (!Array.isArray(this.props.className)) {
-            this.props.className = [this.props.className];
-        }
         const classNames = this.props.className
             .flatMap((cln) => cln.split(' '))
             .filter((cln) => cln.length > 0);
 
         this.elem.classList.add(...classNames);
     }
+
+    /** Apply props to elements of component according to userProps map */
+    setUserProps() {
+        const { userProps } = this.constructor;
+        if (!isObject(userProps)) {
+            return;
+        }
+
+        Object.keys(userProps).forEach((elemName) => {
+            const availProps = asArray(userProps[elemName]);
+            if (!this[elemName]) {
+                return;
+            }
+
+            availProps.forEach((prop) => {
+                if (typeof this.props[prop] !== 'undefined') {
+                    this[elemName][prop] = this.props[prop];
+                }
+            });
+        });
+    }
+
+    /** Update state of component and render changes */
+    setState(state) {
+        const newState = isFunction(state) ? state(this.state) : state;
+        if (this.state === newState) {
+            return;
+        }
+
+        this.render(newState, this.state);
+        this.state = newState;
+    }
+
+    /** Render component state */
+    render() { }
 }

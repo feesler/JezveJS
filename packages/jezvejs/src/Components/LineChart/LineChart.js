@@ -1,5 +1,5 @@
 import { svg, insertBefore } from '../../js/common.js';
-import { BaseChart } from './BaseChart.js';
+import { BaseChart } from '../BaseChart/BaseChart.js';
 
 /* CSS classes */
 const SHOW_NODES_CLASS = 'linechart__nodes';
