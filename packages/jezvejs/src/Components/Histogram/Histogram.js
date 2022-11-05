@@ -1,7 +1,9 @@
-import { svg } from '../../js/common.js';
+import { asArray, svg } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
+import './style.scss';
 
 /* CSS classes */
+const CONTAINER_CLASS = 'histogram';
 const BAR_CLASS = 'histogram__bar';
 const CATEGORY_CLASS = 'histogram_category-';
 
@@ -14,8 +16,12 @@ export class Histogram extends BaseChart {
     constructor(props) {
         super(props);
 
-        this.props.visibilityOffset = 1;
-        this.props.scaleAroundAxis = true;
+        this.props = {
+            ...this.props,
+            visibilityOffset: 1,
+            scaleAroundAxis: true,
+            className: [CONTAINER_CLASS, ...asArray(this.props.className)],
+        };
 
         this.init();
     }

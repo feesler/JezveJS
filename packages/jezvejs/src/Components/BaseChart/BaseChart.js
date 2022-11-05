@@ -180,6 +180,7 @@ export class BaseChart extends Component {
 
         this.contentOffset = getOffset(this.content);
 
+        this.setClassNames();
         this.setData(this.props.data);
     }
 

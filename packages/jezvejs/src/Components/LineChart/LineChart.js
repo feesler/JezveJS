@@ -1,7 +1,9 @@
-import { svg, insertBefore } from '../../js/common.js';
+import { svg, insertBefore, asArray } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
+import './style.scss';
 
 /* CSS classes */
+const CONTAINER_CLASS = 'linechart';
 const SHOW_NODES_CLASS = 'linechart__nodes';
 const PATH_CLASS = 'linechart__path';
 const ITEM_CLASS = 'linechart__item';
@@ -26,6 +28,7 @@ export class LineChart extends BaseChart {
             ...this.props,
             visibilityOffset: 2,
             scaleAroundAxis: false,
+            className: [CONTAINER_CLASS, ...asArray(this.props.className)],
         };
 
         this.paths = [];
