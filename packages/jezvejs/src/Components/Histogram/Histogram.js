@@ -7,6 +7,11 @@ const CONTAINER_CLASS = 'histogram';
 const BAR_CLASS = 'histogram__bar';
 const CATEGORY_CLASS = 'histogram_category-';
 
+/** Default properties */
+const defaultProps = {
+    columnGap: 0,
+};
+
 /**
  * Base chart component constructor
  * @param {Object} props
@@ -17,6 +22,7 @@ export class Histogram extends BaseChart {
         super(props);
 
         this.props = {
+            ...defaultProps,
             ...this.props,
             visibilityOffset: 1,
             scaleAroundAxis: true,
@@ -112,7 +118,7 @@ export class Histogram extends BaseChart {
             height: Math.abs(y0 - y1),
         };
 
-        item.x += columnIndex * width;
+        item.x += columnIndex * (width + this.props.columnGap);
 
         if (
             Number.isNaN(item.x)
@@ -159,8 +165,8 @@ export class Histogram extends BaseChart {
         const columnsInGroup = (this.props.stacked)
             ? Math.max(stackedGroups.length, 1)
             : dataSets.length;
-
-        const width = this.state.barWidth / columnsInGroup;
+        const gapsWidth = this.props.columnGap * (columnsInGroup - 1);
+        const width = (this.state.barWidth - gapsWidth) / columnsInGroup;
 
         const longestSet = this.getLongestDataSet();
         longestSet.forEach((_, index) => {
