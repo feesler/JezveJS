@@ -105,6 +105,29 @@ const chartGroupedData = {
     ],
 };
 
+const chartGroupedCategoriesData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, -1050, -1200, 1000, 1001, 1002, -1005, 1050, 1200],
+        group: 'first',
+        category: 'cat1',
+    }, {
+        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, 2500, -2100, 2200],
+        group: 'first',
+        category: 'cat2',
+    }, {
+        data: [553, 200, 5500, 0, 58, 347, 1302, -12, -780, 5600, 460, 150, 2000, 2000],
+        group: 'second',
+        category: 'cat1',
+    }, {
+        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
+        group: 'second',
+        category: 'cat2',
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
+    ],
+};
+
 const noData = {
     values: [],
     series: [],
@@ -159,11 +182,50 @@ const renderMultiColumnPopup = (target) => {
         props: { className: 'custom-chart-popup__list' },
         children: target.group.map(
             (item, index) => createElement('li', {
+                props: {
+                    className: `list-item_category-${item.categoryIndex + 1}`,
+                },
                 children: createElement(((target.index === index) ? 'b' : 'span'), {
                     props: { textContent: item.value },
                 }),
             }),
         ),
+    });
+};
+
+const renderCategoriesPopup = (target) => {
+    if (!target.group) {
+        return createElement('span', { props: { textContent: target.item.value } });
+    }
+
+    const listItems = [];
+    target.group.forEach((item, index) => {
+        if (item.columnIndex !== target.item.columnIndex) {
+            return;
+        }
+
+        const listItem = createElement('li', {
+            props: {
+                className: `list-item_category-${item.categoryIndex + 1}`,
+            },
+            children: createElement(((target.index === index) ? 'b' : 'span'), {
+                props: { textContent: item.value },
+            }),
+        });
+        listItems.push(listItem);
+    });
+
+    const list = createElement('ul', {
+        props: { className: 'custom-chart-popup__list' },
+        children: listItems,
+    });
+
+    return createElement('div', {
+        props: { className: 'custom-chart-popup' },
+        children: [
+            createElement('b', { props: { textContent: target.item.groupName } }),
+            list,
+        ],
     });
 };
 
@@ -277,6 +339,24 @@ const stackedGroupedHistogram = () => {
     });
 };
 
+const stackedCategoriesHistogram = () => {
+    Histogram.create({
+        data: chartGroupedCategoriesData,
+        elem: 'stacked-categories-histogram',
+        height: 320,
+        marginTop: 35,
+        barWidth: 50,
+        barMargin: 15,
+        columnGap: 5,
+        autoScale: true,
+        showPopup: true,
+        renderPopup: renderCategoriesPopup,
+        scrollThrottle: 50,
+        activateOnHover: true,
+        stacked: true,
+    });
+};
+
 const noDataHistogram = () => {
     Histogram.create({
         data: noData,
@@ -343,6 +423,7 @@ const init = () => {
     stackedHistogram();
     stackedNegativeHistogram();
     stackedGroupedHistogram();
+    stackedCategoriesHistogram();
     // Different data tests
     noDataHistogram();
     singleNegativeHistogram();

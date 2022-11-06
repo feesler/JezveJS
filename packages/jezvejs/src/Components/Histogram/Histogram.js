@@ -102,6 +102,7 @@ export class Histogram extends BaseChart {
         columnIndex = 0,
         categoryIndex = 0,
         valueOffset = 0,
+        groupName = null,
     }) {
         const fixedValue = value ?? 0;
         const fixedOffset = valueOffset ?? 0;
@@ -116,6 +117,9 @@ export class Histogram extends BaseChart {
             y: Math.min(y0, y1),
             width,
             height: Math.abs(y0 - y1),
+            columnIndex,
+            categoryIndex,
+            groupName,
         };
 
         item.x += columnIndex * (width + this.props.columnGap);
@@ -154,6 +158,17 @@ export class Histogram extends BaseChart {
         }, []);
     }
 
+    getStackedCategories(dataSets) {
+        if (!this.props.stacked) {
+            return [];
+        }
+
+        return dataSets.reduce((res, item) => {
+            const category = item.category ?? null;
+            return res.includes(category) ? res : [...res, category];
+        }, []);
+    }
+
     /** Create items with default scale */
     createItems() {
         const dataSets = this.getDataSets(true);
@@ -162,6 +177,7 @@ export class Histogram extends BaseChart {
         }
 
         const stackedGroups = this.getStackedGroups(dataSets);
+        const stackedCategories = this.getStackedCategories(dataSets);
         const columnsInGroup = (this.props.stacked)
             ? Math.max(stackedGroups.length, 1)
             : dataSets.length;
@@ -174,12 +190,16 @@ export class Histogram extends BaseChart {
             const posValueOffset = Array(columnsInGroup).fill(0);
             const negValueOffset = Array(columnsInGroup).fill(0);
 
-            dataSets.forEach((dataSet, categoryIndex) => {
+            dataSets.forEach((dataSet, dataSetIndex) => {
                 const value = dataSet.data[index] ?? 0;
+                const category = dataSet.category ?? null;
+                const categoryIndex = (category)
+                    ? stackedCategories.indexOf(category)
+                    : dataSetIndex;
+                const groupName = dataSet.group ?? null;
 
                 let columnIndex = 0;
                 if (this.props.stacked) {
-                    const groupName = dataSet.group ?? null;
                     columnIndex = stackedGroups.indexOf(groupName);
                 } else {
                     columnIndex = categoryIndex;
@@ -196,6 +216,7 @@ export class Histogram extends BaseChart {
                     columnIndex,
                     categoryIndex,
                     valueOffset,
+                    groupName,
                 });
                 group.push(item);
 
