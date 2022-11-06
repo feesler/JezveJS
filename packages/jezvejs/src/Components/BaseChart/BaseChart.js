@@ -254,7 +254,7 @@ export class BaseChart extends Component {
         const [firstItem] = values;
         if (!isObject(firstItem)) {
             const data = values;
-            return (extended) ? [{ data }] : data;
+            return (extended) ? [{ data }] : [data];
         }
 
         return (extended) ? values : values.map((item) => item.data);
