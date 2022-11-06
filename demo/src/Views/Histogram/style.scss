@@ -21,6 +21,11 @@ section {
   }
 }
 
+.custom-chart-popup {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
 .custom-chart-popup__list {
   display: flex;
   flex-flow: column nowrap;
@@ -38,7 +43,7 @@ section {
 }
 
 @for $i from 1 through length($colors) {
-  .custom-chart-popup__list li:nth-child(#{$i}) {
+  .custom-chart-popup__list .list-item_category-#{$i} {
     color: var(--charts-color-#{$i});
   }
 }
