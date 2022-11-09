@@ -32,6 +32,15 @@ export class Histogram extends BaseChart {
         this.init();
     }
 
+    getItemBBox(item) {
+        return {
+            x: item.x,
+            y: item.y,
+            width: item.width,
+            height: item.height,
+        };
+    }
+
     /** Find item by event object */
     findItemByEvent(e) {
         const result = super.findItemByEvent(e);

@@ -12,6 +12,7 @@ const CATEGORY_CLASS = 'linechart_category-';
 /** Default properties */
 const defaultProps = {
     drawNodeCircles: false,
+    nodeCircleRadius: 4,
 };
 
 /**
@@ -42,6 +43,16 @@ export class LineChart extends BaseChart {
         if (this.props.drawNodeCircles) {
             this.chartContainer.classList.add(SHOW_NODES_CLASS);
         }
+    }
+
+    getItemBBox(item) {
+        const radius = this.props.nodeCircleRadius;
+        return {
+            x: item.dot.x - radius,
+            y: item.dot.y - radius,
+            width: radius * 2,
+            height: radius * 2,
+        };
     }
 
     /** Find item by event object */
@@ -122,7 +133,7 @@ export class LineChart extends BaseChart {
             class: [ITEM_CLASS, categoryClass].join(' '),
             cx: item.dot.x,
             cy: item.dot.y,
-            r: 4,
+            r: this.props.nodeCircleRadius,
         });
 
         this.itemsGroup.append(item.elem);

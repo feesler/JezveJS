@@ -663,12 +663,12 @@ export class BaseChart extends Component {
             this.popup.append(content);
         }
 
-        const rectBBox = target.item.elem.getBBox();
+        const itemBBox = this.getItemBBox(target.item);
         const chartsBRect = this.chartScroller.getBoundingClientRect();
 
-        let popupX = rectBBox.x - this.chartScroller.scrollLeft
-            + (rectBBox.width - this.popup.offsetWidth) / 2;
-        const popupY = rectBBox.y - this.popup.offsetHeight - 10;
+        let popupX = itemBBox.x - this.chartScroller.scrollLeft
+            + (itemBBox.width - this.popup.offsetWidth) / 2;
+        const popupY = itemBBox.y - this.popup.offsetHeight - 10;
 
         if (popupX < 0) {
             popupX = 0;
