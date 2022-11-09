@@ -32,6 +32,18 @@ export class Histogram extends BaseChart {
         this.init();
     }
 
+    get columnOuterWidth() {
+        return this.state.barWidth + this.props.columnGap;
+    }
+
+    get groupWidth() {
+        return this.columnOuterWidth * this.state.columnsInGroup - this.props.columnGap;
+    }
+
+    get groupOuterWidth() {
+        return this.groupWidth + this.state.barMargin;
+    }
+
     getItemBBox(item) {
         return {
             x: item.x,
@@ -77,11 +89,10 @@ export class Histogram extends BaseChart {
                 }
             }
         } else {
-            const groupX = this.barOuterWidth * result.index;
+            const groupX = this.groupOuterWidth * result.index;
             const innerX = result.x - groupX;
-            const barWidth = this.state.barWidth / result.item.length;
 
-            index = Math.floor(innerX / barWidth);
+            index = Math.floor(innerX / this.columnOuterWidth);
         }
 
         if (index >= 0 && index < result.item.length) {
@@ -138,7 +149,7 @@ export class Histogram extends BaseChart {
         const item = {
             value: fixedValue,
             valueOffset: fixedOffset,
-            x: index * this.barOuterWidth,
+            x: index * this.groupOuterWidth + columnIndex * this.columnOuterWidth,
             y: Math.min(y0, y1),
             width,
             height: Math.abs(y0 - y1),
@@ -146,8 +157,6 @@ export class Histogram extends BaseChart {
             categoryIndex,
             groupName,
         };
-
-        item.x += columnIndex * (width + this.props.columnGap);
 
         if (
             Number.isNaN(item.x)
@@ -194,6 +203,19 @@ export class Histogram extends BaseChart {
         }, []);
     }
 
+    /** Returns current count of columns in group */
+    getColumnsInGroupCount() {
+        const dataSets = this.getDataSets(true);
+        if (dataSets.length === 0) {
+            return 0;
+        }
+
+        const stackedGroups = this.getStackedGroups(dataSets);
+        return (this.props.stacked)
+            ? Math.max(stackedGroups.length, 1)
+            : dataSets.length;
+    }
+
     /** Create items with default scale */
     createItems() {
         const dataSets = this.getDataSets(true);
@@ -203,17 +225,12 @@ export class Histogram extends BaseChart {
 
         const stackedGroups = this.getStackedGroups(dataSets);
         const stackedCategories = this.getStackedCategories(dataSets);
-        const columnsInGroup = (this.props.stacked)
-            ? Math.max(stackedGroups.length, 1)
-            : dataSets.length;
-        const gapsWidth = this.props.columnGap * (columnsInGroup - 1);
-        const width = (this.state.barWidth - gapsWidth) / columnsInGroup;
 
         const longestSet = this.getLongestDataSet();
         longestSet.forEach((_, index) => {
             const group = [];
-            const posValueOffset = Array(columnsInGroup).fill(0);
-            const negValueOffset = Array(columnsInGroup).fill(0);
+            const posValueOffset = Array(this.state.columnsInGroup).fill(0);
+            const negValueOffset = Array(this.state.columnsInGroup).fill(0);
 
             dataSets.forEach((dataSet, dataSetIndex) => {
                 const value = dataSet.data[index] ?? 0;
@@ -236,7 +253,7 @@ export class Histogram extends BaseChart {
 
                 const item = this.createItem({
                     value,
-                    width,
+                    width: this.state.barWidth,
                     index,
                     columnIndex,
                     categoryIndex,

@@ -119,7 +119,7 @@ export class BaseChart extends Component {
         };
     }
 
-    get barOuterWidth() {
+    get groupOuterWidth() {
         return this.state.barWidth + this.state.barMargin;
     }
 
@@ -190,12 +190,13 @@ export class BaseChart extends Component {
         }
 
         this.state.data = data;
-        this.state.columnsCount = this.getColumnsCount();
+        this.state.groupsCount = this.getGroupsCount();
+        this.state.columnsInGroup = this.getColumnsInGroupCount();
 
         // create grid
         this.calculateGrid(this.state.data.values);
 
-        this.state.chartContentWidth = this.state.columnsCount * this.barOuterWidth;
+        this.state.chartContentWidth = this.state.groupsCount * this.groupOuterWidth;
         this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
 
         this.drawVLabels();
@@ -232,8 +233,13 @@ export class BaseChart extends Component {
         return values.length;
     }
 
+    /** Returns current count of columns in group */
+    getColumnsInGroupCount() {
+        return 1;
+    }
+
     /** Returns count of data columns */
-    getColumnsCount() {
+    getGroupsCount() {
         const { values } = this.state.data;
         if (values.length === 0) {
             return 0;
@@ -371,7 +377,7 @@ export class BaseChart extends Component {
     /** Update width of chart block */
     updateChartWidth() {
         const contentWidth = Math.max(
-            this.state.columnsCount * this.barOuterWidth,
+            this.state.groupsCount * this.groupOuterWidth,
             this.state.lastHLabelOffset,
         );
 
@@ -391,7 +397,7 @@ export class BaseChart extends Component {
             return;
         }
 
-        const valuesExtended = this.state.columnsCount + 1;
+        const valuesExtended = this.state.groupsCount + 1;
         this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
         if (this.state.barWidth > 10) {
             this.state.barMargin = this.state.barWidth / 5;
@@ -421,14 +427,14 @@ export class BaseChart extends Component {
 
     /** Return array of currently visible items */
     getVisibleItems() {
-        const { barOuterWidth } = this;
+        const { groupOuterWidth } = this;
         const res = [];
         const offs = this.props.visibilityOffset;
 
-        let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / barOuterWidth);
+        let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / groupOuterWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
-        let firstItem = Math.floor(this.chartScroller.scrollLeft / barOuterWidth);
+        let firstItem = Math.floor(this.chartScroller.scrollLeft / groupOuterWidth);
         firstItem = Math.max(0, firstItem - offs);
 
         if (firstItem + itemsOnWidth >= this.items.length) {
@@ -526,7 +532,7 @@ export class BaseChart extends Component {
                     lastOffset = currentOffset;
                 }
             }
-            labelShift += itemsCount * this.barOuterWidth;
+            labelShift += itemsCount * this.groupOuterWidth;
         });
 
         this.state.lastHLabelOffset = lastOffset;
@@ -535,7 +541,7 @@ export class BaseChart extends Component {
     /** Find item by event object */
     findItemByEvent(e) {
         const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
-        const index = Math.floor(x / this.barOuterWidth);
+        const index = Math.floor(x / this.groupOuterWidth);
         if (index < 0 || index >= this.items.length) {
             return { x, item: null, index: -1 };
         }

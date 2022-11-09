@@ -85,9 +85,9 @@ export class LineChart extends BaseChart {
     }
 
     getCoordinates(value, index) {
-        const { barOuterWidth } = this;
+        const { groupOuterWidth } = this;
         return {
-            x: index * barOuterWidth + barOuterWidth / 2,
+            x: index * groupOuterWidth + groupOuterWidth / 2,
             y: this.grid.getY(value),
         };
     }
@@ -187,10 +187,10 @@ export class LineChart extends BaseChart {
 
     /** Draw path currently saved at nodes */
     drawPath(values, categoryIndex = 0) {
-        const { barOuterWidth } = this;
+        const { groupOuterWidth } = this;
 
         const coords = values.map((value, index) => ({
-            x: index * barOuterWidth + barOuterWidth / 2,
+            x: index * groupOuterWidth + groupOuterWidth / 2,
             y: value,
         }));
 
