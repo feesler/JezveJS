@@ -21,11 +21,13 @@ const defaultProps = {
  * @param {string|Element} props.elem - base element for component
  */
 export class LineChart extends BaseChart {
-    constructor(props) {
-        super(props);
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
 
         this.props = {
-            ...defaultProps,
             ...this.props,
             visibilityOffset: 2,
             scaleAroundAxis: false,

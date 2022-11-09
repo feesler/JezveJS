@@ -229,10 +229,31 @@ const renderCategoriesPopup = (target) => {
     });
 };
 
+const onChangeColumnWidth = (chart, value) => {
+    const columnWidthValue = ge('columnWidthValue');
+    columnWidthValue.textContent = value;
+
+    chart.setColumnWidth(value);
+};
+
+const onChangeGroupsGap = (chart, value) => {
+    const groupsGapValue = ge('groupsGapValue');
+    groupsGapValue.textContent = value;
+
+    chart.setGroupsGap(value);
+};
+
 const defaultHistogram = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartData,
         elem: 'chart',
+    });
+
+    setEvents(ge('columnWidthRange'), {
+        input: (e) => onChangeColumnWidth(histogram, e.target.value),
+    });
+    setEvents(ge('groupsGapRange'), {
+        input: (e) => onChangeGroupsGap(histogram, e.target.value),
     });
 };
 

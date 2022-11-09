@@ -153,10 +153,31 @@ const renderMultiColumnPopup = (target) => {
     });
 };
 
+const onChangeColumnWidth = (chart, value) => {
+    const columnWidthValue = ge('columnWidthValue');
+    columnWidthValue.textContent = value;
+
+    chart.setColumnWidth(value);
+};
+
+const onChangeGroupsGap = (chart, value) => {
+    const groupsGapValue = ge('groupsGapValue');
+    groupsGapValue.textContent = value;
+
+    chart.setGroupsGap(value);
+};
+
 const defaultLinechart = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: chartData,
         elem: 'linechart',
+    });
+
+    setEvents(ge('columnWidthRange'), {
+        input: (e) => onChangeColumnWidth(chart, e.target.value),
+    });
+    setEvents(ge('groupsGapRange'), {
+        input: (e) => onChangeGroupsGap(chart, e.target.value),
     });
 };
 

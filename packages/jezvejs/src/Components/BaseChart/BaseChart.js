@@ -108,8 +108,7 @@ export class BaseChart extends Component {
         this.emptyClickHandler = () => this.hidePopup();
 
         this.state = {
-            columnWidth: this.props.columnWidth,
-            groupsGap: this.props.groupsGap,
+            ...this.props,
             chartContentWidth: 0,
             hLabelsHeight: 25,
             vLabelsWidth: 10,
@@ -146,13 +145,13 @@ export class BaseChart extends Component {
                 }),
             ],
         });
-        if (this.props.autoScale && this.props.animate) {
+        if (this.state.autoScale && this.state.animate) {
             this.chartContainer.classList.add(ANIMATE_CLASS);
         }
 
         this.elem.append(this.chartContainer);
 
-        const { height, marginTop } = this.props;
+        const { height, marginTop } = this.state;
         this.state.chartHeight = height - this.state.hLabelsHeight - marginTop;
 
         this.labelsContainer = svg('svg', {
@@ -182,6 +181,10 @@ export class BaseChart extends Component {
 
         this.setClassNames();
         this.setData(this.props.data);
+
+        if (this.props.scrollToEnd) {
+            this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
+        }
     }
 
     setData(data) {
@@ -201,7 +204,7 @@ export class BaseChart extends Component {
 
         this.drawVLabels();
         this.drawGrid();
-        this.updateBarWidth();
+        this.updateColumnWidth();
         this.updateChartWidth();
 
         // create bars
@@ -212,10 +215,26 @@ export class BaseChart extends Component {
         // create horizontal labels
         this.createHLabels();
         this.updateChartWidth();
+    }
 
-        if (this.props.scrollToEnd) {
-            this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
+    setColumnWidth(value) {
+        const width = parseInt(value, 10);
+        if (Number.isNaN(width) || width < 1 || this.state.columnWidth === width) {
+            return;
         }
+
+        this.state.columnWidth = width;
+        this.setData(this.state.data);
+    }
+
+    setGroupsGap(value) {
+        const gap = parseInt(value, 10);
+        if (Number.isNaN(gap) || this.state.groupsGap === gap) {
+            return;
+        }
+
+        this.state.groupsGap = gap;
+        this.setData(this.state.data);
     }
 
     /** Returns count of data categories */
@@ -296,13 +315,13 @@ export class BaseChart extends Component {
      */
     calculateGrid(values) {
         const grid = new ChartGrid({
-            scaleAroundAxis: this.props.scaleAroundAxis,
+            scaleAroundAxis: this.state.scaleAroundAxis,
             height: this.state.chartHeight,
-            margin: this.props.marginTop,
-            minStep: this.props.minGridStep,
-            maxStep: this.props.maxGridStep,
-            valuesMargin: this.props.gridValuesMargin,
-            stacked: this.props.stacked,
+            margin: this.state.marginTop,
+            minStep: this.state.minGridStep,
+            maxStep: this.state.maxGridStep,
+            valuesMargin: this.state.gridValuesMargin,
+            stacked: this.state.stacked,
         });
 
         grid.calculate(values);
@@ -386,14 +405,14 @@ export class BaseChart extends Component {
         const paperWidth = Math.max(chartOffset - this.state.vLabelsWidth, contentWidth);
 
         this.content.setAttribute('width', paperWidth);
-        this.content.setAttribute('height', this.props.height);
+        this.content.setAttribute('height', this.state.height);
 
         this.state.chartWidth = Math.max(paperWidth, contentWidth);
     }
 
     /** Calculate width and margin of bar for fitToWidth option */
-    updateBarWidth() {
-        if (!this.props.fitToWidth) {
+    updateColumnWidth() {
+        if (!this.state.fitToWidth) {
             return;
         }
 
@@ -419,7 +438,7 @@ export class BaseChart extends Component {
         }
 
         this.labelsContainer.setAttribute('width', lWidth);
-        this.labelsContainer.setAttribute('height', this.props.height + 20);
+        this.labelsContainer.setAttribute('height', this.state.height + 20);
         this.state.vLabelsWidth = lWidth;
 
         this.updateChartWidth();
@@ -429,7 +448,7 @@ export class BaseChart extends Component {
     getVisibleItems() {
         const { groupOuterWidth } = this;
         const res = [];
-        const offs = this.props.visibilityOffset;
+        const offs = this.state.visibilityOffset;
 
         let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / groupOuterWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
@@ -465,8 +484,8 @@ export class BaseChart extends Component {
         this.vertLabelsGroup = svg('g');
         this.labelsContainer.append(this.vertLabelsGroup);
 
-        const formatFunction = isFunction(this.props.renderYAxisLabel)
-            ? this.props.renderYAxisLabel
+        const formatFunction = isFunction(this.state.renderYAxisLabel)
+            ? this.state.renderYAxisLabel
             : (value) => value.toString();
 
         while (step <= this.grid.steps) {
@@ -500,7 +519,7 @@ export class BaseChart extends Component {
         let lastOffset = 0;
         const lblMarginLeft = 10;
         const dyOffset = 5.5;
-        const lblY = this.props.height - (this.state.hLabelsHeight / 2);
+        const lblY = this.state.height - (this.state.hLabelsHeight / 2);
 
         this.xAxisLabelsGroup?.remove();
         this.xAxisLabelsGroup = svg('g');
@@ -526,7 +545,7 @@ export class BaseChart extends Component {
 
                 // Check last label not overflow chart to prevent
                 // horizontal scroll in fitToWidth mode
-                if (this.props.fitToWidth && currentOffset > this.state.chartContentWidth) {
+                if (this.state.fitToWidth && currentOffset > this.state.chartContentWidth) {
                     txtEl.remove();
                 } else {
                     lastOffset = currentOffset;
@@ -557,7 +576,7 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (this.props.showPopup) {
+        if (this.state.showPopup) {
             this.showPopup(target);
         }
 
@@ -579,7 +598,7 @@ export class BaseChart extends Component {
 
         this.activeTarget = target;
 
-        if (this.props.activateOnHover) {
+        if (this.state.activateOnHover) {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
         if (isFunction(this.props.onitemover)) {
@@ -595,7 +614,7 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (this.props.activateOnHover) {
+        if (this.state.activateOnHover) {
             target.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
         }
         if (isFunction(this.props.onitemout)) {
@@ -691,7 +710,7 @@ export class BaseChart extends Component {
 
     /** Scale visible items of chart */
     scaleVisible() {
-        if (!this.props.autoScale) {
+        if (!this.state.autoScale) {
             return;
         }
 
@@ -711,7 +730,7 @@ export class BaseChart extends Component {
             this.scaleFunc();
         }
 
-        if (this.props.showPopup) {
+        if (this.state.showPopup) {
             this.hidePopup();
         }
 
