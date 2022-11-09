@@ -1910,9 +1910,10 @@ export class DropDown extends Component {
             ? selectedItems[0].title
             : '';
         const usePlaceholder = (str.length === 0);
+        const placeholder = (usePlaceholder) ? this.props.placeholder : str;
 
         if (state.editable && this.inputElem) {
-            this.inputElem.placeholder = (usePlaceholder) ? this.props.placeholder : str;
+            this.inputElem.placeholder = placeholder ?? '';
 
             if (state.inputString == null) {
                 this.inputElem.value = str;
@@ -1920,8 +1921,7 @@ export class DropDown extends Component {
                 this.inputElem.value = state.inputString;
             }
         } else if (!state.editable && this.staticElem) {
-            const staticText = (usePlaceholder) ? this.props.placeholder : str;
-
+            const staticText = placeholder ?? '';
             this.staticElem.textContent = staticText;
             this.staticElem.title = staticText;
             this.staticElem.classList.toggle(PLACEHOLDER_CLASS, usePlaceholder);
