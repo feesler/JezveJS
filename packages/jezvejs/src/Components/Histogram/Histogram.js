@@ -51,6 +51,22 @@ export class Histogram extends BaseChart {
                 && y >= bar.y
                 && y < bar.y + bar.height
             ));
+            // Find column closest to the mouse coordinates
+            if (index === -1) {
+                const diffs = result.item.map((bar, ind) => ({
+                    bar,
+                    ind,
+                    diff: Math.min(
+                        Math.abs(y - bar.y),
+                        Math.abs(y - bar.y - bar.height),
+                    ),
+                })).filter(({ bar }) => (x >= bar.x && x < bar.x + bar.width));
+
+                if (diffs.length > 0) {
+                    diffs.sort((a, b) => a.diff - b.diff);
+                    index = diffs[0].ind;
+                }
+            }
         } else {
             const groupX = this.barOuterWidth * result.index;
             const innerX = result.x - groupX;
