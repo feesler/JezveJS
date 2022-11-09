@@ -33,8 +33,8 @@ const ANIMATE_CLASS = 'chart_animated';
 const defaultProps = {
     // Layout
     height: 300,
-    barWidth: 38,
-    barMargin: 10,
+    columnWidth: 38,
+    groupsGap: 10,
     marginTop: 10,
     // Grid behavior
     visibilityOffset: 1,
@@ -108,8 +108,8 @@ export class BaseChart extends Component {
         this.emptyClickHandler = () => this.hidePopup();
 
         this.state = {
-            barWidth: this.props.barWidth,
-            barMargin: this.props.barMargin,
+            columnWidth: this.props.columnWidth,
+            groupsGap: this.props.groupsGap,
             chartContentWidth: 0,
             hLabelsHeight: 25,
             vLabelsWidth: 10,
@@ -120,7 +120,7 @@ export class BaseChart extends Component {
     }
 
     get groupOuterWidth() {
-        return this.state.barWidth + this.state.barMargin;
+        return this.state.columnWidth + this.state.groupsGap;
     }
 
     /** Initialization of chart */
@@ -398,12 +398,12 @@ export class BaseChart extends Component {
         }
 
         const valuesExtended = this.state.groupsCount + 1;
-        this.state.barWidth = this.chart.parentNode.offsetWidth / valuesExtended;
-        if (this.state.barWidth > 10) {
-            this.state.barMargin = this.state.barWidth / 5;
-            this.state.barWidth -= this.state.barMargin;
+        this.state.columnWidth = this.chart.parentNode.offsetWidth / valuesExtended;
+        if (this.state.columnWidth > 10) {
+            this.state.groupsGap = this.state.columnWidth / 5;
+            this.state.columnWidth -= this.state.groupsGap;
         } else {
-            this.state.barMargin = 0;
+            this.state.groupsGap = 0;
         }
     }
 

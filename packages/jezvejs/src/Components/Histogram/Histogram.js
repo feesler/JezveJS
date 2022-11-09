@@ -33,7 +33,7 @@ export class Histogram extends BaseChart {
     }
 
     get columnOuterWidth() {
-        return this.state.barWidth + this.props.columnGap;
+        return this.state.columnWidth + this.props.columnGap;
     }
 
     get groupWidth() {
@@ -41,7 +41,7 @@ export class Histogram extends BaseChart {
     }
 
     get groupOuterWidth() {
-        return this.groupWidth + this.state.barMargin;
+        return this.groupWidth + this.state.groupsGap;
     }
 
     getItemBBox(item) {
@@ -253,7 +253,7 @@ export class Histogram extends BaseChart {
 
                 const item = this.createItem({
                     value,
-                    width: this.state.barWidth,
+                    width: this.state.columnWidth,
                     index,
                     columnIndex,
                     categoryIndex,
