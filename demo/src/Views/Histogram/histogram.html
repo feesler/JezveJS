@@ -14,9 +14,9 @@
             <div class="nav-header">
                 <button class="nav-toggle-btn">
                     <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
                     </svg>
                 </button>
 
@@ -30,6 +30,18 @@
                         <h2>Histogram</h2>
                         <section>
                             <div id="chart" class="std_chart_wrap"></div>
+                            <div class="section-controls">
+                                <span>columnWidth:</span>
+                                <div>
+                                    <input id="columnWidthRange" type="range" min="1" max="50" value="38">
+                                    <span id="columnWidthValue">38</span>
+                                </div>
+                                <span>groupsGap:</span>
+                                <div>
+                                    <input id="groupsGapRange" type="range" min="1" max="50" value="10">
+                                    <span id="groupsGapValue">10</span>
+                                </div>
+                            </div>
                         </section>
 
                         <h2>Histogram fit bars to width</h2>

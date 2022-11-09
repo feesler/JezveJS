@@ -229,10 +229,31 @@ const renderCategoriesPopup = (target) => {
     });
 };
 
+const onChangeColumnWidth = (chart, value) => {
+    const columnWidthValue = ge('columnWidthValue');
+    columnWidthValue.textContent = value;
+
+    chart.setColumnWidth(value);
+};
+
+const onChangeGroupsGap = (chart, value) => {
+    const groupsGapValue = ge('groupsGapValue');
+    groupsGapValue.textContent = value;
+
+    chart.setGroupsGap(value);
+};
+
 const defaultHistogram = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartData,
         elem: 'chart',
+    });
+
+    setEvents(ge('columnWidthRange'), {
+        input: (e) => onChangeColumnWidth(histogram, e.target.value),
+    });
+    setEvents(ge('groupsGapRange'), {
+        input: (e) => onChangeGroupsGap(histogram, e.target.value),
     });
 };
 
@@ -327,8 +348,8 @@ const stackedGroupedHistogram = () => {
         elem: 'stacked-grouped-histogram',
         height: 320,
         marginTop: 35,
-        barWidth: 50,
-        barMargin: 15,
+        columnWidth: 50,
+        groupsGap: 15,
         columnGap: 5,
         autoScale: true,
         showPopup: true,
@@ -345,8 +366,8 @@ const stackedCategoriesHistogram = () => {
         elem: 'stacked-categories-histogram',
         height: 320,
         marginTop: 35,
-        barWidth: 50,
-        barMargin: 15,
+        columnWidth: 50,
+        groupsGap: 15,
         columnGap: 5,
         autoScale: true,
         showPopup: true,

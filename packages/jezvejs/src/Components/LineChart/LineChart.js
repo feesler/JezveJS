@@ -12,6 +12,7 @@ const CATEGORY_CLASS = 'linechart_category-';
 /** Default properties */
 const defaultProps = {
     drawNodeCircles: false,
+    nodeCircleRadius: 4,
 };
 
 /**
@@ -20,11 +21,13 @@ const defaultProps = {
  * @param {string|Element} props.elem - base element for component
  */
 export class LineChart extends BaseChart {
-    constructor(props) {
-        super(props);
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
 
         this.props = {
-            ...defaultProps,
             ...this.props,
             visibilityOffset: 2,
             scaleAroundAxis: false,
@@ -42,6 +45,16 @@ export class LineChart extends BaseChart {
         if (this.props.drawNodeCircles) {
             this.chartContainer.classList.add(SHOW_NODES_CLASS);
         }
+    }
+
+    getItemBBox(item) {
+        const radius = this.props.nodeCircleRadius;
+        return {
+            x: item.dot.x - radius,
+            y: item.dot.y - radius,
+            width: radius * 2,
+            height: radius * 2,
+        };
     }
 
     /** Find item by event object */
@@ -74,9 +87,9 @@ export class LineChart extends BaseChart {
     }
 
     getCoordinates(value, index) {
-        const { barOuterWidth } = this;
+        const { groupOuterWidth } = this;
         return {
-            x: index * barOuterWidth + barOuterWidth / 2,
+            x: index * groupOuterWidth + groupOuterWidth / 2,
             y: this.grid.getY(value),
         };
     }
@@ -122,7 +135,7 @@ export class LineChart extends BaseChart {
             class: [ITEM_CLASS, categoryClass].join(' '),
             cx: item.dot.x,
             cy: item.dot.y,
-            r: 4,
+            r: this.props.nodeCircleRadius,
         });
 
         this.itemsGroup.append(item.elem);
@@ -176,10 +189,10 @@ export class LineChart extends BaseChart {
 
     /** Draw path currently saved at nodes */
     drawPath(values, categoryIndex = 0) {
-        const { barOuterWidth } = this;
+        const { groupOuterWidth } = this;
 
         const coords = values.map((value, index) => ({
-            x: index * barOuterWidth + barOuterWidth / 2,
+            x: index * groupOuterWidth + groupOuterWidth / 2,
             y: value,
         }));
 
