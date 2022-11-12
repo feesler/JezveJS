@@ -39,7 +39,7 @@ const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
 const FULLSCREEN_BG_CLASS = 'dd__background';
 const EDITABLE_CLASS = 'dd__editable';
-const INPUT_CLASS = 'dd__editable';
+const INPUT_CLASS = 'dd__input';
 /* Selection */
 const SELECTION_CLASS = 'dd__selection';
 const SINGLE_SELECTION_CLASS = 'dd__single-selection';
