@@ -1,5 +1,5 @@
 {
-    "name": "jezvejs",
+    "name": "jezvejs-monorepo",
     "version": "1.0.0",
     "private": true,
     "type": "module",
@@ -68,7 +68,7 @@
         "postcss-cli": "^8.3.1",
         "postcss-loader": "^5.3.0",
         "sass": "^1.56.1",
-        "sass-loader": "^13.1.0",
+        "sass-loader": "^13.2.0",
         "style-loader": "^2.0.0",
         "stylelint": "^14.14.1",
         "stylelint-config-prettier-scss": "^0.0.1",
@@ -82,5 +82,9 @@
         "@babel/runtime": "^7.20.1",
         "core-js": "^3.26.0",
         "whatwg-fetch": "^3.6.2"
-    }
+    },
+    "workspaces": [
+        "packages/*",
+        "demo"
+    ]
 }
