@@ -9,6 +9,10 @@
   --dd-input-text: #000000;
   --dd-placeholder: #808080;
   --dd-list-z-index: 9999;
+  --dd-combo-height: 34px;
+  --dd-combo-content-height: calc(
+    var(--dd-combo-height) - var(--dd-border-width) * 2
+  );
 
   /* Active component */
   --dd-active-border: #888888;
@@ -28,7 +32,13 @@
   --dd-disabled-selection-item-text: #a0a0a0;
   --dd-disabled-selection-item-bg: #dfdfdf;
 
+  /* Multiple selection */
+  --dd-selection-items-gap: 2px;
+
   /* Multiple selection item */
+  --dd-selection-item-height: calc(
+    var(--dd-combo-content-height) - var(--dd-selection-items-gap) * 2
+  );
   --dd-selection-item-text: #ffffff;
   --dd-selection-item-bg: #20a0ff;
   --dd-selection-item-btn: #1e82cc;
@@ -89,8 +99,10 @@
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  min-height: 34px;
-  border: var(--dd-border-width) solid var(--dd-border-color);
+  min-height: var(--dd-combo-height);
+  border-width: var(--dd-border-width);
+  border-style: solid;
+  border-color: var(--dd-border-color);
   border-radius: var(--dd-border-radius);
   background-color: var(--dd-bg-color);
   padding: 0 28px 0 0;
@@ -107,7 +119,8 @@
   display: flex;
   flex-flow: row wrap;
   margin: 0;
-  padding: 0;
+  padding: var(--dd-selection-items-gap);
+  gap: var(--dd-selection-items-gap);
   font-weight: 400;
   font-size: 1rem;
   vertical-align: middle;
@@ -118,9 +131,8 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  margin: 2px 0 2px 2px;
   padding: 0 6px 0 10px;
-  height: 28px;
+  height: var(--dd-selection-item-height);
   font-weight: normal;
   white-space: nowrap;
   background-color: var(--dd-selection-item-bg);
@@ -157,8 +169,8 @@
   font-size: 0.9rem;
   padding: 0 0 0 5px;
   margin: 0;
-  height: 30px;
-  min-height: 30px;
+  height: var(--dd-combo-content-height);
+  min-height: var(--dd-combo-content-height);
   align-items: center;
   background-color: var(--dd-bg-color);
   color: var(--dd-selection-text);
@@ -178,7 +190,7 @@
   font-size: 1rem;
   padding: 0 0 0 4px;
   margin: 0;
-  height: 30px;
+  height: var(--dd-combo-content-height);
   min-width: 50px;
   background-color: var(--dd-bg-color);
   color: var(--dd-input-text);

@@ -4,8 +4,11 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const htmlMinifyOptions = {
-    removeRedundantAttributes: false
+const htmlCommonOptions = {
+    favicon: './assets/favicon.ico',
+    minify: {
+        removeRedundantAttributes: false
+    },
 };
 
 export default {
@@ -89,139 +92,139 @@ export default {
             template: './Views/Main/index.html',
             filename: 'demo/index.html',
             chunks: ['polyfills', 'demoMain'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/ChartGrid/chartgrid.html',
             filename: 'demo/chartgrid.html',
             chunks: ['polyfills', 'chartGridDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Checkbox/checkbox.html',
             filename: 'demo/checkbox.html',
             chunks: ['polyfills', 'checkboxDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/CommonTests/common.html',
             filename: 'demo/common.html',
             chunks: ['polyfills', 'commonTestsDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Collapsible/collapsible.html',
             filename: 'demo/collapsible.html',
             chunks: ['polyfills', 'collapsibleDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/DateInput/dateinput.html',
             filename: 'demo/dateinput.html',
             chunks: ['polyfills', 'dateInputDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/DatePicker/datepicker.html',
             filename: 'demo/datepicker.html',
             chunks: ['polyfills', 'datePickerDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Debug/debug.html',
             filename: 'demo/debug.html',
             chunks: ['polyfills', 'debugDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/DecimalInput/decimal.html',
             filename: 'demo/decimal.html',
             chunks: ['polyfills', 'decimalInputDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/DpiTest/dpitest.html',
             filename: 'demo/dpitest.html',
             chunks: ['polyfills', 'dpiTestDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/DragnDrop/dragndrop.html',
             filename: 'demo/dragndrop.html',
             chunks: ['polyfills', 'dragnDropDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/DropDown/dropdown.html',
             filename: 'demo/dropdown.html',
             chunks: ['polyfills', 'dropDownDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/EmptyClick/emptyclick.html',
             filename: 'demo/emptyclick.html',
             chunks: ['polyfills', 'emptyClickDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Histogram/histogram.html',
             filename: 'demo/histogram.html',
             chunks: ['polyfills', 'histogramDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/InputGroup/inputgroup.html',
             filename: 'demo/inputgroup.html',
             chunks: ['polyfills', 'inputGroupDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/LineChart/linechart.html',
             filename: 'demo/linechart.html',
             chunks: ['polyfills', 'linechartDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Offcanvas/offcanvas.html',
             filename: 'demo/offcanvas.html',
             chunks: ['polyfills', 'offcanvasDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Paginator/paginator.html',
             filename: 'demo/paginator.html',
             chunks: ['polyfills', 'paginatorDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/PieChart/piechart.html',
             filename: 'demo/piechart.html',
             chunks: ['polyfills', 'pieChartDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Popup/popup.html',
             filename: 'demo/popup.html',
             chunks: ['polyfills', 'popupDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Progress/progress.html',
             filename: 'demo/progress.html',
             chunks: ['polyfills', 'progressDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Slider/Slider.html',
             filename: 'demo/slider.html',
             chunks: ['polyfills', 'sliderDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
             template: './Views/Switch/switch.html',
             filename: 'demo/switch.html',
             chunks: ['polyfills', 'switchDemo'],
-            minify: htmlMinifyOptions,
+            ...htmlCommonOptions,
         }),
     ],
     cache: {
