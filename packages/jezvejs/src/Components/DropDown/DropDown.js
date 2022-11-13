@@ -922,13 +922,13 @@ export class DropDown extends Component {
         }
 
         const html = document.documentElement;
-        const { scrollHeight } = html;
         const screenTop = html.scrollTop;
         const screenBottom = screenTop + html.clientHeight;
 
         this.elem.classList.add(LIST_OPEN_CLASS);
-
         const scrollAvailable = !this.isInsideFixedContainer();
+        const scrollHeight = (scrollAvailable) ? html.scrollHeight : screenBottom;
+
         let listHeight = this.list.offsetHeight;
         let border = 0;
         if (!this.props.listAttach) {
