@@ -31,6 +31,7 @@ export default {
         dropDownDemo: './Views/DropDown/DropDown.js',
         emptyClickDemo: './Views/EmptyClick/EmptyClick.js',
         histogramDemo: './Views/Histogram/Histogram.js',
+        iconButtonDemo: './Views/IconButton/IconButton.js',
         inputGroupDemo: './Views/InputGroup/InputGroup.js',
         linechartDemo: './Views/LineChart/LineChart.js',
         offcanvasDemo: './Views/Offcanvas/Offcanvas.js',
@@ -170,6 +171,12 @@ export default {
             template: './Views/Histogram/histogram.html',
             filename: 'demo/histogram.html',
             chunks: ['polyfills', 'histogramDemo'],
+            ...htmlCommonOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: './Views/IconButton/iconbutton.html',
+            filename: 'demo/iconbutton.html',
+            chunks: ['polyfills', 'iconButtonDemo'],
             ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({

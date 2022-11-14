@@ -1,0 +1,41 @@
+.logs-container {
+  display: inline-flex;
+  padding: 4px;
+  margin-top: 6px;
+  min-height: 1rem;
+  max-height: 100px;
+  min-width: 300px;
+  line-height: 1.5;
+  overflow-y: auto;
+  border: 1px solid #b4b4b4;
+}
+
+.circle-icon {
+  --iconbtn-hover-icon-color: #ffffff;
+
+  .iconbutton__icon {
+    border: 2px solid #000000;
+    border-radius: 50%;
+  }
+}
+
+.bg-btn {
+  --iconbtn-title-color: #ffffff;
+  --iconbtn-subtitle-color: #e4c200;
+  --iconbtn-icon-color: #ffffff;
+  --iconbtn-background: #0044ff;
+  --iconbtn-hover-title-color: #dddddd;
+  --iconbtn-hover-subtitle-color: #f7dc47;
+  --iconbtn-hover-icon-color: #dddddd;
+  --iconbtn-hover-background: #2962ff;
+
+  padding: 5px 15px 5px 5px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+@media (hover: hover) {
+  .circle-icon:hover .iconbutton__icon {
+    background-color: #000000;
+  }
+}

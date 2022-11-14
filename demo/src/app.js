@@ -37,6 +37,7 @@ const navigationMenu = [{
         { title: 'Collapsible', url: 'demo/collapsible.html' },
         { title: 'Date Picker', url: 'demo/datepicker.html' },
         { title: 'Drop Down', url: 'demo/dropdown.html' },
+        { title: 'Icon Button', url: 'demo/iconbutton.html' },
         { title: 'Offcanvas', url: 'demo/offcanvas.html' },
         { title: 'Paginator', url: 'demo/paginator.html' },
         { title: 'Popup', url: 'demo/popup.html' },

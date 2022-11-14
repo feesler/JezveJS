@@ -11,6 +11,7 @@ export * from './src/Components/DragnDrop/index.js';
 export { DropDown } from './src/Components/DropDown/DropDown.js';
 export { Histogram } from './src/Components/Histogram/Histogram.js';
 export { IndetermProgress } from './src/Components/IndetermProgress/IndetermProgress.js';
+export { IconButton } from './src/Components/IconButton/IconButton.js';
 export { InputGroup } from './src/Components/InputGroup/InputGroup.js';
 export { LineChart } from './src/Components/LineChart/LineChart.js';
 export { Offcanvas } from './src/Components/Offcanvas/Offcanvas.js';
