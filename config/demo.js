@@ -38,6 +38,7 @@ export default {
         paginatorDemo: './Views/Paginator/Paginator.js',
         pieChartDemo: './Views/PieChart/PieChart.js',
         popupDemo: './Views/Popup/Popup.js',
+        popupMenuDemo: './Views/PopupMenu/PopupMenu.js',
         progressDemo: './Views/Progress/Progress.js',
         sliderDemo: './Views/Slider/Slider.js',
         switchDemo: './Views/Switch/Switch.js',
@@ -213,6 +214,12 @@ export default {
             template: './Views/Popup/popup.html',
             filename: 'demo/popup.html',
             chunks: ['polyfills', 'popupDemo'],
+            ...htmlCommonOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: './Views/PopupMenu/popupmenu.html',
+            filename: 'demo/popupmenu.html',
+            chunks: ['polyfills', 'popupMenuDemo'],
             ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({

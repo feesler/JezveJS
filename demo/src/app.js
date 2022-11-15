@@ -41,6 +41,7 @@ const navigationMenu = [{
         { title: 'Offcanvas', url: 'demo/offcanvas.html' },
         { title: 'Paginator', url: 'demo/paginator.html' },
         { title: 'Popup', url: 'demo/popup.html' },
+        { title: 'Popup Menu', url: 'demo/popupmenu.html' },
         { title: 'Progress and Spinner', url: 'demo/progress.html' },
         { title: 'Slider', url: 'demo/slider.html' },
         { title: 'Switch', url: 'demo/switch.html' },

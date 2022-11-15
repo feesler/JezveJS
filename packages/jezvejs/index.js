@@ -18,6 +18,7 @@ export { Offcanvas } from './src/Components/Offcanvas/Offcanvas.js';
 export { Paginator } from './src/Components/Paginator/Paginator.js';
 export { PieChart } from './src/Components/PieChart/PieChart.js';
 export { Popup } from './src/Components/Popup/Popup.js';
+export { PopupMenu } from './src/Components/PopupMenu/PopupMenu.js';
 export { Progress } from './src/Components/Progress/Progress.js';
 export { Radio } from './src/Components/Radio/Radio.js';
 export { Slider } from './src/Components/Slider/Slider.js';
