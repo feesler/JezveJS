@@ -1,0 +1,16 @@
+.logs-container {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.logs-content {
+  display: inline-flex;
+  padding: 4px;
+  margin-top: 6px;
+  min-height: 1rem;
+  max-height: 100px;
+  min-width: 300px;
+  line-height: 1.5;
+  overflow-y: auto;
+  border: 1px solid #b4b4b4;
+}

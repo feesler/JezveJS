@@ -1,11 +1,11 @@
 {
     "name": "jezvejs-demo",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "private": true,
     "type": "module",
     "author": "Henry Feesler",
     "license": "ISC",
     "dependencies": {
-        "jezvejs": "^1.49.2"
+        "jezvejs": "^1.50.0"
     }
 }

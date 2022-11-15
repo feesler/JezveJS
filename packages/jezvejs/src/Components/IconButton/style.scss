@@ -1,0 +1,106 @@
+/* icon link */
+.iconbutton {
+  --iconbtn-size: 32px;
+  --iconbtn-title-color: #000000;
+  --iconbtn-subtitle-color: #003cff;
+  --iconbtn-icon-color: #000000;
+  --iconbtn-background: none;
+
+  /* Hover state */
+  --iconbtn-hover-title-color: #888888;
+  --iconbtn-hover-subtitle-color: #6f91ff;
+  --iconbtn-hover-icon-color: #888888;
+  --iconbtn-hover-background: none;
+
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  height: var(--iconbtn-size);
+  border: 0 none;
+  padding: 0;
+  overflow: hidden;
+  vertical-align: middle;
+  text-decoration: none;
+  background: var(--iconbtn-background);
+  cursor: pointer;
+
+  &:focus-visible {
+    box-shadow: var(--focus-shadow);
+  }
+}
+
+.iconbutton__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--iconbtn-size);
+  height: var(--iconbtn-size);
+  padding: 2px;
+  overflow: hidden;
+}
+
+.iconbutton__icon-content {
+  width: 24px;
+  height: 24px;
+  fill: var(--iconbtn-icon-color);
+}
+
+.iconbutton__content {
+  display: inline-flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  vertical-align: middle;
+  padding: 0 0 0 5px;
+  height: var(--iconbtn-size);
+  line-height: var(--iconbtn-size);
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+  color: var(--iconbtn-title-color);
+}
+
+.iconbutton__title {
+  height: 20px;
+  line-height: 20px;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.iconbutton__subtitle {
+  height: 12px;
+  line-height: 12px;
+  clear: both;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: var(--iconbtn-subtitle-color);
+}
+
+.iconbutton[disabled] {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+@media (hover: hover) {
+  .iconbutton:hover {
+    background: var(--iconbtn-hover-background);
+
+    .iconbutton__icon-content {
+      fill: var(--iconbtn-hover-icon-color);
+    }
+
+    .iconbutton__content {
+      color: var(--iconbtn-hover-title-color);
+    }
+
+    .iconbutton__subtitle {
+      color: var(--iconbtn-hover-subtitle-color);
+    }
+  }
+}

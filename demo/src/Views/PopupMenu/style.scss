@@ -1,0 +1,18 @@
+.logs-container {
+  display: inline-flex;
+  padding: 4px;
+  margin-top: 6px;
+  min-height: 1rem;
+  max-height: 100px;
+  min-width: 300px;
+  line-height: 1.5;
+  overflow-y: auto;
+  border: 1px solid #b4b4b4;
+}
+
+.block {
+  display: block;
+  width: 100px;
+  height: 100px;
+  background-color: #0065bd;
+}
