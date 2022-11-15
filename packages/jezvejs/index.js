@@ -13,6 +13,7 @@ export { Histogram } from './src/Components/Histogram/Histogram.js';
 export { IndetermProgress } from './src/Components/IndetermProgress/IndetermProgress.js';
 export { IconButton } from './src/Components/IconButton/IconButton.js';
 export { InputGroup } from './src/Components/InputGroup/InputGroup.js';
+export { LinkMenu } from './src/Components/LinkMenu/LinkMenu.js';
 export { LineChart } from './src/Components/LineChart/LineChart.js';
 export { Offcanvas } from './src/Components/Offcanvas/Offcanvas.js';
 export { Paginator } from './src/Components/Paginator/Paginator.js';

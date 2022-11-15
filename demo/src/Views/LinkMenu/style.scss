@@ -1,4 +1,9 @@
 .logs-container {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.logs-content {
   display: inline-flex;
   padding: 4px;
   margin-top: 6px;
@@ -8,11 +13,4 @@
   line-height: 1.5;
   overflow-y: auto;
   border: 1px solid #b4b4b4;
-}
-
-.block {
-  display: block;
-  width: 100px;
-  height: 100px;
-  background-color: #0065bd;
 }
