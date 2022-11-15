@@ -84,7 +84,8 @@ const renderNavSection = ({ title, items }, baseURL) => {
     return [header, menu];
 };
 
-const renderNavigationMenu = (baseURL) => {
+export const renderNavigationMenu = () => {
+    const baseURL = getBaseURL();
     const sections = navigationMenu.map((item) => renderNavSection(item, baseURL)).flat();
     return createElement('div', {
         props: { className: 'nav-menu-container' },
@@ -93,8 +94,7 @@ const renderNavigationMenu = (baseURL) => {
 };
 
 export const initNavigation = () => {
-    const baseURL = getBaseURL();
-    const navMenu = renderNavigationMenu(baseURL);
+    const navMenu = renderNavigationMenu();
 
     const offcanvas = Offcanvas.create({
         content: navMenu,
