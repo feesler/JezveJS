@@ -81,12 +81,15 @@ const renderNavSection = ({ title, items }, baseURL) => {
         children: items.map((item) => renderMenuItem(item, baseURL)),
     });
 
-    return [header, menu];
+    return createElement('div', {
+        props: { className: 'nav-menu-section' },
+        children: [header, menu],
+    });
 };
 
 export const renderNavigationMenu = () => {
     const baseURL = getBaseURL();
-    const sections = navigationMenu.map((item) => renderNavSection(item, baseURL)).flat();
+    const sections = navigationMenu.map((item) => renderNavSection(item, baseURL));
     return createElement('div', {
         props: { className: 'nav-menu-container' },
         children: sections,
