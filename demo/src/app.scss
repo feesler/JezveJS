@@ -140,15 +140,30 @@ h3 {
 }
 
 .nav-menu-container {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 24px;
+}
+
+.offcanvas__content .nav-menu-container {
+  flex-flow: column nowrap;
   padding: 12px;
 }
 
+.nav-menu-section h2 {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 4px 0;
+  color: #404040;
+}
+
 .nav-menu li {
-  margin-left: 16px;
+  display: flex;
   list-style-type: none;
 
   a,
   a:visited {
+    padding: 4px 0;
     text-decoration: none;
     font-size: 18px;
     color: #0072c6;
@@ -194,7 +209,6 @@ section {
   gap: 2rem;
 }
 
-
 @media (hover: hover) {
   .nav-header__logo > a:hover {
     color: #ffffff;
@@ -203,5 +217,12 @@ section {
   .nav-menu li a:hover {
     text-decoration: underline;
     color: #0093ff;
+  }
+}
+
+/* Desktop */
+@media (min-width: 576px) {
+  .nav-menu-container {
+    flex-flow: row wrap;
   }
 }

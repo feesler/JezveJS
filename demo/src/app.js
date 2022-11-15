@@ -81,11 +81,15 @@ const renderNavSection = ({ title, items }, baseURL) => {
         children: items.map((item) => renderMenuItem(item, baseURL)),
     });
 
-    return [header, menu];
+    return createElement('div', {
+        props: { className: 'nav-menu-section' },
+        children: [header, menu],
+    });
 };
 
-const renderNavigationMenu = (baseURL) => {
-    const sections = navigationMenu.map((item) => renderNavSection(item, baseURL)).flat();
+export const renderNavigationMenu = () => {
+    const baseURL = getBaseURL();
+    const sections = navigationMenu.map((item) => renderNavSection(item, baseURL));
     return createElement('div', {
         props: { className: 'nav-menu-container' },
         children: sections,
@@ -93,8 +97,7 @@ const renderNavigationMenu = (baseURL) => {
 };
 
 export const initNavigation = () => {
-    const baseURL = getBaseURL();
-    const navMenu = renderNavigationMenu(baseURL);
+    const navMenu = renderNavigationMenu();
 
     const offcanvas = Offcanvas.create({
         content: navMenu,

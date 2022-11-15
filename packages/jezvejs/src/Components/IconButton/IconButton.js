@@ -241,7 +241,7 @@ export class IconButton extends Component {
         }
 
         if (this.elem.tagName === 'A') {
-            this.elem.href = state.url;
+            this.elem.href = state.url ?? '';
         }
 
         this.titleElem = createElement('span', {
