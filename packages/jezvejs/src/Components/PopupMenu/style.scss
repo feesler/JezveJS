@@ -25,24 +25,24 @@
   justify-content: center;
   position: relative;
   width: fit-content;
-}
 
-/* Toggle show/hide menu button */
-.popup-menu-btn {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  background: none;
-  cursor: pointer;
-}
+  /* Toggle show/hide menu button */
+  .popup-menu-btn {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+  }
 
-.popup-menu-btn__icon {
-  width: 24px;
-  height: 24px;
+  .popup-menu-btn__icon {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .popup-menu-list {
@@ -55,79 +55,81 @@
   border-radius: var(--popupmenu-border-radius);
   z-index: var(--popupmenu-z-index);
   background: var(--popupmenu-background);
-}
 
-.popup-menu-list_fixed {
-  position: fixed;
-}
+  &.popup-menu-list_fixed {
+    position: fixed;
+  }
 
-.popup-menu-list__separator {
-  border: 0;
-  border-bottom-width: var(--popupmenu-separator-size);
-  border-bottom-style: solid;
-  border-color: var(--popupmenu-separator-color);
-  height: 0;
-  padding: 0;
-}
-
-/* Menu item with icon */
-.popup-menu__iconbutton {
-  --iconbtn-background: none;
-  --iconbtn-title-color: var(--popupmenu-title-color);
-  --iconbtn-subtitle-color: var(--popupmenu-subtitle-color);
-  --iconbtn-hover-background: var(--popupmenu-hover-background);
-  --iconbtn-hover-icon-color: var(--popupmenu-hover-icon-color);
-  --iconbtn-hover-title-color: var(--popupmenu-hover-title-color);
-  --iconbtn-hover-subtitle-color: var(--popupmenu-hover-subtitle-color);
-
-  height: auto;
-  padding: 8px 16px 8px 8px;
-  width: 100%;
-
-  .iconbutton__icon {
+  .popup-menu-list__separator {
     border: 0;
-    padding: 4px;
+    border-bottom-width: var(--popupmenu-separator-size);
+    border-bottom-style: solid;
+    border-color: var(--popupmenu-separator-color);
+    height: 0;
+    padding: 0;
   }
 
-  .iconbutton__icon-content {
-    width: 24px;
-    height: 24px;
+  /* Menu item with icon */
+  .popup-menu__iconbutton {
+    --iconbtn-background: none;
+    --iconbtn-title-color: var(--popupmenu-title-color);
+    --iconbtn-subtitle-color: var(--popupmenu-subtitle-color);
+    --iconbtn-hover-background: var(--popupmenu-hover-background);
+    --iconbtn-hover-icon-color: var(--popupmenu-hover-icon-color);
+    --iconbtn-hover-title-color: var(--popupmenu-hover-title-color);
+    --iconbtn-hover-subtitle-color: var(--popupmenu-hover-subtitle-color);
+
+    height: auto;
+    padding: 8px 16px 8px 8px;
+    width: 100%;
+
+    .iconbutton__icon {
+      border: 0;
+      padding: 4px;
+    }
+
+    .iconbutton__icon-content {
+      width: 24px;
+      height: 24px;
+    }
+
+    .iconbutton__content {
+      padding-left: 10px;
+    }
   }
 
-  .iconbutton__content {
-    padding-left: 10px;
-  }
-}
+  /* Menu item with checkbox */
+  .action-checkbox {
+    --checkbox-text: var(--popupmenu-title-color);
 
-/* Menu item with checkbox */
-.action-checkbox {
-  --checkbox-text: var(--popupmenu-title-color);
+    display: flex;
+    padding: 8px 16px 8px 8px;
+    margin: 0;
+    cursor: pointer;
 
-  display: flex;
-  padding: 8px 16px 8px 8px;
-  margin: 0;
-  cursor: pointer;
+    .checkbox__check {
+      margin: 6px;
+    }
 
-  .checkbox__check {
-    margin: 6px;
-  }
-
-  .checkbox__label {
-    margin: 6px 0;
-    padding-left: 10px;
+    .checkbox__label {
+      margin: 6px 0;
+      padding-left: 10px;
+    }
   }
 }
 
 @media (hover: hover) {
-  .iconbutton.popup-menu__iconbutton:hover {
-    .iconbutton__icon {
-      background: none;
+  .popup-menu-list {
+    .iconbutton.popup-menu__iconbutton:hover {
+      .iconbutton__icon {
+        background: none;
+      }
     }
-  }
 
-  .action-checkbox:hover {
-    --checkbox-text: var(--popupmenu-hover-title-color);
+    .action-checkbox:hover {
+      --checkbox-text: var(--popupmenu-hover-title-color);
 
-    background-color: var(--popupmenu-hover-background);
+      background-color: var(--popupmenu-hover-background);
+    }
   }
 }
