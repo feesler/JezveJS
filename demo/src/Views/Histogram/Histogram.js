@@ -61,10 +61,16 @@ const chartData3 = {
 const chartMultiData = {
     values: [{
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+        category: 'cat1',
+        group: 1,
     }, {
         data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
+        category: 'cat1',
+        group: 2,
     }, {
         data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
+        category: 'cat1',
+        group: 3,
     }],
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
@@ -80,6 +86,19 @@ const chartNegMultiData = {
         data: [-553, -200, -5500, 0, -58, -347, -1302, -12, -780, -5600, -460, -150, -2000, -2000],
     }, {
         data: [-50, -200, -550, -100, -850, -1220, -1302, -900, -780, -1800, -2210, -2500, -2100],
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
+    ],
+};
+
+const chartStackedData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+    }, {
+        data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
+    }, {
+        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
     }],
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
@@ -314,7 +333,7 @@ const multiColumnHistogram = () => {
 
 const stackedHistogram = () => {
     Histogram.create({
-        data: chartMultiData,
+        data: chartStackedData,
         elem: 'stacked-histogram',
         height: 320,
         marginTop: 35,
@@ -348,9 +367,9 @@ const stackedGroupedHistogram = () => {
         elem: 'stacked-grouped-histogram',
         height: 320,
         marginTop: 35,
-        columnWidth: 50,
+        columnWidth: 25,
         groupsGap: 15,
-        columnGap: 5,
+        columnGap: 2,
         autoScale: true,
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
@@ -366,9 +385,9 @@ const stackedCategoriesHistogram = () => {
         elem: 'stacked-categories-histogram',
         height: 320,
         marginTop: 35,
-        columnWidth: 50,
+        columnWidth: 25,
         groupsGap: 15,
-        columnGap: 5,
+        columnGap: 2,
         autoScale: true,
         showPopup: true,
         renderPopup: renderCategoriesPopup,

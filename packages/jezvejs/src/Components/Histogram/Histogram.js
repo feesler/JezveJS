@@ -6,6 +6,7 @@ import './style.scss';
 const CONTAINER_CLASS = 'histogram';
 const BAR_CLASS = 'histogram__bar';
 const CATEGORY_CLASS = 'histogram_category-';
+const COLUMN_CLASS = 'histogram_column-';
 
 /** Default properties */
 const defaultProps = {
@@ -169,9 +170,15 @@ export class Histogram extends BaseChart {
             throw new Error('Invalid values');
         }
 
-        const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
+        const columnClass = `${COLUMN_CLASS}${columnIndex + 1}`;
+        const classNames = [BAR_CLASS, columnClass];
+        if (this.state.stacked) {
+            const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
+            classNames.push(categoryClass);
+        }
+
         item.elem = svg('rect', {
-            class: [BAR_CLASS, categoryClass].join(' '),
+            class: classNames.join(' '),
             x: item.x,
             y: item.y,
             width: item.width,
@@ -237,7 +244,7 @@ export class Histogram extends BaseChart {
             dataSets.forEach((dataSet, dataSetIndex) => {
                 const value = dataSet.data[index] ?? 0;
                 const category = dataSet.category ?? null;
-                const categoryIndex = (category)
+                const categoryIndex = (category && stackedCategories.includes(category))
                     ? stackedCategories.indexOf(category)
                     : dataSetIndex;
                 const groupName = dataSet.group ?? null;

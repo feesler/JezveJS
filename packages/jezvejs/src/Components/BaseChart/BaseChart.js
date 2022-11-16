@@ -19,6 +19,7 @@ import './style.scss';
 
 /* CSS classes */
 const CHARTS_CLASS = 'charts';
+const STACKED_CLASS = 'chart_stacked';
 const CONTAINER_CLASS = 'chart__container';
 const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
@@ -147,6 +148,9 @@ export class BaseChart extends Component {
         });
         if (this.state.autoScale && this.state.animate) {
             this.chartContainer.classList.add(ANIMATE_CLASS);
+        }
+        if (this.state.stacked) {
+            this.chartContainer.classList.add(STACKED_CLASS);
         }
 
         this.elem.append(this.chartContainer);
