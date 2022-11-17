@@ -106,7 +106,7 @@ const eurData = {
 };
 /* eslint-enable max-len */
 
-const noData = {
+const emptyData = {
     values: [],
     series: [],
 };
@@ -275,7 +275,7 @@ const stackedNegLinechart = () => {
 
 const noDataLinechart = () => {
     LineChart.create({
-        data: noData,
+        data: emptyData,
         elem: 'linechart_no_data',
         autoScale: true,
     });
@@ -321,7 +321,8 @@ const setDataLinechart = () => {
         autoScale: true,
     });
 
-    setEvents(ge('setData1Btn'), { click: () => linechart.setData(chartData2) });
+    setEvents(ge('setNoDataBtn'), { click: () => linechart.setData(emptyData) });
+    setEvents(ge('setData1Btn'), { click: () => linechart.setData(negPosData) });
     setEvents(ge('setData2Btn'), { click: () => linechart.setData(chartData3) });
     setEvents(ge('setData3Btn'), { click: () => linechart.setData(chartStackedData) });
 };

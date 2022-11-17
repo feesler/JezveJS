@@ -151,7 +151,7 @@ const chartGroupedCategoriesData = {
     stacked: true,
 };
 
-const noData = {
+const emptyData = {
     values: [],
     series: [],
 };
@@ -399,7 +399,7 @@ const stackedCategoriesHistogram = () => {
 
 const noDataHistogram = () => {
     Histogram.create({
-        data: noData,
+        data: emptyData,
         elem: 'chart_no_data',
         autoScale: true,
     });
@@ -441,12 +441,13 @@ const negativeAndPositiveHistogram = () => {
 
 const setDataHistogram = () => {
     const histogram = Histogram.create({
-        data: posData,
+        data: negPosData,
         elem: 'chart_setdata',
         autoScale: true,
     });
 
-    setEvents(ge('setData1Btn'), { click: () => histogram.setData(chartData2) });
+    setEvents(ge('setNoDataBtn'), { click: () => histogram.setData(emptyData) });
+    setEvents(ge('setData1Btn'), { click: () => histogram.setData(negPosData) });
     setEvents(ge('setData2Btn'), { click: () => histogram.setData(chartData3) });
     setEvents(ge('setData3Btn'), { click: () => histogram.setData(chartGroupedCategoriesData) });
 };

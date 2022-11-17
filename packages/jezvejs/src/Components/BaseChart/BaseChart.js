@@ -6,7 +6,6 @@ import {
     setEmptyClick,
     removeEmptyClick,
     getOffset,
-    prependChild,
     removeChilds,
     px,
     throttle,
@@ -344,6 +343,9 @@ export class BaseChart extends Component {
     /** Draw grid and return array of grid lines */
     drawGrid(state) {
         const { chartWidth, grid } = state;
+
+        this.gridGroup?.remove();
+        this.gridGroup = null;
         if (!grid.steps) {
             return;
         }
@@ -371,8 +373,7 @@ export class BaseChart extends Component {
             step += 1;
         }
 
-        this.gridGroup?.remove();
-        prependChild(this.content, gridGroup);
+        this.content.prepend(gridGroup);
         this.gridGroup = gridGroup;
     }
 
@@ -489,8 +490,10 @@ export class BaseChart extends Component {
     /** Draw vertical labels */
     drawVLabels(state) {
         const { grid } = state;
+        this.vertLabelsGroup?.remove();
+        this.vertLabelsGroup = null;
         if (!grid.steps) {
-            return state;
+            return this.setVertLabelsWidth(0, state);
         }
 
         const formatFunction = isFunction(state.renderYAxisLabel)
@@ -503,7 +506,6 @@ export class BaseChart extends Component {
         let step = 0;
         let labelsWidth = 0;
 
-        this.vertLabelsGroup?.remove();
         this.vertLabelsGroup = svg('g');
         this.labelsContainer.append(this.vertLabelsGroup);
 
