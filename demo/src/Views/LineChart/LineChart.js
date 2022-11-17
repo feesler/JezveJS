@@ -166,6 +166,24 @@ const renderMultiColumnPopup = (target) => {
     });
 };
 
+const renderCustomLegend = (categories) => {
+    if (!Array.isArray(categories) || categories.length === 0) {
+        return null;
+    }
+
+    return createElement('ul', {
+        props: { className: 'chart__legend-list' },
+        children: categories.map((_, index) => createElement('li', {
+            props: {
+                className: `list-item_category-${index + 1}`,
+            },
+            children: createElement('span', {
+                props: { textContent: `Category ${index + 1}` },
+            }),
+        })),
+    });
+};
+
 const onChangeColumnWidth = (chart, value) => {
     const columnWidthValue = ge('columnWidthValue');
     columnWidthValue.textContent = value;
@@ -244,6 +262,7 @@ const multiple = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
+        showLegend: true,
     });
 };
 
@@ -257,6 +276,8 @@ const stacked = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 };
 
@@ -270,6 +291,8 @@ const stackedNeg = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 };
 
@@ -319,6 +342,8 @@ const setData = () => {
         data: negPosData,
         elem: 'linechart_setdata',
         autoScale: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 
     setEvents(ge('setNoDataBtn'), { click: () => linechart.setData(emptyData) });
