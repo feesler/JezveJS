@@ -177,11 +177,20 @@ export class BaseChart extends Component {
         this.contentOffset = getOffset(this.content);
 
         this.setClassNames();
+        this.observeSize();
         this.setData(this.props.data);
 
         if (this.props.scrollToEnd) {
             this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
         }
+    }
+
+    observeSize() {
+        const observer = new ResizeObserver(() => {
+            const newState = this.updateChartWidth(this.state);
+            this.setState(newState);
+        });
+        observer.observe(this.chartContainer);
     }
 
     setData(data) {
@@ -203,10 +212,8 @@ export class BaseChart extends Component {
         state.groupsCount = this.getGroupsCount(state);
         state.columnsInGroup = this.getColumnsInGroupCount(state);
         state.grid = this.calculateGrid(data.values, state);
-        state.chartContentWidth = state.groupsCount * this.getGroupOuterWidth(state);
-        state.chartWidth = Math.max(this.chart.offsetWidth, state.chartContentWidth);
-
-        this.setState(state);
+        const newState = this.updateChartWidth(state);
+        this.setState(newState);
     }
 
     setColumnWidth(value) {
@@ -219,10 +226,8 @@ export class BaseChart extends Component {
             ...this.state,
             columnWidth: width,
         };
-        state.chartContentWidth = state.groupsCount * this.getGroupOuterWidth(state);
-        state.chartWidth = Math.max(this.chart.offsetWidth, state.chartContentWidth);
-
-        this.setState(state);
+        const newState = this.updateChartWidth(state);
+        this.setState(newState);
     }
 
     setGroupsGap(value) {
@@ -235,11 +240,8 @@ export class BaseChart extends Component {
             ...this.state,
             groupsGap: gap,
         };
-
-        state.chartContentWidth = state.groupsCount * this.getGroupOuterWidth(state);
-        state.chartWidth = Math.max(this.chart.offsetWidth, state.chartContentWidth);
-
-        this.setState(state);
+        const newState = this.updateChartWidth(state);
+        this.setState(newState);
     }
 
     /** Returns count of data categories */
@@ -399,12 +401,7 @@ export class BaseChart extends Component {
         };
 
         const chartOffset = this.chartContainer.offsetWidth;
-        const paperWidth = Math.max(chartOffset - newState.vLabelsWidth, contentWidth);
-
-        this.content.setAttribute('width', paperWidth);
-        this.content.setAttribute('height', newState.height);
-
-        newState.chartWidth = Math.max(paperWidth, contentWidth);
+        newState.chartWidth = Math.max(chartOffset - newState.vLabelsWidth, contentWidth);
 
         return newState;
     }
@@ -770,12 +767,7 @@ export class BaseChart extends Component {
     }
 
     /** Update vertical scale of items */
-    /* eslint-disable-next-line no-unused-vars */
-    updateItemsScale(items) {
-    }
-
-    /** Update horizontal scale of items */
-    updateItemsWidth() {
+    updateItemsScale() {
     }
 
     render(state) {
@@ -796,6 +788,9 @@ export class BaseChart extends Component {
         // create horizontal labels
         newState = this.createHLabels(newState);
         newState = this.updateChartWidth(newState);
+
+        this.content.setAttribute('width', newState.chartWidth);
+        this.content.setAttribute('height', newState.height);
 
         this.state = newState;
     }
