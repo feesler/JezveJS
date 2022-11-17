@@ -927,7 +927,6 @@ export class DropDown extends Component {
 
         this.elem.classList.add(LIST_OPEN_CLASS);
         const scrollAvailable = !this.isInsideFixedContainer();
-        const scrollHeight = (scrollAvailable) ? html.scrollHeight : screenBottom;
 
         let listHeight = this.list.offsetHeight;
         let border = 0;
@@ -947,8 +946,14 @@ export class DropDown extends Component {
             }
             : null;
 
-        let totalListHeight = container.height + listHeight;
+        let totalListHeight = container.height + LIST_MARGIN + listHeight;
         let listBottom = container.top + totalListHeight;
+
+        this.list.style.top = px(
+            container.top - offset.top + container.height,
+        );
+
+        const scrollHeight = (scrollAvailable) ? html.scrollHeight : screenBottom;
 
         if (this.props.fullScreen && isVisible(this.backgroundElem)) {
             document.body.style.overflow = 'hidden';
@@ -965,46 +970,48 @@ export class DropDown extends Component {
                 listHeight = html.clientHeight - container.height - (padding + LIST_MARGIN);
                 this.list.style.height = px(listHeight);
 
-                totalListHeight = container.height + listHeight;
+                totalListHeight = container.height + LIST_MARGIN + listHeight;
                 listBottom = container.top + totalListHeight;
             }
 
             const listTop = container.top - listHeight - padding;
             const topSpace = container.top - screenTop;
             const bottomSpace = screenBottom - container.top + container.height;
+            const topScrollSpace = container.top;
+            const bottomScrollSpace = scrollHeight - container.top + container.height;
 
             // Check vertical offset of drop down list
-            if (
+            const flipList = (
                 listBottom > scrollHeight
                 && (
-                    scrollAvailable
+                    (scrollAvailable && topScrollSpace > bottomScrollSpace)
                     || (!scrollAvailable && topSpace > bottomSpace)
                 )
-            ) {
-                const listOverflow = screenTop - listTop;
+            );
+            if (flipList) {
+                let listOverflow = screenTop - listTop;
+                if (listOverflow > 0 && scrollAvailable) {
+                    const distance = Math.min(listOverflow, screenTop);
+                    html.scrollTop += distance;
+                    listOverflow -= distance;
+                }
                 if (listOverflow > 0) {
-                    if (scrollAvailable) {
-                        html.scrollTop -= listOverflow;
-                    } else {
-                        listHeight -= listOverflow;
-                        this.list.style.height = px(listHeight);
-                    }
+                    listHeight -= listOverflow;
+                    this.list.style.height = px(listHeight);
                 }
 
                 this.list.style.top = px(container.top - offset.top - listHeight - padding);
             } else {
-                const listOverflow = listBottom + padding - screenBottom;
-                if (listOverflow > 0) {
-                    if (scrollAvailable) {
-                        html.scrollTop += listOverflow;
-                    } else {
-                        listHeight -= listOverflow;
-                        this.list.style.height = px(listHeight);
-                    }
+                let listOverflow = listBottom - screenBottom;
+                if (listOverflow > 0 && scrollAvailable) {
+                    const distance = Math.min(listOverflow, scrollHeight - screenBottom);
+                    html.scrollTop += distance;
+                    listOverflow -= distance;
                 }
-                this.list.style.top = px(
-                    container.top - offset.top + container.height - border,
-                );
+                if (listOverflow > 0) {
+                    listHeight -= listOverflow;
+                    this.list.style.height = px(listHeight);
+                }
             }
         }
 
