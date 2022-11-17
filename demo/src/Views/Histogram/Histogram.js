@@ -61,10 +61,16 @@ const chartData3 = {
 const chartMultiData = {
     values: [{
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+        category: 'cat1',
+        group: 1,
     }, {
         data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
+        category: 'cat1',
+        group: 2,
     }, {
         data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
+        category: 'cat1',
+        group: 3,
     }],
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
@@ -84,6 +90,21 @@ const chartNegMultiData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
+};
+
+const chartStackedData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+    }, {
+        data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
+    }, {
+        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4], ['12.22', 4],
+    ],
+    stacked: true,
 };
 
 const chartGroupedData = {
@@ -103,6 +124,7 @@ const chartGroupedData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
 const chartGroupedCategoriesData = {
@@ -126,9 +148,10 @@ const chartGroupedCategoriesData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
-const noData = {
+const emptyData = {
     values: [],
     series: [],
 };
@@ -243,7 +266,7 @@ const onChangeGroupsGap = (chart, value) => {
     chart.setGroupsGap(value);
 };
 
-const defaultHistogram = () => {
+const columnWidthAndGap = () => {
     const histogram = Histogram.create({
         data: chartData,
         elem: 'chart',
@@ -257,7 +280,7 @@ const defaultHistogram = () => {
     });
 };
 
-const fitToWidthHistogram = () => {
+const fitToWidth = () => {
     Histogram.create({
         data: chartData,
         elem: 'chart_fittowidth',
@@ -265,7 +288,7 @@ const fitToWidthHistogram = () => {
     });
 };
 
-const autoScaleHistogram = () => {
+const autoScale = () => {
     Histogram.create({
         data: chartData2,
         elem: 'chart_autoscale',
@@ -277,7 +300,7 @@ const autoScaleHistogram = () => {
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
-const callbacksHistogram = () => {
+const callbacks = () => {
     Histogram.create({
         data: chartData2,
         elem: 'chart_callbacks',
@@ -298,7 +321,7 @@ const callbacksHistogram = () => {
     });
 };
 
-const multiColumnHistogram = () => {
+const multiColumn = () => {
     Histogram.create({
         data: chartMultiData,
         elem: 'chart_multicolumn',
@@ -312,9 +335,9 @@ const multiColumnHistogram = () => {
     });
 };
 
-const stackedHistogram = () => {
+const stacked = () => {
     Histogram.create({
-        data: chartMultiData,
+        data: chartStackedData,
         elem: 'stacked-histogram',
         height: 320,
         marginTop: 35,
@@ -323,11 +346,10 @@ const stackedHistogram = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
-const stackedNegativeHistogram = () => {
+const stackedNegative = () => {
     Histogram.create({
         data: chartNegMultiData,
         elem: 'stacked-neg-histogram',
@@ -338,55 +360,52 @@ const stackedNegativeHistogram = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
-const stackedGroupedHistogram = () => {
+const stackedGrouped = () => {
     Histogram.create({
         data: chartGroupedData,
         elem: 'stacked-grouped-histogram',
         height: 320,
         marginTop: 35,
-        columnWidth: 50,
+        columnWidth: 25,
         groupsGap: 15,
-        columnGap: 5,
+        columnGap: 2,
         autoScale: true,
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
-const stackedCategoriesHistogram = () => {
+const stackedCategories = () => {
     Histogram.create({
         data: chartGroupedCategoriesData,
         elem: 'stacked-categories-histogram',
         height: 320,
         marginTop: 35,
-        columnWidth: 50,
+        columnWidth: 25,
         groupsGap: 15,
-        columnGap: 5,
+        columnGap: 2,
         autoScale: true,
         showPopup: true,
         renderPopup: renderCategoriesPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
-const noDataHistogram = () => {
+const noData = () => {
     Histogram.create({
-        data: noData,
+        data: emptyData,
         elem: 'chart_no_data',
         autoScale: true,
     });
 };
 
-const singleNegativeHistogram = () => {
+const singleNegative = () => {
     Histogram.create({
         data: singleNegData,
         elem: 'chart_single_neg',
@@ -396,7 +415,7 @@ const singleNegativeHistogram = () => {
     });
 };
 
-const onlyPositiveHistogram = () => {
+const onlyPositive = () => {
     Histogram.create({
         data: posData,
         elem: 'chart_pos',
@@ -404,7 +423,7 @@ const onlyPositiveHistogram = () => {
     });
 };
 
-const onlyNegativeHistogram = () => {
+const onlyNegative = () => {
     Histogram.create({
         data: negData,
         elem: 'chart_neg',
@@ -412,7 +431,7 @@ const onlyNegativeHistogram = () => {
     });
 };
 
-const negativeAndPositiveHistogram = () => {
+const negativeAndPositive = () => {
     Histogram.create({
         data: negPosData,
         elem: 'chart_negpos',
@@ -420,38 +439,38 @@ const negativeAndPositiveHistogram = () => {
     });
 };
 
-const setDataHistogram = () => {
+const setData = () => {
     const histogram = Histogram.create({
-        data: chartData,
+        data: negPosData,
         elem: 'chart_setdata',
         autoScale: true,
     });
 
-    const setData1Btn = ge('setData1Btn');
-    setEvents(setData1Btn, { click: () => histogram.setData(chartData2) });
-    const setData2Btn = ge('setData2Btn');
-    setEvents(setData2Btn, { click: () => histogram.setData(chartData3) });
+    setEvents(ge('setNoDataBtn'), { click: () => histogram.setData(emptyData) });
+    setEvents(ge('setData1Btn'), { click: () => histogram.setData(negPosData) });
+    setEvents(ge('setData2Btn'), { click: () => histogram.setData(chartData3) });
+    setEvents(ge('setData3Btn'), { click: () => histogram.setData(chartGroupedCategoriesData) });
 };
 
 const init = () => {
     initNavigation();
 
-    defaultHistogram();
-    fitToWidthHistogram();
-    autoScaleHistogram();
-    callbacksHistogram();
-    multiColumnHistogram();
-    stackedHistogram();
-    stackedNegativeHistogram();
-    stackedGroupedHistogram();
-    stackedCategoriesHistogram();
+    columnWidthAndGap();
+    fitToWidth();
+    autoScale();
+    callbacks();
+    multiColumn();
+    stacked();
+    stackedNegative();
+    stackedGrouped();
+    stackedCategories();
     // Different data tests
-    noDataHistogram();
-    singleNegativeHistogram();
-    onlyPositiveHistogram();
-    onlyNegativeHistogram();
-    negativeAndPositiveHistogram();
-    setDataHistogram();
+    noData();
+    singleNegative();
+    onlyPositive();
+    onlyNegative();
+    negativeAndPositive();
+    setData();
 };
 
 onReady(init);

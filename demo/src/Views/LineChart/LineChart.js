@@ -69,6 +69,18 @@ const chartMultiData = {
     ],
 };
 
+const chartStackedData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+    }, {
+        data: [553, 200, 5500, 1500, 580, 347, 1302, 1200, 780, 5600, 460, 150],
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4],
+    ],
+    stacked: true,
+};
+
 const chartNegMultiData = {
     values: [{
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
@@ -82,6 +94,7 @@ const chartNegMultiData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
 /* eslint-disable max-len */
@@ -93,7 +106,7 @@ const eurData = {
 };
 /* eslint-enable max-len */
 
-const noData = {
+const emptyData = {
     values: [],
     series: [],
 };
@@ -167,7 +180,7 @@ const onChangeGroupsGap = (chart, value) => {
     chart.setGroupsGap(value);
 };
 
-const defaultLinechart = () => {
+const columnWidthAndGap = () => {
     const chart = LineChart.create({
         data: chartData,
         elem: 'linechart',
@@ -181,7 +194,7 @@ const defaultLinechart = () => {
     });
 };
 
-const fitToWidthLinechart = () => {
+const fitToWidth = () => {
     LineChart.create({
         data: chartData,
         elem: 'linechart_fittowidth',
@@ -189,7 +202,7 @@ const fitToWidthLinechart = () => {
     });
 };
 
-const autoScaleLinechart = () => {
+const autoScale = () => {
     LineChart.create({
         data: eurData,
         elem: 'linechart_autoscale',
@@ -201,7 +214,7 @@ const autoScaleLinechart = () => {
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
-const callbacksLinechart = () => {
+const callbacks = () => {
     LineChart.create({
         data: chartData,
         elem: 'linechart_callbacks',
@@ -221,7 +234,7 @@ const callbacksLinechart = () => {
     });
 };
 
-const multipleLinechart = () => {
+const multiple = () => {
     LineChart.create({
         data: chartMultiData,
         elem: 'linechart_multiple',
@@ -234,9 +247,9 @@ const multipleLinechart = () => {
     });
 };
 
-const stackedLinechart = () => {
+const stacked = () => {
     LineChart.create({
-        data: chartMultiData,
+        data: chartStackedData,
         elem: 'linechart_stacked',
         height: 320,
         marginTop: 35,
@@ -244,11 +257,10 @@ const stackedLinechart = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
-const stackedNegLinechart = () => {
+const stackedNeg = () => {
     LineChart.create({
         data: chartNegMultiData,
         elem: 'linechart-neg-stacked',
@@ -258,19 +270,18 @@ const stackedNegLinechart = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
-const noDataLinechart = () => {
+const noData = () => {
     LineChart.create({
-        data: noData,
+        data: emptyData,
         elem: 'linechart_no_data',
         autoScale: true,
     });
 };
 
-const singleNegativeLinechart = () => {
+const singleNegative = () => {
     LineChart.create({
         data: singleNegData,
         elem: 'linechart_single_neg',
@@ -279,7 +290,7 @@ const singleNegativeLinechart = () => {
     });
 };
 
-const onlyPositiveLinechart = () => {
+const onlyPositive = () => {
     LineChart.create({
         data: posData,
         elem: 'linechart_pos',
@@ -287,7 +298,7 @@ const onlyPositiveLinechart = () => {
     });
 };
 
-const onlyNegativeLinechart = () => {
+const onlyNegative = () => {
     LineChart.create({
         data: negData,
         elem: 'linechart_neg',
@@ -295,7 +306,7 @@ const onlyNegativeLinechart = () => {
     });
 };
 
-const negativeAndPositiveLinechart = () => {
+const negativeAndPositive = () => {
     LineChart.create({
         data: negPosData,
         elem: 'linechart_negpos',
@@ -303,36 +314,36 @@ const negativeAndPositiveLinechart = () => {
     });
 };
 
-const setDataLinechart = () => {
+const setData = () => {
     const linechart = LineChart.create({
         data: negPosData,
         elem: 'linechart_setdata',
         autoScale: true,
     });
 
-    const setData1Btn = ge('setLineData1Btn');
-    setEvents(setData1Btn, { click: () => linechart.setData(chartData2) });
-    const setData2Btn = ge('setLineData2Btn');
-    setEvents(setData2Btn, { click: () => linechart.setData(chartData3) });
+    setEvents(ge('setNoDataBtn'), { click: () => linechart.setData(emptyData) });
+    setEvents(ge('setData1Btn'), { click: () => linechart.setData(negPosData) });
+    setEvents(ge('setData2Btn'), { click: () => linechart.setData(chartData3) });
+    setEvents(ge('setData3Btn'), { click: () => linechart.setData(chartStackedData) });
 };
 
 const init = () => {
     initNavigation();
 
-    defaultLinechart();
-    fitToWidthLinechart();
-    autoScaleLinechart();
-    callbacksLinechart();
-    multipleLinechart();
-    stackedLinechart();
-    stackedNegLinechart();
+    columnWidthAndGap();
+    fitToWidth();
+    autoScale();
+    callbacks();
+    multiple();
+    stacked();
+    stackedNeg();
     // Different data tests
-    noDataLinechart();
-    singleNegativeLinechart();
-    onlyPositiveLinechart();
-    onlyNegativeLinechart();
-    negativeAndPositiveLinechart();
-    setDataLinechart();
+    noData();
+    singleNegative();
+    onlyPositive();
+    onlyNegative();
+    negativeAndPositive();
+    setData();
 };
 
 onReady(init);
