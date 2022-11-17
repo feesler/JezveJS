@@ -266,7 +266,7 @@ const onChangeGroupsGap = (chart, value) => {
     chart.setGroupsGap(value);
 };
 
-const defaultHistogram = () => {
+const columnWidthAndGap = () => {
     const histogram = Histogram.create({
         data: chartData,
         elem: 'chart',
@@ -280,7 +280,7 @@ const defaultHistogram = () => {
     });
 };
 
-const fitToWidthHistogram = () => {
+const fitToWidth = () => {
     Histogram.create({
         data: chartData,
         elem: 'chart_fittowidth',
@@ -288,7 +288,7 @@ const fitToWidthHistogram = () => {
     });
 };
 
-const autoScaleHistogram = () => {
+const autoScale = () => {
     Histogram.create({
         data: chartData2,
         elem: 'chart_autoscale',
@@ -300,7 +300,7 @@ const autoScaleHistogram = () => {
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
-const callbacksHistogram = () => {
+const callbacks = () => {
     Histogram.create({
         data: chartData2,
         elem: 'chart_callbacks',
@@ -321,7 +321,7 @@ const callbacksHistogram = () => {
     });
 };
 
-const multiColumnHistogram = () => {
+const multiColumn = () => {
     Histogram.create({
         data: chartMultiData,
         elem: 'chart_multicolumn',
@@ -335,7 +335,7 @@ const multiColumnHistogram = () => {
     });
 };
 
-const stackedHistogram = () => {
+const stacked = () => {
     Histogram.create({
         data: chartStackedData,
         elem: 'stacked-histogram',
@@ -349,7 +349,7 @@ const stackedHistogram = () => {
     });
 };
 
-const stackedNegativeHistogram = () => {
+const stackedNegative = () => {
     Histogram.create({
         data: chartNegMultiData,
         elem: 'stacked-neg-histogram',
@@ -363,7 +363,7 @@ const stackedNegativeHistogram = () => {
     });
 };
 
-const stackedGroupedHistogram = () => {
+const stackedGrouped = () => {
     Histogram.create({
         data: chartGroupedData,
         elem: 'stacked-grouped-histogram',
@@ -380,7 +380,7 @@ const stackedGroupedHistogram = () => {
     });
 };
 
-const stackedCategoriesHistogram = () => {
+const stackedCategories = () => {
     Histogram.create({
         data: chartGroupedCategoriesData,
         elem: 'stacked-categories-histogram',
@@ -397,7 +397,7 @@ const stackedCategoriesHistogram = () => {
     });
 };
 
-const noDataHistogram = () => {
+const noData = () => {
     Histogram.create({
         data: emptyData,
         elem: 'chart_no_data',
@@ -405,7 +405,7 @@ const noDataHistogram = () => {
     });
 };
 
-const singleNegativeHistogram = () => {
+const singleNegative = () => {
     Histogram.create({
         data: singleNegData,
         elem: 'chart_single_neg',
@@ -415,7 +415,7 @@ const singleNegativeHistogram = () => {
     });
 };
 
-const onlyPositiveHistogram = () => {
+const onlyPositive = () => {
     Histogram.create({
         data: posData,
         elem: 'chart_pos',
@@ -423,7 +423,7 @@ const onlyPositiveHistogram = () => {
     });
 };
 
-const onlyNegativeHistogram = () => {
+const onlyNegative = () => {
     Histogram.create({
         data: negData,
         elem: 'chart_neg',
@@ -431,7 +431,7 @@ const onlyNegativeHistogram = () => {
     });
 };
 
-const negativeAndPositiveHistogram = () => {
+const negativeAndPositive = () => {
     Histogram.create({
         data: negPosData,
         elem: 'chart_negpos',
@@ -439,7 +439,7 @@ const negativeAndPositiveHistogram = () => {
     });
 };
 
-const setDataHistogram = () => {
+const setData = () => {
     const histogram = Histogram.create({
         data: negPosData,
         elem: 'chart_setdata',
@@ -455,22 +455,22 @@ const setDataHistogram = () => {
 const init = () => {
     initNavigation();
 
-    defaultHistogram();
-    fitToWidthHistogram();
-    autoScaleHistogram();
-    callbacksHistogram();
-    multiColumnHistogram();
-    stackedHistogram();
-    stackedNegativeHistogram();
-    stackedGroupedHistogram();
-    stackedCategoriesHistogram();
+    columnWidthAndGap();
+    fitToWidth();
+    autoScale();
+    callbacks();
+    multiColumn();
+    stacked();
+    stackedNegative();
+    stackedGrouped();
+    stackedCategories();
     // Different data tests
-    noDataHistogram();
-    singleNegativeHistogram();
-    onlyPositiveHistogram();
-    onlyNegativeHistogram();
-    negativeAndPositiveHistogram();
-    setDataHistogram();
+    noData();
+    singleNegative();
+    onlyPositive();
+    onlyNegative();
+    negativeAndPositive();
+    setData();
 };
 
 onReady(init);
