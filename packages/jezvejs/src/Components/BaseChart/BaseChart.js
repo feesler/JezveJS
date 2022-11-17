@@ -53,7 +53,6 @@ const defaultProps = {
     scrollThrottle: false,
     activateOnHover: false,
     renderYAxisLabel: null,
-    stacked: false,
     // Callbacks
     onscroll: null,
     onitemclick: null,
@@ -63,6 +62,7 @@ const defaultProps = {
     data: {
         values: [],
         series: [],
+        stacked: false,
     },
 };
 
@@ -195,7 +195,10 @@ export class BaseChart extends Component {
 
         const state = {
             ...this.state,
-            data,
+            data: {
+                ...defaultProps.data,
+                ...data,
+            },
         };
 
         state.groupsCount = this.getGroupsCount(state);
@@ -324,7 +327,7 @@ export class BaseChart extends Component {
             minStep: state.minGridStep,
             maxStep: state.maxGridStep,
             valuesMargin: state.gridValuesMargin,
-            stacked: state.stacked,
+            stacked: state.data.stacked,
         });
         grid.calculate(values);
 
@@ -788,7 +791,7 @@ export class BaseChart extends Component {
     render(state) {
         const animated = state.autoScale && state.animate;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
-        this.chartContainer.classList.toggle(STACKED_CLASS, state.stacked);
+        this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
 
         let newState = this.drawVLabels(state);
         this.drawGrid(newState);

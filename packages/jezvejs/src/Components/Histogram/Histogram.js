@@ -62,7 +62,7 @@ export class Histogram extends BaseChart {
         let item = null;
         let index = -1;
 
-        if (this.state.stacked) {
+        if (this.state.data.stacked) {
             const { x } = result;
             const y = e.offsetY;
             index = result.item.findIndex((bar) => (
@@ -171,7 +171,7 @@ export class Histogram extends BaseChart {
 
         const columnClass = `${COLUMN_CLASS}${columnIndex + 1}`;
         const classNames = [BAR_CLASS, columnClass];
-        if (state.stacked) {
+        if (state.data.stacked) {
             const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
             classNames.push(categoryClass);
         }
@@ -190,7 +190,7 @@ export class Histogram extends BaseChart {
     }
 
     getStackedGroups(dataSets, state = this.state) {
-        if (!state.stacked) {
+        if (!state.data.stacked) {
             return [];
         }
 
@@ -201,7 +201,7 @@ export class Histogram extends BaseChart {
     }
 
     getStackedCategories(dataSets, state = this.state) {
-        if (!state.stacked) {
+        if (!state.data.stacked) {
             return [];
         }
 
@@ -219,7 +219,7 @@ export class Histogram extends BaseChart {
         }
 
         const stackedGroups = this.getStackedGroups(dataSets, state);
-        return (this.state.stacked)
+        return (state.data.stacked)
             ? Math.max(stackedGroups.length, 1)
             : dataSets.length;
     }
@@ -247,7 +247,7 @@ export class Histogram extends BaseChart {
                     ? stackedCategories.indexOf(category)
                     : dataSetIndex;
                 const groupName = dataSet.group ?? null;
-                const columnIndex = (this.state.stacked)
+                const columnIndex = (state.data.stacked)
                     ? stackedGroups.indexOf(groupName)
                     : categoryIndex;
                 const valueOffset = (value >= 0)
@@ -265,7 +265,7 @@ export class Histogram extends BaseChart {
                 }, state);
                 group.push(item);
 
-                if (!state.stacked) {
+                if (!state.data.stacked) {
                     return;
                 }
                 if (value >= 0) {

@@ -90,6 +90,7 @@ const chartNegMultiData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
 const chartStackedData = {
@@ -103,6 +104,7 @@ const chartStackedData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
 const chartGroupedData = {
@@ -122,6 +124,7 @@ const chartGroupedData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
 const chartGroupedCategoriesData = {
@@ -145,6 +148,7 @@ const chartGroupedCategoriesData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
 const noData = {
@@ -342,7 +346,6 @@ const stackedHistogram = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
@@ -357,7 +360,6 @@ const stackedNegativeHistogram = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
@@ -375,7 +377,6 @@ const stackedGroupedHistogram = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
@@ -393,7 +394,6 @@ const stackedCategoriesHistogram = () => {
         renderPopup: renderCategoriesPopup,
         scrollThrottle: 50,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
@@ -441,15 +441,14 @@ const negativeAndPositiveHistogram = () => {
 
 const setDataHistogram = () => {
     const histogram = Histogram.create({
-        data: chartData,
+        data: posData,
         elem: 'chart_setdata',
         autoScale: true,
     });
 
-    const setData1Btn = ge('setData1Btn');
-    setEvents(setData1Btn, { click: () => histogram.setData(chartData2) });
-    const setData2Btn = ge('setData2Btn');
-    setEvents(setData2Btn, { click: () => histogram.setData(chartData3) });
+    setEvents(ge('setData1Btn'), { click: () => histogram.setData(chartData2) });
+    setEvents(ge('setData2Btn'), { click: () => histogram.setData(chartData3) });
+    setEvents(ge('setData3Btn'), { click: () => histogram.setData(chartGroupedCategoriesData) });
 };
 
 const init = () => {

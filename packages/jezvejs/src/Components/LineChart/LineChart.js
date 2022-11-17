@@ -35,14 +35,6 @@ export class LineChart extends BaseChart {
         this.init();
     }
 
-    init() {
-        super.init();
-
-        if (this.state.drawNodeCircles) {
-            this.chartContainer.classList.add(SHOW_NODES_CLASS);
-        }
-    }
-
     getItemBBox(item) {
         const radius = this.state.nodeCircleRadius;
         return {
@@ -163,7 +155,7 @@ export class LineChart extends BaseChart {
                 }, state);
                 group.push(item);
 
-                if (state.stacked) {
+                if (state.data.stacked) {
                     valueOffset += value;
                 }
             });
@@ -276,5 +268,11 @@ export class LineChart extends BaseChart {
         });
 
         this.renderPaths(state);
+    }
+
+    render(state, prevState = {}) {
+        this.chartContainer.classList.toggle(SHOW_NODES_CLASS, state.drawNodeCircles);
+
+        super.render(state, prevState);
     }
 }

@@ -69,6 +69,18 @@ const chartMultiData = {
     ],
 };
 
+const chartStackedData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+    }, {
+        data: [553, 200, 5500, 1500, 580, 347, 1302, 1200, 780, 5600, 460, 150],
+    }],
+    series: [
+        ['10.22', 4], ['11.22', 4],
+    ],
+    stacked: true,
+};
+
 const chartNegMultiData = {
     values: [{
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
@@ -82,6 +94,7 @@ const chartNegMultiData = {
     series: [
         ['10.22', 4], ['11.22', 4], ['12.22', 4],
     ],
+    stacked: true,
 };
 
 /* eslint-disable max-len */
@@ -236,7 +249,7 @@ const multipleLinechart = () => {
 
 const stackedLinechart = () => {
     LineChart.create({
-        data: chartMultiData,
+        data: chartStackedData,
         elem: 'linechart_stacked',
         height: 320,
         marginTop: 35,
@@ -244,7 +257,6 @@ const stackedLinechart = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
@@ -258,7 +270,6 @@ const stackedNegLinechart = () => {
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
-        stacked: true,
     });
 };
 
@@ -310,10 +321,9 @@ const setDataLinechart = () => {
         autoScale: true,
     });
 
-    const setData1Btn = ge('setLineData1Btn');
-    setEvents(setData1Btn, { click: () => linechart.setData(chartData2) });
-    const setData2Btn = ge('setLineData2Btn');
-    setEvents(setData2Btn, { click: () => linechart.setData(chartData3) });
+    setEvents(ge('setData1Btn'), { click: () => linechart.setData(chartData2) });
+    setEvents(ge('setData2Btn'), { click: () => linechart.setData(chartData3) });
+    setEvents(ge('setData3Btn'), { click: () => linechart.setData(chartStackedData) });
 };
 
 const init = () => {
