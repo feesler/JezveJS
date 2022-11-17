@@ -377,18 +377,6 @@ export class BaseChart extends Component {
         this.gridGroup = gridGroup;
     }
 
-    /** Save total width of chart block with labels */
-    getChartOffset(chartElem) {
-        if (!chartElem
-            || !chartElem.parentNode
-            || !chartElem.parentNode.parentNode
-            || !chartElem.parentNode.parentNode.parentNode) {
-            return null;
-        }
-
-        return chartElem.parentNode.parentNode.parentNode.offsetWidth;
-    }
-
     /** Return array of values */
     mapValues(items) {
         if (!items || !Array.isArray(items)) {
@@ -410,7 +398,7 @@ export class BaseChart extends Component {
             chartContentWidth: contentWidth,
         };
 
-        const chartOffset = this.getChartOffset(this.chart);
+        const chartOffset = this.chartContainer.offsetWidth;
         const paperWidth = Math.max(chartOffset - newState.vLabelsWidth, contentWidth);
 
         this.content.setAttribute('width', paperWidth);
