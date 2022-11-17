@@ -3,7 +3,7 @@
 $colors: #20a0ff, #ff0077, #00d647, #e2de00;
 $active-colors: #00bfff, #ff3392, #00ff55, #fcf93d;
 
-.charts {
+.linechart {
   @for $i from 1 through length($colors) {
     --charts-color-#{$i}: #{list.nth($colors, $i)};
     --charts-active-color-#{$i}: #{list.nth($active-colors, $i)};
@@ -30,14 +30,19 @@ section {
   list-style-type: disc;
 }
 
-.custom-chart-popup__list li span {
-  position: relative;
-  left: -10px;
-  color: #000000;
+.custom-chart-popup__list li,
+.chart__legend-list li {
+  b,
+  span {
+    position: relative;
+    left: -10px;
+    color: #000000;
+  }
 }
 
 @for $i from 1 through length($colors) {
-  .custom-chart-popup__list li:nth-child(#{$i}) {
+  .custom-chart-popup__list .list-item_category-#{$i},
+  .chart__legend-list .list-item_category-#{$i} {
     color: var(--charts-color-#{$i});
   }
 }

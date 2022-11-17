@@ -189,51 +189,23 @@ export class Histogram extends BaseChart {
         return item;
     }
 
-    getStackedGroups(dataSets, state = this.state) {
-        if (!state.data.stacked) {
-            return [];
-        }
-
-        return dataSets.reduce((res, item) => {
-            const group = item.group ?? null;
-            return res.includes(group) ? res : [...res, group];
-        }, []);
-    }
-
-    getStackedCategories(dataSets, state = this.state) {
-        if (!state.data.stacked) {
-            return [];
-        }
-
-        return dataSets.reduce((res, item) => {
-            const category = item.category ?? null;
-            return res.includes(category) ? res : [...res, category];
-        }, []);
-    }
-
     /** Returns current count of columns in group */
     getColumnsInGroupCount(state) {
-        const dataSets = this.getDataSets(true, state);
-        if (dataSets.length === 0) {
-            return 0;
-        }
-
-        const stackedGroups = this.getStackedGroups(dataSets, state);
+        const stackedGroups = this.getStackedGroups(state);
         return (state.data.stacked)
             ? Math.max(stackedGroups.length, 1)
-            : dataSets.length;
+            : state.dataSets.length;
     }
 
     /** Create items with default scale */
     createItems(state) {
-        const dataSets = this.getDataSets(true, state);
+        const { dataSets } = state;
         if (dataSets.length === 0) {
             return;
         }
 
-        const stackedGroups = this.getStackedGroups(dataSets, state);
-        const stackedCategories = this.getStackedCategories(dataSets, state);
-
+        const stackedGroups = this.getStackedGroups(state);
+        const stackedCategories = this.getStackedCategories(state);
         const longestSet = this.getLongestDataSet(state);
         longestSet.forEach((_, index) => {
             const group = [];

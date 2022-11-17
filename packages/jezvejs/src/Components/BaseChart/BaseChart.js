@@ -6,6 +6,7 @@ import {
     setEmptyClick,
     removeEmptyClick,
     getOffset,
+    re,
     removeChilds,
     px,
     throttle,
@@ -24,10 +25,15 @@ const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
 const VLABELS_CLASS = 'chart__vert-labels';
 const VLABELS_CONTAINER_CLASS = 'vertical-legend';
-const POPUP_CLASS = 'chart__popup';
-const POPUP_LIST_CLASS = 'chart__popup-list';
 const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
+/* Popup */
+const POPUP_CLASS = 'chart__popup';
+const POPUP_LIST_CLASS = 'chart__popup-list';
+/* Legend */
+const LEGEND_CLASS = 'chart__legend';
+const LEGEND_LIST_CLASS = 'chart__legend-list';
+const LEGEND_LIST_ITEM_CLASS = 'chart__legend-list-item';
 
 /** Default properties */
 const defaultProps = {
@@ -52,6 +58,8 @@ const defaultProps = {
     scrollThrottle: false,
     activateOnHover: false,
     renderYAxisLabel: null,
+    showLegend: false,
+    renderLegend: null,
     // Callbacks
     onscroll: null,
     onitemclick: null,
@@ -89,6 +97,7 @@ export class BaseChart extends Component {
         this.verticalLabels = null;
         this.content = null;
         this.labelsContainer = null;
+        this.legend = null;
         this.popup = null;
         this.items = [];
         this.itemsGroup = null;
@@ -209,6 +218,7 @@ export class BaseChart extends Component {
             },
         };
 
+        state.dataSets = this.getDataSets(state);
         state.groupsCount = this.getGroupsCount(state);
         state.columnsInGroup = this.getColumnsInGroupCount(state);
         state.grid = this.calculateGrid(data.values, state);
@@ -246,17 +256,7 @@ export class BaseChart extends Component {
 
     /** Returns count of data categories */
     getCategoriesCount(state = this.state) {
-        const { values } = state.data;
-        if (values.length === 0) {
-            return 0;
-        }
-
-        const [firstItem] = values;
-        if (!isObject(firstItem)) {
-            return 1;
-        }
-
-        return values.length;
+        return state.dataSets.length;
     }
 
     /** Returns current count of columns in group */
@@ -266,49 +266,55 @@ export class BaseChart extends Component {
 
     /** Returns count of data columns */
     getGroupsCount(state = this.state) {
-        const { values } = state.data;
-        if (values.length === 0) {
-            return 0;
-        }
-
-        const [firstItem] = values;
-        if (!isObject(firstItem)) {
-            return values.length;
-        }
-
-        const valuesLength = values.map((item) => item.data.length);
+        const valuesLength = state.dataSets.map((item) => item.data.length);
         return Math.max(...valuesLength);
     }
 
     /** Returns array of data sets */
-    getDataSets(extended = false, state = this.state) {
+    getDataSets(state = this.state) {
         const { values } = state.data;
+        if (values.length === 0) {
+            return [];
+        }
+
         const [firstItem] = values;
         if (!isObject(firstItem)) {
             const data = values;
-            return (extended) ? [{ data }] : [data];
+            return [{ data }];
         }
 
-        return (extended) ? values : values.map((item) => item.data);
+        return values;
     }
 
     /** Returns longest data set */
     getLongestDataSet(state = this.state) {
-        const { values } = state.data;
-        if (values.length === 0) {
-            return values;
-        }
-
-        const [firstItem] = values;
-        if (!isObject(firstItem)) {
-            return values;
-        }
-
-        const resIndex = values.reduce((res, item, index) => (
-            (values[res].data.length < item.data.length) ? index : res
+        const resIndex = state.dataSets.reduce((res, item, index) => (
+            (state.dataSets[res].data.length < item.data.length) ? index : res
         ), 0);
 
-        return values[resIndex].data;
+        return state.dataSets[resIndex].data;
+    }
+
+    getStackedGroups(state = this.state) {
+        if (!state.data.stacked) {
+            return [];
+        }
+
+        return state.dataSets.reduce((res, item) => {
+            const group = item.group ?? null;
+            return res.includes(group) ? res : [...res, group];
+        }, []);
+    }
+
+    getStackedCategories(state = this.state) {
+        if (!state.data.stacked) {
+            return [];
+        }
+
+        return state.dataSets.reduce((res, item) => {
+            const category = item.category ?? null;
+            return res.includes(category) ? res : [...res, category];
+        }, []);
     }
 
     formatCoord(value, asPixels = false) {
@@ -770,6 +776,51 @@ export class BaseChart extends Component {
     updateItemsScale() {
     }
 
+    defaultLegendContent(categories) {
+        if (!Array.isArray(categories) || categories.length === 0) {
+            return null;
+        }
+
+        return createElement('ul', {
+            props: { className: LEGEND_LIST_CLASS },
+            children: categories.map((category) => createElement('li', {
+                props: {
+                    className: LEGEND_LIST_ITEM_CLASS,
+                    textContent: category.toString(),
+                },
+            })),
+        });
+    }
+
+    renderLegend(state) {
+        re(this.legend);
+        if (!state.showLegend) {
+            this.legend = null;
+            return;
+        }
+
+        const categories = [];
+        state.dataSets.forEach((dataSet, index) => {
+            const category = (state.data.stacked && dataSet.category)
+                ? dataSet.category
+                : index;
+            if (!categories.includes(category)) {
+                categories.push(category);
+            }
+        });
+
+        const legendContent = isFunction(state.renderLegend)
+            ? state.renderLegend(categories)
+            : this.defaultLegendContent(categories);
+
+        this.legend = createElement('div', {
+            props: { className: LEGEND_CLASS },
+            children: legendContent,
+        });
+
+        this.elem.append(this.legend);
+    }
+
     render(state) {
         const animated = state.autoScale && state.animate;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
@@ -791,6 +842,8 @@ export class BaseChart extends Component {
 
         this.content.setAttribute('width', newState.chartWidth);
         this.content.setAttribute('height', newState.height);
+
+        this.renderLegend(state);
 
         this.state = newState;
     }

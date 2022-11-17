@@ -134,7 +134,7 @@ export class LineChart extends BaseChart {
 
     /** Create items with default scale */
     createItems(state) {
-        const dataSets = this.getDataSets(false, state);
+        const { dataSets } = state;
         if (dataSets.length === 0) {
             return;
         }
@@ -145,8 +145,8 @@ export class LineChart extends BaseChart {
             const group = [];
             let valueOffset = 0;
 
-            dataSets.forEach((data, categoryIndex) => {
-                const value = data[index] ?? 0;
+            dataSets.forEach((dataSet, categoryIndex) => {
+                const value = dataSet.data[index] ?? 0;
                 const item = this.createItem({
                     value,
                     index,
@@ -242,7 +242,7 @@ export class LineChart extends BaseChart {
     }
 
     renderPaths(state) {
-        const dataSets = this.getDataSets(false, state);
+        const { dataSets } = state;
         if (dataSets.length === 0) {
             return;
         }

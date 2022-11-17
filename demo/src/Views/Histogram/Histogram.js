@@ -216,6 +216,24 @@ const renderMultiColumnPopup = (target) => {
     });
 };
 
+const renderCustomLegend = (categories) => {
+    if (!Array.isArray(categories) || categories.length === 0) {
+        return null;
+    }
+
+    return createElement('ul', {
+        props: { className: 'chart__legend-list' },
+        children: categories.map((_, index) => createElement('li', {
+            props: {
+                className: `list-item_category-${index + 1}`,
+            },
+            children: createElement('span', {
+                props: { textContent: `Category ${index + 1}` },
+            }),
+        })),
+    });
+};
+
 const renderCategoriesPopup = (target) => {
     if (!target.group) {
         return createElement('span', { props: { textContent: target.item.value } });
@@ -332,6 +350,7 @@ const multiColumn = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
+        showLegend: true,
     });
 };
 
@@ -346,6 +365,8 @@ const stacked = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 };
 
@@ -360,6 +381,8 @@ const stackedNegative = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 };
 
@@ -377,6 +400,8 @@ const stackedGrouped = () => {
         renderPopup: renderMultiColumnPopup,
         scrollThrottle: 50,
         activateOnHover: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 };
 
@@ -394,6 +419,8 @@ const stackedCategories = () => {
         renderPopup: renderCategoriesPopup,
         scrollThrottle: 50,
         activateOnHover: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 };
 
@@ -444,6 +471,8 @@ const setData = () => {
         data: negPosData,
         elem: 'chart_setdata',
         autoScale: true,
+        showLegend: true,
+        renderLegend: renderCustomLegend,
     });
 
     setEvents(ge('setNoDataBtn'), { click: () => histogram.setData(emptyData) });
