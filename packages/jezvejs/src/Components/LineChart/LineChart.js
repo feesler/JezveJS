@@ -25,14 +25,10 @@ export class LineChart extends BaseChart {
         super({
             ...defaultProps,
             ...props,
-        });
-
-        this.props = {
-            ...this.props,
             visibilityOffset: 2,
             scaleAroundAxis: false,
-            className: [CONTAINER_CLASS, ...asArray(this.props.className)],
-        };
+            className: [CONTAINER_CLASS, ...asArray(props.className)],
+        });
 
         this.paths = [];
 
@@ -42,13 +38,13 @@ export class LineChart extends BaseChart {
     init() {
         super.init();
 
-        if (this.props.drawNodeCircles) {
+        if (this.state.drawNodeCircles) {
             this.chartContainer.classList.add(SHOW_NODES_CLASS);
         }
     }
 
     getItemBBox(item) {
-        const radius = this.props.nodeCircleRadius;
+        const radius = this.state.nodeCircleRadius;
         return {
             x: item.dot.x - radius,
             y: item.dot.y - radius,
@@ -86,23 +82,24 @@ export class LineChart extends BaseChart {
         return res;
     }
 
-    getCoordinates(value, index) {
-        const { groupOuterWidth } = this;
+    getCoordinates(value, index, state) {
+        const { grid } = state;
+        const groupWidth = this.getGroupOuterWidth(state);
         return {
-            x: index * groupOuterWidth + groupOuterWidth / 2,
-            y: this.grid.getY(value),
+            x: index * groupWidth + groupWidth / 2,
+            y: grid.getY(value),
         };
     }
 
     /** Set new position of item */
-    setItemPos(item, y) {
+    setItemPos(item, y, state) {
         const point = item;
 
         if (point.dot.y === y) {
             return;
         }
 
-        if (this.props.autoScale && this.props.animate) {
+        if (state.autoScale && state.animate) {
             point.elem.style.cy = this.formatCoord(y, true);
         } else {
             point.elem.setAttribute('cy', y);
@@ -116,14 +113,14 @@ export class LineChart extends BaseChart {
         index,
         categoryIndex = 0,
         valueOffset = 0,
-    }) {
+    }, state) {
         const fixedValue = value ?? 0;
         const fixedOffset = valueOffset ?? 0;
 
         const item = {
             value: fixedValue,
             valueOffset: fixedOffset,
-            dot: this.getCoordinates(fixedValue + fixedOffset, index),
+            dot: this.getCoordinates(fixedValue + fixedOffset, index, state),
         };
 
         if (Number.isNaN(item.dot.x) || Number.isNaN(item.dot.y)) {
@@ -135,7 +132,7 @@ export class LineChart extends BaseChart {
             class: [ITEM_CLASS, categoryClass].join(' '),
             cx: item.dot.x,
             cy: item.dot.y,
-            r: this.props.nodeCircleRadius,
+            r: state.nodeCircleRadius,
         });
 
         this.itemsGroup.append(item.elem);
@@ -144,14 +141,14 @@ export class LineChart extends BaseChart {
     }
 
     /** Create items with default scale */
-    createItems() {
-        const dataSets = this.getDataSets();
+    createItems(state) {
+        const dataSets = this.getDataSets(false, state);
         if (dataSets.length === 0) {
             return;
         }
 
         this.paths = [];
-        const longestSet = this.getLongestDataSet();
+        const longestSet = this.getLongestDataSet(state);
         longestSet.forEach((_, index) => {
             const group = [];
             let valueOffset = 0;
@@ -163,10 +160,10 @@ export class LineChart extends BaseChart {
                     index,
                     categoryIndex,
                     valueOffset,
-                });
+                }, state);
                 group.push(item);
 
-                if (this.props.stacked) {
+                if (state.stacked) {
                     valueOffset += value;
                 }
             });
@@ -174,7 +171,7 @@ export class LineChart extends BaseChart {
             this.items.push(group);
         });
 
-        this.renderPaths();
+        this.renderPaths(state);
     }
 
     formatPath(points) {
@@ -188,15 +185,14 @@ export class LineChart extends BaseChart {
     }
 
     /** Draw path currently saved at nodes */
-    drawPath(values, categoryIndex = 0) {
-        const { groupOuterWidth } = this;
-
+    drawPath(values, categoryIndex, state) {
+        const groupWidth = this.getGroupOuterWidth(state);
         const coords = values.map((value, index) => ({
-            x: index * groupOuterWidth + groupOuterWidth / 2,
+            x: index * groupWidth + groupWidth / 2,
             y: value,
         }));
 
-        const isAnimated = this.props.autoScale && this.props.animate;
+        const isAnimated = state.autoScale && state.animate;
         const shape = this.formatPath(coords);
 
         let path = null;
@@ -213,7 +209,7 @@ export class LineChart extends BaseChart {
             this.itemsGroup.append(path.elem);
             // Insert path before circles
             const group = this.items[0];
-            const groupItems = Array.isArray(group) ? group : [group];
+            const groupItems = asArray(group);
             insertBefore(path.elem, groupItems[0].elem);
 
             path.animateElem = svg('animate', {
@@ -244,7 +240,7 @@ export class LineChart extends BaseChart {
 
     getCategoryItems(categoryIndex = 0) {
         return this.items.map((item) => {
-            const group = Array.isArray(item) ? item : [item];
+            const group = asArray(item);
             if (categoryIndex < 0 || categoryIndex >= group.length) {
                 throw new Error(`Invalid category ${categoryIndex}`);
             }
@@ -253,32 +249,32 @@ export class LineChart extends BaseChart {
         });
     }
 
-    renderPaths() {
-        const dataSets = this.getDataSets();
+    renderPaths(state) {
+        const dataSets = this.getDataSets(false, state);
         if (dataSets.length === 0) {
             return;
         }
 
-        const categoriesCount = this.getCategoriesCount();
+        const categoriesCount = this.getCategoriesCount(state);
         for (let i = 0; i < categoriesCount; i += 1) {
             const items = this.getCategoryItems(i);
             const values = items.map((item) => item.dot.y);
-            this.drawPath(values, i);
+            this.drawPath(values, i, state);
         }
     }
 
     /** Update scale of path */
-    updateItemsScale(items) {
+    updateItemsScale(items, state) {
         if (!Array.isArray(items)) {
             return;
         }
 
-        // update height of bars
+        const { grid } = state;
         items.flat().forEach((item) => {
-            const y = this.grid.getY(item.value + item.valueOffset);
-            this.setItemPos(item, y);
+            const y = grid.getY(item.value + item.valueOffset);
+            this.setItemPos(item, y, state);
         });
 
-        this.renderPaths();
+        this.renderPaths(state);
     }
 }

@@ -23,28 +23,24 @@ export class Histogram extends BaseChart {
         super({
             ...defaultProps,
             ...props,
-        });
-
-        this.props = {
-            ...this.props,
             visibilityOffset: 1,
             scaleAroundAxis: true,
-            className: [CONTAINER_CLASS, ...asArray(this.props.className)],
-        };
+            className: [CONTAINER_CLASS, ...asArray(props.className)],
+        });
 
         this.init();
     }
 
-    get columnOuterWidth() {
-        return this.state.columnWidth + this.state.columnGap;
+    getColumnOuterWidth(state = this.state) {
+        return state.columnWidth + state.columnGap;
     }
 
-    get groupWidth() {
-        return this.columnOuterWidth * this.state.columnsInGroup - this.state.columnGap;
+    getGroupWidth(state = this.state) {
+        return this.getColumnOuterWidth(state) * state.columnsInGroup - state.columnGap;
     }
 
-    get groupOuterWidth() {
-        return this.groupWidth + this.state.groupsGap;
+    getGroupOuterWidth(state = this.state) {
+        return this.getGroupWidth(state) + state.groupsGap;
     }
 
     getItemBBox(item) {
@@ -92,10 +88,10 @@ export class Histogram extends BaseChart {
                 }
             }
         } else {
-            const groupX = this.groupOuterWidth * result.index;
+            const groupX = this.getGroupOuterWidth() * result.index;
             const innerX = result.x - groupX;
 
-            index = Math.floor(innerX / this.columnOuterWidth);
+            index = Math.floor(innerX / this.getColumnOuterWidth());
         }
 
         if (index >= 0 && index < result.item.length) {
@@ -115,14 +111,14 @@ export class Histogram extends BaseChart {
     }
 
     /** Set new position of item */
-    setItemPos(item, y, height) {
+    setItemPos(item, y, height, state) {
         const bar = item;
 
         if (bar.y === y && bar.height === height) {
             return;
         }
 
-        if (this.state.autoScale && this.state.animate) {
+        if (state.autoScale && state.animate) {
             bar.elem.style.y = this.formatCoord(y, true);
             bar.elem.style.height = this.formatCoord(height, true);
         } else {
@@ -142,17 +138,20 @@ export class Histogram extends BaseChart {
         categoryIndex = 0,
         valueOffset = 0,
         groupName = null,
-    }) {
+    }, state) {
+        const { grid } = state;
         const fixedValue = value ?? 0;
         const fixedOffset = valueOffset ?? 0;
 
-        const y0 = this.grid.getY(fixedOffset);
-        const y1 = this.grid.getY(fixedValue + fixedOffset);
+        const y0 = grid.getY(fixedOffset);
+        const y1 = grid.getY(fixedValue + fixedOffset);
+        const groupWidth = this.getGroupOuterWidth(state);
+        const columnWidth = this.getColumnOuterWidth(state);
 
         const item = {
             value: fixedValue,
             valueOffset: fixedOffset,
-            x: index * this.groupOuterWidth + columnIndex * this.columnOuterWidth,
+            x: index * groupWidth + columnIndex * columnWidth,
             y: Math.min(y0, y1),
             width,
             height: Math.abs(y0 - y1),
@@ -172,7 +171,7 @@ export class Histogram extends BaseChart {
 
         const columnClass = `${COLUMN_CLASS}${columnIndex + 1}`;
         const classNames = [BAR_CLASS, columnClass];
-        if (this.state.stacked) {
+        if (state.stacked) {
             const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
             classNames.push(categoryClass);
         }
@@ -190,8 +189,8 @@ export class Histogram extends BaseChart {
         return item;
     }
 
-    getStackedGroups(dataSets) {
-        if (!this.state.stacked) {
+    getStackedGroups(dataSets, state = this.state) {
+        if (!state.stacked) {
             return [];
         }
 
@@ -201,8 +200,8 @@ export class Histogram extends BaseChart {
         }, []);
     }
 
-    getStackedCategories(dataSets) {
-        if (!this.state.stacked) {
+    getStackedCategories(dataSets, state = this.state) {
+        if (!state.stacked) {
             return [];
         }
 
@@ -213,33 +212,33 @@ export class Histogram extends BaseChart {
     }
 
     /** Returns current count of columns in group */
-    getColumnsInGroupCount() {
-        const dataSets = this.getDataSets(true);
+    getColumnsInGroupCount(state) {
+        const dataSets = this.getDataSets(true, state);
         if (dataSets.length === 0) {
             return 0;
         }
 
-        const stackedGroups = this.getStackedGroups(dataSets);
+        const stackedGroups = this.getStackedGroups(dataSets, state);
         return (this.state.stacked)
             ? Math.max(stackedGroups.length, 1)
             : dataSets.length;
     }
 
     /** Create items with default scale */
-    createItems() {
-        const dataSets = this.getDataSets(true);
+    createItems(state) {
+        const dataSets = this.getDataSets(true, state);
         if (dataSets.length === 0) {
             return;
         }
 
-        const stackedGroups = this.getStackedGroups(dataSets);
-        const stackedCategories = this.getStackedCategories(dataSets);
+        const stackedGroups = this.getStackedGroups(dataSets, state);
+        const stackedCategories = this.getStackedCategories(dataSets, state);
 
-        const longestSet = this.getLongestDataSet();
+        const longestSet = this.getLongestDataSet(state);
         longestSet.forEach((_, index) => {
             const group = [];
-            const posValueOffset = Array(this.state.columnsInGroup).fill(0);
-            const negValueOffset = Array(this.state.columnsInGroup).fill(0);
+            const posValueOffset = Array(state.columnsInGroup).fill(0);
+            const negValueOffset = Array(state.columnsInGroup).fill(0);
 
             dataSets.forEach((dataSet, dataSetIndex) => {
                 const value = dataSet.data[index] ?? 0;
@@ -257,16 +256,16 @@ export class Histogram extends BaseChart {
 
                 const item = this.createItem({
                     value,
-                    width: this.state.columnWidth,
+                    width: state.columnWidth,
                     index,
                     columnIndex,
                     categoryIndex,
                     valueOffset,
                     groupName,
-                });
+                }, state);
                 group.push(item);
 
-                if (!this.state.stacked) {
+                if (!state.stacked) {
                     return;
                 }
                 if (value >= 0) {
@@ -280,18 +279,19 @@ export class Histogram extends BaseChart {
     }
 
     /** Update scale of items */
-    updateItemsScale(items) {
+    updateItemsScale(items, state) {
         if (!Array.isArray(items)) {
             return;
         }
 
+        const { grid } = state;
         items.flat().forEach((item) => {
-            const y0 = this.grid.getY(item.valueOffset);
-            const y1 = this.grid.getY(item.value + item.valueOffset);
+            const y0 = grid.getY(item.valueOffset);
+            const y1 = grid.getY(item.value + item.valueOffset);
             const newY = Math.min(y0, y1);
             const barHeight = Math.abs(y0 - y1);
 
-            this.setItemPos(item, newY, barHeight);
+            this.setItemPos(item, newY, barHeight, state);
         });
     }
 }

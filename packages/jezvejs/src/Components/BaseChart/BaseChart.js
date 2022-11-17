@@ -110,6 +110,7 @@ export class BaseChart extends Component {
 
         this.state = {
             ...this.props,
+            data: null,
             chartContentWidth: 0,
             hLabelsHeight: 25,
             vLabelsWidth: 10,
@@ -119,8 +120,8 @@ export class BaseChart extends Component {
         };
     }
 
-    get groupOuterWidth() {
-        return this.state.columnWidth + this.state.groupsGap;
+    getGroupOuterWidth(state = this.state) {
+        return state.columnWidth + state.groupsGap;
     }
 
     /** Initialization of chart */
@@ -146,13 +147,6 @@ export class BaseChart extends Component {
                 }),
             ],
         });
-        if (this.state.autoScale && this.state.animate) {
-            this.chartContainer.classList.add(ANIMATE_CLASS);
-        }
-        if (this.state.stacked) {
-            this.chartContainer.classList.add(STACKED_CLASS);
-        }
-
         this.elem.append(this.chartContainer);
 
         const { height, marginTop } = this.state;
@@ -195,30 +189,22 @@ export class BaseChart extends Component {
         if (!data?.values || !data?.series) {
             throw new Error('Invalid data');
         }
+        if (this.state.data === data) {
+            return;
+        }
 
-        this.state.data = data;
-        this.state.groupsCount = this.getGroupsCount();
-        this.state.columnsInGroup = this.getColumnsInGroupCount();
+        const state = {
+            ...this.state,
+            data,
+        };
 
-        // create grid
-        this.calculateGrid(this.state.data.values);
+        state.groupsCount = this.getGroupsCount(state);
+        state.columnsInGroup = this.getColumnsInGroupCount(state);
+        state.grid = this.calculateGrid(data.values, state);
+        state.chartContentWidth = state.groupsCount * this.getGroupOuterWidth(state);
+        state.chartWidth = Math.max(this.chart.offsetWidth, state.chartContentWidth);
 
-        this.state.chartContentWidth = this.state.groupsCount * this.groupOuterWidth;
-        this.state.chartWidth = Math.max(this.chart.offsetWidth, this.state.chartContentWidth);
-
-        this.drawVLabels();
-        this.drawGrid();
-        this.updateColumnWidth();
-        this.updateChartWidth();
-
-        // create bars
-        this.resetItems();
-        this.createItems();
-        this.scaleVisible();
-
-        // create horizontal labels
-        this.createHLabels();
-        this.updateChartWidth();
+        this.setState(state);
     }
 
     setColumnWidth(value) {
@@ -227,8 +213,14 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.state.columnWidth = width;
-        this.setData(this.state.data);
+        const state = {
+            ...this.state,
+            columnWidth: width,
+        };
+        state.chartContentWidth = state.groupsCount * this.getGroupOuterWidth(state);
+        state.chartWidth = Math.max(this.chart.offsetWidth, state.chartContentWidth);
+
+        this.setState(state);
     }
 
     setGroupsGap(value) {
@@ -237,13 +229,20 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.state.groupsGap = gap;
-        this.setData(this.state.data);
+        const state = {
+            ...this.state,
+            groupsGap: gap,
+        };
+
+        state.chartContentWidth = state.groupsCount * this.getGroupOuterWidth(state);
+        state.chartWidth = Math.max(this.chart.offsetWidth, state.chartContentWidth);
+
+        this.setState(state);
     }
 
     /** Returns count of data categories */
-    getCategoriesCount() {
-        const { values } = this.state.data;
+    getCategoriesCount(state = this.state) {
+        const { values } = state.data;
         if (values.length === 0) {
             return 0;
         }
@@ -262,8 +261,8 @@ export class BaseChart extends Component {
     }
 
     /** Returns count of data columns */
-    getGroupsCount() {
-        const { values } = this.state.data;
+    getGroupsCount(state = this.state) {
+        const { values } = state.data;
         if (values.length === 0) {
             return 0;
         }
@@ -278,8 +277,8 @@ export class BaseChart extends Component {
     }
 
     /** Returns array of data sets */
-    getDataSets(extended = false) {
-        const { values } = this.state.data;
+    getDataSets(extended = false, state = this.state) {
+        const { values } = state.data;
         const [firstItem] = values;
         if (!isObject(firstItem)) {
             const data = values;
@@ -290,8 +289,8 @@ export class BaseChart extends Component {
     }
 
     /** Returns longest data set */
-    getLongestDataSet() {
-        const { values } = this.state.data;
+    getLongestDataSet(state = this.state) {
+        const { values } = state.data;
         if (values.length === 0) {
             return values;
         }
@@ -317,20 +316,19 @@ export class BaseChart extends Component {
      * Calculate grid for specified set of values
      * @param {number[]} values
      */
-    calculateGrid(values) {
+    calculateGrid(values, state = this.state) {
         const grid = new ChartGrid({
-            scaleAroundAxis: this.state.scaleAroundAxis,
-            height: this.state.chartHeight,
-            margin: this.state.marginTop,
-            minStep: this.state.minGridStep,
-            maxStep: this.state.maxGridStep,
-            valuesMargin: this.state.gridValuesMargin,
-            stacked: this.state.stacked,
+            scaleAroundAxis: state.scaleAroundAxis,
+            height: state.chartHeight,
+            margin: state.marginTop,
+            minStep: state.minGridStep,
+            maxStep: state.maxGridStep,
+            valuesMargin: state.gridValuesMargin,
+            stacked: state.stacked,
         });
-
         grid.calculate(values);
 
-        this.grid = grid;
+        return grid;
     }
 
     /** Remove elements */
@@ -341,17 +339,16 @@ export class BaseChart extends Component {
     }
 
     /** Draw grid and return array of grid lines */
-    drawGrid() {
-        const width = this.state.chartWidth;
-        let step = 0;
-
-        if (!this.grid.steps) {
+    drawGrid(state) {
+        const { chartWidth, grid } = state;
+        if (!grid.steps) {
             return;
         }
 
         const gridGroup = svg('g');
-        let curY = this.grid.yFirst;
-        while (step <= this.grid.steps) {
+        let step = 0;
+        let curY = grid.yFirst;
+        while (step <= grid.steps) {
             let rY = Math.round(curY);
             if (rY > curY) {
                 rY -= 0.5;
@@ -359,7 +356,7 @@ export class BaseChart extends Component {
                 rY += 0.5;
             }
 
-            const linePath = `M0,${rY}L${width},${rY}`;
+            const linePath = `M0,${rY}L${chartWidth},${rY}`;
             const el = svg('path', {
                 class: 'chart__grid-line',
                 d: linePath,
@@ -367,7 +364,7 @@ export class BaseChart extends Component {
 
             gridGroup.append(el);
 
-            curY += this.grid.yStep;
+            curY += grid.yStep;
             step += 1;
         }
 
@@ -398,66 +395,81 @@ export class BaseChart extends Component {
     }
 
     /** Update width of chart block */
-    updateChartWidth() {
+    updateChartWidth(state) {
         const contentWidth = Math.max(
-            this.state.groupsCount * this.groupOuterWidth,
-            this.state.lastHLabelOffset,
+            state.groupsCount * this.getGroupOuterWidth(state),
+            state.lastHLabelOffset,
         );
 
-        this.state.chartContentWidth = contentWidth;
+        const newState = {
+            ...state,
+            chartContentWidth: contentWidth,
+        };
+
         const chartOffset = this.getChartOffset(this.chart);
-        const paperWidth = Math.max(chartOffset - this.state.vLabelsWidth, contentWidth);
+        const paperWidth = Math.max(chartOffset - newState.vLabelsWidth, contentWidth);
 
         this.content.setAttribute('width', paperWidth);
-        this.content.setAttribute('height', this.state.height);
+        this.content.setAttribute('height', newState.height);
 
-        this.state.chartWidth = Math.max(paperWidth, contentWidth);
+        newState.chartWidth = Math.max(paperWidth, contentWidth);
+
+        return newState;
     }
 
     /** Calculate width and margin of bar for fitToWidth option */
-    updateColumnWidth() {
-        if (!this.state.fitToWidth) {
-            return;
+    updateColumnWidth(state) {
+        if (!state.fitToWidth) {
+            return state;
         }
 
-        const valuesExtended = this.state.groupsCount + 1;
-        this.state.columnWidth = this.chart.parentNode.offsetWidth / valuesExtended;
-        if (this.state.columnWidth > 10) {
-            this.state.groupsGap = this.state.columnWidth / 5;
-            this.state.columnWidth -= this.state.groupsGap;
+        const valuesExtended = state.groupsCount + 1;
+        const newState = {
+            ...state,
+            columnWidth: this.chart.parentNode.offsetWidth / valuesExtended,
+        };
+        if (newState.columnWidth > 10) {
+            newState.groupsGap = newState.columnWidth / 5;
+            newState.columnWidth -= newState.groupsGap;
         } else {
-            this.state.groupsGap = 0;
+            newState.groupsGap = 0;
         }
+
+        return newState;
     }
 
     /** Set new width for vertical labels block and SVG object */
-    setVertLabelsWidth(width) {
+    setVertLabelsWidth(width, state) {
         if (!this.labelsContainer || !this.chart) {
-            return;
+            return state;
         }
 
         const lWidth = Math.ceil(width);
-        if (this.state.vLabelsWidth === lWidth) {
-            return;
+        if (state.vLabelsWidth === lWidth) {
+            return state;
         }
 
         this.labelsContainer.setAttribute('width', lWidth);
-        this.labelsContainer.setAttribute('height', this.state.height + 20);
-        this.state.vLabelsWidth = lWidth;
+        this.labelsContainer.setAttribute('height', state.height + 20);
 
-        this.updateChartWidth();
+        const newState = {
+            ...state,
+            vLabelsWidth: lWidth,
+        };
+
+        return this.updateChartWidth(newState);
     }
 
     /** Return array of currently visible items */
-    getVisibleItems() {
-        const { groupOuterWidth } = this;
+    getVisibleItems(state = this.state) {
+        const groupWidth = this.getGroupOuterWidth(state);
         const res = [];
-        const offs = this.state.visibilityOffset;
+        const offs = state.visibilityOffset;
 
-        let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / groupOuterWidth);
+        let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / groupWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
-        let firstItem = Math.floor(this.chartScroller.scrollLeft / groupOuterWidth);
+        let firstItem = Math.floor(this.chartScroller.scrollLeft / groupWidth);
         firstItem = Math.max(0, firstItem - offs);
 
         if (firstItem + itemsOnWidth >= this.items.length) {
@@ -472,29 +484,29 @@ export class BaseChart extends Component {
     }
 
     /** Draw vertical labels */
-    drawVLabels() {
+    drawVLabels(state) {
+        const { grid } = state;
+        if (!grid.steps) {
+            return state;
+        }
+
+        const formatFunction = isFunction(state.renderYAxisLabel)
+            ? state.renderYAxisLabel
+            : (value) => value.toString();
         const xOffset = 5;
         const dyOffset = 5.5;
-        let curY = this.grid.yFirst;
-        let val = this.grid.valueFirst;
+        let curY = grid.yFirst;
+        let val = grid.valueFirst;
         let step = 0;
         let labelsWidth = 0;
-
-        if (!this.grid.steps) {
-            return;
-        }
 
         this.vertLabelsGroup?.remove();
         this.vertLabelsGroup = svg('g');
         this.labelsContainer.append(this.vertLabelsGroup);
 
-        const formatFunction = isFunction(this.state.renderYAxisLabel)
-            ? this.state.renderYAxisLabel
-            : (value) => value.toString();
-
-        while (step <= this.grid.steps) {
-            const isZero = Math.abs(this.grid.toPrec(val)) === 0;
-            const tVal = (isZero) ? 0 : this.grid.toPrecString(val);
+        while (step <= grid.steps) {
+            const isZero = Math.abs(grid.toPrec(val)) === 0;
+            const tVal = (isZero) ? 0 : grid.toPrecString(val);
 
             const tspan = svg('tspan', { dy: dyOffset });
             const prop = ('innerHTML' in tspan) ? 'innerHTML' : 'textContent';
@@ -509,27 +521,27 @@ export class BaseChart extends Component {
 
             const labelRect = el.getBoundingClientRect();
             labelsWidth = Math.max(labelsWidth, Math.ceil(labelRect.width) + 10);
-            val -= this.grid.valueStep;
-            curY += this.grid.yStep;
+            val -= grid.valueStep;
+            curY += grid.yStep;
             step += 1;
         }
 
-        this.setVertLabelsWidth(labelsWidth);
+        return this.setVertLabelsWidth(labelsWidth, state);
     }
 
     /** Create horizontal labels */
-    createHLabels() {
+    createHLabels(state) {
         let labelShift = 0;
         let lastOffset = 0;
         const lblMarginLeft = 10;
         const dyOffset = 5.5;
-        const lblY = this.state.height - (this.state.hLabelsHeight / 2);
+        const lblY = state.height - (state.hLabelsHeight / 2);
 
         this.xAxisLabelsGroup?.remove();
         this.xAxisLabelsGroup = svg('g');
         this.content.append(this.xAxisLabelsGroup);
 
-        this.state.data.series.forEach((val) => {
+        state.data.series.forEach((val) => {
             const [itemDate, itemsCount] = val;
 
             if (lastOffset === 0 || labelShift > lastOffset + lblMarginLeft) {
@@ -549,22 +561,25 @@ export class BaseChart extends Component {
 
                 // Check last label not overflow chart to prevent
                 // horizontal scroll in fitToWidth mode
-                if (this.state.fitToWidth && currentOffset > this.state.chartContentWidth) {
+                if (state.fitToWidth && currentOffset > state.chartContentWidth) {
                     txtEl.remove();
                 } else {
                     lastOffset = currentOffset;
                 }
             }
-            labelShift += itemsCount * this.groupOuterWidth;
+            labelShift += itemsCount * this.getGroupOuterWidth(state);
         });
 
-        this.state.lastHLabelOffset = lastOffset;
+        return {
+            ...state,
+            lastHLabelOffset: lastOffset,
+        };
     }
 
     /** Find item by event object */
     findItemByEvent(e) {
         const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
-        const index = Math.floor(x / this.groupOuterWidth);
+        const index = Math.floor(x / this.getGroupOuterWidth());
         if (index < 0 || index >= this.items.length) {
             return { x, item: null, index: -1 };
         }
@@ -713,19 +728,25 @@ export class BaseChart extends Component {
     }
 
     /** Scale visible items of chart */
-    scaleVisible() {
-        if (!this.state.autoScale) {
-            return;
+    scaleVisible(state = this.state) {
+        if (!state.autoScale) {
+            return state;
         }
 
-        const vItems = this.getVisibleItems();
+        const vItems = this.getVisibleItems(state);
         const values = this.mapValues(vItems);
 
-        this.calculateGrid(values);
-        this.drawVLabels();
-        this.drawGrid();
+        let newState = {
+            ...state,
+            grid: this.calculateGrid(values, state),
+        };
+        newState = this.drawVLabels(newState);
+        this.drawGrid(newState);
 
-        this.updateItemsScale(vItems);
+        this.updateItemsScale(vItems, newState);
+
+        this.state = newState;
+        return newState;
     }
 
     /** Chart content 'scroll' event handler */
@@ -762,5 +783,27 @@ export class BaseChart extends Component {
 
     /** Update horizontal scale of items */
     updateItemsWidth() {
+    }
+
+    render(state) {
+        const animated = state.autoScale && state.animate;
+        this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
+        this.chartContainer.classList.toggle(STACKED_CLASS, state.stacked);
+
+        let newState = this.drawVLabels(state);
+        this.drawGrid(newState);
+        newState = this.updateColumnWidth(newState);
+        newState = this.updateChartWidth(newState);
+
+        // create bars
+        this.resetItems();
+        this.createItems(newState);
+        newState = this.scaleVisible(newState);
+
+        // create horizontal labels
+        newState = this.createHLabels(newState);
+        newState = this.updateChartWidth(newState);
+
+        this.state = newState;
     }
 }
