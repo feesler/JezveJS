@@ -1,12 +1,14 @@
 import { isObject } from '../../js/common.js';
 
 const mandatoryProps = ['height', 'margin'];
+
 const defaultProps = {
     scaleAroundAxis: true,
     valuesMargin: 0,
     minStep: 0,
     maxStep: 0,
     stacked: false,
+    defaultValueRange: 100,
 };
 
 /**
@@ -287,9 +289,19 @@ export class ChartGrid {
             return;
         }
 
+        const { scaleAroundAxis, defaultValueRange } = this.props;
+
         let minValue = Math.min(...allValues);
         let maxValue = Math.max(...allValues);
-        if (this.props.scaleAroundAxis || allValues.length === 1) {
+        if (minValue === maxValue) {
+            if (scaleAroundAxis) {
+                maxValue += defaultValueRange;
+            } else {
+                minValue -= defaultValueRange / 2;
+                maxValue += defaultValueRange / 2;
+            }
+        }
+        if (scaleAroundAxis || allValues.length === 1) {
             minValue = Math.min(minValue, 0);
             maxValue = Math.max(maxValue, 0);
         }
