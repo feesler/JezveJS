@@ -1,12 +1,14 @@
 import { isObject } from '../../js/common.js';
 
 const mandatoryProps = ['height', 'margin'];
+
 const defaultProps = {
     scaleAroundAxis: true,
     valuesMargin: 0,
     minStep: 0,
     maxStep: 0,
     stacked: false,
+    defaultValueRange: 100,
 };
 
 /**
@@ -245,13 +247,15 @@ export class ChartGrid {
     getHeight(value) {
         const y0 = this.convertRelToAbs(0);
         const y1 = this.convertRelToAbs(value);
-        return Math.abs(y0 - y1);
+        const height = Math.abs(y0 - y1);
+        return this.roundToPrecision(height, 1);
     }
 
     /** Convert y-axis value from grid to view units */
     getY(value) {
         const yAbs = this.convertRelToAbs(value);
-        return this.props.height + this.props.margin - yAbs;
+        const y = this.props.height + this.props.margin - yAbs;
+        return this.roundToPrecision(y, 1);
     }
 
     /** Obtain all values from chart data structure */
@@ -287,9 +291,19 @@ export class ChartGrid {
             return;
         }
 
+        const { scaleAroundAxis, defaultValueRange } = this.props;
+
         let minValue = Math.min(...allValues);
         let maxValue = Math.max(...allValues);
-        if (this.props.scaleAroundAxis || allValues.length === 1) {
+        if (minValue === maxValue) {
+            if (scaleAroundAxis) {
+                maxValue += defaultValueRange;
+            } else {
+                minValue -= defaultValueRange / 2;
+                maxValue += defaultValueRange / 2;
+            }
+        }
+        if (scaleAroundAxis || allValues.length === 1) {
             minValue = Math.min(minValue, 0);
             maxValue = Math.max(maxValue, 0);
         }

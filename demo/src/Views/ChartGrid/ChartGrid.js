@@ -122,6 +122,10 @@ function init() {
         values: [2580, 2, -6925, -300],
         series: [['02.01.2021', 4]],
     });
+    initHistogram({
+        values: [0, 0, 0, 0],
+        series: [['02.01.2021', 4]],
+    });
 
     initLineChart({
         values: [55.5336, 67.2652, 58.1207],
@@ -146,6 +150,10 @@ function init() {
     initLineChart({
         values: [0.00036, 0.00002],
         series: [['01.01.2021', 2]],
+    });
+    initLineChart({
+        values: [100, 100, 100, 100],
+        series: [['02.01.2021', 4]],
     });
 }
 
