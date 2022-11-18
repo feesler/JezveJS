@@ -145,6 +145,7 @@ export class Histogram extends BaseChart {
 
         const y0 = grid.getY(fixedOffset);
         const y1 = grid.getY(fixedValue + fixedOffset);
+        const height = grid.roundToPrecision(Math.abs(y0 - y1), 1);
         const groupWidth = this.getGroupOuterWidth(state);
         const columnWidth = this.getColumnOuterWidth(state);
 
@@ -154,7 +155,7 @@ export class Histogram extends BaseChart {
             x: index * groupWidth + columnIndex * columnWidth,
             y: Math.min(y0, y1),
             width,
-            height: Math.abs(y0 - y1),
+            height,
             columnIndex,
             categoryIndex,
             groupName,
@@ -261,9 +262,9 @@ export class Histogram extends BaseChart {
             const y0 = grid.getY(item.valueOffset);
             const y1 = grid.getY(item.value + item.valueOffset);
             const newY = Math.min(y0, y1);
-            const barHeight = Math.abs(y0 - y1);
+            const height = grid.roundToPrecision(Math.abs(y0 - y1), 1);
 
-            this.setItemPos(item, newY, barHeight, state);
+            this.setItemPos(item, newY, height, state);
         });
     }
 }
