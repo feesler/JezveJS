@@ -21,7 +21,7 @@
         "test": "node ./tests/index.js",
         "test-partial": "node ./tests/index.js -p",
         "all": "npm-run-all lint build test",
-        "lint": "npm-run-all lint-src lint-style lint-tests",
+        "lint": "npm-run-all --parallel lint-src lint-style lint-tests",
         "lint-src": "eslint --quiet ./packages/jezvejs/src/**/*.js ./demo/src/**/*.js",
         "lint-style": "npx stylelint packages/jezvejs/src/**/*.scss demo/src/**/*.scss",
         "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/ ./packages/jezvejs-test/**/*.js",
