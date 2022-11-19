@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
-<title>Jezve JS | Switch</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+    <title>Jezve JS | Switch</title>
 </head>
+
 <body>
-<div class="page">
-	<div class="page-wrapper">
+    <div class="page">
+        <div class="page-wrapper">
 
-		<div class="nav-header">
-            <button class="nav-toggle-btn">
-                <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                </svg>
-            </button>
+            <div class="nav-header">
+                <button class="nav-toggle-btn">
+                    <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                    </svg>
+                </button>
 
-			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
-		</div>
+                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+            </div>
 
-		<div class="page-container">
-			<div class="page-content">
-				<div class="page-content-wrap">
-                    <h1>Switch</h1>
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="page-content-wrap">
+                        <h1>Switch</h1>
 
-                    <h2>Parse component from DOM</h2>
-                    <section>
-                        <label id="defaultSwitch" class="switch">
-                            <input type="checkbox" checked>
-                            <div class="switch-slider"></div>
-                        </label>
-                    </section>
+                        <h2>Parse component from DOM</h2>
+                        <section>
+                            <label id="defaultSwitch" class="switch">
+                                <input type="checkbox" checked>
+                                <div class="switch-slider"></div>
+                            </label>
+                        </section>
 
-                    <h2>Dynamically create component with className option</h2>
-                    <section>
-                        <form id="dynamicContainer"></form>
-                        <div class="section-controls">
-                            <button id="checkBtn" class="btn" type="button">Check</button>
-                            <button id="uncheckBtn" class="btn" type="button">Uncheck</button>
-                            <button id="toggleBtn" class="btn" type="button">Toggle</button>
-                            <button id="enableBtn" class="btn" type="button">Enable</button>
-                            <button id="disableBtn" class="btn" type="button">Disable</button>
+                        <h2>Dynamically create component with className option</h2>
+                        <section>
+                            <form id="dynamicContainer"></form>
+                            <div class="section-controls">
+                                <button id="checkBtn" class="btn" type="button">Check</button>
+                                <button id="uncheckBtn" class="btn" type="button">Uncheck</button>
+                                <button id="toggleBtn" class="btn" type="button">Toggle</button>
+                                <button id="enableBtn" class="btn" type="button">Enable</button>
+                                <button id="disableBtn" class="btn" type="button">Disable</button>
+                            </div>
+                            <div class="section-controls">
+                                <button id="changePropBtn" class="btn" type="button">Change property</button>
+                                <button id="resetBtn" class="btn" type="button">Reset form</button>
+                            </div>
+                        </section>
+
+                        <h2>Large</h2>
+                        <section id="largeContainer"></section>
+
+                        <div>
+                            <label>Events log</label><br>
+                            <textarea id="eventsLog" class="logs-container"></textarea>
                         </div>
-                        <div class="section-controls">
-                            <button id="changePropBtn" class="btn" type="button">Change property</button>
-                            <button id="resetBtn" class="btn" type="button">Reset form</button>
-                        </div>
-                    </section>
-
-                    <h2>Large</h2>
-                    <section id="largeContainer"></section>
-
-                    <div>
-                        <label>Events log</label><br>
-                        <textarea id="eventsLog" class="logs-container"></textarea>
                     </div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

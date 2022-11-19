@@ -1,333 +1,337 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
-<title>Jezve JS | Drop Down component</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+    <title>Jezve JS | Drop Down component</title>
 </head>
+
 <body>
-<div class="page">
-	<div class="page-wrapper">
+    <div class="page">
+        <div class="page-wrapper">
 
-		<div class="nav-header">
-            <button class="nav-toggle-btn">
-                <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                </svg>
-            </button>
+            <div class="nav-header">
+                <button class="nav-toggle-btn">
+                    <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                    </svg>
+                </button>
 
-			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
-		</div>
+                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+            </div>
 
-		<div class="page-container">
-			<div class="page-content">
-				<div class="page-content-wrap">
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="page-content-wrap">
 
-<h2>Standard inline drop down</h2>
-<section>
-    <div class="inline-container">
-        <input id="selinp" type="text">
-        <input id="selinp2" type="text">
-    </div>
-</section>
+                        <h2>Standard inline drop down</h2>
+                        <section>
+                            <div class="inline-container">
+                                <input id="selinp" type="text">
+                                <input id="selinp2" type="text">
+                            </div>
+                        </section>
 
-<h2>Stretch drop down 100% width</h2>
-<section>
-    <div class="allwidth">
-        <input id="selinp3" type="text">
-    </div>
-</section>
+                        <h2>Stretch drop down 100% width</h2>
+                        <section>
+                            <div class="allwidth">
+                                <input id="selinp3" type="text">
+                            </div>
+                        </section>
 
-<h2>Stretch drop down 50% width</h2>
-<section>
-    <div class="allwidth halfwidth">
-        <input id="selinp4" type="text">
-        <label>Events log</label><br>
-        <textarea id="log-single" class="logs-container"></textarea>
-    </div>
-</section>
+                        <h2>Stretch drop down 50% width</h2>
+                        <section>
+                            <div class="allwidth halfwidth">
+                                <input id="selinp4" type="text">
+                                <label>Events log</label><br>
+                                <textarea id="log-single" class="logs-container"></textarea>
+                            </div>
+                        </section>
 
-<h2>Parse select element (with no default selection)</h2>
-<section>
-	<select id="sel0" value="0">
-		<option value="1">Item 1</option>
-		<option value="2">Long item test Lorem ipsum dolor sit amet</option>
-		<option value="3">Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5">Item 5</option>
-	</select><br>
-</section>
+                        <h2>Parse select element (with no default selection)</h2>
+                        <section>
+                            <select id="sel0" value="0">
+                                <option value="1">Item 1</option>
+                                <option value="2">Long item test Lorem ipsum dolor sit amet</option>
+                                <option value="3">Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5">Item 5</option>
+                            </select><br>
+                        </section>
 
-<h2>Parse select element (with selected option support)</h2>
-<section>
-	<select id="sel">
-		<option value="1">Item 1</option>
-		<option value="2">Item 2</option>
-		<option value="3" selected>Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5">Item 5</option>
-	</select>
-</section>
+                        <h2>Parse select element (with selected option support)</h2>
+                        <section>
+                            <select id="sel">
+                                <option value="1">Item 1</option>
+                                <option value="2">Item 2</option>
+                                <option value="3" selected>Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5">Item 5</option>
+                            </select>
+                        </section>
 
-<h2>Disabled option support</h2>
-<section>
-	<select id="disabledopt">
-		<option value="1">Item 1</option>
-		<option value="2">Item 2</option>
-		<option value="3" disabled>Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5" disabled>Item 5</option>
-	</select>
-</section>
+                        <h2>Disabled option support</h2>
+                        <section>
+                            <select id="disabledopt">
+                                <option value="1">Item 1</option>
+                                <option value="2">Item 2</option>
+                                <option value="3" disabled>Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5" disabled>Item 5</option>
+                            </select>
+                        </section>
 
-<h2>Option groups support</h2>
-<section>
-	<select id="optgroupssel">
-		<option value="1">Item 1</option>
-		<optgroup>
-			<option value="2">Item 2</option>
-			<option value="3" disabled>Item 3</option>
-		</optgroup>
-		<option value="4">Item 4</option>
-		<optgroup>
-		</optgroup>
-		<optgroup label="Correct">
-			<option value="5" selected>Item 5</option>
-			<option value="6">Item 6</option>
-			<option value="7">Item 7</option>
-		</optgroup>
-		<option value="8">Item 8</option>
-		<optgroup label="Empty">
-		</optgroup>
-		<option value="9">Item 9</option>
-		<option value="10">Item 10</option>
-		<option value="11">Item 11</option>
-	</select>
-</section>
+                        <h2>Option groups support</h2>
+                        <section>
+                            <select id="optgroupssel">
+                                <option value="1">Item 1</option>
+                                <optgroup>
+                                    <option value="2">Item 2</option>
+                                    <option value="3" disabled>Item 3</option>
+                                </optgroup>
+                                <option value="4">Item 4</option>
+                                <optgroup>
+                                </optgroup>
+                                <optgroup label="Correct">
+                                    <option value="5" selected>Item 5</option>
+                                    <option value="6">Item 6</option>
+                                    <option value="7">Item 7</option>
+                                </optgroup>
+                                <option value="8">Item 8</option>
+                                <optgroup label="Empty">
+                                </optgroup>
+                                <option value="9">Item 9</option>
+                                <option value="10">Item 10</option>
+                                <option value="11">Item 11</option>
+                            </select>
+                        </section>
 
-<h2>Dynamic groups create</h2>
-<section>
-    <input id="optgroupsdyn" type="text">
-</section>
+                        <h2>Dynamic groups create</h2>
+                        <section>
+                            <input id="optgroupsdyn" type="text">
+                        </section>
 
-<h2>Create drop down without host element in DOM</h2>
-<section id="unattachedSection">
-</section>
+                        <h2>Create drop down without host element in DOM</h2>
+                        <section id="unattachedSection">
+                        </section>
 
-<h2>Attach drop down to block element</h2>
-<section>
-	<div id="box" class="bluebox">click</div>
-</section>
+                        <h2>Attach drop down to block element</h2>
+                        <section>
+                            <div id="box" class="bluebox">click</div>
+                        </section>
 
-<h2>Attach drop down to inline element</h2>
-<section>
-	<div>some text text loream ispum lalalal <span id="inline" class="link_inline">click</span> lorem lorem</div>
-</section>
+                        <h2>Attach drop down to inline element</h2>
+                        <section>
+                            <div>some text text loream ispum lalalal <span id="inline" class="link_inline">click</span>
+                                lorem lorem</div>
+                        </section>
 
-<h2>Clipping test</h2>
-<section>
-    <div class="offset-parent">
-        <div class="clipper">
-            <select id="clipped">
-                <option value="1">Item 1</option>
-                <option value="2">Item 2</option>
-                <option value="3">Item 3</option>
-                <option value="4">Item 4</option>
-                <option value="5">Item 5</option>
-            </select>
+                        <h2>Clipping test</h2>
+                        <section>
+                            <div class="offset-parent">
+                                <div class="clipper">
+                                    <select id="clipped">
+                                        <option value="1">Item 1</option>
+                                        <option value="2">Item 2</option>
+                                        <option value="3">Item 3</option>
+                                        <option value="4">Item 4</option>
+                                        <option value="5">Item 5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+
+                        <h2>Multiple select drop down</h2>
+                        <section>
+                            <select id="selinp5" multiple>
+                                <option value="1" selected>Item 1</option>
+                                <option value="2" selected>Item 2</option>
+                                <option value="3" selected>Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5">Item 5</option>
+                            </select>
+                            <label>Events log</label><br>
+                            <textarea id="log-multi" class="logs-container"></textarea>
+                        </section>
+
+                        <h2>Focus test native select</h2>
+                        <section>
+                            <select id="focusSel">
+                                <option value="1">Item 1</option>
+                                <option value="2">Item 2</option>
+                                <option value="3">Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5">Item 5</option>
+                            </select>
+                        </section>
+
+                        <h2>Generated multiple select drop down</h2>
+                        <section>
+                            <input id="selinp6" type="text">
+                            <div class="section-controls">
+                                <input id="enableOptionBtn" class="btn" type="button" value="Toggle enable item 3">
+                            </div>
+                            <label>Events log</label><br>
+                            <textarea id="log-genmulti" class="logs-container"></textarea>
+                        </section>
+
+                        <h2>Disabled single select drop down</h2>
+                        <section>
+                            <div>
+                                <select id="selinp7single" disabled>
+                                    <option value="1">Item 1</option>
+                                    <option value="2">Item 2</option>
+                                    <option value="3" selected>Item 3</option>
+                                    <option value="4">Item 4</option>
+                                    <option value="5">Item 5</option>
+                                </select>
+                            </div>
+                            <div class="section-controls">
+                                <input id="enableSingleBtn" class="btn" type="button" value="Enable">
+                            </div>
+                        </section>
+
+                        <h2>Disabled multiple select drop down</h2>
+                        <section>
+                            <div>
+                                <select id="selinp7" multiple disabled>
+                                    <option value="1">Item 1</option>
+                                    <option value="2">Item 2</option>
+                                    <option value="3" selected>Item 3</option>
+                                    <option value="4">Item 4</option>
+                                    <option value="5">Item 5</option>
+                                </select>
+                            </div>
+                            <div class="section-controls">
+                                <input id="enableBtn" class="btn" type="button" value="Enable">
+                            </div>
+                        </section>
+
+                        <h2>Built-in items filter with single select</h2>
+                        <section>
+                            <input id="selinp8" type="text" disabled>
+                            <div class="section-controls">
+                                <input id="enableFilterBtn" class="btn" type="button" value="Enable"><br>
+                            </div>
+                        </section>
+
+                        <h2>Built-in items filter with multiple select + noResultsMessage option</h2>
+                        <section>
+                            <input id="multiSelFilterInp" type="text" disabled>
+                            <div class="section-controls">
+                                <input id="enableMultiFilterBtn" class="btn" type="button" value="Enable"><br>
+                            </div>
+                        </section>
+
+                        <h2>Custom render</h2>
+                        <section>
+                            <div>
+                                <select id="selinp10" multiple>
+                                    <option value="1">Item 1</option>
+                                    <option value="2">Item 2</option>
+                                    <option value="3">Item 3</option>
+                                    <option value="4" selected>Item 4</option>
+                                    <option value="5" selected>Item 5</option>
+                                    <option value="6">Item 6</option>
+                                    <option value="7">Item 7</option>
+                                    <option value="8">Item 8</option>
+                                    <option value="9">Item 9</option>
+                                    <option value="10">Item 10</option>
+                                    <option value="11">Item 11</option>
+                                </select>
+                            </div>
+                            <div class="section-controls">
+                                <input id="enableBtn2" class="btn" type="button" value="Disable"><br>
+                            </div>
+                            <div>
+                                <label>Events log</label><br>
+                                <div id="log-custom" class="logs-container"></div>
+                            </div>
+                        </section>
+
+                        <h2>useNativeSelect option with single select</h2>
+                        <section>
+                            <select id="selinp11single">
+                                <option value="1">Item 1</option>
+                                <option value="2">Item 2</option>
+                                <option value="3">Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5">Item 5</option>
+                            </select>
+                        </section>
+
+                        <h2>useNativeSelect option with generated single select</h2>
+                        <section>
+                            <input id="nativeGenerated" type="text">
+                        </section>
+
+                        <h2>useNativeSelect option with multiple select</h2>
+                        <section>
+                            <select id="selinp11" multiple>
+                                <option value="1">Item 1</option>
+                                <option value="2">Item 2</option>
+                                <option value="3">Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5">Item 5</option>
+                            </select>
+                        </section>
+
+                        <h2>fullScreen option</h2>
+                        <section>
+                            <select id="selinp12" multiple>
+                                <option value="1">Item 1</option>
+                                <option value="2">Item 2</option>
+                                <option value="3">Item 3</option>
+                                <option value="4">Item 4</option>
+                                <option value="5">Item 5</option>
+                                <option value="6">Item 6</option>
+                                <option value="7">Item 7</option>
+                                <option value="8">Item 8</option>
+                                <option value="9">Item 9</option>
+                                <option value="10">Item 10</option>
+                                <option value="11">Item 11</option>
+                                <option value="12">Item 12</option>
+                                <option value="13">Item 13</option>
+                                <option value="14">Item 14</option>
+                                <option value="15">Item 15</option>
+                            </select>
+                        </section>
+
+                        <h2>Dynamic Drop Down</h2>
+                        <section>
+                            <select id="dynamicSel"></select>
+                            <div class="section-controls">
+                                <button id="addBtn" class="btn" type="button">Add item</button>
+                                <button id="addDisBtn" class="btn" type="button">Add disabled item</button>
+                                <button id="addHiddenBtn" class="btn" type="button">Add hidden item</button>
+                                <button id="delBtn" class="btn" type="button">Remove last item</button>
+                                <button id="delAllBtn" class="btn" type="button">Remove all items</button>
+                            </div>
+                        </section>
+
+                        <h2>Drop Down inside popup</h2>
+                        <section>
+                            <div class="section-controls">
+                                <button id="popupBtn" class="btn" type="button">Show popup</button>
+                            </div>
+                            <div id="popupContent" hidden>
+                                <div id="popupDropDownContainer"></div>
+                                <div id="popupControls" class="section-controls">
+                                    <button class="btn" type="button" data-align="top">Align top</button>
+                                    <button class="btn" type="button" data-align="center">Align center</button>
+                                    <button class="btn" type="button" data-align="bottom">Align bottom</button>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</section>
-
-<h2>Multiple select drop down</h2>
-<section>
-	<select id="selinp5" multiple>
-		<option value="1" selected>Item 1</option>
-		<option value="2" selected>Item 2</option>
-		<option value="3" selected>Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5">Item 5</option>
-	</select>
-    <label>Events log</label><br>
-	<textarea id="log-multi" class="logs-container"></textarea>
-</section>
-
-<h2>Focus test native select</h2>
-<section>
-	<select id="focusSel">
-		<option value="1">Item 1</option>
-		<option value="2">Item 2</option>
-		<option value="3">Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5">Item 5</option>
-	</select>
-</section>
-
-<h2>Generated multiple select drop down</h2>
-<section>
-	<input id="selinp6" type="text">
-	<div class="section-controls">
-		<input id="enableOptionBtn" class="btn" type="button" value="Toggle enable item 3">
-	</div>
-	<label>Events log</label><br>
-	<textarea id="log-genmulti" class="logs-container"></textarea>
-</section>
-
-<h2>Disabled single select drop down</h2>
-<section>
-    <div>
-        <select id="selinp7single" disabled>
-            <option value="1">Item 1</option>
-            <option value="2">Item 2</option>
-            <option value="3" selected>Item 3</option>
-            <option value="4">Item 4</option>
-            <option value="5">Item 5</option>
-        </select>
-    </div>
-    <div class="section-controls">
-	    <input id="enableSingleBtn" class="btn" type="button" value="Enable">
-    </div>
-</section>
-
-<h2>Disabled multiple select drop down</h2>
-<section>
-    <div>
-        <select id="selinp7" multiple disabled>
-            <option value="1">Item 1</option>
-            <option value="2">Item 2</option>
-            <option value="3" selected>Item 3</option>
-            <option value="4">Item 4</option>
-            <option value="5">Item 5</option>
-        </select>
-    </div>
-    <div class="section-controls">
-	    <input id="enableBtn" class="btn" type="button" value="Enable">
-    </div>
-</section>
-
-<h2>Built-in items filter with single select</h2>
-<section>
-	<input id="selinp8" type="text" disabled>
-    <div class="section-controls">
-        <input id="enableFilterBtn" class="btn" type="button" value="Enable"><br>
-    </div>
-</section>
-
-<h2>Built-in items filter with multiple select + noResultsMessage option</h2>
-<section>
-	<input id="multiSelFilterInp" type="text" disabled>
-    <div class="section-controls">
-        <input id="enableMultiFilterBtn" class="btn" type="button" value="Enable"><br>
-    </div>
-</section>
-
-<h2>Custom render</h2>
-<section>
-    <div>
-        <select id="selinp10" multiple>
-            <option value="1">Item 1</option>
-            <option value="2">Item 2</option>
-            <option value="3">Item 3</option>
-            <option value="4" selected>Item 4</option>
-            <option value="5" selected>Item 5</option>
-            <option value="6">Item 6</option>
-            <option value="7">Item 7</option>
-            <option value="8">Item 8</option>
-            <option value="9">Item 9</option>
-            <option value="10">Item 10</option>
-            <option value="11">Item 11</option>
-        </select>
-    </div>
-    <div class="section-controls">
-        <input id="enableBtn2" class="btn" type="button" value="Disable"><br>
-    </div>
-    <div>
-        <label>Events log</label><br>
-        <div id="log-custom" class="logs-container"></div>
-    </div>
-</section>
-
-<h2>useNativeSelect option with single select</h2>
-<section>
-	<select id="selinp11single">
-		<option value="1">Item 1</option>
-		<option value="2">Item 2</option>
-		<option value="3">Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5">Item 5</option>
-	</select>
-</section>
-
-<h2>useNativeSelect option with generated single select</h2>
-<section>
-    <input id="nativeGenerated" type="text">
-</section>
-
-<h2>useNativeSelect option with multiple select</h2>
-<section>
-	<select id="selinp11" multiple>
-		<option value="1">Item 1</option>
-		<option value="2">Item 2</option>
-		<option value="3">Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5">Item 5</option>
-	</select>
-</section>
-
-<h2>fullScreen option</h2>
-<section>
-	<select id="selinp12" multiple>
-		<option value="1">Item 1</option>
-		<option value="2">Item 2</option>
-		<option value="3">Item 3</option>
-		<option value="4">Item 4</option>
-		<option value="5">Item 5</option>
-		<option value="6">Item 6</option>
-		<option value="7">Item 7</option>
-		<option value="8">Item 8</option>
-		<option value="9">Item 9</option>
-		<option value="10">Item 10</option>
-		<option value="11">Item 11</option>
-		<option value="12">Item 12</option>
-		<option value="13">Item 13</option>
-		<option value="14">Item 14</option>
-		<option value="15">Item 15</option>
-	</select>
-</section>
-
-<h2>Dynamic Drop Down</h2>
-<section>
-    <select id="dynamicSel"></select>
-    <div class="section-controls">
-        <button id="addBtn" class="btn" type="button">Add item</button>
-        <button id="addDisBtn" class="btn" type="button">Add disabled item</button>
-        <button id="addHiddenBtn" class="btn" type="button">Add hidden item</button>
-        <button id="delBtn" class="btn" type="button">Remove last item</button>
-        <button id="delAllBtn" class="btn" type="button">Remove all items</button>
-    </div>
-</section>
-
-<h2>Drop Down inside popup</h2>
-<section>
-    <div class="section-controls">
-        <button id="popupBtn" class="btn" type="button">Show popup</button>
-    </div>
-    <div id="popupContent" hidden>
-        <div id="popupDropDownContainer"></div>
-        <div id="popupControls" class="section-controls">
-            <button class="btn" type="button" data-align="top">Align top</button>
-            <button class="btn" type="button" data-align="center">Align center</button>
-            <button class="btn" type="button" data-align="bottom">Align bottom</button>
-        </div>
-    </div>
-</section>
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 </body>
+
 </html>
