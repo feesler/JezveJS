@@ -9,8 +9,8 @@ import {
     re,
     removeChilds,
     px,
-    throttle,
     createElement,
+    debounce,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
@@ -55,7 +55,8 @@ const defaultProps = {
     animate: false,
     showPopup: false,
     renderPopup: null,
-    scrollThrottle: false,
+    autoScaleTimeout: 200,
+    resizeTimeout: 200,
     activateOnHover: false,
     renderYAxisLabel: null,
     showLegend: false,
@@ -108,10 +109,10 @@ export class BaseChart extends Component {
 
         if (!this.props.autoScale) {
             this.scaleFunc = null;
-        } else if (this.props.scrollThrottle === false) {
+        } else if (this.props.autoScaleTimeout === false) {
             this.scaleFunc = () => this.scaleVisible();
         } else {
-            this.scaleFunc = throttle(() => this.scaleVisible(), this.props.scrollThrottle);
+            this.scaleFunc = debounce(() => this.scaleVisible(), this.props.autoScaleTimeout);
         }
 
         this.emptyClickHandler = () => this.hidePopup();
@@ -195,10 +196,12 @@ export class BaseChart extends Component {
     }
 
     observeSize() {
-        const observer = new ResizeObserver(() => {
+        const handler = debounce(() => {
             const newState = this.updateChartWidth(this.state);
             this.setState(newState);
-        });
+        }, this.props.resizeTimeout);
+
+        const observer = new ResizeObserver(handler);
         observer.observe(this.chartContainer);
     }
 
@@ -776,6 +779,19 @@ export class BaseChart extends Component {
     updateItemsScale() {
     }
 
+    isHorizontalScaleNeeded(state, prevState = {}) {
+        return (
+            state.data !== prevState?.data
+            || state.columnWidth !== prevState?.columnWidth
+            || state.groupsGap !== prevState?.groupsGap
+            || state.fitToWidth !== prevState?.fitToWidth
+        );
+    }
+
+    /** Update horizontal scale of items */
+    updateHorizontalScale() {
+    }
+
     defaultLegendContent(categories) {
         if (!Array.isArray(categories) || categories.length === 0) {
             return null;
@@ -821,7 +837,7 @@ export class BaseChart extends Component {
         this.elem.append(this.legend);
     }
 
-    render(state) {
+    render(state, prevState = {}) {
         const animated = state.autoScale && state.animate;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
@@ -831,14 +847,19 @@ export class BaseChart extends Component {
         newState = this.updateColumnWidth(newState);
         newState = this.updateChartWidth(newState);
 
-        // create bars
-        this.resetItems();
-        this.createItems(newState);
+        if (state.data !== prevState?.data) {
+            this.resetItems();
+            this.createItems(newState);
+        }
         newState = this.scaleVisible(newState);
 
         // create horizontal labels
         newState = this.createHLabels(newState);
         newState = this.updateChartWidth(newState);
+
+        if (this.isHorizontalScaleNeeded(newState, prevState)) {
+            this.updateHorizontalScale(newState);
+        }
 
         this.content.setAttribute('width', newState.chartWidth);
         this.content.setAttribute('height', newState.height);

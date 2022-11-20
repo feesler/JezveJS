@@ -110,30 +110,14 @@ export class Histogram extends BaseChart {
         return res;
     }
 
-    /** Set new position of item */
-    setItemPos(item, y, height, state) {
-        const bar = item;
-
-        if (bar.y === y && bar.height === height) {
-            return;
-        }
-
-        if (state.autoScale && state.animate) {
-            bar.elem.style.y = this.formatCoord(y, true);
-            bar.elem.style.height = this.formatCoord(height, true);
-        } else {
-            bar.elem.setAttribute('y', y);
-            bar.elem.setAttribute('height', height);
-        }
-
-        bar.y = y;
-        bar.height = height;
+    getX(item, groupWidth, columnWidth) {
+        return item.groupIndex * groupWidth + item.columnIndex * columnWidth;
     }
 
     createItem({
         value,
         width,
-        index,
+        groupIndex,
         columnIndex = 0,
         categoryIndex = 0,
         valueOffset = 0,
@@ -152,14 +136,15 @@ export class Histogram extends BaseChart {
         const item = {
             value: fixedValue,
             valueOffset: fixedOffset,
-            x: index * groupWidth + columnIndex * columnWidth,
             y: Math.min(y0, y1),
             width,
             height,
+            groupIndex,
             columnIndex,
             categoryIndex,
             groupName,
         };
+        item.x = this.getX(item, groupWidth, columnWidth);
 
         if (
             Number.isNaN(item.x)
@@ -208,13 +193,13 @@ export class Histogram extends BaseChart {
         const stackedGroups = this.getStackedGroups(state);
         const stackedCategories = this.getStackedCategories(state);
         const longestSet = this.getLongestDataSet(state);
-        longestSet.forEach((_, index) => {
+        longestSet.forEach((_, groupIndex) => {
             const group = [];
             const posValueOffset = Array(state.columnsInGroup).fill(0);
             const negValueOffset = Array(state.columnsInGroup).fill(0);
 
             dataSets.forEach((dataSet, dataSetIndex) => {
-                const value = dataSet.data[index] ?? 0;
+                const value = dataSet.data[groupIndex] ?? 0;
                 const category = dataSet.category ?? null;
                 const categoryIndex = (category && stackedCategories.includes(category))
                     ? stackedCategories.indexOf(category)
@@ -230,7 +215,7 @@ export class Histogram extends BaseChart {
                 const item = this.createItem({
                     value,
                     width: state.columnWidth,
-                    index,
+                    groupIndex,
                     columnIndex,
                     categoryIndex,
                     valueOffset,
@@ -251,6 +236,24 @@ export class Histogram extends BaseChart {
         });
     }
 
+    /** Set vertical position and height of item */
+    setItemVerticalPos(item, y, height, state) {
+        const bar = item;
+        if (bar.y === y && bar.height === height) {
+            return;
+        }
+
+        bar.y = y;
+        bar.height = height;
+        if (state.autoScale && state.animate) {
+            bar.elem.style.y = this.formatCoord(bar.y, true);
+            bar.elem.style.height = this.formatCoord(bar.height, true);
+        } else {
+            bar.elem.setAttribute('y', bar.y);
+            bar.elem.setAttribute('height', bar.height);
+        }
+    }
+
     /** Update scale of items */
     updateItemsScale(items, state) {
         if (!Array.isArray(items)) {
@@ -264,7 +267,38 @@ export class Histogram extends BaseChart {
             const newY = Math.min(y0, y1);
             const height = grid.roundToPrecision(Math.abs(y0 - y1), 1);
 
-            this.setItemPos(item, newY, height, state);
+            this.setItemVerticalPos(item, newY, height, state);
+        });
+    }
+
+    isHorizontalScaleNeeded(state, prevState = {}) {
+        return (
+            super.isHorizontalScaleNeeded(state, prevState)
+            || state.columnGap !== prevState?.columnGap
+        );
+    }
+
+    /** Set vertical position and height of item */
+    setItemHorizontalPos(item, x, width) {
+        const bar = item;
+        if (bar.x === x && bar.width === width) {
+            return;
+        }
+
+        bar.x = x;
+        bar.width = width;
+        bar.elem.setAttribute('x', bar.x);
+        bar.elem.setAttribute('width', bar.width);
+    }
+
+    /** Update horizontal scale of items */
+    updateHorizontalScale(state) {
+        const groupWidth = this.getGroupOuterWidth(state);
+        const columnWidth = this.getColumnOuterWidth(state);
+
+        this.items.flat().forEach((item) => {
+            const newX = this.getX(item, groupWidth, columnWidth);
+            this.setItemHorizontalPos(item, newX, state.columnWidth);
         });
     }
 }
