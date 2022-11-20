@@ -9,8 +9,8 @@ import {
     re,
     removeChilds,
     px,
-    throttle,
     createElement,
+    debounce,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
@@ -55,7 +55,7 @@ const defaultProps = {
     animate: false,
     showPopup: false,
     renderPopup: null,
-    scrollThrottle: false,
+    autoScaleTimeout: 200,
     activateOnHover: false,
     renderYAxisLabel: null,
     showLegend: false,
@@ -108,10 +108,10 @@ export class BaseChart extends Component {
 
         if (!this.props.autoScale) {
             this.scaleFunc = null;
-        } else if (this.props.scrollThrottle === false) {
+        } else if (this.props.autoScaleTimeout === false) {
             this.scaleFunc = () => this.scaleVisible();
         } else {
-            this.scaleFunc = throttle(() => this.scaleVisible(), this.props.scrollThrottle);
+            this.scaleFunc = debounce(() => this.scaleVisible(), this.props.autoScaleTimeout);
         }
 
         this.emptyClickHandler = () => this.hidePopup();

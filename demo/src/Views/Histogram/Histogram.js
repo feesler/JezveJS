@@ -311,7 +311,6 @@ const autoScale = () => {
         data: chartData2,
         elem: 'chart_autoscale',
         autoScale: true,
-        scrollThrottle: 200,
     });
 };
 
@@ -328,7 +327,6 @@ const callbacks = () => {
         autoScale: true,
         animate: true,
         showPopup: true,
-        scrollThrottle: 50,
         activateOnHover: true,
         renderPopup: (target) => formatAsUSD(target.item.value),
         renderYAxisLabel: formatDecimalValue,
@@ -348,7 +346,6 @@ const multiColumn = () => {
         autoScale: true,
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
-        scrollThrottle: 50,
         activateOnHover: true,
         showLegend: true,
     });
@@ -363,7 +360,6 @@ const stacked = () => {
         autoScale: true,
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
-        scrollThrottle: 50,
         activateOnHover: true,
         showLegend: true,
         renderLegend: renderCustomLegend,
@@ -379,7 +375,6 @@ const stackedNegative = () => {
         autoScale: true,
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
-        scrollThrottle: 50,
         activateOnHover: true,
         showLegend: true,
         renderLegend: renderCustomLegend,
@@ -398,7 +393,6 @@ const stackedGrouped = () => {
         autoScale: true,
         showPopup: true,
         renderPopup: renderMultiColumnPopup,
-        scrollThrottle: 50,
         activateOnHover: true,
         showLegend: true,
         renderLegend: renderCustomLegend,
@@ -417,7 +411,6 @@ const stackedCategories = () => {
         autoScale: true,
         showPopup: true,
         renderPopup: renderCategoriesPopup,
-        scrollThrottle: 50,
         activateOnHover: true,
         showLegend: true,
         renderLegend: renderCustomLegend,

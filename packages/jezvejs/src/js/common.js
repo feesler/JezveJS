@@ -835,7 +835,7 @@ export const deepMeet = (obj, expectedObj) => {
  * Call function no more than once every ms seconds
  * @param {Function} func - function to throttle
  * @param {Number} ms - timeout
- * @returns
+ * @returns {Function}
  */
 export function throttle(func, ms) {
     let isThrottled = false;
@@ -864,4 +864,34 @@ export function throttle(func, ms) {
     }
 
     return wrapper;
+}
+
+/**
+ * Runs only last call of function after timeout
+ * @param {Function} func - function to debounce
+ * @param {Number} ms - timeout
+ * @param {Boolean} immediate - run function on start of timeout
+ * @returns {Function}
+ */
+export function debounce(func, ms, immediate = false) {
+    let timeout = null;
+
+    return function (...args) {
+        const savedThis = this;
+        const savedArgs = args;
+
+        const later = () => {
+            timeout = null;
+            if (!immediate) {
+                func.apply(savedThis, savedArgs);
+            }
+        };
+
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, ms);
+        if (callNow) {
+            func.apply(savedThis, savedArgs);
+        }
+    };
 }
