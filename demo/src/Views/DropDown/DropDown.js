@@ -287,6 +287,19 @@ const multiSelectFilter = () => {
     enableBtn.addEventListener('click', (e) => toggleEnable(e, dropDown));
 };
 
+// Built-in items filter with multiple select
+const attachedFilter = () => {
+    DropDown.create({
+        elem: 'boxFilter',
+        listAttach: true,
+        enableFilter: true,
+        noResultsMessage: 'Nothing found',
+        multi: true,
+        placeholder: 'Type to filter',
+        data: initItems('Filter item', 100),
+    });
+};
+
 // Custom render drop down
 const customRender = () => {
     const customDropDown = DropDown.create({
@@ -474,6 +487,7 @@ const init = () => {
 
     singleSelectFilter();
     multiSelectFilter();
+    attachedFilter();
 
     customRender();
     useNativeSelect();

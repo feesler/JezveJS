@@ -182,7 +182,7 @@
   color: var(--dd-placeholder);
 }
 
-/* Editable input */
+/* Input */
 .dd__input {
   display: flex;
   flex: 1 1 auto;
@@ -200,6 +200,10 @@
     color: var(--dd-placeholder) !important;
     font-weight: 400 !important;
   }
+}
+
+.dd__list .dd__input {
+  flex: 0 0 auto;
 }
 
 /* Clear selection button */
@@ -252,12 +256,12 @@
 /* Drop down list */
 .dd__list {
   position: absolute;
+  flex-flow: column nowrap;
   display: none;
   box-sizing: border-box;
   max-width: 100%;
   max-height: var(--dd-max-list-height);
   margin: 5px 0;
-  overflow-y: auto;
   background-color: var(--dd-bg-color);
   border: var(--dd-border-width) solid var(--dd-border-color);
   border-radius: var(--dd-list-border-radius);
@@ -270,6 +274,7 @@
     list-style-image: none;
     list-style-type: none;
     overflow-x: hidden;
+    overflow-y: auto;
     background-color: var(--dd-list-item-bg);
   }
 }
