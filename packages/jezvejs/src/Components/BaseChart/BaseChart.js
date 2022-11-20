@@ -56,6 +56,7 @@ const defaultProps = {
     showPopup: false,
     renderPopup: null,
     autoScaleTimeout: 200,
+    resizeTimeout: 200,
     activateOnHover: false,
     renderYAxisLabel: null,
     showLegend: false,
@@ -195,10 +196,12 @@ export class BaseChart extends Component {
     }
 
     observeSize() {
-        const observer = new ResizeObserver(() => {
+        const handler = debounce(() => {
             const newState = this.updateChartWidth(this.state);
             this.setState(newState);
-        });
+        }, this.props.resizeTimeout);
+
+        const observer = new ResizeObserver(handler);
         observer.observe(this.chartContainer);
     }
 
