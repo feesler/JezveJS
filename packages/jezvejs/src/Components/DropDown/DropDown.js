@@ -490,18 +490,18 @@ export class DropDown extends Component {
 
     /** Click by delete button of selected item event handler */
     onDeleteSelectedItem(e) {
-        if (!e?.target || !this.props.multi) {
+        if (!this.props.multi) {
             return;
         }
-
-        const index = this.getSelectedItemIndex(e.target);
+        const index = this.getSelectedItemIndex(e?.target);
         if (index === -1) {
             return;
         }
 
         const SelectionItemComponent = this.props.components.MultiSelectionItem;
+        const isClick = (e.type === 'click');
         if (
-            e.type === 'click'
+            isClick
             && !e.target.closest(`.${SelectionItemComponent.buttonClass}`)
         ) {
             return;
@@ -512,19 +512,29 @@ export class DropDown extends Component {
             return;
         }
 
-        // Focus input or container if deselect last(right) selected item
-        // Activate next selected item otherwise
-        if (e.type === 'click' || index === selectedItems.length - 1) {
-            this.activateSelectedItem(-1);
+        const isBackspace = (e.type === 'keydown' && e.code === 'Backspace');
+        let itemToActivate;
+        if (isBackspace) {
+            if (index === 0) {
+                // Activate first selected item if available or focus host input otherwise
+                itemToActivate = (selectedItems.length > 1) ? 0 : -1;
+            } else {
+                // Activate previous selected item
+                itemToActivate = index - 1;
+            }
         } else {
-            this.activateSelectedItem(index);
+            // Focus input or container if deselect last(right) selected item
+            // Activate next selected item otherwise
+            itemToActivate = (isClick || index === selectedItems.length - 1) ? -1 : index;
         }
+        this.activateSelectedItem(itemToActivate);
 
         const item = selectedItems[index];
-        if (item) {
-            this.deselectItem(item.id);
+        if (!item) {
+            return;
         }
 
+        this.deselectItem(item.id);
         this.sendItemSelectEvent();
         this.state.changed = true;
         this.sendChangeEvent();
@@ -551,12 +561,7 @@ export class DropDown extends Component {
         ) {
             if (
                 this.props.multi
-                && (
-                    e.code === 'Backspace'
-                    || e.key === 'Backspace'
-                    || e.code === 'ArrowLeft'
-                    || e.key === 'Left'
-                )
+                && (e.code === 'Backspace' || e.code === 'ArrowLeft')
             ) {
                 if (this.state.editable && e.currentTarget === this.inputElem) {
                     const cursorPos = getCursorPos(this.inputElem);
@@ -571,91 +576,19 @@ export class DropDown extends Component {
             }
         }
 
-        if (e.code === 'Backspace' || e.key === 'Backspace') {
-            if (this.props.multi && this.isSelectedItemElement(e.target)) {
-                const selectedItems = this.getSelectedItems(this.state);
-                if (!selectedItems.length) {
-                    return;
-                }
-
-                const index = this.getSelectedItemIndex(e.target);
-                if (index === -1) {
-                    return;
-                }
-
-                if (index === 0) {
-                    // Activate first selected item if available or focus host input otherwise
-                    if (selectedItems.length > 1) {
-                        this.activateSelectedItem(1);
-                    } else {
-                        this.activateSelectedItem(-1);
-                    }
-                } else {
-                    // Activate previous selected item
-                    this.activateSelectedItem(index - 1);
-                }
-
-                const item = selectedItems[index];
-                if (item) {
-                    this.deselectItem(item.id);
-
-                    this.sendItemSelectEvent();
-                    this.state.changed = true;
-                    this.sendChangeEvent();
-                }
-            }
-
-            return;
-        }
-
-        if (this.props.multi && (e.code === 'Delete' || e.key === 'Del')) {
+        if (this.props.multi && (e.code === 'Backspace' || e.code === 'Delete')) {
             this.onDeleteSelectedItem(e);
             return;
         }
 
-        if (this.props.multi && (e.code === 'ArrowLeft' || e.key === 'Left')) {
-            if (this.isSelectedItemElement(e.target)) {
-                const selectedItems = this.getSelectedItems(this.state);
-                if (!selectedItems.length) {
-                    return;
-                }
-
-                const index = this.getSelectedItemIndex(e.target);
-                if (index === 0) {
-                    return;
-                }
-
-                this.activateSelectedItem(index - 1);
-            }
-
-            return;
-        }
-
-        if (this.props.multi && (e.code === 'ArrowRight' || e.key === 'Right')) {
-            if (this.isSelectedItemElement(e.target)) {
-                const selectedItems = this.getSelectedItems(this.state);
-                if (!selectedItems.length) {
-                    return;
-                }
-
-                const index = this.getSelectedItemIndex(e.target);
-                if (index === -1) {
-                    return;
-                }
-
-                if (index === selectedItems.length - 1) {
-                    this.activateSelectedItem(-1);
-                } else {
-                    this.activateSelectedItem(index + 1);
-                }
-            }
-
+        if (this.props.multi && (e.code === 'ArrowLeft' || e.code === 'ArrowRight')) {
+            this.onSelectionNavigate(e);
             return;
         }
 
         const activeItem = this.getActiveItem();
 
-        if (e.code === 'ArrowDown' || e.key === 'Down') {
+        if (e.code === 'ArrowDown') {
             const availItems = this.getAvailableItems(this.state);
 
             if (!this.state.visible && !activeItem) {
@@ -668,21 +601,21 @@ export class DropDown extends Component {
                     [newItem] = availItems;
                 }
             }
-        } else if (e.code === 'ArrowUp' || e.key === 'Up') {
+        } else if (e.code === 'ArrowUp') {
             if (this.state.visible && activeItem) {
                 newItem = this.getPrevAvailableItem(activeItem.id);
             }
-        } else if (e.code === 'Home' || e.key === 'Home') {
+        } else if (e.code === 'Home') {
             const availItems = this.getAvailableItems(this.state);
             if (availItems.length > 0) {
                 [newItem] = availItems;
             }
-        } else if (e.code === 'End' || e.key === 'End') {
+        } else if (e.code === 'End') {
             const availItems = this.getAvailableItems(this.state);
             if (availItems.length > 0) {
                 newItem = availItems[availItems.length - 1];
             }
-        } else if (e.code === 'Enter' || e.key === 'Enter') {
+        } else if (e.code === 'Enter') {
             this.handleItemSelect(activeItem);
             e.preventDefault();
         } else if (e.code === 'Escape') {
@@ -698,6 +631,34 @@ export class DropDown extends Component {
             this.setActive(newItem);
             this.scrollToItem(newItem);
             e.preventDefault();
+        }
+    }
+
+    /** Handler for left or right arrow keys */
+    onSelectionNavigate(e) {
+        if (!this.props.multi) {
+            return;
+        }
+        if (!this.isSelectedItemElement(e?.target)) {
+            return;
+        }
+
+        const navigateLeft = (e.code === 'ArrowLeft' || e.key === 'Left');
+        const selectedItems = this.getSelectedItems(this.state);
+        if (!selectedItems.length) {
+            return;
+        }
+
+        const index = this.getSelectedItemIndex(e.target);
+        if (index === -1 || (navigateLeft && index === 0)) {
+            return;
+        }
+
+        if (navigateLeft) {
+            this.activateSelectedItem(index - 1);
+        } else {
+            const itemToActivate = (index === selectedItems.length - 1) ? -1 : index + 1;
+            this.activateSelectedItem(itemToActivate);
         }
     }
 
