@@ -9,14 +9,12 @@ import {
     isVisible,
     setEmptyClick,
     removeEmptyClick,
-    getOffset,
     re,
     px,
     createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import '../../css/common.scss';
-import './style.scss';
+import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import {
     DAYS_IN_WEEK,
     MONTHS_COUNT,
@@ -28,6 +26,8 @@ import {
     isSameYearMonth,
     isSameDate,
 } from '../../js/DateUtils.js';
+import '../../css/common.scss';
+import './style.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'dp__container';
@@ -349,43 +349,12 @@ export class DatePicker extends Component {
 
         // check position of control in window and place it to be visible
         if (value) {
-            const html = document.documentElement;
-            const screenBottom = html.scrollTop + html.clientHeight;
-            const container = getOffset(this.elem);
-            container.width = this.elem.offsetWidth;
-            container.height = this.elem.offsetHeight;
-
-            const totalHeight = container.height + this.wrapper.offsetHeight;
-            const bottom = container.top + totalHeight;
-
-            if (bottom > html.scrollHeight) {
-                const bottomOffset = (this.relativeParent) ? this.relativeParent.offsetHeight : 0;
-                this.wrapper.style.bottom = px(bottomOffset);
-            } else if (bottom > screenBottom) {
-                html.scrollTop += bottom - screenBottom;
-            }
-
-            // Check element wider than screen
-            const width = this.wrapper.offsetWidth;
-            if (width >= html.clientWidth) {
-                this.wrapper.style.width = px(html.clientWidth);
-                this.wrapper.style.left = px(0);
-            } else {
-                // Check element overflows screen to the right
-                // if rendered from the left of container
-                const leftOffset = container.left - html.scrollLeft;
-                if (leftOffset + width > html.clientWidth) {
-                    const left = container.left + container.width - width;
-                    if (left < 0) {
-                        this.wrapper.style.right = px(left);
-                    } else {
-                        this.wrapper.style.right = px(0);
-                    }
-                } else {
-                    this.wrapper.style.left = px(0);
-                }
-            }
+            PopupPosition.calculate({
+                elem: this.wrapper,
+                refElem: this.relativeParent,
+            });
         } else {
+            this.wrapper.style.top = '';
             this.wrapper.style.bottom = '';
             this.wrapper.style.left = '';
             this.wrapper.style.right = '';

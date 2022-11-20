@@ -261,11 +261,11 @@
   box-sizing: border-box;
   max-width: 100%;
   max-height: var(--dd-max-list-height);
-  margin: 5px 0;
   background-color: var(--dd-bg-color);
   border: var(--dd-border-width) solid var(--dd-border-color);
   border-radius: var(--dd-list-border-radius);
   z-index: var(--dd-list-z-index);
+  overflow: hidden;
 
   ul {
     padding: 0;

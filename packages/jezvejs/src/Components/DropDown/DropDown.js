@@ -17,11 +17,11 @@ import {
     removeEvents,
     deepMeet,
     enable,
-    computedStyle,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { DropDownListItem } from './ListItem.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
+import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import '../../css/common.scss';
 import './style.scss';
 
@@ -870,158 +870,6 @@ export class DropDown extends Component {
     /** Returns list element for specified item id */
     getListItemElem(id) {
         return this.listElem.querySelector(`[data-id="${id}"]`);
-    }
-
-    /** Find parent element of list without offsetParent and check it has position: fixed */
-    isInsideFixedContainer() {
-        let elem = this.list;
-        while (elem.offsetParent) {
-            elem = elem.offsetParent;
-        }
-
-        const style = computedStyle(elem);
-        return style.position === 'fixed';
-    }
-
-    /** Calculate height, vertical and horizontal offset of list element */
-    calculatePosition(state) {
-        if (isVisible(this.selectElem, true)) {
-            return;
-        }
-
-        if (!this.list || !state.visible) {
-            return;
-        }
-
-        const html = document.documentElement;
-        const screenTop = html.scrollTop;
-        const screenBottom = screenTop + html.clientHeight;
-
-        this.elem.classList.add(LIST_OPEN_CLASS);
-        const scrollAvailable = !this.isInsideFixedContainer();
-
-        let listHeight = this.list.offsetHeight;
-        let border = 0;
-        if (!this.props.listAttach) {
-            border = (this.comboElem.offsetHeight - this.comboElem.scrollHeight) / 2;
-        }
-
-        const offset = getOffset(this.list.offsetParent);
-        const container = getOffset(this.elem);
-        container.width = this.elem.offsetWidth;
-        container.height = this.elem.offsetHeight;
-        const combo = (!this.props.listAttach)
-            ? {
-                ...getOffset(this.comboElem),
-                width: this.comboElem.offsetWidth,
-                height: this.comboElem.offsetHeight,
-            }
-            : null;
-
-        let totalListHeight = container.height + LIST_MARGIN + listHeight;
-        let listBottom = container.top + totalListHeight;
-
-        this.list.style.top = px(
-            container.top - offset.top + container.height,
-        );
-
-        const scrollHeight = (scrollAvailable) ? html.scrollHeight : screenBottom;
-
-        if (this.props.fullScreen && isVisible(this.backgroundElem)) {
-            document.body.style.overflow = 'hidden';
-
-            this.list.style.left = px(combo.left);
-            this.list.style.top = px(combo.top - offset.top + combo.height - border);
-
-            const fullScreenListHeight = html.clientHeight - combo.height;
-            this.list.style.height = px(fullScreenListHeight / 2);
-        } else {
-            const padding = SCREEN_PADDING * 2;
-            // Check list taller than screen
-            if (totalListHeight > html.clientHeight) {
-                listHeight = html.clientHeight - container.height - (padding + LIST_MARGIN);
-                this.list.style.height = px(listHeight);
-
-                totalListHeight = container.height + LIST_MARGIN + listHeight;
-                listBottom = container.top + totalListHeight;
-            }
-
-            const listTop = container.top - listHeight - padding;
-            const topSpace = container.top - screenTop;
-            const bottomSpace = screenBottom - container.top + container.height;
-            const topScrollSpace = container.top;
-            const bottomScrollSpace = scrollHeight - container.top + container.height;
-
-            // Check vertical offset of drop down list
-            const flipList = (
-                listBottom > scrollHeight
-                && (
-                    (scrollAvailable && topScrollSpace > bottomScrollSpace)
-                    || (!scrollAvailable && topSpace > bottomSpace)
-                )
-            );
-            if (flipList) {
-                let listOverflow = screenTop - listTop;
-                if (listOverflow > 0 && scrollAvailable) {
-                    const distance = Math.min(listOverflow, screenTop);
-                    html.scrollTop += distance;
-                    listOverflow -= distance;
-                }
-                if (listOverflow > 0) {
-                    listHeight -= listOverflow;
-                    this.list.style.height = px(listHeight);
-                }
-
-                this.list.style.top = px(container.top - offset.top - listHeight - padding);
-            } else {
-                let listOverflow = listBottom - screenBottom;
-                if (listOverflow > 0 && scrollAvailable) {
-                    const distance = Math.min(listOverflow, scrollHeight - screenBottom);
-                    html.scrollTop += distance;
-                    listOverflow -= distance;
-                }
-                if (listOverflow > 0) {
-                    listHeight -= listOverflow;
-                    this.list.style.height = px(listHeight);
-                }
-            }
-        }
-
-        if (state.filtered && state.filteredCount === 0) {
-            this.list.style.height = '';
-        }
-
-        // Check horizontal offset of drop down list
-        const minWidth = (combo) ? combo.width : container.width;
-        this.list.style.minWidth = px(minWidth);
-        this.list.style.width = '';
-
-        if (this.props.fullScreen) {
-            return;
-        }
-
-        // Check list element wider than screen
-        const listWidth = this.list.offsetWidth;
-        if (listWidth >= html.clientWidth) {
-            this.list.style.width = px(html.clientWidth);
-            this.list.style.left = px(0);
-        } else {
-            const leftOffset = container.left - html.scrollLeft;
-
-            // Check list overflows screen to the right
-            // if rendered from the left of container
-            if (leftOffset + listWidth > html.clientWidth) {
-                const listLeft = container.left + container.width - listWidth - offset.left;
-                if (listLeft < 0) {
-                    this.list.style.left = px(0);
-                    this.list.style.width = px(listWidth + listLeft);
-                } else {
-                    this.list.style.left = px(listLeft);
-                }
-            } else {
-                this.list.style.left = px(container.left - offset.left);
-            }
-        }
     }
 
     /** Show or hide drop down list */
@@ -2066,6 +1914,29 @@ export class DropDown extends Component {
         this.optGroups = optGroups;
     }
 
+    renderFullscreenList(state) {
+        if (!state.visible || this.props.listAttach) {
+            return;
+        }
+
+        const html = document.documentElement;
+        const combo = getOffset(this.comboElem);
+        combo.width = this.comboElem.offsetWidth;
+        combo.height = this.comboElem.offsetHeight;
+        const offset = getOffset(this.list.offsetParent);
+
+        document.body.style.overflow = 'hidden';
+
+        this.list.style.left = px(combo.left);
+        this.list.style.top = px(combo.top - offset.top + combo.height);
+
+        this.list.style.minWidth = px(combo.width);
+        this.list.style.width = '';
+
+        const fullScreenListHeight = html.clientHeight - combo.height;
+        this.list.style.height = px(fullScreenListHeight / 2);
+    }
+
     renderList(state, prevState) {
         // Skip render if currently native select is visible
         if (isVisible(this.selectElem, true)) {
@@ -2074,20 +1945,36 @@ export class DropDown extends Component {
 
         this.renderListContent(state, prevState);
 
-        if (state.visible) {
-            this.calculatePosition(state);
+        this.elem.classList.toggle(LIST_OPEN_CLASS, state.visible);
 
-            if (!prevState.visible) {
-                this.listElem.scrollTop = 0;
-            }
-        } else {
-            this.elem.classList.remove(LIST_OPEN_CLASS);
+        if (!state.visible) {
             if (this.props.fullScreen) {
                 document.body.style.overflow = '';
             }
-
             this.list.style.height = '';
             this.list.style.top = '';
+
+            return;
+        }
+
+        if (this.props.fullScreen && isVisible(this.backgroundElem)) {
+            this.renderFullscreenList(state, prevState);
+        } else {
+            PopupPosition.calculate({
+                elem: this.list,
+                refElem: this.elem,
+                margin: LIST_MARGIN,
+                screenPadding: SCREEN_PADDING,
+                useRefWidth: true,
+            });
+        }
+
+        if (state.filtered && state.filteredCount === 0) {
+            this.list.style.height = '';
+        }
+
+        if (!prevState.visible) {
+            this.listElem.scrollTop = 0;
         }
     }
 
