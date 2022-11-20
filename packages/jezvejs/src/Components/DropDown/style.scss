@@ -93,8 +93,7 @@
 
 .dd__combo {
   display: inline-flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row nowrap;
   align-items: stretch;
   box-sizing: border-box;
   position: relative;
@@ -105,20 +104,13 @@
   border-color: var(--dd-border-color);
   border-radius: var(--dd-border-radius);
   background-color: var(--dd-bg-color);
-  padding: 0 28px 0 0;
   overflow: hidden;
-}
-
-/* Multiple select */
-.dd__container_multiple .dd__combo {
-  padding: 0 52px 0 0;
 }
 
 /* Current selection items */
 .dd__selection {
   display: flex;
   flex-flow: row wrap;
-  margin: 0;
   padding: var(--dd-selection-items-gap);
   gap: var(--dd-selection-items-gap);
   font-weight: 400;
@@ -206,18 +198,35 @@
   flex: 0 0 auto;
 }
 
+/* Controls */
+.dd__combo-value {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: var(--dd-combo-content-height);
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+/* Controls */
+.dd__combo-controls {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--dd-combo-content-height);
+  flex: 0 0 auto;
+}
+
 /* Clear selection button */
 .dd__clear-btn {
-  width: 24px;
-  height: 100%;
-  max-height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: var(--dd-combo-content-height);
   cursor: pointer;
-  position: absolute;
-  right: 24px;
-  bottom: 0;
   background-color: var(--dd-bg-color);
   z-index: 2;
 
@@ -235,12 +244,8 @@
   align-items: center;
   justify-content: center;
   width: 24px;
-  height: 100%;
-  max-height: 2rem;
+  height: var(--dd-combo-content-height);
   overflow: hidden;
-  position: absolute;
-  right: 0;
-  bottom: 0;
   cursor: pointer;
   background-color: var(--dd-bg-color);
 
@@ -376,6 +381,12 @@
 .dd__container_attached select,
 .dd__container select {
   display: none;
+}
+
+/* useNative container */
+.dd__container_native.dd__container_attached,
+.dd__container_native.dd__container {
+  position: relative;
 }
 
 .dd__container_native.dd__container_attached select,

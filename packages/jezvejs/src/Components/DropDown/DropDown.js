@@ -51,6 +51,8 @@ const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
 const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const COMBO_CLASS = 'dd__combo';
+const VALUE_CLASS = 'dd__combo-value';
+const CONTROLS_CLASS = 'dd__combo-controls';
 const CLEAR_BTN_CLASS = 'dd__clear-btn';
 const CLEAR_ICON_CLASS = 'dd__clear-icon';
 const TOGGLE_BTN_CLASS = 'dd__toggle-btn';
@@ -64,8 +66,8 @@ const LIST_MARGIN = 5;
 
 /** Default properties */
 const defaultProps = {
-    name: null,
-    form: null,
+    name: undefined,
+    form: undefined,
     multi: false,
     listAttach: false,
     enableFilter: false,
@@ -105,6 +107,10 @@ const defaultProps = {
  * @param {Object} props.data - array of item objects { id, title }
  */
 export class DropDown extends Component {
+    static userProps = {
+        selectElem: ['name', 'form'],
+    };
+
     constructor(props = {}) {
         super(props);
 
@@ -145,15 +151,12 @@ export class DropDown extends Component {
             focusedElem: null,
             blockTouch: false,
         };
-
-        if (this.state.disabled) {
-            this.state.editable = false;
-        }
+        this.state.editable = !this.state.disabled && this.props.enableFilter;
 
         this.emptyClickHandler = () => this.showList(false);
-        this.toggleHandler = () => this.toggleList();
-        this.inputHandler = (e) => this.onInput(e);
-        this.inpHandlers = {
+        this.toggleEvents = { click: () => this.toggleList() };
+        this.inputEvents = { input: (e) => this.onInput(e) };
+        this.commonEvents = {
             focus: (e) => this.onFocus(e),
             blur: (e) => this.onBlur(e),
             keydown: (e) => this.onKey(e),
@@ -165,18 +168,7 @@ export class DropDown extends Component {
             this.attachToInput();
         }
 
-        if (!this.state.disabled) {
-            this.assignInputHandlers(this.elem);
-        }
-
-        this.selectElem.tabIndex = -1;
-        if (typeof this.props.name === 'string') {
-            this.selectElem.name = this.props.name;
-        }
-        if (typeof this.props.form === 'string') {
-            this.selectElem.form = this.props.form;
-        }
-
+        this.setUserProps();
         this.setClassNames();
 
         if (this.props.useNativeSelect) {
@@ -192,19 +184,11 @@ export class DropDown extends Component {
         }
 
         this.createList();
-
-        this.selectElem.addEventListener('change', (e) => this.onChange(e));
-        this.assignInputHandlers(this.selectElem);
-
-        if (this.state.disabled) {
-            this.selectElem.disabled = true;
-        }
+        setEvents(this.selectElem, { change: (e) => this.onChange(e) });
+        this.assignCommonHandlers(this.selectElem);
 
         if (!this.props.listAttach) {
-            this.comboElem = this.createCombo();
-            if (!this.comboElem) {
-                throw new Error('Fail to create combo element');
-            }
+            this.createCombo();
             this.elem.appendChild(this.comboElem);
         }
 
@@ -243,7 +227,8 @@ export class DropDown extends Component {
     /** Attach DropDown component to specified input element */
     attachToInput() {
         if (!this.hostElem) {
-            this.hostElem = createElement('select');
+            this.createSelect();
+            this.hostElem = this.selectElem;
         }
         if (!this.isInputElement(this.hostElem)) {
             throw new Error('Invalid element specified');
@@ -251,10 +236,6 @@ export class DropDown extends Component {
 
         // Create container
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-        this.selectionElem = createElement('div', {
-            props: { className: SELECTION_CLASS },
-            events: { click: (e) => this.onDeleteSelectedItem(e) },
-        });
 
         if (this.hostElem.disabled) {
             this.state.disabled = true;
@@ -278,33 +259,25 @@ export class DropDown extends Component {
                 this.inputElem = this.hostElem;
             }
 
-            this.selectElem = createElement('select');
+            this.createSelect();
         }
+        this.elem.append(this.selectElem);
 
         if (this.props.multi) {
             this.selectElem.multiple = true;
             this.elem.classList.add(MULTIPLE_CLASS);
         }
-
-        this.state.editable = this.props.enableFilter;
     }
 
     /** Attach DropDown to specified element */
     attachToElement() {
         this.elem = createElement('div', { props: { className: ATTACHED_CLASS } });
-
         insertAfter(this.elem, this.hostElem);
-
         this.elem.append(this.hostElem);
 
-        this.hostElem.addEventListener('click', this.toggleHandler);
-        this.state.editable = this.props.enableFilter;
+        setEvents(this.hostElem, this.toggleEvents);
 
-        if (!this.state.disabled && this.staticElem) {
-            this.staticElem.addEventListener('click', this.toggleHandler);
-        }
-
-        this.selectElem = createElement('select');
+        this.createSelect();
         if (this.props.multi) {
             this.selectElem.multiple = true;
         }
@@ -312,6 +285,11 @@ export class DropDown extends Component {
         this.elem.append(this.hostElem, this.selectElem);
 
         return true;
+    }
+
+    /** Creates select element */
+    createSelect() {
+        this.selectElem = createElement('select');
     }
 
     /** Creates input element */
@@ -348,27 +326,32 @@ export class DropDown extends Component {
     /** Create combo element and return if success */
     createCombo() {
         if (this.props.listAttach || !this.inputElem) {
-            return null;
+            return;
         }
 
-        // Create single selection element
+        const valueContainer = createElement('div', { props: { className: VALUE_CLASS } });
+        if (this.props.multi) {
+            this.selectionElem = createElement('div', {
+                props: { className: SELECTION_CLASS },
+                events: { click: (e) => this.onDeleteSelectedItem(e) },
+            });
+            valueContainer.append(this.selectionElem);
+        }
         this.staticElem = createElement('span', { props: { className: SINGLE_SELECTION_CLASS } });
-        show(this.staticElem, !this.state.editable);
+        valueContainer.append(this.staticElem, this.inputElem);
 
-        this.toggleBtn = this.createToggleButton();
-
-        const res = createElement('div', { props: { className: COMBO_CLASS } });
+        const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
         if (this.props.multi) {
-            res.append(this.selectionElem);
+            this.createClearButton();
+            controls.append(this.clearBtn);
         }
-        res.append(this.staticElem, this.inputElem);
-        if (this.props.multi) {
-            this.clearBtn = this.createClearButton();
-            res.append(this.clearBtn);
-        }
-        res.append(this.selectElem, this.toggleBtn);
+        this.createToggleButton();
+        controls.append(this.toggleBtn);
 
-        return res;
+        this.comboElem = createElement('div', {
+            props: { className: COMBO_CLASS },
+            children: [valueContainer, controls],
+        });
     }
 
     /** Returns close icon SVG element */
@@ -383,17 +366,11 @@ export class DropDown extends Component {
     /** Create clear selection button */
     createClearButton() {
         const closeIcon = this.createCloseIcon(CLEAR_ICON_CLASS);
-        const res = createElement('div', {
+        this.clearBtn = createElement('div', {
             props: { className: CLEAR_BTN_CLASS },
             children: closeIcon,
             events: { click: () => this.onClear() },
         });
-
-        if (this.state.disabled) {
-            res.disabled = true;
-        }
-
-        return res;
     }
 
     /** Create toggle drop down button */
@@ -403,28 +380,22 @@ export class DropDown extends Component {
             { class: TOGGLE_ICON_CLASS, viewBox: '0 0 3.7 3.7' },
             svg('path', { d: TOGGLE_ICON }),
         );
-        const res = createElement('div', {
+        this.toggleBtn = createElement('div', {
             props: { className: TOGGLE_BTN_CLASS },
             children: arrowIcon,
-            events: { click: this.toggleHandler },
+            events: this.toggleEvents,
         });
-
-        if (this.state.disabled) {
-            res.disabled = true;
-        }
-
-        return res;
     }
 
     /* Event handlers */
     /** Add focus/blur event handlers to specified element */
-    assignInputHandlers(elem) {
-        setEvents(elem, this.inpHandlers);
+    assignCommonHandlers(elem) {
+        setEvents(elem, this.commonEvents);
     }
 
     /** Remove focus/blur event handlers from specified element */
-    removeInputHandlers(elem) {
-        removeEvents(elem, this.inpHandlers);
+    removeCommonHandlers(elem) {
+        removeEvents(elem, this.commonEvents);
     }
 
     /** List item 'click' event handler */
@@ -924,15 +895,15 @@ export class DropDown extends Component {
         this.elem.classList.toggle(EDITABLE_CLASS, !!this.state.editable);
         this.inputElem.classList.toggle(INPUT_CLASS, !!this.state.editable);
         if (this.state.editable) {
-            this.inputElem.addEventListener('input', this.inputHandler);
+            setEvents(this.inputElem, this.inputEvents);
             if (this.staticElem) {
                 this.inputElem.value = this.staticElem.textContent;
             }
-            this.assignInputHandlers(this.inputElem);
+            this.assignCommonHandlers(this.inputElem);
             this.inputElem.autocomplete = 'off';
         } else {
-            this.removeInputHandlers(this.inputElem);
-            this.inputElem.removeEventListener('input', this.inputHandler);
+            this.removeCommonHandlers(this.inputElem);
+            removeEvents(this.inputElem, this.inputEvents);
 
             if (!this.staticElem) {
                 return;
@@ -943,7 +914,7 @@ export class DropDown extends Component {
                 : this.inputElem.value;
             this.staticElem.textContent = content;
 
-            this.staticElem.addEventListener('click', this.toggleHandler);
+            setEvents(this.staticElem, this.toggleEvents);
         }
     }
 
@@ -1088,7 +1059,7 @@ export class DropDown extends Component {
 
                     selItem.elem.tabIndex = -1;
                     selItem.elem.dataset.id = item.id;
-                    this.assignInputHandlers(selItem.elem);
+                    this.assignCommonHandlers(selItem.elem);
                 }
 
                 selectionItems.push(selItem);
@@ -1101,7 +1072,7 @@ export class DropDown extends Component {
                 }
 
                 // Remove input handlers to avoid 'blur' event on remove element
-                this.removeInputHandlers(item.elem);
+                this.removeCommonHandlers(item.elem);
                 re(item.elem);
             });
 
@@ -1984,13 +1955,14 @@ export class DropDown extends Component {
         if (state.disabled !== prevState?.disabled) {
             enable(this.elem, !state.disabled);
             if (state.disabled) {
-                this.removeInputHandlers(this.elem);
+                this.removeCommonHandlers(this.elem);
             } else {
-                this.assignInputHandlers(this.elem);
+                this.assignCommonHandlers(this.elem);
             }
 
             enable(this.selectElem, !state.disabled);
             enable(this.inputElem, !state.disabled);
+            enable(this.clearBtn, !state.disabled);
             enable(this.toggleBtn, !state.disabled);
         }
 
