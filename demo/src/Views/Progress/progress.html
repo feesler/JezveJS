@@ -1,76 +1,79 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
-<title>Jezve JS | Progress component</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+    <title>Jezve JS | Progress component</title>
 </head>
+
 <body>
-<div class="page">
-	<div class="page-wrapper">
+    <div class="page">
+        <div class="page-wrapper">
 
-		<div class="nav-header">
-            <button class="nav-toggle-btn">
-                <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                </svg>
-            </button>
+            <div class="nav-header">
+                <button class="nav-toggle-btn">
+                    <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                    </svg>
+                </button>
 
-			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
-		</div>
+                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+            </div>
 
-		<div class="page-container">
-			<div class="page-content">
-				<div class="page-content-wrap">
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="page-content-wrap">
 
-	<h1>Progress</h1>
+                        <h1>Progress</h1>
 
-	<h2>Default</h2>
-    <section>
-        <div id="defaultProgress"></div>
-        <div class="section-controls">
-            <button id="set0Btn" class="btn" type="button">0%</button>
-            <button id="set50Btn" class="btn" type="button">50%</button>
-            <button id="set100Btn" class="btn" type="button">100%</button>
+                        <h2>Default</h2>
+                        <section>
+                            <div id="defaultProgress"></div>
+                            <div class="section-controls">
+                                <button id="set0Btn" class="btn" type="button">0%</button>
+                                <button id="set50Btn" class="btn" type="button">50%</button>
+                                <button id="set100Btn" class="btn" type="button">100%</button>
+                            </div>
+                        </section>
+
+                        <h2>Different styles</h2>
+                        <section>
+                            <div id="styledProgress"></div>
+                        </section>
+
+                        <h1>Indeterminate Progress</h1>
+
+                        <h2>300px width, 3 sec</h2>
+                        <section>
+                            <div id="prwrap"></div>
+                            <div class="section-controls">
+                                <button id="toggleBtn" class="btn" type="button">Start</button>
+                            </div>
+                        </section>
+
+                        <h2>600px width, 5 sec</h2>
+                        <section>
+                            <div id="prwrap2"></div>
+                        </section>
+
+                        <h2>Circles style</h2>
+                        <section>
+                            <div id="prwrap3"></div>
+                        </section>
+
+                        <h1>Spinner</h1>
+                        <section>
+                            <div id="spinnerContainer"></div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
-
-	<h2>Different styles</h2>
-    <section>
-        <div id="styledProgress"></div>
-    </section>
-
-	<h1>Indeterminate Progress</h1>
-
-	<h2>300px width, 3 sec</h2>
-    <section>
-        <div id="prwrap"></div>
-        <div class="section-controls">
-            <button id="toggleBtn" class="btn" type="button">Start</button>
-        </div>
-    </section>
-
-	<h2>600px width, 5 sec</h2>
-    <section>
-    	<div id="prwrap2"></div>
-    </section>
-
-	<h2>Circles style</h2>
-    <section>
-	    <div id="prwrap3"></div>
-    </section>
-
-	<h1>Spinner</h1>
-    <section>
-        <div id="spinnerContainer"></div>
-    </section>
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+    </div>
 </body>
+
 </html>

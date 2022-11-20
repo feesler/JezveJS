@@ -1,82 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
-<title>Jezve JS | Paginator</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+    <title>Jezve JS | Paginator</title>
 </head>
+
 <body>
-<div class="page">
-	<div class="page-wrapper">
+    <div class="page">
+        <div class="page-wrapper">
 
-		<div class="nav-header">
-            <button class="nav-toggle-btn">
-                <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                </svg>
-            </button>
+            <div class="nav-header">
+                <button class="nav-toggle-btn">
+                    <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                    </svg>
+                </button>
 
-			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
-		</div>
+                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+            </div>
 
-		<div class="page-container">
-			<div class="page-content">
-				<div class="page-content-wrap">
-<h1>Paginator</h1>
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="page-content-wrap">
+                        <h1>Paginator</h1>
 
-<h2>Simple paginator</h2>
-<section id="simple"></section>
+                        <h2>Simple paginator</h2>
+                        <section id="simple"></section>
 
-<h2>Styled paginator</h2>
-<section id="styled"></section>
+                        <h2>Styled paginator</h2>
+                        <section id="styled"></section>
 
-<h2>Use arrows</h2>
-<section id="arrows"></section>
+                        <h2>Use arrows</h2>
+                        <section id="arrows"></section>
 
-<h2>Allow active link</h2>
-<section id="active-link"></section>
+                        <h2>Allow active link</h2>
+                        <section id="active-link"></section>
 
-<h2>Custom URL and page parameter</h2>
-<section id="custom-url"></section>
+                        <h2>Custom URL and page parameter</h2>
+                        <section id="custom-url"></section>
 
-<h2>Disabled URL</h2>
-<section id="no-url"></section>
+                        <h2>Disabled URL</h2>
+                        <section id="no-url"></section>
 
-<h2>Change handler</h2>
-<section>
-    <div id="handler"></div>
-    <div id="handler-status"></div>
-</section>
+                        <h2>Change handler</h2>
+                        <section>
+                            <div id="handler"></div>
+                            <div id="handler-status"></div>
+                        </section>
 
-<h2>Prerendered</h2>
-<section>
-    <div id="prerendered" class="paginator">
-        <span class="paginator-item paginator-arrow" disabled></span>
-        <span class="paginator-item paginator-item__active" data-page="1">1</span>
-        <a class="paginator-item" data-page="2">2</a>
-        <a class="paginator-item" data-page="3">3</a>
-        <a class="paginator-item" data-page="4">4</a>
-        <span class="paginator-item">...</span>
-        <a class="paginator-item" data-page="100">100</a>
-        <span class="paginator-item paginator-arrow" data-page="2"></span>
+                        <h2>Prerendered</h2>
+                        <section>
+                            <div id="prerendered" class="paginator">
+                                <span class="paginator-item paginator-arrow" disabled></span>
+                                <span class="paginator-item paginator-item__active" data-page="1">1</span>
+                                <a class="paginator-item" data-page="2">2</a>
+                                <a class="paginator-item" data-page="3">3</a>
+                                <a class="paginator-item" data-page="4">4</a>
+                                <span class="paginator-item">...</span>
+                                <a class="paginator-item" data-page="100">100</a>
+                                <span class="paginator-item paginator-arrow" data-page="2"></span>
+                            </div>
+                        </section>
+
+                        <h2>showSingleItem: true</h2>
+                        <section>
+                            <div id="single-on"></div>
+                        </section>
+
+                        <h2>showSingleItem: false</h2>
+                        <section>
+                            <div id="single-off"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</section>
-
-<h2>showSingleItem: true</h2>
-<section>
-    <div id="single-on"></div>
-</section>
-
-<h2>showSingleItem: false</h2>
-<section>
-    <div id="single-off"></div>
-</section>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 </body>
+
 </html>

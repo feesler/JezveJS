@@ -5,10 +5,8 @@ import {
     setEvents,
     re,
     removeEvents,
-    getOffset,
     asArray,
     show,
-    px,
     removeChilds,
     setEmptyClick,
     removeEmptyClick,
@@ -17,6 +15,7 @@ import {
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
 import { IconButton } from '../IconButton/IconButton.js';
+import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import './style.scss';
 
 /* CSS classes */
@@ -295,76 +294,6 @@ export class PopupMenu extends Component {
         return style.position === 'fixed';
     }
 
-    calculatePosition() {
-        const html = document.documentElement;
-        const screenTop = html.scrollTop;
-        const screenBottom = screenTop + html.clientHeight;
-        const scrollAvailable = !this.isInsideFixedContainer();
-        const scrollHeight = (scrollAvailable) ? html.scrollHeight : screenBottom;
-
-        const offset = (this.menuList.offsetParent)
-            ? getOffset(this.menuList.offsetParent)
-            : { top: screenTop, left: html.scrollLeft };
-        const container = getOffset(this.relElem);
-        container.width = this.relElem.offsetWidth;
-        container.height = this.relElem.offsetHeight;
-
-        const margins = LIST_MARGIN * 2;
-        const padding = SCREEN_PADDING * 2;
-        const listWidth = this.menuList.offsetWidth;
-        let listHeight = this.menuList.offsetHeight;
-        const totalListHeight = container.height + listHeight + margins;
-        const listBottom = container.top + totalListHeight;
-
-        // Check vertical offset of menu list
-        const listTop = container.top - listHeight - padding;
-        const topSpace = container.top - screenTop;
-        const bottomSpace = screenBottom - container.top + container.height;
-
-        if (
-            listBottom > scrollHeight
-            && (
-                scrollAvailable
-                || (!scrollAvailable && topSpace > bottomSpace)
-            )
-        ) {
-            const listOverflow = screenTop - listTop;
-            if (listOverflow > 0) {
-                if (scrollAvailable) {
-                    html.scrollTop -= listOverflow;
-                } else {
-                    listHeight -= listOverflow;
-                    this.menuList.style.height = px(listHeight);
-                }
-            }
-
-            this.menuList.style.top = px(container.top - offset.top - listHeight - padding);
-        } else {
-            const listOverflow = listBottom + padding - screenBottom;
-            if (listOverflow > 0) {
-                if (scrollAvailable) {
-                    html.scrollTop += listOverflow;
-                } else {
-                    listHeight -= listOverflow;
-                    this.menuList.style.height = px(listHeight);
-                }
-            }
-            this.menuList.style.top = px(
-                container.top - offset.top + container.height + padding,
-            );
-        }
-
-        const leftOffset = container.left - html.scrollLeft;
-        // Check list overflows screen to the right
-        // if rendered from the left of container
-        if (leftOffset + listWidth > html.clientWidth) {
-            const listLeft = container.left + container.width - listWidth - offset.left;
-            this.menuList.style.left = px(listLeft);
-        } else {
-            this.menuList.style.left = px(container.left - offset.left);
-        }
-    }
-
     showMenu() {
         show(this.menuList, true);
         if (!this.props.fixed && !this.menuList.offsetParent) {
@@ -373,7 +302,12 @@ export class PopupMenu extends Component {
         }
 
         this.ignoreScroll = true;
-        this.calculatePosition();
+        PopupPosition.calculate({
+            elem: this.menuList,
+            refElem: this.relElem,
+            margin: LIST_MARGIN,
+            screenPadding: SCREEN_PADDING,
+        });
 
         if (PopupMenu.activeInstance !== this) {
             PopupMenu.hideActive();

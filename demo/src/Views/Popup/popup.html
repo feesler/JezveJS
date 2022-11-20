@@ -1,148 +1,152 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
-<title>Jezve JS | Popup component</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+    <title>Jezve JS | Popup component</title>
 </head>
+
 <body>
-<div class="page">
-	<div class="page-wrapper">
+    <div class="page">
+        <div class="page-wrapper">
 
-		<div class="nav-header">
-            <button class="nav-toggle-btn">
-                <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                    <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"/>
-                </svg>
-            </button>
+            <div class="nav-header">
+                <button class="nav-toggle-btn">
+                    <svg class="nav-toggle-icon" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                    </svg>
+                </button>
 
-			<h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
-		</div>
+                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+            </div>
 
-		<div class="page-container">
-			<div class="page-content">
-				<div class="page-content-wrap">
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="page-content-wrap">
 
-	<h2>Full width dynamic popup</h2>
-	<section>
-        <div class="section-controls">
-	        <input id="showFullWidthBtn" class="btn" type="button" value="Show">
+                        <h2>Full width dynamic popup</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showFullWidthBtn" class="btn" type="button" value="Show">
+                            </div>
+                            <div id="result"></div>
+                        </section>
+
+                        <h2>Full width dynamic popup with close button</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showCloseBtn" class="btn" type="button" value="Show popup scroll">
+                                <input id="showMsgScrollBtn" class="btn" type="button"
+                                    value="Show popup message scroll">
+                            </div>
+                        </section>
+
+                        <h2>Center only background</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showCenterOnlyBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                        <h2>No page dimming</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showNoDimBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                        <h2>Draggable popup</h2>
+                        <section class="row-section">
+                            <div class="section-controls">
+                                <input id="showDraggableBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                        <h2>Notification popup</h2>
+                        <section class="row-section">
+                            <div class="section-controls">
+                                <input id="showNotifyBtn" class="btn" type="button" value="Show">
+                                <input id="showSuccessNotifyBtn" class="btn" type="button" value="Show success">
+                                <input id="showErrorNotifyBtn" class="btn" type="button" value="Show error">
+                            </div>
+                        </section>
+
+                        <h2>Popup from HTML template</h2>
+                        <section class="row-section">
+                            <div class="section-controls">
+                                <input id="showTplBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                        <h2>Nested popups</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showNestedBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                        <h2>Update controls after create popup</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showControlsUpdBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                        <h2>Update title after create popup</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showTitleUpdBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                        <h2>Update content after create popup</h2>
+                        <section>
+                            <div class="section-controls">
+                                <input id="showContentUpdBtn" class="btn" type="button" value="Show">
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
         </div>
-    	<div id="result"></div>
-	</section>
+    </div>
 
-	<h2>Full width dynamic popup with close button</h2>
-	<section>
-        <div class="section-controls">
-	        <input id="showCloseBtn" class="btn" type="button" value="Show popup scroll">
-	        <input id="showMsgScrollBtn" class="btn" type="button" value="Show popup message scroll">
+    <div id="formTemplate" hidden>
+        <div><span>This popup is created from template. Controls and title are added.</span></div>
+        <div>
+            <label for="updname">New name</label>
+            <div class="stretch_input"><input id="updname" name="name" type="text"></div>
         </div>
-	</section>
-
-	<h2>Center only background</h2>
-	<section>
-        <div class="section-controls">
-            <input id="showCenterOnlyBtn" class="btn" type="button" value="Show">
+        <div>
+            <label for="updpass">New password</label>
+            <div class="stretch_input"><input id="updpass" name="pass" type="text"></div>
         </div>
-	</section>
+    </div>
 
-	<h2>No page dimming</h2>
-	<section>
-        <div class="section-controls">
-		    <input id="showNoDimBtn" class="btn" type="button" value="Show">
+    <div id="nestedParentTemplate" hidden>
+        <div><span>This popup will launch another popup.</span></div>
+        <div><span id="valueresult"></span></div>
+    </div>
+
+    <div id="nestedChildTemplate" hidden>
+        <div><span>This popup is also created from template and launched from another popup.</span></div>
+        <div>
+            <label for="valueselect">Values:</label>
+            <div class="stretch_input">
+                <select id="valueselect">
+                    <option value="1">Value 1</option>
+                    <option value="2">Value 2</option>
+                    <option value="3">Value 3</option>
+                    <option value="4">Value 4</option>
+                    <option value="5">Value 5</option>
+                </select>
+            </div>
         </div>
-	</section>
-
-	<h2>Draggable popup</h2>
-	<section class="row-section">
-        <div class="section-controls">
-    		<input id="showDraggableBtn" class="btn" type="button" value="Show">
-        </div>
-	</section>
-
-	<h2>Notification popup</h2>
-	<section class="row-section">
-        <div class="section-controls">
-            <input id="showNotifyBtn" class="btn" type="button" value="Show">
-            <input id="showSuccessNotifyBtn" class="btn" type="button" value="Show success">
-            <input id="showErrorNotifyBtn" class="btn" type="button" value="Show error">
-        </div>
-	</section>
-
-	<h2>Popup from HTML template</h2>
-	<section class="row-section">
-        <div class="section-controls">
-            <input id="showTplBtn" class="btn" type="button" value="Show">
-        </div>
-	</section>
-
-	<h2>Nested popups</h2>
-	<section>
-        <div class="section-controls">
-            <input id="showNestedBtn" class="btn" type="button" value="Show">
-        </div>
-	</section>
-
-	<h2>Update controls after create popup</h2>
-	<section>
-        <div class="section-controls">
-    		<input id="showControlsUpdBtn" class="btn" type="button" value="Show">
-        </div>
-	</section>
-
-	<h2>Update title after create popup</h2>
-	<section>
-        <div class="section-controls">
-            <input id="showTitleUpdBtn" class="btn" type="button" value="Show">
-        </div>
-	</section>
-
-	<h2>Update content after create popup</h2>
-	<section>
-        <div class="section-controls">
-            <input id="showContentUpdBtn" class="btn" type="button" value="Show">
-        </div>
-	</section>
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="formTemplate" hidden>
-	<div><span>This popup is created from template. Controls and title are added.</span></div>
-	<div>
-		<label for="updname">New name</label>
-		<div class="stretch_input"><input id="updname" name="name" type="text"></div>
-	</div>
-	<div>
-		<label for="updpass">New password</label>
-		<div class="stretch_input"><input id="updpass" name="pass" type="text"></div>
-	</div>
-</div>
-
-<div id="nestedParentTemplate" hidden>
-	<div><span>This popup will launch another popup.</span></div>
-	<div><span id="valueresult"></span></div>
-</div>
-
-<div id="nestedChildTemplate" hidden>
-	<div><span>This popup is also created from template and launched from another popup.</span></div>
-	<div>
-		<label for="valueselect">Values:</label>
-		<div class="stretch_input">
-			<select id="valueselect">
-				<option value="1">Value 1</option>
-				<option value="2">Value 2</option>
-				<option value="3">Value 3</option>
-				<option value="4">Value 4</option>
-				<option value="5">Value 5</option>
-			</select>
-		</div>
-	</div>
-</div>
+    </div>
 </body>
+
 </html>
