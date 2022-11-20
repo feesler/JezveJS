@@ -74,45 +74,29 @@ export class LineChart extends BaseChart {
         return res;
     }
 
-    getCoordinates(value, index, state) {
-        const { grid } = state;
-        const groupWidth = this.getGroupOuterWidth(state);
-        return {
-            x: index * groupWidth + groupWidth / 2,
-            y: grid.getY(value),
-        };
-    }
-
-    /** Set new position of item */
-    setItemPos(item, y, state) {
-        const point = item;
-
-        if (point.dot.y === y) {
-            return;
-        }
-
-        if (state.autoScale && state.animate) {
-            point.elem.style.cy = this.formatCoord(y, true);
-        } else {
-            point.elem.setAttribute('cy', y);
-        }
-
-        point.dot.y = y;
+    getX(index, groupWidth) {
+        return index * groupWidth + groupWidth / 2;
     }
 
     createItem({
         value,
-        index,
+        groupIndex,
         categoryIndex = 0,
         valueOffset = 0,
     }, state) {
+        const { grid } = state;
         const fixedValue = value ?? 0;
         const fixedOffset = valueOffset ?? 0;
+        const groupWidth = this.getGroupOuterWidth(state);
 
         const item = {
             value: fixedValue,
             valueOffset: fixedOffset,
-            dot: this.getCoordinates(fixedValue + fixedOffset, index, state),
+            groupIndex,
+            dot: {
+                x: this.getX(groupIndex, groupWidth),
+                y: grid.getY(fixedValue + fixedOffset),
+            },
         };
 
         if (Number.isNaN(item.dot.x) || Number.isNaN(item.dot.y)) {
@@ -141,15 +125,15 @@ export class LineChart extends BaseChart {
 
         this.paths = [];
         const longestSet = this.getLongestDataSet(state);
-        longestSet.forEach((_, index) => {
+        longestSet.forEach((_, groupIndex) => {
             const group = [];
             let valueOffset = 0;
 
             dataSets.forEach((dataSet, categoryIndex) => {
-                const value = dataSet.data[index] ?? 0;
+                const value = dataSet.data[groupIndex] ?? 0;
                 const item = this.createItem({
                     value,
-                    index,
+                    groupIndex,
                     categoryIndex,
                     valueOffset,
                 }, state);
@@ -255,6 +239,23 @@ export class LineChart extends BaseChart {
         }
     }
 
+    /** Set vertical position of item */
+    setItemVerticalPos(item, y, state) {
+        const point = item;
+
+        if (point.dot.y === y) {
+            return;
+        }
+
+        if (state.autoScale && state.animate) {
+            point.elem.style.cy = this.formatCoord(y, true);
+        } else {
+            point.elem.setAttribute('cy', y);
+        }
+
+        point.dot.y = y;
+    }
+
     /** Update scale of path */
     updateItemsScale(items, state) {
         if (!Array.isArray(items)) {
@@ -264,7 +265,30 @@ export class LineChart extends BaseChart {
         const { grid } = state;
         items.flat().forEach((item) => {
             const y = grid.getY(item.value + item.valueOffset);
-            this.setItemPos(item, y, state);
+            this.setItemVerticalPos(item, y, state);
+        });
+
+        this.renderPaths(state);
+    }
+
+    /** Set horizontal position of item */
+    setItemHorizontalPos(item, x) {
+        const point = item;
+        if (point.dot.x === x) {
+            return;
+        }
+
+        point.dot.x = x;
+        point.elem.setAttribute('cx', point.dot.x);
+    }
+
+    /** Update horizontal scale of items */
+    updateHorizontalScale(state) {
+        const groupWidth = this.getGroupOuterWidth(state);
+
+        this.items.flat().forEach((item) => {
+            const newX = this.getX(item.groupIndex, groupWidth);
+            this.setItemHorizontalPos(item, newX);
         });
 
         this.renderPaths(state);
