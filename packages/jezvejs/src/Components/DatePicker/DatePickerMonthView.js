@@ -33,9 +33,9 @@ export class DatePickerMonthView extends Component {
 
         this.state = {
             ...this.props,
-            set: [],
         };
         this.type = MONTH_VIEW;
+        this.items = [];
 
         this.init();
         this.render(this.state);
@@ -51,10 +51,6 @@ export class DatePickerMonthView extends Component {
 
     get nav() {
         return this.state.nav;
-    }
-
-    get set() {
-        return this.state.set;
     }
 
     init() {
@@ -84,10 +80,10 @@ export class DatePickerMonthView extends Component {
 
         // days
         do {
-            const dateElems = week.map((weekday) => {
-                const setObj = {
+            week.forEach((weekday) => {
+                const item = {
                     date: weekday,
-                    cell: createElement('div', {
+                    elem: createElement('div', {
                         props: {
                             className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${DAY_CELL_CLASS}`,
                             textContent: weekday.getDate(),
@@ -96,24 +92,21 @@ export class DatePickerMonthView extends Component {
                 };
 
                 if (!isSameYearMonth(date, weekday)) {
-                    setObj.cell.classList.add(OTHER_CELL_CLASS);
+                    item.elem.classList.add(OTHER_CELL_CLASS);
                 }
                 if (isSameDate(weekday, today)) {
-                    setObj.cell.classList.add(TODAY_CELL_CLASS);
+                    item.elem.classList.add(TODAY_CELL_CLASS);
                 }
 
-                return setObj;
+                this.items.push(item);
+                this.elem.append(item.elem);
             });
-            this.state.set.push(...dateElems);
 
             const nextWeekDay = shiftDate(week[0], DAYS_IN_WEEK);
             week = isSameYearMonth(date, nextWeekDay)
                 ? getWeekDays(nextWeekDay)
                 : null;
         } while (week);
-
-        const viewItems = this.state.set.map((item) => item.cell);
-        this.elem.append(...viewItems);
     }
 
     /**
@@ -138,12 +131,12 @@ export class DatePickerMonthView extends Component {
             return;
         }
 
-        state.set.forEach((dateObj) => {
-            const isActive = state.actDate && isSameDate(dateObj.date, state.actDate);
-            dateObj.cell.classList.toggle(ACTIVE_CELL_CLASS, isActive);
+        this.items.forEach((item) => {
+            const isActive = state.actDate && isSameDate(item.date, state.actDate);
+            item.elem.classList.toggle(ACTIVE_CELL_CLASS, isActive);
 
-            const highlight = state.range && this.inRange(dateObj.date, state.curRange);
-            dateObj.cell.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
+            const highlight = state.range && this.inRange(item.date, state.curRange);
+            item.elem.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
         });
     }
 }
