@@ -2,7 +2,7 @@
     "name": "jezvejs",
     "version": "1.55.0",
     "type": "module",
-    "module": "src/js/index.js",
+    "module": "index.js",
     "files": [
         "src",
         "index.js"
@@ -26,7 +26,7 @@
     },
     "main": "index.js",
     "exports": {
-        ".": "./src/js/index.js",
+        ".": "./index.js",
         "./*": "./src/Components/*/*.js",
         "./style/*": "./src/Components/*/style.scss",
         "./style": "./src/css/common.scss"
