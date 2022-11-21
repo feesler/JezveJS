@@ -19,9 +19,9 @@ export class DatePickerYearView extends Component {
 
         this.state = {
             ...this.props,
-            set: [],
         };
         this.type = YEAR_VIEW;
+        this.items = [];
 
         this.init();
     }
@@ -38,10 +38,6 @@ export class DatePickerYearView extends Component {
         return this.state.nav;
     }
 
-    get set() {
-        return this.state.set;
-    }
-
     init() {
         const { date } = this.state;
         const rYear = date.getFullYear();
@@ -56,9 +52,9 @@ export class DatePickerYearView extends Component {
         // months of current year
         for (let i = 0; i < MONTHS_COUNT; i += 1) {
             const monthDate = new Date(rYear, i, 1);
-            const setObj = {
+            const item = {
                 date: monthDate,
-                cell: createElement('div', {
+                elem: createElement('div', {
                     props: {
                         className: `${CELL_CLASS} ${YEAR_CELL_CLASS}`,
                         textContent: getShortMonthName(monthDate, this.props.locales),
@@ -66,8 +62,8 @@ export class DatePickerYearView extends Component {
                 }),
             };
 
-            this.state.set.push(setObj);
-            this.elem.append(setObj.cell);
+            this.items.push(item);
+            this.elem.append(item.elem);
         }
     }
 }

@@ -21,9 +21,9 @@ export class DatePickerYearRangeView extends Component {
 
         this.state = {
             ...this.props,
-            set: [],
         };
         this.type = YEARRANGE_VIEW;
+        this.items = [];
 
         this.init();
     }
@@ -38,10 +38,6 @@ export class DatePickerYearRangeView extends Component {
 
     get nav() {
         return this.state.nav;
-    }
-
-    get set() {
-        return this.state.set;
     }
 
     init() {
@@ -59,9 +55,9 @@ export class DatePickerYearRangeView extends Component {
         // years of current range
         for (let i = 0; i < YEAR_RANGE_LENGTH + 2; i += 1) {
             const yearDate = new Date(startYear + i, 0, 1);
-            const setObj = {
+            const item = {
                 date: yearDate,
-                cell: createElement('div', {
+                elem: createElement('div', {
                     props: {
                         className: `${CELL_CLASS} ${YEARRANGE_CELL_CLASS}`,
                         textContent: yearDate.getFullYear(),
@@ -70,11 +66,11 @@ export class DatePickerYearRangeView extends Component {
             };
 
             if (i === 0 || i === YEAR_RANGE_LENGTH + 1) {
-                setObj.cell.classList.add(OTHER_CELL_CLASS);
+                item.elem.classList.add(OTHER_CELL_CLASS);
             }
 
-            this.state.set.push(setObj);
-            this.elem.append(setObj.cell);
+            this.items.push(item);
+            this.elem.append(item.elem);
         }
     }
 }

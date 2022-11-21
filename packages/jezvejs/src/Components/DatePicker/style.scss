@@ -143,14 +143,15 @@
   transform-origin: 0 0;
 }
 
+/* Animation */
+.dp__animated {
+  pointer-events: none;
+}
+
 .dp__animated-view,
 .dp__animated-view > .dp__view-container {
   transition-property: all;
   transition-duration: 0.5s;
-}
-
-.dp__animated-view .dp__cell:hover {
-  background-color: var(--dp-bg-color);
 }
 
 .dp__layered-view {

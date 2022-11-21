@@ -1,6 +1,15 @@
 import { ge } from '../../js/common.js';
+import { SortableDragAvatar } from './SortableDragAvatar.js';
 import { SortableDragZone } from './SortableDragZone.js';
 import { SortableDropTarget } from './SortableDropTarget.js';
+import { SortableTableDragAvatar } from './SortableTableDragAvatar.js';
+
+export {
+    SortableDragAvatar,
+    SortableDragZone,
+    SortableDropTarget,
+    SortableTableDragAvatar,
+};
 
 /**
  * Sortable widget constructor
@@ -18,6 +27,10 @@ import { SortableDropTarget } from './SortableDropTarget.js';
  * @param {String|String[]} props.handles - CSS selectors for available drag start handles
  */
 export class Sortable {
+    static create(...args) {
+        return new this(...args);
+    }
+
     constructor(props = {}) {
         this.elem = (typeof props.elem === 'string') ? ge(props.elem) : props.elem;
         if (!this.elem) {

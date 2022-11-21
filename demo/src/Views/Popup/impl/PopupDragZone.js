@@ -1,4 +1,4 @@
-import { DragZone } from 'jezvejs/DragZone';
+import { DragZone } from 'jezvejs/DragnDrop';
 import { PopupDragAvatar } from './PopupDragAvatar.js';
 
 /** Draggable popup implementation */

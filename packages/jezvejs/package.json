@@ -1,8 +1,8 @@
 {
     "name": "jezvejs",
-    "version": "1.55.0",
+    "version": "1.56.0",
     "type": "module",
-    "module": "src/js/index.js",
+    "module": "index.js",
     "files": [
         "src",
         "index.js"
@@ -26,13 +26,9 @@
     },
     "main": "index.js",
     "exports": {
-        ".": "./src/js/index.js",
+        ".": "./index.js",
         "./*": "./src/Components/*/*.js",
         "./style/*": "./src/Components/*/style.scss",
-        "./DragMaster": "./src/Components/DragnDrop/DragMaster.js",
-        "./DragAvatar": "./src/Components/DragnDrop/DragAvatar.js",
-        "./DragZone": "./src/Components/DragnDrop/DragZone.js",
-        "./DropTarget": "./src/Components/DragnDrop/DropTarget.js",
         "./style": "./src/css/common.scss"
     }
 }

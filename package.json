@@ -4,10 +4,6 @@
     "private": true,
     "type": "module",
     "module": "dist/js/index.js",
-    "files": [
-        "src",
-        "tests"
-    ],
     "description": "JavaScript utility and components library",
     "repository": {
         "type": "git",
@@ -26,15 +22,13 @@
         "lint-style": "npx stylelint packages/jezvejs/src/**/*.scss demo/src/**/*.scss",
         "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/ ./packages/jezvejs-test/**/*.js",
         "debug": "node --inspect-brk ./tests/index.js",
-        "build": "npx webpack --progress -c ./config/demo.js -c ./config/prod.js -c ./config/local.js -m",
-        "build-dev": "npx webpack --progress -c ./config/demo.js  -c ./config/dev.js -c ./config/local.js -m",
+        "build": "npx webpack --progress -c ./config/demo.js -c ./config/prod.js -m",
+        "build-dev": "npx webpack --progress -c ./config/demo.js -c ./config/dev.js -m",
         "build-all": "npm-run-all build build-tests",
         "build-src": "npx webpack --progress -c ./config/common.js -c ./config/prod.js -m",
         "build-src-dev": "npx webpack --progress -c ./config/common.js -c ./config/dev.js -m",
-        "build-demo": "npx webpack --progress -c ./config/demo.js -c ./config/prod.js -m",
-        "build-demo-dev": "npx webpack --progress -c ./config/demo.js  -c ./config/dev.js -m",
         "build-tests": "npx webpack --progress -c ./config/tests.js",
-        "serve": "npx webpack serve -c ./config/demo.js  -c ./config/dev.js -c ./config/local.js -m"
+        "serve": "npx webpack serve -c ./config/demo.js -c ./config/dev.js -m"
     },
     "author": "Henry Feesler",
     "license": "ISC",
