@@ -465,6 +465,7 @@ const setData = () => {
         elem: 'chart_setdata',
         autoScale: true,
         showLegend: true,
+        scrollToEnd: true,
         renderLegend: renderCustomLegend,
     });
 

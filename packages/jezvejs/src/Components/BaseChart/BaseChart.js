@@ -189,10 +189,6 @@ export class BaseChart extends Component {
         this.setClassNames();
         this.observeSize();
         this.setData(this.props.data);
-
-        if (this.props.scrollToEnd) {
-            this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
-        }
     }
 
     observeSize() {
@@ -227,6 +223,12 @@ export class BaseChart extends Component {
         state.grid = this.calculateGrid(data.values, state);
         const newState = this.updateChartWidth(state);
         this.setState(newState);
+
+        setTimeout(() => {
+            if (this.props.scrollToEnd) {
+                this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
+            }
+        });
     }
 
     setColumnWidth(value) {
