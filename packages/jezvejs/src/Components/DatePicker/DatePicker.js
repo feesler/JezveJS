@@ -36,7 +36,8 @@ const NAV_ICON_CLASS = 'dp__header_nav-icon';
 /* View */
 const VIEW_CLASS = 'dp__view';
 /* Animation */
-const ANIMATED_CLASS = 'dp__animated-view';
+const ANIMATED_CLASS = 'dp__animated';
+const ANIMATED_VIEW_CLASS = 'dp__animated-view';
 const LAYER_VIEW_CLASS = 'dp__layered-view';
 const TOP_FROM_CLASS = 'top_from';
 const BOTTOM_FROM_CLASS = 'bottom_from';
@@ -451,15 +452,15 @@ export class DatePicker extends Component {
 
     /**
      * 'transitionend' event handler
-     * @param {*} e - Event object
+     * @param {Event} e - Event object
      */
     onTransitionEnd(e) {
-        if (e.target !== this.currView.elem
-            || e.propertyName !== 'transform') {
+        if (e?.target !== this.currView.elem || e?.propertyName !== 'transform') {
             return;
         }
 
-        this.cellsContainer.classList.remove(ANIMATED_CLASS);
+        this.wrapper.classList.remove(ANIMATED_CLASS);
+        this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
         this.nextView.elem.classList.remove(
             LAYER_VIEW_CLASS,
             BOTTOM_TO_CLASS,
@@ -519,6 +520,7 @@ export class DatePicker extends Component {
         this.cellsContainer.style.width = px(currTblWidth);
         this.cellsContainer.style.height = px(currTblHeight);
 
+        // If new view is the same type as current then animate slide
         if (this.currView.type === view.type) {
             const leftToRight = this.currView.date < view.date;
 
@@ -527,7 +529,8 @@ export class DatePicker extends Component {
             view.elem.style.width = px(currTblWidth);
             view.elem.style.left = px(leftToRight ? currTblWidth : -currTblWidth);
 
-            this.cellsContainer.classList.add(ANIMATED_CLASS);
+            this.wrapper.classList.add(ANIMATED_CLASS);
+            this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
 
             this.cellsContainer.style.height = px(view.elem.offsetHeight);
             const trMatrix = [1, 0, 0, 1, (leftToRight ? -currTblWidth : currTblWidth), 0];
@@ -588,7 +591,8 @@ export class DatePicker extends Component {
         );
 
         setTimeout(() => {
-            this.cellsContainer.classList.add(ANIMATED_CLASS);
+            this.wrapper.classList.add(ANIMATED_CLASS);
+            this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
             this.cellsContainer.style.height = px(view.elem.offsetHeight);
             view.elem.style.opacity = 1;
             this.currView.elem.style.opacity = 0;
