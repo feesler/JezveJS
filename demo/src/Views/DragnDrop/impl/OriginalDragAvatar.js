@@ -1,5 +1,5 @@
 import { re, getOffset, px } from 'jezvejs';
-import { DragAvatar } from 'jezvejs/DragAvatar';
+import { DragAvatar } from 'jezvejs/DragnDrop';
 
 /**
  * Original drag avatar

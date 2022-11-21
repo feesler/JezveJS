@@ -1,4 +1,4 @@
-import { DropTarget } from 'jezvejs/DropTarget';
+import { DropTarget } from 'jezvejs/DragnDrop';
 import { DefaultDragAvatar } from './DefaultDragAvatar.js';
 
 /**

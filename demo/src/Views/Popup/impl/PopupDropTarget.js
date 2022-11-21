@@ -1,5 +1,5 @@
 import { getOffset, px } from 'jezvejs';
-import { DropTarget } from 'jezvejs/DropTarget';
+import { DropTarget } from 'jezvejs/DragnDrop';
 import { PopupDragAvatar } from './PopupDragAvatar.js';
 
 /**

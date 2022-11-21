@@ -1,4 +1,4 @@
-import { DragZone } from 'jezvejs/DragZone';
+import { DragZone } from 'jezvejs/DragnDrop';
 import { DefaultDragAvatar } from './DefaultDragAvatar.js';
 import { OriginalDragAvatar } from './OriginalDragAvatar.js';
 

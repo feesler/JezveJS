@@ -1,6 +1,15 @@
 import { ge } from '../../js/common.js';
+import { SortableDragAvatar } from './SortableDragAvatar.js';
 import { SortableDragZone } from './SortableDragZone.js';
 import { SortableDropTarget } from './SortableDropTarget.js';
+import { SortableTableDragAvatar } from './SortableTableDragAvatar.js';
+
+export {
+    SortableDragAvatar,
+    SortableDragZone,
+    SortableDropTarget,
+    SortableTableDragAvatar,
+};
 
 /**
  * Sortable widget constructor
