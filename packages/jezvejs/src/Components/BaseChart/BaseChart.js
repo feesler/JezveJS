@@ -467,7 +467,7 @@ export class BaseChart extends Component {
         let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / groupWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
-        let firstItem = Math.floor(this.chartScroller.scrollLeft / groupWidth);
+        let firstItem = Math.round(this.chartScroller.scrollLeft / groupWidth);
         firstItem = Math.max(0, firstItem - offs);
 
         if (firstItem + itemsOnWidth >= this.items.length) {
