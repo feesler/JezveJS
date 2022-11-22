@@ -1,7 +1,36 @@
-import { MainView } from './view/main.js';
-import { DropDownView } from './view/DropDown.js';
-import { DatePickerView } from './view/DatePicker.js';
-import { PaginatorView } from './view/Paginator.js';
+import { DropDownView } from './view/DropDownView.js';
+import { DatePickerView } from './view/DatePickerView.js';
+import { PaginatorView } from './view/PaginatorView.js';
+import { AppView } from './view/AppView.js';
+
+const routeMap = {
+    dropdown: DropDownView,
+    datepicker: DatePickerView,
+    paginator: PaginatorView,
+    chartgrid: AppView,
+    checkbox: AppView,
+    collapsible: AppView,
+    common: AppView,
+    dateinput: AppView,
+    debug: AppView,
+    decimal: AppView,
+    dpitest: AppView,
+    dragndrop: AppView,
+    emptyclick: AppView,
+    histogram: AppView,
+    iconbutton: AppView,
+    index: AppView,
+    inputgroup: AppView,
+    linechart: AppView,
+    linkmenu: AppView,
+    offcanvas: AppView,
+    piechart: AppView,
+    popup: AppView,
+    popupmenu: AppView,
+    progress: AppView,
+    slider: AppView,
+    switch: AppView,
+};
 
 /** Process request url and return view class if match */
 export async function route(env, url) {
@@ -19,21 +48,21 @@ export async function route(env, url) {
     // Remove leading directory if needed
     let reqPath = reqUrl.pathname;
     if (reqPath.startsWith(testUrl.pathname)) {
-        reqPath = reqPath.substr(testUrl.pathname.length);
+        reqPath = reqPath.substring(testUrl.pathname.length);
     }
 
     const path = reqPath.replace(/^\/+|\/+$/g, ''); // cut leading and trailing slashes
     const parts = path.split('/');
-    let part = parts.shift();
+    let part = parts.shift().toLowerCase();
     if (part === 'jezvejs') {
-        part = parts.shift();
+        part = parts.shift().toLowerCase();
     }
     if (part === 'demo') {
-        part = parts.shift();
+        part = parts.shift().toLowerCase();
     }
 
     if (!part) {
-        return MainView;
+        return routeMap.index;
     }
 
     const dotInd = part.indexOf('.');
@@ -41,15 +70,9 @@ export async function route(env, url) {
         part = part.substring(0, dotInd);
     }
 
-    if (part === 'dropdown') {
-        return DropDownView;
-    }
-    if (part === 'datepicker') {
-        return DatePickerView;
-    }
-    if (part === 'paginator') {
-        return PaginatorView;
+    if (!routeMap[part]) {
+        throw new Error(`Unknown route: ${reqUrl.pathname}`);
     }
 
-    throw new Error(`Unknown route: ${reqUrl.pathname}`);
+    return routeMap[part];
 }

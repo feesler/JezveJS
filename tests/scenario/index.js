@@ -8,12 +8,14 @@ import { commonTests } from './common.js';
 import { datePickerTests } from './DatePicker.js';
 import { dropDownTests } from './DropDown.js';
 import { paginatorTests } from './Paginator.js';
+import { loadTests } from './Load.js';
 
 const storiesMap = {
     common: commonTests,
     dropDown: dropDownTests,
     datePicker: datePickerTests,
     paginator: paginatorTests,
+    load: loadTests,
 };
 
 export class Scenario {

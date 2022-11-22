@@ -1,9 +1,4 @@
-import {
-    formatDate,
-    TestApplication,
-    goTo,
-    baseUrl,
-} from 'jezve-test';
+import { formatDate, TestApplication } from 'jezve-test';
 import { config } from './config.js';
 import { Scenario } from './scenario/index.js';
 
@@ -38,14 +33,6 @@ class Application extends TestApplication {
 
     async startTests() {
         await this.scenario.run();
-    }
-
-    async goToMainView() {
-        if (this.view) {
-            await this.view.goToMainView();
-        } else {
-            await goTo(baseUrl());
-        }
     }
 }
 
