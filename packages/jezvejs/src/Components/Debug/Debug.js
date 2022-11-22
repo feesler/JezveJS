@@ -1,95 +1,85 @@
-import { createElement, re } from '../../js/common.js';
+import { createElement, isFunction } from '../../js/common.js';
+import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './debug.scss';
 
-export class Debug {
-    constructor() {
-        this.contobj = null;
-        this.dbgdiv = null;
+const defaultProps = {
+    className: 'bottom left',
+};
+
+export class Debug extends Component {
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
+
+        this.init();
     }
 
-    /** Clear debug window */
-    clearDebug() {
-        if (this.dbgdiv) {
-            this.dbgdiv.innerHTML = '';
-        }
-    }
+    init() {
+        this.logElem = createElement('div', { props: { className: 'log' } });
 
-    /** Close debug window */
-    closeDebug() {
-        if (this.contobj) {
-            re(this.contobj);
-            this.dbgdiv = null;
-            this.contobj = null;
-        }
-    }
-
-    /** Write text into debug window */
-    log(a) {
-        if (this.dbgdiv && a) {
-            this.dbgdiv.innerHTML += `${a}<br>`;
-            this.dbgdiv.scrollTop = this.dbgdiv.scrollHeight;
-        }
-    }
-
-    create(props = {}) {
-        // Container
-        if (this.contobj) {
-            return;
-        }
-        this.contobj = createElement('div', { props: { className: 'debug' } });
-        if (!this.contobj) {
-            return;
-        }
-
-        const posOpt = props.position || 'bottom left';
-
-        this.contobj.classList.add.apply(null, posOpt.split(' '));
-
-        // Debug log window
-        const logElem = createElement('div', { props: { className: 'log' } });
-        this.dbgdiv = this.contobj.append(logElem);
-
-        // Container of controls
-        this.contobj.append(createElement('div', {
+        this.controls = createElement('div', {
             props: { className: 'controls' },
             children: [
                 createElement('input', {
                     props: { type: 'button', value: 'Clear' },
-                    events: { click: () => this.clearDebug() },
+                    events: { click: () => this.clear() },
                 }),
                 createElement('input', {
                     props: { type: 'button', value: 'Close' },
-                    events: { click: () => this.closeDebug() },
+                    events: { click: () => this.close() },
                 }),
             ],
-        }));
+        });
 
-        document.body.append(this.contobj);
+        this.elem = createElement('div', {
+            props: { className: 'debug' },
+            children: [this.logElem, this.controls],
+        });
+
+        this.setClassNames();
+        document.body.append(this.elem);
+    }
+
+    /** Clear debug window */
+    clear() {
+        this.logElem.innerHTML = '';
+    }
+
+    /** Close debug window */
+    close() {
+        this.show(false);
+    }
+
+    /** Write text into debug window */
+    log(textContent) {
+        if (typeof textContent !== 'string') {
+            return;
+        }
+
+        const message = createElement('div', { props: { textContent } });
+        this.logElem.append(message);
+        this.logElem.scrollTop = this.logElem.scrollHeight;
     }
 
     addControl(text, callback) {
-        if (!this.contobj || !this.contobj.firstElementChild) {
-            return;
+        if (!text || !isFunction(callback)) {
+            return null;
         }
 
-        const controls = this.contobj.firstElementChild.nextElementSibling;
-        if (!controls) {
-            return;
-        }
-
-        controls.append(createElement('input', {
+        const control = createElement('input', {
             props: { type: 'button', value: text },
             events: { click: callback },
-        }));
+        });
+        this.controls.append(control);
+        return control;
     }
 
-    addInfo(text) {
-        const controls = this.contobj?.firstElementChild?.nextElementSibling;
-        if (!controls) {
-            return;
-        }
-
-        controls.append(createElement('span', { props: { innerHTML: text } }));
+    addInfo(textContent) {
+        const info = createElement('span', { props: { textContent } });
+        this.controls.append(info);
+        return info;
     }
 }
