@@ -13,19 +13,22 @@ import { PopupDropTarget } from './impl/PopupDropTarget.js';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
-const onPopupResult = (res) => {
-    const result = ge('result');
-    if (result) {
-        result.textContent = (res) ? 'OK Button' : 'Cancel Button';
+const logTo = (target, value) => {
+    const elem = (typeof target === 'string') ? ge(target) : target;
+    if (!elem) {
+        return;
     }
+
+    elem.value += `${value}\r\n`;
+};
+
+const onPopupResult = (res) => {
+    const value = (res) ? 'OK Button' : 'Cancel Button';
+    logTo('result', value);
 };
 
 const onPopupResultAndClose = (popup, res) => {
-    const result = ge('result');
-    if (result) {
-        result.textContent = (res) ? 'OK Button' : 'Cancel Button';
-    }
-
+    onPopupResult(res);
     popup.close();
 };
 
