@@ -1,3 +1,9 @@
+.buttons-list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 12px;
+}
+
 .circle-icon {
   --iconbtn-hover-icon-color: #ffffff;
 
