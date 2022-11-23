@@ -1726,6 +1726,13 @@ export class DropDown extends Component {
         return state.items.filter((item) => item && item.group === group);
     }
 
+    isVisibleGroup(state, group) {
+        const items = this.getGroupItems(state, group);
+        return items.some((item) => (
+            !item.hidden && (!state.filtered || (state.filtered && item.matchFilter))
+        ));
+    }
+
     renderSelect(state) {
         const optGroups = [];
         const options = [];
@@ -1851,6 +1858,7 @@ export class DropDown extends Component {
                 }
                 if (!optGroups.includes(group)) {
                     optGroups.push(group);
+                    show(group.elems.elem, this.isVisibleGroup(state, item.group));
                 }
                 lastGroupElem = group.elems.elem;
                 itemContainer = group.elems.listElem;

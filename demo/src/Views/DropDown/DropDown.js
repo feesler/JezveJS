@@ -13,10 +13,10 @@ import { CustomListItem } from './impl/CustomListItem.js';
 import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
 import './style.scss';
 
-const initItems = (title, count) => {
+const initItems = (title, count, startFrom = 1) => {
     const res = [];
 
-    for (let ind = 1; ind < count; ind += 1) {
+    for (let ind = startFrom; ind < startFrom + count - 1; ind += 1) {
         res.push({ id: ind, title: `${title} ${ind}` });
     }
 
@@ -288,6 +288,30 @@ const multiSelectFilter = () => {
 };
 
 // Built-in items filter with multiple select
+const groupsSelectFilter = () => {
+    const dropDown = DropDown.create({
+        elem: 'groupFilterInp',
+        enableFilter: true,
+        noResultsMessage: 'Nothing found',
+        multi: true,
+        placeholder: 'Type to filter',
+    });
+
+    const group10 = dropDown.addGroup('1 - 9');
+    initItems('Item', 9).forEach(
+        (item) => dropDown.addItem({ ...item, group: group10 }),
+    );
+    const group20 = dropDown.addGroup('10 - 19');
+    initItems('Item', 10, 10).forEach(
+        (item) => dropDown.addItem({ ...item, group: group20 }),
+    );
+    const group30 = dropDown.addGroup('20 - 29');
+    initItems('Item', 10, 20).forEach(
+        (item) => dropDown.addItem({ ...item, group: group30 }),
+    );
+};
+
+// Built-in items filter with multiple select
 const attachedFilter = () => {
     DropDown.create({
         elem: 'boxFilter',
@@ -487,6 +511,7 @@ const init = () => {
 
     singleSelectFilter();
     multiSelectFilter();
+    groupsSelectFilter();
     attachedFilter();
 
     customRender();
