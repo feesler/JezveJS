@@ -46,8 +46,10 @@
                         <section>
                             <div class="allwidth halfwidth">
                                 <input id="selinp4" type="text">
-                                <label>Events log</label><br>
-                                <textarea id="log-single" class="logs-container"></textarea>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="log-single"></textarea>
+                                </div>
                             </div>
                         </section>
 
@@ -59,7 +61,7 @@
                                 <option value="3">Item 3</option>
                                 <option value="4">Item 4</option>
                                 <option value="5">Item 5</option>
-                            </select><br>
+                            </select>
                         </section>
 
                         <h2>Parse select element (with selected option support)</h2>
@@ -153,8 +155,10 @@
                                 <option value="4">Item 4</option>
                                 <option value="5">Item 5</option>
                             </select>
-                            <label>Events log</label><br>
-                            <textarea id="log-multi" class="logs-container"></textarea>
+                            <div class="logs-container">
+                                <label>Events log</label>
+                                <textarea id="log-multi"></textarea>
+                            </div>
                         </section>
 
                         <h2>Focus test native select</h2>
@@ -174,8 +178,10 @@
                             <div class="section-controls">
                                 <input id="enableOptionBtn" class="btn" type="button" value="Toggle enable item 3">
                             </div>
-                            <label>Events log</label><br>
-                            <textarea id="log-genmulti" class="logs-container"></textarea>
+                            <div class="logs-container">
+                                <label>Events log</label>
+                                <textarea id="log-genmulti"></textarea>
+                            </div>
                         </section>
 
                         <h2>Disabled single select drop down</h2>
@@ -214,7 +220,7 @@
                         <section>
                             <input id="selinp8" type="text" disabled>
                             <div class="section-controls">
-                                <input id="enableFilterBtn" class="btn" type="button" value="Enable"><br>
+                                <input id="enableFilterBtn" class="btn" type="button" value="Enable">
                             </div>
                         </section>
 
@@ -222,8 +228,13 @@
                         <section>
                             <input id="multiSelFilterInp" type="text" disabled>
                             <div class="section-controls">
-                                <input id="enableMultiFilterBtn" class="btn" type="button" value="Enable"><br>
+                                <input id="enableMultiFilterBtn" class="btn" type="button" value="Enable">
                             </div>
+                        </section>
+
+                        <h2>Built-in items filter with groups</h2>
+                        <section>
+                            <input id="groupFilterInp" type="text">
                         </section>
 
                         <h2>Built-in items filter for attached to block element</h2>
@@ -249,11 +260,11 @@
                                 </select>
                             </div>
                             <div class="section-controls">
-                                <input id="enableBtn2" class="btn" type="button" value="Disable"><br>
+                                <input id="enableBtn2" class="btn" type="button" value="Disable">
                             </div>
-                            <div>
-                                <label>Events log</label><br>
-                                <div id="log-custom" class="logs-container"></div>
+                            <div class="logs-container">
+                                <label>Events log</label>
+                                <textarea id="log-custom"></textarea>
                             </div>
                         </section>
 

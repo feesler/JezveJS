@@ -1,13 +1,7 @@
-.logs-container {
-  display: inline-flex;
-  padding: 4px;
-  margin-top: 6px;
-  min-height: 1rem;
-  max-height: 100px;
-  min-width: 300px;
-  line-height: 1.5;
-  overflow-y: auto;
-  border: 1px solid #b4b4b4;
+.buttons-list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 12px;
 }
 
 .circle-icon {

@@ -18,9 +18,16 @@ const initDynamicButton = () => {
         title: 'Icon button',
         icon: 'update',
         className: 'circle-icon',
-        onClick: () => addEventLog('Clicked'),
+        onClick: () => addEventLog('Update button clicked'),
     });
-    ge('dynamicButton').prepend(dynamicBtn.elem);
+    ge('dynamicButton').append(dynamicBtn.elem);
+
+    const noTitleBtn = IconButton.create({
+        icon: 'del',
+        className: 'circle-icon',
+        onClick: () => addEventLog('Del button clicked'),
+    });
+    ge('dynamicButton').append(noTitleBtn.elem);
 };
 
 const initDynamicLink = () => {

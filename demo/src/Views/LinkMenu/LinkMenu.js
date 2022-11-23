@@ -7,7 +7,6 @@ import {
 } from 'jezvejs';
 import { LinkMenu } from 'jezvejs/LinkMenu';
 import { initNavigation } from '../../app.js';
-import './style.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

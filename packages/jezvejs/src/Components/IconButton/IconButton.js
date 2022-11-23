@@ -5,6 +5,7 @@ import {
     removeChilds,
     setEvents,
     enable,
+    show,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import './style.scss';
@@ -232,8 +233,6 @@ export class IconButton extends Component {
 
     /** Render component */
     render(state, prevState = {}) {
-        removeChilds(this.contentElem);
-
         enable(this.elem, state.enabled);
 
         if (state.icon !== prevState.icon) {
@@ -242,6 +241,15 @@ export class IconButton extends Component {
 
         if (this.elem.tagName === 'A') {
             this.elem.href = state.url ?? '';
+        }
+
+        removeChilds(this.contentElem);
+        const showContent = !!state.title;
+        show(this.contentElem, showContent);
+        if (!showContent) {
+            this.titleElem = null;
+            this.subtitleElem = null;
+            return;
         }
 
         this.titleElem = createElement('span', {
