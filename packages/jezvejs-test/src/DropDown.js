@@ -47,16 +47,13 @@ export class DropDown extends TestComponent {
 
         const selectElem = await query(this.elem, 'select');
 
-        const props = await evaluate((elem, select) => ({
+        const res = await evaluate((elem, select) => ({
             isAttached: elem.classList.contains('dd__container_attached'),
             disabled: elem.hasAttribute('disabled'),
-            isMulti: select?.hasAttribute('multiple'),
+            isMulti: select.hasAttribute('multiple'),
+            value: select.value,
         }), this.elem, selectElem);
-
-        const res = {
-            selectElem,
-            ...props,
-        };
+        res.selectElem = selectElem;
 
         if (res.isAttached) {
             res.toggleBtn = await query(this.elem, ':scope > *');
@@ -84,23 +81,32 @@ export class DropDown extends TestComponent {
             assert(res.clearBtn, 'Clear button not found');
 
             const selItemElems = await queryAll(this.elem, '.dd__selection > .dd__selection-item');
-            res.selectedItems = await asyncMap(selItemElems, async (el) => {
-                const deselectBtn = await query(el, '.dd__del-selection-item-btn');
+            const deselectButtons = await queryAll(this.elem, '.dd__del-selection-item-btn');
+            assert(selItemElems.length === deselectButtons.length, 'Invalid selection element');
 
-                let title = await prop(el, 'textContent');
-                const ind = title.indexOf('×');
-                if (ind !== -1) {
-                    title = title.substr(0, ind);
-                }
+            const selItems = selItemElems.map((elem, ind) => ({
+                elem,
+                deselectBtn: deselectButtons[ind],
+            }));
+            res.selectedItems = await asyncMap(selItems, async ({ elem, deselectBtn }) => {
+                const item = await evaluate((el) => {
+                    let title = el.textContent;
+                    const closePos = title.indexOf('×');
+                    if (closePos !== -1) {
+                        title = title.substring(0, closePos);
+                    }
 
-                const id = await prop(el, 'dataset.id');
+                    return {
+                        id: el.dataset.id,
+                        title,
+                    };
+                }, elem);
+                item.deselectBtn = deselectBtn;
 
-                return { id, title, deselectBtn };
+                return item;
             });
 
             res.value = res.selectedItems;
-        } else {
-            res.value = await prop(res.selectElem, 'value');
         }
 
         const selectOptions = await queryAll(res.selectElem, 'option');
@@ -112,25 +118,27 @@ export class DropDown extends TestComponent {
         }), item));
 
         res.listContainer = await query(this.elem, '.dd__list');
-        if (res.listContainer) {
-            const listItems = await queryAll(this.elem, '.dd__list li');
-            res.items = await asyncMap(listItems, async (item) => {
-                const listItem = await evaluate((elem) => ({
-                    text: elem.textContent,
-                    hidden: elem.hidden,
-                }), item);
-                listItem.elem = item;
-
-                const option = optionsData.find((opt) => opt.title === listItem.text);
-                if (option) {
-                    listItem.id = option.id;
-                    listItem.selected = option.selected;
-                    listItem.disabled = option.disabled;
-                }
-
-                return listItem;
-            });
+        if (!res.listContainer) {
+            return res;
         }
+
+        const listItems = await queryAll(this.elem, '.dd__list li');
+        res.items = await asyncMap(listItems, async (elem) => {
+            const item = await evaluate((el) => ({
+                text: el.textContent,
+                hidden: el.hidden,
+            }), elem);
+            item.elem = elem;
+
+            const option = optionsData.find((opt) => opt.title === item.text);
+            if (option) {
+                item.id = option.id;
+                item.selected = option.selected;
+                item.disabled = option.disabled;
+            }
+
+            return item;
+        });
 
         return res;
     }

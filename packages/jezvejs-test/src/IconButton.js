@@ -2,9 +2,9 @@ import {
     TestComponent,
     assert,
     query,
-    prop,
     hasClass,
     click,
+    evaluate,
 } from 'jezve-test';
 
 export class IconButton extends TestComponent {
@@ -16,27 +16,18 @@ export class IconButton extends TestComponent {
         const validClass = await hasClass(this.elem, 'iconbutton');
         assert(validClass, 'Invalid icon button element');
 
-        const res = {};
+        const titleElem = await query(this.elem, '.iconbutton__content');
+        const subTitleElem = await query(this.elem, '.iconbutton__subtitle');
 
-        const tagName = await prop(this.elem, 'tagName');
-        if (tagName === 'A') {
-            res.link = await prop(this.elem, 'href');
-        }
-
-        res.titleElem = await query(this.elem, '.iconbutton__content');
-        const titleInner = await query(res.titleElem, ':scope > *');
-        assert(titleInner, 'Title element not found');
-        res.title = await prop(titleInner, 'textContent');
-
-        // Subtitle is optional
-        res.subTitleElem = await query(res.titleElem, '.iconbutton__subtitle');
-        if (res.subTitleElem) {
-            res.subtitle = await prop(res.subTitleElem, 'textContent');
-        } else {
-            res.subtitle = null;
-        }
-
-        return res;
+        return evaluate((elem, title, subtitle) => ({
+            tagName: elem.tagName,
+            link: elem.href,
+            title: (title) ? title.textContent.trim() : null,
+            subtitle: (subtitle) ? subtitle.textContent.trim() : null,
+            value: elem.dataset.value,
+            isCheckbox: elem.classList.contains('checkbox'),
+            selected: elem.classList.contains('link-menu-item_selected'),
+        }), this.elem, titleElem, subTitleElem);
     }
 
     get link() {
