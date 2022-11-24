@@ -3,12 +3,13 @@ import {
     assert,
     query,
     queryAll,
-    hasClass,
     prop,
     isVisible,
     click,
     wait,
     copyObject,
+    evaluate,
+    asyncMap,
 } from 'jezve-test';
 
 const monthTitles = [{
@@ -36,29 +37,31 @@ export class DatePicker extends TestComponent {
         res.titleElem = await query(res.wrapper, '.dp__header .dp__header_title');
         res.title = await prop(res.titleElem, 'textContent');
 
-        res.cells = [];
-        res.viewType = 'month';
         const elems = await queryAll(res.wrapper, '.dp__view-container .dp__cell');
-        for (const elem of elems) {
-            if (await hasClass(elem, 'dp__year-view__cell')) {
-                res.viewType = 'year';
-            } else if (await hasClass(elem, 'dp__year-range-view__cell')) {
-                res.viewType = 'yearRange';
+
+        res.viewType = await evaluate((elem) => {
+            if (elem.classList.contains('dp__year-view__cell')) {
+                return 'year';
+            }
+            if (elem.classList.contains('dp__year-range-view__cell')) {
+                return 'yearRange';
             }
 
-            if (await hasClass(elem, 'dp__other-month-cell')) {
-                continue;
-            }
+            return 'month';
+        }, elems[0]);
 
-            const cell = {
-                elem,
-                title: await prop(elem, 'textContent'),
-                active: await hasClass(elem, 'dp__cell_act'),
-                highlighted: await hasClass(elem, 'dp__cell_hl'),
-            };
+        res.cells = await asyncMap(elems, async (elem) => {
+            const cell = await evaluate((el) => ({
+                title: el.textContent,
+                other: el.classList.contains('dp__other-month-cell'),
+                active: el.classList.contains('dp__cell_act'),
+                highlighted: el.classList.contains('dp__cell_hl'),
+            }), elem);
+            cell.elem = elem;
 
-            res.cells.push(cell);
-        }
+            return cell;
+        });
+        res.cells = res.cells.filter((item) => !item.other);
 
         res.current = this.parseHeader(res.title, res.viewType);
 

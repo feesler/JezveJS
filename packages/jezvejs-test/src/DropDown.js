@@ -6,10 +6,10 @@ import {
     queryAll,
     hasClass,
     prop,
-    attr,
     isVisible,
     click,
     closest,
+    evaluate,
 } from 'jezve-test';
 
 export class DropDown extends TestComponent {
@@ -45,18 +45,25 @@ export class DropDown extends TestComponent {
         const validContainer = await DropDown.isValidContainer(this.elem);
         assert(validContainer, 'Invalid drop down element');
 
-        const res = {};
+        const selectElem = await query(this.elem, 'select');
 
-        res.isAttached = await hasClass(this.elem, 'dd__container_attached');
+        const props = await evaluate((elem, select) => ({
+            isAttached: elem.classList.contains('dd__container_attached'),
+            disabled: elem.hasAttribute('disabled'),
+            isMulti: select?.hasAttribute('multiple'),
+        }), this.elem, selectElem);
+
+        const res = {
+            selectElem,
+            ...props,
+        };
+
         if (res.isAttached) {
             res.toggleBtn = await query(this.elem, ':scope > *');
         } else {
             res.toggleBtn = await query(this.elem, '.dd__toggle-btn');
         }
         assert(res.toggleBtn, 'Select button not found');
-
-        const disabledAttr = await attr(this.elem, 'disabled');
-        res.disabled = disabledAttr != null;
 
         if (!res.isAttached) {
             res.statSel = await query(this.elem, '.dd__single-selection');
@@ -72,8 +79,6 @@ export class DropDown extends TestComponent {
             }
         }
 
-        res.selectElem = await query(this.elem, 'select');
-        res.isMulti = await prop(res.selectElem, 'multiple');
         if (res.isMulti) {
             res.clearBtn = await query(this.elem, '.dd__clear-btn');
             assert(res.clearBtn, 'Clear button not found');
@@ -99,22 +104,22 @@ export class DropDown extends TestComponent {
         }
 
         const selectOptions = await queryAll(res.selectElem, 'option');
-        const optionsData = await asyncMap(selectOptions, async (item) => ({
-            id: await prop(item, 'value'),
-            title: await prop(item, 'textContent'),
-            selected: await prop(item, 'selected'),
-            disabled: await prop(item, 'disabled'),
-        }));
+        const optionsData = await asyncMap(selectOptions, (item) => evaluate((elem) => ({
+            id: elem.value,
+            title: elem.textContent,
+            selected: elem.selected,
+            disabled: elem.disabled,
+        }), item));
 
         res.listContainer = await query(this.elem, '.dd__list');
         if (res.listContainer) {
             const listItems = await queryAll(this.elem, '.dd__list li');
             res.items = await asyncMap(listItems, async (item) => {
-                const listItem = {
-                    text: await prop(item, 'textContent'),
-                    hidden: await prop(item, 'hidden'),
-                    elem: item,
-                };
+                const listItem = await evaluate((elem) => ({
+                    text: elem.textContent,
+                    hidden: elem.hidden,
+                }), item);
+                listItem.elem = item;
 
                 const option = optionsData.find((opt) => opt.title === listItem.text);
                 if (option) {

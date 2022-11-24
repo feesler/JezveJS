@@ -2,29 +2,46 @@ import {
     TestComponent,
     assert,
     queryAll,
-    prop,
     hasClass,
     click,
+    asyncMap,
+    evaluate,
 } from 'jezve-test';
 
 export class Paginator extends TestComponent {
     async parseContent() {
-        const res = {};
-
-        res.items = [];
-        res.activeItem = null;
+        const res = {
+            items: [],
+            activeItem: null,
+        };
 
         const validClass = await hasClass(this.elem, 'paginator');
         assert(validClass, 'Unexpected stucture of paginator control');
 
+        const elems = await queryAll(this.elem, '.paginator-item');
+        const items = await asyncMap(elems, async (elem) => {
+            const item = await evaluate((el) => ({
+                isArrow: el.classList.contains('paginator-arrow'),
+                isActive: el.classList.contains('paginator-item__active'),
+                title: el.textContent.trim(),
+                tagName: el.tagName,
+                link: el.href,
+            }), elem);
+
+            item.elem = elem;
+            item.linkElem = (item.tagName === 'A') ? elem : null;
+            if (!item.isArrow) {
+                item.num = parseInt(item.title, 10);
+            }
+
+            return item;
+        });
+
         let ellipsisBefore = false;
         let prevPageItem = null;
-        const elems = await queryAll(this.elem, '.paginator-item');
-
-        for (const itemElem of elems) {
-            const isArrow = await hasClass(itemElem, 'paginator-arrow');
-            if (isArrow) {
-                continue;
+        items.forEach((item) => {
+            if (item.isArrow) {
+                return;
             }
 
             /*
@@ -32,28 +49,16 @@ export class Paginator extends TestComponent {
             - ellipsis can't be first item
             - ellipsis can't follow after ellipsis
             */
-            const text = await prop(itemElem, 'textContent');
-            if (text === '...') {
+            if (item.title === '...') {
                 assert(
                     res.items.length > 0 && !ellipsisBefore && prevPageItem,
                     'Unexpected placement of paginator ellipsis',
                 );
 
                 ellipsisBefore = true;
-                continue;
+                return;
             }
 
-            const item = { elem: itemElem };
-            item.isActive = await hasClass(itemElem, 'paginator-item__active');
-
-            const tagName = await prop(itemElem, 'tagName');
-            if (tagName === 'A') {
-                item.linkElem = itemElem;
-                item.link = await prop(itemElem, 'href');
-            }
-
-            item.title = await prop(itemElem, 'textContent');
-            item.num = parseInt(item.title, 10);
             assert(
                 item.title && !Number.isNaN(item.num) && item.num >= 1,
                 `Unexpected title of paginator item: '${item.title}'`,
@@ -74,18 +79,22 @@ export class Paginator extends TestComponent {
                 'Unexpected order of paginator item',
             );
 
+            const resItem = {
+                ...item,
+                ind: res.items.length,
+            };
+
             if (item.isActive) {
                 assert(!res.activeItem, 'More than one active paginator item');
 
-                res.activeItem = item;
-                res.active = item.num;
+                res.activeItem = resItem;
+                res.active = resItem.num;
             }
 
-            item.ind = res.items.length;
-            res.items.push(item);
-            prevPageItem = item;
+            res.items.push(resItem);
+            prevPageItem = resItem;
             ellipsisBefore = false;
-        }
+        });
 
         // Check ellipsis is not the last item
         assert(!ellipsisBefore, 'Unexpected placement of paginator ellipsis');
