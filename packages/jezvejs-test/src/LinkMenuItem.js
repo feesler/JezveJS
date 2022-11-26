@@ -2,9 +2,8 @@ import {
     TestComponent,
     assert,
     query,
-    prop,
-    hasClass,
     click,
+    evaluate,
 } from 'jezve-test';
 import { Checkbox } from 'jezvejs-test';
 
@@ -12,30 +11,28 @@ export class LinkMenuItem extends TestComponent {
     async parseContent() {
         assert(this.elem, 'Invalid element');
 
-        const res = {};
+        let titleElem = await query(this.elem, '.link-menu-item__title');
+        if (!titleElem) {
+            titleElem = this.elem;
+        }
 
-        const tagName = await prop(this.elem, 'tagName');
-        if (tagName === 'A') {
+        const res = await evaluate((elem, title) => ({
+            tagName: elem.tagName,
+            title: title.textContent.trim(),
+            value: elem.dataset.value,
+            isCheckbox: elem.classList.contains('checkbox'),
+            selected: elem.classList.contains('link-menu-item_selected'),
+        }), this.elem, titleElem);
+
+        if (res.tagName === 'A') {
             res.linkElem = this.elem;
         } else {
             res.linkElem = await query(this.elem, 'a');
         }
 
-        res.titleElem = await query(this.elem, '.link-menu-item__title');
-        if (!res.titleElem) {
-            res.titleElem = this.elem;
-        }
-        const title = await prop(res.titleElem, 'textContent');
-        res.title = title.trim();
-
-        res.value = await prop(this.elem, 'dataset.value');
-
-        res.isCheckbox = await hasClass(this.elem, 'checkbox');
         if (res.isCheckbox) {
             res.checkbox = await Checkbox.create(this, this.elem);
             res.selected = res.checkbox.checked;
-        } else {
-            res.selected = await hasClass(this.elem, 'link-menu-item_selected');
         }
 
         return res;

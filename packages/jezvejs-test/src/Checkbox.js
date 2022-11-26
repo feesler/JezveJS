@@ -2,9 +2,9 @@ import {
     TestComponent,
     assert,
     query,
-    prop,
     hasClass,
     click,
+    evaluate,
 } from 'jezve-test';
 
 export class Checkbox extends TestComponent {
@@ -16,17 +16,19 @@ export class Checkbox extends TestComponent {
         const validClass = await hasClass(this.elem, 'checkbox');
         assert(validClass, 'Invalid checkbox');
 
-        const res = {
-            inputElem: await query(this.elem, 'input[type="checkbox"]'),
+        const inputElem = await query(this.elem, 'input[type="checkbox"]');
+        assert(inputElem, 'Checkbox input element not found');
+
+        const props = await evaluate((input) => ({
+            checked: input.checked,
+            disabled: input.disabled,
+        }), inputElem);
+
+        return {
+            inputElem,
             labelElem: await query(this.elem, '.checkbox__label'),
+            ...props,
         };
-
-        assert(res.inputElem, 'Checkbox input element not found');
-
-        res.checked = await prop(res.inputElem, 'checked');
-        res.disabled = await prop(res.inputElem, 'disabled');
-
-        return res;
     }
 
     get checked() {

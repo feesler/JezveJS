@@ -1,31 +1,32 @@
 import {
     TestComponent,
     query,
-    hasClass,
-    prop,
     click,
     assert,
+    evaluate,
 } from 'jezve-test';
 
 export class Collapsible extends TestComponent {
     async parseContent() {
         assert(this.elem, 'Invalid collapsible element');
 
-        const res = {
-            collapsed: !(await hasClass(this.elem, 'collapsible__expanded')),
-            headerElem: await query(this.elem, '.collapsible-header'),
-            labelElem: await query(this.elem, '.collapsible-header label'),
-            contentElem: await query(this.elem, '.collapsible-content'),
-        };
+        const labelElem = await query(this.elem, '.collapsible-header label');
+
+        const res = await evaluate((elem, label) => ({
+            collapsed: !elem.classList.contains('collapsible__expanded'),
+            title: label.textContent,
+        }), this.elem, labelElem);
+
+        res.labelElem = labelElem;
+        res.headerElem = await query(this.elem, '.collapsible-header');
+        res.contentElem = await query(this.elem, '.collapsible-content');
 
         assert(
             res.headerElem
             && res.labelElem
             && res.contentElem,
-            'Invalid structure of import rule accordion',
+            'Invalid structure of Collapsible component',
         );
-
-        res.title = await prop(res.labelElem, 'textContent');
 
         return res;
     }
