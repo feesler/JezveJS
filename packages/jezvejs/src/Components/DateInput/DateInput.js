@@ -115,6 +115,7 @@ export class DateInput extends Component {
                 }
 
                 descriptor.set.call(this, self.handleValue(value));
+                self.sendInputEvent();
             },
         });
     }
