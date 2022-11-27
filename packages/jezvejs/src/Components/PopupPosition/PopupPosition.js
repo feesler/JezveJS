@@ -12,6 +12,19 @@ export class PopupPosition {
         return style?.position === 'fixed';
     }
 
+    /**
+     * Returns height of visualViewport if possible
+     * Otherwise returns clientHeight of document
+     */
+    static getScreenHeight() {
+        const { clientHeight } = document.documentElement;
+        if (!window.visualViewport) {
+            return clientHeight;
+        }
+
+        return Math.min(clientHeight, window.visualViewport.height);
+    }
+
     /** Calculate height, vertical and horizontal offset of popup element */
     static calculate({
         elem,
@@ -27,7 +40,8 @@ export class PopupPosition {
         const { style } = elem;
         const html = document.documentElement;
         const screenTop = html.scrollTop;
-        const screenBottom = screenTop + html.clientHeight;
+        const screenHeight = this.getScreenHeight();
+        const screenBottom = screenTop + screenHeight;
         const scrollAvailable = !this.isInsideFixedContainer(elem);
 
         const offset = (elem.offsetParent)
@@ -51,9 +65,9 @@ export class PopupPosition {
         let bottom = container.top + totalHeight;
 
         // Check element taller than screen
-        if (totalHeight > html.clientHeight) {
-            height = html.clientHeight - container.height - (screenPadding + margin);
-            style.height = px(height);
+        if (totalHeight > screenHeight) {
+            height = screenHeight - container.height - (screenPadding + margin);
+            style.maxHeight = px(height);
 
             totalHeight = container.height + margin + screenPadding + height;
             bottom = container.top + totalHeight;
@@ -82,7 +96,7 @@ export class PopupPosition {
         }
         if (overflow > 0) {
             height -= overflow;
-            style.height = px(height);
+            style.maxHeight = px(height);
         }
         if (flip) {
             style.top = px(container.top - offset.top - height - margin);
