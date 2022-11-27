@@ -1954,6 +1954,12 @@ export class DropDown extends Component {
 
         if (!prevState.visible) {
             this.listElem.scrollTop = 0;
+
+            if (this.props.enableFilter) {
+                setTimeout(() => {
+                    this.inputElem.focus();
+                });
+            }
         }
     }
 
