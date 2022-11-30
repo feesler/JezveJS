@@ -62,14 +62,31 @@ const initDisabled = () => {
         icon: 'plus',
         enabled: false,
     });
-    ge('disabledIconBtn').append(disabledBtn.elem);
+    const disabledLink = IconButton.create({
+        type: 'link',
+        url: '#disabled',
+        title: 'Disabled link',
+        icon: 'update',
+        enabled: false,
+    });
 
-    const toggleEnableBtn = ge('toggleEnableBtn');
-    setEvents(toggleEnableBtn, {
+    ge('disabledContainer').append(disabledBtn.elem, disabledLink.elem);
+
+    const toggleEnableButtonBtn = ge('toggleEnableButtonBtn');
+    setEvents(toggleEnableButtonBtn, {
         click: () => {
             const { enabled } = disabledBtn;
-            toggleEnableBtn.textContent = (enabled) ? 'Enable' : 'Disable';
+            toggleEnableButtonBtn.textContent = (enabled) ? 'Enable button' : 'Disable button';
             disabledBtn.enable(!enabled);
+        },
+    });
+
+    const toggleEnableLinkBtn = ge('toggleEnableLinkBtn');
+    setEvents(toggleEnableLinkBtn, {
+        click: () => {
+            const { enabled } = disabledLink;
+            toggleEnableLinkBtn.textContent = (enabled) ? 'Enable link' : 'Disable link';
+            disabledLink.enable(!enabled);
         },
     });
 };

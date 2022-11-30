@@ -27,6 +27,7 @@ const defaultProps = {
     icon: undefined,
     onClick: null,
     id: undefined,
+    tabIndex: undefined,
 };
 
 /**
@@ -34,7 +35,7 @@ const defaultProps = {
  */
 export class IconButton extends Component {
     static userProps = {
-        elem: ['id'],
+        elem: ['id', 'tabIndex'],
     };
 
     constructor(props) {
@@ -92,7 +93,15 @@ export class IconButton extends Component {
         }
 
         if (this.elem.tagName === 'A' && typeof this.state.url === 'undefined') {
+            this.state.type = 'link';
             this.state.url = this.elem.href;
+        }
+
+        if (
+            typeof this.props.tabIndex === 'undefined'
+            && this.elem.hasAttribute('tabindex')
+        ) {
+            this.props.tabIndex = this.elem.getAttribute('tabindex');
         }
 
         this.iconElem = this.elem.querySelector(`.${ICON_CONTAINER_CLASS}`);
@@ -136,11 +145,18 @@ export class IconButton extends Component {
     }
 
     setHandlers() {
-        if (!isFunction(this.props.onClick)) {
+        setEvents(this.elem, { click: (e) => this.onClick(e) });
+    }
+
+    onClick(e) {
+        if (!this.state.enabled) {
+            e.preventDefault();
             return;
         }
 
-        setEvents(this.elem, { click: (e) => this.props.onClick(e) });
+        if (isFunction(this.props.onClick)) {
+            this.props.onClick(e);
+        }
     }
 
     /** Create SVG icon element */
@@ -239,8 +255,11 @@ export class IconButton extends Component {
             this.renderIcon(state);
         }
 
-        if (this.elem.tagName === 'A') {
+        if (state.type === 'link') {
             this.elem.href = state.url ?? '';
+            this.elem.tabIndex = (state.enabled)
+                ? (this.props.tabIndex ?? '')
+                : -1;
         }
 
         removeChilds(this.contentElem);
