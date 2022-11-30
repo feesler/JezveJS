@@ -24,6 +24,9 @@ const initDefault = () => {
             url: '#',
             onClick: () => addEventLog('Link item clicked'),
         }, {
+            title: 'No icon item',
+            onClick: () => addEventLog('No icon item clicked'),
+        }, {
             type: 'separator',
         }, {
             type: 'checkbox',

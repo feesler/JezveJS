@@ -80,7 +80,7 @@
     --iconbtn-hover-subtitle-color: var(--popupmenu-hover-subtitle-color);
 
     height: auto;
-    padding: 8px 16px 8px 8px;
+    padding: 8px;
     width: 100%;
 
     .iconbutton__icon {
@@ -94,7 +94,11 @@
     }
 
     .iconbutton__content {
-      padding-left: 10px;
+      padding: 0 10px 0 42px;
+    }
+
+    .iconbutton__icon + .iconbutton__content {
+      padding: 0 10px;
     }
   }
 
@@ -103,7 +107,7 @@
     --checkbox-text: var(--popupmenu-title-color);
 
     display: flex;
-    padding: 8px 16px 8px 8px;
+    padding: 8px;
     margin: 0;
     cursor: pointer;
 
@@ -112,8 +116,9 @@
     }
 
     .checkbox__label {
-      margin: 6px 0;
-      padding-left: 10px;
+      padding: 0 10px;
+      height: 32px;
+      line-height: 32px;
     }
   }
 }
