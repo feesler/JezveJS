@@ -2,7 +2,6 @@ import {
     isFunction,
     asArray,
     createElement,
-    svg,
     addChilds,
     removeChilds,
     setEvents,
@@ -10,6 +9,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
+import { Icon } from '../Icon/Icon.js';
 import './style.scss';
 
 const CONTAINER_CLASS = 'link-menu';
@@ -287,19 +287,6 @@ export class LinkMenu extends Component {
         return checkbox.elem;
     }
 
-    /** Create SVG icon element */
-    createIcon(icon, className = null) {
-        const useElem = svg('use');
-        const res = svg('svg', {}, useElem);
-        if (className) {
-            res.setAttribute('class', className);
-        }
-
-        useElem.href.baseVal = (icon) ? `#${icon}` : '';
-
-        return res;
-    }
-
     renderItemContent(item, state) {
         const isLink = this.isLinkItem(item, state);
         const tagName = (isLink) ? 'a' : 'b';
@@ -309,7 +296,10 @@ export class LinkMenu extends Component {
         if (item.icon) {
             const iconElem = createElement('span', {
                 props: { className: ITEM_ICON_CONTAINER_CLASS },
-                children: this.createIcon(item.icon, ITEM_ICON_CLASS),
+                children: Icon.create({
+                    icon: item.icon,
+                    className: ITEM_ICON_CLASS,
+                }).elem,
             });
 
             children.push(iconElem);
