@@ -1,32 +1,22 @@
 import 'jezvejs/style';
 import {
     ge,
-    svg,
     setEvents,
     onReady,
     createElement,
 } from 'jezvejs';
 import { Collapsible } from 'jezvejs/Collapsible';
+import { Icon } from 'jezvejs/Icon';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
 const CUSTOM_BTN_CLASS = 'custom-header-btn';
 const CUSTOM_ICON_CLASS = 'custom-header-icon';
 
-/** Create SVG icon element for buttons of custom header */
-const createIcon = (icon) => {
-    const useElem = svg('use');
-    const res = svg('svg', { class: CUSTOM_ICON_CLASS }, useElem);
-
-    useElem.href.baseVal = (icon) ? `#${icon}` : '';
-
-    return res;
-};
-
 /** Create button for custom header */
 const createButton = (icon) => createElement('button', {
     props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
-    children: createIcon(icon),
+    children: Icon.create({ icon, className: CUSTOM_ICON_CLASS }).elem,
     events: { click: (e) => e.stopPropagation() },
 });
 
@@ -82,7 +72,7 @@ const initDisabledToggle = () => {
     });
     const toggleBtn = createElement('button', {
         props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
-        children: createIcon('toggle-ext'),
+        children: Icon.create({ icon: 'toggle-ext', className: CUSTOM_ICON_CLASS }).elem,
     });
 
     const collapse = Collapsible.create({

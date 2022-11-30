@@ -1,6 +1,6 @@
 {
     "name": "jezvejs",
-    "version": "1.56.6",
+    "version": "1.57.0",
     "type": "module",
     "module": "index.js",
     "files": [
@@ -20,7 +20,7 @@
     "author": "Henry Feesler",
     "license": "ISC",
     "dependencies": {
-        "@babel/runtime": "^7.20.5",
+        "@babel/runtime": "^7.20.6",
         "core-js": "^3.26.1",
         "whatwg-fetch": "^3.6.2"
     },

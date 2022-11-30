@@ -1,12 +1,12 @@
 import {
     isFunction,
     createElement,
-    svg,
     setEvents,
     enable,
     re,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
+import { Icon } from '../Icon/Icon.js';
 import './style.scss';
 
 /* CSS classes */
@@ -144,19 +144,6 @@ export class IconButton extends Component {
         }
     }
 
-    /** Create SVG icon element */
-    createIcon(icon, className = null) {
-        const useElem = svg('use');
-        const res = svg('svg', {}, useElem);
-        if (className) {
-            res.setAttribute('class', className);
-        }
-
-        useElem.href.baseVal = (icon) ? `#${icon}` : '';
-
-        return res;
-    }
-
     /** Set title text */
     enable(value) {
         if (this.state.enabled === !!value) {
@@ -229,7 +216,10 @@ export class IconButton extends Component {
         }
 
         const icon = (typeof state.icon === 'string')
-            ? this.createIcon(state.icon, ICON_CLASS)
+            ? Icon.create({
+                icon: state.icon,
+                className: ICON_CLASS,
+            }).elem
             : state.icon;
 
         this.iconElem = createElement('span', {

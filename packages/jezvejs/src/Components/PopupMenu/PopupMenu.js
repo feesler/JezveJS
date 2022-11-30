@@ -1,6 +1,5 @@
 import {
     isFunction,
-    svg,
     createElement,
     setEvents,
     re,
@@ -14,6 +13,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
+import { Icon } from '../Icon/Icon.js';
 import { IconButton } from '../IconButton/IconButton.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import './style.scss';
@@ -93,7 +93,10 @@ export class PopupMenu extends Component {
         } else {
             this.menuBtn = createElement('button', {
                 props: { className: BUTTON_CLASS, type: 'button' },
-                children: this.createIcon(this.props.icon, ICON_CLASS),
+                children: Icon.create({
+                    icon: this.props.icon,
+                    className: ICON_CLASS,
+                }).elem,
                 events: this.togglerEvents,
             });
 
@@ -112,19 +115,6 @@ export class PopupMenu extends Component {
         }
 
         this.setClassNames();
-    }
-
-    /** Create SVG icon element */
-    createIcon(icon, className = null) {
-        const useElem = svg('use');
-        const res = svg('svg', {}, useElem);
-        if (className) {
-            res.setAttribute('class', className);
-        }
-
-        useElem.href.baseVal = (icon) ? `#${icon}` : '';
-
-        return res;
     }
 
     setHandlers() {
