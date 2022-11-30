@@ -2,10 +2,9 @@ import {
     isFunction,
     createElement,
     svg,
-    removeChilds,
     setEvents,
     enable,
-    show,
+    re,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import './style.scss';
@@ -63,24 +62,14 @@ export class IconButton extends Component {
     }
 
     init() {
-        this.iconElem = createElement('span', {
-            props: { className: ICON_CONTAINER_CLASS },
-        });
-
-        this.contentElem = createElement('div', {
-            props: { className: CONTENT_CLASS },
-        });
-
         const isLink = (this.props.type === 'link');
         if (isLink) {
             this.elem = createElement('a', {
                 props: { className: CONTAINER_CLASS },
-                children: [this.iconElem, this.contentElem],
             });
         } else {
             this.elem = createElement('button', {
                 props: { className: CONTAINER_CLASS, type: 'button' },
-                children: [this.iconElem, this.contentElem],
             });
         }
 
@@ -114,22 +103,18 @@ export class IconButton extends Component {
             throw new Error('Invalid structure of iconbutton element');
         }
 
-        this.titleElem = this.contentElem.querySelector(`.${TITLE_CLASS}`);
+        const titleElem = this.contentElem.querySelector(`.${TITLE_CLASS}`);
         if (typeof this.state.title === 'undefined') {
-            if (this.titleElem) {
-                this.state.title = this.titleElem.textContent.trim();
-            } else {
-                this.state.title = this.contentElem.textContent.trim();
-            }
+            this.state.title = (titleElem)
+                ? titleElem.textContent.trim()
+                : this.contentElem.textContent.trim();
         }
 
-        this.subtitleElem = this.contentElem.querySelector(`.${SUBTITLE_CLASS}`);
+        const subtitleElem = this.contentElem.querySelector(`.${SUBTITLE_CLASS}`);
         if (typeof this.state.subtitle === 'undefined') {
-            if (this.subtitleElem) {
-                this.state.subtitle = this.subtitleElem.textContent.trim();
-            } else {
-                this.state.subtitle = null;
-            }
+            this.state.subtitle = (subtitleElem)
+                ? subtitleElem.textContent.trim()
+                : null;
         }
 
         this.state.enabled = !this.elem.hasAttribute('disabled');
@@ -233,27 +218,61 @@ export class IconButton extends Component {
         this.setState({ ...this.state, url });
     }
 
-    renderIcon(state) {
-        removeChilds(this.iconElem);
+    renderIcon(state, prevState) {
+        if (state.icon === prevState.icon) {
+            return;
+        }
+
+        re(this.iconElem);
         if (!state.icon) {
             return;
         }
 
-        if (typeof state.icon === 'string') {
-            this.icon = this.createIcon(state.icon, ICON_CLASS);
-        } else {
-            this.icon = state.icon;
+        const icon = (typeof state.icon === 'string')
+            ? this.createIcon(state.icon, ICON_CLASS)
+            : state.icon;
+
+        this.iconElem = createElement('span', {
+            props: { className: ICON_CONTAINER_CLASS },
+            children: icon,
+        });
+        this.elem.prepend(this.iconElem);
+    }
+
+    renderContent(state, prevState) {
+        if (state.title === prevState.title && state.subtitle === prevState.subtitle) {
+            return;
         }
-        this.iconElem.append(this.icon);
+
+        re(this.contentElem);
+        if (!state.title) {
+            return;
+        }
+
+        this.contentElem = createElement('div', {
+            props: { className: CONTENT_CLASS },
+            children: [
+                createElement('span', {
+                    props: {
+                        className: (state.subtitle) ? TITLE_CLASS : '',
+                        textContent: state.title,
+                    },
+                }),
+            ],
+        });
+        if (state.subtitle) {
+            const subtitleElem = createElement('span', {
+                props: { className: SUBTITLE_CLASS, textContent: state.subtitle },
+            });
+            this.contentElem.append(subtitleElem);
+        }
+
+        this.elem.append(this.contentElem);
     }
 
     /** Render component */
     render(state, prevState = {}) {
         enable(this.elem, state.enabled);
-
-        if (state.icon !== prevState.icon) {
-            this.renderIcon(state);
-        }
 
         if (state.type === 'link') {
             this.elem.href = state.url ?? '';
@@ -262,28 +281,7 @@ export class IconButton extends Component {
                 : -1;
         }
 
-        removeChilds(this.contentElem);
-        const showContent = !!state.title;
-        show(this.contentElem, showContent);
-        if (!showContent) {
-            this.titleElem = null;
-            this.subtitleElem = null;
-            return;
-        }
-
-        this.titleElem = createElement('span', {
-            props: {
-                className: (state.subtitle) ? TITLE_CLASS : '',
-                textContent: state.title,
-            },
-        });
-        this.contentElem.append(this.titleElem);
-
-        if (state.subtitle) {
-            this.subtitleElem = createElement('span', {
-                props: { className: SUBTITLE_CLASS, textContent: state.subtitle },
-            });
-            this.contentElem.append(this.subtitleElem);
-        }
+        this.renderIcon(state, prevState);
+        this.renderContent(state, prevState);
     }
 }
