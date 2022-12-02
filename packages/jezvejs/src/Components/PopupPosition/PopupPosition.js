@@ -26,13 +26,15 @@ export class PopupPosition {
     }
 
     /** Calculate height, vertical and horizontal offset of popup element */
-    static calculate({
-        elem,
-        refElem,
-        margin = 0,
-        screenPadding = 0,
-        useRefWidth = false,
-    }) {
+    static calculate(options) {
+        const {
+            elem,
+            refElem,
+            margin = 0,
+            screenPadding = 0,
+            useRefWidth = false,
+        } = options;
+
         if (!elem || !refElem) {
             return;
         }
@@ -60,17 +62,18 @@ export class PopupPosition {
         );
 
         const scrollHeight = (scrollAvailable) ? html.scrollHeight : screenBottom;
+        const padding = screenPadding * 2;
         let height = elem.offsetHeight;
-        let totalHeight = container.height + margin + screenPadding + height;
-        let bottom = container.top + totalHeight;
+        let totalHeight = container.height + margin + padding + height;
+        let bottom = container.top + totalHeight - screenPadding;
 
         // Check element taller than screen
         if (totalHeight > screenHeight) {
-            height = screenHeight - container.height - (screenPadding + margin);
+            height = screenHeight - container.height - (padding + margin);
             style.maxHeight = px(height);
 
-            totalHeight = container.height + margin + screenPadding + height;
-            bottom = container.top + totalHeight;
+            totalHeight = container.height + margin + padding + height;
+            bottom = container.top + totalHeight - screenPadding;
         }
 
         const top = container.top - height - margin - screenPadding;

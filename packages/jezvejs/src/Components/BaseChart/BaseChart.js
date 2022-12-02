@@ -106,6 +106,7 @@ export class BaseChart extends Component {
         this.gridGroup = null;
         this.vertLabelsGroup = null;
         this.xAxisLabelsGroup = null;
+        this.scrollRequested = false;
 
         if (!this.props.autoScale) {
             this.scaleFunc = null;
@@ -224,11 +225,14 @@ export class BaseChart extends Component {
         const newState = this.updateChartWidth(state);
         this.setState(newState);
 
-        setTimeout(() => {
-            if (this.props.scrollToEnd) {
-                this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
-            }
-        });
+        if (this.props.scrollToEnd) {
+            this.scrollRequested = true;
+            this.scrollToRight();
+        }
+    }
+
+    scrollToRight() {
+        this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
     }
 
     setColumnWidth(value) {
@@ -355,13 +359,15 @@ export class BaseChart extends Component {
 
     /** Draw grid and return array of grid lines */
     drawGrid(state) {
-        const { chartWidth, grid } = state;
+        const { grid } = state;
 
         this.gridGroup?.remove();
         this.gridGroup = null;
         if (!grid.steps) {
             return;
         }
+
+        const width = this.content.scrollWidth;
 
         const gridGroup = svg('g');
         let step = 0;
@@ -374,7 +380,7 @@ export class BaseChart extends Component {
                 rY += 0.5;
             }
 
-            const linePath = `M0,${rY}L${chartWidth},${rY}`;
+            const linePath = `M0,${rY}L${width},${rY}`;
             const el = svg('path', {
                 class: 'chart__grid-line',
                 d: linePath,
@@ -746,6 +752,11 @@ export class BaseChart extends Component {
 
         this.updateItemsScale(vItems, newState);
 
+        if (this.scrollRequested) {
+            this.scrollToRight();
+            this.scrollRequested = false;
+        }
+
         this.state = newState;
         return newState;
     }
@@ -845,7 +856,6 @@ export class BaseChart extends Component {
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
 
         let newState = this.drawVLabels(state);
-        this.drawGrid(newState);
         newState = this.updateColumnWidth(newState);
         newState = this.updateChartWidth(newState);
 
@@ -866,8 +876,8 @@ export class BaseChart extends Component {
         this.content.setAttribute('width', newState.chartWidth);
         this.content.setAttribute('height', newState.height);
 
-        this.renderLegend(state);
+        this.drawGrid(newState);
 
-        this.state = newState;
+        this.renderLegend(state);
     }
 }
