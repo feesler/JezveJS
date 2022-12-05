@@ -3,34 +3,32 @@
   --dd-bg-color: #ffffff;
   --dd-border-color: #dfdfdf;
   --dd-border-width: 1px;
-  --dd-border-radius: 3px;
-  --dd-list-border-radius: 5px;
-  --dd-selection-text: #000000;
-  --dd-input-text: #000000;
-  --dd-placeholder: #808080;
-  --dd-list-z-index: 9999;
+
+  /* Combo */
+  --dd-combo-border-radius: 3px;
   --dd-combo-height: 34px;
   --dd-combo-content-height: calc(
     var(--dd-combo-height) - var(--dd-border-width) * 2
   );
 
-  /* Active component */
-  --dd-active-border: #888888;
-  --dd-active-bg: #ffffff;
-  --dd-active-outline: #aee5ff;
+  /* Text input */
+  --dd-input-text: #000000;
+  --dd-input-bg: var(--dd-bg-color);
+  --dd-placeholder: #808080;
+  --dd-input-padding: 0 5px 0 5px;
+  --dd-input-font-size: 1rem;
+  --dd-input-font-weight: 400;
+
+  /* Single selection */
+  --dd-selection-text: var(--dd-input-text);
+  --dd-selection-bg: var(--dd-bg-color);
+  --dd-selection-padding: var(--dd-input-padding);
+  --dd-selection-font-size: var(--dd-input-font-size);
+  --dd-selection-font-weight: var(--dd-input-font-weight);
 
   /* Clear and toggle buttons */
   --dd-btn-fill: #888888;
   --dd-btn-hover-fill: #000000;
-
-  /* Disabled component */
-  --dd-disabled-bg: #eeeeee;
-  --dd-disabled-border: #eeeeee;
-  --dd-disabled-selection-color: #a0a0a0;
-  --dd-disabled-input-text: #a0a0a0;
-  --dd-disabled-btn-fill: #a0a0a0;
-  --dd-disabled-selection-item-text: #a0a0a0;
-  --dd-disabled-selection-item-bg: #dfdfdf;
 
   /* Multiple selection */
   --dd-selection-items-gap: 2px;
@@ -44,14 +42,21 @@
   --dd-selection-item-btn: #1e82cc;
   --dd-selection-item-border-radius: 3px;
 
-  /* Multiple selection item hover */
-  --dd-selection-item-hover-text: #ffffff;
-  --dd-selection-item-hover-bg: #1e82cc;
-  --dd-selection-item-hover-btn: #166096;
+  /* Active multiple selection item */
+  --dd-selection-item-active-text: #ffffff;
+  --dd-selection-item-active-bg: #1e82cc;
+  --dd-selection-item-active-btn: #166096;
+
+  /* Hover multiple selection item */
+  --dd-selection-item-hover-text: var(--dd-selection-item-active-text);
+  --dd-selection-item-hover-bg: var(--dd-selection-item-active-bg);
+  --dd-selection-item-hover-btn: var(--dd-selection-item-active-btn);
   --dd-selection-item-btn-hover: #ffffff;
 
   /* List */
   --dd-max-list-height: 300px;
+  --dd-list-z-index: 9999;
+  --dd-list-border-radius: 5px;
 
   /* List item */
   --dd-list-item-text: #000000;
@@ -78,6 +83,40 @@
   /* Fullscreen mode */
   --dd-fullscreen-bg: #ffffff;
   --dd-fullscreen-z-index: 3000;
+
+  /* Active component */
+  --dd-active-border: #888888;
+  --dd-active-bg: #ffffff;
+  --dd-active-outline: #aee5ff;
+
+  /* Active component: Text input */
+  --dd-active-input-text: var(--dd-input-text);
+  --dd-active-input-bg: var(--dd-input-bg);
+
+  /* Active component: Single selection */
+  --dd-active-selection-text: var(--dd-selection-text);
+  --dd-active-selection-bg: var(--dd-selection-bg);
+
+  /* Active component: Multiple selection items */
+  --dd-active-selection-item-text: var(--dd-selection-item-text);
+  --dd-active-selection-item-bg: var(--dd-selection-item-bg);
+
+  /* Disabled component */
+  --dd-disabled-bg: #eeeeee;
+  --dd-disabled-border: #eeeeee;
+  --dd-disabled-btn-fill: #a0a0a0;
+
+  /* Disabled component: Text input */
+  --dd-disabled-input-text: #a0a0a0;
+  --dd-disabled-input-bg: var(--dd-disabled-bg);
+
+  /* Disabled component: Single selection */
+  --dd-disabled-selection-color: #a0a0a0;
+  --dd-disabled-selection-bg: var(--dd-disabled-bg);
+
+  /* Disabled component: Multiple selection items */
+  --dd-disabled-selection-item-text: #a0a0a0;
+  --dd-disabled-selection-item-bg: #dfdfdf;
 }
 
 /* Container of drop down control */
@@ -102,7 +141,7 @@
   border-width: var(--dd-border-width);
   border-style: solid;
   border-color: var(--dd-border-color);
-  border-radius: var(--dd-border-radius);
+  border-radius: var(--dd-combo-border-radius);
   background-color: var(--dd-bg-color);
   overflow: hidden;
 }
@@ -143,29 +182,19 @@
   fill: var(--dd-selection-item-btn);
 }
 
-/* Active selection item */
-.dd__selection-item_active {
-  color: var(--dd-selection-item-hover-text);
-  background-color: var(--dd-selection-item-hover-bg);
-
-  .dd__del-selection-item-icon {
-    fill: var(--dd-selection-item-hover-btn);
-  }
-}
-
 /* Single selection */
 .dd__single-selection {
   display: flex;
   flex: 1 0 auto;
-  font-weight: 400;
-  font-size: 0.9rem;
-  padding: 0 0 0 5px;
+  font-weight: var(--dd-selection-font-weight);
+  font-size: var(--dd-selection-font-size);
+  padding: var(--dd-selection-padding);
   margin: 0;
   height: var(--dd-combo-content-height);
   min-height: var(--dd-combo-content-height);
   line-height: var(--dd-combo-content-height);
   align-items: center;
-  background-color: var(--dd-bg-color);
+  background-color: var(--dd-selection-bg);
   color: var(--dd-selection-text);
   cursor: pointer;
 }
@@ -179,18 +208,18 @@
   display: flex;
   flex: 1 1 auto;
   font-family: inherit;
-  font-weight: 400;
-  font-size: 1rem;
-  padding: 0 0 0 4px;
+  font-weight: var(--dd-input-font-weight);
+  font-size: var(--dd-input-font-size);
+  padding: var(--dd-input-padding);
   margin: 0;
   height: var(--dd-combo-content-height);
   min-width: 50px;
-  background-color: var(--dd-bg-color);
+  background-color: var(--dd-input-bg);
   color: var(--dd-input-text);
 
   &:placeholder {
     color: var(--dd-placeholder) !important;
-    font-weight: 400 !important;
+    font-weight: var(--dd-input-font-weight) !important;
   }
 }
 
@@ -464,12 +493,35 @@
 /* Active container */
 .dd__container_active {
   .dd__combo,
-  .dd__input,
-  .dd__single-selection,
   .dd__selection,
   .dd__clear-btn,
   .dd__toggle-btn {
     background-color: var(--dd-active-bg);
+  }
+
+  .dd__input {
+    color: var(--dd-active-input-text);
+    background-color: var(--dd-active-input-bg);
+  }
+
+  .dd__single-selection {
+    color: var(--dd-active-selection-text);
+    background-color: var(--dd-active-selection-bg);
+  }
+
+  .dd__selection-item {
+    color: var(--dd-active-selection-item-text);
+    background-color: var(--dd-active-selection-item-bg);
+  }
+
+  /* Active selection item */
+  .dd__selection-item_active {
+    color: var(--dd-selection-item-active-text);
+    background-color: var(--dd-selection-item-active-bg);
+
+    .dd__del-selection-item-icon {
+      fill: var(--dd-selection-item-active-btn);
+    }
   }
 
   .dd__combo,
@@ -490,17 +542,17 @@
 
   .dd__single-selection {
     color: var(--dd-disabled-selection-color);
-    background-color: var(--dd-disabled-bg);
+    background-color: var(--dd-disabled-selection-bg);
     user-select: none;
   }
 
   .dd__input {
-    background-color: var(--dd-disabled-bg);
+    background-color: var(--dd-disabled-input-bg);
     color: var(--dd-disabled-input-text);
 
     &:placeholder {
       color: var(--dd-disabled-input-text) !important;
-      font-weight: 400 !important;
+      font-weight: var(--dd-input-font-weight) !important;
     }
   }
 
