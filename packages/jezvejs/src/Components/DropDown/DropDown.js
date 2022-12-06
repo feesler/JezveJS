@@ -526,33 +526,37 @@ export class DropDown extends Component {
 
         e.stopPropagation();
 
-        if (
-            (this.state.editable && e.target === this.inputElem)
-            || (!this.state.editable && e.target === this.elem)
-        ) {
-            if (
-                this.props.multi
-                && (e.code === 'Backspace' || e.code === 'ArrowLeft')
-            ) {
-                if (this.state.editable && e.currentTarget === this.inputElem) {
-                    const cursorPos = getCursorPos(this.inputElem);
-                    if (cursorPos && cursorPos.start === cursorPos.end && cursorPos.start === 0) {
-                        this.activateLastSelectedItem();
-                    }
-                } else {
-                    this.activateLastSelectedItem();
-                }
+        const { editable } = this.state;
+        const { multi } = this.props;
 
-                return;
+        // Backspace or Arrow Left key on container or text input
+        // Activate last multiple selection item
+        if (
+            multi
+            && (e.code === 'Backspace' || e.code === 'ArrowLeft')
+            && (
+                (editable && e.target === this.inputElem)
+                || (!editable && e.target === this.elem)
+            )
+        ) {
+            if (editable && e.currentTarget === this.inputElem) {
+                // Check cursor is at start of input
+                const cursorPos = getCursorPos(this.inputElem);
+                if (cursorPos?.start !== 0 || cursorPos.start !== cursorPos.end) {
+                    return;
+                }
             }
+
+            this.activateLastSelectedItem();
+            return;
         }
 
-        if (this.props.multi && (e.code === 'Backspace' || e.code === 'Delete')) {
+        if (multi && (e.code === 'Backspace' || e.code === 'Delete')) {
             this.onDeleteSelectedItem(e);
             return;
         }
 
-        if (this.props.multi && (e.code === 'ArrowLeft' || e.code === 'ArrowRight')) {
+        if (multi && (e.code === 'ArrowLeft' || e.code === 'ArrowRight')) {
             this.onSelectionNavigate(e);
             return;
         }
@@ -610,22 +614,22 @@ export class DropDown extends Component {
         if (!this.props.multi) {
             return;
         }
-        if (!this.isSelectedItemElement(e?.target)) {
-            return;
-        }
 
-        const navigateLeft = (e.code === 'ArrowLeft' || e.key === 'Left');
         const selectedItems = this.getSelectedItems(this.state);
         if (!selectedItems.length) {
             return;
         }
 
-        const index = this.getSelectedItemIndex(e.target);
-        if (index === -1 || (navigateLeft && index === 0)) {
-            return;
-        }
+        const index = this.state.actSelItemIndex;
+        if (e.code === 'ArrowLeft') {
+            if (index === 0) {
+                return;
+            }
+            if (index === -1) {
+                this.activateLastSelectedItem();
+                return;
+            }
 
-        if (navigateLeft) {
             this.activateSelectedItem(index - 1);
         } else {
             const itemToActivate = (index === selectedItems.length - 1) ? -1 : index + 1;
@@ -693,6 +697,7 @@ export class DropDown extends Component {
             return;
         }
 
+        this.activateSelectedItem(-1);
         this.toggleItem(item.id);
         this.sendItemSelectEvent();
         this.state.changed = true;
@@ -1082,14 +1087,12 @@ export class DropDown extends Component {
         }
 
         setTimeout(() => {
-            if (this.state.disabled || !this.state.active) {
+            if (this.state.disabled || !this.state.active || this.state.actSelItemIndex === -1) {
                 return;
             }
 
-            if (this.state.actSelItemIndex !== -1) {
-                const item = this.selectionItems[this.state.actSelItemIndex];
-                item.elem.focus();
-            }
+            const item = this.selectionItems[this.state.actSelItemIndex];
+            item?.elem?.focus();
         });
     }
 
@@ -1220,10 +1223,14 @@ export class DropDown extends Component {
             inputString: null,
             filtered: false,
             filteredCount: 0,
-            items: this.state.items.map((item) => ({
-                ...item,
-                active: false,
-            })),
+            items: (
+                (index === -1)
+                    ? this.state.items
+                    : this.state.items.map((item) => ({
+                        ...item,
+                        active: false,
+                    }))
+            ),
         });
 
         if (this.state.actSelItemIndex === -1) {
@@ -1594,6 +1601,7 @@ export class DropDown extends Component {
 
         this.setState({
             ...this.state,
+            actSelItemIndex: -1,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: item === itemToActivate,
