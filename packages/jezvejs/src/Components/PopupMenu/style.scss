@@ -70,7 +70,7 @@
   }
 
   /* Menu item with icon */
-  .popup-menu__iconbutton {
+  .iconbutton.popup-menu__iconbutton {
     --iconbtn-background: none;
     --iconbtn-title-color: var(--popupmenu-title-color);
     --iconbtn-subtitle-color: var(--popupmenu-subtitle-color);
