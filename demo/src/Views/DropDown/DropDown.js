@@ -451,6 +451,7 @@ const createPopup = () => {
     }
 
     const dropDown = DropDown.create({
+        enableFilter: true,
         placeholder: 'Select item',
         data: initItems('Popup item', 50),
     });

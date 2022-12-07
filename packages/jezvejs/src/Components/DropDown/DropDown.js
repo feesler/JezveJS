@@ -1938,7 +1938,7 @@ export class DropDown extends Component {
             if (this.props.fullScreen) {
                 document.body.style.overflow = '';
             }
-            this.list.style.height = '';
+            this.list.style.maxHeight = '';
             this.list.style.top = '';
 
             return;
