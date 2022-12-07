@@ -13,17 +13,16 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
-import { Icon } from '../Icon/Icon.js';
 import { IconButton } from '../IconButton/IconButton.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
+import { PopupMenuButton } from './PopupMenuButton.js';
 import './style.scss';
 
+export { PopupMenuButton };
+
 /* CSS classes */
-const MENU_CLASS = 'popup-menu';
 const LIST_CLASS = 'popup-menu-list';
 const FIXED_LIST_CLASS = 'popup-menu-list_fixed';
-const BUTTON_CLASS = 'btn icon-btn popup-menu-btn';
-const ICON_CLASS = 'icon popup-menu-btn__icon';
 const SEPARATOR_CLASS = 'popup-menu-list__separator';
 const ICONBTN_CLASS = 'popup-menu__iconbutton';
 const CHECKBOX_CLASS = 'action-checkbox';
@@ -91,22 +90,13 @@ export class PopupMenu extends Component {
                 this.attachTo(this.props.attachTo);
             }
         } else {
-            this.menuBtn = createElement('button', {
-                props: { className: BUTTON_CLASS, type: 'button' },
-                children: Icon.create({
-                    icon: this.props.icon,
-                    className: ICON_CLASS,
-                }).elem,
-                events: this.togglerEvents,
+            this.container = PopupMenuButton.create({
+                icon: this.props.icon,
             });
+            this.elem = this.container.elem;
+            this.elem.append(this.menuList);
+            setEvents(this.container.button, this.togglerEvents);
 
-            this.elem = createElement('div', {
-                props: { className: MENU_CLASS },
-                children: [
-                    this.menuBtn,
-                    this.menuList,
-                ],
-            });
             this.relElem = this.elem;
         }
 
@@ -161,8 +151,8 @@ export class PopupMenu extends Component {
             removeEvents(this.hostElem, this.togglerEvents);
             this.hostElem = null;
             this.relElem = null;
-        } else {
-            removeEvents(this.menuBtn, this.togglerEvents);
+        } else if (this.container) {
+            removeEvents(this.container.button, this.togglerEvents);
         }
 
         show(this.menuList, false);
