@@ -1,0 +1,22 @@
+.slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider__content {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+
+.slider_vertical .slider__content {
+  flex-flow: column nowrap;
+}
+
+.slider__content.animate {
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  flex-shrink: 0;
+}
