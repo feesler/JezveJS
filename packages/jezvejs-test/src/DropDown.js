@@ -4,7 +4,6 @@ import {
     asyncMap,
     query,
     queryAll,
-    hasClass,
     prop,
     isVisible,
     click,
@@ -37,9 +36,10 @@ export class DropDown extends TestComponent {
     }
 
     static async isValidContainer(elem) {
-        const validClass = await hasClass(elem, 'dd__container');
-        const validAttachedClass = await hasClass(elem, 'dd__container_attached');
-        return validClass || validAttachedClass;
+        return evaluate((el) => (
+            el.classList.contains('dd__container')
+            || el.classList.contains('dd__container_attached')
+        ), elem);
     }
 
     async parseContent() {
