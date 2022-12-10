@@ -506,7 +506,7 @@ export const prependChild = (parent, elem) => {
         return;
     }
 
-    const elems = Array.isArray(elem) ? elem : [elem];
+    const elems = asArray(elem);
     const fe = parent.firstChild;
     if (fe) {
         elems.reduce((prev, el) => {
@@ -539,7 +539,7 @@ const clickHandlersMap = [];
  */
 const onEmptyClick = (e, callback, elem) => {
     let notExcluded = true;
-    const elems = Array.isArray(elem) ? elem : [elem];
+    const elems = asArray(elem);
 
     if (!isFunction(callback)) {
         return;

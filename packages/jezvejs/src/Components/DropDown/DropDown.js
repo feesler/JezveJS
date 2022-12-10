@@ -17,6 +17,7 @@ import {
     removeEvents,
     deepMeet,
     enable,
+    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { DropDownListItem } from './ListItem.js';
@@ -1397,7 +1398,7 @@ export class DropDown extends Component {
             return null;
         }
 
-        const data = Array.isArray(items) ? items : [items];
+        const data = asArray(items);
         return data.map((item) => this.createItem(item));
     }
 

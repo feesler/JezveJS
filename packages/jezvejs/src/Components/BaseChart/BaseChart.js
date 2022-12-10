@@ -11,6 +11,7 @@ import {
     px,
     createElement,
     debounce,
+    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
@@ -352,8 +353,7 @@ export class BaseChart extends Component {
 
     /** Remove elements */
     removeElements(elem) {
-        const elems = Array.isArray(elem) ? elem : [elem];
-
+        const elems = asArray(elem);
         elems.forEach((el) => el?.parentNode?.removeChild(el));
     }
 

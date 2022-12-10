@@ -11,6 +11,7 @@ import {
     removeEmptyClick,
     removeChilds,
     createElement,
+    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -204,7 +205,7 @@ export class Popup extends Component {
             this.messageElem.innerHTML = preparedContent;
         } else {
             removeChilds(this.messageElem);
-            const elems = Array.isArray(content) ? content : [content];
+            const elems = asArray(content);
             this.messageElem.append(...elems);
         }
 

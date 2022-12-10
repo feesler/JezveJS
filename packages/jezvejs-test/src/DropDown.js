@@ -10,6 +10,7 @@ import {
     click,
     closest,
     evaluate,
+    asArray,
 } from 'jezve-test';
 
 export class DropDown extends TestComponent {
@@ -296,7 +297,7 @@ export class DropDown extends TestComponent {
     async setSelection(val) {
         assert(!this.content.disabled, 'Component is disabled');
 
-        const values = Array.isArray(val) ? val : [val];
+        const values = asArray(val);
         if (values.length > 1) {
             assert(this.content.isMulti, 'Select multiple items not available for single select DropDown');
         }

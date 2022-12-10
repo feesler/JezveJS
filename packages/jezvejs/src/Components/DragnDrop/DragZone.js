@@ -1,4 +1,4 @@
-import { ge, isObject } from '../../js/common.js';
+import { asArray, ge, isObject } from '../../js/common.js';
 import { DragMaster } from './DragMaster.js';
 
 const defaultProps = {
@@ -72,7 +72,7 @@ export class DragZone {
         }
 
         const hnds = this.props.handles;
-        const handles = Array.isArray(hnds) ? hnds : [hnds];
+        const handles = asArray(hnds);
 
         return handles.some((hnd) => {
             let elem;
@@ -87,9 +87,7 @@ export class DragZone {
                 elem = ge(hnd);
             }
 
-            if (!Array.isArray(elem)) {
-                elem = [elem];
-            }
+            elem = asArray(elem);
 
             return elem.some((el) => (
                 el
