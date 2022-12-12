@@ -59,11 +59,32 @@ const initAttached = () => {
     menu.attachTo(ge('attached'));
 };
 
+const initClipping = () => {
+    const menu = PopupMenu.create({
+        id: 'clipingMenu',
+        items: [{
+            icon: 'select',
+            title: 'Item 1',
+        }, {
+            icon: 'search',
+            title: 'Item 2',
+        }, {
+            title: 'Item 3',
+        }, {
+            type: 'separator',
+        }, {
+            title: 'Item 4',
+        }],
+    });
+    ge('headerContent').append(menu.elem);
+};
+
 const init = () => {
     initNavigation();
 
     initDefault();
     initAttached();
+    initClipping();
 };
 
 onReady(init);

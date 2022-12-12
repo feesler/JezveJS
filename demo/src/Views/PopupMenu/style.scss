@@ -4,3 +4,15 @@
   height: 100px;
   background-color: #0065bd;
 }
+
+.nav-header__content {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  width: 100%;
+  overflow: hidden;
+}
+
+.nav-header__content .popup-menu-btn__icon {
+  fill: #ffffff;
+}
