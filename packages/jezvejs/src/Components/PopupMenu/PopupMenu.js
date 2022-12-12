@@ -9,7 +9,6 @@ import {
     removeChilds,
     setEmptyClick,
     removeEmptyClick,
-    computedStyle,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
@@ -261,17 +260,6 @@ export class PopupMenu extends Component {
         const separator = createElement('div', { props: { className: SEPARATOR_CLASS } });
         this.menuList.append(separator);
         return separator;
-    }
-
-    /** Find parent element of list without offsetParent and check it has position: fixed */
-    isInsideFixedContainer() {
-        let elem = this.menuList;
-        while (elem.offsetParent) {
-            elem = elem.offsetParent;
-        }
-
-        const style = computedStyle(elem);
-        return style.position === 'fixed';
     }
 
     showMenu() {
