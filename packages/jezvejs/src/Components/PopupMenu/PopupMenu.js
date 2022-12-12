@@ -104,7 +104,7 @@ export class PopupMenu extends Component {
         }
 
         if (this.props.id) {
-            this.elem.id = this.props.id;
+            this.menuList.id = this.props.id;
         }
 
         this.setClassNames();
