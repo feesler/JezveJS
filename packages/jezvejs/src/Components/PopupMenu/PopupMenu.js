@@ -93,7 +93,11 @@ export class PopupMenu extends Component {
                 icon: this.props.icon,
             });
             this.elem = this.container.elem;
-            this.elem.append(this.menuList);
+            if (this.props.fixed) {
+                document.body.append(this.menuList);
+            } else {
+                this.elem.append(this.menuList);
+            }
             setEvents(this.container.button, this.togglerEvents);
 
             this.relElem = this.elem;
