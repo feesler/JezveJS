@@ -420,6 +420,7 @@ const stackedCategories = () => {
         showPopup: true,
         showPopupOnHover: true,
         animatePopup: true,
+        pinPopupOnClick: true,
         renderPopup: renderCategoriesPopup,
         activateOnHover: true,
         showLegend: true,
