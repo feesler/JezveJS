@@ -562,6 +562,11 @@ const onEmptyClick = (e, callback, elem) => {
     }
 };
 
+/** Returns index of 'empty click' handler with specified callback */
+const getEmptyClickHandlerIndex = (callback) => (
+    clickHandlersMap.findIndex((item) => item.callback === callback)
+);
+
 /** Set event handler for click by empty place */
 export const setEmptyClick = (callback, elem) => {
     if (!document.documentElement || !isFunction(callback)) {
@@ -569,6 +574,11 @@ export const setEmptyClick = (callback, elem) => {
     }
 
     setTimeout(() => {
+        const ind = getEmptyClickHandlerIndex(callback);
+        if (ind !== -1) {
+            return;
+        }
+
         const handler = (e) => onEmptyClick(e, callback, elem);
         clickHandlersMap.push({ callback, handler });
 
@@ -581,7 +591,7 @@ export const setEmptyClick = (callback, elem) => {
 
 /** Remove previously set event handler for click by empty place */
 export const removeEmptyClick = (callback) => {
-    const ind = clickHandlersMap.findIndex((item) => item.callback === callback);
+    const ind = getEmptyClickHandlerIndex(callback);
     if (ind === -1) {
         return;
     }
