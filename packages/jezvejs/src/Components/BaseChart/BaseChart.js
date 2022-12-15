@@ -227,6 +227,7 @@ export class BaseChart extends Component {
         };
 
         state.dataSets = this.getDataSets(state);
+        state.seriesMap = this.getSeriesMap(state);
         state.groupsCount = this.getGroupsCount(state);
         state.columnsInGroup = this.getColumnsInGroupCount(state);
         state.grid = this.calculateGrid(data.values, state);
@@ -301,6 +302,17 @@ export class BaseChart extends Component {
         }
 
         return values;
+    }
+
+    /** Return array to map group index to series index */
+    getSeriesMap(state = this.state) {
+        if (!Array.isArray(state?.data?.series)) {
+            return [];
+        }
+
+        return state.data.series.flatMap(([, count], index) => (
+            Array(count).fill(index)
+        ));
     }
 
     /** Returns longest data set */
@@ -591,25 +603,19 @@ export class BaseChart extends Component {
     }
 
     /** Returns series value for specified items group */
-    getSeriesByIndex(index) {
-        let res = null;
+    getSeriesByIndex(index, state = this.state) {
         if (index === -1) {
-            return res;
+            return null;
+        }
+        const { seriesMap } = state;
+        if (!seriesMap || seriesMap.length === 0) {
+            return null;
         }
 
-        let currentIndex = 0;
-        this.state.data.series.some(([value, count]) => {
-            const inRange = index >= currentIndex && index < currentIndex + count;
-            if (inRange) {
-                res = value;
-            } else {
-                currentIndex += count;
-            }
-
-            return inRange;
-        });
-
-        return res;
+        const ind = Math.max(0, Math.min(index, state.seriesMap.length - 1));
+        const seriesIndex = state.seriesMap[ind];
+        const [value] = state.data.series[seriesIndex];
+        return value;
     }
 
     /** Find item by event object */
