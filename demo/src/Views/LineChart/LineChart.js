@@ -281,7 +281,7 @@ const stacked = () => {
     });
 };
 
-const stackedNeg = () => {
+const stackedNegative = () => {
     LineChart.create({
         data: chartNegMultiData,
         elem: 'linechart-neg-stacked',
@@ -289,6 +289,8 @@ const stackedNeg = () => {
         marginTop: 35,
         autoScale: true,
         showPopup: true,
+        showPopupOnHover: true,
+        animatePopup: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
         showLegend: true,
@@ -361,7 +363,7 @@ const init = () => {
     callbacks();
     multiple();
     stacked();
-    stackedNeg();
+    stackedNegative();
     // Different data tests
     noData();
     singleNegative();

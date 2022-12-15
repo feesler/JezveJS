@@ -30,6 +30,7 @@ const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
 /* Popup */
 const POPUP_CLASS = 'chart__popup';
+const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
 const POPUP_LIST_CLASS = 'chart__popup-list';
 /* Legend */
 const LEGEND_CLASS = 'chart__legend';
@@ -55,6 +56,8 @@ const defaultProps = {
     autoScale: false,
     animate: false,
     showPopup: false,
+    showPopupOnHover: false,
+    animatePopup: false,
     renderPopup: null,
     autoScaleTimeout: 200,
     resizeTimeout: 200,
@@ -627,6 +630,9 @@ export class BaseChart extends Component {
         if (this.state.activateOnHover) {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
+        if (this.state.showPopupOnHover) {
+            this.showPopup(target);
+        }
         if (isFunction(this.props.onitemover)) {
             this.props.onitemover({ ...target, event: e });
         }
@@ -702,6 +708,7 @@ export class BaseChart extends Component {
             this.chartContainer.append(this.popup);
         }
 
+        this.popup.classList.toggle(ANIMATE_POPUP_CLASS, this.state.animatePopup);
         show(this.popup, true);
 
         this.chartContainer.style.position = 'relative';

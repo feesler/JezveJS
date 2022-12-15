@@ -410,6 +410,8 @@ const stackedCategories = () => {
         columnGap: 2,
         autoScale: true,
         showPopup: true,
+        showPopupOnHover: true,
+        animatePopup: true,
         renderPopup: renderCategoriesPopup,
         activateOnHover: true,
         showLegend: true,
