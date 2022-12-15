@@ -28,7 +28,11 @@
         "build-src": "npx webpack --progress -c ./config/common.js -c ./config/prod.js -m",
         "build-src-dev": "npx webpack --progress -c ./config/common.js -c ./config/dev.js -m",
         "build-tests": "npx webpack --progress -c ./config/tests.js",
-        "serve": "npx webpack serve -c ./config/demo.js -c ./config/dev.js -m"
+        "serve": "npx webpack serve -c ./config/demo.js -c ./config/dev.js -m",
+        "i-jezvejs": "npm install -w jezvejs",
+        "p-jezvejs": "npm publish -w jezvejs",
+        "update": "npm update --save",
+        "publish": "npm-run-all i-jezvejs update p-jezvejs"
     },
     "author": "Henry Feesler",
     "license": "ISC",
