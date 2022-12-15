@@ -141,7 +141,7 @@ const chartGroupedCategoriesData = {
         group: 'second',
         category: 'cat1',
     }, {
-        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
+        data: [50, 200, 550, 0, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
         group: 'second',
         category: 'cat2',
     }],
@@ -241,7 +241,10 @@ const renderCategoriesPopup = (target) => {
 
     const listItems = [];
     target.group.forEach((item, index) => {
-        if (item.columnIndex !== target.item.columnIndex) {
+        if (
+            item.columnIndex !== target.item.columnIndex
+            || item.value === 0
+        ) {
             return;
         }
 
@@ -255,6 +258,10 @@ const renderCategoriesPopup = (target) => {
         });
         listItems.push(listItem);
     });
+
+    if (listItems.length === 0) {
+        return null;
+    }
 
     const list = createElement('ul', {
         props: { className: 'custom-chart-popup__list' },

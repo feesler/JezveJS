@@ -741,6 +741,11 @@ export class BaseChart extends Component {
         this.chartContainer.style.position = 'relative';
 
         const content = this.renderPopupContent(target);
+        show(this.popup, (content !== null));
+        if (content === null) {
+            return;
+        }
+
         if (typeof content === 'string') {
             this.popup.textContent = content;
         } else {
