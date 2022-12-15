@@ -107,6 +107,7 @@ export class BaseChart extends Component {
         this.legend = null;
         this.popup = null;
         this.pinnedPopup = null;
+        this.pinnedTarget = null;
         this.items = [];
         this.itemsGroup = null;
         this.grid = null;
@@ -641,6 +642,7 @@ export class BaseChart extends Component {
             if (this.state.pinPopupOnClick) {
                 re(this.pinnedPopup);
                 this.pinnedPopup = this.popup;
+                this.pinnedTarget = target.item;
                 this.popup = null;
             }
         }
@@ -666,9 +668,18 @@ export class BaseChart extends Component {
         if (this.state.activateOnHover) {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
+
         if (this.state.showPopupOnHover) {
             this.showPopup(target);
+            // Hide popup if already pinned same item
+            if (
+                this.state.pinPopupOnClick
+                && target.item === this.pinnedTarget
+            ) {
+                show(this.popup, false);
+            }
         }
+
         if (isFunction(this.props.onitemover)) {
             this.props.onitemover({ ...target, event: e });
         }
