@@ -55,16 +55,18 @@ const defaultProps = {
     scrollToEnd: false,
     autoScale: false,
     animate: false,
-    showPopup: false,
-    showPopupOnHover: false,
-    animatePopup: false,
-    renderPopup: null,
     autoScaleTimeout: 200,
     resizeTimeout: 200,
     activateOnHover: false,
     renderYAxisLabel: null,
     showLegend: false,
     renderLegend: null,
+    // Popup
+    showPopup: false,
+    pinPopupOnClick: false,
+    showPopupOnHover: false,
+    animatePopup: false,
+    renderPopup: null,
     // Callbacks
     onscroll: null,
     onitemclick: null,
@@ -104,6 +106,7 @@ export class BaseChart extends Component {
         this.labelsContainer = null;
         this.legend = null;
         this.popup = null;
+        this.pinnedPopup = null;
         this.items = [];
         this.itemsGroup = null;
         this.grid = null;
@@ -634,6 +637,12 @@ export class BaseChart extends Component {
 
         if (this.state.showPopup) {
             this.showPopup(target);
+
+            if (this.state.pinPopupOnClick) {
+                re(this.pinnedPopup);
+                this.pinnedPopup = this.popup;
+                this.popup = null;
+            }
         }
 
         if (isFunction(this.props.onitemclick)) {
@@ -714,11 +723,11 @@ export class BaseChart extends Component {
     }
 
     hidePopup() {
-        if (!this.popup) {
-            return;
-        }
-
         show(this.popup, false);
+
+        if (this.state.pinPopupOnClick) {
+            show(this.pinnedPopup, false);
+        }
 
         removeEmptyClick(this.emptyClickHandler);
     }
@@ -728,9 +737,8 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (this.popup) {
-            removeEmptyClick(this.emptyClickHandler);
-        } else {
+        removeEmptyClick(this.emptyClickHandler);
+        if (!this.popup) {
             this.popup = createElement('div', { props: { className: POPUP_CLASS } });
             this.chartContainer.append(this.popup);
         }
@@ -741,6 +749,11 @@ export class BaseChart extends Component {
         this.chartContainer.style.position = 'relative';
 
         const content = this.renderPopupContent(target);
+        show(this.popup, (content !== null));
+        if (content === null) {
+            return;
+        }
+
         if (typeof content === 'string') {
             this.popup.textContent = content;
         } else {
