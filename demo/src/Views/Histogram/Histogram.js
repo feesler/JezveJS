@@ -265,6 +265,7 @@ const renderCategoriesPopup = (target) => {
         props: { className: 'custom-chart-popup' },
         children: [
             createElement('b', { props: { textContent: target.item.groupName } }),
+            createElement('div', { props: { textContent: target.series } }),
             list,
         ],
     });

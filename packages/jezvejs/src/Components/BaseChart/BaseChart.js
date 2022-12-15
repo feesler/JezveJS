@@ -586,6 +586,28 @@ export class BaseChart extends Component {
         };
     }
 
+    /** Returns series value for specified items group */
+    getSeriesByIndex(index) {
+        let res = null;
+        if (index === -1) {
+            return res;
+        }
+
+        let currentIndex = 0;
+        this.state.data.series.some(([value, count]) => {
+            const inRange = index >= currentIndex && index < currentIndex + count;
+            if (inRange) {
+                res = value;
+            } else {
+                currentIndex += count;
+            }
+
+            return inRange;
+        });
+
+        return res;
+    }
+
     /** Find item by event object */
     findItemByEvent(e) {
         const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
@@ -595,7 +617,12 @@ export class BaseChart extends Component {
         }
 
         const item = this.items[index];
-        return { x, item, index };
+        return {
+            x,
+            item,
+            index,
+            series: this.getSeriesByIndex(index),
+        };
     }
 
     /** Chart content 'click' event handler */
