@@ -135,6 +135,7 @@ export class BaseChart extends Component {
             chartWidth: 0,
             chartHeight: 0,
             lastHLabelOffset: 0,
+            blockTouch: false,
         };
     }
 
@@ -183,9 +184,11 @@ export class BaseChart extends Component {
         };
         if (
             this.props.activateOnHover
+            || this.props.showPopupOnHover
             || isFunction(this.props.onitemover)
             || isFunction(this.props.onitemout)
         ) {
+            events.touchstart = (e) => this.onTouchStart(e);
             events.mousemove = (e) => this.onMouseMove(e);
             events.mouseleave = (e) => this.onMouseLeave(e);
         }
@@ -637,24 +640,24 @@ export class BaseChart extends Component {
 
     /** Chart content 'click' event handler */
     onClick(e) {
-        if (this.mouseMoveTimeout) {
-            clearTimeout(this.mouseMoveTimeout);
-            this.mouseMoveTimeout = null;
-        }
+        this.state.blockTouch = false;
 
         const target = this.findItemByEvent(e);
         if (!target.item) {
             return;
         }
 
-        if (this.state.showPopup) {
-            if (!this.popup && this.pinnedPopup) {
+        const { showPopup, pinPopupOnClick } = this.state;
+        if (showPopup) {
+            // Reuse pinned popup in case there is no hover popup
+            // Popup will be pinned again, so it's possible to animate position of element
+            if (!this.popup && pinPopupOnClick && this.pinnedPopup) {
                 this.popup = this.pinnedPopup;
             }
 
             this.showPopup(target);
 
-            if (this.state.pinPopupOnClick) {
+            if (pinPopupOnClick) {
                 if (this.pinnedPopup !== this.popup) {
                     re(this.pinnedPopup);
                 }
@@ -663,6 +666,8 @@ export class BaseChart extends Component {
                 this.popup = null;
             }
         }
+
+        this.activateTarget(target, e);
 
         if (isFunction(this.props.onitemclick)) {
             this.props.onitemclick({ ...target, event: e });
@@ -682,15 +687,17 @@ export class BaseChart extends Component {
 
         this.activeTarget = target;
 
-        if (this.state.activateOnHover) {
+        const { activateOnHover, showPopupOnHover, pinPopupOnClick } = this.state;
+
+        if (activateOnHover) {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
 
-        if (this.state.showPopupOnHover) {
+        if (showPopupOnHover) {
             this.showPopup(target);
             // Hide popup if already pinned same item
             if (
-                this.state.pinPopupOnClick
+                pinPopupOnClick
                 && target.item === this.pinnedTarget
             ) {
                 show(this.popup, false);
@@ -718,15 +725,21 @@ export class BaseChart extends Component {
         }
     }
 
+    /** Chart content 'touchstart' event handler */
+    onTouchStart(e) {
+        if (e.touches) {
+            this.state.blockTouch = true;
+        }
+    }
+
     /** Chart content 'mousemove' event handler */
     onMouseMove(e) {
-        if (this.mouseMoveTimeout) {
-            clearTimeout(this.mouseMoveTimeout);
+        if (this.state.blockTouch) {
+            return;
         }
-        this.mouseMoveTimeout = setTimeout(() => {
-            const target = this.findItemByEvent(e);
-            this.activateTarget(target, e);
-        });
+
+        const target = this.findItemByEvent(e);
+        this.activateTarget(target, e);
     }
 
     /** Chart content 'mouseleave' event handler */
