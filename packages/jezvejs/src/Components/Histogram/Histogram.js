@@ -105,6 +105,7 @@ export class Histogram extends BaseChart {
             index,
             group: result.item,
             groupIndex: result.index,
+            series: result.series,
         };
 
         return res;

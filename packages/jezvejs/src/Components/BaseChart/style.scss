@@ -43,6 +43,11 @@
   white-space: nowrap;
 }
 
+/* Animated popup */
+.chart__popup_animated {
+  transition: all 0.2s ease;
+}
+
 /* List for multiple values popup */
 .chart__popup-list {
   display: flex;

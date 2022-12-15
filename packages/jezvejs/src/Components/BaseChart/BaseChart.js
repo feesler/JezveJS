@@ -30,6 +30,7 @@ const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
 /* Popup */
 const POPUP_CLASS = 'chart__popup';
+const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
 const POPUP_LIST_CLASS = 'chart__popup-list';
 /* Legend */
 const LEGEND_CLASS = 'chart__legend';
@@ -55,6 +56,8 @@ const defaultProps = {
     autoScale: false,
     animate: false,
     showPopup: false,
+    showPopupOnHover: false,
+    animatePopup: false,
     renderPopup: null,
     autoScaleTimeout: 200,
     resizeTimeout: 200,
@@ -583,6 +586,28 @@ export class BaseChart extends Component {
         };
     }
 
+    /** Returns series value for specified items group */
+    getSeriesByIndex(index) {
+        let res = null;
+        if (index === -1) {
+            return res;
+        }
+
+        let currentIndex = 0;
+        this.state.data.series.some(([value, count]) => {
+            const inRange = index >= currentIndex && index < currentIndex + count;
+            if (inRange) {
+                res = value;
+            } else {
+                currentIndex += count;
+            }
+
+            return inRange;
+        });
+
+        return res;
+    }
+
     /** Find item by event object */
     findItemByEvent(e) {
         const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
@@ -592,7 +617,12 @@ export class BaseChart extends Component {
         }
 
         const item = this.items[index];
-        return { x, item, index };
+        return {
+            x,
+            item,
+            index,
+            series: this.getSeriesByIndex(index),
+        };
     }
 
     /** Chart content 'click' event handler */
@@ -626,6 +656,9 @@ export class BaseChart extends Component {
 
         if (this.state.activateOnHover) {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
+        }
+        if (this.state.showPopupOnHover) {
+            this.showPopup(target);
         }
         if (isFunction(this.props.onitemover)) {
             this.props.onitemover({ ...target, event: e });
@@ -702,6 +735,7 @@ export class BaseChart extends Component {
             this.chartContainer.append(this.popup);
         }
 
+        this.popup.classList.toggle(ANIMATE_POPUP_CLASS, this.state.animatePopup);
         show(this.popup, true);
 
         this.chartContainer.style.position = 'relative';

@@ -265,6 +265,7 @@ const renderCategoriesPopup = (target) => {
         props: { className: 'custom-chart-popup' },
         children: [
             createElement('b', { props: { textContent: target.item.groupName } }),
+            createElement('div', { props: { textContent: target.series } }),
             list,
         ],
     });
@@ -410,6 +411,8 @@ const stackedCategories = () => {
         columnGap: 2,
         autoScale: true,
         showPopup: true,
+        showPopupOnHover: true,
+        animatePopup: true,
         renderPopup: renderCategoriesPopup,
         activateOnHover: true,
         showLegend: true,

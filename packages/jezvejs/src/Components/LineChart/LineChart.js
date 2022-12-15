@@ -67,6 +67,7 @@ export class LineChart extends BaseChart {
         const res = {
             item,
             index,
+            series: result.series,
             group: result.item,
             groupIndex: result.index,
         };
