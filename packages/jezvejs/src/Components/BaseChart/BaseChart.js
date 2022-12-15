@@ -631,16 +631,27 @@ export class BaseChart extends Component {
 
     /** Chart content 'click' event handler */
     onClick(e) {
+        if (this.mouseMoveTimeout) {
+            clearTimeout(this.mouseMoveTimeout);
+            this.mouseMoveTimeout = null;
+        }
+
         const target = this.findItemByEvent(e);
         if (!target.item) {
             return;
         }
 
         if (this.state.showPopup) {
+            if (!this.popup && this.pinnedPopup) {
+                this.popup = this.pinnedPopup;
+            }
+
             this.showPopup(target);
 
             if (this.state.pinPopupOnClick) {
-                re(this.pinnedPopup);
+                if (this.pinnedPopup !== this.popup) {
+                    re(this.pinnedPopup);
+                }
                 this.pinnedPopup = this.popup;
                 this.pinnedTarget = target.item;
                 this.popup = null;
@@ -703,8 +714,13 @@ export class BaseChart extends Component {
 
     /** Chart content 'mousemove' event handler */
     onMouseMove(e) {
-        const target = this.findItemByEvent(e);
-        this.activateTarget(target, e);
+        if (this.mouseMoveTimeout) {
+            clearTimeout(this.mouseMoveTimeout);
+        }
+        this.mouseMoveTimeout = setTimeout(() => {
+            const target = this.findItemByEvent(e);
+            this.activateTarget(target, e);
+        });
     }
 
     /** Chart content 'mouseleave' event handler */
@@ -789,7 +805,11 @@ export class BaseChart extends Component {
         this.popup.style.left = px(popupX);
         this.popup.style.top = px(popupY);
 
-        setEmptyClick(this.emptyClickHandler, [target.item.elem, this.popup]);
+        setEmptyClick(this.emptyClickHandler, [
+            target.item.elem,
+            this.popup,
+            this.pinnedPopup,
+        ]);
     }
 
     /** Scale visible items of chart */

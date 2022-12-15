@@ -400,6 +400,8 @@ const stackedGrouped = () => {
         columnGap: 2,
         autoScale: true,
         showPopup: true,
+        animatePopup: true,
+        pinPopupOnClick: true,
         renderPopup: renderMultiColumnPopup,
         activateOnHover: true,
         showLegend: true,
