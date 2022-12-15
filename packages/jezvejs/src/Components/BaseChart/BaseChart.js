@@ -107,6 +107,7 @@ export class BaseChart extends Component {
         this.legend = null;
         this.popup = null;
         this.pinnedPopup = null;
+        this.pinnedTarget = null;
         this.items = [];
         this.itemsGroup = null;
         this.grid = null;
@@ -226,6 +227,7 @@ export class BaseChart extends Component {
         };
 
         state.dataSets = this.getDataSets(state);
+        state.seriesMap = this.getSeriesMap(state);
         state.groupsCount = this.getGroupsCount(state);
         state.columnsInGroup = this.getColumnsInGroupCount(state);
         state.grid = this.calculateGrid(data.values, state);
@@ -300,6 +302,17 @@ export class BaseChart extends Component {
         }
 
         return values;
+    }
+
+    /** Return array to map group index to series index */
+    getSeriesMap(state = this.state) {
+        if (!Array.isArray(state?.data?.series)) {
+            return [];
+        }
+
+        return state.data.series.flatMap(([, count], index) => (
+            Array(count).fill(index)
+        ));
     }
 
     /** Returns longest data set */
@@ -590,25 +603,19 @@ export class BaseChart extends Component {
     }
 
     /** Returns series value for specified items group */
-    getSeriesByIndex(index) {
-        let res = null;
+    getSeriesByIndex(index, state = this.state) {
         if (index === -1) {
-            return res;
+            return null;
+        }
+        const { seriesMap } = state;
+        if (!seriesMap || seriesMap.length === 0) {
+            return null;
         }
 
-        let currentIndex = 0;
-        this.state.data.series.some(([value, count]) => {
-            const inRange = index >= currentIndex && index < currentIndex + count;
-            if (inRange) {
-                res = value;
-            } else {
-                currentIndex += count;
-            }
-
-            return inRange;
-        });
-
-        return res;
+        const ind = Math.max(0, Math.min(index, state.seriesMap.length - 1));
+        const seriesIndex = state.seriesMap[ind];
+        const [value] = state.data.series[seriesIndex];
+        return value;
     }
 
     /** Find item by event object */
@@ -630,17 +637,29 @@ export class BaseChart extends Component {
 
     /** Chart content 'click' event handler */
     onClick(e) {
+        if (this.mouseMoveTimeout) {
+            clearTimeout(this.mouseMoveTimeout);
+            this.mouseMoveTimeout = null;
+        }
+
         const target = this.findItemByEvent(e);
         if (!target.item) {
             return;
         }
 
         if (this.state.showPopup) {
+            if (!this.popup && this.pinnedPopup) {
+                this.popup = this.pinnedPopup;
+            }
+
             this.showPopup(target);
 
             if (this.state.pinPopupOnClick) {
-                re(this.pinnedPopup);
+                if (this.pinnedPopup !== this.popup) {
+                    re(this.pinnedPopup);
+                }
                 this.pinnedPopup = this.popup;
+                this.pinnedTarget = target.item;
                 this.popup = null;
             }
         }
@@ -666,9 +685,18 @@ export class BaseChart extends Component {
         if (this.state.activateOnHover) {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
+
         if (this.state.showPopupOnHover) {
             this.showPopup(target);
+            // Hide popup if already pinned same item
+            if (
+                this.state.pinPopupOnClick
+                && target.item === this.pinnedTarget
+            ) {
+                show(this.popup, false);
+            }
         }
+
         if (isFunction(this.props.onitemover)) {
             this.props.onitemover({ ...target, event: e });
         }
@@ -692,8 +720,13 @@ export class BaseChart extends Component {
 
     /** Chart content 'mousemove' event handler */
     onMouseMove(e) {
-        const target = this.findItemByEvent(e);
-        this.activateTarget(target, e);
+        if (this.mouseMoveTimeout) {
+            clearTimeout(this.mouseMoveTimeout);
+        }
+        this.mouseMoveTimeout = setTimeout(() => {
+            const target = this.findItemByEvent(e);
+            this.activateTarget(target, e);
+        });
     }
 
     /** Chart content 'mouseleave' event handler */
@@ -778,7 +811,11 @@ export class BaseChart extends Component {
         this.popup.style.left = px(popupX);
         this.popup.style.top = px(popupY);
 
-        setEmptyClick(this.emptyClickHandler, [target.item.elem, this.popup]);
+        setEmptyClick(this.emptyClickHandler, [
+            target.item.elem,
+            this.popup,
+            this.pinnedPopup,
+        ]);
     }
 
     /** Scale visible items of chart */
