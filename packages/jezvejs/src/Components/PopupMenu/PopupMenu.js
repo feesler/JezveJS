@@ -117,7 +117,7 @@ export class PopupMenu extends Component {
             this.setScrollEvents();
             setTimeout(() => {
                 this.ignoreScroll = false;
-            }, 200);
+            }, 500);
         }
     }
 
