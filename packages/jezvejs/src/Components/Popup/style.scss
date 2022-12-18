@@ -16,6 +16,7 @@
   overflow-y: auto;
   background: var(--popup-dim-bg);
   z-index: 2010;
+  scroll-behavior: smooth;
 }
 
 .popup__wrapper {

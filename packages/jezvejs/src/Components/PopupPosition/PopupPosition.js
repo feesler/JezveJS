@@ -1,4 +1,4 @@
-import { computedStyle, getOffset, px } from '../../js/common.js';
+import { computedStyle, px } from '../../js/common.js';
 
 export class PopupPosition {
     /** Find parent element without offsetParent and check it has position: fixed */
@@ -10,6 +10,22 @@ export class PopupPosition {
 
         const style = computedStyle(parent);
         return style?.position === 'fixed';
+    }
+
+    static getScrollParent(elem) {
+        let node = elem;
+        while (node && node.nodeType !== 9) {
+            const style = computedStyle(node);
+            const overflow = style?.overflowY ?? 'visible';
+            const isScrollable = !overflow.startsWith('visible') && !overflow.startsWith('hidden');
+            if (isScrollable && node.scrollHeight >= node.clientHeight) {
+                return node;
+            }
+
+            node = node.parentNode;
+        }
+
+        return document.scrollingElement || document.body;
     }
 
     /**
@@ -41,46 +57,45 @@ export class PopupPosition {
 
         const { style } = elem;
         const html = document.documentElement;
-        const screenTop = html.scrollTop;
         const screenHeight = this.getScreenHeight();
+        const scrollParent = this.getScrollParent(elem);
+        const scrollAvailable = scrollParent.scrollHeight >= scrollParent.clientHeight;
+        const screenTop = scrollParent.scrollTop;
         const screenBottom = screenTop + screenHeight;
-        const scrollAvailable = !this.isInsideFixedContainer(elem);
 
         const offset = (elem.offsetParent)
-            ? getOffset(elem.offsetParent)
-            : { top: screenTop, left: html.scrollLeft };
+            ? elem.offsetParent.getBoundingClientRect()
+            : { top: screenTop, left: scrollParent.scrollLeft };
 
-        const container = getOffset(refElem);
-        container.width = refElem.offsetWidth;
-        container.height = refElem.offsetHeight;
+        const reference = refElem.getBoundingClientRect();
 
         // Vertical offset
 
         // Initial set vertical position used in further calculations
         style.top = px(
-            container.top - offset.top + container.height + margin,
+            reference.top - offset.top + reference.height + margin,
         );
 
-        const scrollHeight = (scrollAvailable) ? html.scrollHeight : screenBottom;
+        const scrollHeight = (scrollAvailable) ? scrollParent.scrollHeight : screenBottom;
         const padding = screenPadding * 2;
         let height = elem.offsetHeight;
-        let totalHeight = container.height + margin + padding + height;
-        let bottom = container.top + totalHeight - screenPadding;
+        let totalHeight = reference.height + margin + padding + height;
+        let bottom = reference.top + totalHeight - screenPadding;
 
         // Check element taller than screen
         if (totalHeight > screenHeight) {
-            height = screenHeight - container.height - (padding + margin);
+            height = screenHeight - reference.height - (padding + margin);
             style.maxHeight = px(height);
 
-            totalHeight = container.height + margin + padding + height;
-            bottom = container.top + totalHeight - screenPadding;
+            totalHeight = reference.height + margin + padding + height;
+            bottom = reference.top + totalHeight - screenPadding;
         }
 
-        const top = container.top - height - margin - screenPadding;
-        const topSpace = container.top - screenTop;
-        const bottomSpace = screenBottom - container.top + container.height;
-        const topScrollSpace = container.top;
-        const bottomScrollSpace = scrollHeight - container.top + container.height;
+        const top = reference.top - height - margin - screenPadding;
+        const topSpace = reference.top - screenTop;
+        const bottomSpace = screenBottom - reference.top + reference.height;
+        const topScrollSpace = reference.top;
+        const bottomScrollSpace = scrollHeight - reference.top + reference.height;
 
         const flip = (
             bottom > scrollHeight
@@ -90,11 +105,15 @@ export class PopupPosition {
             )
         );
 
-        let overflow = (flip) ? (screenTop - top) : (bottom - screenBottom);
+        let overflow = (flip) ? (screenTop - top) : (bottom - screenHeight);
         if (overflow > 0 && scrollAvailable) {
             const maxDistance = (flip) ? screenTop : (scrollHeight - screenBottom);
             const distance = Math.min(overflow, maxDistance);
-            html.scrollTop += distance;
+
+            const newScrollTop = scrollParent.scrollTop + distance;
+            setTimeout(() => {
+                scrollParent.scrollTop = newScrollTop;
+            }, 200);
             overflow -= distance;
         }
         if (overflow > 0) {
@@ -102,12 +121,12 @@ export class PopupPosition {
             style.maxHeight = px(height);
         }
         if (flip) {
-            style.top = px(container.top - offset.top - height - margin);
+            style.top = px(reference.top - offset.top - height - margin);
         }
 
         // Horizontal offset
         if (useRefWidth) {
-            style.minWidth = px(container.width);
+            style.minWidth = px(reference.width);
             style.width = '';
         }
 
@@ -120,15 +139,15 @@ export class PopupPosition {
         }
 
         // Check element overflows screen to the right
-        // if rendered from the left of container
-        const relLeft = container.left - offset.left;
-        const leftOffset = container.left - html.scrollLeft;
+        // if rendered from the left of reference
+        const relLeft = reference.left - offset.left;
+        const leftOffset = reference.left - html.scrollLeft;
         if (leftOffset + width <= html.clientWidth) {
             style.left = px(relLeft);
             return;
         }
 
-        const left = relLeft + container.width - width;
+        const left = relLeft + reference.width - width;
         overflow = offset.left + left;
         if (overflow < 0) {
             style.left = px(left - overflow);
