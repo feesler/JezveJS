@@ -163,6 +163,8 @@ export class DropDown extends Component {
             keydown: (e) => this.onKey(e),
         };
 
+        setEvents(window.visualViewport, { resize: (e) => this.onViewportResize(e) });
+
         if (this.props.listAttach) {
             this.attachToElement();
         } else {
@@ -397,6 +399,11 @@ export class DropDown extends Component {
     /** Remove focus/blur event handlers from specified element */
     removeCommonHandlers(elem) {
         removeEvents(elem, this.commonEvents);
+    }
+
+    /** viewPort 'resize' event handler */
+    onViewportResize() {
+        this.updateListPosition();
     }
 
     /** List item 'click' event handler */
@@ -1925,6 +1932,26 @@ export class DropDown extends Component {
         this.list.style.height = px(fullScreenListHeight / 2);
     }
 
+    updateListPosition() {
+        if (
+            !this.state.visible
+            || isVisible(this.selectElem, true)
+            || (this.props.fullScreen && isVisible(this.backgroundElem))
+        ) {
+            return;
+        }
+
+        setTimeout(() => {
+            PopupPosition.calculate({
+                elem: this.list,
+                refElem: this.elem,
+                margin: LIST_MARGIN,
+                screenPadding: SCREEN_PADDING,
+                useRefWidth: true,
+            });
+        }, 100);
+    }
+
     renderList(state, prevState) {
         // Skip render if currently native select is visible
         if (isVisible(this.selectElem, true)) {
@@ -1955,10 +1982,6 @@ export class DropDown extends Component {
                 screenPadding: SCREEN_PADDING,
                 useRefWidth: true,
             });
-        }
-
-        if (state.filtered && state.filteredCount === 0) {
-            this.list.style.height = '';
         }
 
         if (!prevState.visible) {
