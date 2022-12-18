@@ -62,6 +62,7 @@ export class PopupPosition {
         const scrollAvailable = scrollParent.scrollHeight >= scrollParent.clientHeight;
         const screenTop = scrollParent.scrollTop;
         const screenBottom = screenTop + screenHeight;
+        const fixedParent = this.isInsideFixedContainer(elem);
 
         const offset = (elem.offsetParent)
             ? elem.offsetParent.getBoundingClientRect()
@@ -109,10 +110,12 @@ export class PopupPosition {
         if (overflow > 0 && scrollAvailable) {
             const maxDistance = (flip) ? screenTop : (scrollHeight - screenBottom);
             const distance = Math.min(overflow, maxDistance);
-
             const newScrollTop = scrollParent.scrollTop + distance;
             setTimeout(() => {
                 scrollParent.scrollTop = newScrollTop;
+                if (fixedParent) {
+                    window.scrollTo(window.scrollX, window.scrollY + distance);
+                }
             }, 200);
             overflow -= distance;
         }
