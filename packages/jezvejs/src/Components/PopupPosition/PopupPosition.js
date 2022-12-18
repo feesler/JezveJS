@@ -1,4 +1,4 @@
-import { computedStyle, px } from '../../js/common.js';
+import { computedStyle, isFunction, px } from '../../js/common.js';
 
 export class PopupPosition {
     /** Find parent element without offsetParent and check it has position: fixed */
@@ -49,6 +49,8 @@ export class PopupPosition {
             margin = 0,
             screenPadding = 0,
             useRefWidth = false,
+            scrollTimeout = 200,
+            onScrollDone = null,
         } = options;
 
         if (!elem || !refElem) {
@@ -119,7 +121,11 @@ export class PopupPosition {
                 if (fixedParent) {
                     window.scrollTo(window.scrollX, window.scrollY + distance);
                 }
-            }, 200);
+
+                if (isFunction(onScrollDone)) {
+                    onScrollDone();
+                }
+            }, scrollTimeout);
             overflow -= distance;
         }
         if (overflow > 0) {

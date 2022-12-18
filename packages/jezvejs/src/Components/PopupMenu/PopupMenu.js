@@ -35,6 +35,7 @@ const defaultProps = {
     attached: false,
     attachTo: null,
     hideOnScroll: true,
+    ignoreScrollTimeout: 500,
     fixed: true,
     content: null,
     items: [],
@@ -112,13 +113,17 @@ export class PopupMenu extends Component {
 
     setHandlers() {
         setEmptyClick(this.emptyClickHandler);
+    }
 
-        if (this.props.hideOnScroll) {
-            this.setScrollEvents();
-            setTimeout(() => {
-                this.ignoreScroll = false;
-            }, 500);
+    setScrollHandlers() {
+        if (!this.props.hideOnScroll) {
+            return;
         }
+
+        this.setScrollEvents();
+        setTimeout(() => {
+            this.ignoreScroll = false;
+        }, this.props.ignoreScrollTimeout);
     }
 
     removeHandlers() {
@@ -279,6 +284,7 @@ export class PopupMenu extends Component {
             refElem: this.relElem,
             margin: LIST_MARGIN,
             screenPadding: SCREEN_PADDING,
+            onScrollDone: () => this.setScrollHandlers(),
         });
 
         if (PopupMenu.activeInstance !== this) {
