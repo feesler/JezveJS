@@ -127,6 +127,8 @@ export class PopupPosition {
                 }
             }, scrollTimeout);
             overflow -= distance;
+        } else if (isFunction(onScrollDone)) {
+            onScrollDone();
         }
         if (overflow > 0) {
             height -= overflow;
