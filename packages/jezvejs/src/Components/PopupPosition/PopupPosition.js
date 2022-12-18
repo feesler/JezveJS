@@ -66,16 +66,15 @@ export class PopupPosition {
 
         const offset = (elem.offsetParent)
             ? elem.offsetParent.getBoundingClientRect()
-            : { top: screenTop, left: scrollParent.scrollLeft };
+            : { top: 0, left: 0 };
 
         const reference = refElem.getBoundingClientRect();
 
         // Vertical offset
 
         // Initial set vertical position used in further calculations
-        style.top = px(
-            reference.top - offset.top + reference.height + margin,
-        );
+        const initialTop = reference.top - offset.top + reference.height + margin;
+        style.top = px(initialTop);
 
         const scrollHeight = (scrollAvailable) ? scrollParent.scrollHeight : screenBottom;
         const padding = screenPadding * 2;
@@ -112,6 +111,10 @@ export class PopupPosition {
             const distance = Math.min(overflow, maxDistance);
             const newScrollTop = scrollParent.scrollTop + distance;
             setTimeout(() => {
+                if (!elem.offsetParent) {
+                    style.top = px(initialTop - distance);
+                }
+
                 scrollParent.scrollTop = newScrollTop;
                 if (fixedParent) {
                     window.scrollTo(window.scrollX, window.scrollY + distance);
