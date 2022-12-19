@@ -1,6 +1,6 @@
 import 'jezvejs/style';
-import { ge, onReady } from 'jezvejs';
-import { PopupMenu } from 'jezvejs/PopupMenu';
+import { createElement, ge, onReady } from 'jezvejs';
+import { PopupMenu, PopupMenuButton } from 'jezvejs/PopupMenu';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
@@ -79,12 +79,66 @@ const initClipping = () => {
     ge('headerContent').append(menu.elem);
 };
 
+const onListMenuClick = (e, menu) => {
+    const listItemElem = e.target.closest('.list-item');
+    if (!listItemElem) {
+        return;
+    }
+    const menuContainer = listItemElem.querySelector('.popup-menu');
+    if (!menuContainer) {
+        return;
+    }
+
+    menu.attachTo(menuContainer);
+};
+
+const renderListItem = (id, menu) => (
+    createElement('div', {
+        props: {
+            className: 'list-item',
+            dataset: { id },
+        },
+        children: [
+            createElement('span', { props: { textContent: `Item ${id}` } }),
+            PopupMenuButton.create({ onClick: (e) => onListMenuClick(e, menu) }).elem,
+        ],
+    })
+);
+
+const initList = () => {
+    const menu = PopupMenu.create({
+        attached: true,
+        items: [{
+            id: 'selectModeBtn',
+            icon: 'select',
+            title: 'Select',
+        }, {
+            id: 'separator1',
+            type: 'separator',
+        }, {
+            id: 'selectAllBtn',
+            title: 'Select all',
+        }, {
+            id: 'deselectAllBtn',
+            title: 'Clear selection',
+        }],
+    });
+
+    const list = ge('list');
+    const itemsCount = 20;
+    for (let i = 1; i <= itemsCount; i += 1) {
+        const itemElem = renderListItem(i, menu);
+        list.append(itemElem);
+    }
+};
+
 const init = () => {
     initNavigation();
 
     initDefault();
     initAttached();
     initClipping();
+    initList();
 };
 
 onReady(init);
