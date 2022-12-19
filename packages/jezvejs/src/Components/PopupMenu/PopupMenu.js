@@ -147,7 +147,7 @@ export class PopupMenu extends Component {
             return;
         }
         // Ignore scroll of menu itself
-        const listElem = e.target.closest(LIST_SELECTOR);
+        const listElem = (isFunction(e.target.closest)) ? e.target.closest(LIST_SELECTOR) : null;
         if (listElem === this.menuList) {
             return;
         }
