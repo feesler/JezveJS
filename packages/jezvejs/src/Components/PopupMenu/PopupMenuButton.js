@@ -1,4 +1,4 @@
-import { createElement } from '../../js/common.js';
+import { createElement, isFunction } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Icon } from '../Icon/Icon.js';
 import './style.scss';
@@ -10,6 +10,7 @@ const ICON_CLASS = 'icon popup-menu-btn__icon';
 
 const defaultProps = {
     icon: 'ellipsis',
+    onClick: null,
 };
 
 export class PopupMenuButton extends Component {
@@ -23,12 +24,18 @@ export class PopupMenuButton extends Component {
     }
 
     init() {
+        const events = {};
+        if (isFunction(this.props.onClick)) {
+            events.click = (e) => this.props.onClick(e);
+        }
+
         this.button = createElement('button', {
             props: { className: BUTTON_CLASS, type: 'button' },
             children: Icon.create({
                 icon: this.props.icon,
                 className: ICON_CLASS,
             }).elem,
+            events,
         });
 
         this.elem = createElement('div', {
