@@ -297,10 +297,7 @@ export class PopupMenu extends Component {
 
     hideMenu() {
         show(this.menuList, false);
-        this.menuList.style.top = '';
-        this.menuList.style.left = '';
-        this.menuList.style.width = '';
-        this.menuList.style.height = '';
+        PopupPosition.reset(this.menuList);
 
         PopupMenu.activeInstance = null;
         this.removeHandlers();

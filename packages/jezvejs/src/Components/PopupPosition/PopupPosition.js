@@ -185,4 +185,18 @@ export class PopupPosition {
             style.left = px(left);
         }
     }
+
+    /* Reset previously applied style properties of element */
+    static reset(elem) {
+        if (!elem) {
+            return;
+        }
+
+        const { style } = elem;
+        style.top = '';
+        style.left = '';
+        style.minWidth = '';
+        style.width = '';
+        style.maxHeight = '';
+    }
 }
