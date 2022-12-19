@@ -108,14 +108,15 @@ export class PopupPosition {
         const top = reference.top - height - margin - screenPadding;
         const topSpace = reference.top;
         const bottomSpace = screenHeight - reference.bottom;
-        const topScrollSpace = refInScrollParent.top;
-        const bottomScrollSpace = scrollHeight - refInScrollParent.bottom;
+        const topScrollSpace = (scrollAvailable) ? refInScrollParent.top : 0;
+        const bottomScrollSpace = (scrollAvailable)
+            ? (scrollHeight - refInScrollParent.bottom)
+            : 0;
 
         const flip = (
             bottom > screenHeight
             && (
-                (topSpace > bottomSpace)
-                || (scrollAvailable && topScrollSpace > bottomScrollSpace)
+                (topSpace + topScrollSpace > bottomSpace + bottomScrollSpace)
             )
         );
 
@@ -128,6 +129,8 @@ export class PopupPosition {
             const maxDistance = (flip) ? scrollTop : (scrollHeight - scrollBottom);
             const distance = Math.min(overflow, maxDistance) * ((flip) ? -1 : 1);
             const newScrollTop = scrollParent.scrollTop + distance;
+            const newWindowScroll = window.scrollY + distance;
+
             setTimeout(() => {
                 if (!elem.offsetParent) {
                     style.top = px(initialTop - distance);
@@ -135,20 +138,24 @@ export class PopupPosition {
 
                 scrollParent.scrollTop = newScrollTop;
                 if (fixedParent) {
-                    window.scrollTo(window.scrollX, window.scrollY + distance);
+                    window.scrollTo(window.scrollX, newWindowScroll);
                 }
 
                 if (isFunction(onScrollDone)) {
                     onScrollDone();
                 }
             }, scrollTimeout);
-            overflow -= distance;
+
+            overflow -= Math.abs(distance);
         } else if (isFunction(onScrollDone)) {
             onScrollDone();
         }
         if (overflow > 0) {
             height -= overflow;
             style.maxHeight = px(height);
+            if (flip) {
+                initialTop += overflow;
+            }
         }
         if (flip) {
             style.top = px(initialTop);
