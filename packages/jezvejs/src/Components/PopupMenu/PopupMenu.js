@@ -21,6 +21,7 @@ export { PopupMenuButton };
 
 /* CSS classes */
 const LIST_CLASS = 'popup-menu-list';
+const LIST_SELECTOR = `.${LIST_CLASS}`;
 const FIXED_LIST_CLASS = 'popup-menu-list_fixed';
 const SEPARATOR_CLASS = 'popup-menu-list__separator';
 const ICONBTN_CLASS = 'popup-menu__iconbutton';
@@ -64,7 +65,7 @@ export class PopupMenu extends Component {
         this.items = {};
 
         this.emptyClickHandler = () => this.hideMenu();
-        this.scrollHandler = () => this.onScroll();
+        this.scrollHandler = (e) => this.onScroll(e);
         this.togglerEvents = { click: (e) => this.toggleMenu(e) };
 
         this.init();
@@ -112,7 +113,7 @@ export class PopupMenu extends Component {
     }
 
     setHandlers() {
-        setEmptyClick(this.emptyClickHandler);
+        setEmptyClick(this.emptyClickHandler, [this.menuList, this.relElem]);
     }
 
     setScrollHandlers() {
@@ -141,8 +142,13 @@ export class PopupMenu extends Component {
         window.removeEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
     }
 
-    onScroll() {
+    onScroll(e) {
         if (this.ignoreScroll) {
+            return;
+        }
+        // Ignore scroll of menu itself
+        const listElem = e.target.closest(LIST_SELECTOR);
+        if (listElem === this.menuList) {
             return;
         }
 

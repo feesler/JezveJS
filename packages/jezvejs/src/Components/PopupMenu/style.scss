@@ -49,7 +49,7 @@
   display: flex;
   flex-flow: column nowrap;
   position: absolute;
-  overflow: hidden;
+  overflow-y: auto;
   border-width: var(--popupmenu-border-width);
   border-style: solid;
   border-color: var(--popupmenu-border-color);
@@ -81,6 +81,7 @@
     --iconbtn-hover-subtitle-color: var(--popupmenu-hover-subtitle-color);
 
     height: auto;
+    flex-shrink: 0;
     padding: 8px;
     width: 100%;
 
@@ -110,6 +111,7 @@
     display: flex;
     padding: 8px;
     margin: 0;
+    flex-shrink: 0;
     cursor: pointer;
 
     .checkbox__check {
