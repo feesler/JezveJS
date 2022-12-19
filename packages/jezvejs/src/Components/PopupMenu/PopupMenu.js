@@ -287,7 +287,7 @@ export class PopupMenu extends Component {
             onScrollDone: () => this.setScrollHandlers(),
         });
 
-        if (PopupMenu.activeInstance !== this) {
+        if (PopupMenu.activeInstance && PopupMenu.activeInstance !== this) {
             PopupMenu.hideActive();
             PopupMenu.activeInstance = this;
         }
