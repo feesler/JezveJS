@@ -13,7 +13,7 @@ export class PopupPosition {
     }
 
     static getScrollParent(elem) {
-        let node = elem;
+        let node = elem?.parentNode;
         while (node && node.nodeType !== 9) {
             const style = computedStyle(node);
             const overflow = style?.overflowY ?? 'visible';
