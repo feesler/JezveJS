@@ -41,6 +41,12 @@ export class PopupPosition {
         return Math.min(clientHeight, window.visualViewport.height);
     }
 
+    static getWindowScrollTop() {
+        const { body } = document;
+        const { scrollTop } = document.documentElement;
+        return window.pageYOffset || scrollTop || body.scrollTop;
+    }
+
     /** Calculate height, vertical and horizontal offset of popup element */
     static calculate(options) {
         const {
@@ -63,7 +69,8 @@ export class PopupPosition {
         const screenHeight = this.getScreenHeight();
         const scrollParent = this.getScrollParent(elem);
         const scrollAvailable = scrollParent.scrollHeight >= scrollParent.clientHeight;
-        const screenTop = scrollParent.scrollTop;
+        const { scrollTop } = scrollParent;
+        const screenTop = this.getWindowScrollTop();
         const screenBottom = screenTop + screenHeight;
         const fixedParent = this.isInsideFixedContainer(refElem);
 
@@ -84,9 +91,20 @@ export class PopupPosition {
         style.top = px(initialTop);
 
         const scrollHeight = (scrollAvailable) ? scrollParent.scrollHeight : screenBottom;
-        const { scrollTop } = scrollParent;
         const scrollBottom = scrollTop + scrollParentBox.height;
 
+        const windowScrollTop = (fixedParent) ? scrollTop : screenTop;
+        const windowScrollHeight = (fixedParent) ? scrollHeight : html.scrollHeight;
+        const windowScrollBottom = windowScrollTop + screenHeight;
+
+        const dist = {
+            top: scrollTop,
+            bottom: scrollHeight - scrollBottom,
+        };
+        const windowDist = {
+            top: windowScrollTop,
+            bottom: windowScrollHeight - windowScrollBottom,
+        };
         const refInScrollParent = {
             top: scrollTop + reference.top - scrollParentBox.top,
             bottom: scrollTop + reference.bottom - scrollParentBox.top,
@@ -113,10 +131,13 @@ export class PopupPosition {
             ? (scrollHeight - refInScrollParent.bottom)
             : 0;
 
+        const overflowBottom = bottom - screenHeight;
+        const overflowTop = -top;
         const flip = (
-            bottom > screenHeight
+            overflowBottom > 0
             && (
-                (topSpace + topScrollSpace > bottomSpace + bottomScrollSpace)
+                (overflowBottom > overflowTop)
+                && (topSpace + topScrollSpace > bottomSpace + bottomScrollSpace)
             )
         );
 
@@ -124,12 +145,19 @@ export class PopupPosition {
             initialTop = reference.top - offset.top - height - margin;
         }
 
-        let overflow = (flip) ? (-top) : (bottom - screenHeight);
+        let overflow = (flip) ? overflowTop : overflowBottom;
         if (overflow > 0 && scrollAvailable) {
-            const maxDistance = (flip) ? scrollTop : (scrollHeight - scrollBottom);
+            const maxDistance = (flip) ? dist.top : dist.bottom;
             const distance = Math.min(overflow, maxDistance) * ((flip) ? -1 : 1);
             const newScrollTop = scrollParent.scrollTop + distance;
-            const newWindowScroll = window.scrollY + distance;
+            overflow -= Math.abs(distance);
+            let windowDistance = distance;
+
+            if (distance === 0 && overflow > 0) {
+                const maxWindowDistance = (flip) ? windowDist.top : windowDist.bottom;
+                windowDistance = Math.min(overflow, maxWindowDistance) * ((flip) ? -1 : 1);
+                overflow -= Math.abs(windowDistance);
+            }
 
             setTimeout(() => {
                 if (!elem.offsetParent) {
@@ -138,15 +166,13 @@ export class PopupPosition {
 
                 scrollParent.scrollTop = newScrollTop;
                 if (fixedParent) {
-                    window.scrollTo(window.scrollX, newWindowScroll);
+                    window.scrollTo(window.scrollX, window.scrollY + windowDistance);
                 }
 
                 if (isFunction(onScrollDone)) {
                     onScrollDone();
                 }
             }, scrollTimeout);
-
-            overflow -= Math.abs(distance);
         } else if (isFunction(onScrollDone)) {
             onScrollDone();
         }
