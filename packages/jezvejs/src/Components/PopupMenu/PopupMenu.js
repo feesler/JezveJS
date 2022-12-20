@@ -295,8 +295,8 @@ export class PopupMenu extends Component {
 
         if (PopupMenu.activeInstance && PopupMenu.activeInstance !== this) {
             PopupMenu.hideActive();
-            PopupMenu.activeInstance = this;
         }
+        PopupMenu.activeInstance = this;
 
         this.setHandlers();
     }
