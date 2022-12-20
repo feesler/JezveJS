@@ -437,7 +437,7 @@ const dynamicAddRemoveItems = () => {
 let popup = null;
 
 const setPopupAlign = (align) => {
-    if (!popup) {
+    if (!popup || !align) {
         return;
     }
 
