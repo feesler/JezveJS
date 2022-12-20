@@ -2,14 +2,15 @@ import { computedStyle, isFunction, px } from '../../js/common.js';
 
 export class PopupPosition {
     /** Find parent element without offsetParent and check it has position: fixed */
-    static isInsideFixedContainer(elem) {
+    static getFixedParent(elem) {
         let parent = elem;
         while (parent.offsetParent) {
             parent = parent.offsetParent;
         }
 
         const style = computedStyle(parent);
-        return style?.position === 'fixed';
+        const isFixed = style?.position === 'fixed';
+        return (isFixed) ? parent : null;
     }
 
     static getScrollParent(elem) {
@@ -47,6 +48,12 @@ export class PopupPosition {
         return window.pageYOffset || scrollTop || body.scrollTop;
     }
 
+    static notifyScrollDone(callback) {
+        if (isFunction(callback)) {
+            callback();
+        }
+    }
+
     /** Calculate height, vertical and horizontal offset of popup element */
     static calculate(options) {
         const {
@@ -72,15 +79,16 @@ export class PopupPosition {
         const { scrollTop } = scrollParent;
         const screenTop = this.getWindowScrollTop();
         const screenBottom = screenTop + screenHeight;
-        const fixedParent = this.isInsideFixedContainer(refElem);
+        const fixedParent = this.getFixedParent(refElem);
+        const fixedElement = !elem.offsetParent;
 
         const scrollParentBox = (scrollParent)
             ? scrollParent.getBoundingClientRect()
             : { top: 0, left: 0, height: screenHeight };
 
-        const offset = (elem.offsetParent)
-            ? elem.offsetParent.getBoundingClientRect()
-            : { top: 0, left: 0 };
+        const offset = (fixedElement)
+            ? { top: 0, left: 0 }
+            : elem.offsetParent.getBoundingClientRect();
 
         const reference = refElem.getBoundingClientRect();
 
@@ -88,6 +96,9 @@ export class PopupPosition {
 
         // Initial set vertical position used in further calculations
         let initialTop = reference.bottom - offset.top + margin;
+        if (fixedParent && !fixedElement) {
+            initialTop += scrollTop;
+        }
         style.top = px(initialTop);
 
         const scrollHeight = (scrollAvailable) ? scrollParent.scrollHeight : screenBottom;
@@ -145,20 +156,27 @@ export class PopupPosition {
             initialTop = reference.top - offset.top - height - margin;
         }
 
+        let waitForScroll = false;
         let overflow = (flip) ? overflowTop : overflowBottom;
         if (overflow > 0 && scrollAvailable) {
             const maxDistance = (flip) ? dist.top : dist.bottom;
             const distance = Math.min(overflow, maxDistance) * ((flip) ? -1 : 1);
             const newScrollTop = scrollParent.scrollTop + distance;
-            overflow -= Math.abs(distance);
-            let windowDistance = distance;
 
-            if (distance === 0 && overflow > 0) {
+            if ((flip && distance < 0) || (!flip && distance > 0)) {
+                overflow -= Math.abs(distance);
+            }
+
+            // Scroll window if overflow is not cleared yet
+            let windowDistance = distance;
+            if (overflow > 0) {
                 const maxWindowDistance = (flip) ? windowDist.top : windowDist.bottom;
                 windowDistance = Math.min(overflow, maxWindowDistance) * ((flip) ? -1 : 1);
                 overflow -= Math.abs(windowDistance);
             }
+            const newWindowScrollY = window.scrollY + windowDistance;
 
+            waitForScroll = true;
             setTimeout(() => {
                 if (!elem.offsetParent) {
                     style.top = px(initialTop - distance);
@@ -166,16 +184,13 @@ export class PopupPosition {
 
                 scrollParent.scrollTop = newScrollTop;
                 if (fixedParent) {
-                    window.scrollTo(window.scrollX, window.scrollY + windowDistance);
+                    window.scrollTo(window.scrollX, newWindowScrollY);
                 }
 
-                if (isFunction(onScrollDone)) {
-                    onScrollDone();
-                }
+                this.notifyScrollDone(onScrollDone);
             }, scrollTimeout);
-        } else if (isFunction(onScrollDone)) {
-            onScrollDone();
         }
+        // Decrease height of element if overflow is not cleared
         if (overflow > 0) {
             height -= overflow;
             style.maxHeight = px(height);
@@ -185,6 +200,10 @@ export class PopupPosition {
         }
         if (flip) {
             style.top = px(initialTop);
+        }
+
+        if (!waitForScroll) {
+            this.notifyScrollDone(onScrollDone);
         }
 
         // Horizontal offset

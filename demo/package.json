@@ -6,6 +6,6 @@
     "author": "Henry Feesler",
     "license": "ISC",
     "dependencies": {
-        "jezvejs": "^1.63.7"
+        "jezvejs": "^1.63.8"
     }
 }
