@@ -1966,9 +1966,8 @@ export class DropDown extends Component {
             if (this.props.fullScreen) {
                 document.body.style.overflow = '';
             }
-            this.list.style.maxHeight = '';
-            this.list.style.top = '';
 
+            PopupPosition.reset(this.list);
             return;
         }
 

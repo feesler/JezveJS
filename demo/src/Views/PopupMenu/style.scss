@@ -16,3 +16,30 @@
 .nav-header__content .popup-menu-btn__icon {
   fill: #ffffff;
 }
+
+/* List element */
+.list {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  width: 100%;
+  max-width: 400px;
+  max-height: 300px;
+  overflow-y: auto;
+  row-gap: 2px;
+}
+
+.list-item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  padding: 0.5rem;
+  background-color: #dddddd;
+
+  .popup-menu .popup-menu-btn__icon {
+    width: 18px;
+    height: 18px;
+  }
+}
