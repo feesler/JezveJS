@@ -134,8 +134,11 @@ export class Histogram extends BaseChart {
     }, state) {
         const { grid } = state;
         const fixedValue = value ?? 0;
-        const fixedOffset = valueOffset ?? 0;
+        if (fixedValue === 0) {
+            return null;
+        }
 
+        const fixedOffset = valueOffset ?? 0;
         const y0 = grid.getY(fixedOffset);
         const y1 = grid.getY(fixedValue + fixedOffset);
         const height = grid.roundToPrecision(Math.abs(y0 - y1), 1);
@@ -209,6 +212,10 @@ export class Histogram extends BaseChart {
 
             dataSets.forEach((dataSet, dataSetIndex) => {
                 const value = dataSet.data[groupIndex] ?? 0;
+                if (value === 0) {
+                    return;
+                }
+
                 const category = dataSet.category ?? null;
                 const categoryIndex = (category && stackedCategories.includes(category))
                     ? stackedCategories.indexOf(category)
