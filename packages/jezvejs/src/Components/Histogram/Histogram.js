@@ -127,6 +127,7 @@ export class Histogram extends BaseChart {
         value,
         width,
         groupIndex,
+        category = null,
         columnIndex = 0,
         categoryIndex = 0,
         valueOffset = 0,
@@ -153,6 +154,7 @@ export class Histogram extends BaseChart {
             height,
             groupIndex,
             columnIndex,
+            category,
             categoryIndex,
             groupName,
         };
@@ -233,6 +235,7 @@ export class Histogram extends BaseChart {
                     width: state.columnWidth,
                     groupIndex,
                     columnIndex,
+                    category,
                     categoryIndex,
                     valueOffset,
                     groupName,
