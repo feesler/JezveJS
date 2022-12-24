@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge, onReady } from 'jezvejs';
+import { ge, onReady, setEvents } from 'jezvejs';
 import { PieChart } from 'jezvejs/PieChart';
 import { initNavigation } from '../../app.js';
 import './style.scss';
@@ -101,12 +101,45 @@ const initInnerRadius = () => {
     container.append(chart.elem);
 };
 
+const initNoData = () => {
+    const initialData = [
+        {
+            id: 1,
+            value: 10,
+            title: 'First category',
+            offset: 10,
+        },
+        { id: 2, value: 10, title: 'Second category' },
+        { id: 3, value: 10, title: 'Third category' },
+        { id: 4, value: 20, title: 'Fourth category' },
+        { id: 5, value: 3, title: 'Fiveth category' },
+        { id: 6, value: 5, title: 'Sixth category' },
+    ];
+
+    const container = ge('noDataPChart');
+    const chart = PieChart.create({
+        className: 'middle_pie',
+        radius: 100,
+        innerRadius: 70,
+        offset: 10,
+        data: null,
+    });
+    container.append(chart.elem);
+
+    const setNoDataBtn = ge('setNoDataBtn');
+    setEvents(setNoDataBtn, { click: () => chart.setData(null) });
+
+    const setDataBtn = ge('setDataBtn');
+    setEvents(setDataBtn, { click: () => chart.setData(initialData) });
+};
+
 const init = () => {
     initNavigation();
 
     initSmall();
     initOffset();
     initInnerRadius();
+    initNoData();
 };
 
 onReady(init);

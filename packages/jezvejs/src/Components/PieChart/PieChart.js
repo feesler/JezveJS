@@ -87,15 +87,12 @@ export class PieChart extends Component {
     }
 
     setData(data) {
-        if (!Array.isArray(data)) {
-            throw new Error('Expected data array');
-        }
-
         if (this.state.data === data) {
             return;
         }
 
-        this.state.data = data.map((item) => {
+        const items = asArray(data);
+        this.state.data = items.map((item) => {
             const res = isObject(item) ? { ...item } : { value: item };
 
             if (!('value' in res)) {
@@ -279,14 +276,12 @@ export class PieChart extends Component {
             throw new Error('Invalid radius');
         }
 
-        if (typeof data === 'undefined' || data === 0) {
-            throw new Error('Invalid data');
-        }
-
         let values = asArray(data);
         const total = this.arraySum(values);
         if (total === 0) {
-            throw new Error('Invalid data');
+            this.sectorsGroup?.remove();
+            this.sectorsGroup = null;
+            return;
         }
 
         values = values.map((item) => ({
