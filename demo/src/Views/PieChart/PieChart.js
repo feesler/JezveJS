@@ -107,7 +107,7 @@ const initNoData = () => {
         { category: 3, value: 10, title: 'Second category' },
         { category: 5, value: 10, title: 'Third category' },
         { category: 7, value: 20, title: 'Fourth category' },
-        { category: 8, value: 3, title: 'Fiveth category' },
+        { category: 8, value: 0, title: 'Fiveth category' },
         { category: 'gray', value: 5, title: 'Sixth category' },
     ];
 

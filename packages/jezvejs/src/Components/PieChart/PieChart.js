@@ -284,10 +284,12 @@ export class PieChart extends Component {
             return;
         }
 
-        values = values.map((item) => ({
-            ...item,
-            arc: 360 * (item.value / total),
-        }));
+        values = values
+            .filter((item) => item.value > 0)
+            .map((item) => ({
+                ...item,
+                arc: 360 * (item.value / total),
+            }));
         values.sort((a, b) => (a.value - b.value));
 
         let start = 0;
