@@ -284,10 +284,12 @@ export class PieChart extends Component {
             return;
         }
 
-        values = values.map((item) => ({
-            ...item,
-            arc: 360 * (item.value / total),
-        }));
+        values = values
+            .filter((item) => item.value > 0)
+            .map((item) => ({
+                ...item,
+                arc: 360 * (item.value / total),
+            }));
         values.sort((a, b) => (a.value - b.value));
 
         let start = 0;
@@ -305,7 +307,8 @@ export class PieChart extends Component {
                 sector.arc,
                 sector.offset,
             );
-            sector.elem.classList.add(SECTOR_CLASS, `${SECTOR_CATEGORY_CLASS}${ind + 1}`);
+            const category = item.category ?? (ind + 1);
+            sector.elem.classList.add(SECTOR_CLASS, `${SECTOR_CATEGORY_CLASS}${category}`);
 
             if (this.props.colors.length > 0) {
                 sector.color = this.getNextColor(prevColor);
