@@ -37,8 +37,8 @@
     "author": "Henry Feesler",
     "license": "ISC",
     "devDependencies": {
-        "@babel/cli": "^7.19.3",
-        "@babel/core": "^7.20.5",
+        "@babel/cli": "^7.20.7",
+        "@babel/core": "^7.20.7",
         "@babel/eslint-parser": "^7.19.1",
         "@babel/plugin-proposal-class-properties": "^7.18.6",
         "@babel/plugin-transform-regenerator": "^7.20.5",
@@ -73,7 +73,7 @@
         "webpack-merge": "^5.8.0"
     },
     "dependencies": {
-        "@babel/runtime": "^7.20.6",
+        "@babel/runtime": "^7.20.7",
         "core-js": "^3.26.1",
         "whatwg-fetch": "^3.6.2"
     },
