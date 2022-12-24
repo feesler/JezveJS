@@ -82,6 +82,7 @@ export class LineChart extends BaseChart {
     createItem({
         value,
         groupIndex,
+        category = null,
         categoryIndex = 0,
         valueOffset = 0,
     }, state) {
@@ -94,6 +95,8 @@ export class LineChart extends BaseChart {
             value: fixedValue,
             valueOffset: fixedOffset,
             groupIndex,
+            category,
+            categoryIndex,
             dot: {
                 x: this.getX(groupIndex, groupWidth),
                 y: grid.getY(fixedValue + fixedOffset),
@@ -132,9 +135,12 @@ export class LineChart extends BaseChart {
 
             dataSets.forEach((dataSet, categoryIndex) => {
                 const value = dataSet.data[groupIndex] ?? 0;
+                const category = dataSet.category ?? null;
+
                 const item = this.createItem({
                     value,
                     groupIndex,
+                    category,
                     categoryIndex,
                     valueOffset,
                 }, state);
