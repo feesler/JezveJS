@@ -305,7 +305,8 @@ export class PieChart extends Component {
                 sector.arc,
                 sector.offset,
             );
-            sector.elem.classList.add(SECTOR_CLASS, `${SECTOR_CATEGORY_CLASS}${ind + 1}`);
+            const category = item.category ?? (ind + 1);
+            sector.elem.classList.add(SECTOR_CLASS, `${SECTOR_CATEGORY_CLASS}${category}`);
 
             if (this.props.colors.length > 0) {
                 sector.color = this.getNextColor(prevColor);

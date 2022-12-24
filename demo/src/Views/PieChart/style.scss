@@ -34,6 +34,10 @@
   .pie__sector-9 {
     fill: #dcf900;
   }
+
+  .pie__sector-gray {
+    fill: #9c9c9c;
+  }
 }
 
 .std_chart_wrap {
@@ -89,6 +93,10 @@
 
     .pie__sector-9:hover {
       fill: #e6fc3f;
+    }
+
+    .pie__sector-gray:hover {
+      fill: #c5c5c5;
     }
   }
 }
