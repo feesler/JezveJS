@@ -170,12 +170,42 @@ export class PieChart extends Component {
     }
 
     /**
+     * Draw full circle sector
+     * @param {number} x - x coordinate of center of circle
+     * @param {number} y - y coordinate of center of circle
+     * @param {number} r - radius of circle
+     * @param {number} ir - inner radius of circle
+     * @param {number} offset - offset from center of circles
+     */
+    drawFullSector(x, y, r, ir, offset) {
+        const outer1 = circularArc(x, y, r, 0, 180, offset, true);
+        const outer2 = circularArc(x, y, r, 180, 180, offset, true);
+        const outerSX = svgValue(outer1.startX);
+        const outerSY = svgValue(outer1.startY);
+        const outer = `m${outerSX} ${outerSY} ${outer1.command} ${outer2.command}z`;
+
+        if (ir === 0) {
+            return svg('path', { d: outer });
+        }
+
+        const inner1 = circularArc(x, y, ir, 0, 180, offset, false);
+        const inner2 = circularArc(x, y, ir, 180, 180, offset, false);
+        const dX = svgValue(outer1.endX - inner1.startX);
+        const dY = svgValue(outer1.endY - inner1.startY);
+        const inner = `m${dX} ${dY} ${inner1.command} ${inner2.command}z`;
+
+        return svg('path', { d: `${outer} ${inner}` });
+    }
+
+    /**
      * Draw circle sector
      * @param {number} x - x coordinate of center of circle
-     * @param {number} y  - y coordinate of center of circle
-     * @param {number} r  - radius of circle
+     * @param {number} y - y coordinate of center of circle
+     * @param {number} r - radius of circle
+     * @param {number} ir - inner radius of circle
      * @param {number} start - start angle of sector in degrees
      * @param {number} arc - angle of sector arc in degrees
+     * @param {number} offset - offset from center of circles
      */
     drawSector(x, y, r, ir, start, arc, offset) {
         const cx = parseFloat(x);
@@ -194,7 +224,9 @@ export class PieChart extends Component {
             throw new Error(`Invalid inner radius: ${ir}`);
         }
 
-        let pathCommand;
+        if (arc === 360) {
+            return this.drawFullSector(x, y, r, ir, offset);
+        }
 
         // Outer arc
         const outerArc = circularArc(x, y, r, start, arc, offset, true);
@@ -202,29 +234,26 @@ export class PieChart extends Component {
         const fsy = svgValue(outerArc.startY);
         const outer = `m${fsx} ${fsy} ${outerArc.command}`;
 
-        // Use inner radius
-        if (innerRadius > 0) {
-            const innerArc = circularArc(x, y, ir, start, arc, offset, false);
-
-            // shift from outer arc end point to inner arc end point
-            const elx = svgValue(innerArc.endX - outerArc.endX);
-            const ely = svgValue(innerArc.endY - outerArc.endY);
-            // shift from inner arc start point to outer arc start point
-            const slx = svgValue(outerArc.startX - innerArc.startX);
-            const sly = svgValue(outerArc.startY - innerArc.startY);
-
-            const inner = `l${elx} ${ely} ${innerArc.command}`;
-
-            pathCommand = `${outer} ${inner} l${slx} ${sly}z`;
-        } else {
+        if (innerRadius === 0) {
             // shift from arc end point to center of circle
             const lx = svgValue(outerArc.centerX - outerArc.endX);
             const ly = svgValue(outerArc.centerY - outerArc.endY);
 
-            pathCommand = `${outer} l${lx} ${ly}z`;
+            return svg('path', { d: `${outer} l${lx} ${ly}z` });
         }
 
-        return svg('path', { d: pathCommand });
+        // Use inner radius
+        const innerArc = circularArc(x, y, ir, start, arc, offset, false);
+        // shift from outer arc end point to inner arc end point
+        const elx = svgValue(innerArc.endX - outerArc.endX);
+        const ely = svgValue(innerArc.endY - outerArc.endY);
+        // shift from inner arc start point to outer arc start point
+        const slx = svgValue(outerArc.startX - innerArc.startX);
+        const sly = svgValue(outerArc.startY - innerArc.startY);
+
+        const inner = `l${elx} ${ely} ${innerArc.command}`;
+
+        return svg('path', { d: `${outer} ${inner} l${slx} ${sly}z` });
     }
 
     /** Draw pie chart */

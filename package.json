@@ -74,7 +74,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.20.7",
-        "core-js": "^3.26.1",
+        "core-js": "^3.27.0",
         "whatwg-fetch": "^3.6.2"
     },
     "workspaces": [
