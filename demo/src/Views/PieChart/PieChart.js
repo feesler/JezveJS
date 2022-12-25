@@ -18,11 +18,18 @@ const initSmall = () => {
     container.append(chart.elem);
 };
 
+const toggleSectorOffset = (data, sector) => (
+    data.map((item) => ({
+        ...item,
+        offset: (sector.id === item.id && item.offset !== 10) ? 10 : 0,
+    }))
+);
+
 const initOffset = () => {
     const hovtitle = ge('hovtitle');
     const container = ge('offsetPChart');
 
-    const initialData = [
+    let data = [
         {
             id: 1,
             value: 10,
@@ -36,7 +43,7 @@ const initOffset = () => {
 
     const chart = PieChart.create({
         className: 'middle_pie',
-        data: initialData,
+        data,
         radius: 100,
         offset: 10,
         onitemover: ({ sector }) => {
@@ -46,12 +53,8 @@ const initOffset = () => {
             hovtitle.textContent = '';
         },
         onitemclick: ({ sector }) => {
-            const newData = initialData.map((item) => ({
-                ...item,
-                offset: (sector.id === item.id) ? 10 : 0,
-            }));
-
-            chart.setData(newData);
+            data = toggleSectorOffset(data, sector);
+            chart.setData(data);
         },
     });
 
@@ -62,7 +65,7 @@ const initInnerRadius = () => {
     const hovtitle = ge('hovtitle-inner');
     const container = ge('innerPChart');
 
-    const initialData = [
+    let data = [
         {
             id: 1,
             value: 10,
@@ -78,7 +81,7 @@ const initInnerRadius = () => {
 
     const chart = PieChart.create({
         className: 'middle_pie',
-        data: initialData,
+        data,
         radius: 100,
         innerRadius: 70,
         offset: 10,
@@ -89,12 +92,8 @@ const initInnerRadius = () => {
             hovtitle.textContent = '';
         },
         onitemclick: ({ sector }) => {
-            const newData = initialData.map((item) => ({
-                ...item,
-                offset: (sector.id === item.id) ? 10 : 0,
-            }));
-
-            chart.setData(newData);
+            data = toggleSectorOffset(data, sector);
+            chart.setData(data);
         },
     });
 
@@ -105,22 +104,32 @@ const initSingleValue = () => {
     const container = ge('singleValPChart');
     const innerContainer = ge('singleValInnerPChart');
 
-    const data = [100];
+    let data = [{ value: 100 }];
 
     const chart = PieChart.create({
         className: 'middle_pie',
         data,
         radius: 100,
         offset: 10,
+        onitemclick: ({ sector }) => {
+            data = toggleSectorOffset(data, sector);
+            chart.setData(data);
+        },
     });
     container.append(chart.elem);
 
+    let innerData = [{ value: 100 }];
+
     const innerChart = PieChart.create({
         className: 'middle_pie',
-        data,
+        data: innerData,
         radius: 100,
         innerRadius: 70,
         offset: 10,
+        onitemclick: ({ sector }) => {
+            innerData = toggleSectorOffset(innerData, sector);
+            innerChart.setData(innerData);
+        },
     });
     innerContainer.append(innerChart.elem);
 };

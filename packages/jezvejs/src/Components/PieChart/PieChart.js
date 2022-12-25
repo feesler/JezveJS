@@ -177,9 +177,14 @@ export class PieChart extends Component {
      * @param {number} ir - inner radius of circle
      * @param {number} offset - offset from center of circles
      */
-    drawFullSector(x, y, r, ir, offset) {
-        const outer1 = circularArc(x, y, r, 0, 180, offset, true);
-        const outer2 = circularArc(x, y, r, 180, 180, offset, true);
+    drawFullSector(x, y, r, ir, offset = 0) {
+        const offs = parseFloat(offset);
+        if (Number.isNaN(offs)) {
+            throw new Error(`Invalid offset: ${offset}`);
+        }
+
+        const outer1 = circularArc(x, y, r + offs, 0, 180, 0, true);
+        const outer2 = circularArc(x, y, r + offs, 180, 180, 0, true);
         const outerSX = svgValue(outer1.startX);
         const outerSY = svgValue(outer1.startY);
         const outer = `m${outerSX} ${outerSY} ${outer1.command} ${outer2.command}z`;
@@ -188,8 +193,8 @@ export class PieChart extends Component {
             return svg('path', { d: outer });
         }
 
-        const inner1 = circularArc(x, y, ir, 0, 180, offset, false);
-        const inner2 = circularArc(x, y, ir, 180, 180, offset, false);
+        const inner1 = circularArc(x, y, ir + offs, 0, 180, 0, false);
+        const inner2 = circularArc(x, y, ir + offs, 180, 180, 0, false);
         const dX = svgValue(outer1.endX - inner1.startX);
         const dY = svgValue(outer1.endY - inner1.startY);
         const inner = `m${dX} ${dY} ${inner1.command} ${inner2.command}z`;
