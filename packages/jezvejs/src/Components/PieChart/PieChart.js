@@ -76,8 +76,7 @@ export class PieChart extends Component {
 
         this.elem = svg('svg', {
             class: PIE_CHART_CLASS,
-            width: size,
-            height: size,
+            viewBox: `0 0 ${size} ${size}`,
         });
 
         this.setClassNames();
