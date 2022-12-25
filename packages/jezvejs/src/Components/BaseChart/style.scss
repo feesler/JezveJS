@@ -41,6 +41,7 @@
   background-color: var(--chart-popup-bg);
   padding: 5px;
   white-space: nowrap;
+  z-index: 9999;
 }
 
 /* Animated popup */
