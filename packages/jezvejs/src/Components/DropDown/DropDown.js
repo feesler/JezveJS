@@ -647,7 +647,7 @@ export class DropDown extends Component {
 
     /**
      * Handler for 'touchstart' event on list item
-     * Set blockTouch flasg for further 'mousemove' event
+     * Set blockTouch flag for further 'mousemove' event
      * @param {TouchEvent} e - event object
      */
     onTouchStart(e) {
