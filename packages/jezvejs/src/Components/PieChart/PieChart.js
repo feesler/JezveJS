@@ -45,7 +45,9 @@ export class PieChart extends Component {
             ...this.props,
         };
 
-        this.state = {};
+        this.state = {
+            blockTouch: false,
+        };
         this.sectors = [];
         this.sectorsGroup = null;
 
@@ -78,6 +80,7 @@ export class PieChart extends Component {
             class: PIE_CHART_CLASS,
             viewBox: `0 0 ${size} ${size}`,
         });
+        setEvents(this.elem, { touchstart: (e) => this.onTouchStart(e) });
 
         this.setClassNames();
 
@@ -116,7 +119,14 @@ export class PieChart extends Component {
         this.render(this.state);
     }
 
-    /** Sector item click event handler */
+    /** Chart content 'touchstart' event handler */
+    onTouchStart(e) {
+        if (e.touches) {
+            this.state.blockTouch = true;
+        }
+    }
+
+    /** Sector item 'click' event handler */
     onItemClick(e, sector) {
         if (!isFunction(this.props.onitemclick)) {
             return;
@@ -125,18 +135,24 @@ export class PieChart extends Component {
         this.props.onitemclick({ sector, event: e });
     }
 
-    /** Sector item mouse over event handler */
+    /** Sector item 'mouseover' event handler */
     onItemOver(e, sector) {
-        if (!isFunction(this.props.onitemover)) {
+        if (
+            this.state.blockTouch
+            || !isFunction(this.props.onitemover)
+        ) {
             return;
         }
 
         this.props.onitemover({ sector, event: e });
     }
 
-    /** Sector item mouse out from bar event handler */
+    /** Sector item 'mouseout' from bar event handler */
     onItemOut(e, sector) {
-        if (!isFunction(this.props.onitemout)) {
+        if (
+            this.state.blockTouch
+            || !isFunction(this.props.onitemout)
+        ) {
             return;
         }
 
