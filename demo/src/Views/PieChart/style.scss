@@ -57,6 +57,10 @@
   top: calc(50% - 25px);
 }
 
+.single-value-section {
+  column-gap: 2rem;
+}
+
 @media (hover: hover) {
   .middle_pie {
     .pie__sector-1:hover {
