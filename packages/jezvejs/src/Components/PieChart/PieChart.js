@@ -8,7 +8,6 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import {
-    toRadian,
     hexColor,
     svgValue,
     circularArc,
@@ -179,85 +178,48 @@ export class PieChart extends Component {
      * @param {number} arc - angle of sector arc in degrees
      */
     drawSector(x, y, r, ir, start, arc, offset) {
-        // center of circle point
-        let cx = parseFloat(x);
-        let cy = parseFloat(y);
+        const cx = parseFloat(x);
+        const cy = parseFloat(y);
         if (Number.isNaN(cx) || Number.isNaN(cy)) {
             throw new Error(`Invalid coordinates: (${x}; ${y})`);
         }
 
-        const cr = parseFloat(r);
-        if (Number.isNaN(cr) || cr === 0.0) {
+        const radius = parseFloat(r);
+        if (Number.isNaN(radius) || radius === 0.0) {
             throw new Error(`Invalid radius: ${r}`);
         }
-        const icr = parseFloat(ir);
-        if (Number.isNaN(icr) || icr < 0 || icr > cr) {
-            throw new Error(`Invalid radius: ${ir}`);
+
+        const innerRadius = parseFloat(ir);
+        if (Number.isNaN(innerRadius) || innerRadius < 0 || innerRadius > radius) {
+            throw new Error(`Invalid inner radius: ${ir}`);
         }
-
-        const a = toRadian(arc);
-        const b = toRadian(start);
-        const large = (a < Math.PI) ? 0 : 1;
-
-        if (typeof offset !== 'undefined') {
-            const offs = parseFloat(offset);
-            if (Number.isNaN(offs)) {
-                throw new Error(`Invalid offset: ${offset}`);
-            }
-
-            const c = b + (a / 2);
-            const offsx = offs * Math.cos(-c);
-            const offsy = offs * Math.sin(-c);
-            cx += offsx;
-            cy += offsy;
-        }
-
-        const fcr = svgValue(cr);
-        // Outer arc start point
-        const sx = cx + cr * Math.cos(a + b);
-        const sy = cy - cr * Math.sin(a + b);
-        const fsx = svgValue(sx);
-        const fsy = svgValue(sy);
-        // Outer arc end point
-        const ex = cx + cr * Math.cos(b);
-        const ey = cy - cr * Math.sin(b);
-        // shift from arc start point to arc end point
-        const dx = svgValue(ex - sx);
-        const dy = svgValue(ey - sy);
 
         let pathCommand;
 
-        const outerArc = circularArc(fcr, large, 1, dx, dy);
-        const outer = `m${fsx} ${fsy} ${outerArc}`;
+        // Outer arc
+        const outerArc = circularArc(x, y, r, start, arc, offset, true);
+        const fsx = svgValue(outerArc.startX);
+        const fsy = svgValue(outerArc.startY);
+        const outer = `m${fsx} ${fsy} ${outerArc.command}`;
 
         // Use inner radius
-        if (icr > 0) {
-            const ficr = svgValue(icr);
-            // Outer arc start point
-            const isx = cx + icr * Math.cos(a + b);
-            const isy = cy - icr * Math.sin(a + b);
-            // Outer arc end point
-            const iex = cx + icr * Math.cos(b);
-            const iey = cy - icr * Math.sin(b);
-            // shift from arc start point to arc end point
-            const idx = svgValue(isx - iex);
-            const idy = svgValue(isy - iey);
+        if (innerRadius > 0) {
+            const innerArc = circularArc(x, y, ir, start, arc, offset, false);
 
             // shift from outer arc end point to inner arc end point
-            const elx = svgValue(iex - ex);
-            const ely = svgValue(iey - ey);
+            const elx = svgValue(innerArc.endX - outerArc.endX);
+            const ely = svgValue(innerArc.endY - outerArc.endY);
             // shift from inner arc start point to outer arc start point
-            const slx = svgValue(sx - isx);
-            const sly = svgValue(sy - isy);
+            const slx = svgValue(outerArc.startX - innerArc.startX);
+            const sly = svgValue(outerArc.startY - innerArc.startY);
 
-            const innerArc = circularArc(ficr, large, 0, idx, idy);
-            const inner = `l${elx} ${ely} ${innerArc}`;
+            const inner = `l${elx} ${ely} ${innerArc.command}`;
 
             pathCommand = `${outer} ${inner} l${slx} ${sly}z`;
         } else {
             // shift from arc end point to center of circle
-            const lx = svgValue(cx - ex);
-            const ly = svgValue(cy - ey);
+            const lx = svgValue(outerArc.centerX - outerArc.endX);
+            const ly = svgValue(outerArc.centerY - outerArc.endY);
 
             pathCommand = `${outer} l${lx} ${ly}z`;
         }
