@@ -5,7 +5,7 @@ import { initNavigation } from '../../app.js';
 import './style.scss';
 
 const initSmall = () => {
-    const container = ge('pchart');
+    const container = ge('defaultPChart');
     const chart = PieChart.create({
         className: 'small_pie',
         colors: [
@@ -20,7 +20,7 @@ const initSmall = () => {
 
 const initOffset = () => {
     const hovtitle = ge('hovtitle');
-    const container = ge('pchart2');
+    const container = ge('offsetPChart');
 
     const initialData = [
         {
@@ -60,7 +60,7 @@ const initOffset = () => {
 
 const initInnerRadius = () => {
     const hovtitle = ge('hovtitle-inner');
-    const container = ge('pchart3');
+    const container = ge('innerPChart');
 
     const initialData = [
         {
@@ -101,6 +101,30 @@ const initInnerRadius = () => {
     container.append(chart.elem);
 };
 
+const initSingleValue = () => {
+    const container = ge('singleValPChart');
+    const innerContainer = ge('singleValInnerPChart');
+
+    const data = [100];
+
+    const chart = PieChart.create({
+        className: 'middle_pie',
+        data,
+        radius: 100,
+        offset: 10,
+    });
+    container.append(chart.elem);
+
+    const innerChart = PieChart.create({
+        className: 'middle_pie',
+        data,
+        radius: 100,
+        innerRadius: 70,
+        offset: 10,
+    });
+    innerContainer.append(innerChart.elem);
+};
+
 const initNoData = () => {
     const initialData = [
         { category: 2, value: 10, title: 'First category' },
@@ -134,6 +158,7 @@ const init = () => {
     initSmall();
     initOffset();
     initInnerRadius();
+    initSingleValue();
     initNoData();
 };
 

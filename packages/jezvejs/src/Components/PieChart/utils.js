@@ -35,6 +35,69 @@ export const svgValue = (val, prec = 5) => (
 );
 
 /** Format circular arc command for SVG path element */
-export const circularArc = (radius, large, clockwise, dx, dy) => (
+export const circularArcCommand = (radius, large, clockwise, dx, dy) => (
     `a${radius} ${radius} 0 ${large} ${clockwise} ${dx} ${dy}`
 );
+
+/** Format circular arc command for SVG path element */
+export const circularArc = (x, y, radius, startDeg, arcDeg, offset, clockwise = true) => {
+    // center of circle point
+    let centerX = parseFloat(x);
+    let centerY = parseFloat(y);
+    if (Number.isNaN(centerX) || Number.isNaN(centerY)) {
+        throw new Error(`Invalid coordinates: (${x}; ${y})`);
+    }
+
+    const r = parseFloat(radius);
+    if (Number.isNaN(r) || r === 0.0) {
+        throw new Error(`Invalid radius: ${r}`);
+    }
+
+    const a = toRadian(arcDeg);
+    const b = toRadian(startDeg);
+    const large = (a < Math.PI) ? 0 : 1;
+
+    if (typeof offset !== 'undefined') {
+        const offs = parseFloat(offset);
+        if (Number.isNaN(offs)) {
+            throw new Error(`Invalid offset: ${offset}`);
+        }
+
+        const c = b + (a / 2);
+        const offsetX = offs * Math.cos(-c);
+        const offsetY = offs * Math.sin(-c);
+        centerX += offsetX;
+        centerY += offsetY;
+    }
+
+    // Start point
+    const startX = centerX + r * Math.cos(a + b);
+    const startY = centerY - r * Math.sin(a + b);
+    // End point
+    const endX = centerX + r * Math.cos(b);
+    const endY = centerY - r * Math.sin(b);
+    // Shift from start point to end point
+    const deltaX = (clockwise) ? (endX - startX) : (startX - endX);
+    const deltaY = (clockwise) ? (endY - startY) : (startY - endY);
+
+    const command = circularArcCommand(
+        svgValue(r),
+        large,
+        (clockwise) ? 1 : 0,
+        svgValue(deltaX),
+        svgValue(deltaY),
+    );
+
+    return {
+        centerX,
+        centerY,
+        startX,
+        startY,
+        endX,
+        endY,
+        deltaX,
+        deltaY,
+        large,
+        command,
+    };
+};
