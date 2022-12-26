@@ -11,7 +11,6 @@ import {
     px,
     createElement,
     debounce,
-    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
@@ -131,10 +130,10 @@ export class BaseChart extends Component {
             data: null,
             chartContentWidth: 0,
             hLabelsHeight: 25,
-            vLabelsWidth: 10,
+            scrollerWidth: 0,
             chartWidth: 0,
             chartHeight: 0,
-            lastHLabelOffset: 0,
+            scrollLeft: 0,
             blockTouch: false,
         };
     }
@@ -173,7 +172,7 @@ export class BaseChart extends Component {
 
         this.labelsContainer = svg('svg', {
             class: VLABELS_CLASS,
-            width: this.state.vLabelsWidth,
+            width: 10,
             height: height + 20,
         });
         this.verticalLabels.append(this.labelsContainer);
@@ -205,12 +204,13 @@ export class BaseChart extends Component {
 
     observeSize() {
         const handler = debounce(() => {
-            const newState = this.updateChartWidth(this.state);
+            let newState = this.updateColumnWidth(this.state);
+            newState = this.updateChartWidth(newState);
             this.setState(newState);
         }, this.props.resizeTimeout);
 
         const observer = new ResizeObserver(handler);
-        observer.observe(this.chartContainer);
+        observer.observe(this.chartScroller);
     }
 
     setData(data) {
@@ -234,7 +234,9 @@ export class BaseChart extends Component {
         state.groupsCount = this.getGroupsCount(state);
         state.columnsInGroup = this.getColumnsInGroupCount(state);
         state.grid = this.calculateGrid(data.values, state);
-        const newState = this.updateChartWidth(state);
+
+        let newState = this.updateColumnWidth(state);
+        newState = this.updateChartWidth(newState);
         this.setState(newState);
 
         if (this.props.scrollToEnd) {
@@ -373,12 +375,6 @@ export class BaseChart extends Component {
         return grid;
     }
 
-    /** Remove elements */
-    removeElements(elem) {
-        const elems = asArray(elem);
-        elems.forEach((el) => el?.parentNode?.removeChild(el));
-    }
-
     /** Draw grid and return array of grid lines */
     drawGrid(state) {
         const { grid } = state;
@@ -389,7 +385,7 @@ export class BaseChart extends Component {
             return;
         }
 
-        const width = this.content.scrollWidth;
+        const width = state.chartWidth;
 
         const gridGroup = svg('g');
         let step = 0;
@@ -429,9 +425,14 @@ export class BaseChart extends Component {
 
     /** Update width of chart block */
     updateChartWidth(state) {
+        const labelsBox = this.xAxisLabelsGroup?.getBBox();
+        const lastHLabelOffset = (labelsBox)
+            ? (labelsBox.x + labelsBox.width)
+            : 0;
+
         const contentWidth = Math.max(
             state.groupsCount * this.getGroupOuterWidth(state),
-            state.lastHLabelOffset,
+            lastHLabelOffset,
         );
 
         const newState = {
@@ -439,8 +440,8 @@ export class BaseChart extends Component {
             chartContentWidth: contentWidth,
         };
 
-        const chartOffset = this.chartContainer.offsetWidth;
-        newState.chartWidth = Math.max(chartOffset - newState.vLabelsWidth, contentWidth);
+        newState.scrollerWidth = this.chartScroller.offsetWidth;
+        newState.chartWidth = Math.max(newState.scrollerWidth, contentWidth);
 
         return newState;
     }
@@ -451,7 +452,7 @@ export class BaseChart extends Component {
             return state;
         }
 
-        const valuesExtended = state.groupsCount + 1;
+        const valuesExtended = state.groupsCount + 2;
         const newState = {
             ...state,
             columnWidth: this.chart.parentNode.offsetWidth / valuesExtended,
@@ -466,38 +467,16 @@ export class BaseChart extends Component {
         return newState;
     }
 
-    /** Set new width for vertical labels block and SVG object */
-    setVertLabelsWidth(width, state) {
-        if (!this.labelsContainer || !this.chart) {
-            return state;
-        }
-
-        const lWidth = Math.ceil(width);
-        if (state.vLabelsWidth === lWidth) {
-            return state;
-        }
-
-        this.labelsContainer.setAttribute('width', lWidth);
-        this.labelsContainer.setAttribute('height', state.height + 20);
-
-        const newState = {
-            ...state,
-            vLabelsWidth: lWidth,
-        };
-
-        return this.updateChartWidth(newState);
-    }
-
     /** Return array of currently visible items */
     getVisibleItems(state = this.state) {
         const groupWidth = this.getGroupOuterWidth(state);
         const res = [];
         const offs = state.visibilityOffset;
 
-        let itemsOnWidth = Math.round(this.chartScroller.offsetWidth / groupWidth);
+        let itemsOnWidth = Math.round(state.scrollerWidth / groupWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
-        let firstItem = Math.round(this.chartScroller.scrollLeft / groupWidth);
+        let firstItem = Math.round(state.scrollLeft / groupWidth);
         firstItem = Math.max(0, firstItem - offs);
 
         if (firstItem + itemsOnWidth >= this.items.length) {
@@ -517,7 +496,7 @@ export class BaseChart extends Component {
         this.vertLabelsGroup?.remove();
         this.vertLabelsGroup = null;
         if (!grid.steps) {
-            return this.setVertLabelsWidth(0, state);
+            return;
         }
 
         const formatFunction = isFunction(state.renderYAxisLabel)
@@ -528,34 +507,34 @@ export class BaseChart extends Component {
         let curY = grid.yFirst;
         let val = grid.valueFirst;
         let step = 0;
-        let labelsWidth = 0;
 
         this.vertLabelsGroup = svg('g');
-        this.labelsContainer.append(this.vertLabelsGroup);
 
         while (step <= grid.steps) {
             const isZero = Math.abs(grid.toPrec(val)) === 0;
             const tVal = (isZero) ? 0 : grid.toPrecString(val);
 
-            const tspan = svg('tspan', { dy: dyOffset });
-            const prop = ('innerHTML' in tspan) ? 'innerHTML' : 'textContent';
-            tspan[prop] = formatFunction(tVal);
             const el = svg('text', {
                 className: 'chart__text',
                 x: xOffset,
-                y: Math.round(curY),
-            }, tspan);
+                y: Math.round(curY) + dyOffset,
+            });
+            el.textContent = formatFunction(tVal);
 
             this.vertLabelsGroup.append(el);
 
-            const labelRect = el.getBoundingClientRect();
-            labelsWidth = Math.max(labelsWidth, Math.ceil(labelRect.width) + 10);
             val -= grid.valueStep;
             curY += grid.yStep;
             step += 1;
         }
 
-        return this.setVertLabelsWidth(labelsWidth, state);
+        this.labelsContainer.append(this.vertLabelsGroup);
+
+        const labelRect = this.vertLabelsGroup.getBBox();
+        const labelsWidth = Math.ceil(labelRect.width) + 10;
+
+        this.labelsContainer.setAttribute('width', labelsWidth);
+        this.labelsContainer.setAttribute('height', state.height + 20);
     }
 
     /** Create horizontal labels */
@@ -566,43 +545,53 @@ export class BaseChart extends Component {
         const dyOffset = 5.5;
         const lblY = state.height - (state.hLabelsHeight / 2);
 
+        const groupOuterWidth = this.getGroupOuterWidth(state);
+
         this.xAxisLabelsGroup?.remove();
         this.xAxisLabelsGroup = svg('g');
+
+        const labels = [];
+        for (let i = 0; i < state.data.series.length; i += 1) {
+            const [itemDate, itemsCount] = state.data.series[i];
+            const txtEl = svg('text', {
+                class: 'chart__text',
+                x: labelShift,
+                y: lblY + dyOffset,
+            });
+            txtEl.textContent = itemDate.toString();
+
+            this.xAxisLabelsGroup.append(txtEl);
+            labels.push(txtEl);
+
+            labelShift += itemsCount * groupOuterWidth;
+        }
         this.content.append(this.xAxisLabelsGroup);
 
-        state.data.series.forEach((val) => {
-            const [itemDate, itemsCount] = val;
+        const labelsToRemove = [];
+        requestAnimationFrame(() => {
+            for (let ind = 0; ind < labels.length; ind += 1) {
+                const labelElem = labels[ind];
 
-            if (lastOffset === 0 || labelShift > lastOffset + lblMarginLeft) {
-                const tspan = svg('tspan', { dy: dyOffset });
-                const prop = ('innerHTML' in tspan) ? 'innerHTML' : 'textContent';
-                tspan[prop] = itemDate.toString();
-                const txtEl = svg('text', {
-                    className: 'chart__text',
-                    x: labelShift,
-                    y: lblY,
-                }, tspan);
-
-                this.xAxisLabelsGroup.append(txtEl);
-
-                const labelRect = txtEl.getBoundingClientRect();
-                const currentOffset = labelShift + Math.ceil(labelRect.width);
+                const labelRect = labelElem.getBBox();
+                const currentOffset = Math.ceil(labelRect.x + labelRect.width);
 
                 // Check last label not overflow chart to prevent
                 // horizontal scroll in fitToWidth mode
-                if (state.fitToWidth && currentOffset > state.chartContentWidth) {
-                    txtEl.remove();
+                if (
+                    (lastOffset > 0 && labelRect.x < lastOffset + lblMarginLeft)
+                    || (state.fitToWidth && currentOffset > state.chartContentWidth)
+                ) {
+                    labelsToRemove.push(labelElem);
                 } else {
                     lastOffset = currentOffset;
                 }
             }
-            labelShift += itemsCount * this.getGroupOuterWidth(state);
-        });
 
-        return {
-            ...state,
-            lastHLabelOffset: lastOffset,
-        };
+            for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
+                const labelElem = labelsToRemove[ind];
+                labelElem.remove();
+            }
+        });
     }
 
     /** Returns series value for specified items group */
@@ -623,7 +612,7 @@ export class BaseChart extends Component {
 
     /** Find item by event object */
     findItemByEvent(e) {
-        const x = e.clientX - this.contentOffset.left + this.chartScroller.scrollLeft;
+        const x = e.clientX - this.contentOffset.left + this.state.scrollLeft;
         const index = Math.floor(x / this.getGroupOuterWidth());
         if (index < 0 || index >= this.items.length) {
             return { x, item: null, index: -1 };
@@ -838,33 +827,32 @@ export class BaseChart extends Component {
 
     /** Scale visible items of chart */
     scaleVisible(state = this.state) {
+        if (this.scrollRequested) {
+            this.scrollToRight();
+            this.scrollRequested = false;
+            return;
+        }
+
         if (!state.autoScale) {
-            return state;
+            return;
         }
 
         const vItems = this.getVisibleItems(state);
         const values = this.mapValues(vItems);
 
-        let newState = {
+        const newState = {
             ...state,
             grid: this.calculateGrid(values, state),
         };
-        newState = this.drawVLabels(newState);
-        this.drawGrid(newState);
 
         this.updateItemsScale(vItems, newState);
-
-        if (this.scrollRequested) {
-            this.scrollToRight();
-            this.scrollRequested = false;
-        }
-
-        this.state = newState;
-        return newState;
+        this.setState(newState);
     }
 
     /** Chart content 'scroll' event handler */
     onScroll() {
+        this.state.scrollLeft = this.chartScroller.scrollLeft;
+
         if (this.scaleFunc) {
             this.scaleFunc();
         }
@@ -957,28 +945,26 @@ export class BaseChart extends Component {
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
 
-        let newState = this.drawVLabels(state);
-        newState = this.updateColumnWidth(newState);
-        newState = this.updateChartWidth(newState);
+        this.drawVLabels(state);
 
         if (state.data !== prevState?.data) {
             this.resetItems();
-            this.createItems(newState);
+            this.createItems(state);
         }
-        newState = this.scaleVisible(newState);
 
         // create horizontal labels
-        newState = this.createHLabels(newState);
-        newState = this.updateChartWidth(newState);
-
-        if (this.isHorizontalScaleNeeded(newState, prevState)) {
-            this.updateHorizontalScale(newState);
+        if (state.data !== prevState?.data) {
+            this.createHLabels(state);
         }
 
-        this.content.setAttribute('width', newState.chartWidth);
-        this.content.setAttribute('height', newState.height);
+        if (this.isHorizontalScaleNeeded(state, prevState)) {
+            this.updateHorizontalScale(state);
+        }
 
-        this.drawGrid(newState);
+        this.content.setAttribute('width', state.chartWidth);
+        this.content.setAttribute('height', state.height);
+
+        this.drawGrid(state);
 
         this.renderLegend(state);
     }

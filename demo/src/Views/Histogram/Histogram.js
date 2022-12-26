@@ -7,6 +7,7 @@ import {
 } from 'jezvejs';
 import { Histogram } from 'jezvejs/Histogram';
 import { initNavigation } from '../../app.js';
+import largeData from './largeData.json';
 import './style.scss';
 
 /* eslint-disable no-unused-vars */
@@ -486,6 +487,7 @@ const setData = () => {
     setEvents(ge('setData1Btn'), { click: () => histogram.setData(negPosData) });
     setEvents(ge('setData2Btn'), { click: () => histogram.setData(chartData3) });
     setEvents(ge('setData3Btn'), { click: () => histogram.setData(chartGroupedCategoriesData) });
+    setEvents(ge('largeDataBtn'), { click: () => histogram.setData(largeData) });
 };
 
 const init = () => {
@@ -493,6 +495,7 @@ const init = () => {
 
     columnWidthAndGap();
     fitToWidth();
+
     autoScale();
     callbacks();
     multiColumn();
