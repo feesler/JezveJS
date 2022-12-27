@@ -296,8 +296,8 @@ const onChangeGroupsGap = (chart, value) => {
 const columnWidthAndGap = () => {
     const histogram = Histogram.create({
         data: chartData,
-        elem: 'chart',
     });
+    ge('chart').append(histogram.elem);
 
     setEvents(ge('columnWidthRange'), {
         input: (e) => onChangeColumnWidth(histogram, e.target.value),
@@ -308,28 +308,27 @@ const columnWidthAndGap = () => {
 };
 
 const fitToWidth = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartData,
-        elem: 'chart_fittowidth',
         fitToWidth: true,
     });
+    ge('chart_fittowidth').append(histogram.elem);
 };
 
 const autoScale = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartData2,
-        elem: 'chart_autoscale',
         autoScale: true,
     });
+    ge('chart_autoscale').append(histogram.elem);
 };
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
 const callbacks = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartData2,
-        elem: 'chart_callbacks',
         height: 320,
         marginTop: 35,
         scrollToEnd: true,
@@ -344,10 +343,11 @@ const callbacks = () => {
         onitemover: onBarOver,
         onitemout: onBarOut,
     });
+    ge('chart_callbacks').append(histogram.elem);
 };
 
 const multiColumn = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartMultiData,
         elem: 'chart_multicolumn',
         height: 320,
@@ -358,12 +358,12 @@ const multiColumn = () => {
         activateOnHover: true,
         showLegend: true,
     });
+    ge('chart_multicolumn').append(histogram.elem);
 };
 
 const stacked = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartStackedData,
-        elem: 'stacked-histogram',
         height: 320,
         marginTop: 35,
         autoScale: true,
@@ -373,12 +373,12 @@ const stacked = () => {
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
+    ge('stacked-histogram').append(histogram.elem);
 };
 
 const stackedNegative = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartNegMultiData,
-        elem: 'stacked-neg-histogram',
         height: 320,
         marginTop: 35,
         autoScale: true,
@@ -388,12 +388,12 @@ const stackedNegative = () => {
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
+    ge('stacked-neg-histogram').append(histogram.elem);
 };
 
 const stackedGrouped = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartGroupedData,
-        elem: 'stacked-grouped-histogram',
         height: 320,
         marginTop: 35,
         columnWidth: 25,
@@ -408,12 +408,12 @@ const stackedGrouped = () => {
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
+    ge('stacked-grouped-histogram').append(histogram.elem);
 };
 
 const stackedCategories = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: chartGroupedCategoriesData,
-        elem: 'stacked-categories-histogram',
         height: 320,
         marginTop: 35,
         columnWidth: 25,
@@ -429,48 +429,50 @@ const stackedCategories = () => {
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
+    ge('stacked-grouped-histogram').append(histogram.elem);
 };
 
 const noData = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: emptyData,
-        elem: 'chart_no_data',
         autoScale: true,
     });
+    ge('chart_no_data').append(histogram.elem);
 };
 
 const singleNegative = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: singleNegData,
-        elem: 'chart_single_neg',
         autoScale: true,
         onitemover: onBarOver,
         onitemout: onBarOut,
     });
+    ge('chart_single_neg').append(histogram.elem);
 };
 
 const onlyPositive = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: posData,
-        elem: 'chart_pos',
         autoScale: true,
     });
+    ge('chart_pos').append(histogram.elem);
 };
 
 const onlyNegative = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: negData,
-        elem: 'chart_neg',
         autoScale: true,
     });
+    ge('chart_neg').append(histogram.elem);
 };
 
 const negativeAndPositive = () => {
-    Histogram.create({
+    const histogram = Histogram.create({
         data: negPosData,
         elem: 'chart_negpos',
         autoScale: true,
     });
+    ge('chart_negpos').append(histogram.elem);
 };
 
 const setData = () => {
@@ -482,6 +484,7 @@ const setData = () => {
         scrollToEnd: true,
         renderLegend: renderCustomLegend,
     });
+    ge('chart_setdata').append(histogram.elem);
 
     setEvents(ge('setNoDataBtn'), { click: () => histogram.setData(emptyData) });
     setEvents(ge('setData1Btn'), { click: () => histogram.setData(negPosData) });

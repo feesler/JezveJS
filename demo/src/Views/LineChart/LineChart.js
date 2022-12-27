@@ -201,8 +201,8 @@ const onChangeGroupsGap = (chart, value) => {
 const columnWidthAndGap = () => {
     const chart = LineChart.create({
         data: chartData,
-        elem: 'linechart',
     });
+    ge('linechart').append(chart.elem);
 
     setEvents(ge('columnWidthRange'), {
         input: (e) => onChangeColumnWidth(chart, e.target.value),
@@ -213,29 +213,28 @@ const columnWidthAndGap = () => {
 };
 
 const fitToWidth = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: chartData,
-        elem: 'linechart_fittowidth',
         fitToWidth: true,
     });
+    ge('linechart_fittowidth').append(chart.elem);
 };
 
 const autoScale = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: eurData,
-        elem: 'linechart_autoscale',
         autoScale: true,
         drawNodeCircles: true,
     });
+    ge('linechart_fittowidth').append(chart.elem);
 };
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
 const callbacks = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: chartData,
-        elem: 'linechart_callbacks',
         height: 320,
         marginTop: 35,
         scrollToEnd: true,
@@ -250,12 +249,12 @@ const callbacks = () => {
         onitemover: onNodeOver,
         onitemout: onNodeOut,
     });
+    ge('linechart_callbacks').append(chart.elem);
 };
 
 const multiple = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: chartMultiData,
-        elem: 'linechart_multiple',
         height: 320,
         marginTop: 35,
         autoScale: true,
@@ -264,12 +263,12 @@ const multiple = () => {
         activateOnHover: true,
         showLegend: true,
     });
+    ge('linechart_multiple').append(chart.elem);
 };
 
 const stacked = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: chartStackedData,
-        elem: 'linechart_stacked',
         height: 320,
         marginTop: 35,
         autoScale: true,
@@ -279,12 +278,12 @@ const stacked = () => {
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
+    ge('linechart_stacked').append(chart.elem);
 };
 
 const stackedNegative = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: chartNegMultiData,
-        elem: 'linechart-neg-stacked',
         height: 320,
         marginTop: 35,
         autoScale: true,
@@ -296,62 +295,67 @@ const stackedNegative = () => {
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
+    ge('linechart-neg-stacked').append(chart.elem);
 };
 
 const noData = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: emptyData,
-        elem: 'linechart_no_data',
         autoScale: true,
     });
+    ge('linechart_no_data').append(chart.elem);
 };
 
 const singleNegative = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: singleNegData,
-        elem: 'linechart_single_neg',
         autoScale: true,
         drawNodeCircles: true,
     });
+    ge('linechart_single_neg').append(chart.elem);
 };
 
 const onlyPositive = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: posData,
         elem: 'linechart_pos',
         autoScale: true,
     });
+    ge('linechart_pos').append(chart.elem);
 };
 
 const onlyNegative = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: negData,
         elem: 'linechart_neg',
         autoScale: true,
     });
+    ge('linechart_neg').append(chart.elem);
 };
 
 const negativeAndPositive = () => {
-    LineChart.create({
+    const chart = LineChart.create({
         data: negPosData,
         elem: 'linechart_negpos',
         autoScale: true,
     });
+    ge('linechart_negpos').append(chart.elem);
 };
 
 const setData = () => {
-    const linechart = LineChart.create({
+    const chart = LineChart.create({
         data: negPosData,
         elem: 'linechart_setdata',
         autoScale: true,
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
+    ge('linechart_setdata').append(chart.elem);
 
-    setEvents(ge('setNoDataBtn'), { click: () => linechart.setData(emptyData) });
-    setEvents(ge('setData1Btn'), { click: () => linechart.setData(negPosData) });
-    setEvents(ge('setData2Btn'), { click: () => linechart.setData(chartData3) });
-    setEvents(ge('setData3Btn'), { click: () => linechart.setData(chartStackedData) });
+    setEvents(ge('setNoDataBtn'), { click: () => chart.setData(emptyData) });
+    setEvents(ge('setData1Btn'), { click: () => chart.setData(negPosData) });
+    setEvents(ge('setData2Btn'), { click: () => chart.setData(chartData3) });
+    setEvents(ge('setData3Btn'), { click: () => chart.setData(chartStackedData) });
 };
 
 const init = () => {

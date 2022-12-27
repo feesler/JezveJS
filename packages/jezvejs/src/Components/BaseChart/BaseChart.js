@@ -18,7 +18,8 @@ import '../../css/common.scss';
 import './style.scss';
 
 /* CSS classes */
-const CHARTS_CLASS = 'charts';
+const CHART_CLASS = 'chart';
+const HORIZONTAL_CONTAINER_CLASS = 'chart__horizontal';
 const STACKED_CLASS = 'chart_stacked';
 const CONTAINER_CLASS = 'chart__container';
 const SCROLLER_CLASS = 'chart__scroller';
@@ -88,10 +89,6 @@ export class BaseChart extends Component {
     constructor(props) {
         super(props);
 
-        if (!this.elem) {
-            throw new Error('Invalid chart container');
-        }
-
         this.props = {
             ...defaultProps,
             ...this.props,
@@ -153,7 +150,7 @@ export class BaseChart extends Component {
         this.chartScroller.addEventListener('scroll', (e) => this.onScroll(e), { passive: true });
 
         this.chartContainer = createElement('div', {
-            props: { className: CHARTS_CLASS },
+            props: { className: HORIZONTAL_CONTAINER_CLASS },
             children: [
                 createElement('div', {
                     props: { className: CONTAINER_CLASS },
@@ -165,7 +162,11 @@ export class BaseChart extends Component {
                 }),
             ],
         });
-        this.elem.append(this.chartContainer);
+
+        this.elem = createElement('div', {
+            props: { className: CHART_CLASS },
+            children: this.chartContainer,
+        });
 
         const { height, marginTop } = this.state;
         this.state.chartHeight = height - this.state.hLabelsHeight - marginTop;

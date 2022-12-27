@@ -1,7 +1,8 @@
 /* Main container for charts */
-.charts {
+.chart {
   --chart-grid-color: #808080;
   --chart-text-size: 14px;
+  --chart-text-color: #000000;
   --chart-animation-duration: 0.5s;
 
   /* Popup */
@@ -9,6 +10,13 @@
   --chart-popup-border: #000000;
   --chart-popup-bg: #ffffff;
 
+  display: flex;
+  flex-flow: column nowrap;
+  flex-basis: 100%;
+}
+
+/* Horizontal container for chart */
+.chart__horizontal {
   display: flex;
   flex-flow: row nowrap;
   flex-basis: 100%;
