@@ -516,7 +516,7 @@ export class BaseChart extends Component {
             const tVal = (isZero) ? 0 : grid.toPrecString(val);
 
             const el = svg('text', {
-                className: 'chart__text',
+                class: 'chart__text chart-yaxis__label',
                 x: xOffset,
                 y: Math.round(curY) + dyOffset,
             });
@@ -555,7 +555,7 @@ export class BaseChart extends Component {
         for (let i = 0; i < state.data.series.length; i += 1) {
             const [itemDate, itemsCount] = state.data.series[i];
             const txtEl = svg('text', {
-                class: 'chart__text',
+                class: 'chart__text chart-xaxis__label',
                 x: labelShift,
                 y: lblY + dyOffset,
             });

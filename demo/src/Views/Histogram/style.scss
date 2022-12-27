@@ -28,6 +28,10 @@ section {
   }
 }
 
+.histogram_autoscale {
+  --chart-text-color: #9d6dff;
+}
+
 .custom-chart-popup {
   display: flex;
   flex-flow: column nowrap;

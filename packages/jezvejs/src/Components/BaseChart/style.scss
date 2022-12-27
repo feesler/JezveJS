@@ -77,7 +77,8 @@
 .chart__text {
   font-family: "Segoe UI", sans-serif;
   font-size: var(--chart-text-size);
-  text-anchor: "start";
+  text-anchor: start;
+  fill: var(--chart-text-color);
 }
 
 /* Chart legend */

@@ -319,6 +319,7 @@ const autoScale = () => {
     const histogram = Histogram.create({
         data: chartData2,
         autoScale: true,
+        className: 'histogram_autoscale'
     });
     ge('chart_autoscale').append(histogram.elem);
 };
