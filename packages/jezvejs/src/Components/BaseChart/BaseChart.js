@@ -111,6 +111,7 @@ export class BaseChart extends Component {
         this.vertLabelsGroup = null;
         this.xAxisLabelsGroup = null;
         this.scrollRequested = false;
+        this.contentOffset = null;
 
         if (!this.props.autoScale) {
             this.scaleFunc = null;
@@ -235,6 +236,7 @@ export class BaseChart extends Component {
         state.columnsInGroup = this.getColumnsInGroupCount(state);
         state.grid = this.calculateGrid(data.values, state);
 
+        this.contentOffset = getOffset(this.chartScroller);
         let newState = this.updateColumnWidth(state);
         newState = this.updateChartWidth(newState);
         this.setState(newState);
@@ -619,6 +621,10 @@ export class BaseChart extends Component {
 
     /** Find item by event object */
     findItemByEvent(e) {
+        if (!this.contentOffset) {
+            return { item: null, index: -1 };
+        }
+
         const x = e.clientX - this.contentOffset.left + this.state.scrollLeft;
         const index = Math.floor(x / this.getGroupOuterWidth());
         if (index < 0 || index >= this.items.length) {
