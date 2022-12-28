@@ -62,7 +62,7 @@ const defaultProps = {
     showLegend: false,
     renderLegend: null,
     // Popup
-    showPopup: false,
+    showPopupOnClick: false,
     pinPopupOnClick: false,
     showPopupOnHover: false,
     animatePopup: false,
@@ -649,8 +649,8 @@ export class BaseChart extends Component {
             return;
         }
 
-        const { showPopup, pinPopupOnClick } = this.state;
-        if (showPopup) {
+        const { showPopupOnClick, pinPopupOnClick } = this.state;
+        if (showPopupOnClick) {
             // Reuse pinned popup in case there is no hover popup
             // Popup will be pinned again, so it's possible to animate position of element
             if (!this.popup && pinPopupOnClick && this.pinnedPopup) {
@@ -691,11 +691,11 @@ export class BaseChart extends Component {
 
         const { activateOnHover, showPopupOnHover, pinPopupOnClick } = this.state;
 
-        if (activateOnHover) {
+        if (activateOnHover && e.type === 'mousemove') {
             target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
         }
 
-        if (showPopupOnHover) {
+        if (showPopupOnHover && e.type === 'mousemove') {
             this.showPopup(target);
             // Hide popup if already pinned same item
             if (
@@ -864,7 +864,7 @@ export class BaseChart extends Component {
             this.scaleFunc();
         }
 
-        if (this.state.showPopup) {
+        if (this.state.showPopupOnClick || this.state.showPopupOnHover) {
             this.hidePopup();
         }
 
