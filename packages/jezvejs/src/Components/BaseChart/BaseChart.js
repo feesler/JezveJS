@@ -202,8 +202,6 @@ export class BaseChart extends Component {
         this.content = svg('svg', { class: CONTENT_CLASS }, null, events);
         this.chart.append(this.content);
 
-        this.contentOffset = getOffset(this.content);
-
         this.setClassNames();
         this.observeSize();
         this.setData(this.props.data);
@@ -437,14 +435,12 @@ export class BaseChart extends Component {
     /** Update width of chart block */
     updateChartWidth(state) {
         const labelsBox = this.xAxisLabelsGroup?.getBBox();
-        const lastHLabelOffset = (labelsBox)
-            ? (labelsBox.x + labelsBox.width)
+        const lastHLabelOffset = (labelsBox && !state.fitToWidth)
+            ? Math.round(labelsBox.x + labelsBox.width)
             : 0;
 
-        const contentWidth = Math.max(
-            state.groupsCount * this.getGroupOuterWidth(state),
-            Math.round(lastHLabelOffset),
-        );
+        const groupsWidth = state.groupsCount * this.getGroupOuterWidth(state);
+        const contentWidth = Math.max(groupsWidth, lastHLabelOffset);
 
         const newState = {
             ...state,
@@ -466,7 +462,7 @@ export class BaseChart extends Component {
         const valuesExtended = state.groupsCount + 2;
         const newState = {
             ...state,
-            columnWidth: this.chart.parentNode.offsetWidth / valuesExtended,
+            columnWidth: this.chartScroller.offsetWidth / valuesExtended,
         };
         if (newState.columnWidth > 10) {
             newState.groupsGap = newState.columnWidth / 5;
@@ -873,6 +869,7 @@ export class BaseChart extends Component {
 
     /** Chart scroller resize observer handler */
     onResize() {
+        this.contentOffset = getOffset(this.chartScroller);
         let newState = this.updateColumnWidth(this.state);
         newState = this.updateChartWidth(newState);
         this.setState(newState);
@@ -972,12 +969,8 @@ export class BaseChart extends Component {
             this.createItems(state);
         }
 
-        // create horizontal labels
-        if (state.data !== prevState?.data) {
-            this.createHLabels(state);
-        }
-
         if (this.isHorizontalScaleNeeded(state, prevState)) {
+            this.createHLabels(state);
             this.updateHorizontalScale(state);
         }
 

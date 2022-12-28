@@ -65,9 +65,9 @@ export class Histogram extends BaseChart {
         const groupWidth = this.getGroupWidth();
         const groupOuterWidth = this.getGroupOuterWidth();
         const groupX = groupOuterWidth * result.index;
+        let { x } = result;
 
         if (this.state.data.stacked) {
-            let { x } = result;
             // Fix x coordinate if curson is between groups
             if (x >= groupX + groupWidth && x < groupX + groupOuterWidth) {
                 x = groupX + groupWidth - 1;
@@ -97,9 +97,10 @@ export class Histogram extends BaseChart {
                 }
             }
         } else {
-            const innerX = result.x - groupX;
-
-            index = Math.floor(innerX / this.getColumnOuterWidth());
+            index = result.item.findIndex((bar) => (
+                x >= bar.x
+                && x < bar.x + bar.width
+            ));
         }
 
         if (index >= 0 && index < result.item.length) {
