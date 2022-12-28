@@ -120,6 +120,12 @@ export class BaseChart extends Component {
             this.scaleFunc = debounce(() => this.scaleVisible(), this.props.autoScaleTimeout);
         }
 
+        if (this.props.scrollToEnd) {
+            this.scrollFunc = debounce(() => this.scrollToRight(), 100);
+        } else {
+            this.scrollFunc = null;
+        }
+
         this.emptyClickHandler = () => this.hidePopup();
 
         this.state = {
@@ -204,12 +210,7 @@ export class BaseChart extends Component {
     }
 
     observeSize() {
-        const handler = debounce(() => {
-            let newState = this.updateColumnWidth(this.state);
-            newState = this.updateChartWidth(newState);
-            this.setState(newState);
-        }, this.props.resizeTimeout);
-
+        const handler = debounce(() => this.onResize(), this.props.resizeTimeout);
         const observer = new ResizeObserver(handler);
         observer.observe(this.chartScroller);
     }
@@ -240,13 +241,22 @@ export class BaseChart extends Component {
         newState = this.updateChartWidth(newState);
         this.setState(newState);
 
-        if (this.props.scrollToEnd) {
+        if (this.scrollFunc) {
             this.scrollRequested = true;
-            this.scrollToRight();
+            this.scrollFunc();
         }
     }
 
     scrollToRight() {
+        if (!this.scrollRequested) {
+            return;
+        }
+
+        if (this.state.scrollLeft + this.state.scrollerWidth >= this.state.chartWidth) {
+            this.scrollRequested = false;
+            return;
+        }
+
         this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
     }
 
@@ -433,7 +443,7 @@ export class BaseChart extends Component {
 
         const contentWidth = Math.max(
             state.groupsCount * this.getGroupOuterWidth(state),
-            lastHLabelOffset,
+            Math.round(lastHLabelOffset),
         );
 
         const newState = {
@@ -828,12 +838,6 @@ export class BaseChart extends Component {
 
     /** Scale visible items of chart */
     scaleVisible(state = this.state) {
-        if (this.scrollRequested) {
-            this.scrollToRight();
-            this.scrollRequested = false;
-            return;
-        }
-
         if (!state.autoScale) {
             return;
         }
@@ -864,6 +868,21 @@ export class BaseChart extends Component {
 
         if (isFunction(this.props.onscroll)) {
             this.props.onscroll.call(this);
+        }
+    }
+
+    /** Chart scroller resize observer handler */
+    onResize() {
+        let newState = this.updateColumnWidth(this.state);
+        newState = this.updateChartWidth(newState);
+        this.setState(newState);
+
+        if (this.scaleFunc) {
+            this.scaleFunc();
+        }
+
+        if (this.scrollFunc) {
+            this.scrollFunc();
         }
     }
 
