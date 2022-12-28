@@ -226,7 +226,7 @@ const autoScale = () => {
         autoScale: true,
         drawNodeCircles: true,
     });
-    ge('linechart_fittowidth').append(chart.elem);
+    ge('linechart_autoscale').append(chart.elem);
 };
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
@@ -318,7 +318,6 @@ const singleNegative = () => {
 const onlyPositive = () => {
     const chart = LineChart.create({
         data: posData,
-        elem: 'linechart_pos',
         autoScale: true,
     });
     ge('linechart_pos').append(chart.elem);
@@ -327,7 +326,6 @@ const onlyPositive = () => {
 const onlyNegative = () => {
     const chart = LineChart.create({
         data: negData,
-        elem: 'linechart_neg',
         autoScale: true,
     });
     ge('linechart_neg').append(chart.elem);
@@ -336,7 +334,6 @@ const onlyNegative = () => {
 const negativeAndPositive = () => {
     const chart = LineChart.create({
         data: negPosData,
-        elem: 'linechart_negpos',
         autoScale: true,
     });
     ge('linechart_negpos').append(chart.elem);
@@ -345,7 +342,6 @@ const negativeAndPositive = () => {
 const setData = () => {
     const chart = LineChart.create({
         data: negPosData,
-        elem: 'linechart_setdata',
         autoScale: true,
         showLegend: true,
         renderLegend: renderCustomLegend,

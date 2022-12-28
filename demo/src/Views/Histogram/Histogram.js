@@ -319,7 +319,7 @@ const autoScale = () => {
     const histogram = Histogram.create({
         data: chartData2,
         autoScale: true,
-        className: 'histogram_autoscale'
+        className: 'histogram_autoscale',
     });
     ge('chart_autoscale').append(histogram.elem);
 };
@@ -430,7 +430,7 @@ const stackedCategories = () => {
         showLegend: true,
         renderLegend: renderCustomLegend,
     });
-    ge('stacked-grouped-histogram').append(histogram.elem);
+    ge('stacked-categories-histogram').append(histogram.elem);
 };
 
 const noData = () => {
