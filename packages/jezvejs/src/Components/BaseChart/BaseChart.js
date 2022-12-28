@@ -18,7 +18,8 @@ import '../../css/common.scss';
 import './style.scss';
 
 /* CSS classes */
-const CHARTS_CLASS = 'charts';
+const CHART_CLASS = 'chart';
+const HORIZONTAL_CONTAINER_CLASS = 'chart__horizontal';
 const STACKED_CLASS = 'chart_stacked';
 const CONTAINER_CLASS = 'chart__container';
 const SCROLLER_CLASS = 'chart__scroller';
@@ -88,10 +89,6 @@ export class BaseChart extends Component {
     constructor(props) {
         super(props);
 
-        if (!this.elem) {
-            throw new Error('Invalid chart container');
-        }
-
         this.props = {
             ...defaultProps,
             ...this.props,
@@ -121,6 +118,12 @@ export class BaseChart extends Component {
             this.scaleFunc = () => this.scaleVisible();
         } else {
             this.scaleFunc = debounce(() => this.scaleVisible(), this.props.autoScaleTimeout);
+        }
+
+        if (this.props.scrollToEnd) {
+            this.scrollFunc = debounce(() => this.scrollToRight(), 100);
+        } else {
+            this.scrollFunc = null;
         }
 
         this.emptyClickHandler = () => this.hidePopup();
@@ -153,7 +156,7 @@ export class BaseChart extends Component {
         this.chartScroller.addEventListener('scroll', (e) => this.onScroll(e), { passive: true });
 
         this.chartContainer = createElement('div', {
-            props: { className: CHARTS_CLASS },
+            props: { className: HORIZONTAL_CONTAINER_CLASS },
             children: [
                 createElement('div', {
                     props: { className: CONTAINER_CLASS },
@@ -165,7 +168,11 @@ export class BaseChart extends Component {
                 }),
             ],
         });
-        this.elem.append(this.chartContainer);
+
+        this.elem = createElement('div', {
+            props: { className: CHART_CLASS },
+            children: this.chartContainer,
+        });
 
         const { height, marginTop } = this.state;
         this.state.chartHeight = height - this.state.hLabelsHeight - marginTop;
@@ -195,20 +202,13 @@ export class BaseChart extends Component {
         this.content = svg('svg', { class: CONTENT_CLASS }, null, events);
         this.chart.append(this.content);
 
-        this.contentOffset = getOffset(this.content);
-
         this.setClassNames();
         this.observeSize();
         this.setData(this.props.data);
     }
 
     observeSize() {
-        const handler = debounce(() => {
-            let newState = this.updateColumnWidth(this.state);
-            newState = this.updateChartWidth(newState);
-            this.setState(newState);
-        }, this.props.resizeTimeout);
-
+        const handler = debounce(() => this.onResize(), this.props.resizeTimeout);
         const observer = new ResizeObserver(handler);
         observer.observe(this.chartScroller);
     }
@@ -239,13 +239,22 @@ export class BaseChart extends Component {
         newState = this.updateChartWidth(newState);
         this.setState(newState);
 
-        if (this.props.scrollToEnd) {
+        if (this.scrollFunc) {
             this.scrollRequested = true;
-            this.scrollToRight();
+            this.scrollFunc();
         }
     }
 
     scrollToRight() {
+        if (!this.scrollRequested) {
+            return;
+        }
+
+        if (this.state.scrollLeft + this.state.scrollerWidth >= this.state.chartWidth) {
+            this.scrollRequested = false;
+            return;
+        }
+
         this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
     }
 
@@ -426,14 +435,12 @@ export class BaseChart extends Component {
     /** Update width of chart block */
     updateChartWidth(state) {
         const labelsBox = this.xAxisLabelsGroup?.getBBox();
-        const lastHLabelOffset = (labelsBox)
-            ? (labelsBox.x + labelsBox.width)
+        const lastHLabelOffset = (labelsBox && !state.fitToWidth)
+            ? Math.round(labelsBox.x + labelsBox.width)
             : 0;
 
-        const contentWidth = Math.max(
-            state.groupsCount * this.getGroupOuterWidth(state),
-            lastHLabelOffset,
-        );
+        const groupsWidth = state.groupsCount * this.getGroupOuterWidth(state);
+        const contentWidth = Math.max(groupsWidth, lastHLabelOffset);
 
         const newState = {
             ...state,
@@ -455,7 +462,7 @@ export class BaseChart extends Component {
         const valuesExtended = state.groupsCount + 2;
         const newState = {
             ...state,
-            columnWidth: this.chart.parentNode.offsetWidth / valuesExtended,
+            columnWidth: this.chartScroller.offsetWidth / valuesExtended,
         };
         if (newState.columnWidth > 10) {
             newState.groupsGap = newState.columnWidth / 5;
@@ -515,7 +522,7 @@ export class BaseChart extends Component {
             const tVal = (isZero) ? 0 : grid.toPrecString(val);
 
             const el = svg('text', {
-                className: 'chart__text',
+                class: 'chart__text chart-yaxis__label',
                 x: xOffset,
                 y: Math.round(curY) + dyOffset,
             });
@@ -554,7 +561,7 @@ export class BaseChart extends Component {
         for (let i = 0; i < state.data.series.length; i += 1) {
             const [itemDate, itemsCount] = state.data.series[i];
             const txtEl = svg('text', {
-                class: 'chart__text',
+                class: 'chart__text chart-xaxis__label',
                 x: labelShift,
                 y: lblY + dyOffset,
             });
@@ -827,12 +834,6 @@ export class BaseChart extends Component {
 
     /** Scale visible items of chart */
     scaleVisible(state = this.state) {
-        if (this.scrollRequested) {
-            this.scrollToRight();
-            this.scrollRequested = false;
-            return;
-        }
-
         if (!state.autoScale) {
             return;
         }
@@ -863,6 +864,22 @@ export class BaseChart extends Component {
 
         if (isFunction(this.props.onscroll)) {
             this.props.onscroll.call(this);
+        }
+    }
+
+    /** Chart scroller resize observer handler */
+    onResize() {
+        this.contentOffset = getOffset(this.chartScroller);
+        let newState = this.updateColumnWidth(this.state);
+        newState = this.updateChartWidth(newState);
+        this.setState(newState);
+
+        if (this.scaleFunc) {
+            this.scaleFunc();
+        }
+
+        if (this.scrollFunc) {
+            this.scrollFunc();
         }
     }
 
@@ -952,12 +969,8 @@ export class BaseChart extends Component {
             this.createItems(state);
         }
 
-        // create horizontal labels
-        if (state.data !== prevState?.data) {
-            this.createHLabels(state);
-        }
-
         if (this.isHorizontalScaleNeeded(state, prevState)) {
+            this.createHLabels(state);
             this.updateHorizontalScale(state);
         }
 
