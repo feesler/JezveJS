@@ -57,6 +57,7 @@ const defaultProps = {
     animate: false,
     autoScaleTimeout: 200,
     resizeTimeout: 200,
+    activateOnClick: false,
     activateOnHover: false,
     renderYAxisLabel: null,
     showLegend: false,
@@ -101,6 +102,8 @@ export class BaseChart extends Component {
         this.content = null;
         this.labelsContainer = null;
         this.legend = null;
+        this.activeTarget = null;
+        this.currentTarget = null;
         this.popup = null;
         this.pinnedPopup = null;
         this.pinnedTarget = null;
@@ -669,7 +672,9 @@ export class BaseChart extends Component {
             }
         }
 
-        this.activateTarget(target, e);
+        if (this.state.activateOnClick) {
+            this.activateTarget(target, e);
+        }
 
         if (isFunction(this.props.onitemclick)) {
             this.props.onitemclick({ ...target, event: e });
@@ -689,42 +694,18 @@ export class BaseChart extends Component {
 
         this.activeTarget = target;
 
-        const { activateOnHover, showPopupOnHover, pinPopupOnClick } = this.state;
-
-        if (activateOnHover && e.type === 'mousemove') {
-            target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
-        }
-
-        if (showPopupOnHover && e.type === 'mousemove') {
-            this.showPopup(target);
-            // Hide popup if already pinned same item
-            if (
-                pinPopupOnClick
-                && target.item === this.pinnedTarget
-            ) {
-                show(this.popup, false);
-            }
-        }
-
-        if (isFunction(this.props.onitemover)) {
-            this.props.onitemover({ ...target, event: e });
-        }
+        target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
     }
 
     /** Deactivates specified target */
-    deactivateTarget(e) {
+    deactivateTarget() {
         const target = this.activeTarget;
         this.activeTarget = null;
         if (!target?.item) {
             return;
         }
 
-        if (this.state.activateOnHover) {
-            target.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
-        }
-        if (isFunction(this.props.onitemout)) {
-            this.props.onitemout({ ...target, event: e });
-        }
+        target.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
     }
 
     /** Chart content 'touchstart' event handler */
@@ -741,12 +722,51 @@ export class BaseChart extends Component {
         }
 
         const target = this.findItemByEvent(e);
-        this.activateTarget(target, e);
+        if (this.currentTarget?.item === target?.item) {
+            return;
+        }
+
+        if (this.currentTarget?.item && isFunction(this.props.onitemout)) {
+            this.props.onitemout({ ...this.currentTarget, event: e });
+        }
+
+        this.currentTarget = target;
+
+        if (this.state.activateOnHover) {
+            this.activateTarget(target, e);
+        }
+
+        if (!target?.item) {
+            return;
+        }
+
+        if (this.state.showPopupOnHover) {
+            this.showPopup(target);
+            // Hide popup if already pinned same item
+            if (
+                this.state.pinPopupOnClick
+                && target.item === this.pinnedTarget
+            ) {
+                show(this.popup, false);
+            }
+        }
+
+        if (isFunction(this.props.onitemover)) {
+            this.props.onitemover({ ...target, event: e });
+        }
     }
 
     /** Chart content 'mouseleave' event handler */
     onMouseLeave(e) {
-        this.deactivateTarget(e);
+        if (this.state.activateOnHover) {
+            this.deactivateTarget();
+        }
+
+        if (this.currentTarget?.item && isFunction(this.props.onitemout)) {
+            this.props.onitemout({ ...this.currentTarget, event: e });
+        }
+
+        this.currentTarget = null;
     }
 
     defaultPopupContent(target) {
