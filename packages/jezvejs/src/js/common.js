@@ -109,14 +109,15 @@ export const addChilds = (elem, childs) => {
  * Set up event handlers for specified element
  * @param {Element} elem - element to set event handlers
  * @param {Object} events - event handlers object
+ * @param {boolean|Object} options - useCapture flag or options object
  */
-export const setEvents = (elem, events) => {
+export const setEvents = (elem, events, options = undefined) => {
     if (!elem || !events) {
         return;
     }
 
     Object.keys(events).forEach((eventName) => {
-        elem.addEventListener(eventName, events[eventName]);
+        elem.addEventListener(eventName, events[eventName], options);
     });
 };
 
@@ -124,14 +125,15 @@ export const setEvents = (elem, events) => {
  * Remove event handlers from specified element
  * @param {Element} elem - element to remove event handlers from
  * @param {Object} events - event handlers object
+ * @param {boolean|Object} options - useCapture flag or options object
  */
-export const removeEvents = (elem, events) => {
+export const removeEvents = (elem, events, options = undefined) => {
     if (!elem || !events) {
         return;
     }
 
     Object.keys(events).forEach((eventName) => {
-        elem.removeEventListener(eventName, events[eventName]);
+        elem.removeEventListener(eventName, events[eventName], options);
     });
 };
 
