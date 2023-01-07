@@ -4,9 +4,20 @@ import { Offcanvas } from 'jezvejs/Offcanvas';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
+const logTo = (target, value) => {
+    const elem = (typeof target === 'string') ? ge(target) : target;
+    if (!elem) {
+        return;
+    }
+
+    elem.value += `${value}\r\n`;
+};
+
 const initDefault = () => {
     const offcanvas = Offcanvas.create({
         content: ge('defaultContent'),
+        onOpened: () => logTo('result', 'Opened'),
+        onClosed: () => logTo('result', 'Closed'),
     });
 
     const btn = ge('showDefaultBtn');

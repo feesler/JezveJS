@@ -20,6 +20,9 @@ const BACKGROUND_CLASS = 'offcanvas__bg';
 const defaultProps = {
     placement: 'left',
     closed: true,
+    onOpened: null,
+    onClosed: null,
+    onToggle: null,
 };
 
 export class Offcanvas extends Component {
@@ -47,6 +50,7 @@ export class Offcanvas extends Component {
         this.elem = createElement('div', {
             props: { className: CONTAINER_CLASS },
             children: [this.contentElem],
+            events: { transitionend: (e) => this.onTransitionEnd(e) },
         });
 
         if (this.props.placement === 'right') {
@@ -77,6 +81,24 @@ export class Offcanvas extends Component {
         } else {
             show(content, true);
             this.contentElem.append(content);
+        }
+    }
+
+    onTransitionEnd(e) {
+        if (e?.target !== this.elem) {
+            return;
+        }
+
+        if (this.state.closed) {
+            if (isFunction(this.props.onClosed)) {
+                this.props.onClosed();
+            }
+        } else if (isFunction(this.props.onOpened)) {
+            this.props.onOpened();
+        }
+
+        if (isFunction(this.props.onToggle)) {
+            this.props.onToggle(this.state.closed);
         }
     }
 
