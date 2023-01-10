@@ -99,22 +99,20 @@ export class IconButton extends Component {
         }
 
         this.contentElem = this.elem.querySelector(`.${CONTENT_CLASS}`);
-        if (!this.contentElem) {
-            throw new Error('Invalid structure of iconbutton element');
-        }
+        if (this.contentElem) {
+            const titleElem = this.contentElem.querySelector(`.${TITLE_CLASS}`);
+            if (typeof this.state.title === 'undefined') {
+                this.state.title = (titleElem)
+                    ? titleElem.textContent.trim()
+                    : this.contentElem.textContent.trim();
+            }
 
-        const titleElem = this.contentElem.querySelector(`.${TITLE_CLASS}`);
-        if (typeof this.state.title === 'undefined') {
-            this.state.title = (titleElem)
-                ? titleElem.textContent.trim()
-                : this.contentElem.textContent.trim();
-        }
-
-        const subtitleElem = this.contentElem.querySelector(`.${SUBTITLE_CLASS}`);
-        if (typeof this.state.subtitle === 'undefined') {
-            this.state.subtitle = (subtitleElem)
-                ? subtitleElem.textContent.trim()
-                : null;
+            const subtitleElem = this.contentElem.querySelector(`.${SUBTITLE_CLASS}`);
+            if (typeof this.state.subtitle === 'undefined') {
+                this.state.subtitle = (subtitleElem)
+                    ? subtitleElem.textContent.trim()
+                    : null;
+            }
         }
 
         this.state.enabled = !this.elem.hasAttribute('disabled');
