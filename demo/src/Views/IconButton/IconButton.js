@@ -11,6 +11,7 @@ const addEventLog = (value) => {
 
 const initParsed = () => {
     IconButton.fromElement(ge('createBtn'));
+    IconButton.fromElement(ge('updateBtn'));
 };
 
 const initDynamicButton = () => {

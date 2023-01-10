@@ -30,17 +30,31 @@
 
                         <h2>Parse component from DOM</h2>
                         <section>
-                            <button id="createBtn" class="iconbutton" type="button">
-                                <span class="iconbutton__icon">
-                                    <svg class="iconbutton__icon-content" version="1.1" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="m11 4v7h-7v2l7 1e-4v7h2v-7l7-1e-4v-2h-7v-7l-2-1e-5z" />
-                                    </svg>
-                                </span>
-                                <span class="iconbutton__content">
-                                    <span>Create</span>
-                                </span>
-                            </button>
+                            <div class="buttons-list">
+                                <button id="createBtn" class="iconbutton" type="button">
+                                    <span class="iconbutton__icon">
+                                        <svg class="iconbutton__icon-content" version="1.1" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="m11 4v7h-7v2l7 1e-4v7h2v-7l7-1e-4v-2h-7v-7l-2-1e-5z" />
+                                        </svg>
+                                    </span>
+                                    <span class="iconbutton__content">
+                                        <span>Create</span>
+                                    </span>
+                                </button>
+
+                                <button id="updateBtn" class="iconbutton" type="button">
+                                    <span class="iconbutton__icon">
+                                        <svg class="iconbutton__icon-content" version="1.1" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <use href="#update" />
+                                        </svg>
+                                    </span>
+                                    <span class="iconbutton__content">
+                                        <span>Update</span>
+                                    </span>
+                                </button>
+                            </div>
                         </section>
 
                         <h2>Dynamically create button component with className option</h2>
