@@ -126,12 +126,13 @@ export class DropDown extends TestComponent {
         const listItems = await queryAll(this.elem, '.dd__list li');
         res.items = await asyncMap(listItems, async (elem) => {
             const item = await evaluate((el) => ({
+                id: el.dataset.id,
                 text: el.textContent,
                 hidden: el.hidden,
             }), elem);
             item.elem = elem;
 
-            const option = optionsData.find((opt) => opt.title === item.text);
+            const option = optionsData.find((opt) => opt.id === item.id);
             if (option) {
                 item.id = option.id;
                 item.selected = option.selected;
