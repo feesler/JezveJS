@@ -339,10 +339,10 @@ const callbacks = () => {
         activateOnClick: true,
         renderPopup: (target) => formatAsUSD(target.item.value),
         renderYAxisLabel: formatDecimalValue,
-        onitemclick: onBarClick,
-        onscroll: onChartsScroll,
-        onitemover: onBarOver,
-        onitemout: onBarOut,
+        onItemClick: onBarClick,
+        onScroll: onChartsScroll,
+        onItemOver: onBarOver,
+        onItemOut: onBarOut,
     });
     ge('chart_callbacks').append(histogram.elem);
 };
@@ -449,8 +449,8 @@ const singleNegative = () => {
     const histogram = Histogram.create({
         data: singleNegData,
         autoScale: true,
-        onitemover: onBarOver,
-        onitemout: onBarOut,
+        onItemOver: onBarOver,
+        onItemOut: onBarOut,
     });
     ge('chart_single_neg').append(histogram.elem);
 };

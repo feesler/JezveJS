@@ -18,7 +18,7 @@ const initDefault = () => {
 
     DateInput.create({
         elem: ge('dateinput'),
-        oninput: (e) => onInput(e),
+        onInput: (e) => onInput(e),
     });
 };
 

@@ -30,7 +30,7 @@ const initStatic = () => {
     const datePicker = DatePicker.create({
         static: true,
         animated: true,
-        ondateselect: (date) => formatDateToInput(date, 'staticDateInp'),
+        onDateSelect: (date) => formatDateToInput(date, 'staticDateInp'),
     });
 
     insertAfter(datePicker.elem, ge('staticDateInp'));
@@ -40,7 +40,7 @@ const initPopup = () => {
     const inpGroup = ge('dpPopupGroup');
     const datePicker = DatePicker.create({
         relparent: inpGroup,
-        ondateselect: (date) => {
+        onDateSelect: (date) => {
             formatDateToInput(date, 'popupDateInp');
             datePicker.hide();
         },
@@ -65,7 +65,7 @@ const initRangeSelect = () => {
     const datePicker = DatePicker.create({
         relparent: inpGroup,
         range: true,
-        onrangeselect: (range) => {
+        onRangeSelect: (range) => {
             formatRangeToInput(range, 'rangeInp');
             datePicker.hide();
         },
@@ -81,14 +81,14 @@ const initCallbacks = () => {
     const datePicker = DatePicker.create({
         relparent: inpGroup,
         range: true,
-        ondateselect: (date) => {
+        onDateSelect: (date) => {
             statustext.textContent = `Date selected: ${formatDate(date)}`;
         },
-        onrangeselect: (range) => formatRangeToInput(range, 'cbInp'),
-        onshow: () => {
+        onRangeSelect: (range) => formatRangeToInput(range, 'cbInp'),
+        onShow: () => {
             statustext.textContent = 'Select range...';
         },
-        onhide: () => {
+        onHide: () => {
             statustext.textContent = 'Loading...';
         },
     });

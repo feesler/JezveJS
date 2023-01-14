@@ -46,13 +46,13 @@ const initOffset = () => {
         data,
         radius: 100,
         offset: 10,
-        onitemover: ({ sector }) => {
+        onItemOver: ({ sector }) => {
             hovtitle.textContent = sector.title;
         },
-        onitemout: () => {
+        onItemOut: () => {
             hovtitle.textContent = '';
         },
-        onitemclick: ({ sector }) => {
+        onItemClick: ({ sector }) => {
             data = toggleSectorOffset(data, sector);
             chart.setData(data);
         },
@@ -85,13 +85,13 @@ const initInnerRadius = () => {
         radius: 100,
         innerRadius: 70,
         offset: 10,
-        onitemover: ({ sector }) => {
+        onItemOver: ({ sector }) => {
             hovtitle.textContent = sector.title;
         },
-        onitemout: () => {
+        onItemOut: () => {
             hovtitle.textContent = '';
         },
-        onitemclick: ({ sector }) => {
+        onItemClick: ({ sector }) => {
             data = toggleSectorOffset(data, sector);
             chart.setData(data);
         },
@@ -111,7 +111,7 @@ const initSingleValue = () => {
         data,
         radius: 100,
         offset: 10,
-        onitemclick: ({ sector }) => {
+        onItemClick: ({ sector }) => {
             data = toggleSectorOffset(data, sector);
             chart.setData(data);
         },
@@ -126,7 +126,7 @@ const initSingleValue = () => {
         radius: 100,
         innerRadius: 70,
         offset: 10,
-        onitemclick: ({ sector }) => {
+        onItemClick: ({ sector }) => {
             innerData = toggleSectorOffset(innerData, sector);
             innerChart.setData(innerData);
         },
