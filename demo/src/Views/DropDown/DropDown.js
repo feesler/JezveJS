@@ -276,6 +276,10 @@ const singleSelectFilter = () => {
             dropDown.setSelection(newItem.id);
         },
     });
+
+    setEvents(ge('setInvalidSingleSelectionBtn'), {
+        click: () => dropDown.setSelection([]),
+    });
 };
 
 // Built-in items filter with multiple select
