@@ -27,7 +27,7 @@ export class DropDownView extends AppView {
 
         res.customDropDown = await DropDown.createFromChild(this, await query('#selinp10'));
         res.nativeSelDropDown = await DropDown.createFromChild(this, await query('#selinp11'));
-        res.enableBtn2 = await query('#enableBtn2');
+        res.enableCustomBtn = await query('#enableCustomBtn');
 
         res.fullscreenDropDown = await DropDown.createFromChild(this, await query('#selinp12'));
 
@@ -54,7 +54,7 @@ export class DropDownView extends AppView {
             && res.filterDropDown
             && res.customDropDown
             && res.nativeSelDropDown
-            && res.enableBtn2
+            && res.enableCustomBtn
             && res.fullscreenDropDown
             && res.dynamicDropDown
             && res.addItemBtn

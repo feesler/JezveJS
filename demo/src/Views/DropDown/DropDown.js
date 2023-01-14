@@ -226,37 +226,36 @@ const dynamicMultipleSelect = () => {
         genDropDown.addItem(props);
     });
 
-    const enableOptionBtn = ge('enableOptionBtn');
-    enableOptionBtn.addEventListener('click', () => {
-        const item = genDropDown.getItem('3');
-        genDropDown.enableItem('3', item.disabled);
+    setEvents(ge('enableOptionBtn'), {
+        click: () => {
+            const item = genDropDown.getItem('3');
+            genDropDown.enableItem('3', item.disabled);
+        },
     });
 };
 
 // Disabled single select drop down
 const parseDisabledSingleSelect = () => {
-    const disabledSingleDropDown = DropDown.create({
+    const dropDown = DropDown.create({
         elem: 'selinp7single',
         className: 'dd_stretch',
         disabled: true,
         placeholder: 'Multi select control',
     });
 
-    const enableBtn = ge('enableSingleBtn');
-    enableBtn.addEventListener('click', (e) => toggleEnable(e, disabledSingleDropDown));
+    setEvents(ge('enableSingleBtn'), { click: (e) => toggleEnable(e, dropDown) });
 };
 
 // Disabled multiple select drop down
 const parseDisabledMultiSelect = () => {
-    const disabledDropDown = DropDown.create({
+    const dropDown = DropDown.create({
         elem: 'selinp7',
         className: 'dd_stretch',
         disabled: true,
         placeholder: 'Multi select control',
     });
 
-    const enableBtn = ge('enableBtn');
-    enableBtn.addEventListener('click', (e) => toggleEnable(e, disabledDropDown));
+    setEvents(ge('enableBtn'), { click: (e) => toggleEnable(e, dropDown) });
 };
 
 // Built-in items filter with single select
@@ -268,8 +267,15 @@ const singleSelectFilter = () => {
         data: initItems('Filter item', 100),
     });
 
-    const enableBtn = ge('enableFilterBtn');
-    enableBtn.addEventListener('click', (e) => toggleEnable(e, dropDown));
+    setEvents(ge('enableFilterBtn'), { click: (e) => toggleEnable(e, dropDown) });
+
+    setEvents(ge('setSelectionSingleBtn'), {
+        click: () => {
+            const selected = dropDown.getSelectionData();
+            const newItem = dropDown.items.find((item) => item.id !== selected.id);
+            dropDown.setSelection(newItem.id);
+        },
+    });
 };
 
 // Built-in items filter with multiple select
@@ -283,8 +289,20 @@ const multiSelectFilter = () => {
         data: initItems('Filter item', 100),
     });
 
-    const enableBtn = ge('enableMultiFilterBtn');
-    enableBtn.addEventListener('click', (e) => toggleEnable(e, dropDown));
+    setEvents(ge('enableMultiFilterBtn'), { click: (e) => toggleEnable(e, dropDown) });
+
+    setEvents(ge('setSelectionMultiBtn'), {
+        click: () => {
+            const [first, second] = dropDown.items;
+
+            const selection = dropDown.items.filter((_, ind) => (
+                (first.selected && ((ind % 2) === 1))
+                || (!first.selected && !second.selected && ((ind % 2) === 0))
+            )).map((item) => item.id);
+
+            dropDown.setSelection(selection);
+        },
+    });
 };
 
 // Built-in items filter with multiple select
@@ -326,7 +344,7 @@ const attachedFilter = () => {
 
 // Custom render drop down
 const customRender = () => {
-    const customDropDown = DropDown.create({
+    const dropDown = DropDown.create({
         elem: 'selinp10',
         className: 'dd__custom dd_stretch',
         placeholder: 'Multi select control',
@@ -339,8 +357,7 @@ const customRender = () => {
         components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
     });
 
-    const enableBtn = ge('enableBtn2');
-    enableBtn.addEventListener('click', (e) => toggleEnable(e, customDropDown));
+    setEvents(ge('enableCustomBtn'), { click: (e) => toggleEnable(e, dropDown) });
 };
 
 // useNativeSelect drop down
@@ -377,61 +394,58 @@ const fullScreen = () => {
 
 // Dynamic add/remove items
 const dynamicAddRemoveItems = () => {
-    const dynamicDropDown = DropDown.create({
+    const dropDown = DropDown.create({
         elem: 'dynamicSel',
         placeholder: 'Dynamic Drop Down',
         multi: true,
     });
 
-    const addBtn = ge('addBtn');
-    if (addBtn) {
-        addBtn.addEventListener('click', () => {
-            const itemId = dynamicDropDown.items.length + 1;
-            dynamicDropDown.addItem({
+    setEvents(ge('addBtn'), {
+        click: () => {
+            const itemId = dropDown.items.length + 1;
+            dropDown.addItem({
                 id: itemId,
                 title: `Item ${itemId}`,
             });
-        });
-    }
-
-    const addDisabledBtn = ge('addDisBtn');
-    addDisabledBtn.addEventListener('click', () => {
-        const itemId = dynamicDropDown.items.length + 1;
-        dynamicDropDown.addItem({
-            id: itemId,
-            title: `Item ${itemId}`,
-            disabled: true,
-        });
+        },
     });
 
-    const addHiddenBtn = ge('addHiddenBtn');
-    addHiddenBtn.addEventListener('click', () => {
-        const itemId = dynamicDropDown.items.length + 1;
-        dynamicDropDown.addItem({
-            id: itemId,
-            title: `Item ${itemId}`,
-            disabled: true,
-            hidden: true,
-        });
+    setEvents(ge('addDisBtn'), {
+        click: () => {
+            const itemId = dropDown.items.length + 1;
+            dropDown.addItem({
+                id: itemId,
+                title: `Item ${itemId}`,
+                disabled: true,
+            });
+        },
     });
 
-    const delBtn = ge('delBtn');
-    delBtn.addEventListener('click', () => {
-        const itemsCount = dynamicDropDown.items.length;
-        if (!itemsCount) {
-            return;
-        }
-
-        const item = dynamicDropDown.items[itemsCount - 1];
-        dynamicDropDown.removeItem(item.id);
+    setEvents(ge('addHiddenBtn'), {
+        click: () => {
+            const itemId = dropDown.items.length + 1;
+            dropDown.addItem({
+                id: itemId,
+                title: `Item ${itemId}`,
+                disabled: true,
+                hidden: true,
+            });
+        },
     });
 
-    const delAllBtn = ge('delAllBtn');
-    if (delAllBtn) {
-        delAllBtn.addEventListener('click', () => {
-            dynamicDropDown.removeAll();
-        });
-    }
+    setEvents(ge('delBtn'), {
+        click: () => {
+            const itemsCount = dropDown.items.length;
+            if (!itemsCount) {
+                return;
+            }
+
+            const item = dropDown.items[itemsCount - 1];
+            dropDown.removeItem(item.id);
+        },
+    });
+
+    setEvents(ge('delAllBtn'), { click: () => dropDown.removeAll() });
 };
 
 let popup = null;
