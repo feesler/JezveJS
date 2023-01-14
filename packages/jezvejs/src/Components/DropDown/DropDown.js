@@ -486,7 +486,7 @@ export class DropDown extends Component {
             return;
         }
 
-        const selectedItems = this.getSelectedItems(this.state);
+        const selectedItems = this.getSelectedItems();
         if (!selectedItems.length) {
             return;
         }
@@ -623,7 +623,7 @@ export class DropDown extends Component {
             return;
         }
 
-        const selectedItems = this.getSelectedItems(this.state);
+        const selectedItems = this.getSelectedItems();
         if (!selectedItems.length) {
             return;
         }
@@ -1106,7 +1106,7 @@ export class DropDown extends Component {
 
     /** Return selected items data for 'itemselect' and 'change' events */
     getSelectionData() {
-        const selectedItems = this.getSelectedItems(this.state)
+        const selectedItems = this.getSelectedItems()
             .map((item) => ({ id: item.id, value: item.title }));
 
         if (this.props.multi) {
@@ -1195,6 +1195,22 @@ export class DropDown extends Component {
         });
     }
 
+    /** Sets items selection */
+    setSelection(ids) {
+        const itemIds = asArray(ids).map((id) => id?.toString());
+        if (!this.props.multi && itemIds.length > 1) {
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            items: this.state.items.map((item) => ({
+                ...item,
+                selected: itemIds.includes(item.id),
+            })),
+        });
+    }
+
     /** Return index of selected item contains specified element */
     getSelectedItemIndex(elem) {
         const SelectionItemComponent = this.props.components.MultiSelectionItem;
@@ -1203,7 +1219,7 @@ export class DropDown extends Component {
             return -1;
         }
 
-        const selectedItems = this.getSelectedItems(this.state);
+        const selectedItems = this.getSelectedItems();
         if (!Array.isArray(selectedItems)) {
             return -1;
         }
@@ -1219,7 +1235,7 @@ export class DropDown extends Component {
 
         // Check correctness of index
         if (index !== -1) {
-            const selectedItems = this.getSelectedItems(this.state);
+            const selectedItems = this.getSelectedItems();
             if (index < 0 || index >= selectedItems.length) {
                 return;
             }
@@ -1254,7 +1270,7 @@ export class DropDown extends Component {
 
     /** Activate last(right) selected item */
     activateLastSelectedItem() {
-        const selectedItems = this.getSelectedItems(this.state);
+        const selectedItems = this.getSelectedItems();
         if (!selectedItems.length) {
             return;
         }
