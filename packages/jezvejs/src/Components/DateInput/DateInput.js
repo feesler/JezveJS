@@ -16,7 +16,7 @@ const defaultProps = {
     name: undefined,
     form: undefined,
     placeholder: undefined,
-    oninput: null,
+    onInput: null,
 };
 
 /**
@@ -131,8 +131,8 @@ export class DateInput extends Component {
 
     /** 'input' event handler */
     handleInput(e) {
-        if (isFunction(this.props.oninput)) {
-            this.props.oninput(e);
+        if (isFunction(this.props.onInput)) {
+            this.props.onInput(e);
         }
     }
 

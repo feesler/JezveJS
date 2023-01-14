@@ -15,7 +15,7 @@ const defaultProps = {
     placeholder: undefined,
     value: undefined,
     digits: undefined,
-    oninput: null,
+    onInput: null,
     allowNegative: true,
     allowMultipleLeadingZeros: false,
 };
@@ -25,7 +25,7 @@ const defaultProps = {
  * @param {Object} props
  * @param {string|Element} props.elem - identifier or element to attach component to
  * @param {Number} props.digits - decimal digits limit
- * @param {Function} props.oninput - 'input' event handler
+ * @param {Function} props.onInput - 'input' event handler
  * @param {Function} props.allowNegative - enables input negative values
  */
 export class DecimalInput extends Component {
@@ -63,7 +63,7 @@ export class DecimalInput extends Component {
             paste: this.beforeInputHandler,
             beforeinput: this.beforeInputHandler,
         };
-        if (isFunction(this.props.oninput)) {
+        if (isFunction(this.props.onInput)) {
             this.eventHandlers.input = (e) => this.handleInput(e);
         }
         setEvents(this.elem, this.eventHandlers);
@@ -224,8 +224,8 @@ export class DecimalInput extends Component {
 
     /** 'input' event handler */
     handleInput(e) {
-        if (isFunction(this.props.oninput)) {
-            this.props.oninput(e);
+        if (isFunction(this.props.onInput)) {
+            this.props.onInput(e);
         }
     }
 }

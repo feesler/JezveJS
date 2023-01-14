@@ -16,8 +16,8 @@ export {
  * @param {Object} props
  * @param {String} props.elem - identifier or Element of sortable container
  * @param {String} props.group - sortable group udentifier
- * @param {Function} props.ondragstart - drag start event handler
- * @param {Function} props.oninsertat - drop item on new place event handler
+ * @param {Function} props.onDragStart - drag start event handler
+ * @param {Function} props.onInsertAt - drop item on new place event handler
  * @param {boolean} props.table - enable table sort behavior
  * @param {boolean} props.copyWidth - enable copying width of original item to drag avatar
  * @param {String} props.selector - CSS selector for sortable items

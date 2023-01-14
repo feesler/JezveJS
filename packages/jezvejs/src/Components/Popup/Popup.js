@@ -39,7 +39,7 @@ const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2
 const defaultProps = {
     nodim: false,
     scrollMessage: false,
-    onclose: null,
+    onClose: null,
     className: null,
     title: null,
     btn: null,
@@ -51,7 +51,7 @@ const defaultProps = {
  * @param {String} params.id - identifier of element will be created for popup
  * @param {boolean} params.nodim - option to not dim background on popup appear
  * @param {boolean} params.scrollMessage - scroll message content instead of entire popup
- * @param {Function} params.onclose - popup close event handler
+ * @param {Function} params.onClose - popup close event handler
  * @param {String|String[]} params.className - list of additional CSS classes for popup
  * @param {String} params.title - title of popup
  * @param {Object} params.btn:
@@ -164,8 +164,8 @@ export class Popup extends Component {
     close() {
         this.hide();
 
-        if (isFunction(this.props.onclose)) {
-            this.props.onclose();
+        if (isFunction(this.props.onClose)) {
+            this.props.onClose();
         }
     }
 

@@ -91,10 +91,10 @@ const initStandardStretch = () => {
         className: 'dd_stretch',
         placeholder: 'Select item 4',
         data: initItems('Item', 10),
-        onitemselect(selection) {
+        onItemSelect(selection) {
             logTo('log-single', `itemselect: ${formatObject(selection)}`);
         },
-        onchange(selection) {
+        onChange(selection) {
             logTo('log-single', `change: ${formatObject(selection)}`);
         },
     });
@@ -192,10 +192,10 @@ const parseMultipleSelect = () => {
         elem: 'selinp5',
         className: 'dd_stretch',
         placeholder: 'Multi select control',
-        onitemselect(selection) {
+        onItemSelect(selection) {
             logTo('log-multi', `itemselect: ${formatObject(selection)}`);
         },
-        onchange(selection) {
+        onChange(selection) {
             logTo('log-multi', `change: ${formatObject(selection)}`);
         },
     });
@@ -207,11 +207,11 @@ const dynamicMultipleSelect = () => {
         elem: 'selinp6',
         className: 'dd_stretch',
         placeholder: 'Multi select control',
-        onitemselect(selection) {
+        onItemSelect(selection) {
             logTo('log-genmulti', `itemselect: ${formatObject(selection)}`);
         },
         multi: true,
-        onchange(selection) {
+        onChange(selection) {
             logTo('log-genmulti', `change: ${formatObject(selection)}`);
         },
     });
@@ -352,10 +352,10 @@ const customRender = () => {
         elem: 'selinp10',
         className: 'dd__custom dd_stretch',
         placeholder: 'Multi select control',
-        onitemselect(selection) {
+        onItemSelect(selection) {
             logTo('log-custom', `itemselect: ${formatObject(selection)}`);
         },
-        onchange(selection) {
+        onChange(selection) {
             logTo('log-custom', `change: ${formatObject(selection)}`);
         },
         components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },

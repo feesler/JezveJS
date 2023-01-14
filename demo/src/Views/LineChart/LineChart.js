@@ -245,10 +245,10 @@ const callbacks = () => {
         renderPopup: (target) => formatAsUSD(target.item.value),
         renderYAxisLabel: formatDecimalValue,
         activateOnHover: true,
-        onitemclick: onNodeClick,
-        onscroll: onChartsScroll,
-        onitemover: onNodeOver,
-        onitemout: onNodeOut,
+        onItemClick: onNodeClick,
+        onScroll: onChartsScroll,
+        onItemOver: onNodeOver,
+        onItemOut: onNodeOut,
     });
     ge('linechart_callbacks').append(chart.elem);
 };

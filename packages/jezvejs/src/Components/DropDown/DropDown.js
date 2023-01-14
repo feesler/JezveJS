@@ -78,9 +78,9 @@ const defaultProps = {
     useNativeSelect: false,
     fullScreen: false,
     placeholder: null,
-    onitemselect: null,
-    onchange: null,
-    oninput: null,
+    onItemSelect: null,
+    onChange: null,
+    onInput: null,
     className: null,
     components: {
         ListItem: DropDownListItem,
@@ -98,9 +98,9 @@ const defaultProps = {
  *     small devices(less 768px width) to view list and edit selection
  * @param {boolean} props.fullScreen - if set true component will show fullscreen popup
  * @param {string} props.placeholder - placeholder text for component
- * @param {Function} props.onitemselect - item selected event handler
- * @param {Function} props.onchange - selection changed event handler
- * @param {boolean|Function} props.oninput - text input event handler
+ * @param {Function} props.onItemSelect - item selected event handler
+ * @param {Function} props.onChange - selection changed event handler
+ * @param {boolean|Function} props.onInput - text input event handler
  *    If set to true list items will be filtered by input value
  * @param {Function} props.components.ListItem - custom list item component
  * @param {Function} props.components.MultiSelectionItem - custom selected item component
@@ -676,8 +676,8 @@ export class DropDown extends Component {
             this.filter(e.target.value);
         }
 
-        if (isFunction(this.props.oninput)) {
-            this.props.oninput(e);
+        if (isFunction(this.props.onInput)) {
+            this.props.onInput(e);
         }
     }
 
@@ -1118,9 +1118,9 @@ export class DropDown extends Component {
 
     /** Send current selection data to 'itemselect' event handler */
     sendItemSelectEvent() {
-        if (isFunction(this.props.onitemselect)) {
+        if (isFunction(this.props.onItemSelect)) {
             const data = this.getSelectionData();
-            this.props.onitemselect.call(this, data);
+            this.props.onItemSelect(data);
         }
     }
 
@@ -1133,9 +1133,9 @@ export class DropDown extends Component {
             return;
         }
 
-        if (isFunction(this.props.onchange)) {
+        if (isFunction(this.props.onChange)) {
             const data = this.getSelectionData();
-            this.props.onchange.call(this, data);
+            this.props.onChange(data);
         }
 
         this.state.changed = false;

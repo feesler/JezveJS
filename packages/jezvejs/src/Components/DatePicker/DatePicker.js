@@ -54,10 +54,10 @@ const defaultProps = {
     range: false,
     locales: [],
     animated: false,
-    onrangeselect: null,
-    ondateselect: null,
-    onshow: null,
-    onhide: null,
+    onRangeSelect: null,
+    onDateSelect: null,
+    onShow: null,
+    onHide: null,
 };
 
 /**
@@ -69,10 +69,10 @@ const defaultProps = {
  * @param {boolean} props.range - if true turn on date range select mode
  * @param {String|[]} props.locales - locales to render component
  * @param {boolean} props.animated - animate transitions between views if possible
- * @param {function} props.onrangeselect - date range select callback
- * @param {function} props.ondateselect - single date select callback
- * @param {function} props.onshow - dynamic date picker shown callback
- * @param {function} props.onhide - dynamic date picker hidden callback
+ * @param {function} props.onRangeSelect - date range select callback
+ * @param {function} props.onDateSelect - single date select callback
+ * @param {function} props.onShow - dynamic date picker shown callback
+ * @param {function} props.onHide - dynamic date picker hidden callback
  */
 export class DatePicker extends Component {
     constructor(props) {
@@ -136,11 +136,11 @@ export class DatePicker extends Component {
     }
 
     sendShowEvents(value = true) {
-        if (value && isFunction(this.props.onshow)) {
-            this.props.onshow();
+        if (value && isFunction(this.props.onShow)) {
+            this.props.onShow();
         }
-        if (!value && isFunction(this.props.onhide)) {
-            this.props.onhide();
+        if (!value && isFunction(this.props.onHide)) {
+            this.props.onHide();
         }
     }
 
@@ -331,8 +331,8 @@ export class DatePicker extends Component {
             actDate: date,
         });
 
-        if (isFunction(this.props.ondateselect)) {
-            this.props.ondateselect(date);
+        if (isFunction(this.props.onDateSelect)) {
+            this.props.onDateSelect(date);
         }
 
         if (this.props.range) {
@@ -355,8 +355,8 @@ export class DatePicker extends Component {
         } else {
             this.setSelection(start, date, false);
 
-            if (isFunction(this.props.onrangeselect)) {
-                this.props.onrangeselect(this.state.curRange);
+            if (isFunction(this.props.onRangeSelect)) {
+                this.props.onRangeSelect(this.state.curRange);
             }
         }
     }

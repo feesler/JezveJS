@@ -30,7 +30,7 @@ const initClonedAvatar = () => {
 const initSortable = () => {
     Sortable.create({
         elem: 'sortable_container',
-        oninsertat: onSort,
+        onInsertAt: onSort,
         selector: '.normal_item',
         placeholderClass: 'item_placeholder',
         group: 'tiles',
@@ -82,7 +82,7 @@ const initSortableList = () => {
 
     Sortable.create({
         elem: 'list_sortable',
-        oninsertat: onListSort,
+        onInsertAt: onListSort,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         copyWidth: true,
@@ -128,7 +128,7 @@ const initExchangable = () => {
 
     Sortable.create({
         elem: 'list_exch_1',
-        oninsertat: onExchange,
+        onInsertAt: onExchange,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         dragClass: true,
@@ -137,7 +137,7 @@ const initExchangable = () => {
     });
     Sortable.create({
         elem: 'list_exch_2',
-        oninsertat: onExchange,
+        onInsertAt: onExchange,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         dragClass: 'list_item_drag',
@@ -177,7 +177,7 @@ const onTableSort = (srcElem, destElem) => {
 const initTableEachBody = () => {
     Sortable.create({
         elem: 'table_sortable',
-        oninsertat: onTableSort,
+        onInsertAt: onTableSort,
         selector: 'tbody',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl',
@@ -190,7 +190,7 @@ const initTableEachBody = () => {
 const initTableSingleBody = () => {
     Sortable.create({
         elem: 'table_sortable_2',
-        oninsertat: onSort,
+        onInsertAt: onSort,
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl2',
@@ -203,7 +203,7 @@ const initTableSingleBody = () => {
 const initTableNoBody = () => {
     Sortable.create({
         elem: 'table_sortable_3',
-        oninsertat: onSort,
+        onInsertAt: onSort,
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl3',

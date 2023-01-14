@@ -28,9 +28,9 @@ const defaultProps = {
     data: null,
     colors: [],
     className: null,
-    onitemclick: null,
-    onitemover: null,
-    onitemout: null,
+    onItemClick: null,
+    onItemOver: null,
+    onItemOut: null,
 };
 
 /**
@@ -128,35 +128,35 @@ export class PieChart extends Component {
 
     /** Sector item 'click' event handler */
     onItemClick(e, sector) {
-        if (!isFunction(this.props.onitemclick)) {
+        if (!isFunction(this.props.onItemClick)) {
             return;
         }
 
-        this.props.onitemclick({ sector, event: e });
+        this.props.onItemClick({ sector, event: e });
     }
 
     /** Sector item 'mouseover' event handler */
     onItemOver(e, sector) {
         if (
             this.state.blockTouch
-            || !isFunction(this.props.onitemover)
+            || !isFunction(this.props.onItemOver)
         ) {
             return;
         }
 
-        this.props.onitemover({ sector, event: e });
+        this.props.onItemOver({ sector, event: e });
     }
 
     /** Sector item 'mouseout' from bar event handler */
     onItemOut(e, sector) {
         if (
             this.state.blockTouch
-            || !isFunction(this.props.onitemout)
+            || !isFunction(this.props.onItemOut)
         ) {
             return;
         }
 
-        this.props.onitemout({ sector, event: e });
+        this.props.onItemOut({ sector, event: e });
     }
 
     /** Calculate sum of array values */

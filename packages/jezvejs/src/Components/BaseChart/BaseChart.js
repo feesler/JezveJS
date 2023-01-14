@@ -69,10 +69,10 @@ const defaultProps = {
     animatePopup: false,
     renderPopup: null,
     // Callbacks
-    onscroll: null,
-    onitemclick: null,
-    onitemover: null,
-    onitemout: null,
+    onScroll: null,
+    onItemClick: null,
+    onItemOver: null,
+    onItemOut: null,
     // Data
     data: {
         values: [],
@@ -195,8 +195,8 @@ export class BaseChart extends Component {
         if (
             this.props.activateOnHover
             || this.props.showPopupOnHover
-            || isFunction(this.props.onitemover)
-            || isFunction(this.props.onitemout)
+            || isFunction(this.props.onItemOver)
+            || isFunction(this.props.onItemOut)
         ) {
             events.touchstart = (e) => this.onTouchStart(e);
             events.mousemove = (e) => this.onMouseMove(e);
@@ -676,8 +676,8 @@ export class BaseChart extends Component {
             this.activateTarget(target, e);
         }
 
-        if (isFunction(this.props.onitemclick)) {
-            this.props.onitemclick({ ...target, event: e });
+        if (isFunction(this.props.onItemClick)) {
+            this.props.onItemClick({ ...target, event: e });
         }
     }
 
@@ -726,8 +726,8 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (this.currentTarget?.item && isFunction(this.props.onitemout)) {
-            this.props.onitemout({ ...this.currentTarget, event: e });
+        if (this.currentTarget?.item && isFunction(this.props.onItemOut)) {
+            this.props.onItemOut({ ...this.currentTarget, event: e });
         }
 
         this.currentTarget = target;
@@ -751,8 +751,8 @@ export class BaseChart extends Component {
             }
         }
 
-        if (isFunction(this.props.onitemover)) {
-            this.props.onitemover({ ...target, event: e });
+        if (isFunction(this.props.onItemOver)) {
+            this.props.onItemOver({ ...target, event: e });
         }
     }
 
@@ -762,8 +762,8 @@ export class BaseChart extends Component {
             this.deactivateTarget();
         }
 
-        if (this.currentTarget?.item && isFunction(this.props.onitemout)) {
-            this.props.onitemout({ ...this.currentTarget, event: e });
+        if (this.currentTarget?.item && isFunction(this.props.onItemOut)) {
+            this.props.onItemOut({ ...this.currentTarget, event: e });
         }
 
         this.currentTarget = null;
@@ -888,8 +888,8 @@ export class BaseChart extends Component {
             this.hidePopup();
         }
 
-        if (isFunction(this.props.onscroll)) {
-            this.props.onscroll.call(this);
+        if (isFunction(this.props.onScroll)) {
+            this.props.onScroll();
         }
     }
 
