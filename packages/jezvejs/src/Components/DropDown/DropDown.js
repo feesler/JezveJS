@@ -1198,7 +1198,7 @@ export class DropDown extends Component {
     /** Sets items selection */
     setSelection(ids) {
         const itemIds = asArray(ids).map((id) => id?.toString());
-        if (!this.props.multi && itemIds.length > 1) {
+        if (!this.props.multi && itemIds.length !== 1) {
             return;
         }
 
