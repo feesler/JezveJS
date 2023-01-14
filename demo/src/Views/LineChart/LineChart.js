@@ -7,6 +7,7 @@ import {
 } from 'jezvejs';
 import { LineChart } from 'jezvejs/LineChart';
 import { initNavigation } from '../../app.js';
+import largeData from '../Histogram/largeData.json';
 import './style.scss';
 
 /* eslint-disable no-unused-vars */
@@ -352,6 +353,7 @@ const setData = () => {
     setEvents(ge('setData1Btn'), { click: () => chart.setData(negPosData) });
     setEvents(ge('setData2Btn'), { click: () => chart.setData(chartData3) });
     setEvents(ge('setData3Btn'), { click: () => chart.setData(chartStackedData) });
+    setEvents(ge('largeDataBtn'), { click: () => chart.setData(largeData) });
 };
 
 const init = () => {

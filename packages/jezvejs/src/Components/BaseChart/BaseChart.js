@@ -386,7 +386,7 @@ export class BaseChart extends Component {
         });
         grid.calculate(values);
 
-        return grid;
+        return (grid.steps === 0) ? state.grid : grid;
     }
 
     /** Draw grid and return array of grid lines */
@@ -395,7 +395,7 @@ export class BaseChart extends Component {
 
         this.gridGroup?.remove();
         this.gridGroup = null;
-        if (!grid.steps) {
+        if (!grid?.steps) {
             return;
         }
 
@@ -507,7 +507,7 @@ export class BaseChart extends Component {
         const { grid } = state;
         this.vertLabelsGroup?.remove();
         this.vertLabelsGroup = null;
-        if (!grid.steps) {
+        if (!grid?.steps) {
             return;
         }
 
