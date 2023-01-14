@@ -158,6 +158,7 @@
   /* Disabled input */
   .input-group__input[disabled] {
     color: var(--ig-input-disabled-color);
+    -webkit-text-fill-color: var(--ig-input-disabled-color);
     background-color: var(--ig-input-disabled-bg);
     border-color: var(--ig-input-disabled-border);
   }
