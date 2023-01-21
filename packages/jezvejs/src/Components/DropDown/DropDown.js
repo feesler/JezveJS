@@ -1091,6 +1091,7 @@ export class DropDown extends Component {
 
             this.selectionItems = selectionItems;
 
+            show(this.selectionElem, selectedItems.length > 0);
             show(this.clearBtn, selectedItems.length > 0);
         }
 
