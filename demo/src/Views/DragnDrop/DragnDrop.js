@@ -3,6 +3,7 @@ import {
     ge,
     createElement,
     onReady,
+    asArray,
 } from 'jezvejs';
 import { Sortable } from 'jezvejs/Sortable';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
@@ -134,6 +135,7 @@ const initExchangable = () => {
         dragClass: true,
         group: 'exch',
         copyWidth: true,
+        allowSingleItemSort: true,
     });
     Sortable.create({
         elem: 'list_exch_2',
@@ -142,6 +144,107 @@ const initExchangable = () => {
         placeholderClass: 'list_item_placeholder',
         dragClass: 'list_item_drag',
         group: 'exch',
+        copyWidth: true,
+        allowSingleItemSort: true,
+    });
+};
+
+const renderTreeItem = (title, content = [], className = []) => createElement('div', {
+    props: { className: ['tree-item', ...asArray(className)].join(' ') },
+    children: [
+        createElement('div', {
+            props: { className: 'tree-item__title' },
+            children: createElement('span', { props: { textContent: title } }),
+        }),
+        createElement('div', {
+            props: { className: 'tree-item__content' },
+            children: content,
+        }),
+    ],
+});
+
+const getTreeItemIdByElem = (elem) => {
+    const titleElem = elem?.querySelector('.tree-item__title');
+    if (!titleElem) {
+        return null;
+    }
+
+    const text = titleElem.textContent.trim();
+    return (text.startsWith('Item ')) ? text.substring(5) : text;
+};
+
+const onTreeSort = (srcElem, destElem) => {
+    const srdId = getTreeItemIdByElem(srcElem);
+    const destId = getTreeItemIdByElem(destElem);
+
+    writeLog(ge('treeLog'), `srcId: ${srdId}; destId: ${destId}`);
+};
+
+const initTree = () => {
+    const treeRoot = ge('treeRoot');
+    for (let i = 1; i <= 4; i += 1) {
+        const childItems = (i < 3) ? [1, 2, 3] : [];
+        const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
+        const item = renderTreeItem(`Item ${i}`, content);
+        treeRoot.append(item);
+    }
+
+    Sortable.create({
+        elem: treeRoot,
+        onInsertAt: onTreeSort,
+        selector: '.tree-item',
+        containerSelector: '.tree-item__content',
+        placeholderClass: 'tree-item__placeholder',
+        dragClass: true,
+        group: 'tree',
+        copyWidth: true,
+        tree: true,
+    });
+};
+
+const initTreeExchange = () => {
+    const treeExch1 = ge('treeExch1');
+    for (let i = 1; i <= 4; i += 1) {
+        const childItems = (i < 3) ? [1, 2, 3] : [];
+        const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
+        const item = renderTreeItem(`Item ${i}`, content);
+        treeExch1.append(item);
+    }
+
+    const treeExch2 = ge('treeExch2');
+    for (let i = 1; i <= 4; i += 1) {
+        const childItems = (i > 3) ? [1, 2] : [];
+        const content = childItems.map((childId) => (
+            renderTreeItem(`Item ${i}.${childId}`, [], 'tree-item-2')
+        ));
+        const item = renderTreeItem(`Item ${i}`, content, 'tree-item-2');
+        treeExch2.append(item);
+    }
+
+    Sortable.create({
+        elem: treeExch1,
+        onInsertAt: onTreeSort,
+        selector: '.tree-item',
+        containerSelector: '.tree-item__content',
+        placeholderClass: 'tree-item__placeholder',
+        dragClass: true,
+        group: 'treeExch',
+        copyWidth: true,
+        tree: true,
+        allowSingleItemSort: true,
+    });
+
+    Sortable.create({
+        elem: treeExch2,
+        onInsertAt: onTreeSort,
+        selector: '.tree-item',
+        containerSelector: '.tree-item__content',
+        placeholderClass: 'tree-item__placeholder',
+        dragClass: true,
+        group: 'treeExch',
+        copyWidth: true,
+        tree: true,
+        allowSingleItemSort: true,
     });
 };
 
@@ -316,6 +419,9 @@ const init = () => {
     initSortable();
     initSortableList();
     initExchangable();
+
+    initTree();
+    initTreeExchange();
 
     initTableEachBody();
     initTableSingleBody();

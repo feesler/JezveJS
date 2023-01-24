@@ -71,6 +71,21 @@
                             <div id="exch_out" class="output-area"></div>
                         </section>
 
+                        <h2>Tree sort</h2>
+                        <section>
+                            <div id="treeRoot" class="tree"></div>
+                            <div id="treeLog" class="output-area"></div>
+                        </section>
+
+                        <h2>Tree exchange</h2>
+                        <section>
+                            <div class="exch-lists-container">
+                                <div id="treeExch1" class="tree"></div>
+                                <div id="treeExch2" class="tree"></div>
+                            </div>
+                            <div id="treeExchLog" class="output-area"></div>
+                        </section>
+
                         <h2>Sortable table with TBODY per each row</h2>
                         <section>
                             <table id="table_sortable" class="sortable_tbl">
@@ -349,31 +364,13 @@
                             <div id="di3" class="drag_item" style="top: 100px;">
                                 <input type="text">
                                 <div id="dh3_1" class="drag-handle-btn">
-                                    <svg class="drag-handle-btn__icon" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"
-                                            stroke-width="0" />
-                                        <path
-                                            d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"
-                                            stroke-width="0" />
-                                        <path
-                                            d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"
-                                            stroke-width="0" />
+                                    <svg class="drag-handle-btn__icon" xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#dragHandle">
                                     </svg>
                                 </div>
                                 <div id="dh3_2" class="drag-handle-btn">
-                                    <svg class="drag-handle-btn__icon red" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"
-                                            stroke-width="0" />
-                                        <path
-                                            d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"
-                                            stroke-width="0" />
-                                        <path
-                                            d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z"
-                                            stroke-width="0" />
+                                    <svg class="drag-handle-btn__icon red" xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#dragHandle">
                                     </svg>
                                 </div>
                             </div>
@@ -408,6 +405,14 @@
             </div>
         </div>
     </div>
+
+    <svg width="0" height="0" display="none" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="dragHandle" viewBox="0 0 20 20">
+            <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+            <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+            <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+        </symbol>
+    </svg>
 </body>
 
 </html>

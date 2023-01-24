@@ -1,8 +1,8 @@
 import {
-    isFunction,
     comparePosition,
     insertAfter,
     insertBefore,
+    hasFlag,
 } from '../../js/common.js';
 import { DropTarget } from '../DragnDrop/DropTarget.js';
 import { SortableDragAvatar } from './SortableDragAvatar.js';
@@ -11,6 +11,7 @@ import { SortableDragAvatar } from './SortableDragAvatar.js';
 
 const defaultProps = {
     group: null,
+    tree: false,
 };
 
 // Sortable drop target
@@ -28,19 +29,23 @@ export class SortableDropTarget extends DropTarget {
         let el = avatar.getTargetElem();
         const dragInfo = avatar.getDragInfo();
         const itemSelector = dragInfo.dragZone.getItemSelector();
+        const containerSelector = dragInfo.dragZone.getContainerSelector();
         const phItemClass = dragInfo.dragZone.getPlaceholder();
         const root = dragInfo.dragZone.getElement();
 
-        while (el && el !== root) {
-            if ((isFunction(el.matches) && el.matches(itemSelector))
-                || (el.classList && el.classList.contains(phItemClass))) {
+        while (el && el !== root && !el.dragZone) {
+            if (
+                el.matches(itemSelector)
+                || el.matches(containerSelector)
+                || (el.classList && el.classList.contains(phItemClass))
+            ) {
                 return el;
             }
 
             el = el.parentNode;
         }
 
-        return null;
+        return (el?.dragZone) ? el : null;
     }
 
     onDragMove(avatar, event) {
@@ -66,14 +71,21 @@ export class SortableDropTarget extends DropTarget {
         if (!nodeCmp) {
             return;
         }
+        const dragZoneBeforeTarget = hasFlag(nodeCmp, 2);
+        const dragZoneAfterTarget = hasFlag(nodeCmp, 4);
+        const dragZoneContainsTarget = hasFlag(nodeCmp, 8);
+        const targetContainsDragZone = hasFlag(nodeCmp, 16);
+        const itemSelector = dragInfo.dragZone.getItemSelector();
+        const containerSelector = dragInfo.dragZone.getContainerSelector();
+        const targetContainer = this.targetElem.querySelector(containerSelector);
 
         // check drop target is already a placeholder
         if (this.targetElem.classList.contains(dragInfo.dragZone.getPlaceholder())) {
             const pos = avatar.getSortPosition();
             // swap drag zone with drop target
-            if (nodeCmp & 2) {
+            if (dragZoneBeforeTarget) {
                 insertAfter(dragInfo.dragZoneElem, this.targetElem);
-            } else if (nodeCmp & 4) {
+            } else if (dragZoneAfterTarget) {
                 insertBefore(dragInfo.dragZoneElem, this.targetElem);
             }
 
@@ -84,13 +96,49 @@ export class SortableDropTarget extends DropTarget {
                     insertBefore(this.targetElem, pos.next);
                 }
             }
-        } else if (dragInfo.dragZoneElem.parentNode !== this.targetElem.parentNode) {
-            insertBefore(dragInfo.dragZoneElem, this.targetElem);
-        } else if (nodeCmp & 2) {
-            /* drag zone element is after current drop target */
+        } else if (
+            dragInfo.dragZoneElem.parentNode !== this.targetElem.parentNode
+            && !dragZoneContainsTarget
+        ) {
+            /* move between different containers */
+            if (this.targetElem.dragZone && !targetContainsDragZone) {
+                this.targetElem.append(dragInfo.dragZoneElem);
+            } else if (
+                this.props.tree
+                && targetContainsDragZone
+                && (this.targetElem.dragZone || this.targetElem.matches(containerSelector))
+            ) {
+                const parentItem = dragInfo.dragZoneElem.parentNode.closest(itemSelector);
+                if (parentItem && parentItem !== this.targetElem) {
+                    const rect = parentItem.getBoundingClientRect();
+                    if (event.clientY >= rect.bottom) {
+                        insertAfter(dragInfo.dragZoneElem, parentItem);
+                    } else if (event.clientY <= rect.top) {
+                        insertBefore(dragInfo.dragZoneElem, parentItem);
+                    }
+                }
+            } else if (!this.targetElem.dragZone) {
+                if (this.props.tree && this.targetElem.matches(containerSelector)) {
+                    if (this.targetElem.childElementCount === 0) {
+                        this.targetElem.append(dragInfo.dragZoneElem);
+                    }
+                } else {
+                    insertBefore(dragInfo.dragZoneElem, this.targetElem);
+                }
+            }
+        } else if (
+            this.props.tree
+            && targetContainer
+            && targetContainer.childElementCount === 0
+            && !dragZoneContainsTarget
+        ) {
+            /* new target element has empty container */
+            targetContainer.append(dragInfo.dragZoneElem);
+        } else if (dragZoneBeforeTarget && !dragZoneContainsTarget) {
+            /* drag zone element is before new drop target */
             insertAfter(dragInfo.dragZoneElem, this.targetElem);
-        } else if (nodeCmp & 4) {
-            /* drag zone element is before current drop target */
+        } else if (dragZoneAfterTarget && !dragZoneContainsTarget) {
+            /* drag zone element is after new drop target */
             insertBefore(dragInfo.dragZoneElem, this.targetElem);
         }
 
