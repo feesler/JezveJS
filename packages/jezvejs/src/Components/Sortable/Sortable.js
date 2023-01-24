@@ -25,6 +25,7 @@ export {
  * @param {String} props.dragClass - CSS class for drag avatar
  * @param {boolean} props.onlyRootHandle - enable drag start only on root of item
  * @param {String|String[]} props.handles - CSS selectors for available drag start handles
+ * @param {boolean} props.tree - enables tree sort
  */
 export class Sortable {
     static create(...args) {

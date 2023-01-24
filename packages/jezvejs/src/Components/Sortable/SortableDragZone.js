@@ -10,6 +10,7 @@ const defaultProps = {
     table: false,
     copyWidth: false,
     selector: null,
+    containerSelector: null,
     placeholderClass: false,
     dragClass: 'drag',
     onlyRootHandle: false,
@@ -110,31 +111,24 @@ export class SortableDragZone extends DragZone {
         return this.props.onlyRootHandle && target === item;
     }
 
-    // Return group of sortable
+    /** Returns sortable group */
     getGroup() {
-        if (this.props && this.props.group) {
-            return this.props.group;
-        }
-
-        return null;
+        return this.props?.group ?? null;
     }
 
-    // Return class for placeholder element
+    /** Returns CSS class for placeholder element */
     getPlaceholder() {
-        if (this.props && this.props.placeholderClass) {
-            return this.props.placeholderClass;
-        }
-
-        return null;
+        return this.props?.placeholderClass ?? null;
     }
 
-    // Return class for item element
+    /** Returns selector for sortable item element */
     getItemSelector() {
-        if (this.props && this.props.selector) {
-            return this.props.selector;
-        }
+        return this.props?.selector ?? null;
+    }
 
-        return null;
+    /** Returns selector for container element */
+    getContainerSelector() {
+        return this.props?.containerSelector ?? null;
     }
 
     // Return class for drag avatar element
