@@ -141,9 +141,9 @@ export class SortableDragZone extends DragZone {
     }
 
     // Insert event handler
-    onInsertAt(srcElem, elem) {
+    onInsertAt(srcElem, elem, newPos) {
         if (this.props && isFunction(this.props.onInsertAt)) {
-            this.props.onInsertAt(srcElem, elem);
+            this.props.onInsertAt(srcElem, elem, newPos);
         }
     }
 }

@@ -175,9 +175,11 @@ export class SortableDropTarget extends DropTarget {
         }
 
         const newPos = avatar.getSortPosition();
-        if (avatarInfo.initialPos.prev !== newPos.prev
-            && avatarInfo.initialPos.next !== newPos.next) {
-            avatarInfo.dragZone.onInsertAt(avatarInfo.dragZoneElem, avatarInfo.sortTarget);
+        if (
+            avatarInfo.initialPos.prev !== newPos.prev
+            || avatarInfo.initialPos.next !== newPos.next
+        ) {
+            avatarInfo.dragZone.onInsertAt(avatarInfo.dragZoneElem, avatarInfo.sortTarget, newPos);
         }
     }
 

@@ -104,11 +104,13 @@ const onExchange = (srcElem, destElem) => {
         return;
     }
 
-    const srcId = getItemIdByElem(srcElem);
-    const destId = getItemIdByElem(destElem);
-    const destParent = destElem.parentNode.id;
+    const isContainer = destElem.matches('.list-area');
 
-    writeLog(exchOut, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent}`);
+    const srcId = getItemIdByElem(srcElem);
+    const destId = (isContainer) ? null : getItemIdByElem(destElem);
+    const destParent = (isContainer) ? destElem : destElem.parentNode;
+
+    writeLog(exchOut, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent.id}`);
 };
 
 const renderDestListItem = (title = 'Item', isPlaceholder = false) => createElement('div', {
@@ -164,7 +166,7 @@ const renderTreeItem = (title, content = [], className = []) => createElement('d
 });
 
 const getTreeItemIdByElem = (elem) => {
-    const titleElem = elem?.querySelector('.tree-item__title');
+    const titleElem = elem?.querySelector(':scope > .tree-item__title');
     if (!titleElem) {
         return null;
     }
@@ -173,11 +175,27 @@ const getTreeItemIdByElem = (elem) => {
     return (text.startsWith('Item ')) ? text.substring(5) : text;
 };
 
-const onTreeSort = (srcElem, destElem) => {
-    const srdId = getTreeItemIdByElem(srcElem);
-    const destId = getTreeItemIdByElem(destElem);
+const getTreeItemParentId = (elem) => {
+    if (!elem?.parentNode) {
+        return null;
+    }
 
-    writeLog(ge('treeLog'), `srcId: ${srdId}; destId: ${destId}`);
+    const parentItem = elem.parentNode.closest('.tree-item');
+    if (parentItem) {
+        return getTreeItemIdByElem(parentItem);
+    }
+
+    const tree = elem.closest('.tree');
+    return tree?.id ?? null;
+};
+
+const onTreeSort = (srcElem, destElem, newPos) => {
+    const srdId = getTreeItemIdByElem(srcElem);
+    const parentId = getTreeItemParentId(srcElem);
+    const prevId = getTreeItemIdByElem(newPos.prev);
+    const nextId = getTreeItemIdByElem(newPos.next);
+
+    writeLog(ge('treeLog'), `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
 };
 
 const initTree = () => {
