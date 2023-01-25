@@ -12,6 +12,15 @@ import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
+const logTo = (target, value) => {
+    const elem = (typeof target === 'string') ? ge(target) : target;
+    if (!elem) {
+        return;
+    }
+
+    elem.value += `${value}\r\n`;
+};
+
 /* eslint-disable-next-line no-unused-vars */
 function onSort(srcElem, destElem) {
 }
@@ -38,10 +47,6 @@ const initSortable = () => {
     });
 };
 
-const writeLog = (elem, text) => {
-    elem?.append(createElement('div', { props: { textContent: text } }));
-};
-
 const getItemIdByElem = (elem) => {
     if (!elem) {
         return null;
@@ -53,20 +58,21 @@ const getItemIdByElem = (elem) => {
 
 // Sortable list
 const onListSort = (srcElem, destElem) => {
-    const listSortOut = ge('listsort_out');
+    const listSortLog = ge('listSortLog');
 
     if (!srcElem) {
-        writeLog(listSortOut, 'Missing source item');
+        logTo(listSortLog, 'Missing source item');
         return;
     }
     if (!destElem) {
-        writeLog(listSortOut, 'Missing destination item');
+        logTo(listSortLog, 'Missing destination item');
         return;
     }
 
     const srcId = getItemIdByElem(srcElem);
     const destId = getItemIdByElem(destElem);
-    writeLog(listSortOut, `srcId: ${srcId}; destId: ${destId}`);
+
+    logTo(listSortLog, `srcId: ${srcId}; destId: ${destId}`);
 };
 
 const renderListItem = (title = 'Item') => createElement('div', {
@@ -93,14 +99,14 @@ const initSortableList = () => {
 
 // Exchangable lists
 const onExchange = (srcElem, destElem) => {
-    const exchOut = ge('exch_out');
+    const exchangeLog = ge('exchangeLog');
 
     if (!srcElem) {
-        writeLog(exchOut, 'Missing source item');
+        logTo(exchangeLog, 'Missing source item');
         return;
     }
     if (!destElem) {
-        writeLog(exchOut, 'Missing destination item');
+        logTo(exchangeLog, 'Missing destination item');
         return;
     }
 
@@ -110,7 +116,7 @@ const onExchange = (srcElem, destElem) => {
     const destId = (isContainer) ? null : getItemIdByElem(destElem);
     const destParent = (isContainer) ? destElem : destElem.parentNode;
 
-    writeLog(exchOut, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent.id}`);
+    logTo(exchangeLog, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent.id}`);
 };
 
 const renderDestListItem = (title = 'Item', isPlaceholder = false) => createElement('div', {
@@ -195,7 +201,7 @@ const onTreeSort = (srcElem, destElem, newPos) => {
     const prevId = getTreeItemIdByElem(newPos.prev);
     const nextId = getTreeItemIdByElem(newPos.next);
 
-    writeLog(ge('treeLog'), `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
+    logTo(ge('treeLog'), `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
 };
 
 const initTree = () => {
@@ -220,6 +226,15 @@ const initTree = () => {
     });
 };
 
+const onTreeExchange = (srcElem, destElem, newPos) => {
+    const srdId = getTreeItemIdByElem(srcElem);
+    const parentId = getTreeItemParentId(srcElem);
+    const prevId = getTreeItemIdByElem(newPos.prev);
+    const nextId = getTreeItemIdByElem(newPos.next);
+
+    logTo('treeExchLog', `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
+};
+
 const initTreeExchange = () => {
     const treeExch1 = ge('treeExch1');
     for (let i = 1; i <= 4; i += 1) {
@@ -241,7 +256,7 @@ const initTreeExchange = () => {
 
     Sortable.create({
         elem: treeExch1,
-        onInsertAt: onTreeSort,
+        onInsertAt: onTreeExchange,
         selector: '.tree-item',
         containerSelector: '.tree-item__content',
         placeholderClass: 'tree-item__placeholder',
@@ -254,7 +269,7 @@ const initTreeExchange = () => {
 
     Sortable.create({
         elem: treeExch2,
-        onInsertAt: onTreeSort,
+        onInsertAt: onTreeExchange,
         selector: '.tree-item',
         containerSelector: '.tree-item__content',
         placeholderClass: 'tree-item__placeholder',
@@ -277,21 +292,21 @@ const getTableRowIdByElem = (elem) => {
 
 // Sortable list
 const onTableSort = (srcElem, destElem) => {
-    const logElem = ge('table-log');
+    const tableLog = ge('tableLog');
 
     if (!srcElem) {
-        writeLog(logElem, 'Missing source item');
+        logTo(tableLog, 'Missing source item');
         return;
     }
     if (!destElem) {
-        writeLog(logElem, 'Missing destination item');
+        logTo(tableLog, 'Missing destination item');
         return;
     }
 
     const srcId = getTableRowIdByElem(srcElem);
     const destId = getTableRowIdByElem(destElem);
 
-    writeLog(logElem, `srcId: ${srcId}; destId: ${destId}`);
+    logTo(tableLog, `srcId: ${srcId}; destId: ${destId}`);
 };
 
 /** Sortable table with TBODY per each row */
