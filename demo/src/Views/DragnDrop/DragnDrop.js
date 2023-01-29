@@ -52,11 +52,10 @@ const renderTileTitle = (textContent) => createElement('span', {
 
 const renderTile = (textContent, withIcon = false) => createElement('div', {
     props: { className: 'sortable-tile' },
-    children: (
-        (withIcon)
-            ? [renderTileTitle(textContent), renderTileIcon()]
-            : renderTileTitle(textContent)
-    ),
+    children: [
+        renderTileTitle(textContent),
+        (withIcon) ? renderTileIcon() : null,
+    ],
 });
 
 const renderTilePlaceholder = () => createElement('div', {

@@ -97,11 +97,11 @@ export const setAttributes = (element, attrs) => {
  * @param {Element[]} childs - element or array of elements to append
  */
 export const addChilds = (elem, childs) => {
-    if (!elem || !childs) {
+    const children = asArray(childs).filter((item) => !!item);
+    if (!elem || children.length === 0) {
         return;
     }
 
-    const children = asArray(childs);
     elem.append(...children);
 };
 
