@@ -89,9 +89,9 @@
 
 *,
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   -webkit-font-smoothing: antialiased;
   font-synthesis: none;
 }
@@ -137,4 +137,13 @@ button::-moz-focus-inner {
 /* Hidden element */
 [hidden] {
   display: none !important;
+}
+
+/*
+1. Fix default SVG appearance
+2. Disable pointer events to prevent 'pointercancel' event during drag'n'drop
+*/
+svg {
+  display: block;
+  pointer-events: none;
 }
