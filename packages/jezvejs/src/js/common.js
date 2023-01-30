@@ -117,7 +117,13 @@ export const setEvents = (elem, events, options = undefined) => {
     }
 
     Object.keys(events).forEach((eventName) => {
-        elem.addEventListener(eventName, events[eventName], options);
+        const handler = events[eventName];
+
+        if (isFunction(handler)) {
+            elem.addEventListener(eventName, handler, options);
+        } else if (isObject(handler) && isFunction(handler.listener)) {
+            elem.addEventListener(eventName, handler.listener, handler.options);
+        }
     });
 };
 
@@ -133,7 +139,13 @@ export const removeEvents = (elem, events, options = undefined) => {
     }
 
     Object.keys(events).forEach((eventName) => {
-        elem.removeEventListener(eventName, events[eventName], options);
+        const handler = events[eventName];
+
+        if (isFunction(handler)) {
+            elem.removeEventListener(eventName, handler, options);
+        } else if (isObject(handler) && isFunction(handler.listener)) {
+            elem.removeEventListener(eventName, handler.listener, handler.options);
+        }
     });
 };
 

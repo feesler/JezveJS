@@ -128,9 +128,13 @@ export class DragMaster {
 
     /** Returns event handlers object except 'move' and 'selectstart' */
     getEventHandlers() {
-        const { end, cancel } = (this.isTouch) ? this.touchEvents : this.mouseEvents;
+        const { move, end, cancel } = (this.isTouch) ? this.touchEvents : this.mouseEvents;
         const events = {
             keydown: this.handlers.keydown,
+            [move]: {
+                listener: this.handlers.move,
+                options: { passive: false },
+            },
             [end]: this.handlers.end,
             dragstart: this.handlers.preventDefault,
         };
@@ -143,10 +147,7 @@ export class DragMaster {
 
     /** Sets event handlers */
     setupHandlers() {
-        const { move } = (this.isTouch) ? this.touchEvents : this.mouseEvents;
         const events = this.getEventHandlers();
-
-        setEvents(document, { [move]: this.handlers.move }, { passive: false });
         setEvents(document, events);
         setEvents(document.body, { selectstart: this.handlers.preventDefault });
 
@@ -157,10 +158,7 @@ export class DragMaster {
 
     /** Removes event handlers */
     removeHandlers() {
-        const { move } = (this.isTouch) ? this.touchEvents : this.mouseEvents;
         const events = this.getEventHandlers();
-
-        removeEvents(document, { [move]: this.handlers.move }, { passive: false });
         removeEvents(document, events);
         removeEvents(document.body, { selectstart: this.handlers.preventDefault });
 
