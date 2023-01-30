@@ -45,10 +45,17 @@ export class Radio extends Component {
         }
     }
 
+    /** Returns id of root element of component */
+    get id() {
+        return this.props.id;
+    }
+
+    /** Returns checked state of component */
     get checked() {
         return this.input.checked;
     }
 
+    /** Returns disabled state of component */
     get disabled() {
         return this.input.disabled;
     }

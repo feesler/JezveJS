@@ -2,11 +2,6 @@
   height: 200px;
 }
 
-.sortable-squares {
-  display: flex;
-  flex-flow: row wrap;
-}
-
 .inner-drop {
   position: relative;
   width: 180px;
@@ -29,38 +24,55 @@
   opacity: 0.5;
 }
 
-.sortable_item {
-  margin: 0 10px 10px 0;
-  padding: 10px;
+/* Sortable tiles list */
+.sortable-tiles {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
 }
 
-.normal_item {
+.sortable-tile {
   width: 100px;
   height: 100px;
   background-color: #55dd99;
   position: relative;
-  display: block !important;
-  visibility: visible !important;
 }
 
-.normal_item > span {
+.sortable-tile__title {
   position: absolute;
-  bottom: 10px;
+  bottom: 5px;
   left: 10px;
   color: #ffffff;
 }
 
-.item_placeholder {
-  width: 98px;
-  height: 98px;
+.sortable-tile__icon-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 23px;
+}
+
+.sortable-tile__icon {
+  width: 60px;
+  height: 54px;
+  fill: #ffffff;
+}
+
+.sortable-tile_placeholder {
+  width: 100px;
+  height: 100px;
   border: 1px dashed #888888;
   background: none;
 }
 
-.item_placeholder * {
+.sortable-tile_placeholder * {
   visibility: hidden;
 }
 
+/* Sortable list */
 .list-area {
   display: inline-flex;
   flex-flow: column nowrap;

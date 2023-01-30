@@ -549,6 +549,7 @@
   .dd__input {
     background-color: var(--dd-disabled-input-bg);
     color: var(--dd-disabled-input-text);
+    -webkit-text-fill-color: var(--dd-disabled-input-text);
 
     &:placeholder {
       color: var(--dd-disabled-input-text) !important;

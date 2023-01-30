@@ -1,8 +1,13 @@
-/* eslint no-unused-vars: "warn" */
+import { removeEvents, setEvents } from '../../js/common.js';
 
 /** Main drag and drop class */
 export class DragMaster {
     static instance = null;
+
+    static props = {
+        touchMoveTimeout: 200,
+        mouseMoveThreshold: 5,
+    };
 
     static getInstance() {
         if (!this.instance) {
@@ -12,112 +17,20 @@ export class DragMaster {
         return this.instance;
     }
 
-    constructor() {
-        this.dragZone = null;
-        this.avatar = null;
-        this.dropTarget = null;
-        this.touchTimeout = 0;
-        this.touchMoveReady = false;
-        this.handlers = null;
-    }
+    static getElementUnderClientXY(elem, clientX, clientY) {
+        const display = elem.style.getPropertyValue('display');
+        const priority = elem.style.getPropertyPriority('display');
+        elem.style.setProperty('display', 'none', 'important');
 
-    disableTextSelect() {
-        document.body.style.userSelect = 'none';
-        document.body.style.webkitUserSelect = 'none';
-    }
+        let target = document.elementFromPoint(clientX, clientY);
 
-    enableTextSelect() {
-        document.body.style.userSelect = '';
-        document.body.style.webkitUserSelect = '';
-    }
+        elem.style.setProperty('display', display, priority);
 
-    /** Set event handlers for document */
-    addTouchEventHandlers() {
-        if (!this.handlers) {
-            return;
+        if (!target || target === document) {
+            target = document.body;
         }
 
-        document.addEventListener('keydown', this.handlers.keydown);
-        document.addEventListener('touchmove', this.handlers.touchmove, { passive: false });
-        document.addEventListener('touchend', this.handlers.touchend);
-        document.addEventListener('touchcancel', this.handlers.touchcancel);
-        document.addEventListener('dragstart', this.handlers.dragstart);
-        document.body.addEventListener('selectstart', this.handlers.selectstart);
-        this.disableTextSelect();
-    }
-
-    /** Set event handlers for document */
-    addDocumentEventHandlers() {
-        if (!this.handlers) {
-            return;
-        }
-
-        document.addEventListener('keydown', this.handlers.keydown);
-        document.addEventListener('mousemove', this.handlers.mousemove);
-        document.addEventListener('mouseup', this.handlers.mouseup);
-        document.addEventListener('dragstart', this.handlers.dragstart);
-        document.body.addEventListener('selectstart', this.handlers.selectstart);
-    }
-
-    /** Remove event handler from document */
-    removeTouchEventHandlers() {
-        if (!this.handlers) {
-            return;
-        }
-
-        document.removeEventListener('keydown', this.handlers.keydown);
-        document.removeEventListener('touchmove', this.handlers.touchmove);
-        document.removeEventListener('touchend', this.handlers.touchend);
-        document.removeEventListener('touchcancel', this.handlers.touchcancel);
-        document.removeEventListener('dragstart', this.handlers.dragstart);
-        document.body.removeEventListener('selectstart', this.handlers.selectstart);
-        this.enableTextSelect();
-    }
-
-    /** Remove event handler from document */
-    removeDocumentEventHandlers() {
-        if (!this.handlers) {
-            return;
-        }
-
-        document.removeEventListener('keydown', this.handlers.keydown);
-        document.removeEventListener('mousemove', this.handlers.mousemove);
-        document.removeEventListener('mouseup', this.handlers.mouseup);
-        document.removeEventListener('dragstart', this.handlers.dragstart);
-        document.body.removeEventListener('selectstart', this.handlers.selectstart);
-    }
-
-    /** Clean up drag objects */
-    cleanUp() {
-        this.dragZone = null;
-        this.avatar = null;
-        this.dropTarget = null;
-    }
-
-    /** Search for drag zone object */
-    findDragZone(e) {
-        let elem = e.target;
-
-        while (elem !== document && !elem.dragZone) {
-            elem = elem.parentNode;
-        }
-
-        return elem.dragZone;
-    }
-
-    /** Try to find drop target under mouse cursor */
-    findDropTarget(e) {
-        let elem = this.avatar.getTargetElem();
-
-        while (elem !== document && !elem.dropTarget) {
-            elem = elem.parentNode;
-        }
-
-        if (!elem.dropTarget) {
-            return null;
-        }
-
-        return elem.dropTarget;
+        return target;
     }
 
     static getEventCoordinatesObject(e) {
@@ -150,14 +63,169 @@ export class DragMaster {
         };
     }
 
+    static makeDraggable(elem) {
+        const inst = this.getInstance();
+        inst.makeDraggable(elem);
+    }
+
+    constructor() {
+        this.dragZone = null;
+        this.avatar = null;
+        this.dropTarget = null;
+        this.isTouch = false;
+        this.touchTimeout = 0;
+        this.touchMoveReady = false;
+
+        this.handlers = {
+            keydown: (e) => this.onKey(e),
+            start: (e) => this.mouseDown(e),
+            move: (e) => this.mouseMove(e),
+            end: (e) => this.mouseUp(e),
+            cancel: (e) => this.mouseUp(e),
+            preventDefault: (e) => e.preventDefault(),
+        };
+
+        this.touchEvents = {
+            move: 'touchmove',
+            end: 'touchend',
+            cancel: 'touchcancel',
+        };
+
+        this.mouseEvents = {
+            move: 'mousemove',
+            end: 'mouseup',
+        };
+    }
+
+    makeDraggable(elem) {
+        if (!elem) {
+            throw new Error('Invalid element');
+        }
+
+        setEvents(elem, {
+            mousedown: this.handlers.start,
+            touchstart: this.handlers.start,
+        });
+    }
+
+    /** Returns true if event is valid to start drag */
+    isValidStartEvent(e) {
+        return (
+            (e.type === 'touchstart' && e.touches?.length === 1)
+            || (e.type === 'mousedown' && e.which === 1)
+        );
+    }
+
+    disableTextSelect() {
+        document.body.style.userSelect = 'none';
+        document.body.style.webkitUserSelect = 'none';
+    }
+
+    enableTextSelect() {
+        document.body.style.userSelect = '';
+        document.body.style.webkitUserSelect = '';
+    }
+
+    /** Returns event handlers object except 'move' and 'selectstart' */
+    getEventHandlers() {
+        const { move, end, cancel } = (this.isTouch) ? this.touchEvents : this.mouseEvents;
+        const events = {
+            keydown: this.handlers.keydown,
+            [move]: {
+                listener: this.handlers.move,
+                options: { passive: false },
+            },
+            [end]: this.handlers.end,
+            dragstart: this.handlers.preventDefault,
+        };
+        if (cancel) {
+            events[cancel] = this.handlers.cancel;
+        }
+
+        return events;
+    }
+
+    /** Sets event handlers */
+    setupHandlers() {
+        const events = this.getEventHandlers();
+        setEvents(document, events);
+        setEvents(document.body, { selectstart: this.handlers.preventDefault });
+
+        if (this.isTouch) {
+            this.disableTextSelect();
+        }
+    }
+
+    /** Removes event handlers */
+    removeHandlers() {
+        const events = this.getEventHandlers();
+        removeEvents(document, events);
+        removeEvents(document.body, { selectstart: this.handlers.preventDefault });
+
+        if (this.isTouch) {
+            this.enableTextSelect();
+        }
+    }
+
+    /** Clean up drag objects */
+    cleanUp() {
+        this.dragZone = null;
+        this.avatar = null;
+        this.dropTarget = null;
+    }
+
+    /** Sets touch move timeout */
+    initMoveTimeout(e) {
+        this.touchMoveReady = false;
+        this.resetMoveTimeout();
+
+        this.touchTimeout = setTimeout(() => {
+            this.touchMoveReady = true;
+            this.handleMove(e);
+        }, DragMaster.props.touchMoveTimeout);
+    }
+
+    /** Clears touch move timeout */
+    resetMoveTimeout() {
+        if (this.touchTimeout) {
+            clearTimeout(this.touchTimeout);
+            this.touchTimeout = 0;
+        }
+    }
+
+    /** Search for drag zone object */
+    findDragZone(e) {
+        let elem = e.target;
+
+        while (elem !== document && !elem.dragZone) {
+            elem = elem.parentNode;
+        }
+
+        return elem.dragZone;
+    }
+
+    /** Try to find drop target under mouse cursor */
+    findDropTarget() {
+        let elem = this.avatar.getTargetElem();
+        while (elem !== document && !elem.dropTarget) {
+            elem = elem.parentNode;
+        }
+
+        return elem.dropTarget ?? null;
+    }
+
     initAvatar(e) {
         if (this.avatar) {
             return;
         }
 
-        const coords = DragMaster.getEventPageCoordinates(e);
-        if (!e.touches) {
-            if (Math.abs(this.downX - coords.x) < 5 && Math.abs(this.downY - coords.y) < 5) {
+        if (!this.isTouch) {
+            const coords = DragMaster.getEventPageCoordinates(e);
+            const { mouseMoveThreshold } = DragMaster.props;
+            if (
+                Math.abs(this.downX - coords.x) < mouseMoveThreshold
+                && Math.abs(this.downY - coords.y) < mouseMoveThreshold
+            ) {
                 return;
             }
         }
@@ -200,13 +268,15 @@ export class DragMaster {
 
     /** Document mouse move event handler */
     mouseMove(e) {
-        if (e.touches) {
+        if (this.isTouch) {
             if (!this.touchMoveReady) {
-                clearTimeout(this.touchTimeout);
-                this.touchTimeout = 0;
+                this.resetMoveTimeout();
                 return;
             }
-            e.preventDefault();
+
+            if (e.cancelable) {
+                e.preventDefault();
+            }
         }
 
         this.handleMove(e);
@@ -214,16 +284,11 @@ export class DragMaster {
 
     /** Document mouse up event handler */
     mouseUp(e) {
-        if (this.touchTimeout) {
-            clearTimeout(this.touchTimeout);
-            this.touchTimeout = 0;
+        if (!this.isTouch && e.which !== 1) {
+            return;
         }
 
-        if (!e.touches) {
-            if (e.which !== 1) {
-                return false;
-            }
-        }
+        this.resetMoveTimeout();
 
         if (this.avatar) {
             if (this.dropTarget) {
@@ -234,13 +299,7 @@ export class DragMaster {
         }
 
         this.cleanUp();
-        if (e.touches) {
-            this.removeTouchEventHandlers();
-        } else {
-            this.removeDocumentEventHandlers();
-        }
-
-        return false;
+        this.removeHandlers();
     }
 
     /** Keydown event handler */
@@ -255,27 +314,16 @@ export class DragMaster {
         }
     }
 
-    /** Empty function return false */
-    emptyFalse(e) {
-        e.preventDefault();
-    }
-
     /** Mouse down on drag object element event handler */
     mouseDown(e) {
-        if (e.touches) {
-            if (e.touches.length > 1) {
-                return;
-            }
-        } else if (e.type === 'mousedown') {
-            if (e.which !== 1) {
-                return;
-            }
-        } else {
+        if (!this.isValidStartEvent(e)) {
             return;
         }
 
+        this.isTouch = e.type === 'touchstart';
+
         this.dragZone = this.findDragZone(e);
-        if (!this.dragZone || !this.dragZone.isValidDragHandle(e.target)) {
+        if (!this.dragZone?.isValidDragHandle(e.target)) {
             return;
         }
 
@@ -283,75 +331,10 @@ export class DragMaster {
         this.downX = coord.x;
         this.downY = coord.y;
 
-        if (e.touches) {
-            this.touchMoveReady = false;
-            this.handlers = {
-                keydown: (ev) => this.onKey(ev),
-                touchmove: (ev) => this.mouseMove(ev),
-                touchend: (ev) => this.mouseUp(ev),
-                touchcancel: (ev) => this.mouseUp(ev),
-                dragstart: (ev) => this.emptyFalse(ev),
-                selectstart: (ev) => this.emptyFalse(ev),
-            };
-            this.addTouchEventHandlers();
+        this.setupHandlers();
 
-            if (this.touchTimeout) {
-                clearTimeout(this.touchTimeout);
-                this.touchTimeout = 0;
-            }
-
-            const touchStartEvent = e;
-            this.touchTimeout = setTimeout(() => {
-                this.touchMoveReady = true;
-                this.handleMove(touchStartEvent);
-            }, 200);
-        } else {
-            this.handlers = {
-                keydown: (ev) => this.onKey(ev),
-                mousemove: (ev) => this.mouseMove(ev),
-                mouseup: (ev) => this.mouseUp(ev),
-                dragstart: (ev) => this.emptyFalse(ev),
-                selectstart: (ev) => this.emptyFalse(ev),
-            };
-            this.addDocumentEventHandlers();
+        if (this.isTouch) {
+            this.initMoveTimeout(e);
         }
-    }
-
-    static makeDraggable(elem) {
-        const el = elem;
-
-        const inst = this.getInstance();
-        el.addEventListener('mousedown', (e) => inst.mouseDown(e));
-        el.addEventListener('touchstart', (e) => inst.mouseDown(e));
-    }
-
-    static getElementUnderClientXY(elem, clientX, clientY) {
-        const el = elem;
-        const quirks = !elem.style.getPropertyValue; // IE < 9
-
-        let display;
-        let priority;
-        if (quirks) {
-            display = el.style.cssText;
-            el.style.cssText += 'display: none!important';
-        } else {
-            display = el.style.getPropertyValue('display');
-            priority = el.style.getPropertyPriority('display');
-            el.style.setProperty('display', 'none', 'important');
-        }
-
-        let target = document.elementFromPoint(clientX, clientY);
-
-        if (quirks) {
-            el.style.cssText = display;
-        } else {
-            el.style.setProperty('display', display, priority);
-        }
-
-        if (!target || target === document) {
-            target = document.body;
-        }
-
-        return target;
     }
 }

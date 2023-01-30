@@ -6,6 +6,7 @@ import {
     asArray,
 } from 'jezvejs';
 import { Sortable } from 'jezvejs/Sortable';
+import { Icon } from 'jezvejs/Icon';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
@@ -37,12 +38,45 @@ const initClonedAvatar = () => {
     DefaultDropTarget.create({ elem: ge('inner_drop2') });
 };
 
+const renderTileIcon = () => createElement('span', {
+    props: { className: 'sortable-tile__icon-container' },
+    children: Icon.create({
+        icon: 'tile-purse',
+        className: 'sortable-tile__icon',
+    }).elem,
+});
+
+const renderTileTitle = (textContent) => createElement('span', {
+    props: { className: 'sortable-tile__title', textContent },
+});
+
+const renderTile = (textContent, withIcon = false) => createElement('div', {
+    props: { className: 'sortable-tile' },
+    children: [
+        renderTileTitle(textContent),
+        (withIcon) ? renderTileIcon() : null,
+    ],
+});
+
+const renderTilePlaceholder = () => createElement('div', {
+    props: { className: 'sortable-tile sortable-tile_placeholder' },
+});
+
 const initSortable = () => {
+    const sortableContainer = ge('sortableContainer');
+
+    for (let i = 1; i <= 6; i += 1) {
+        const item = (i === 2)
+            ? renderTilePlaceholder()
+            : renderTile(`Item ${i}`, i === 3);
+        sortableContainer.append(item);
+    }
+
     Sortable.create({
-        elem: 'sortable_container',
+        elem: sortableContainer,
         onInsertAt: onSort,
-        selector: '.normal_item',
-        placeholderClass: 'item_placeholder',
+        selector: '.sortable-tile',
+        placeholderClass: 'sortable-tile_placeholder',
         group: 'tiles',
     });
 };
