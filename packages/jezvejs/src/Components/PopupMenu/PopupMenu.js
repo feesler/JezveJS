@@ -42,6 +42,7 @@ const defaultProps = {
     items: [],
     id: null,
     onClose: null,
+    onItemClick: null,
 };
 
 export class PopupMenu extends Component {
@@ -237,15 +238,30 @@ export class PopupMenu extends Component {
         return res;
     }
 
+    onItemClick(item, itemHandler, ...args) {
+        const itemArg = item.id ?? item;
+        if (!itemArg) {
+            return;
+        }
+
+        if (isFunction(this.props.onItemClick)) {
+            this.props.onItemClick(itemArg);
+        }
+        if (isFunction(itemHandler)) {
+            itemHandler(...args);
+        }
+    }
+
     addIconItem(item) {
         if (!item) {
             return null;
         }
 
-        const { className = [], ...rest } = item;
+        const { className = [], onClick = null, ...rest } = item;
         const button = IconButton.create({
             className: [ICONBTN_CLASS, ...asArray(className)],
             ...rest,
+            onClick: (...args) => this.onItemClick(button, onClick, ...args),
         });
         this.menuList.append(button.elem);
 
@@ -257,7 +273,7 @@ export class PopupMenu extends Component {
             return null;
         }
 
-        const { className = [], ...rest } = item;
+        const { className = [], onChange = null, ...rest } = item;
         // Checkbox accept 'label' prop instead of 'title' as IconButton
         if (rest.title && typeof rest.label === 'undefined') {
             rest.label = rest.title;
@@ -265,6 +281,7 @@ export class PopupMenu extends Component {
         const button = Checkbox.create({
             className: [CHECKBOX_CLASS, ...asArray(className)],
             ...rest,
+            onChange: (...args) => this.onItemClick(button, onChange, ...args),
         });
         this.menuList.append(button.elem);
 

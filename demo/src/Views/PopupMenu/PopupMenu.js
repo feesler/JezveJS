@@ -12,26 +12,29 @@ const addEventLog = (value) => {
 const initDefault = () => {
     const menu = PopupMenu.create({
         id: 'listMenu',
+        onItemClick: (id) => addEventLog(`Item '${id}' clicked`),
         items: [{
+            id: 'selectBtnItem',
             icon: 'select',
             title: 'Button item',
             subtitle: 'With subtitle',
             onClick: () => addEventLog('Button item clicked'),
         }, {
+            id: 'linkItem',
             type: 'link',
             title: 'Link item',
             icon: 'search',
             url: '#',
-            onClick: () => addEventLog('Link item clicked'),
         }, {
+            id: 'noIconItem',
             title: 'No icon item',
-            onClick: () => addEventLog('No icon item clicked'),
         }, {
             type: 'separator',
         }, {
+            id: 'checkboxItem',
             type: 'checkbox',
             title: 'Checkbox item',
-            onChange: () => addEventLog('Checkbox item clicked'),
+            onChange: (checked) => addEventLog(`Checkbox item toggled: ${checked}`),
         }],
     });
     ge('default').append(menu.elem);

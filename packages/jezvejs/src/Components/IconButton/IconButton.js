@@ -56,7 +56,12 @@ export class IconButton extends Component {
         }
     }
 
-    /** Return enabled state */
+    /** Returns id of root element of component */
+    get id() {
+        return this.props.id;
+    }
+
+    /** Returns enabled state of component */
     get enabled() {
         return this.state.enabled;
     }
