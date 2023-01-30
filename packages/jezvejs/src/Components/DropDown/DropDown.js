@@ -729,7 +729,7 @@ export class DropDown extends Component {
     /* List items methods */
     /** Return list item object by id */
     getItem(itemId, state = this.state) {
-        const strId = itemId.toString();
+        const strId = itemId?.toString();
         return state.items.find((item) => item.id === strId);
     }
 
@@ -740,7 +740,7 @@ export class DropDown extends Component {
 
     /** Return index of list item by id */
     getItemIndex(itemId, state = this.state) {
-        const strId = itemId.toString();
+        const strId = itemId?.toString();
         return state.items.findIndex((item) => item.id === strId);
     }
 
@@ -1033,7 +1033,7 @@ export class DropDown extends Component {
     }
 
     getSelectionItemById(itemId) {
-        const strId = itemId.toString();
+        const strId = itemId?.toString();
         return this.selectionItems.find((item) => item.id === strId);
     }
 
@@ -1158,7 +1158,7 @@ export class DropDown extends Component {
 
     /** Select specified item */
     selectItem(itemId) {
-        const strId = itemId.toString();
+        const strId = itemId?.toString();
         const itemToSelect = this.getItem(strId);
         if (!itemToSelect || itemToSelect.selected) {
             return;
@@ -1181,7 +1181,7 @@ export class DropDown extends Component {
             return;
         }
 
-        const strId = itemId.toString();
+        const strId = itemId?.toString();
         const itemToDeselect = this.getItem(strId);
         if (!itemToDeselect?.selected) {
             return;
@@ -1636,7 +1636,7 @@ export class DropDown extends Component {
 
     /** Enable/disable list item by id */
     enableItem(itemId, val) {
-        const strId = itemId.toString();
+        const strId = itemId?.toString();
         const actionItem = this.getItem(strId);
         const toDisable = !val;
         if (!actionItem || actionItem.disabled === toDisable) {
@@ -1795,7 +1795,7 @@ export class DropDown extends Component {
     }
 
     getListItemById(itemId) {
-        const strId = itemId.toString();
+        const strId = itemId?.toString();
         return this.listItems.find((item) => item.id === strId);
     }
 
