@@ -221,6 +221,15 @@ export const re = (target) => {
     return null;
 };
 
+/** Returns splitted and filtered array of class names */
+export const getClassNames = (...args) => (
+    args.flatMap((item) => typeof item === 'string' && item.split(' '))
+        .filter((item) => typeof item === 'string' && item.length > 0)
+);
+
+/** Returns arguments converted to className string */
+export const getClassName = (...args) => getClassNames(...args).join(' ');
+
 /** Check is specified string is number */
 export const isNum = (val) => {
     const fval = parseFloat(val);
