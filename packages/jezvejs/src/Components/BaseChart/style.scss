@@ -37,6 +37,7 @@
 /* Main content SVG element */
 .chart__content {
   user-select: none;
+  pointer-events: all;
   overflow: hidden;
 }
 
