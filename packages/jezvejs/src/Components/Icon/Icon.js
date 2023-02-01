@@ -1,4 +1,4 @@
-import { svg } from '../../js/common.js';
+import { createSVGElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {
@@ -28,8 +28,8 @@ export class Icon extends Component {
     }
 
     init() {
-        this.useElem = svg('use');
-        this.elem = svg('svg', {}, this.useElem);
+        this.useElem = createSVGElement('use');
+        this.elem = createSVGElement('svg', { children: this.useElem });
 
         this.setClassNames();
         this.setUserProps();

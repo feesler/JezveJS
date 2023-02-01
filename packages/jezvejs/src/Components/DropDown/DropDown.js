@@ -1,7 +1,7 @@
 import {
     isFunction,
     createElement,
-    svg,
+    createSVGElement,
     removeChilds,
     re,
     px,
@@ -359,11 +359,10 @@ export class DropDown extends Component {
 
     /** Returns close icon SVG element */
     createCloseIcon(className) {
-        return svg(
-            'svg',
-            { class: className, viewBox: '0 0 14 14' },
-            svg('path', { d: CLOSE_ICON }),
-        );
+        return createSVGElement('svg', {
+            attrs: { class: className, viewBox: '0 0 14 14' },
+            children: createSVGElement('path', { attrs: { d: CLOSE_ICON } }),
+        });
     }
 
     /** Create clear selection button */
@@ -378,11 +377,10 @@ export class DropDown extends Component {
 
     /** Create toggle drop down button */
     createToggleButton() {
-        const arrowIcon = svg(
-            'svg',
-            { class: TOGGLE_ICON_CLASS, viewBox: '0 0 3.7 3.7' },
-            svg('path', { d: TOGGLE_ICON }),
-        );
+        const arrowIcon = createSVGElement('svg', {
+            attrs: { class: TOGGLE_ICON_CLASS, viewBox: '0 0 3.7 3.7' },
+            children: createSVGElement('path', { attrs: { d: TOGGLE_ICON } }),
+        });
         this.toggleBtn = createElement('div', {
             props: { className: TOGGLE_BTN_CLASS },
             children: arrowIcon,

@@ -1,4 +1,4 @@
-import { asArray, svg } from '../../js/common.js';
+import { asArray, createSVGElement } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
 import './style.scss';
 
@@ -177,12 +177,14 @@ export class Histogram extends BaseChart {
             classNames.push(categoryClass);
         }
 
-        item.elem = svg('rect', {
-            class: classNames.join(' '),
-            x: item.x,
-            y: item.y,
-            width: item.width,
-            height: item.height,
+        item.elem = createSVGElement('rect', {
+            attrs: {
+                class: classNames.join(' '),
+                x: item.x,
+                y: item.y,
+                width: item.width,
+                height: item.height,
+            },
         });
 
         this.itemsGroup.append(item.elem);

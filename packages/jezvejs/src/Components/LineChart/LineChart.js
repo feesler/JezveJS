@@ -1,4 +1,4 @@
-import { svg, insertBefore, asArray } from '../../js/common.js';
+import { createSVGElement, insertBefore, asArray } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
 import './style.scss';
 
@@ -108,11 +108,13 @@ export class LineChart extends BaseChart {
         }
 
         const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
-        item.elem = svg('circle', {
-            class: [ITEM_CLASS, categoryClass].join(' '),
-            cx: item.dot.x,
-            cy: item.dot.y,
-            r: state.nodeCircleRadius,
+        item.elem = createSVGElement('circle', {
+            attrs: {
+                class: [ITEM_CLASS, categoryClass].join(' '),
+                cx: item.dot.x,
+                cy: item.dot.y,
+                r: state.nodeCircleRadius,
+            },
         });
 
         this.itemsGroup.append(item.elem);
@@ -184,8 +186,10 @@ export class LineChart extends BaseChart {
         } else {
             const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
             path = {
-                elem: svg('path', {
-                    class: [PATH_CLASS, categoryClass].join(' '),
+                elem: createSVGElement('path', {
+                    attrs: {
+                        class: [PATH_CLASS, categoryClass].join(' '),
+                    },
                 }),
             };
 
@@ -195,14 +199,16 @@ export class LineChart extends BaseChart {
             const groupItems = asArray(group);
             insertBefore(path.elem, groupItems[0].elem);
 
-            path.animateElem = svg('animate', {
-                attributeType: 'XML',
-                attributeName: 'd',
-                dur: '0.5s',
-                begin: 'indefinite',
-                fill: 'freeze',
-                repeatCount: '1',
-                calcMode: 'linear',
+            path.animateElem = createSVGElement('animate', {
+                attrs: {
+                    attributeType: 'XML',
+                    attributeName: 'd',
+                    dur: '0.5s',
+                    begin: 'indefinite',
+                    fill: 'freeze',
+                    repeatCount: '1',
+                    calcMode: 'linear',
+                },
             });
             path.elem.append(path.animateElem);
 

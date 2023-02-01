@@ -150,7 +150,35 @@ export const removeEvents = (elem, events, options = undefined) => {
 };
 
 /**
- * Create specified DOM element and set parameters if specified
+ * Applies options to element
+ * @param {Element} elem - element to apply options
+ * @param {Object} options
+ * @param {Object} options.attrs - attributes to set for created element
+ * @param {Object} options.props - properties to set for created element
+ * @param {Element[]} options.children - element or array of elements to append to created element
+ * @param {Object} options.events - event handlers object
+ */
+export const applyElementOptions = (elem, options = {}) => {
+    if (!elem || !options) {
+        return;
+    }
+
+    if (options.props) {
+        setProps(elem, options.props);
+    }
+    if (options.attrs) {
+        setAttributes(elem, options.attrs);
+    }
+    if (options.children) {
+        addChilds(elem, options.children);
+    }
+    if (options.events) {
+        setEvents(elem, options.events);
+    }
+};
+
+/**
+ * Creates specified DOM element and sets parameters if specified
  * @param {string} tagName - tag name of element to create
  * @param {Object} options
  * @param {Object} options.attrs - attributes to set for created element
@@ -168,45 +196,31 @@ export const createElement = (tagName, options = {}) => {
         return null;
     }
 
-    if (options?.props) {
-        setProps(elem, options?.props);
-    }
-    if (options?.attrs) {
-        setAttributes(elem, options.attrs);
-    }
-    if (options?.children) {
-        addChilds(elem, options?.children);
-    }
-    if (options?.events) {
-        setEvents(elem, options.events);
-    }
+    applyElementOptions(elem, options);
 
     return elem;
 };
 
 /**
- * Create new SVG namespace element, set attributes
- * @param {string} tagName
- * @param {Object} attributes
- * @param {Element[]} children
- * @param {Object} events - event handlers object
+ * Creates specified SVG element and sets parameters if specified
+ * @param {string} tagName - tag name of element to create
+ * @param {Object} options
+ * @param {Object} options.attrs - attributes to set for created element
+ * @param {Object} options.props - properties to set for created element
+ * @param {Element[]} options.children - element or array of elements to append to created element
+ * @param {Object} options.events - event handlers object
  */
-export const svg = (tagName, attributes, children, events) => {
+export const createSVGElement = (tagName, options = {}) => {
     if (typeof tagName !== 'string') {
         return null;
     }
 
     const elem = document.createElementNS('http://www.w3.org/2000/svg', tagName);
+    if (!elem) {
+        return null;
+    }
 
-    if (attributes) {
-        setAttributes(elem, attributes);
-    }
-    if (children) {
-        addChilds(elem, children);
-    }
-    if (events) {
-        setEvents(elem, events);
-    }
+    applyElementOptions(elem, options);
 
     return elem;
 };
@@ -220,6 +234,15 @@ export const re = (target) => {
 
     return null;
 };
+
+/** Returns splitted and filtered array of class names */
+export const getClassNames = (...args) => (
+    args.flatMap((item) => typeof item === 'string' && item.split(' '))
+        .filter((item) => typeof item === 'string' && item.length > 0)
+);
+
+/** Returns arguments converted to className string */
+export const getClassName = (...args) => getClassNames(...args).join(' ');
 
 /** Check is specified string is number */
 export const isNum = (val) => {

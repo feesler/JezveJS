@@ -6,6 +6,7 @@ import {
     isFunction,
     isObject,
     asArray,
+    getClassNames,
 } from './common.js';
 
 /**
@@ -75,17 +76,12 @@ export class Component {
         this.enable(false);
     }
 
+    /** Applies 'className' property to the root element of component */
     setClassNames() {
-        this.props.className = asArray(this.props.className);
-        if (!this.props.className.length === 0) {
-            return;
+        const classNames = getClassNames(this.props.className);
+        if (classNames.length > 0) {
+            this.elem.classList.add(...classNames);
         }
-
-        const classNames = this.props.className
-            .flatMap((cln) => cln.split(' '))
-            .filter((cln) => cln.length > 0);
-
-        this.elem.classList.add(...classNames);
     }
 
     /** Apply props to elements of component according to userProps map */

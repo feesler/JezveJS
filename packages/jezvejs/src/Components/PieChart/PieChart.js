@@ -1,5 +1,5 @@
 import {
-    svg,
+    createSVGElement,
     isObject,
     isFunction,
     copyObject,
@@ -76,9 +76,11 @@ export class PieChart extends Component {
         const { radius, offset } = this.props;
         const size = (radius + offset) * 2;
 
-        this.elem = svg('svg', {
-            class: PIE_CHART_CLASS,
-            viewBox: `0 0 ${size} ${size}`,
+        this.elem = createSVGElement('svg', {
+            attrs: {
+                class: PIE_CHART_CLASS,
+                viewBox: `0 0 ${size} ${size}`,
+            },
         });
         setEvents(this.elem, { touchstart: (e) => this.onTouchStart(e) });
 
@@ -205,7 +207,7 @@ export class PieChart extends Component {
         const outer = `m${outerSX} ${outerSY} ${outer1.command} ${outer2.command}z`;
 
         if (ir === 0) {
-            return svg('path', { d: outer });
+            return createSVGElement('path', { attrs: { d: outer } });
         }
 
         const inner1 = circularArc(x, y, ir + offs, 0, 180, 0, false);
@@ -214,7 +216,7 @@ export class PieChart extends Component {
         const dY = svgValue(outer1.endY - inner1.startY);
         const inner = `m${dX} ${dY} ${inner1.command} ${inner2.command}z`;
 
-        return svg('path', { d: `${outer} ${inner}` });
+        return createSVGElement('path', { attrs: { d: `${outer} ${inner}` } });
     }
 
     /**
@@ -259,7 +261,7 @@ export class PieChart extends Component {
             const lx = svgValue(outerArc.centerX - outerArc.endX);
             const ly = svgValue(outerArc.centerY - outerArc.endY);
 
-            return svg('path', { d: `${outer} l${lx} ${ly}z` });
+            return createSVGElement('path', { attrs: { d: `${outer} l${lx} ${ly}z` } });
         }
 
         // Use inner radius
@@ -273,7 +275,7 @@ export class PieChart extends Component {
 
         const inner = `l${elx} ${ely} ${innerArc.command}`;
 
-        return svg('path', { d: `${outer} ${inner} l${slx} ${sly}z` });
+        return createSVGElement('path', { attrs: { d: `${outer} ${inner} l${slx} ${sly}z` } });
     }
 
     /** Draw pie chart */
@@ -305,7 +307,7 @@ export class PieChart extends Component {
 
         let start = 0;
         let prevColor;
-        const sectorsGroup = svg('g');
+        const sectorsGroup = createSVGElement('g');
         this.sectors = values.map((item, ind) => {
             const sector = copyObject(item);
             sector.start = start;

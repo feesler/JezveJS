@@ -1,6 +1,6 @@
 import {
     createElement,
-    svg,
+    createSVGElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
@@ -68,11 +68,10 @@ export class DropDownMultiSelectionItem extends Component {
     // TODO: move Close icon / close button to separate component
     /** Returns close icon SVG element */
     createCloseIcon(className) {
-        return svg(
-            'svg',
-            { class: className, viewBox: '0 0 14 14' },
-            svg('path', { d: CLOSE_ICON }),
-        );
+        return createSVGElement('svg', {
+            attrs: { class: className, viewBox: '0 0 14 14' },
+            children: createSVGElement('path', { attrs: { d: CLOSE_ICON } }),
+        });
     }
 
     render(state) {
