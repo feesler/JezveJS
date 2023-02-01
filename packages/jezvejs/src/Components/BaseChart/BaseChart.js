@@ -1,5 +1,5 @@
 import {
-    svg,
+    createSVGElement,
     isFunction,
     isObject,
     show,
@@ -181,10 +181,12 @@ export class BaseChart extends Component {
         const { height, marginTop } = this.state;
         this.state.chartHeight = height - this.state.hLabelsHeight - marginTop;
 
-        this.labelsContainer = svg('svg', {
-            class: VLABELS_CLASS,
-            width: 10,
-            height: height + 20,
+        this.labelsContainer = createSVGElement('svg', {
+            attrs: {
+                class: VLABELS_CLASS,
+                width: 10,
+                height: height + 20,
+            },
         });
         this.verticalLabels.append(this.labelsContainer);
 
@@ -203,7 +205,10 @@ export class BaseChart extends Component {
             events.mouseleave = (e) => this.onMouseLeave(e);
         }
 
-        this.content = svg('svg', { class: CONTENT_CLASS }, null, events);
+        this.content = createSVGElement('svg', {
+            attrs: { class: CONTENT_CLASS },
+            events,
+        });
         this.chart.append(this.content);
 
         this.setClassNames();
@@ -401,7 +406,7 @@ export class BaseChart extends Component {
 
         const width = state.chartWidth;
 
-        const gridGroup = svg('g');
+        const gridGroup = createSVGElement('g');
         let step = 0;
         let curY = grid.yFirst;
         while (step <= grid.steps) {
@@ -413,9 +418,11 @@ export class BaseChart extends Component {
             }
 
             const linePath = `M0,${rY}L${width},${rY}`;
-            const el = svg('path', {
-                class: 'chart__grid-line',
-                d: linePath,
+            const el = createSVGElement('path', {
+                attrs: {
+                    class: 'chart__grid-line',
+                    d: linePath,
+                },
             });
 
             gridGroup.append(el);
@@ -520,16 +527,18 @@ export class BaseChart extends Component {
         let val = grid.valueFirst;
         let step = 0;
 
-        this.vertLabelsGroup = svg('g');
+        this.vertLabelsGroup = createSVGElement('g');
 
         while (step <= grid.steps) {
             const isZero = Math.abs(grid.toPrec(val)) === 0;
             const tVal = (isZero) ? 0 : grid.toPrecString(val);
 
-            const el = svg('text', {
-                class: 'chart__text chart-yaxis__label',
-                x: xOffset,
-                y: Math.round(curY) + dyOffset,
+            const el = createSVGElement('text', {
+                attrs: {
+                    class: 'chart__text chart-yaxis__label',
+                    x: xOffset,
+                    y: Math.round(curY) + dyOffset,
+                },
             });
             el.textContent = formatFunction(tVal);
 
@@ -560,15 +569,17 @@ export class BaseChart extends Component {
         const groupOuterWidth = this.getGroupOuterWidth(state);
 
         this.xAxisLabelsGroup?.remove();
-        this.xAxisLabelsGroup = svg('g');
+        this.xAxisLabelsGroup = createSVGElement('g');
 
         const labels = [];
         for (let i = 0; i < state.data.series.length; i += 1) {
             const [itemDate, itemsCount] = state.data.series[i];
-            const txtEl = svg('text', {
-                class: 'chart__text chart-xaxis__label',
-                x: labelShift,
-                y: lblY + dyOffset,
+            const txtEl = createSVGElement('text', {
+                attrs: {
+                    class: 'chart__text chart-xaxis__label',
+                    x: labelShift,
+                    y: lblY + dyOffset,
+                },
             });
             txtEl.textContent = itemDate.toString();
 
@@ -916,7 +927,7 @@ export class BaseChart extends Component {
     /** Remove all items from chart */
     resetItems() {
         this.itemsGroup?.remove();
-        this.itemsGroup = svg('g');
+        this.itemsGroup = createSVGElement('g');
         this.content.append(this.itemsGroup);
         this.items = [];
     }

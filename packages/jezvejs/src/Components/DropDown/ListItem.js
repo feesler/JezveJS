@@ -1,6 +1,6 @@
 import {
     createElement,
-    svg,
+    createSVGElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
@@ -52,16 +52,15 @@ export class DropDownListItem extends Component {
         this.contentElem = createElement('div', { props: { className: LIST_ITEM_CLASS } });
 
         if (this.props.multi) {
-            this.checkIcon = svg(
-                'svg',
-                {
+            this.checkIcon = createSVGElement('svg', {
+                attrs: {
                     class: CHECK_ICON_CLASS,
                     width: 17,
                     height: 17,
                     viewBox: '0 1 10 10',
                 },
-                svg('path', { d: CHECK_ICON }),
-            );
+                children: createSVGElement('path', { attrs: { d: CHECK_ICON } }),
+            });
             this.titleElem = createElement('span');
             this.contentElem.append(this.checkIcon, this.titleElem);
         } else {

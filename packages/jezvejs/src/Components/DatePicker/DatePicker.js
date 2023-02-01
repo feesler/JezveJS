@@ -1,6 +1,6 @@
 import {
     ge,
-    svg,
+    createSVGElement,
     show,
     isDate,
     isFunction,
@@ -44,6 +44,8 @@ const TOP_FROM_CLASS = 'top_from';
 const BOTTOM_FROM_CLASS = 'bottom_from';
 const TOP_TO_CLASS = 'top_to';
 const BOTTOM_TO_CLASS = 'bottom_to';
+
+const NAV_ICON_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
 
 const toCSSValue = (val) => (+val.toFixed(4));
 
@@ -198,11 +200,10 @@ export class DatePicker extends Component {
     }
 
     renderNavIcon() {
-        return svg(
-            'svg',
-            { class: NAV_ICON_CLASS, viewBox: '0 0 2.1 3.4' },
-            svg('path', { d: 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z' }),
-        );
+        return createSVGElement('svg', {
+            attrs: { class: NAV_ICON_CLASS, viewBox: '0 0 2.1 3.4' },
+            children: createSVGElement('path', { attrs: { d: NAV_ICON_PATH } }),
+        });
     }
 
     /**

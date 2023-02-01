@@ -1,6 +1,6 @@
 import {
     isFunction,
-    svg,
+    createSVGElement,
     setEvents,
     enable,
     removeChilds,
@@ -65,11 +65,10 @@ export class Checkbox extends Component {
     }
 
     createCheckPath() {
-        return svg(
-            'svg',
-            { class: ICON_CLASS, viewBox: ICON_VIEWBOX },
-            svg('path', { d: ICON_PATH }),
-        );
+        return createSVGElement('svg', {
+            attrs: { class: ICON_CLASS, viewBox: ICON_VIEWBOX },
+            children: createSVGElement('path', { attrs: { d: ICON_PATH } }),
+        });
     }
 
     init() {

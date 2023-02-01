@@ -1,7 +1,7 @@
 import {
     isFunction,
     ge,
-    svg,
+    createSVGElement,
     setProps,
     re,
     insertAfter,
@@ -175,11 +175,10 @@ export class Popup extends Component {
             return;
         }
 
-        const icon = svg(
-            'svg',
-            { class: CLOSE_ICON_CLASS, viewBox: '0,0,14,14' },
-            svg('path', { d: CLOSE_ICON }),
-        );
+        const icon = createSVGElement('svg', {
+            attrs: { class: CLOSE_ICON_CLASS, viewBox: '0,0,14,14' },
+            children: createSVGElement('path', { attrs: { d: CLOSE_ICON } }),
+        });
 
         this.closeBtn = createElement('button', {
             props: { className: CLOSE_BTN_CLASS, type: 'button' },

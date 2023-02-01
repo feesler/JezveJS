@@ -1,6 +1,6 @@
 import {
     addChilds,
-    svg,
+    createSVGElement,
     isFunction,
     removeChilds,
     setEvents,
@@ -28,6 +28,8 @@ const ARROW_CLASS = 'paginator-arrow';
 const ARROW_ICON_CLASS = 'paginator-arrow__icon';
 const ARROW_CLASS_PREV = 'paginator-arrow__prev';
 const ARROW_CLASS_NEXT = 'paginator-arrow__next';
+
+const ARROW_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
 
 export class Paginator extends Component {
     constructor(props) {
@@ -260,11 +262,10 @@ export class Paginator extends Component {
     }
 
     renderArrow(isNext = false) {
-        const arrowIcon = svg(
-            'svg',
-            { class: ARROW_ICON_CLASS, viewBox: '0 0 2.1 3.4' },
-            svg('path', { d: 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z' }),
-        );
+        const arrowIcon = createSVGElement('svg', {
+            attrs: { class: ARROW_ICON_CLASS, viewBox: '0 0 2.1 3.4' },
+            children: createSVGElement('path', { attrs: { d: ARROW_PATH } }),
+        });
 
         const arrowNavClass = (isNext) ? ARROW_CLASS_NEXT : ARROW_CLASS_PREV;
         return createElement('a', {
