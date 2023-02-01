@@ -237,7 +237,8 @@ export const re = (target) => {
 
 /** Returns splitted and filtered array of class names */
 export const getClassNames = (...args) => (
-    args.flatMap((item) => typeof item === 'string' && item.split(' '))
+    args.flat(256)
+        .flatMap((item) => typeof item === 'string' && item.split(' '))
         .filter((item) => typeof item === 'string' && item.length > 0)
 );
 
