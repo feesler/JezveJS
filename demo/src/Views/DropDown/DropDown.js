@@ -484,6 +484,7 @@ const createPopup = () => {
         id: 'popup',
         title: 'Popup',
         content: popupContent,
+        scrollMessage: true,
         btn: {
             closeBtn: true,
         },

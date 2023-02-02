@@ -65,8 +65,8 @@
 }
 
 .clipper {
-  height: 50px;
-  overflow: hidden;
+  height: 100px;
+  overflow: auto;
   background-color: #bbbbbb;
 }
 
@@ -188,6 +188,21 @@
 
 .bottom-popup .popup__wrapper {
   align-items: flex-end;
+}
+
+.popup-scroll-container {
+  height: 200px;
+  overflow: auto;
+}
+
+.popup-scroll-placeholder {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-size: 3rem;
+  color: #c3c3c3;
 }
 
 @media (hover: hover) {
