@@ -135,7 +135,13 @@ export class Popup extends Component {
         }
 
         if (this.props.nodim !== true) {
+            this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+            document.body.style.top = `-${this.scrollTop}px`;
             document.body.style.overflow = 'hidden';
+            document.body.style.width = '100%';
+            document.body.style.height = 'auto';
+            document.body.style.position = 'fixed';
         }
         show(this.elem, true);
 
@@ -153,7 +159,21 @@ export class Popup extends Component {
 
         show(this.elem, false);
         if (this.props.nodim !== true) {
+            document.body.style.top = '';
             document.body.style.overflow = '';
+            document.body.style.width = '';
+            document.body.style.height = '';
+            document.body.style.position = '';
+
+            const scrollOptionsAvailable = 'scrollBehavior' in document.documentElement.style;
+            if (scrollOptionsAvailable) {
+                window.scrollTo({
+                    top: this.scrollTop,
+                    behavior: 'instant',
+                });
+            } else {
+                window.scrollTo(0, this.scrollTop);
+            }
         }
 
         if (this.props.closeOnEmptyClick === true) {
