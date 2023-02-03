@@ -82,6 +82,7 @@ const defaultProps = {
     onChange: null,
     onInput: null,
     className: null,
+    ignoreScrollTimeout: 500,
     components: {
         ListItem: DropDownListItem,
         MultiSelectionItem: DropDownMultiSelectionItem,
@@ -162,8 +163,8 @@ export class DropDown extends Component {
             blur: (e) => this.onBlur(e),
             keydown: (e) => this.onKey(e),
         };
-
-        setEvents(window.visualViewport, { resize: (e) => this.onViewportResize(e) });
+        this.viewportEvents = { resize: (e) => this.onViewportResize(e) };
+        this.scrollHandler = (e) => this.onWindowScroll(e);
 
         if (this.props.listAttach) {
             this.attachToElement();
@@ -389,6 +390,20 @@ export class DropDown extends Component {
     }
 
     /* Event handlers */
+    listenWindowEvents() {
+        setEvents(window.visualViewport, this.viewportEvents);
+        window.addEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+
+        setTimeout(() => {
+            this.ignoreScroll = false;
+        }, this.props.ignoreScrollTimeout);
+    }
+
+    stopWindowEvents() {
+        removeEvents(window.visualViewport, this.viewportEvents);
+        window.removeEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+    }
+
     /** Add focus/blur event handlers to specified element */
     assignCommonHandlers(elem) {
         setEvents(elem, this.commonEvents);
@@ -397,6 +412,15 @@ export class DropDown extends Component {
     /** Remove focus/blur event handlers from specified element */
     removeCommonHandlers(elem) {
         removeEvents(elem, this.commonEvents);
+    }
+
+    /** viewPort 'resize' event handler */
+    onWindowScroll() {
+        if (this.ignoreScroll) {
+            return;
+        }
+
+        this.updateListPosition();
     }
 
     /** viewPort 'resize' event handler */
@@ -1963,6 +1987,8 @@ export class DropDown extends Component {
                 margin: LIST_MARGIN,
                 screenPadding: SCREEN_PADDING,
                 useRefWidth: true,
+                scrollOnOverflow: false,
+                allowResize: false,
             });
         }, 100);
     }
@@ -1983,18 +2009,22 @@ export class DropDown extends Component {
             }
 
             PopupPosition.reset(this.list);
+            this.stopWindowEvents();
             return;
         }
 
         if (this.props.fullScreen && isVisible(this.backgroundElem)) {
             this.renderFullscreenList(state, prevState);
         } else {
+            this.ignoreScroll = true;
             PopupPosition.calculate({
                 elem: this.list,
                 refElem: this.elem,
                 margin: LIST_MARGIN,
                 screenPadding: SCREEN_PADDING,
                 useRefWidth: true,
+                scrollOnOverflow: true,
+                onScrollDone: () => this.listenWindowEvents(),
             });
         }
 
