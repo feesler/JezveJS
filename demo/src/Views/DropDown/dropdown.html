@@ -339,14 +339,17 @@
                             </div>
                             <div id="popupContent" hidden>
                                 <div class="popup-scroll-container">
-                                    <div class="popup-scroll-placeholder">Scroll</div>
+                                    <div id="topPlaceholder" class="popup-scroll-placeholder">Scroll</div>
                                     <div id="popupDropDownContainer"></div>
-                                    <div class="popup-scroll-placeholder">Scroll</div>
+                                    <div id="bottomPlaceholder" class="popup-scroll-placeholder" hidden>Scroll</div>
                                 </div>
                                 <div id="popupControls" class="section-controls">
-                                    <button class="btn" type="button" data-align="top">Align top</button>
-                                    <button class="btn" type="button" data-align="center">Align center</button>
-                                    <button class="btn" type="button" data-align="bottom">Align bottom</button>
+                                    <button class="btn" type="button" data-action="top">Top</button>
+                                    <button class="btn" type="button" data-action="center">Center</button>
+                                    <button class="btn" type="button" data-action="bottom">Bottom</button>
+                                    <button id="scrollPopupMessageBtn" class="btn" type="button" data-action="scroll">Scroll only content</button>
+                                    <button id="popupSizeBtn" class="btn" type="button" data-action="size">Scroll inside content</button>
+                                    <button id="togglePlaceholderBtn" class="btn" type="button" data-action="placeholder">Show bottom placeholder</button>
                                 </div>
                             </div>
                         </section>
