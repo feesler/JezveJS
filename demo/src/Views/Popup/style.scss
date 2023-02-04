@@ -35,13 +35,14 @@
   background-color: #eeffff;
   max-width: 600px;
   min-width: 130px;
-  padding: 15px 20px;
 }
 
 /* Message popups */
 .popup.msg {
   --popup-close-btn: #ffffff;
   --popup-close-btn-hover: #c0c0c0;
+  --popup-header-padding: 0;
+  --popup-content-padding: 1rem 2rem 1rem 1rem;
 
   top: 70px;
   right: 12px;
@@ -56,7 +57,6 @@
   }
 
   .popup__content-box {
-    padding: 0;
     max-width: 824px;
     width: 100%;
     background: none;
@@ -75,9 +75,6 @@
     max-width: 400px;
     min-width: 200px;
     color: #ffffff;
-    right: 0;
-    padding: 15px 35px 15px 20px;
-    box-sizing: border-box;
   }
 
   &.msg_success .popup__message {
