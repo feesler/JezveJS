@@ -79,6 +79,7 @@ export class PopupPosition {
             scrollOnOverflow = true,
             allowResize = true,
             scrollTimeout = 200,
+            minRefHeight = 20,
             onScrollDone = null,
         } = options;
 
@@ -132,8 +133,8 @@ export class PopupPosition {
         const screenBottomDist = reference.bottom - refScrollParentTop;
 
         const dist = {
-            top: Math.min(screenTopDist, scrollTop),
-            bottom: Math.min(screenBottomDist, scrollHeight - scrollBottom),
+            top: Math.min(screenTopDist - minRefHeight, scrollTop),
+            bottom: Math.min(screenBottomDist - minRefHeight, scrollHeight - scrollBottom),
         };
         const windowDist = {
             top: windowScrollTop,
@@ -142,11 +143,11 @@ export class PopupPosition {
 
         let height = elem.offsetHeight;
         let bottom = reference.bottom + margin + height;
-        const minHeight = margin + screenPadding + height;
+        const minHeight = minRefHeight + margin + screenPadding + height;
 
         // Check element taller than screen
         if (minHeight > screenHeight && allowResize) {
-            height = screenHeight - screenPadding - margin;
+            height = screenHeight - minRefHeight - screenPadding - margin;
             style.maxHeight = px(height);
 
             bottom = reference.bottom + margin + height;

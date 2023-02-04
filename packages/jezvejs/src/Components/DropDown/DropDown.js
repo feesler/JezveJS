@@ -64,6 +64,7 @@ const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 /* List position constants */
 const SCREEN_PADDING = 5;
 const LIST_MARGIN = 5;
+const ATTACH_REF_HEIGHT = 5;
 
 /** Default properties */
 const defaultProps = {
@@ -1999,10 +2000,20 @@ export class DropDown extends Component {
                 margin: LIST_MARGIN,
                 screenPadding: SCREEN_PADDING,
                 useRefWidth: true,
+                minRefHeight: this.getMinRefHeight(),
                 scrollOnOverflow: false,
                 allowResize: false,
             });
         }, 100);
+    }
+
+    getMinRefHeight() {
+        if (this.props.listAttach) {
+            return ATTACH_REF_HEIGHT;
+        }
+
+        const borderWidth = this.comboElem.offsetHeight - this.comboElem.clientHeight;
+        return this.toggleBtn.offsetHeight + borderWidth;
     }
 
     renderList(state, prevState) {
@@ -2029,12 +2040,14 @@ export class DropDown extends Component {
             this.renderFullscreenList(state, prevState);
         } else {
             this.ignoreScroll = true;
+
             PopupPosition.calculate({
                 elem: this.list,
                 refElem: this.elem,
                 margin: LIST_MARGIN,
                 screenPadding: SCREEN_PADDING,
                 useRefWidth: true,
+                minRefHeight: this.getMinRefHeight(),
                 scrollOnOverflow: true,
                 onScrollDone: () => this.listenWindowEvents(),
             });
