@@ -165,6 +165,7 @@ export class DropDown extends Component {
         };
         this.viewportEvents = { resize: (e) => this.onViewportResize(e) };
         this.scrollHandler = (e) => this.onWindowScroll(e);
+        this.listeningWindow = false;
 
         if (this.props.listAttach) {
             this.attachToElement();
@@ -391,17 +392,28 @@ export class DropDown extends Component {
 
     /* Event handlers */
     listenWindowEvents() {
-        setEvents(window.visualViewport, this.viewportEvents);
-        window.addEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
-
         setTimeout(() => {
             this.ignoreScroll = false;
         }, this.props.ignoreScrollTimeout);
+
+        if (this.listeningWindow) {
+            return;
+        }
+
+        setEvents(window.visualViewport, this.viewportEvents);
+        window.addEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+
+        this.listeningWindow = true;
     }
 
     stopWindowEvents() {
+        if (!this.listeningWindow) {
+            return;
+        }
+
         removeEvents(window.visualViewport, this.viewportEvents);
         window.removeEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+        this.listeningWindow = false;
     }
 
     /** Add focus/blur event handlers to specified element */
