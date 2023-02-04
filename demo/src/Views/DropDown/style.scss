@@ -205,6 +205,10 @@
   color: #c3c3c3;
 }
 
+.relative-wrapper .popup__wrapper {
+  position: relative;
+}
+
 .scroll-inside .popup-scroll-placeholder {
   height: 300px;
 }

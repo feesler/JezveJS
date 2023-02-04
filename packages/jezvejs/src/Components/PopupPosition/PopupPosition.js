@@ -114,7 +114,7 @@ export class PopupPosition {
 
         // Initial set vertical position used in further calculations
         let initialTop = reference.bottom - offset.top + margin;
-        if (fixedParent && !fixedElement) {
+        if (fixedParent && fixedParent === elem.offsetParent && !fixedElement) {
             initialTop += scrollTop;
         }
         style.top = px(initialTop);
@@ -169,7 +169,7 @@ export class PopupPosition {
         if (flip) {
             initialTop = reference.top - offset.top - height - margin;
 
-            if (fixedParent && !fixedElement) {
+            if (fixedParent && fixedParent === elem.offsetParent && !fixedElement) {
                 initialTop += scrollTop;
             }
         }
