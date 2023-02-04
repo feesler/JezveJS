@@ -5,6 +5,8 @@ import {
     setEvents,
     onReady,
     show,
+    enable,
+    isVisible,
 } from 'jezvejs';
 import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
@@ -454,13 +456,50 @@ const dynamicAddRemoveItems = () => {
 
 let popup = null;
 
-const setPopupAlign = (align) => {
-    if (!popup || !align) {
+const onPopupAction = (action) => {
+    if (!popup || !action) {
         return;
     }
 
-    popup.elem.classList.toggle('top-popup', align === 'top');
-    popup.elem.classList.toggle('bottom-popup', align === 'bottom');
+    const alignActions = ['top', 'center', 'bottom'];
+
+    if (alignActions.includes(action)) {
+        popup.elem.classList.toggle('top-popup', action === 'top');
+        popup.elem.classList.toggle('bottom-popup', action === 'bottom');
+    }
+
+    if (action === 'scroll') {
+        popup.elem.classList.toggle('popup_scroll-message');
+    }
+
+    if (action === 'size') {
+        popup.elem.classList.toggle('scroll-inside');
+    }
+
+    if (action === 'placeholder') {
+        const bottomPlaceholder = ge('bottomPlaceholder');
+        const visible = isVisible(bottomPlaceholder);
+        show(bottomPlaceholder, !visible);
+
+        const togglePlaceholderBtn = ge('togglePlaceholderBtn');
+        togglePlaceholderBtn.textContent = (visible)
+            ? 'Show bottom placeholder'
+            : 'Hide bottom placeholder';
+    }
+
+    const scrollMessage = popup.elem.classList.contains('popup_scroll-message');
+    const scrollInside = popup.elem.classList.contains('scroll-inside');
+
+    const scrollPopupMessageBtn = ge('scrollPopupMessageBtn');
+    enable(scrollPopupMessageBtn, !scrollInside);
+    scrollPopupMessageBtn.textContent = (scrollMessage)
+        ? 'Scroll whole popup'
+        : 'Scroll only content';
+
+    const popupSizeBtn = ge('popupSizeBtn');
+    popupSizeBtn.textContent = (scrollInside)
+        ? 'Scroll popup'
+        : 'Scroll inside content';
 };
 
 const createPopup = () => {
@@ -475,21 +514,20 @@ const createPopup = () => {
     });
     ge('popupDropDownContainer').append(dropDown.elem);
 
-    setEvents(ge('popupControls'), {
-        click: (e) => setPopupAlign(e?.target?.dataset?.align),
-    });
-
     const popupContent = ge('popupContent');
     popup = Popup.create({
         id: 'popup',
         title: 'Popup',
         content: popupContent,
-        scrollMessage: true,
         btn: {
             closeBtn: true,
         },
     });
     show(popupContent, true);
+
+    setEvents(ge('popupControls'), {
+        click: (e) => onPopupAction(e?.target?.dataset?.action),
+    });
 };
 
 const showPopup = () => {

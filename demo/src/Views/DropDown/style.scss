@@ -190,7 +190,7 @@
   align-items: flex-end;
 }
 
-.popup-scroll-container {
+.scroll-inside .popup-scroll-container {
   height: 200px;
   overflow: auto;
 }
@@ -200,9 +200,13 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  height: 75vh;
   font-size: 3rem;
   color: #c3c3c3;
+}
+
+.scroll-inside .popup-scroll-placeholder {
+  height: 300px;
 }
 
 @media (hover: hover) {
