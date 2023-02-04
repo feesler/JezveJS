@@ -92,6 +92,7 @@
   /* Active component: Text input */
   --dd-active-input-text: var(--dd-input-text);
   --dd-active-input-bg: var(--dd-input-bg);
+  --dd-active-placeholder: var(--dd-placeholder);
 
   /* Active component: Single selection */
   --dd-active-selection-text: var(--dd-selection-text);
@@ -502,11 +503,19 @@
   .dd__input {
     color: var(--dd-active-input-text);
     background-color: var(--dd-active-input-bg);
+
+    &:placeholder {
+      color: var(--dd-active-placeholder) !important;
+    }
   }
 
   .dd__single-selection {
     color: var(--dd-active-selection-text);
     background-color: var(--dd-active-selection-bg);
+  }
+
+  .dd__single-selection_placeholder {
+    color: var(--dd-active-placeholder);
   }
 
   .dd__selection-item {

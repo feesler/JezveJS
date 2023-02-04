@@ -307,6 +307,7 @@ export class PopupMenu extends Component {
             refElem: this.relElem,
             margin: LIST_MARGIN,
             screenPadding: SCREEN_PADDING,
+            allowResize: this.props.hideOnScroll,
             onScrollDone: () => this.setScrollHandlers(),
         });
 

@@ -5,7 +5,7 @@ export class PopupPosition {
 
     /** Find parent element without offsetParent and check it has position: fixed */
     static getFixedParent(elem) {
-        let parent = elem;
+        let parent = elem?.parentNode;
         while (parent.offsetParent) {
             parent = parent.offsetParent;
         }
