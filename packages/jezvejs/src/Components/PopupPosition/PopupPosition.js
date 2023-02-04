@@ -120,7 +120,6 @@ export class PopupPosition {
         style.top = px(initialTop);
 
         const scrollHeight = (scrollAvailable) ? scrollParent.scrollHeight : screenBottom;
-        const scrollBottom = scrollTop + scrollParentBox.height;
 
         const windowScrollTop = (fixedParent) ? scrollTop : screenTop;
         const windowScrollHeight = (fixedParent) ? scrollHeight : html.scrollHeight;
@@ -128,6 +127,7 @@ export class PopupPosition {
 
         const refScrollParentHeight = Math.min(screenHeight, scrollParentBox.height);
         const refScrollParentTop = Math.max(0, scrollParentBox.top);
+        const scrollBottom = scrollTop + refScrollParentHeight;
 
         const screenTopDist = refScrollParentHeight - (reference.top - refScrollParentTop);
         const screenBottomDist = reference.bottom - refScrollParentTop;
