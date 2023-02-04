@@ -476,6 +476,10 @@ const onPopupAction = (action) => {
         popup.elem.classList.toggle('scroll-inside');
     }
 
+    if (action === 'relparent') {
+        popup.elem.classList.toggle('relative-wrapper');
+    }
+
     if (action === 'placeholder') {
         const bottomPlaceholder = ge('bottomPlaceholder');
         const visible = isVisible(bottomPlaceholder);
