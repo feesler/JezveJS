@@ -1,0 +1,86 @@
+/* Notification popups */
+.popup.notification {
+  --popup-header-padding: 0;
+  --popup-content-padding: 1rem 2.5rem 1rem 1rem;
+  --notification-screen-padding: 70px 12px 0 12px;
+  --notification-default-text-color: #000000;
+  --notification-default-bg: #d5d5d5;
+  --notification-default-close-btn: #888888;
+  --notification-default-close-btn-hover: #000000;
+
+  /* Success notification */
+  --notification-success-text-color: #ffffff;
+  --notification-success-bg: #40d060;
+  --notification-success-close-btn: #ffffff;
+  --notification-success-close-btn-hover: #c0c0c0;
+
+  /* Error notification */
+  --notification-error-text-color: #ffffff;
+  --notification-error-bg: #f02020;
+  --notification-error-close-btn: #ffffff;
+  --notification-error-close-btn-hover: #c0c0c0;
+
+
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: auto;
+  width: auto;
+  height: auto;
+
+  .popup__content {
+    background: none;
+    align-self: baseline;
+    padding: var(--notification-screen-padding);
+  }
+
+  .popup__content-box {
+    width: 100%;
+    position: relative;
+    background: none;
+  }
+
+  .popup__header {
+    position: absolute;
+    right: 8px;
+    top: 17px;
+    width: 18px;
+    height: 18px;
+    z-index: 3;
+  }
+
+  .popup__message {
+    max-width: 400px;
+    min-width: 200px;
+  }
+}
+
+.notification.default {
+  --popup-close-btn: var(--notification-default-close-btn);
+  --popup-close-btn-hover: var(--notification-default-close-btn-hover);
+
+  .popup__message {
+    color: var(--notification-default-text-color);
+    background-color: var(--notification-default-bg);
+  }
+}
+
+.notification.success {
+  --popup-close-btn: var(--notification-success-close-btn);
+  --popup-close-btn-hover: var(--notification-success-close-btn-hover);
+
+  .popup__message {
+    color: var(--notification-success-text-color);
+    background-color: var(--notification-success-bg);
+  }
+}
+
+.notification.error {
+  --popup-close-btn: var(--notification-error-close-btn);
+  --popup-close-btn-hover: var(--notification-error-close-btn-hover);
+
+  .popup__message {
+    color: var(--notification-error-text-color);
+    background-color: var(--notification-error-bg);
+  }
+}

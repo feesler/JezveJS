@@ -37,57 +37,6 @@
   min-width: 130px;
 }
 
-/* Message popups */
-.popup.msg {
-  --popup-close-btn: #ffffff;
-  --popup-close-btn-hover: #c0c0c0;
-  --popup-header-padding: 0;
-  --popup-content-padding: 1rem 2rem 1rem 1rem;
-
-  top: 70px;
-  right: 12px;
-  left: auto;
-  bottom: auto;
-  width: auto;
-  height: auto;
-
-  .popup__content {
-    background: none;
-    align-self: baseline;
-  }
-
-  .popup__content-box {
-    max-width: 824px;
-    width: 100%;
-    background: none;
-  }
-
-  .popup__header {
-    position: absolute;
-    right: 8px;
-    top: 17px;
-    width: 18px;
-    height: 18px;
-    z-index: 3;
-  }
-
-  .popup__message {
-    max-width: 400px;
-    min-width: 200px;
-    color: #ffffff;
-  }
-
-  &.msg_success .popup__message {
-    border-color: #20d040;
-    background-color: #40d060;
-  }
-
-  &.msg_error .popup__message {
-    border-color: #f02020;
-    background-color: #f02020;
-  }
-}
-
 .element-title {
   display: flex;
   flex-flow: row nowrap;
