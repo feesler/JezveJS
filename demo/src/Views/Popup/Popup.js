@@ -8,6 +8,7 @@ import {
     show,
 } from 'jezvejs';
 import { Popup } from 'jezvejs/Popup';
+import { Notification } from 'jezvejs/Notification';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
 import { initNavigation } from '../../app.js';
@@ -174,12 +175,9 @@ const initDraggablePopup = () => {
 let notificationPopup = null;
 const showNotifyPopup = () => {
     if (!notificationPopup) {
-        notificationPopup = Popup.create({
+        notificationPopup = Notification.create({
             id: 'notificationPopup',
-            content: 'This popup is dynamically created. It has no buttons and title and will be closed only on click on empty place.',
-            className: ['center_only', 'border_popup'],
-            nodim: true,
-            closeOnEmptyClick: true,
+            content: 'Default notification popup. Will be closed by click on empty place.',
         });
     }
 
@@ -189,13 +187,10 @@ const showNotifyPopup = () => {
 let successNotifyPopup = null;
 const showSuccessNotifyPopup = () => {
     if (!successNotifyPopup) {
-        successNotifyPopup = Popup.create({
+        successNotifyPopup = Notification.create({
             id: 'successNotifyPopup',
             content: 'Success message. Something created as expected.',
-            btn: { closeBtn: true },
-            className: ['msg', 'msg_success'],
-            nodim: true,
-            closeOnEmptyClick: true,
+            type: 'success',
         });
     }
 
@@ -205,13 +200,10 @@ const showSuccessNotifyPopup = () => {
 let errorNotifyPopup = null;
 const showErrorNotifyPopup = () => {
     if (!errorNotifyPopup) {
-        errorNotifyPopup = Popup.create({
+        errorNotifyPopup = Notification.create({
             id: 'errorNotifyPopup',
             content: 'Error message. Fail to create something',
-            btn: { closeBtn: true },
-            className: ['msg', 'msg_error'],
-            nodim: true,
-            closeOnEmptyClick: true,
+            type: 'error',
         });
     }
 

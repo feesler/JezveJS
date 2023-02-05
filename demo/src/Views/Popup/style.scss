@@ -35,60 +35,6 @@
   background-color: #eeffff;
   max-width: 600px;
   min-width: 130px;
-  padding: 15px 20px;
-}
-
-/* Message popups */
-.popup.msg {
-  --popup-close-btn: #ffffff;
-  --popup-close-btn-hover: #c0c0c0;
-
-  top: 70px;
-  right: 12px;
-  left: auto;
-  bottom: auto;
-  width: auto;
-  height: auto;
-
-  .popup__content {
-    background: none;
-    align-self: baseline;
-  }
-
-  .popup__content-box {
-    padding: 0;
-    max-width: 824px;
-    width: 100%;
-    background: none;
-  }
-
-  .popup__header {
-    position: absolute;
-    right: 8px;
-    top: 17px;
-    width: 18px;
-    height: 18px;
-    z-index: 3;
-  }
-
-  .popup__message {
-    max-width: 400px;
-    min-width: 200px;
-    color: #ffffff;
-    right: 0;
-    padding: 15px 35px 15px 20px;
-    box-sizing: border-box;
-  }
-
-  &.msg_success .popup__message {
-    border-color: #20d040;
-    background-color: #40d060;
-  }
-
-  &.msg_error .popup__message {
-    border-color: #f02020;
-    background-color: #f02020;
-  }
 }
 
 .element-title {
