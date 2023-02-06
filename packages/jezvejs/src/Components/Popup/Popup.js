@@ -16,9 +16,8 @@ import { CloseButton } from '../CloseButton/CloseButton.js';
 import './style.scss';
 
 /* CSS classes */
-const CONTAINER_CLASS = 'popup';
-const CONTENT_CLASS = 'popup__content';
-const BOX_CLASS = 'popup__content-box';
+const POPUP_CLASS = 'popup';
+const CONTAINER_CLASS = 'popup__content';
 const WRAPPER_CLASS = 'popup__wrapper';
 const MESSAGE_CLASS = 'popup__message';
 const HEADER_CLASS = 'popup__header';
@@ -31,7 +30,7 @@ const defaultProps = {
     title: null,
     content: null,
     footer: null,
-    closeButton: null,
+    closeButton: false,
     nodim: false,
     scrollMessage: false,
     onClose: null,
@@ -69,23 +68,19 @@ export class Popup extends Component {
 
     init() {
         this.headerElem = createElement('div', { props: { className: HEADER_CLASS } });
-        this.boxElem = createElement('div', {
-            props: { className: BOX_CLASS },
+        this.container = createElement('div', {
+            props: { className: CONTAINER_CLASS },
             children: [
                 this.headerElem,
             ],
         });
-        this.contentWrapElem = createElement('div', {
-            props: { className: CONTENT_CLASS },
-            children: this.boxElem,
-        });
         this.wrapperElem = createElement('div', {
             props: { className: WRAPPER_CLASS },
-            children: this.contentWrapElem,
+            children: this.container,
         });
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            props: { className: POPUP_CLASS },
             attrs: { hidden: '' },
             children: this.wrapperElem,
         });
@@ -122,7 +117,7 @@ export class Popup extends Component {
 
         if (this.state.closeOnEmptyClick === true) {
             setTimeout(() => {
-                setEmptyClick(this.emptyClickHandler, [this.boxElem]);
+                setEmptyClick(this.emptyClickHandler, [this.container]);
             });
         }
     }
@@ -249,7 +244,7 @@ export class Popup extends Component {
             if (this.headerElem) {
                 insertAfter(this.contentElem, this.headerElem);
             } else {
-                this.boxElem.prepend(this.contentElem);
+                this.container.prepend(this.contentElem);
             }
         }
 
@@ -275,7 +270,7 @@ export class Popup extends Component {
 
         if (!this.footerElem) {
             this.footerElem = createElement('div', { props: { className: FOOTER_CLASS } });
-            this.boxElem.append(this.footerElem);
+            this.container.append(this.footerElem);
         }
 
         removeChilds(this.footerElem);

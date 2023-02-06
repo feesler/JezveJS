@@ -7,6 +7,8 @@
   --notification-default-bg: #d5d5d5;
   --notification-default-close-btn: #888888;
   --notification-default-close-btn-hover: #000000;
+  --notification-min-width: 200px;
+  --notification-max-width: 400px;
 
   /* Success notification */
   --notification-success-text-color: #ffffff;
@@ -27,30 +29,26 @@
   width: auto;
   height: auto;
 
-  .popup__content {
-    background: none;
-    align-self: baseline;
+  .popup__wrapper {
     padding: var(--notification-screen-padding);
   }
 
-  .popup__content-box {
-    width: 100%;
-    position: relative;
+  .popup__content {
     background: none;
+    align-self: baseline;
+    position: relative;
   }
 
   .popup__header {
     position: absolute;
     right: 8px;
     top: 17px;
-    width: 18px;
-    height: 18px;
     z-index: 3;
   }
 
   .popup__message {
-    max-width: 400px;
-    min-width: 200px;
+    max-width: var(--notification-max-width);
+    min-width: var(--notification-min-width);
   }
 }
 
