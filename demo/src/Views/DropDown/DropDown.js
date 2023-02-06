@@ -523,9 +523,7 @@ const createPopup = () => {
         id: 'popup',
         title: 'Popup',
         content: popupContent,
-        btn: {
-            closeBtn: true,
-        },
+        closeButton: true,
     });
     show(popupContent, true);
 

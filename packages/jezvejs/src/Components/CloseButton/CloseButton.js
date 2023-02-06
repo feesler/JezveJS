@@ -19,7 +19,5 @@ export class CloseButton extends IconButton {
             className: getClassNames(CLOSE_BUTTON_CLASS, props.className),
             icon,
         });
-
-        this.init();
     }
 }
