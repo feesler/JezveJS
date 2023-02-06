@@ -33,18 +33,43 @@ const onPopupResultAndClose = (popup, res) => {
     popup.close();
 };
 
+const createOkBtn = ({ onClick, textContent = 'ok', disabled = false }) => (
+    createElement('button', {
+        props: {
+            className: 'btn submit-btn',
+            type: 'button',
+            textContent,
+            disabled,
+        },
+        events: { click: (e) => onClick(e) },
+    })
+);
+
+const createCancelBtn = ({ onClick, textContent = 'cancel', disabled = false }) => (
+    createElement('button', {
+        props: {
+            className: 'btn cancel-btn',
+            type: 'button',
+            textContent,
+            disabled,
+        },
+        events: { click: (e) => onClick(e) },
+    })
+);
+
 let fullWidthPopup = null;
 const showFullWidthPopup = () => {
     if (!fullWidthPopup) {
         fullWidthPopup = Popup.create({
             id: 'fullWidthPopup',
             title: 'Fullwidth popup',
+            closeButton: false,
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
                 Control buttons are added and both will close popup.`,
-        });
-        fullWidthPopup.setControls({
-            okBtn: { onclick: () => onPopupResultAndClose(fullWidthPopup, true) },
-            cancelBtn: { onclick: () => onPopupResultAndClose(fullWidthPopup, false) },
+            footer: [
+                createOkBtn({ onClick: () => onPopupResultAndClose(fullWidthPopup, true) }),
+                createCancelBtn({ onClick: () => onPopupResultAndClose(fullWidthPopup, false) }),
+            ],
         });
     }
 
@@ -62,16 +87,16 @@ const showCloseBtnPopup = () => {
         closeBtnPopup = Popup.create({
             id: 'closeBtnPopup',
             title: 'Fullwidth popup',
+            closeButton: true,
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
                 Close button is added. Control buttons will not close popup.
                 On small screen message will overflow and whole popup should be scrolled
 
                 ${placeholderMsg}${placeholderMsg}`,
-            btn: {
-                okBtn: { onclick: onPopupResult.bind(null, true) },
-                cancelBtn: { onclick: onPopupResult.bind(null, false) },
-                closeBtn: true,
-            },
+            footer: [
+                createOkBtn({ onClick: () => onPopupResult(true) }),
+                createCancelBtn({ onClick: () => onPopupResult(false) }),
+            ],
         });
     }
 
@@ -88,17 +113,17 @@ const showMessageScrollPopup = () => {
         messageScrollPopup = Popup.create({
             id: 'messageScrollPopup',
             title: 'Fullwidth popup',
+            closeButton: true,
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
                 Close button is added. Control buttons will not close popup.
                 On small screen message will overflow and whole popup should be scrolled
 
                 ${placeholderMsg}${placeholderMsg}`,
             scrollMessage: true,
-            btn: {
-                okBtn: { onclick: () => onPopupResult(true) },
-                cancelBtn: { onclick: () => onPopupResult(false) },
-                closeBtn: true,
-            },
+            footer: [
+                createOkBtn({ onClick: () => onPopupResult(true) }),
+                createCancelBtn({ onClick: () => onPopupResult(false) }),
+            ],
         });
     }
 
@@ -115,8 +140,8 @@ const showCenterOnlyPopup = () => {
         centerOnlyPopup = Popup.create({
             id: 'centerOnlyPopup',
             title: 'Center popup',
+            closeButton: true,
             content: 'This popup is dynamically created and have only center background.',
-            btn: { closeBtn: true },
             className: 'center_only',
         });
     }
@@ -135,7 +160,7 @@ const showNoDimPopup = () => {
             id: 'noDimPopup',
             title: 'No dimming',
             content: 'This popup is dynamically created and doesn\'t dim page background.',
-            btn: { closeBtn: true },
+            closeButton: true,
             className: ['center_only', 'border_popup'],
             nodim: true,
         });
@@ -155,7 +180,7 @@ const showDraggablePopup = () => {
             id: 'draggablePopup',
             title: 'Draggable',
             content: 'This popup is dynamically created and draggable.',
-            btn: { closeBtn: true },
+            closeButton: true,
             className: ['center_only', 'border_popup', 'draggable_popup'],
             nodim: true,
         });
@@ -177,6 +202,7 @@ const showNotifyPopup = () => {
     if (!notificationPopup) {
         notificationPopup = Notification.create({
             id: 'notificationPopup',
+            closeButton: false,
             content: 'Default notification popup. Will be closed by click on empty place.',
         });
     }
@@ -224,13 +250,12 @@ const showTemplatePopup = () => {
             id: 'templatePopup',
             title: 'Template',
             content,
-            btn: { closeBtn: true },
+            closeButton: true,
+            footer: [
+                createOkBtn({ onClick: () => onPopupResultAndClose(templatePopup, true) }),
+            ],
         });
         show(content, true);
-        templatePopup.setControls({
-            okBtn: { onclick: () => onPopupResultAndClose(templatePopup, true) },
-            closeBtn: true,
-        });
     }
 
     templatePopup.show();
@@ -250,12 +275,12 @@ const showNestedChildPopup = () => {
             content,
             className: ['center_only', 'border_popup'],
             nodim: true,
+            closeButton: true,
+            footer: [
+                createOkBtn({ onClick: () => onPopupResultAndClose(nestedChildPopup, true) }),
+            ],
         });
         show(content, true);
-        nestedChildPopup.setControls({
-            okBtn: { onclick: () => onPopupResultAndClose(nestedChildPopup, true) },
-            closeBtn: true,
-        });
 
         ge('valueselect').addEventListener('change', (e) => {
             ge('valueresult').textContent = selectedValue(e.target);
@@ -273,10 +298,13 @@ const showNestedPopup = () => {
             id: 'nestedParentPopup',
             title: 'Nested popups',
             content,
-            btn: {
-                okBtn: { value: 'Select', onclick: showNestedChildPopup },
-                closeBtn: true,
-            },
+            closeButton: true,
+            footer: [
+                createOkBtn({
+                    textContent: 'Select',
+                    onClick: showNestedChildPopup,
+                }),
+            ],
         });
         show(content, true);
     }
@@ -288,25 +316,41 @@ const initNestedPopup = () => {
     setEvents(ge('showNestedBtn'), { click: showNestedPopup });
 };
 
-const removeControls = (popup) => {
-    popup.setControls({
-        okBtn: { disabled: false },
-        cancelBtn: false,
-        closeBtn: false,
-    });
+let controlsUpdatePopup = null;
+let restoreControlsBtn = null;
+let removeControlsBtn = null;
+
+const removeControls = () => {
+    restoreControlsBtn.disabled = false;
+    controlsUpdatePopup.setFooter([
+        restoreControlsBtn,
+    ]);
+    controlsUpdatePopup.setCloseButton(false);
 };
 
 const restoreControls = (popup) => {
-    popup.setControls({
-        okBtn: { disabled: true },
-        cancelBtn: { value: 'Remove', onclick: () => removeControls(popup) },
-        closeBtn: true,
-    });
+    restoreControlsBtn.disabled = true;
+    popup.setFooter([
+        restoreControlsBtn,
+        removeControlsBtn,
+    ]);
+
+    popup.setCloseButton(true);
 };
 
-let controlsUpdatePopup = null;
 const showControlsUpdatePopup = () => {
     if (!controlsUpdatePopup) {
+        restoreControlsBtn = createOkBtn({
+            textContent: 'Restore',
+            disabled: true,
+            onClick: () => restoreControls(controlsUpdatePopup),
+        });
+
+        removeControlsBtn = createCancelBtn({
+            textContent: 'Remove',
+            onClick: () => removeControls(controlsUpdatePopup),
+        });
+
         controlsUpdatePopup = Popup.create({
             id: 'controlsUpdatePopup',
             title: 'setControls() methods test',
@@ -314,16 +358,11 @@ const showControlsUpdatePopup = () => {
                 After click on Restore button Close and Remove button will appear and Restore button will be disabled.`,
             className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
-            btn: {
-                okBtn: { value: 'Restore', disabled: true },
-                cancelBtn: { value: 'Remove' },
-                closeBtn: true,
-            },
-        });
-
-        controlsUpdatePopup.setControls({
-            okBtn: { onclick: () => restoreControls(controlsUpdatePopup) },
-            cancelBtn: { onclick: () => removeControls(controlsUpdatePopup) },
+            closeButton: true,
+            footer: [
+                restoreControlsBtn,
+                removeControlsBtn,
+            ],
         });
     }
 
@@ -333,6 +372,10 @@ const showControlsUpdatePopup = () => {
 const initControlsUpdatePopup = () => {
     setEvents(ge('showControlsUpdBtn'), { click: showControlsUpdatePopup });
 };
+
+let titleUpdatePopup = null;
+let changeTitleBtn = null;
+let removeTitleBtn = null;
 
 /* eslint-disable no-param-reassign */
 const toggleTitle = (popup) => {
@@ -354,39 +397,41 @@ const toggleTitle = (popup) => {
         popup.titleState = 1;
         popup.setTitle('String title');
     }
-    popup.setControls({ cancelBtn: { disabled: false } });
+
+    removeTitleBtn.disabled = false;
 };
 
 const delTitle = (popup) => {
     popup.titleState = -1;
 
-    popup.removeTitle();
-    popup.setControls({
-        okBtn: { disabled: false },
-        cancelBtn: { disabled: true },
-    });
+    popup.setTitle(null);
+    removeTitleBtn.disabled = true;
 };
 /* eslint-enable no-param-reassign */
 
-let titleUpdatePopup = null;
 const showTitleUpdatePopup = () => {
     if (!titleUpdatePopup) {
+        changeTitleBtn = createOkBtn({
+            textContent: 'Change title',
+            onClick: () => toggleTitle(titleUpdatePopup),
+        });
+        removeTitleBtn = createCancelBtn({
+            textContent: 'Remove title',
+            disabled: true,
+            onClick: () => delTitle(titleUpdatePopup),
+        });
+
         titleUpdatePopup = Popup.create({
             id: 'popup14',
             title: 'setTitle() method test',
             content: 'This popup is able to change its title.',
             className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
-            btn: {
-                okBtn: { value: 'Change title' },
-                cancelBtn: { value: 'Remove title' },
-                closeBtn: true,
-            },
-        });
-
-        titleUpdatePopup.setControls({
-            okBtn: { onclick: () => toggleTitle(titleUpdatePopup) },
-            cancelBtn: { onclick: () => delTitle(titleUpdatePopup) },
+            closeButton: true,
+            footer: [
+                changeTitleBtn,
+                removeTitleBtn,
+            ],
         });
 
         titleUpdatePopup.titleState = 0;
@@ -399,12 +444,15 @@ const initTitleUpdatePopup = () => {
     setEvents(ge('showTitleUpdBtn'), { click: showTitleUpdatePopup });
 };
 
+let contentUpdatePopup = null;
+let stringContentBtn = null;
+let templateContentBtn = null;
+
 const stringContent = (popup) => {
     popup.setContent('This popup is able to change its content.');
-    popup.setControls({
-        okBtn: { disabled: true },
-        cancelBtn: { disabled: false },
-    });
+
+    stringContentBtn.disabled = true;
+    templateContentBtn.disabled = false;
 };
 
 const templateContent = (popup) => {
@@ -417,31 +465,34 @@ const templateContent = (popup) => {
             ],
         }),
     );
-    popup.setControls({
-        okBtn: { disabled: false },
-        cancelBtn: { disabled: true },
-    });
+
+    stringContentBtn.disabled = false;
+    templateContentBtn.disabled = true;
 };
 
-let contentUpdatePopup = null;
 const showContentUpdatePopup = () => {
     if (!contentUpdatePopup) {
+        stringContentBtn = createOkBtn({
+            textContent: 'String',
+            disabled: true,
+            onClick: () => stringContent(contentUpdatePopup),
+        });
+        templateContentBtn = createCancelBtn({
+            textContent: 'Template',
+            onClick: () => templateContent(contentUpdatePopup),
+        });
+
         contentUpdatePopup = Popup.create({
             id: 'contentUpdatePopup',
             title: 'setContent() method test',
             content: 'This popup is able to change its content.',
             className: ['center_only', 'border_popup', 'controls_test'],
             nodim: true,
-            btn: {
-                okBtn: { value: 'String', disabled: true },
-                cancelBtn: { value: 'Template' },
-                closeBtn: true,
-            },
-        });
-
-        contentUpdatePopup.setControls({
-            okBtn: { onclick: () => stringContent(contentUpdatePopup) },
-            cancelBtn: { onclick: () => templateContent(contentUpdatePopup) },
+            closeButton: true,
+            footer: [
+                stringContentBtn,
+                templateContentBtn,
+            ],
         });
     }
 

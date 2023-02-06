@@ -1,16 +1,14 @@
 import {
     isFunction,
     ge,
-    setProps,
     re,
     insertAfter,
-    prependChild,
     show,
     setEmptyClick,
     removeEmptyClick,
     removeChilds,
     createElement,
-    asArray,
+    addChilds,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -25,99 +23,93 @@ const WRAPPER_CLASS = 'popup__wrapper';
 const MESSAGE_CLASS = 'popup__message';
 const HEADER_CLASS = 'popup__header';
 const TITLE_CLASS = 'popup__title';
-const CONTROLS_CLASS = 'popup__controls';
-const SUBMIT_BTN_CLASS = 'btn submit-btn';
-const CANCEL_BTN_CLASS = 'btn cancel-btn';
+const FOOTER_CLASS = 'popup__footer';
 const NO_DIM_CLASS = 'popup_nodim';
 const SCROLL_MESSAGE_CLASS = 'popup_scroll-message';
 
 const defaultProps = {
     title: null,
     content: null,
+    footer: null,
+    closeButton: null,
     nodim: false,
     scrollMessage: false,
     onClose: null,
     className: null,
-    btn: null,
 };
 
 /** Popup component */
 export class Popup extends Component {
-    constructor(...args) {
-        super(...args);
+    static userProps = {
+        elem: ['id'],
+    };
 
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
+            ...props,
+        });
+
+        this.state = {
             ...this.props,
         };
 
         // check popup with same id is already exist
         if ('id' in this.props) {
-            this.elem = ge(this.props.id);
-            if (this.elem) {
+            const elem = ge(this.props.id);
+            if (elem) {
                 throw new Error(`Element with id ${this.props.id} already exist`);
             }
-        }
-        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-        show(this.elem, false);
-        if ('id' in this.props) {
-            this.elem.id = this.props.id;
-        }
-
-        if (this.props.nodim === true) {
-            this.elem.classList.add(NO_DIM_CLASS);
-        }
-        if (this.props.scrollMessage === true) {
-            this.elem.classList.add(SCROLL_MESSAGE_CLASS);
         }
 
         this.emptyClickHandler = () => this.close();
 
+        this.init();
+    }
+
+    init() {
         this.headerElem = createElement('div', { props: { className: HEADER_CLASS } });
-        this.messageElem = createElement('div', { props: { className: MESSAGE_CLASS } });
         this.boxElem = createElement('div', {
             props: { className: BOX_CLASS },
             children: [
                 this.headerElem,
-                this.messageElem,
             ],
         });
-        this.contentElem = createElement('div', {
+        this.contentWrapElem = createElement('div', {
             props: { className: CONTENT_CLASS },
             children: this.boxElem,
         });
         this.wrapperElem = createElement('div', {
             props: { className: WRAPPER_CLASS },
-            children: this.contentElem,
+            children: this.contentWrapElem,
         });
-        this.elem.append(this.wrapperElem);
 
-        this.setTitle(this.props.title);
-        if (!this.setContent(this.props.content)) {
-            return false;
-        }
-        this.setControls(this.props.btn);
+        this.elem = createElement('div', {
+            props: { className: CONTAINER_CLASS },
+            attrs: { hidden: '' },
+            children: this.wrapperElem,
+        });
 
         this.setClassNames();
+        this.setUserProps();
+
+        this.render(this.state);
 
         document.body.append(this.elem);
     }
 
     destroy() {
-        if (this.elem && this.elem.parentNode) {
-            this.elem.parentNode.removeChild(this.elem);
-        }
+        re(this.elem);
         this.elem = null;
     }
 
-    show(val) {
-        const toShow = (typeof val === 'undefined') ? true : !!val;
-        if (!toShow) {
+    show(value = true) {
+        if (!value) {
             this.hide();
             return;
         }
 
-        if (this.props.nodim !== true) {
+        if (this.state.nodim !== true) {
             this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
             document.body.style.top = `-${this.scrollTop}px`;
@@ -128,7 +120,7 @@ export class Popup extends Component {
         }
         show(this.elem, true);
 
-        if (this.props.closeOnEmptyClick === true) {
+        if (this.state.closeOnEmptyClick === true) {
             setTimeout(() => {
                 setEmptyClick(this.emptyClickHandler, [this.boxElem]);
             });
@@ -141,7 +133,7 @@ export class Popup extends Component {
         }
 
         show(this.elem, false);
-        if (this.props.nodim !== true) {
+        if (this.state.nodim !== true) {
             document.body.style.top = '';
             document.body.style.overflow = '';
             document.body.style.width = '';
@@ -159,7 +151,7 @@ export class Popup extends Component {
             }
         }
 
-        if (this.props.closeOnEmptyClick === true) {
+        if (this.state.closeOnEmptyClick === true) {
             removeEmptyClick(this.emptyClickHandler);
         }
     }
@@ -172,9 +164,62 @@ export class Popup extends Component {
         }
     }
 
-    // Add close button to the popup
-    addCloseButton() {
-        if (!this.boxElem || this.closeBtn) {
+    setTitle(title) {
+        if (this.state.title !== title) {
+            this.setState({ ...this.state, title });
+        }
+    }
+
+    setCloseButton(closeButton) {
+        if (this.state.closeButton !== closeButton) {
+            this.setState({ ...this.state, closeButton });
+        }
+    }
+
+    setContent(content) {
+        if (this.state.content !== content) {
+            this.setState({ ...this.state, content });
+        }
+    }
+
+    setFooter(footer) {
+        if (this.state.footer !== footer) {
+            this.setState({ ...this.state, footer });
+        }
+    }
+
+    renderTitle(state, prevState) {
+        if (state.title === prevState.title) {
+            return;
+        }
+
+        if (!state.title) {
+            re(this.titleElem);
+            this.titleElem = null;
+            return;
+        }
+
+        if (!this.titleElem) {
+            this.titleElem = createElement('h1', { props: { className: TITLE_CLASS } });
+            this.headerElem.prepend(this.titleElem);
+        }
+
+        removeChilds(this.titleElem);
+        if (typeof state.title === 'string') {
+            this.titleElem.textContent = state.title;
+        } else {
+            addChilds(this.titleElem, state.title);
+        }
+    }
+
+    renderCloseButton(state, prevState) {
+        if (state.closeButton === prevState.closeButton) {
+            return;
+        }
+
+        if (!state.closeButton) {
+            re(this.closeBtn?.elem);
+            this.closeBtn = null;
             return;
         }
 
@@ -184,128 +229,72 @@ export class Popup extends Component {
         this.headerElem.append(this.closeBtn.elem);
     }
 
-    // Remove close button
-    removeCloseButton() {
-        re(this.closeBtn?.elem);
-        this.closeBtn = null;
+    renderHeader(state, prevState) {
+        this.renderTitle(state, prevState);
+        this.renderCloseButton(state, prevState);
     }
 
-    setContent(content) {
-        if (!content) {
-            return false;
-        }
-
-        if (typeof content === 'string') {
-            const preparedContent = content.replaceAll(/\r?\n/g, '<br>');
-            this.messageElem.innerHTML = preparedContent;
-        } else {
-            removeChilds(this.messageElem);
-            const elems = asArray(content);
-            this.messageElem.append(...elems);
-        }
-
-        return true;
-    }
-
-    setTitle(title) {
-        if (!title) {
-            this.removeTitle();
+    renderContent(state, prevState) {
+        if (state.content === prevState.content) {
             return;
         }
 
-        if (!this.titleElem) {
-            this.titleElem = createElement('h1', { props: { className: TITLE_CLASS } });
-            prependChild(this.headerElem, this.titleElem);
+        if (!state.content) {
+            re(this.contentElem);
+            this.contentElem = null;
         }
 
-        if (typeof title === 'string') {
-            this.titleElem.textContent = title;
+        if (!this.contentElem) {
+            this.contentElem = createElement('div', { props: { className: MESSAGE_CLASS } });
+            if (this.headerElem) {
+                insertAfter(this.contentElem, this.headerElem);
+            } else {
+                this.boxElem.prepend(this.contentElem);
+            }
+        }
+
+        removeChilds(this.contentElem);
+        if (typeof state.content === 'string') {
+            const preparedContent = state.content.replaceAll(/\r?\n/g, '<br>');
+            this.contentElem.innerHTML = preparedContent;
         } else {
-            removeChilds(this.titleElem);
-            this.titleElem.append(title);
+            addChilds(this.contentElem, state.content);
         }
     }
 
-    removeTitle() {
-        re(this.titleElem);
-        this.titleElem = null;
+    renderFooter(state, prevState) {
+        if (state.footer === prevState.footer) {
+            return;
+        }
+
+        if (!state.footer) {
+            re(this.footerElem);
+            this.footerElem = null;
+        }
+
+        if (!this.footerElem) {
+            this.footerElem = createElement('div', { props: { className: FOOTER_CLASS } });
+            this.boxElem.append(this.footerElem);
+        }
+
+        removeChilds(this.footerElem);
+        if (typeof state.footer === 'string') {
+            this.footerElem.textContent = state.footer;
+        } else {
+            addChilds(this.footerElem, state.footer);
+        }
     }
 
-    setControls(controls) {
-        if (!controls) {
-            return false;
+    render(state, prevState = {}) {
+        if (!state) {
+            throw new Error('Invalid state');
         }
 
-        const newHasControls = (
-            ('okBtn' in controls && controls.okBtn !== false)
-            || ('cancelBtn' in controls && controls.cancelBtn !== false)
-        );
-        if (newHasControls) {
-            if (!this.controlsElem) {
-                this.controlsElem = createElement('div', { props: { className: CONTROLS_CLASS } });
-            }
-        } else {
-            re(this.controlsElem);
-            this.controlsElem = null;
-        }
+        this.elem.classList.toggle(NO_DIM_CLASS, state.nodim);
+        this.elem.classList.toggle(SCROLL_MESSAGE_CLASS, state.scrollMessage);
 
-        if ('okBtn' in controls) {
-            if (controls.okBtn === false && this.okBtn) {
-                re(this.okBtn);
-                this.okBtn = null;
-            } else {
-                if (!this.okBtn) {
-                    this.okBtn = createElement('input', {
-                        props: {
-                            className: SUBMIT_BTN_CLASS,
-                            type: 'button',
-                            value: 'ok',
-                        },
-                    });
-                }
-
-                setProps(this.okBtn, controls.okBtn);
-            }
-        }
-
-        if ('cancelBtn' in controls) {
-            if (controls.cancelBtn === false && this.cancelBtn) {
-                re(this.cancelBtn);
-                this.cancelBtn = null;
-            } else {
-                if (!this.cancelBtn) {
-                    this.cancelBtn = createElement('input', {
-                        props: {
-                            className: CANCEL_BTN_CLASS,
-                            type: 'button',
-                            value: 'cancel',
-                            onclick: () => this.close(),
-                        },
-                    });
-                }
-
-                setProps(this.cancelBtn, controls.cancelBtn);
-            }
-        }
-
-        if (newHasControls) {
-            if (this.okBtn) {
-                this.controlsElem.append(this.okBtn);
-            }
-            if (this.cancelBtn) {
-                this.controlsElem.append(this.cancelBtn);
-            }
-            insertAfter(this.controlsElem, this.messageElem);
-        }
-
-        if (typeof controls.closeBtn !== 'undefined') {
-            if (controls.closeBtn === true) {
-                this.addCloseButton();
-            } else if (controls.closeBtn === false) {
-                this.removeCloseButton();
-            }
-        }
-
-        return true;
+        this.renderHeader(state, prevState);
+        this.renderContent(state, prevState);
+        this.renderFooter(state, prevState);
     }
 }

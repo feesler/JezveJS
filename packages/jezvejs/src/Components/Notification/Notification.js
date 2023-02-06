@@ -17,7 +17,7 @@ const classMap = {
 const defaultProps = {
     type: 'default',
     closeOnEmptyClick: true,
-    closeBtn: true,
+    closeButton: true,
 };
 
 export class Notification extends Popup {
@@ -26,7 +26,6 @@ export class Notification extends Popup {
             ...defaultProps,
             ...props,
             nodim: true,
-            btn: { closeBtn: true },
         };
 
         if (typeof popupProps.type !== 'string' || !(popupProps.type in classMap)) {
