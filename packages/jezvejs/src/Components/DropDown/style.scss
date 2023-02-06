@@ -517,9 +517,12 @@
 
   /* Active selection item */
   .dd__selection-item_active {
-    --iconbtn-icon-color: var(--dd-selection-item-active-btn);
-    --iconbtn-title-color: var(--dd-selection-item-active-text);
-    --iconbtn-background: var(--dd-selection-item-active-bg);
+    color: var(--dd-selection-item-active-text);
+    background-color: var(--dd-selection-item-active-bg);
+
+    .close-btn.dd__del-selection-item-btn {
+      --iconbtn-icon-color: var(--dd-selection-item-active-btn);
+    }
   }
 
   .dd__combo,

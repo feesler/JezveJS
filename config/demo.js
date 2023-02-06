@@ -1,19 +1,20 @@
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const filename = fileURLToPath(import.meta.url);
+const currentDir = dirname(filename);
 
 const htmlCommonOptions = {
     favicon: './assets/favicon.ico',
     minify: {
-        removeRedundantAttributes: false
+        removeRedundantAttributes: false,
     },
 };
 
 export default {
     target: 'browserslist',
-    context: resolve(__dirname, '../demo/src'),
+    context: resolve(currentDir, '../demo/src'),
     entry: {
         polyfills: '../../packages/jezvejs/src/js/polyfill/index.js',
 
@@ -47,7 +48,7 @@ export default {
     output: {
         filename: 'demo/js/[name].[fullhash].js',
         assetModuleFilename: 'demo/assets/[name][ext]',
-        path: resolve(__dirname, '../dist'),
+        path: resolve(currentDir, '../dist'),
         clean: true,
         library: {
             name: 'jezvejs',
@@ -60,8 +61,8 @@ export default {
             {
                 test: /\.m?js$/,
                 include: [
-                    resolve(__dirname, '../demo/src'),
-                    resolve(__dirname, '../node_modules/jezvejs'),
+                    resolve(currentDir, '../demo/src'),
+                    resolve(currentDir, '../node_modules/jezvejs'),
                 ],
                 exclude: /node_modules\/(?!(jezvejs)\/).*/,
                 use: [
@@ -70,9 +71,9 @@ export default {
                         options: {
                             babelrc: false,
                             rootMode: 'upward',
-                        }
+                        },
                     },
-                    'astroturf/loader'
+                    'astroturf/loader',
                 ],
             },
             {
@@ -88,7 +89,7 @@ export default {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
             },
-        ]
+        ],
     },
     plugins: [
         new HtmlWebpackPlugin({

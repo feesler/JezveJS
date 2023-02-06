@@ -730,12 +730,11 @@ export class DropDown extends Component {
         this.state.changed = true;
 
         if (!this.props.multi) {
-            this.showList(false);
-        }
-
-        if (this.props.enableFilter && this.state.filtered) {
             this.state.inputString = null;
-            this.showAllItems();
+            this.showList(false);
+            if (this.props.enableFilter && this.state.filtered) {
+                this.showAllItems();
+            }
         }
 
         if (!this.props.multi) {
@@ -1028,17 +1027,22 @@ export class DropDown extends Component {
             return;
         }
 
-        this.setState({
+        const newState = {
             ...this.state,
             actSelItemIndex: -1,
-            inputString: '',
-            filtered: false,
-            filteredCount: 0,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
             })),
-        });
+        };
+
+        if (this.state.inputString === null) {
+            newState.inputString = '';
+            newState.filtered = false;
+            newState.filteredCount = 0;
+        }
+
+        this.setState(newState);
     }
 
     /** Check specified element is child of some selected item element */
@@ -1264,9 +1268,6 @@ export class DropDown extends Component {
         this.setState({
             ...this.state,
             actSelItemIndex: index,
-            inputString: null,
-            filtered: false,
-            filteredCount: 0,
             items: (
                 (index === -1)
                     ? this.state.items

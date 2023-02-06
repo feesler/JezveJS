@@ -20,7 +20,7 @@
         "lint": "npm-run-all --parallel lint-src lint-style lint-tests",
         "lint-src": "eslint --quiet ./packages/jezvejs/src/**/*.js ./demo/src/**/*.js",
         "lint-style": "npx stylelint packages/jezvejs/src/**/*.scss demo/src/**/*.scss",
-        "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/ ./packages/jezvejs-test/**/*.js",
+        "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/ ./packages/jezvejs-test/**/*.js ./config/ ./scripts/",
         "debug": "node --inspect-brk ./tests/index.js",
         "deploy": "node ./scripts/deploy.js",
         "build": "npx webpack --progress -c ./config/demo.js -c ./config/prod.js -m",

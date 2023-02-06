@@ -2,18 +2,19 @@ import webpack from 'webpack';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const filename = fileURLToPath(import.meta.url);
+const currentDir = dirname(filename);
 
 const htmlMinifyOptions = {
-    removeRedundantAttributes: false
+    removeRedundantAttributes: false,
 };
 
 export default {
     mode: 'development',
     devtool: 'inline-source-map',
     target: ['web', 'es5'],
-    context: resolve(__dirname, '..'),
+    context: resolve(currentDir, '..'),
     entry: {
         polyfills: './packages/jezvejs/src/js/polyfill/index.js',
 
@@ -22,8 +23,8 @@ export default {
     },
     output: {
         filename: '[name].[fullhash].js',
-        path: resolve(__dirname, '../dist/tests'),
-        clean: true
+        path: resolve(currentDir, '../dist/tests'),
+        clean: true,
     },
     module: {
         rules: [
@@ -45,7 +46,7 @@ export default {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
             },
-        ]
+        ],
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -56,7 +57,7 @@ export default {
         }),
         new webpack.NormalModuleReplacementPlugin(
             /jezve-test\/NodeEnvironment/,
-            'jezve-test\/BrowserEnvironment'
+            'jezve-test/BrowserEnvironment',
         ),
     ],
     optimization: {
