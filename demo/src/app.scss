@@ -216,6 +216,7 @@ section {
 .logs-container {
   display: flex;
   flex-flow: column nowrap;
+  margin-top: 1rem;
 
   textarea {
     padding: 4px;
