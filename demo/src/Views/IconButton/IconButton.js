@@ -1,5 +1,6 @@
 import 'jezvejs/style';
 import { ge, setEvents, onReady } from 'jezvejs';
+import { CloseButton } from 'jezvejs/CloseButton';
 import { IconButton } from 'jezvejs/IconButton';
 import { initNavigation } from '../../app.js';
 import './style.scss';
@@ -48,6 +49,18 @@ const initSubtitle = () => {
         className: 'bg-btn',
     });
     ge('subtitle').append(subtitleBtn.elem);
+};
+
+const initCloseBtn = () => {
+    const btn = CloseButton.create();
+    ge('closeBtn').append(btn.elem);
+};
+
+const initNoTitle = () => {
+    const btn = IconButton.create({
+        icon: 'calendar-icon',
+    });
+    ge('noTitle').append(btn.elem);
 };
 
 const initNoIcon = () => {
@@ -99,6 +112,8 @@ const init = () => {
     initDynamicButton();
     initDynamicLink();
     initSubtitle();
+    initCloseBtn();
+    initNoTitle();
     initNoIcon();
     initDisabled();
 };

@@ -34,17 +34,8 @@
 }
 
 .iconbutton__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--iconbtn-size);
-  height: var(--iconbtn-size);
-  padding: 2px;
-  overflow: hidden;
-}
-
-.iconbutton__icon-content {
   width: var(--iconbtn-icon-width);
+  min-width: var(--iconbtn-size);
   height: var(--iconbtn-icon-height);
   fill: var(--iconbtn-icon-color);
 }
@@ -94,7 +85,7 @@
   .iconbutton:hover {
     background: var(--iconbtn-hover-background);
 
-    .iconbutton__icon-content {
+    .iconbutton__icon {
       fill: var(--iconbtn-hover-icon-color);
     }
 

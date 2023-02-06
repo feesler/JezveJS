@@ -11,8 +11,7 @@ import './style.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'iconbutton';
-const ICON_CONTAINER_CLASS = 'iconbutton__icon';
-const ICON_CLASS = 'iconbutton__icon-content';
+const ICON_CLASS = 'iconbutton__icon';
 const CONTENT_CLASS = 'iconbutton__content';
 const TITLE_CLASS = 'iconbutton__title';
 const SUBTITLE_CLASS = 'iconbutton__subtitle';
@@ -98,9 +97,9 @@ export class IconButton extends Component {
             this.props.tabIndex = this.elem.getAttribute('tabindex');
         }
 
-        this.iconElem = this.elem.querySelector(`.${ICON_CONTAINER_CLASS}`);
+        this.iconElem = this.elem.querySelector(`.${ICON_CLASS}`);
         if (typeof this.state.icon === 'undefined') {
-            this.state.icon = this.iconElem.querySelector('svg');
+            this.state.icon = this.iconElem;
         }
 
         this.contentElem = this.elem.querySelector(`.${CONTENT_CLASS}`);
@@ -222,11 +221,7 @@ export class IconButton extends Component {
             icon: state.icon,
             className: ICON_CLASS,
         });
-
-        this.iconElem = createElement('span', {
-            props: { className: ICON_CONTAINER_CLASS },
-            children: icon.elem,
-        });
+        this.iconElem = icon.elem;
         this.elem.prepend(this.iconElem);
     }
 

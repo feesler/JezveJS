@@ -85,16 +85,6 @@
     padding: 8px;
     width: 100%;
 
-    .iconbutton__icon {
-      border: 0;
-      padding: 4px;
-    }
-
-    .iconbutton__icon-content {
-      width: 24px;
-      height: 24px;
-    }
-
     .iconbutton__content {
       padding: 0 10px 0 42px;
     }
@@ -128,12 +118,6 @@
 
 @media (hover: hover) {
   .popup-menu-list {
-    .iconbutton.popup-menu__iconbutton:hover {
-      .iconbutton__icon {
-        background: none;
-      }
-    }
-
     .action-checkbox:hover {
       --checkbox-text: var(--popupmenu-hover-title-color);
 
