@@ -27,6 +27,7 @@
     "main": "index.js",
     "exports": {
         ".": "./index.js",
+        "./package.json": "./package.json",
         "./*": "./src/Components/*/*.js",
         "./style/*": "./src/Components/*/style.scss",
         "./style": "./src/css/common.scss"

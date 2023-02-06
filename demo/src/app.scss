@@ -104,17 +104,16 @@ h3 {
 .nav-header {
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
+  align-items: baseline;
   position: fixed;
   left: 0;
   right: 0;
   top: 0;
   padding: 12px;
-  height: 65px;
   z-index: 2000;
   box-sizing: border-box;
   background-color: #404040;
-  color: #ffffff;
+  color: #dddddd;
 }
 
 .nav-header__logo {
@@ -124,6 +123,11 @@ h3 {
     text-decoration: none;
     color: #dddddd;
   }
+}
+
+.nav-header__version {
+  font-size: 1rem;
+  margin-left: 1rem;
 }
 
 /* Navigation toggle button */
@@ -139,8 +143,8 @@ h3 {
 }
 
 .nav-toggle-icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 12px;
   fill: #dddddd;
 }
 
