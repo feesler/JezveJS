@@ -270,6 +270,7 @@ export class Popup extends Component {
         if (!state.footer) {
             re(this.footerElem);
             this.footerElem = null;
+            return;
         }
 
         if (!this.footerElem) {
