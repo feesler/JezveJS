@@ -63,6 +63,7 @@ const showFullWidthPopup = () => {
         fullWidthPopup = Popup.create({
             id: 'fullWidthPopup',
             title: 'Fullwidth popup',
+            className: 'full-width',
             closeButton: false,
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
                 Control buttons are added and both will close popup.`,
@@ -87,6 +88,7 @@ const showCloseBtnPopup = () => {
         closeBtnPopup = Popup.create({
             id: 'closeBtnPopup',
             title: 'Fullwidth popup',
+            className: 'full-width',
             closeButton: true,
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
                 Close button is added. Control buttons will not close popup.
@@ -113,6 +115,7 @@ const showMessageScrollPopup = () => {
         messageScrollPopup = Popup.create({
             id: 'messageScrollPopup',
             title: 'Fullwidth popup',
+            className: 'full-width',
             closeButton: true,
             content: `This popup is dynamically created and have content on the center of screen with fullwidth background.
                 Close button is added. Control buttons will not close popup.
@@ -185,8 +188,8 @@ const showDraggablePopup = () => {
             nodim: true,
         });
 
-        const { boxElem, wrapperElem } = draggablePopup;
-        PopupDragZone.create({ elem: boxElem });
+        const { container, wrapperElem } = draggablePopup;
+        PopupDragZone.create({ elem: container });
         PopupDropTarget.create({ elem: wrapperElem });
     }
 
