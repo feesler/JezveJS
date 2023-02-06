@@ -1,6 +1,9 @@
 /* icon link */
 .iconbutton {
   --iconbtn-size: 32px;
+  --iconbtn-icon-size: 24px;
+  --iconbtn-icon-width: var(--iconbtn-icon-size);
+  --iconbtn-icon-height: var(--iconbtn-icon-size);
   --iconbtn-title-color: #000000;
   --iconbtn-subtitle-color: #003cff;
   --iconbtn-icon-color: #000000;
@@ -41,8 +44,8 @@
 }
 
 .iconbutton__icon-content {
-  width: 24px;
-  height: 24px;
+  width: var(--iconbtn-icon-width);
+  height: var(--iconbtn-icon-height);
   fill: var(--iconbtn-icon-color);
 }
 
