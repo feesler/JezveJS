@@ -1,11 +1,12 @@
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const filename = fileURLToPath(import.meta.url);
+const currentDir = dirname(filename);
 
 export default {
     target: 'browserslist',
-    context: resolve(__dirname, '../packages/jezvejs/'),
+    context: resolve(currentDir, '../packages/jezvejs/'),
     entry: {
         index: './index.js',
         polyfills: './src/js/polyfill/index.js',
@@ -41,7 +42,7 @@ export default {
     },
     output: {
         filename: '[name].js',
-        path: resolve(__dirname, 'dist'),
+        path: resolve(currentDir, 'dist'),
         clean: true,
         library: {
             name: 'jezvejs',
@@ -69,7 +70,7 @@ export default {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
             },
-        ]
+        ],
     },
     cache: {
         type: 'filesystem',

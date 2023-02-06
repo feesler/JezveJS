@@ -1,6 +1,6 @@
 export default {
     mode: 'production',
     optimization: {
-        minimize: true
+        minimize: true,
     },
 };

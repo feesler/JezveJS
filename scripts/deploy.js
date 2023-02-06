@@ -2,8 +2,11 @@ import * as dotenv from 'dotenv';
 import Client from 'ssh2-sftp-client';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+/* eslint-disable no-console */
+
+const filename = fileURLToPath(import.meta.url);
+const currentDir = dirname(filename);
 
 dotenv.config();
 
@@ -14,9 +17,8 @@ const config = {
     port: process.env.SFTP_PORT,
 };
 
-
 const client = new Client();
-const src = join(__dirname, '..', 'dist');
+const src = join(currentDir, '..', 'dist');
 const dest = process.env.DEPLOY_PATH;
 const removeDir = `${dest}/demo`;
 
@@ -45,4 +47,3 @@ try {
     client.end();
     process.exit(res);
 }
-
