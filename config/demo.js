@@ -19,6 +19,7 @@ export default {
         polyfills: '../../packages/jezvejs/src/js/polyfill/index.js',
 
         demoMain: './Views/Main/Main.js',
+        buttonDemo: './Views/Button/Button.js',
         chartGridDemo: './Views/ChartGrid/ChartGrid.js',
         checkboxDemo: './Views/Checkbox/Checkbox.js',
         commonTestsDemo: './Views/CommonTests/CommonTests.js',
@@ -33,7 +34,6 @@ export default {
         emptyClickDemo: './Views/EmptyClick/EmptyClick.js',
         histogramDemo: './Views/Histogram/Histogram.js',
         linkMenuDemo: './Views/LinkMenu/LinkMenu.js',
-        iconButtonDemo: './Views/IconButton/IconButton.js',
         inputGroupDemo: './Views/InputGroup/InputGroup.js',
         linechartDemo: './Views/LineChart/LineChart.js',
         offcanvasDemo: './Views/Offcanvas/Offcanvas.js',
@@ -183,9 +183,9 @@ export default {
             ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
-            template: './Views/IconButton/iconbutton.html',
-            filename: 'demo/iconbutton.html',
-            chunks: ['polyfills', 'iconButtonDemo'],
+            template: './Views/Button/button.html',
+            filename: 'demo/button.html',
+            chunks: ['polyfills', 'buttonDemo'],
             ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({

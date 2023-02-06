@@ -1,0 +1,100 @@
+/* icon link */
+.btn {
+  --btn-size: 32px;
+  --btn-icon-size: 24px;
+  --btn-icon-width: var(--btn-icon-size);
+  --btn-icon-height: var(--btn-icon-size);
+  --btn-title-color: #000000;
+  --btn-subtitle-color: #003cff;
+  --btn-icon-color: #000000;
+  --btn-background: none;
+
+  /* Hover state */
+  --btn-hover-title-color: #888888;
+  --btn-hover-subtitle-color: #6f91ff;
+  --btn-hover-icon-color: #888888;
+  --btn-hover-background: none;
+
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  height: var(--btn-size);
+  border: 0 none;
+  padding: 0;
+  overflow: hidden;
+  vertical-align: middle;
+  text-decoration: none;
+  background: var(--btn-background);
+  cursor: pointer;
+
+  &:focus-visible {
+    box-shadow: var(--focus-shadow);
+  }
+}
+
+.btn__icon {
+  width: var(--btn-icon-width);
+  min-width: var(--btn-size);
+  height: var(--btn-icon-height);
+  fill: var(--btn-icon-color);
+}
+
+.btn__content {
+  display: inline-flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  vertical-align: middle;
+  padding: 0 0 0 5px;
+  height: var(--btn-size);
+  line-height: var(--btn-size);
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+  color: var(--btn-title-color);
+}
+
+.btn__title {
+  height: 20px;
+  line-height: 20px;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: normal;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.btn__subtitle {
+  height: 12px;
+  line-height: 12px;
+  clear: both;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: var(--btn-subtitle-color);
+}
+
+.btn[disabled] {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    background: var(--btn-hover-background);
+
+    .btn__icon {
+      fill: var(--btn-hover-icon-color);
+    }
+
+    .btn__content {
+      color: var(--btn-hover-title-color);
+    }
+
+    .btn__subtitle {
+      color: var(--btn-hover-subtitle-color);
+    }
+  }
+}

@@ -19,7 +19,7 @@ const routeMap = {
     dragndrop: AppView,
     emptyclick: AppView,
     histogram: AppView,
-    iconbutton: AppView,
+    button: AppView,
     index: AppView,
     inputgroup: AppView,
     linechart: AppView,

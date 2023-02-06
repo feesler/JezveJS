@@ -173,10 +173,10 @@
 }
 
 .close-btn.dd__del-selection-item-btn {
-  --iconbtn-size: 12px;
-  --iconbtn-icon-size: 12px;
-  --iconbtn-icon-color: var(--dd-selection-item-btn);
-  --iconbtn-hover-icon-color: var(--dd-selection-item-btn-hover);
+  --btn-size: 12px;
+  --btn-icon-size: 12px;
+  --btn-icon-color: var(--dd-selection-item-btn);
+  --btn-hover-icon-color: var(--dd-selection-item-btn-hover);
 
   padding: 0 0 0 7px;
 }
@@ -249,11 +249,11 @@
 
 /* Clear selection button */
 .close-btn.dd__clear-btn {
-  --iconbtn-size: var(--dd-combo-content-height);
-  --iconbtn-icon-size: 14px;
-  --iconbtn-background: var(--dd-bg-color);
-  --iconbtn-icon-color: var(--dd-btn-fill);
-  --iconbtn-hover-icon-color: var(--dd-btn-hover-fill);
+  --btn-size: var(--dd-combo-content-height);
+  --btn-icon-size: 14px;
+  --btn-background: var(--dd-bg-color);
+  --btn-icon-color: var(--dd-btn-fill);
+  --btn-hover-icon-color: var(--dd-btn-hover-fill);
 
   width: 24px;
   z-index: 2;
@@ -521,7 +521,7 @@
     background-color: var(--dd-selection-item-active-bg);
 
     .close-btn.dd__del-selection-item-btn {
-      --iconbtn-icon-color: var(--dd-selection-item-active-btn);
+      --btn-icon-color: var(--dd-selection-item-active-btn);
     }
   }
 
@@ -606,7 +606,7 @@
       background-color: var(--dd-selection-item-hover-bg);
 
       .dd__del-selection-item-btn {
-        --iconbtn-icon-color: var(--dd-selection-item-hover-btn);
+        --btn-icon-color: var(--dd-selection-item-hover-btn);
       }
     }
   }

@@ -34,12 +34,12 @@ const navigationMenu = [{
 }, {
     title: 'Components',
     items: [
+        { title: 'Button', url: 'demo/button.html' },
         { title: 'Checkbox and Radio', url: 'demo/checkbox.html' },
         { title: 'Collapsible', url: 'demo/collapsible.html' },
         { title: 'Date Picker', url: 'demo/datepicker.html' },
         { title: 'Drop Down', url: 'demo/dropdown.html' },
         { title: 'Link Menu', url: 'demo/linkmenu.html' },
-        { title: 'Icon Button', url: 'demo/iconbutton.html' },
         { title: 'Offcanvas', url: 'demo/offcanvas.html' },
         { title: 'Paginator', url: 'demo/paginator.html' },
         { title: 'Popup', url: 'demo/popup.html' },

@@ -7,17 +7,17 @@ import {
     evaluate,
 } from 'jezve-test';
 
-export class IconButton extends TestComponent {
+export class Button extends TestComponent {
     async parseContent() {
         if (!this.elem) {
             return {};
         }
 
-        const validClass = await hasClass(this.elem, 'iconbutton');
+        const validClass = await hasClass(this.elem, 'btn');
         assert(validClass, 'Invalid icon button element');
 
-        const titleElem = await query(this.elem, '.iconbutton__content');
-        const subTitleElem = await query(this.elem, '.iconbutton__subtitle');
+        const titleElem = await query(this.elem, '.btn__content');
+        const subTitleElem = await query(this.elem, '.btn__subtitle');
 
         return evaluate((elem, title, subtitle) => ({
             tagName: elem.tagName,

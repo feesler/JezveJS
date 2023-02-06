@@ -71,25 +71,25 @@
   }
 
   /* Menu item with icon */
-  .iconbutton.popup-menu__iconbutton {
-    --iconbtn-background: none;
-    --iconbtn-title-color: var(--popupmenu-title-color);
-    --iconbtn-subtitle-color: var(--popupmenu-subtitle-color);
-    --iconbtn-hover-background: var(--popupmenu-hover-background);
-    --iconbtn-hover-icon-color: var(--popupmenu-hover-icon-color);
-    --iconbtn-hover-title-color: var(--popupmenu-hover-title-color);
-    --iconbtn-hover-subtitle-color: var(--popupmenu-hover-subtitle-color);
+  .btn.popup-menu__btn {
+    --btn-background: none;
+    --btn-title-color: var(--popupmenu-title-color);
+    --btn-subtitle-color: var(--popupmenu-subtitle-color);
+    --btn-hover-background: var(--popupmenu-hover-background);
+    --btn-hover-icon-color: var(--popupmenu-hover-icon-color);
+    --btn-hover-title-color: var(--popupmenu-hover-title-color);
+    --btn-hover-subtitle-color: var(--popupmenu-hover-subtitle-color);
 
     height: auto;
     flex-shrink: 0;
     padding: 8px;
     width: 100%;
 
-    .iconbutton__content {
+    .btn__content {
       padding: 0 10px 0 42px;
     }
 
-    .iconbutton__icon + .iconbutton__content {
+    .btn__icon + .btn__content {
       padding: 0 10px;
     }
   }

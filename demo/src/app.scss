@@ -1,3 +1,9 @@
+:root {
+  --action-btn-border-radius: 6px;
+  --action-btn-bg: #0072c6;
+  --action-btn-hover-bg: #1e82cc;
+}
+
 /* Main layout */
 html,
 body {
@@ -68,13 +74,13 @@ h3 {
   font-size: 18px;
 }
 
-.btn,
-.btn:visited {
+.action-btn,
+.action-btn:visited {
   font-weight: normal;
   font-size: 16px;
   display: inline-block;
   color: #ffffff;
-  background-color: #0072c6;
+  background-color: var(--action-btn-bg);
   text-decoration: none;
   border: 0 none;
   width: fit-content;
@@ -82,15 +88,15 @@ h3 {
   margin-right: 15px;
   vertical-align: middle;
   overflow: visible;
-  border-radius: 0;
+  border-radius: var(--action-btn-border-radius);
 }
 
-.btn:focus {
+.action-btn:focus {
   outline: 2px #aee5ff solid;
   outline-offset: 0.1rem;
 }
 
-.btn[disabled] {
+.action-btn[disabled] {
   background-color: #5082aa;
   opacity: 0.3;
 }
@@ -252,5 +258,11 @@ section {
 @media (min-width: 576px) {
   .nav-menu-container {
     flex-flow: row wrap;
+  }
+}
+
+@media (hover: hover) {
+  .submit-btn:hover {
+    background-color: var(--action-btn-hover-bg);
   }
 }

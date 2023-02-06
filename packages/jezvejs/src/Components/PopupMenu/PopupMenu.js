@@ -12,7 +12,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
-import { IconButton } from '../IconButton/IconButton.js';
+import { Button } from '../Button/Button.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { PopupMenuButton } from './PopupMenuButton.js';
 import './style.scss';
@@ -24,7 +24,7 @@ const LIST_CLASS = 'popup-menu-list';
 const LIST_SELECTOR = `.${LIST_CLASS}`;
 const FIXED_LIST_CLASS = 'popup-menu-list_fixed';
 const SEPARATOR_CLASS = 'popup-menu-list__separator';
-const ICONBTN_CLASS = 'popup-menu__iconbutton';
+const BTN_CLASS = 'popup-menu__btn';
 const CHECKBOX_CLASS = 'action-checkbox';
 
 /* List position constants */
@@ -258,8 +258,8 @@ export class PopupMenu extends Component {
         }
 
         const { className = [], onClick = null, ...rest } = item;
-        const button = IconButton.create({
-            className: [ICONBTN_CLASS, ...asArray(className)],
+        const button = Button.create({
+            className: [BTN_CLASS, ...asArray(className)],
             ...rest,
             onClick: (...args) => this.onItemClick(button, onClick, ...args),
         });
@@ -274,7 +274,7 @@ export class PopupMenu extends Component {
         }
 
         const { className = [], onChange = null, ...rest } = item;
-        // Checkbox accept 'label' prop instead of 'title' as IconButton
+        // Checkbox accept 'label' prop instead of 'title' as Button
         if (rest.title && typeof rest.label === 'undefined') {
             rest.label = rest.title;
         }
