@@ -730,11 +730,11 @@ export class DropDown extends Component {
         this.state.changed = true;
 
         if (!this.props.multi) {
+            this.state.inputString = null;
             this.showList(false);
         }
 
         if (this.props.enableFilter && this.state.filtered) {
-            this.state.inputString = null;
             this.showAllItems();
         }
 
