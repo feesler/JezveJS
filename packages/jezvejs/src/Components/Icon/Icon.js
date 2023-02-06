@@ -1,4 +1,4 @@
-import { createSVGElement } from '../../js/common.js';
+import { createSVGElement, re, insertAfter } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {
@@ -24,21 +24,50 @@ export class Icon extends Component {
             ...this.props,
         };
 
-        this.init();
+        this.render(this.state);
     }
 
-    init() {
-        this.useElem = createSVGElement('use');
-        this.elem = createSVGElement('svg', { children: this.useElem });
+    setElement(elem) {
+        if (elem && this.elem?.parentNode) {
+            insertAfter(elem, this.elem);
+            re(this.elem);
+        }
+        this.elem = elem;
+    }
 
-        this.setClassNames();
-        this.setUserProps();
-        this.render(this.state);
+    renderUseIcon(state) {
+        if (typeof state.icon !== 'string') {
+            return;
+        }
+
+        if (!this.useElem) {
+            this.useElem = createSVGElement('use');
+            const elem = createSVGElement('svg', { children: this.useElem });
+            this.setElement(elem);
+        }
+
+        this.useElem.href.baseVal = `#${state.icon}`;
+    }
+
+    renderElementIcon(state) {
+        if (!(state.icon instanceof Element)) {
+            return;
+        }
+        if (this.elem && !this.useElem) {
+            return;
+        }
+
+        const elem = state.icon.cloneNode(true);
+        this.setElement(elem);
+        this.useElem = null;
     }
 
     /** Set icon */
     setIcon(icon) {
-        if (icon && typeof icon !== 'string') {
+        if (
+            typeof icon !== 'string'
+            && !(icon instanceof Element)
+        ) {
             throw new Error('Invalid icon specified');
         }
 
@@ -50,13 +79,22 @@ export class Icon extends Component {
     }
 
     /** Render component */
-    render(state) {
+    render(state, prevState = {}) {
         if (!state) {
             throw new Error('Invalild state');
         }
 
-        this.useElem.href.baseVal = (typeof state.icon === 'string')
-            ? `#${state.icon}`
-            : '';
+        if (state.icon === prevState.icon) {
+            return;
+        }
+
+        if (typeof state.icon === 'string') {
+            this.renderUseIcon(state);
+        } else if (state.icon instanceof Element) {
+            this.renderElementIcon(state);
+        }
+
+        this.setClassNames();
+        this.setUserProps();
     }
 }

@@ -218,16 +218,14 @@ export class IconButton extends Component {
             return;
         }
 
-        const icon = (typeof state.icon === 'string')
-            ? Icon.create({
-                icon: state.icon,
-                className: ICON_CLASS,
-            }).elem
-            : state.icon;
+        const icon = Icon.create({
+            icon: state.icon,
+            className: ICON_CLASS,
+        });
 
         this.iconElem = createElement('span', {
             props: { className: ICON_CONTAINER_CLASS },
-            children: icon,
+            children: icon.elem,
         });
         this.elem.prepend(this.iconElem);
     }
