@@ -27,17 +27,17 @@ const initSimple = () => {
         onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
     });
 
-    ge('simple-collapse').append(collapse.elem);
+    ge('simple').append(collapse.elem);
 };
 
 const initStyled = () => {
     const collapse = Collapsible.create({
-        content: ge('styled-content'),
+        content: ge('styledContent'),
         className: 'styled',
         onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
     });
 
-    ge('styled-collapse').append(collapse.elem);
+    ge('styled').append(collapse.elem);
 };
 
 const initCustomHeader = () => {
@@ -60,7 +60,7 @@ const initCustomHeader = () => {
     });
     collapse.headerContainer.tabIndex = 0;
 
-    ge('custom-collapse').append(collapse.elem);
+    ge('custom').append(collapse.elem);
 };
 
 const initDisabledToggle = () => {
@@ -89,14 +89,14 @@ const initDisabledToggle = () => {
 const initMethods = () => {
     const collapse = Collapsible.create({
         className: 'methods',
-        header: 'Header',
+        header: null,
         content: 'Content',
     });
-    ge('methods-collapse').append(collapse.elem);
+    ge('methods').append(collapse.elem);
 
-    setEvents(ge('expand-btn'), { click: () => collapse.expand() });
-    setEvents(ge('collapse-btn'), { click: () => collapse.collapse() });
-    setEvents(ge('toggle-btn'), { click: () => collapse.toggle() });
+    setEvents(ge('expandBtn'), { click: () => collapse.expand() });
+    setEvents(ge('collapseBtn'), { click: () => collapse.collapse() });
+    setEvents(ge('toggleBtn'), { click: () => collapse.toggle() });
 };
 
 onReady(() => {

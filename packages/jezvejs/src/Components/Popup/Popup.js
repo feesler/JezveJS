@@ -1,7 +1,6 @@
 import {
     isFunction,
     ge,
-    createSVGElement,
     setProps,
     re,
     insertAfter,
@@ -15,6 +14,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
+import { CloseButton } from '../CloseButton/CloseButton.js';
 import './style.scss';
 
 /* CSS classes */
@@ -22,8 +22,6 @@ const CONTAINER_CLASS = 'popup';
 const CONTENT_CLASS = 'popup__content';
 const BOX_CLASS = 'popup__content-box';
 const WRAPPER_CLASS = 'popup__wrapper';
-const CLOSE_BTN_CLASS = 'close-btn';
-const CLOSE_ICON_CLASS = 'close-btn__icon';
 const MESSAGE_CLASS = 'popup__message';
 const HEADER_CLASS = 'popup__header';
 const TITLE_CLASS = 'popup__title';
@@ -33,32 +31,17 @@ const CANCEL_BTN_CLASS = 'btn cancel-btn';
 const NO_DIM_CLASS = 'popup_nodim';
 const SCROLL_MESSAGE_CLASS = 'popup_scroll-message';
 
-/* Icons */
-const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
-
 const defaultProps = {
+    title: null,
+    content: null,
     nodim: false,
     scrollMessage: false,
     onClose: null,
     className: null,
-    title: null,
     btn: null,
 };
 
-/**
- * Popup component constructor
- * @param {Object} params:
- * @param {String} params.id - identifier of element will be created for popup
- * @param {boolean} params.nodim - option to not dim background on popup appear
- * @param {boolean} params.scrollMessage - scroll message content instead of entire popup
- * @param {Function} params.onClose - popup close event handler
- * @param {String|String[]} params.className - list of additional CSS classes for popup
- * @param {String} params.title - title of popup
- * @param {Object} params.btn:
- * @param {Object|false} params.btn.okBtn - properties object. Remove if false
- * @param {Object|false} params.btn.cancelBtn - properties object. Remove if false
- * @param {Object|false} params.btn.closeBtn - properties object. Remove if false
- */
+/** Popup component */
 export class Popup extends Component {
     constructor(...args) {
         super(...args);
@@ -195,22 +178,15 @@ export class Popup extends Component {
             return;
         }
 
-        const icon = createSVGElement('svg', {
-            attrs: { class: CLOSE_ICON_CLASS, viewBox: '0,0,14,14' },
-            children: createSVGElement('path', { attrs: { d: CLOSE_ICON } }),
+        this.closeBtn = CloseButton.create({
+            onClick: () => this.close(),
         });
-
-        this.closeBtn = createElement('button', {
-            props: { className: CLOSE_BTN_CLASS, type: 'button' },
-            children: icon,
-            events: { click: () => this.close() },
-        });
-        this.headerElem.append(this.closeBtn);
+        this.headerElem.append(this.closeBtn.elem);
     }
 
     // Remove close button
     removeCloseButton() {
-        re(this.closeBtn);
+        re(this.closeBtn?.elem);
         this.closeBtn = null;
     }
 

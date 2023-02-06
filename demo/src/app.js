@@ -1,4 +1,5 @@
-import { createElement, setEvents } from 'jezvejs';
+import { ge, createElement, setEvents } from 'jezvejs';
+import packageConfig from 'jezvejs/package.json';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 import './app.scss';
 
@@ -96,6 +97,11 @@ export const renderNavigationMenu = () => {
     });
 };
 
+export const renderVersion = () => {
+    const version = ge('version');
+    version.textContent = packageConfig.version;
+};
+
 export const initNavigation = () => {
     const navMenu = renderNavigationMenu();
 
@@ -105,4 +111,6 @@ export const initNavigation = () => {
 
     const navToggleBtn = document.querySelector('.nav-header .nav-toggle-btn');
     setEvents(navToggleBtn, { click: () => offcanvas.toggle() });
+
+    renderVersion();
 };

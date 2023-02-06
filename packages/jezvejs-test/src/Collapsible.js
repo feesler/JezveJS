@@ -8,34 +8,28 @@ import {
 
 export class Collapsible extends TestComponent {
     async parseContent() {
-        assert(this.elem, 'Invalid collapsible element');
+        const res = {
+            header: { elem: await query(this.elem, '.collapsible-header') },
+            content: { elem: await query(this.elem, '.collapsible-content') },
+        };
 
-        const labelElem = await query(this.elem, '.collapsible-header label');
+        assert(res.content.elem, 'Invalid structure of Collapsible component');
 
-        const res = await evaluate((elem, label) => ({
-            collapsed: !elem.classList.contains('collapsible__expanded'),
-            title: label.textContent,
-        }), this.elem, labelElem);
-
-        res.labelElem = labelElem;
-        res.headerElem = await query(this.elem, '.collapsible-header');
-        res.contentElem = await query(this.elem, '.collapsible-content');
-
-        assert(
-            res.headerElem
-            && res.labelElem
-            && res.contentElem,
-            'Invalid structure of Collapsible component',
-        );
+        [
+            res.collapsed,
+        ] = await evaluate((elem) => ([
+            !elem.classList.contains('collapsible__expanded'),
+        ]), this.elem);
 
         return res;
     }
 
-    isCollapsed() {
+    get collapsed() {
         return this.content.collapsed;
     }
 
     async toggle() {
-        await click(this.content.headerElem);
+        assert(this.content.header.elem, 'Header element not found');
+        await click(this.content.header.elem);
     }
 }
