@@ -72,21 +72,12 @@
 }
 
 /* Close button */
-.popup .close-btn,
-.popup__content-box.dragging .close-btn {
-  overflow: hidden;
-  margin-left: auto;
-  height: 18px;
-  width: 18px;
-  border: 0 none;
-  cursor: pointer;
-  background: none;
-}
+.popup__header .close-btn {
+  --iconbtn-size: 18px;
+  --iconbtn-icon-color: var(--popup-close-btn);
+  --iconbtn-hover-icon-color: var(--popup-close-btn-hover);
 
-.close-btn__icon {
-  width: 18px;
-  height: 18px;
-  fill: var(--popup-close-btn);
+  margin-left: auto;
 }
 
 .popup__message {
@@ -119,11 +110,5 @@
 
   .popup__message {
     overflow-y: auto;
-  }
-}
-
-@media (hover: hover) {
-  .close-btn:hover .close-btn__icon {
-    fill: var(--popup-close-btn-hover);
   }
 }

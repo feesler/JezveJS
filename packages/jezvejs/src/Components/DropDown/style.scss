@@ -172,15 +172,13 @@
   border-radius: var(--dd-selection-item-border-radius);
 }
 
-.dd__del-selection-item-btn {
-  padding: 0 0 0 7px;
-  cursor: pointer;
-}
+.close-btn.dd__del-selection-item-btn {
+  --iconbtn-size: 12px;
+  --iconbtn-icon-size: 12px;
+  --iconbtn-icon-color: var(--dd-selection-item-btn);
+  --iconbtn-hover-icon-color: var(--dd-selection-item-btn-hover);
 
-.dd__del-selection-item-icon {
-  width: 12px;
-  height: 12px;
-  fill: var(--dd-selection-item-btn);
+  padding: 0 0 0 7px;
 }
 
 /* Single selection */
@@ -250,21 +248,15 @@
 }
 
 /* Clear selection button */
-.dd__clear-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: var(--dd-combo-content-height);
-  cursor: pointer;
-  background-color: var(--dd-bg-color);
-  z-index: 2;
+.close-btn.dd__clear-btn {
+  --iconbtn-size: var(--dd-combo-content-height);
+  --iconbtn-icon-size: 14px;
+  --iconbtn-background: var(--dd-bg-color);
+  --iconbtn-icon-color: var(--dd-btn-fill);
+  --iconbtn-hover-icon-color: var(--dd-btn-hover-fill);
 
-  .dd__clear-icon {
-    width: 14px;
-    height: 14px;
-    fill: var(--dd-btn-fill);
-  }
+  width: 24px;
+  z-index: 2;
 }
 
 /* Select Drop Down button */
@@ -525,12 +517,9 @@
 
   /* Active selection item */
   .dd__selection-item_active {
-    color: var(--dd-selection-item-active-text);
-    background-color: var(--dd-selection-item-active-bg);
-
-    .dd__del-selection-item-icon {
-      fill: var(--dd-selection-item-active-btn);
-    }
+    --iconbtn-icon-color: var(--dd-selection-item-active-btn);
+    --iconbtn-title-color: var(--dd-selection-item-active-text);
+    --iconbtn-background: var(--dd-selection-item-active-bg);
   }
 
   .dd__combo,
@@ -604,7 +593,6 @@
 }
 
 @media (hover: hover) {
-  .dd__clear-btn:hover .dd__clear-icon,
   .dd__toggle-btn:hover .dd__toggle-icon {
     fill: var(--dd-btn-hover-fill);
   }
@@ -614,13 +602,9 @@
       color: var(--dd-selection-item-hover-text);
       background-color: var(--dd-selection-item-hover-bg);
 
-      .dd__del-selection-item-icon {
-        fill: var(--dd-selection-item-hover-btn);
+      .dd__del-selection-item-btn {
+        --iconbtn-icon-color: var(--dd-selection-item-hover-btn);
       }
-    }
-
-    .dd__del-selection-item-btn:hover .dd__del-selection-item-icon {
-      fill: var(--dd-selection-item-btn-hover);
     }
   }
 }

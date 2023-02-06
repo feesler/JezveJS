@@ -20,14 +20,14 @@ import {
     asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
+import { PopupPosition } from '../PopupPosition/PopupPosition.js';
+import { CloseButton } from '../CloseButton/CloseButton.js';
 import { DropDownListItem } from './ListItem.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
-import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import '../../css/common.scss';
 import './style.scss';
 
 /* Icons */
-const CLOSE_ICON = 'M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z';
 const TOGGLE_ICON = 'm0.6 0.88-0.35 0.35 1.6 1.6 1.6-1.6-0.35-0.35-1.2 1.2z';
 
 /* CSS classes */
@@ -55,7 +55,6 @@ const COMBO_CLASS = 'dd__combo';
 const VALUE_CLASS = 'dd__combo-value';
 const CONTROLS_CLASS = 'dd__combo-controls';
 const CLEAR_BTN_CLASS = 'dd__clear-btn';
-const CLEAR_ICON_CLASS = 'dd__clear-icon';
 const TOGGLE_BTN_CLASS = 'dd__toggle-btn';
 const TOGGLE_ICON_CLASS = 'dd__toggle-icon';
 const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
@@ -348,8 +347,11 @@ export class DropDown extends Component {
 
         const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
         if (this.props.multi) {
-            this.createClearButton();
-            controls.append(this.clearBtn);
+            this.clearBtn = CloseButton.create({
+                className: CLEAR_BTN_CLASS,
+                onClick: () => this.onClear(),
+            });
+            controls.append(this.clearBtn.elem);
         }
         this.createToggleButton();
         controls.append(this.toggleBtn);
@@ -357,24 +359,6 @@ export class DropDown extends Component {
         this.comboElem = createElement('div', {
             props: { className: COMBO_CLASS },
             children: [valueContainer, controls],
-        });
-    }
-
-    /** Returns close icon SVG element */
-    createCloseIcon(className) {
-        return createSVGElement('svg', {
-            attrs: { class: className, viewBox: '0 0 14 14' },
-            children: createSVGElement('path', { attrs: { d: CLOSE_ICON } }),
-        });
-    }
-
-    /** Create clear selection button */
-    createClearButton() {
-        const closeIcon = this.createCloseIcon(CLEAR_ICON_CLASS);
-        this.clearBtn = createElement('div', {
-            props: { className: CLEAR_BTN_CLASS },
-            children: closeIcon,
-            events: { click: () => this.onClear() },
         });
     }
 
@@ -1127,7 +1111,7 @@ export class DropDown extends Component {
             this.selectionItems = selectionItems;
 
             show(this.selectionElem, selectedItems.length > 0);
-            show(this.clearBtn, selectedItems.length > 0);
+            this.clearBtn?.show(selectedItems.length > 0);
         }
 
         setTimeout(() => {
@@ -2077,7 +2061,7 @@ export class DropDown extends Component {
 
             enable(this.selectElem, !state.disabled);
             enable(this.inputElem, !state.disabled);
-            enable(this.clearBtn, !state.disabled);
+            this.clearBtn?.enable(!state.disabled);
             enable(this.toggleBtn, !state.disabled);
         }
 
