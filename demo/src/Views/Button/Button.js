@@ -1,7 +1,7 @@
 import 'jezvejs/style';
 import { ge, setEvents, onReady } from 'jezvejs';
 import { CloseButton } from 'jezvejs/CloseButton';
-import { IconButton } from 'jezvejs/IconButton';
+import { Button } from 'jezvejs/Button';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
@@ -11,12 +11,12 @@ const addEventLog = (value) => {
 };
 
 const initParsed = () => {
-    IconButton.fromElement(ge('createBtn'));
-    IconButton.fromElement(ge('updateBtn'));
+    Button.fromElement(ge('createBtn'));
+    Button.fromElement(ge('updateBtn'));
 };
 
 const initDynamicButton = () => {
-    const dynamicBtn = IconButton.create({
+    const dynamicBtn = Button.create({
         title: 'Icon button',
         icon: 'update',
         className: 'circle-icon',
@@ -24,7 +24,7 @@ const initDynamicButton = () => {
     });
     ge('dynamicButton').append(dynamicBtn.elem);
 
-    const noTitleBtn = IconButton.create({
+    const noTitleBtn = Button.create({
         icon: 'del',
         className: 'circle-icon',
         onClick: () => addEventLog('Del button clicked'),
@@ -33,7 +33,7 @@ const initDynamicButton = () => {
 };
 
 const initDynamicLink = () => {
-    const dynamicLink = IconButton.create({
+    const dynamicLink = Button.create({
         type: 'link',
         title: 'Icon link',
         icon: 'del',
@@ -42,7 +42,7 @@ const initDynamicLink = () => {
 };
 
 const initSubtitle = () => {
-    const subtitleBtn = IconButton.create({
+    const subtitleBtn = Button.create({
         title: 'Button title',
         subtitle: 'Subtitle',
         icon: 'calendar-icon',
@@ -57,26 +57,26 @@ const initCloseBtn = () => {
 };
 
 const initNoTitle = () => {
-    const btn = IconButton.create({
+    const btn = Button.create({
         icon: 'calendar-icon',
     });
     ge('noTitle').append(btn.elem);
 };
 
 const initNoIcon = () => {
-    const noIconBtn = IconButton.create({
+    const noIconBtn = Button.create({
         title: 'No icon',
     });
     ge('noIcon').append(noIconBtn.elem);
 };
 
 const initDisabled = () => {
-    const disabledBtn = IconButton.create({
+    const disabledBtn = Button.create({
         title: 'Disabled button',
         icon: 'plus',
         enabled: false,
     });
-    const disabledLink = IconButton.create({
+    const disabledLink = Button.create({
         type: 'link',
         url: '#disabled',
         title: 'Disabled link',

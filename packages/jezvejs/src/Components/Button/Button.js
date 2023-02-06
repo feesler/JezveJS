@@ -10,11 +10,11 @@ import { Icon } from '../Icon/Icon.js';
 import './style.scss';
 
 /* CSS classes */
-const CONTAINER_CLASS = 'iconbutton';
-const ICON_CLASS = 'iconbutton__icon';
-const CONTENT_CLASS = 'iconbutton__content';
-const TITLE_CLASS = 'iconbutton__title';
-const SUBTITLE_CLASS = 'iconbutton__subtitle';
+const CONTAINER_CLASS = 'btn';
+const ICON_CLASS = 'btn__icon';
+const CONTENT_CLASS = 'btn__content';
+const TITLE_CLASS = 'btn__title';
+const SUBTITLE_CLASS = 'btn__subtitle';
 
 const defaultProps = {
     type: 'button', // button or link
@@ -29,9 +29,9 @@ const defaultProps = {
 };
 
 /**
- * IconButton component
+ * Button component
  */
-export class IconButton extends Component {
+export class Button extends Component {
     static userProps = {
         elem: ['id', 'tabIndex'],
     };

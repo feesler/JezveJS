@@ -69,9 +69,9 @@
 
 /* Close button */
 .popup__header .close-btn {
-  --iconbtn-size: 18px;
-  --iconbtn-icon-color: var(--popup-close-btn);
-  --iconbtn-hover-icon-color: var(--popup-close-btn-hover);
+  --btn-size: 18px;
+  --btn-icon-color: var(--popup-close-btn);
+  --btn-hover-icon-color: var(--popup-close-btn-hover);
 
   flex-shrink: 0;
   margin-left: auto;

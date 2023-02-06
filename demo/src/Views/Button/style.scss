@@ -1,0 +1,37 @@
+.buttons-list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 12px;
+}
+
+.circle-icon {
+  --btn-hover-icon-color: #ffffff;
+  --btn-icon-size: 32px;
+
+  .btn__icon {
+    border: 2px solid #000000;
+    border-radius: 50%;
+    padding: 2px;
+  }
+}
+
+.bg-btn {
+  --btn-title-color: #ffffff;
+  --btn-subtitle-color: #e4c200;
+  --btn-icon-color: #ffffff;
+  --btn-background: #0044ff;
+  --btn-hover-title-color: #dddddd;
+  --btn-hover-subtitle-color: #f7dc47;
+  --btn-hover-icon-color: #dddddd;
+  --btn-hover-background: #2962ff;
+
+  padding: 5px 15px 5px 5px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+@media (hover: hover) {
+  .circle-icon:hover .btn__icon {
+    background-color: #000000;
+  }
+}

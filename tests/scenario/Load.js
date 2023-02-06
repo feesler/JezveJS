@@ -16,7 +16,7 @@ const views = {
     dragndrop: 'DragnDrop',
     emptyclick: 'emptyClick',
     histogram: 'Histogram',
-    iconbutton: 'IconButton',
+    button: 'Button',
     index: 'Main view',
     inputgroup: 'InputGroup',
     linechart: 'LineChart',
