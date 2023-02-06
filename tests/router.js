@@ -1,3 +1,4 @@
+import { CollapsibleView } from './view/CollapsibleView.js';
 import { DropDownView } from './view/DropDownView.js';
 import { DatePickerView } from './view/DatePickerView.js';
 import { PaginatorView } from './view/PaginatorView.js';
@@ -9,7 +10,7 @@ const routeMap = {
     paginator: PaginatorView,
     chartgrid: AppView,
     checkbox: AppView,
-    collapsible: AppView,
+    collapsible: CollapsibleView,
     common: AppView,
     dateinput: AppView,
     debug: AppView,
