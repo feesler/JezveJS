@@ -5,8 +5,8 @@ import './style.scss';
 
 /* CSS classes */
 const MENU_CLASS = 'popup-menu';
-const BUTTON_CLASS = 'btn icon-btn popup-menu-btn';
-const ICON_CLASS = 'icon popup-menu-btn__icon';
+const BUTTON_CLASS = 'popup-menu-btn';
+const ICON_CLASS = 'popup-menu-btn__icon';
 
 const defaultProps = {
     icon: 'ellipsis',
