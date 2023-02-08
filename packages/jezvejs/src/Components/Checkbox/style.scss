@@ -44,6 +44,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   width: var(--checkbox-size);
   height: var(--checkbox-size);
   padding: 0;

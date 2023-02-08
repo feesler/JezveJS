@@ -41,6 +41,7 @@
 .radio__check {
   display: inline-block;
   position: relative;
+  flex: 0 0 auto;
   width: var(--radio-size);
   height: var(--radio-size);
   padding: 2px;
