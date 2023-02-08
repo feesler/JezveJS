@@ -29,6 +29,7 @@
   /* Clear and toggle buttons */
   --dd-btn-fill: #888888;
   --dd-btn-hover-fill: #000000;
+  --dd-btn-width: 32px;
 
   /* Multiple selection */
   --dd-selection-items-gap: 2px;
@@ -255,7 +256,8 @@
   --btn-icon-color: var(--dd-btn-fill);
   --btn-hover-icon-color: var(--dd-btn-hover-fill);
 
-  width: 24px;
+  width: var(--dd-btn-width);
+  justify-content: center;
   z-index: 2;
 }
 
@@ -265,7 +267,7 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  width: 24px;
+  width: var(--dd-btn-width);
   height: var(--dd-combo-content-height);
   overflow: hidden;
   cursor: pointer;
