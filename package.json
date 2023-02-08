@@ -36,7 +36,8 @@
         "p-jezvejs-test": "npm publish -w jezvejs-test",
         "update": "npm update --save",
         "publish": "npm-run-all i-jezvejs update p-jezvejs",
-        "publish-test": "npm-run-all i-jezvejs-test update p-jezvejs-test"
+        "publish-test": "npm-run-all i-jezvejs-test update p-jezvejs-test",
+        "release": "npm-run-all all publish deploy"
     },
     "author": "Henry Feesler",
     "license": "ISC",
