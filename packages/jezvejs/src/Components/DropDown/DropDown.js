@@ -617,7 +617,7 @@ export class DropDown extends Component {
             if (availItems.length > 0) {
                 newItem = availItems[availItems.length - 1];
             }
-        } else if (e.code === 'Enter') {
+        } else if (e.key === 'Enter') {
             this.handleItemSelect(activeItem);
             e.preventDefault();
         } else if (e.code === 'Escape') {
