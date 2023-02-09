@@ -30,6 +30,7 @@
   --dd-btn-fill: #888888;
   --dd-btn-hover-fill: #000000;
   --dd-btn-width: 32px;
+  --dd-btn-focus-shadow: 0 0 0 0.25rem #0d6efd40;
 
   /* Multiple selection */
   --dd-selection-items-gap: 2px;
@@ -145,7 +146,6 @@
   border-color: var(--dd-border-color);
   border-radius: var(--dd-combo-border-radius);
   background-color: var(--dd-bg-color);
-  overflow: hidden;
 }
 
 /* Current selection items */
@@ -259,6 +259,10 @@
   width: var(--dd-btn-width);
   justify-content: center;
   z-index: 2;
+}
+
+.dd__clear-btn:focus-visible {
+    box-shadow: var(--dd-btn-focus-shadow);
 }
 
 /* Select Drop Down button */
