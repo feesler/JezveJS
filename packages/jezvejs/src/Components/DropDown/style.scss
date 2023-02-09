@@ -197,6 +197,7 @@
   background-color: var(--dd-selection-bg);
   color: var(--dd-selection-text);
   cursor: pointer;
+  pointer-events: none;
 }
 
 .dd__single-selection_placeholder {
@@ -236,6 +237,7 @@
   min-height: var(--dd-combo-content-height);
   flex: 1 1 auto;
   overflow: hidden;
+  cursor: pointer;
 }
 
 /* Controls */
@@ -262,7 +264,7 @@
 }
 
 .dd__clear-btn:focus-visible {
-    box-shadow: var(--dd-btn-focus-shadow);
+  box-shadow: var(--dd-btn-focus-shadow);
 }
 
 /* Select Drop Down button */
