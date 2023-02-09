@@ -65,6 +65,8 @@ const SCREEN_PADDING = 5;
 const LIST_MARGIN = 5;
 const ATTACH_REF_HEIGHT = 5;
 
+const CLICK_TIMEOUT = 200;
+
 /** Default properties */
 const defaultProps = {
     name: undefined,
@@ -156,7 +158,12 @@ export class DropDown extends Component {
         this.state.editable = !this.state.disabled && this.props.enableFilter;
 
         this.emptyClickHandler = () => this.showList(false);
-        this.toggleEvents = { click: () => this.toggleList() };
+        this.toggleEvents = {
+            click: {
+                listener: (e) => this.onClick(e),
+                options: { capture: true },
+            },
+        };
         this.inputEvents = { input: (e) => this.onInput(e) };
         this.commonEvents = {
             focus: (e) => this.onFocus(e),
@@ -280,8 +287,6 @@ export class DropDown extends Component {
         insertAfter(this.elem, this.hostElem);
         this.elem.append(this.hostElem);
 
-        setEvents(this.hostElem, this.toggleEvents);
-
         this.createSelect();
         if (this.props.multi) {
             this.selectElem.multiple = true;
@@ -371,7 +376,6 @@ export class DropDown extends Component {
         this.toggleBtn = createElement('div', {
             props: { className: TOGGLE_BTN_CLASS },
             children: arrowIcon,
-            events: this.toggleEvents,
         });
     }
 
@@ -488,20 +492,16 @@ export class DropDown extends Component {
 
     /** Click by delete button of selected item event handler */
     onDeleteSelectedItem(e) {
-        if (!this.props.multi) {
+        if (!this.props.multi || !e) {
             return;
         }
-        const index = this.getSelectedItemIndex(e?.target);
+        const index = this.getSelectedItemIndex(e.target);
         if (index === -1) {
             return;
         }
 
-        const SelectionItemComponent = this.props.components.MultiSelectionItem;
         const isClick = (e.type === 'click');
-        if (
-            isClick
-            && !e.target.closest(`.${SelectionItemComponent.buttonClass}`)
-        ) {
+        if (isClick && !this.isSelectionItemDeleteButtonTarget(e.target)) {
             return;
         }
 
@@ -509,6 +509,8 @@ export class DropDown extends Component {
         if (!selectedItems.length) {
             return;
         }
+
+        e.stopPropagation();
 
         const isBackspace = (e.type === 'keydown' && e.code === 'Backspace');
         let itemToActivate;
@@ -662,6 +664,21 @@ export class DropDown extends Component {
             const itemToActivate = (index === selectedItems.length - 1) ? -1 : index + 1;
             this.activateSelectedItem(itemToActivate);
         }
+    }
+
+    /** 'click' event handler */
+    onClick(e) {
+        if (
+            this.isListTarget(e.target)
+            || this.isClearButtonTarget(e.target)
+            || this.isSelectionItemDeleteButtonTarget(e.target)
+        ) {
+            return;
+        }
+
+        setTimeout(() => {
+            this.toggleList();
+        }, CLICK_TIMEOUT);
     }
 
     /**
@@ -944,8 +961,6 @@ export class DropDown extends Component {
                 ? this.props.placeholder
                 : this.inputElem.value;
             this.staticElem.textContent = content;
-
-            setEvents(this.staticElem, this.toggleEvents);
         }
     }
 
@@ -1050,11 +1065,29 @@ export class DropDown extends Component {
         return elem && this.selectionElem?.contains(elem);
     }
 
-    /** Check specified element is child of component */
+    /** Returns true if element is child of component */
     isChildTarget(elem) {
         return elem && this.elem.contains(elem);
     }
 
+    /** Returns true if element is list or its child */
+    isListTarget(elem) {
+        return elem && (elem === this.list || this.list.contains(elem));
+    }
+
+    /** Returns true if element is clear button or its child */
+    isClearButtonTarget(elem) {
+        const btn = this.clearBtn?.elem;
+        return elem && (elem === btn || btn?.contains(elem));
+    }
+
+    /** Returns true if element is delete selection item button or its child */
+    isSelectionItemDeleteButtonTarget(elem) {
+        const { MultiSelectionItem } = this.props.components;
+        return elem?.closest(`.${MultiSelectionItem.buttonClass}`);
+    }
+
+    /** Returns selection item by id */
     getSelectionItemById(itemId) {
         const strId = itemId?.toString();
         return this.selectionItems.find((item) => item.id === strId);
@@ -2056,8 +2089,10 @@ export class DropDown extends Component {
             enable(this.elem, !state.disabled);
             if (state.disabled) {
                 this.removeCommonHandlers(this.elem);
+                removeEvents(this.elem, this.toggleEvents);
             } else {
                 this.assignCommonHandlers(this.elem);
+                setEvents(this.elem, this.toggleEvents);
             }
 
             enable(this.selectElem, !state.disabled);
