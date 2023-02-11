@@ -23,6 +23,7 @@
         "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/ ./packages/jezvejs-test/**/*.js ./config/ ./scripts/",
         "debug": "node --inspect-brk ./tests/index.js",
         "deploy": "node ./scripts/deploy.js",
+        "build-deploy": "npm-run-all build deploy",
         "build": "npx webpack --progress -c ./config/demo.js -c ./config/prod.js -m",
         "build-dev": "npx webpack --progress -c ./config/demo.js -c ./config/dev.js -m",
         "build-all": "npm-run-all build build-tests",
