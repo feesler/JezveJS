@@ -316,6 +316,7 @@ const groupsSelectFilter = () => {
     const dropDown = DropDown.create({
         elem: 'groupFilterInp',
         enableFilter: true,
+        openOnFocus: true,
         noResultsMessage: 'Nothing found',
         multi: true,
         placeholder: 'Type to filter',

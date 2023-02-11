@@ -48,6 +48,7 @@ export class DropDownMultiSelectionItem extends Component {
     init() {
         this.deselectButton = CloseButton.create({
             className: SELECTION_ITEM_DEL_BTN_CLASS,
+            tabIndex: -1,
         });
 
         this.titleElem = createElement('span');

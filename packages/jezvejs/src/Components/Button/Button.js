@@ -17,7 +17,7 @@ const TITLE_CLASS = 'btn__title';
 const SUBTITLE_CLASS = 'btn__subtitle';
 
 const defaultProps = {
-    type: 'button', // button or link
+    type: 'button', // button, link or static
     enabled: true,
     url: undefined,
     title: undefined,
@@ -66,9 +66,14 @@ export class Button extends Component {
     }
 
     init() {
-        const isLink = (this.props.type === 'link');
-        if (isLink) {
+        const { type } = this.props;
+
+        if (type === 'link') {
             this.elem = createElement('a', {
+                props: { className: CONTAINER_CLASS },
+            });
+        } else if (type === 'static') {
+            this.elem = createElement('div', {
                 props: { className: CONTAINER_CLASS },
             });
         } else {
@@ -88,6 +93,10 @@ export class Button extends Component {
         if (this.elem.tagName === 'A' && typeof this.state.url === 'undefined') {
             this.state.type = 'link';
             this.state.url = this.elem.href;
+        } else if (this.elem.tagName === 'BUTTON') {
+            this.state.type = 'button';
+        } else {
+            this.state.type = 'static';
         }
 
         if (

@@ -13,6 +13,7 @@ const addEventLog = (value) => {
 const initParsed = () => {
     Button.fromElement(ge('createBtn'));
     Button.fromElement(ge('updateBtn'));
+    Button.fromElement(ge('deleteBtn'));
 };
 
 const initDynamicButton = () => {
@@ -39,6 +40,15 @@ const initDynamicLink = () => {
         icon: 'del',
     });
     ge('dynamicLink').append(dynamicLink.elem);
+};
+
+const initStatic = () => {
+    const dynamicLink = Button.create({
+        type: 'static',
+        title: 'Static button',
+        icon: 'del',
+    });
+    ge('static').append(dynamicLink.elem);
 };
 
 const initSubtitle = () => {
@@ -111,6 +121,7 @@ const init = () => {
     initParsed();
     initDynamicButton();
     initDynamicLink();
+    initStatic();
     initSubtitle();
     initCloseBtn();
     initNoTitle();
