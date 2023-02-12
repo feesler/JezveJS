@@ -13,7 +13,7 @@
 
   /* Text input */
   --dd-input-text: #000000;
-  --dd-input-bg: var(--dd-bg-color);
+  --dd-input-bg: none;
   --dd-placeholder: #808080;
   --dd-input-padding: 0 5px 0 5px;
   --dd-input-font-size: 1rem;
@@ -21,7 +21,7 @@
 
   /* Single selection */
   --dd-selection-text: var(--dd-input-text);
-  --dd-selection-bg: var(--dd-bg-color);
+  --dd-selection-bg: none;
   --dd-selection-padding: var(--dd-input-padding);
   --dd-selection-font-size: var(--dd-input-font-size);
   --dd-selection-font-weight: var(--dd-input-font-weight);
@@ -32,9 +32,11 @@
   --dd-btn-width: 32px;
 
   /* Multiple selection */
+  --dd-multi-selection-bg: none;
   --dd-selection-items-gap: 2px;
 
   /* Multiple selection item */
+  --dd-selection-item-padding: 0 6px 0 10px;
   --dd-selection-item-height: calc(
     var(--dd-combo-content-height) - var(--dd-selection-items-gap) * 2
   );
@@ -156,14 +158,14 @@
   font-weight: 400;
   font-size: 1rem;
   vertical-align: middle;
-  background-color: var(--dd-bg-color);
+  background: var(--dd-multi-selection-bg);
 }
 
 .dd__selection-item {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  padding: 0 6px 0 10px;
+  padding: var(--dd-selection-item-padding);
   height: var(--dd-selection-item-height);
   font-weight: normal;
   white-space: nowrap;
@@ -193,7 +195,7 @@
   min-height: var(--dd-combo-content-height);
   line-height: var(--dd-combo-content-height);
   align-items: center;
-  background-color: var(--dd-selection-bg);
+  background: var(--dd-selection-bg);
   color: var(--dd-selection-text);
   cursor: pointer;
   pointer-events: none;
@@ -214,7 +216,7 @@
   margin: 0;
   height: var(--dd-combo-content-height);
   min-width: 50px;
-  background-color: var(--dd-input-bg);
+  background: var(--dd-input-bg);
   color: var(--dd-input-text);
 
   &:placeholder {
