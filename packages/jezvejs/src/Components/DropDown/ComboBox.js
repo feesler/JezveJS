@@ -38,6 +38,7 @@ const defaultProps = {
     actSelItemIndex: -1,
     onInput: null,
     onDeleteSelectedItem: null,
+    onClearSelection: null,
     components: {
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
@@ -92,7 +93,7 @@ export class DropDownComboBox extends Component {
         if (this.props.multi) {
             const { ClearButton } = this.props.components;
             this.clearBtn = ClearButton.create({
-                onClick: () => this.onClear(),
+                onClick: (e) => this.onClearSelection(e),
             });
             controls.append(this.clearBtn.elem);
         }
@@ -141,17 +142,24 @@ export class DropDownComboBox extends Component {
         }
     }
 
-    /** Handler for 'input' event of text field  */
+    /** Text input 'input' event handler  */
     onInput(e) {
         if (isFunction(this.props.onInput)) {
             this.props.onInput(e);
         }
     }
 
-    /** Handler for 'click' event of multiple selection element */
+    /** Multiple selection element 'click' event handler */
     onDeleteSelectedItem(e) {
         if (isFunction(this.props.onDeleteSelectedItem)) {
             this.props.onDeleteSelectedItem(e);
+        }
+    }
+
+    /** Clear selection button 'click' event handler */
+    onClearSelection(e) {
+        if (isFunction(this.props.onClearSelection)) {
+            this.props.onClearSelection(e);
         }
     }
 

@@ -217,6 +217,7 @@ export class DropDown extends Component {
                 inputString: this.state.inputString,
                 onInput: (e) => this.onInput(e),
                 onDeleteSelectedItem: (e) => this.onDeleteSelectedItem(e),
+                onClearSelection: (e) => this.onClear(e),
                 components: {
                     MultiSelectionItem,
                     ToggleButton,
