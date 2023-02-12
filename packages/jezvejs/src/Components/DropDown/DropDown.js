@@ -1,7 +1,6 @@
 import {
     isFunction,
     createElement,
-    createSVGElement,
     removeChilds,
     re,
     px,
@@ -15,21 +14,20 @@ import {
     getCursorPos,
     setEvents,
     removeEvents,
-    deepMeet,
     enable,
     asArray,
     debounce,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { CloseButton } from '../CloseButton/CloseButton.js';
+import { getSelectedItems } from './utils.js';
 import { DropDownListItem } from './ListItem.js';
+import { DropDownComboBox } from './ComboBox.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
+import { DropDownClearButton } from './ClearButton.js';
+import { DropDownToggleButton } from './ToggleButton.js';
 import '../../css/common.scss';
 import './style.scss';
-
-/* Icons */
-const TOGGLE_ICON = 'm0.6 0.88-0.35 0.35 1.6 1.6 1.6-1.6-0.35-0.35-1.2 1.2z';
 
 /* CSS classes */
 /* Container */
@@ -41,10 +39,7 @@ const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
 const FULLSCREEN_BG_CLASS = 'dd__background';
 const EDITABLE_CLASS = 'dd__editable';
-const INPUT_CLASS = 'dd__input';
-/* Selection */
-const SELECTION_CLASS = 'dd__selection';
-const SINGLE_SELECTION_CLASS = 'dd__single-selection';
+
 /* List */
 const LIST_CLASS = 'dd__list';
 const LIST_OPEN_CLASS = 'dd__open';
@@ -52,14 +47,9 @@ const LIST_GROUP_CLASS = 'dd__list-group';
 const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
 const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
-const COMBO_CLASS = 'dd__combo';
-const VALUE_CLASS = 'dd__combo-value';
-const CONTROLS_CLASS = 'dd__combo-controls';
-const CLEAR_BTN_CLASS = 'dd__clear-btn';
-const TOGGLE_BTN_CLASS = 'dd__toggle-btn';
-const TOGGLE_ICON_CLASS = 'dd__toggle-icon';
-const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
+/* Input */
+const INPUT_CLASS = 'dd__input';
 
 /* List position constants */
 const SCREEN_PADDING = 5;
@@ -88,8 +78,11 @@ const defaultProps = {
     onInput: null,
     className: null,
     components: {
+        ComboBox: DropDownComboBox,
         ListItem: DropDownListItem,
         MultiSelectionItem: DropDownMultiSelectionItem,
+        ToggleButton: DropDownToggleButton,
+        ClearButton: DropDownClearButton,
     },
 };
 
@@ -137,7 +130,6 @@ export class DropDown extends Component {
 
         this.listItems = [];
         this.optGroups = [];
-        this.selectionItems = [];
         this.focusedElem = null;
 
         this.state = {
@@ -162,7 +154,7 @@ export class DropDown extends Component {
 
         this.emptyClickHandler = () => this.showList(false);
         const clickHandler = (e) => this.onClick(e);
-        this.inputEvents = { input: (e) => this.onInput(e) };
+
         this.commonEvents = {
             click: clickHandler,
             touchstart: clickHandler,
@@ -206,11 +198,33 @@ export class DropDown extends Component {
         setEvents(this.selectElem, { change: (e) => this.onChange(e) });
 
         if (!this.props.listAttach) {
-            this.createCombo();
-            this.elem.appendChild(this.comboElem);
-        }
+            const {
+                ComboBox,
+                MultiSelectionItem,
+                ToggleButton,
+                ClearButton,
+            } = this.props.components;
 
-        this.makeEditable(this.state.editable);
+            this.combo = ComboBox.create({
+                inputElem: this.inputElem,
+                multi: this.props.multi,
+                placeholder: this.props.placeholder,
+                editable: this.state.editable,
+                enableFilter: this.props.enableFilter,
+                disabled: this.state.disabled,
+                items: this.state.items,
+                actSelItemIndex: this.state.actSelItemIndex,
+                inputString: this.state.inputString,
+                onInput: (e) => this.onInput(e),
+                onDeleteSelectedItem: (e) => this.onDeleteSelectedItem(e),
+                components: {
+                    MultiSelectionItem,
+                    ToggleButton,
+                    ClearButton,
+                },
+            });
+            this.elem.appendChild(this.combo.elem);
+        }
 
         if (this.hostElem.tagName === 'SELECT') {
             this.parseSelect(this.selectElem);
@@ -319,6 +333,14 @@ export class DropDown extends Component {
 
         if (this.props.listAttach && this.props.enableFilter) {
             this.createInput();
+            this.inputElem.classList.toggle(INPUT_CLASS, true);
+
+            if (this.props.placeholder) {
+                this.inputElem.placeholder = this.props.placeholder;
+            }
+            setEvents(this.inputElem, { input: (e) => this.onInput(e) });
+            this.inputElem.autocomplete = 'off';
+
             children.push(this.inputElem);
         }
 
@@ -337,53 +359,6 @@ export class DropDown extends Component {
             children,
         });
         this.elem.append(this.list);
-    }
-
-    /** Create combo element and return if success */
-    createCombo() {
-        if (this.props.listAttach || !this.inputElem) {
-            return;
-        }
-
-        const valueContainer = createElement('div', { props: { className: VALUE_CLASS } });
-        if (this.props.multi) {
-            this.selectionElem = createElement('div', {
-                props: { className: SELECTION_CLASS },
-                events: { click: (e) => this.onDeleteSelectedItem(e) },
-            });
-            valueContainer.append(this.selectionElem);
-        }
-        this.staticElem = createElement('span', { props: { className: SINGLE_SELECTION_CLASS } });
-        valueContainer.append(this.staticElem, this.inputElem);
-
-        const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
-        if (this.props.multi) {
-            this.clearBtn = CloseButton.create({
-                type: 'static',
-                className: CLEAR_BTN_CLASS,
-                onClick: () => this.onClear(),
-            });
-            controls.append(this.clearBtn.elem);
-        }
-        this.createToggleButton();
-        controls.append(this.toggleBtn);
-
-        this.comboElem = createElement('div', {
-            props: { className: COMBO_CLASS },
-            children: [valueContainer, controls],
-        });
-    }
-
-    /** Create toggle drop down button */
-    createToggleButton() {
-        const arrowIcon = createSVGElement('svg', {
-            attrs: { class: TOGGLE_ICON_CLASS, viewBox: '0 0 3.7 3.7' },
-            children: createSVGElement('path', { attrs: { d: TOGGLE_ICON } }),
-        });
-        this.toggleBtn = createElement('div', {
-            props: { className: TOGGLE_BTN_CLASS },
-            children: arrowIcon,
-        });
     }
 
     /* Event handlers */
@@ -929,7 +904,7 @@ export class DropDown extends Component {
 
     /** Return array of selected items */
     getSelectedItems(state = this.state) {
-        return state?.items?.filter((item) => item?.selected);
+        return getSelectedItems(state);
     }
 
     /** Return list item object which list element contains specified element */
@@ -969,13 +944,9 @@ export class DropDown extends Component {
                 this.emptyClickHandler,
                 [
                     this.list,
-                    (this.props.listAttach) ? this.hostElem : this.comboElem,
+                    (this.props.listAttach) ? this.hostElem : this.combo.elem,
                 ],
             );
-
-            if (!this.state.editable && this.toggleBtn) {
-                setTimeout(() => this.toggleBtn.focus());
-            }
         } else {
             removeEmptyClick(this.emptyClickHandler);
 
@@ -983,50 +954,10 @@ export class DropDown extends Component {
         }
     }
 
-    /** Enable/disable text input at combo element  */
-    makeEditable(editable = true) {
-        if (this.props.listAttach && !this.props.enableFilter) {
-            return;
-        }
-
-        this.state.editable = editable;
-
-        if (this.props.placeholder) {
-            this.inputElem.placeholder = this.props.placeholder;
-        }
-
-        show(this.staticElem, !this.state.editable);
-        show(this.inputElem, this.state.editable);
-
-        this.elem.classList.toggle(EDITABLE_CLASS, !!this.state.editable);
-        this.inputElem.classList.toggle(INPUT_CLASS, !!this.state.editable);
-        if (this.state.editable) {
-            setEvents(this.inputElem, this.inputEvents);
-            if (this.staticElem) {
-                this.inputElem.value = this.staticElem.textContent;
-            }
-            this.inputElem.autocomplete = 'off';
-        } else {
-            removeEvents(this.inputElem, this.inputEvents);
-
-            if (!this.staticElem) {
-                return;
-            }
-
-            const content = (this.props.placeholder && this.inputElem.value.length === 0)
-                ? this.props.placeholder
-                : this.inputElem.value;
-            this.staticElem.textContent = content;
-        }
-    }
-
     /** Setup tabindexes of component */
     setTabIndexes(state) {
         if (state.disabled) {
             this.elem.removeAttribute('tabindex');
-            if (this.inputElem) {
-                this.inputElem.removeAttribute('tabindex');
-            }
             this.selectElem.removeAttribute('tabindex');
             return;
         }
@@ -1035,10 +966,6 @@ export class DropDown extends Component {
 
         this.selectElem.setAttribute('tabindex', (nativeSelectVisible) ? 0 : -1);
         this.elem.setAttribute('tabindex', (nativeSelectVisible || (state.visible && state.editable)) ? -1 : 0);
-
-        if (this.inputElem) {
-            this.inputElem.setAttribute('tabindex', (state.editable) ? 0 : -1);
-        }
     }
 
     /** Enable or disable component */
@@ -1149,68 +1076,6 @@ export class DropDown extends Component {
     isSelectionItemDeleteButtonTarget(elem) {
         const { MultiSelectionItem } = this.props.components;
         return elem?.closest(`.${MultiSelectionItem.buttonClass}`);
-    }
-
-    /** Returns selection item by id */
-    getSelectionItemById(itemId) {
-        const strId = itemId?.toString();
-        return this.selectionItems.find((item) => item.id === strId);
-    }
-
-    /** Render selection elements */
-    renderSelection(state, prevState) {
-        this.renderSingleSelection(state);
-        if (this.props.listAttach || !this.props.multi) {
-            return;
-        }
-
-        const prevSelectedItems = this.getSelectedItems(prevState);
-        const selectedItems = this.getSelectedItems(state);
-        const selectionChanged = (
-            !deepMeet(prevSelectedItems, selectedItems)
-            || state.actSelItemIndex !== prevState.actSelItemIndex
-        );
-
-        if (selectionChanged) {
-            const SelectionItemComponent = this.props.components.MultiSelectionItem;
-            const selectionItems = [];
-
-            selectedItems.forEach((item, index) => {
-                const props = { ...item, active: state.actSelItemIndex === index };
-
-                let selItem = this.getSelectionItemById(item.id);
-                if (selItem) {
-                    selItem.setState(props);
-                } else {
-                    selItem = SelectionItemComponent.create(props);
-                    if (selectionItems.length === 0) {
-                        prependChild(this.selectionElem, selItem.elem);
-                    } else {
-                        const lastItem = selectionItems[selectionItems.length - 1];
-                        insertAfter(selItem.elem, lastItem.elem);
-                    }
-
-                    selItem.elem.tabIndex = -1;
-                    selItem.elem.dataset.id = item.id;
-                }
-
-                selectionItems.push(selItem);
-            });
-
-            // Remove items not included in new state
-            this.selectionItems.forEach((item) => {
-                if (selectionItems.includes(item)) {
-                    return;
-                }
-
-                re(item.elem);
-            });
-
-            this.selectionItems = selectionItems;
-
-            show(this.selectionElem, selectedItems.length > 0);
-            this.clearBtn?.show(selectedItems.length > 0);
-        }
     }
 
     /** Return selected items data for 'itemselect' and 'change' events */
@@ -1481,6 +1346,9 @@ export class DropDown extends Component {
             return false;
         }
 
+        const items = [];
+        const groups = [];
+
         for (let i = 0, l = elem.children.length; i < l; i += 1) {
             const childElem = elem.children[i];
             if (childElem.tagName === 'OPTGROUP') {
@@ -1488,7 +1356,7 @@ export class DropDown extends Component {
                 if (!group) {
                     return false;
                 }
-                this.state.groups.push(group);
+                groups.push(group);
 
                 for (let ci = 0, cl = childElem.children.length; ci < cl; ci += 1) {
                     const groupChild = childElem.children[ci];
@@ -1496,16 +1364,19 @@ export class DropDown extends Component {
                     if (!item) {
                         return false;
                     }
-                    this.state.items.push(item);
+                    items.push(item);
                 }
             } else if (childElem.tagName === 'OPTION') {
                 const item = this.parseOption(childElem, null);
                 if (!item) {
                     return false;
                 }
-                this.state.items.push(item);
+                items.push(item);
             }
         }
+
+        this.state.items = items;
+        this.state.groups = groups;
 
         // For single select check only one item is selected
         if (!this.props.multi) {
@@ -1820,46 +1691,6 @@ export class DropDown extends Component {
         }));
     }
 
-    /** Set text for single selection */
-    renderSingleSelection(state) {
-        if (this.props.multi) {
-            if (state.editable) {
-                this.inputElem.placeholder = this.props.placeholder;
-                if (state.inputString == null) {
-                    this.inputElem.value = '';
-                } else {
-                    this.inputElem.value = state.inputString;
-                }
-            } else if (this.staticElem) {
-                this.staticElem.textContent = this.props.placeholder;
-                this.staticElem.title = this.props.placeholder;
-                this.staticElem.classList.add(PLACEHOLDER_CLASS);
-            }
-
-            return;
-        }
-
-        const [selectedItem] = this.getSelectedItems(state);
-        const str = selectedItem?.title ?? '';
-        const usePlaceholder = (str.length === 0);
-        const placeholder = ((usePlaceholder) ? this.props.placeholder : str) ?? '';
-
-        if (state.editable && this.inputElem) {
-            this.inputElem.placeholder = placeholder;
-
-            if (state.inputString == null) {
-                this.inputElem.value = str;
-            } else {
-                this.inputElem.value = state.inputString;
-            }
-        } else if (!state.editable && this.staticElem) {
-            const staticText = placeholder;
-            this.staticElem.textContent = staticText;
-            this.staticElem.title = staticText;
-            this.staticElem.classList.toggle(PLACEHOLDER_CLASS, usePlaceholder);
-        }
-    }
-
     getGroupItems(state, group) {
         return state.items.filter((item) => item && item.group === group);
     }
@@ -2037,9 +1868,9 @@ export class DropDown extends Component {
         }
 
         const html = document.documentElement;
-        const combo = getOffset(this.comboElem);
-        combo.width = this.comboElem.offsetWidth;
-        combo.height = this.comboElem.offsetHeight;
+        const combo = getOffset(this.combo.elem);
+        combo.width = this.combo.elem.offsetWidth;
+        combo.height = this.combo.elem.offsetHeight;
         const offset = getOffset(this.list.offsetParent);
 
         document.body.style.overflow = 'hidden';
@@ -2083,8 +1914,8 @@ export class DropDown extends Component {
             return ATTACH_REF_HEIGHT;
         }
 
-        const borderWidth = this.comboElem.offsetHeight - this.comboElem.clientHeight;
-        return this.toggleBtn.offsetHeight + borderWidth;
+        const borderWidth = this.combo.elem.offsetHeight - this.combo.elem.clientHeight;
+        return this.combo.toggleBtn.elem.offsetHeight + borderWidth;
     }
 
     renderList(state, prevState) {
@@ -2134,6 +1965,7 @@ export class DropDown extends Component {
 
     render(state, prevState = {}) {
         this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
+        this.elem.classList.toggle(EDITABLE_CLASS, !!state.editable);
 
         if (state.disabled !== prevState?.disabled) {
             enable(this.elem, !state.disabled);
@@ -2144,14 +1976,22 @@ export class DropDown extends Component {
             }
 
             enable(this.selectElem, !state.disabled);
-            enable(this.inputElem, !state.disabled);
-            this.clearBtn?.enable(!state.disabled);
-            enable(this.toggleBtn, !state.disabled);
         }
 
         this.setTabIndexes(state);
-        this.renderSelection(state, prevState);
         this.renderSelect(state, prevState);
+
+        if (this.combo) {
+            this.combo.setState((comboState) => ({
+                ...comboState,
+                editable: state.editable,
+                disabled: state.disabled,
+                items: state.items,
+                actSelItemIndex: state.actSelItemIndex,
+                inputString: state.inputString,
+            }));
+        }
+
         this.renderList(state, prevState);
     }
 }
