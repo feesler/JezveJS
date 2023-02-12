@@ -63,6 +63,7 @@ export const dropDownTests = async () => {
         )));
 
     await DropDownTests.deselectTest('multiSelDropDown', '5');
+    await DropDownTests.clearTest('multiSelDropDown');
 
     await DropDownTests.addRemoveItemsTest();
 };

@@ -236,6 +236,7 @@
   align-items: center;
   justify-content: flex-start;
   min-height: var(--dd-combo-content-height);
+  border-radius: var(--dd-combo-border-radius);
   flex: 1 1 auto;
   overflow: hidden;
   cursor: pointer;
@@ -265,7 +266,7 @@
 }
 
 /* Select Drop Down button */
-.dd__toggle-btn {
+.btn.dd__toggle-btn {
   --btn-size: var(--dd-combo-content-height);
   --btn-icon-size: 16px;
   --btn-icon-color: var(--dd-btn-fill);

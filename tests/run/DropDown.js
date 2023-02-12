@@ -42,9 +42,6 @@ export async function deselectTest(ddname, value) {
     if (!dropdown) {
         throw new Error(`Component ${ddname} not found`);
     }
-    if (!dropdown.content.isMulti) {
-        throw new Error('Deselect is not available for single selection component');
-    }
 
     // Check item is selected
     const origSelected = dropdown.getSelectedValues();
@@ -60,6 +57,32 @@ export async function deselectTest(ddname, value) {
     const selected = dropdown.getSelectedValues();
 
     await test(`[DropDown] Deselect by tag (${value})`, () => assert.deepMeet(selected, expSelected));
+}
+
+export async function clearTest(ddname) {
+    if (typeof ddname !== 'string') {
+        throw new Error('Invalid DropDown specified');
+    }
+
+    let dropdown = App.view.content[ddname];
+    if (!dropdown) {
+        throw new Error(`Component ${ddname} not found`);
+    }
+
+    // Check item is selected
+    const origSelected = dropdown.getSelectedValues();
+    if (origSelected.length === 0) {
+        throw new Error('Nothing selected');
+    }
+
+    const expSelected = [];
+
+    await App.view.performAction(() => dropdown.clearSelection());
+    dropdown = App.view.content[ddname];
+
+    const selected = dropdown.getSelectedValues();
+
+    await test('[DropDown] Clear selection', () => assert.exactMeet(selected, expSelected));
 }
 
 export const addItemTest = async () => {
