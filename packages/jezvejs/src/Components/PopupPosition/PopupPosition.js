@@ -129,9 +129,14 @@ export class PopupPosition {
         const refScrollParentTop = Math.max(0, scrollParentBox.top);
         const scrollBottom = scrollTop + refScrollParentHeight;
 
-        const screenTopDist = refScrollParentHeight - (reference.top - refScrollParentTop);
+        const refScrollTop = reference.top - refScrollParentTop;
+
+        const screenTopDist = refScrollParentHeight - refScrollTop;
         const screenBottomDist = reference.bottom - refScrollParentTop;
 
+        // Maximum scroll distance inside scroll parent:
+        //  top: scroll from top to bottom
+        //  bottom: scroll from bottom to top
         const dist = {
             top: Math.min(screenTopDist - minRefHeight, scrollTop),
             bottom: Math.min(screenBottomDist - minRefHeight, scrollHeight - scrollBottom),
@@ -153,6 +158,9 @@ export class PopupPosition {
             bottom = reference.bottom + margin + height;
         }
 
+        const refOverflowTop = -refScrollTop;
+        const refOverflowBottom = reference.bottom - screenHeight;
+
         const top = reference.top - height - margin - screenPadding;
         const overflowBottom = bottom - screenHeight;
         const overflowTop = -top;
@@ -173,23 +181,28 @@ export class PopupPosition {
                 initialTop += scrollTop;
             }
         }
-        const direction = (flip) ? -1 : 1;
+
+        const elemOverflow = (flip) ? overflowTop : overflowBottom;
+        const refOverflow = (flip) ? refOverflowBottom : refOverflowTop;
+        const isRefOverflow = elemOverflow < 0 && refOverflow > 1;
+        const topToBottom = flip !== isRefOverflow;
+        const direction = (topToBottom) ? -1 : 1;
 
         let waitForScroll = false;
-        let overflow = (flip) ? overflowTop : overflowBottom;
+        let overflow = (isRefOverflow) ? refOverflow : elemOverflow;
         if (overflow > 1 && scrollAvailable && scrollOnOverflow) {
-            const maxDistance = (flip) ? dist.top : dist.bottom;
+            const maxDistance = (topToBottom) ? dist.top : dist.bottom;
             const distance = Math.min(overflow, maxDistance) * direction;
             const newScrollTop = scrollParent.scrollTop + distance;
 
-            if ((flip && distance < 0) || (!flip && distance > 0)) {
+            if ((topToBottom && distance < 0) || (!topToBottom && distance > 0)) {
                 overflow -= Math.abs(distance);
             }
 
             // Scroll window if overflow is not cleared yet
             this.windowScrollDistance = 0;
             if (fixedParent && overflow > 1) {
-                const maxWindowDistance = (flip) ? windowDist.top : windowDist.bottom;
+                const maxWindowDistance = (topToBottom) ? windowDist.top : windowDist.bottom;
                 this.windowScrollDistance = Math.min(overflow, maxWindowDistance) * direction;
                 overflow -= Math.abs(this.windowScrollDistance);
             }
