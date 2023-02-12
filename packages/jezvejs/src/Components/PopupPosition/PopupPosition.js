@@ -32,7 +32,7 @@ export class PopupPosition {
             const style = computedStyle(node);
             const overflow = style?.overflowY ?? 'visible';
             const isScrollable = !overflow.startsWith('visible') && !overflow.startsWith('hidden');
-            if (isScrollable && node.scrollHeight >= node.clientHeight) {
+            if (isScrollable && node.scrollHeight > node.clientHeight) {
                 return node;
             }
 
