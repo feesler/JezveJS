@@ -479,8 +479,7 @@
 /* Active container */
 .dd__container_active {
   .dd__combo,
-  .dd__selection,
-  .dd__clear-btn {
+  .dd__selection {
     background-color: var(--dd-active-bg);
   }
 

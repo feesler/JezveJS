@@ -21,9 +21,9 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { CloseButton } from '../CloseButton/CloseButton.js';
 import { DropDownListItem } from './ListItem.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
+import { DropDownClearButton } from './ClearButton.js';
 import { DropDownToggleButton } from './ToggleButton.js';
 import '../../css/common.scss';
 import './style.scss';
@@ -52,7 +52,6 @@ const NOT_FOUND_CLASS = 'dd__not-found-message';
 const COMBO_CLASS = 'dd__combo';
 const VALUE_CLASS = 'dd__combo-value';
 const CONTROLS_CLASS = 'dd__combo-controls';
-const CLEAR_BTN_CLASS = 'dd__clear-btn';
 const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 
@@ -86,6 +85,7 @@ const defaultProps = {
         ListItem: DropDownListItem,
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
+        ClearButton: DropDownClearButton,
     },
 };
 
@@ -353,10 +353,10 @@ export class DropDown extends Component {
         valueContainer.append(this.staticElem, this.inputElem);
 
         const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
+
         if (this.props.multi) {
-            this.clearBtn = CloseButton.create({
-                type: 'static',
-                className: CLEAR_BTN_CLASS,
+            const { ClearButton } = this.props.components;
+            this.clearBtn = ClearButton.create({
                 onClick: () => this.onClear(),
             });
             controls.append(this.clearBtn.elem);
