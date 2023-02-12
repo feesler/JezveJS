@@ -1,7 +1,6 @@
 import {
     isFunction,
     createElement,
-    createSVGElement,
     removeChilds,
     re,
     px,
@@ -25,11 +24,9 @@ import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';
 import { DropDownListItem } from './ListItem.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
+import { DropDownToggleButton } from './ToggleButton.js';
 import '../../css/common.scss';
 import './style.scss';
-
-/* Icons */
-const TOGGLE_ICON = 'm0.6 0.88-0.35 0.35 1.6 1.6 1.6-1.6-0.35-0.35-1.2 1.2z';
 
 /* CSS classes */
 /* Container */
@@ -56,8 +53,6 @@ const COMBO_CLASS = 'dd__combo';
 const VALUE_CLASS = 'dd__combo-value';
 const CONTROLS_CLASS = 'dd__combo-controls';
 const CLEAR_BTN_CLASS = 'dd__clear-btn';
-const TOGGLE_BTN_CLASS = 'dd__toggle-btn';
-const TOGGLE_ICON_CLASS = 'dd__toggle-icon';
 const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 
@@ -90,6 +85,7 @@ const defaultProps = {
     components: {
         ListItem: DropDownListItem,
         MultiSelectionItem: DropDownMultiSelectionItem,
+        ToggleButton: DropDownToggleButton,
     },
 };
 
@@ -365,24 +361,14 @@ export class DropDown extends Component {
             });
             controls.append(this.clearBtn.elem);
         }
-        this.createToggleButton();
-        controls.append(this.toggleBtn);
+
+        const { ToggleButton } = this.props.components;
+        this.toggleBtn = ToggleButton.create();
+        controls.append(this.toggleBtn.elem);
 
         this.comboElem = createElement('div', {
             props: { className: COMBO_CLASS },
             children: [valueContainer, controls],
-        });
-    }
-
-    /** Create toggle drop down button */
-    createToggleButton() {
-        const arrowIcon = createSVGElement('svg', {
-            attrs: { class: TOGGLE_ICON_CLASS, viewBox: '0 0 3.7 3.7' },
-            children: createSVGElement('path', { attrs: { d: TOGGLE_ICON } }),
-        });
-        this.toggleBtn = createElement('div', {
-            props: { className: TOGGLE_BTN_CLASS },
-            children: arrowIcon,
         });
     }
 
@@ -972,10 +958,6 @@ export class DropDown extends Component {
                     (this.props.listAttach) ? this.hostElem : this.comboElem,
                 ],
             );
-
-            if (!this.state.editable && this.toggleBtn) {
-                setTimeout(() => this.toggleBtn.focus());
-            }
         } else {
             removeEmptyClick(this.emptyClickHandler);
 
@@ -2084,7 +2066,7 @@ export class DropDown extends Component {
         }
 
         const borderWidth = this.comboElem.offsetHeight - this.comboElem.clientHeight;
-        return this.toggleBtn.offsetHeight + borderWidth;
+        return this.toggleBtn.elem.offsetHeight + borderWidth;
     }
 
     renderList(state, prevState) {
@@ -2146,7 +2128,7 @@ export class DropDown extends Component {
             enable(this.selectElem, !state.disabled);
             enable(this.inputElem, !state.disabled);
             this.clearBtn?.enable(!state.disabled);
-            enable(this.toggleBtn, !state.disabled);
+            this.toggleBtn?.enable(!state.disabled);
         }
 
         this.setTabIndexes(state);

@@ -264,23 +264,13 @@
 
 /* Select Drop Down button */
 .dd__toggle-btn {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
+  --btn-size: var(--dd-combo-content-height);
+  --btn-icon-size: 16px;
+  --btn-icon-color: var(--dd-btn-fill);
+  --btn-hover-icon-color: var(--dd-btn-hover-fill);
+
   justify-content: center;
   width: var(--dd-btn-width);
-  height: var(--dd-combo-content-height);
-  overflow: hidden;
-  cursor: pointer;
-  background-color: var(--dd-bg-color);
-
-  .dd__toggle-icon {
-    width: 16px;
-    height: 16px;
-    fill: var(--dd-btn-fill);
-    fill-opacity: 1;
-    stroke: none;
-  }
 }
 
 /* Drop down list */
@@ -490,8 +480,7 @@
 .dd__container_active {
   .dd__combo,
   .dd__selection,
-  .dd__clear-btn,
-  .dd__toggle-btn {
+  .dd__clear-btn {
     background-color: var(--dd-active-bg);
   }
 
@@ -561,10 +550,6 @@
     }
   }
 
-  .dd__toggle-btn {
-    background-color: var(--dd-disabled-bg);
-  }
-
   .dd__toggle-icon {
     fill: var(--dd-disabled-btn-fill);
   }
@@ -599,10 +584,6 @@
 }
 
 @media (hover: hover) {
-  .dd__toggle-btn:hover .dd__toggle-icon {
-    fill: var(--dd-btn-hover-fill);
-  }
-
   .dd__selection-item {
     &:hover {
       color: var(--dd-selection-item-hover-text);
