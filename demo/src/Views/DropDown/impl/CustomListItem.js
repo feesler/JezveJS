@@ -31,13 +31,15 @@ const customColorsMap = {
 };
 
 export class CustomListItem extends Component {
-    constructor(props = {}) {
-        super(props);
+    static get selector() {
+        return 'li';
+    }
 
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+        });
 
         if (typeof this.props.id === 'undefined' || this.props.id === null) {
             throw new Error('Invalid id');
@@ -90,6 +92,8 @@ export class CustomListItem extends Component {
         this.contentElem.classList.toggle(SELECTED_LIST_ITEM_CLASS, selected);
         this.contentElem.classList.toggle(LIST_ITEM_ACTIVE_CLASS, state.active);
 
+        this.elem.dataset.id = state.id;
         this.enable(!state.disabled);
+        this.show(!state.hidden);
     }
 }

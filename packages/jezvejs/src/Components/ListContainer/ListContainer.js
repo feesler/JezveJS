@@ -9,6 +9,7 @@ import {
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {
+    tagName: 'div',
     ItemComponent: null,
     itemSelector: null, // mandatory item CSS selector
     getItemProps: null, // optional callback to map items to props
@@ -51,7 +52,7 @@ export class ListContainer extends Component {
     }
 
     init() {
-        this.elem = createElement('div');
+        this.elem = createElement(this.props.tagName);
 
         this.setClassNames();
         this.setHandlers();
@@ -99,11 +100,7 @@ export class ListContainer extends Component {
      */
     itemIdFromElem(elem) {
         const listItemElem = elem?.closest(this.props.itemSelector);
-        if (!listItemElem?.dataset) {
-            return 0;
-        }
-
-        return parseInt(listItemElem.dataset.id, 10);
+        return listItemElem?.dataset?.id ?? null;
     }
 
     /**

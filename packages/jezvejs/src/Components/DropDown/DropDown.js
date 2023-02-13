@@ -6,7 +6,6 @@ import {
     px,
     insertAfter,
     prependChild,
-    show,
     setEmptyClick,
     removeEmptyClick,
     getOffset,
@@ -22,14 +21,17 @@ import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { getSelectedItems } from './utils.js';
 import { DropDownInput } from './Input.js';
-import { DropDownListItem } from './ListItem.js';
 import { DropDownComboBox } from './ComboBox.js';
+import { DropDownMenu } from './Menu.js';
+import { DropDownMenuList } from './MenuList.js';
+import { DropDownListItem } from './ListItem.js';
+import { DropDownGroupItem } from './GroupItem.js';
+import { DropDownMultipleSelection } from './MultipleSelection.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
 import { DropDownClearButton } from './ClearButton.js';
 import { DropDownToggleButton } from './ToggleButton.js';
 import '../../css/common.scss';
 import './style.scss';
-import { DropDownMultipleSelection } from './MultipleSelection.js';
 
 /* CSS classes */
 /* Container */
@@ -43,10 +45,7 @@ const FULLSCREEN_BG_CLASS = 'dd__background';
 const EDITABLE_CLASS = 'dd__editable';
 
 /* List */
-const LIST_CLASS = 'dd__list';
 const LIST_OPEN_CLASS = 'dd__open';
-const LIST_GROUP_CLASS = 'dd__list-group';
-const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
 const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
@@ -80,7 +79,10 @@ const defaultProps = {
     components: {
         Input: DropDownInput,
         ComboBox: DropDownComboBox,
+        Menu: DropDownMenu,
+        MenuList: DropDownMenuList,
         ListItem: DropDownListItem,
+        GroupItem: DropDownGroupItem,
         MultipleSelection: DropDownMultipleSelection,
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
@@ -130,8 +132,6 @@ export class DropDown extends Component {
             this.props.listAttach = false;
         }
 
-        this.listItems = [];
-        this.optGroups = [];
         this.focusedElem = null;
 
         this.state = {
@@ -147,10 +147,6 @@ export class DropDown extends Component {
             items: [],
             groups: [],
             actSelItemIndex: -1,
-            itemsChanged: false,
-            blockScroll: false,
-            listScroll: 0,
-            blockTouch: false,
         };
         this.state.editable = !this.state.disabled && this.props.enableFilter;
 
@@ -331,34 +327,31 @@ export class DropDown extends Component {
 
     /** Creates list element */
     createList() {
-        const children = [];
+        const {
+            Input,
+            Menu,
+            MenuList,
+            ListItem,
+            GroupItem,
+        } = this.props.components;
 
-        if (this.props.listAttach && this.props.enableFilter) {
-            const { Input } = this.props.components;
-            this.input = Input.create({
-                elem: this.inputElem,
-                placeholder: this.props.placeholder,
-                onInput: (e) => this.onInput(e),
-            });
-
-            children.push(this.input.elem);
-        }
-
-        this.listElem = createElement('ul', {
-            events: {
-                scroll: (e) => this.onScroll(e),
-                touchstart: (e) => this.onTouchStart(e),
-                mousemove: (e) => this.onMouseMove(e),
-                click: (e) => this.onListItemClick(e),
+        this.menu = Menu.create({
+            multi: this.props.multi,
+            showInput: this.props.listAttach && this.props.enableFilter,
+            inputElem: this.inputElem,
+            inputPlaceholder: this.props.placeholder,
+            onInput: (e) => this.onInput(e),
+            onItemClick: (id) => this.onListItemClick(id),
+            onItemActivate: (id) => this.setActive(id),
+            components: {
+                Input,
+                MenuList,
+                ListItem,
+                GroupItem,
             },
         });
-        children.push(this.listElem);
 
-        this.list = createElement('div', {
-            props: { className: LIST_CLASS },
-            children,
-        });
-        this.elem.append(this.list);
+        this.elem.append(this.menu.elem);
     }
 
     /* Event handlers */
@@ -422,10 +415,8 @@ export class DropDown extends Component {
     }
 
     /** List item 'click' event handler */
-    onListItemClick(e) {
-        e.stopPropagation();
-
-        const item = this.getItemByElem(e.target);
+    onListItemClick(itemId) {
+        const item = this.getItem(itemId);
         this.handleItemSelect(item);
     }
 
@@ -549,15 +540,6 @@ export class DropDown extends Component {
         this.sendChangeEvent();
     }
 
-    /** 'scroll' event of list element handler */
-    onScroll() {
-        if (!this.state.blockScroll) {
-            this.setActive(null);
-        }
-
-        this.state.blockScroll = false;
-    }
-
     /** 'keydown' event handler */
     onKey(e) {
         let newItem = null;
@@ -652,8 +634,8 @@ export class DropDown extends Component {
         }
 
         if (newItem) {
-            this.setActive(newItem);
-            this.scrollToItem(newItem);
+            this.setActive(newItem.id);
+            this.menu.scrollToItem(newItem);
             e.preventDefault();
         }
 
@@ -699,7 +681,7 @@ export class DropDown extends Component {
 
         if (
             this.waitForScroll
-            || this.isListTarget(e.target)
+            || this.isMenuTarget(e.target)
             || this.isClearButtonTarget(e.target)
             || this.isSelectionItemDeleteButtonTarget(e.target)
         ) {
@@ -711,31 +693,6 @@ export class DropDown extends Component {
         if (!this.props.openOnFocus) {
             this.focusInputIfNeeded();
         }
-    }
-
-    /**
-     * Handler for 'touchstart' event on list item
-     * Set blockTouch flag for further 'mousemove' event
-     * @param {TouchEvent} e - event object
-     */
-    onTouchStart(e) {
-        if (e.touches) {
-            this.state.blockTouch = true;
-        }
-    }
-
-    /** Handler for 'mousemove' event on list item */
-    onMouseMove(e) {
-        if (this.state.blockScroll || this.state.blockTouch) {
-            return;
-        }
-
-        const item = this.getItemByElem(e.target);
-        if (!item || item.active) {
-            return;
-        }
-
-        this.setActive(item);
     }
 
     /** Handler for 'input' event of text field  */
@@ -918,11 +875,6 @@ export class DropDown extends Component {
         return this.getItem(li.dataset.id);
     }
 
-    /** Returns list element for specified item id */
-    getListItemElem(id) {
-        return this.listElem.querySelector(`[data-id="${id}"]`);
-    }
-
     /** Show or hide drop down list */
     showList(val) {
         if (this.state.visible === val) {
@@ -945,7 +897,7 @@ export class DropDown extends Component {
             setEmptyClick(
                 this.emptyClickHandler,
                 [
-                    this.list,
+                    this.menu.elem,
                     (this.props.listAttach) ? this.hostElem : this.combo.elem,
                 ],
             );
@@ -985,7 +937,7 @@ export class DropDown extends Component {
 
     /** Show drop down list if hidden or hide if visible */
     toggleList() {
-        if (!this.list || !this.listElem || this.state.disabled) {
+        if (this.state.disabled) {
             return;
         }
         // Flush filter
@@ -1045,7 +997,7 @@ export class DropDown extends Component {
 
     getInput() {
         if (this.props.listAttach) {
-            return this.input;
+            return this.menu.input;
         }
 
         return this.combo.input;
@@ -1068,7 +1020,8 @@ export class DropDown extends Component {
 
     /** Check specified element is child of some selected item element */
     isSelectedItemElement(elem) {
-        return elem && this.selectionElem?.contains(elem);
+        const selectionElem = this.combo?.multipleSelection?.elem;
+        return elem && selectionElem?.contains(elem);
     }
 
     /** Returns true if element is child of component */
@@ -1077,8 +1030,9 @@ export class DropDown extends Component {
     }
 
     /** Returns true if element is list or its child */
-    isListTarget(elem) {
-        return elem && (elem === this.list || this.list.contains(elem));
+    isMenuTarget(elem) {
+        const menu = this.menu?.elem;
+        return elem && (elem === menu || menu?.contains(elem));
     }
 
     /** Returns true if element is clear button or its child */
@@ -1423,7 +1377,7 @@ export class DropDown extends Component {
      */
     append(items) {
         const newItems = this.createItems(items);
-        if (!newItems || !this.list || !this.listElem) {
+        if (!newItems) {
             return false;
         }
 
@@ -1549,34 +1503,14 @@ export class DropDown extends Component {
         return group;
     }
 
-    /** Render list group element */
-    renderGroupItem(group) {
-        const listElem = createElement('ul');
-        const res = {
-            listElem,
-            elem: createElement('div', {
-                props: { className: LIST_GROUP_CLASS },
-                children: [
-                    createElement('div', {
-                        props: {
-                            className: LIST_GROUP_LABEL_CLASS,
-                            textContent: group.title,
-                        },
-                    }),
-                    listElem,
-                ],
-            }),
-        };
-
-        return res;
-    }
-
     /**
      * Create new group
      * @param {string} label
      */
     createGroup(title, disabled = false) {
+        const id = `group${Date.now()}${Math.random() * 10000}`;
         const group = {
+            id,
             title,
             disabled,
         };
@@ -1606,7 +1540,8 @@ export class DropDown extends Component {
     }
 
     /** Set active state for specified list item */
-    setActive(itemToActivate) {
+    setActive(itemId) {
+        const itemToActivate = this.getItem(itemId);
         const activeItem = this.getActiveItem();
         if (
             (activeItem === itemToActivate)
@@ -1644,47 +1579,6 @@ export class DropDown extends Component {
         });
     }
 
-    /** Scroll list element until specified list item be fully visible */
-    scrollToItem(item) {
-        if (
-            !item
-            || item.hidden /* item must exist and be visible */
-            || !this.state.visible /* drop down list must be visible */
-        ) {
-            return;
-        }
-
-        const elem = this.getListItemElem(item.id);
-        if (!elem) {
-            return;
-        }
-
-        const itemTop = elem.offsetTop;
-        const itemBottom = itemTop + elem.offsetHeight;
-        const listTop = this.listElem.scrollTop;
-        const listHeight = this.list.clientHeight;
-        const listBottom = listTop + listHeight;
-
-        if (itemTop < listTop) {
-            /* scroll up : decrease scroll top */
-            this.state.blockScroll = true;
-            this.state.listScroll = Math.min(this.listElem.scrollHeight, itemTop);
-            this.listElem.scrollTop = this.state.listScroll;
-        } else if (itemBottom > listBottom) {
-            /* scroll down : increase scroll top */
-            this.state.blockScroll = true;
-            this.state.listScroll = Math.min(
-                this.listElem.scrollHeight,
-                listTop + itemBottom - listBottom,
-            );
-            this.listElem.scrollTop = this.state.listScroll;
-        }
-
-        setTimeout(() => {
-            this.state.blockScroll = false;
-        }, 200);
-    }
-
     /**
      * Search for last selected item to leave selection only on it
      * If not found select first item
@@ -1706,15 +1600,8 @@ export class DropDown extends Component {
         }));
     }
 
-    getGroupItems(state, group) {
+    getGroupItems(group, state = this.state) {
         return state.items.filter((item) => item && item.group === group);
-    }
-
-    isVisibleGroup(state, group) {
-        const items = this.getGroupItems(state, group);
-        return items.some((item) => (
-            !item.hidden && (!state.filtered || (state.filtered && item.matchFilter))
-        ));
     }
 
     renderSelect(state) {
@@ -1745,136 +1632,61 @@ export class DropDown extends Component {
         this.selectElem.append(...options);
     }
 
-    getListItemById(itemId) {
-        const strId = itemId?.toString();
-        return this.listItems.find((item) => item.id === strId);
-    }
-
-    /** Render list item element */
-    renderItem(props) {
-        const ListItemComponent = this.props.components.ListItem;
-        const item = ListItemComponent.create(props);
-
-        item.elem.setAttribute('data-id', item.id);
-
-        return item;
-    }
-
     renderNotFound() {
-        if (!this.notFoundElem) {
-            const contentElem = createElement('div', {
-                props: {
-                    className: NOT_FOUND_CLASS,
-                    textContent: this.props.noResultsMessage,
-                },
-            });
-            this.notFoundElem = createElement('li', { children: contentElem });
-
-            this.listElem.append(this.notFoundElem);
-        }
-
-        show(this.notFoundElem, true);
+        const contentElem = createElement('div', {
+            props: {
+                className: NOT_FOUND_CLASS,
+                textContent: this.props.noResultsMessage,
+            },
+        });
+        return createElement('li', { children: contentElem });
     }
 
     renderListContent(state, prevState) {
-        const optGroups = [];
-        const listItems = [];
-        let lastItem = null;
-        let lastGroupElem = null;
-        let lastItemElem = null;
-
-        if (state.items === prevState.items) {
+        if (
+            state.items === prevState.items
+            && state.visible === prevState.visible
+            && state.filtered === prevState.filtered
+            && state.filteredCount === prevState.filteredCount
+        ) {
             return;
         }
 
-        if (state.filtered && state.filteredCount === 0) {
-            this.renderNotFound();
-        } else {
-            show(this.notFoundElem, false);
-        }
+        const items = [];
+        const groups = [];
 
         state.items.forEach((item) => {
-            const itemProps = {
-                ...item,
-                multi: this.props.multi,
+            if (!item.group) {
+                items.push(item);
+                return;
+            }
+
+            if (groups.includes(item.group.id)) {
+                return;
+            }
+
+            const groupItem = {
+                ...item.group,
+                isGroup: true,
+                items: this.getGroupItems(item.group, state),
             };
-
-            let itemContainer = this.listElem;
-            let listItem = this.getListItemById(item.id);
-            const isNewItem = !listItem;
-            if (listItem) {
-                listItem.setState(itemProps);
-            } else {
-                listItem = this.renderItem(itemProps);
-            }
-
-            listItems.push(listItem);
-
-            if (state.filtered) {
-                show(listItem.elem, item.matchFilter && !item.hidden);
-            } else {
-                show(listItem.elem, !item.hidden);
-            }
-
-            const groupChanged = (lastItem?.group !== item.group);
-            if (item.group) {
-                let group = optGroups.find((groupItem) => groupItem.group === item.group);
-                if (!group) {
-                    group = this.optGroups.find((groupItem) => groupItem.group === item.group);
-                }
-                if (!group) {
-                    group = {
-                        group: item.group,
-                        elems: this.renderGroupItem(item.group),
-                    };
-
-                    const lastElem = (lastItem?.group && groupChanged)
-                        ? lastGroupElem
-                        : lastItemElem;
-                    if (lastElem) {
-                        insertAfter(group.elems.elem, lastElem);
-                    } else {
-                        this.listElem.append(group.elems.elem);
-                    }
-                    if (groupChanged) {
-                        lastItemElem = null;
-                    }
-                }
-                if (!optGroups.includes(group)) {
-                    optGroups.push(group);
-                    show(group.elems.elem, this.isVisibleGroup(state, item.group));
-                }
-                lastGroupElem = group.elems.elem;
-                itemContainer = group.elems.listElem;
-            }
-
-            if (isNewItem) {
-                if (lastItemElem && !groupChanged) {
-                    insertAfter(listItem.elem, lastItemElem);
-                } else {
-                    itemContainer.append(listItem.elem);
-                }
-            }
-
-            lastItemElem = listItem.elem;
-            lastItem = item;
+            groups.push(item.group.id);
+            items.push(groupItem);
         });
 
-        // Remove items not included in new state
-        this.listItems.forEach((item) => {
-            if (!listItems.includes(item)) {
-                re(item.elem);
-            }
-        });
-        // Remove groups not included in new state
-        this.optGroups.forEach((item) => {
-            if (!optGroups.includes(item)) {
-                re(item.elem);
-            }
-        });
+        const noItemsMessage = (state.filtered && state.filteredCount === 0)
+            ? () => this.renderNotFound()
+            : null;
 
-        this.listItems = listItems;
-        this.optGroups = optGroups;
+        this.menu.setState((menuState) => ({
+            ...menuState,
+            inputPlaceholder: this.props.placeholder,
+            inputString: state.inputString,
+            filtered: state.filtered,
+            items,
+            noItemsMessage,
+            listScroll: (prevState.visible) ? menuState.listScroll : 0,
+        }));
     }
 
     renderFullscreenList(state) {
@@ -1886,18 +1698,20 @@ export class DropDown extends Component {
         const combo = getOffset(this.combo.elem);
         combo.width = this.combo.elem.offsetWidth;
         combo.height = this.combo.elem.offsetHeight;
-        const offset = getOffset(this.list.offsetParent);
+        const offset = getOffset(this.menu.elem.offsetParent);
 
         document.body.style.overflow = 'hidden';
 
-        this.list.style.left = px(combo.left);
-        this.list.style.top = px(combo.top - offset.top + combo.height);
+        const { style } = this.menu.elem;
 
-        this.list.style.minWidth = px(combo.width);
-        this.list.style.width = '';
+        style.left = px(combo.left);
+        style.top = px(combo.top - offset.top + combo.height);
+
+        style.minWidth = px(combo.width);
+        style.width = '';
 
         const fullScreenListHeight = html.clientHeight - combo.height;
-        this.list.style.height = px(fullScreenListHeight / 2);
+        style.height = px(fullScreenListHeight / 2);
     }
 
     updateListPosition() {
@@ -1911,7 +1725,7 @@ export class DropDown extends Component {
 
         setTimeout(() => {
             PopupPosition.calculate({
-                elem: this.list,
+                elem: this.menu.elem,
                 refElem: this.elem,
                 margin: LIST_MARGIN,
                 screenPadding: SCREEN_PADDING,
@@ -1939,24 +1753,15 @@ export class DropDown extends Component {
             return;
         }
 
-        if (this.props.listAttach && this.props.enableFilter) {
-            this.input.setState((inputState) => ({
-                ...inputState,
-                placeholder: this.props.placeholder,
-                value: state.inputString,
-            }));
-        }
-
-        this.renderListContent(state, prevState);
-
         this.elem.classList.toggle(LIST_OPEN_CLASS, state.visible);
+        this.renderListContent(state, prevState);
 
         if (!state.visible) {
             if (this.props.fullScreen) {
                 document.body.style.overflow = '';
             }
 
-            PopupPosition.reset(this.list);
+            PopupPosition.reset(this.menu.elem);
             this.stopWindowEvents();
             return;
         }
@@ -1968,7 +1773,7 @@ export class DropDown extends Component {
             const allowScrollAndResize = !this.isTouch || !this.state.editable;
 
             PopupPosition.calculate({
-                elem: this.list,
+                elem: this.menu.elem,
                 refElem: this.elem,
                 margin: LIST_MARGIN,
                 screenPadding: SCREEN_PADDING,
@@ -1979,10 +1784,6 @@ export class DropDown extends Component {
                 allowFlip: false,
                 onScrollDone: () => this.listenWindowEvents(),
             });
-        }
-
-        if (!prevState.visible) {
-            this.listElem.scrollTop = 0;
         }
     }
 
