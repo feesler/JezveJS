@@ -34,6 +34,10 @@ export class DropDownMenu extends Component {
         super({
             ...defaultProps,
             ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
         });
 
         this.ignoreTouch = false;

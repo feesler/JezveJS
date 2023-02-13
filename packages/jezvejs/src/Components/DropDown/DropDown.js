@@ -115,16 +115,14 @@ export class DropDown extends Component {
     };
 
     constructor(props = {}) {
-        super(props);
-
-        this.props = {
+        super({
             ...defaultProps,
-            ...this.props,
+            ...props,
             components: {
                 ...defaultProps.components,
-                ...(this.props.components ?? {}),
+                ...(props?.components ?? {}),
             },
-        };
+        });
 
         this.hostElem = this.elem;
         this.elem = null;

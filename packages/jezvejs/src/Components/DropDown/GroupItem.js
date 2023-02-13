@@ -32,6 +32,10 @@ export class DropDownGroupItem extends Component {
         super({
             ...defaultProps,
             ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
         });
 
         if (typeof this.props.id === 'undefined' || this.props.id === null) {

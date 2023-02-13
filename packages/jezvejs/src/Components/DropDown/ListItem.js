@@ -31,10 +31,10 @@ export class DropDownListItem extends Component {
         return 'li';
     }
 
-    constructor(props) {
+    constructor(props = {}) {
         super({
             ...defaultProps,
-            ...(props ?? {}),
+            ...props,
         });
 
         if (typeof this.props.id === 'undefined' || this.props.id === null) {

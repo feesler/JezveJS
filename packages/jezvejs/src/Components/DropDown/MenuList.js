@@ -23,6 +23,10 @@ export class DropDownMenuList extends ListContainer {
                     ? state.components.GroupItem
                     : state.components.ListItem
             ),
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
         };
         listProps.itemSelector = listProps.components.ListItem.selector;
 

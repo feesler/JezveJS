@@ -1,6 +1,7 @@
 import {
     createElement,
     Component,
+    getClassName,
 } from 'jezvejs';
 
 /* CSS classes */
@@ -57,7 +58,7 @@ export class CustomSelectionItem extends Component {
         this.titleElem = createElement('span');
 
         this.elem = createElement('span', {
-            props: { className: [SELECTION_ITEM_CLASS, 'dd__custom-selection-item'].join(' ') },
+            props: { className: getClassName(SELECTION_ITEM_CLASS, 'dd__custom-selection-item') },
             children: [this.deselectButton, this.titleElem],
         });
     }

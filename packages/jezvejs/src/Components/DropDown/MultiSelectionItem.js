@@ -25,12 +25,10 @@ export class DropDownMultiSelectionItem extends Component {
     }
 
     constructor(props = {}) {
-        super(props);
-
-        this.props = {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+        });
 
         if (typeof this.props.id === 'undefined' || this.props.id === null) {
             throw new Error('Invalid id');
