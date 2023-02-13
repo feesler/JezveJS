@@ -1,90 +1,204 @@
-import { query, click, assert } from 'jezve-test';
+import {
+    query,
+    click,
+    assert,
+    asyncMap,
+} from 'jezve-test';
 import { DropDown } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
+const dropDownSelectors = {
+    inlineDropDown: '#selinp',
+    editableInlineDropDown: '#selinp2',
+    fullWidthDropDown: '#selinp3',
+    halfWidthDropDown: '#selinp4',
+    parsedSelDropDown: '#sel0',
+    parsedSelSelectedDropDown: '#sel',
+    attachedToBlockDropDown: '#box',
+    attachedToInlineDropDown: '#inline',
+    multiSelDropDown: '#selinp5',
+    genMultiSelDropDown: '#selinp6',
+    disabledDropDown: '#selinp7',
+    filterDropDown: '#selinp8',
+    customDropDown: '#selinp10',
+    nativeSelDropDown: '#selinp11',
+    fullscreenDropDown: '#selinp12',
+    dynamicDropDown: '#dynamicSel',
+};
+
+const elemSelectors = {
+    enableBtn: '#enableBtn',
+    enableCustomBtn: '#enableCustomBtn',
+    addItemBtn: '#addBtn',
+    addDisabledItemBtn: '#addDisBtn',
+    addHiddenItemBtn: '#addHiddenBtn',
+    delLastItemBtn: '#delBtn',
+    delAllItemsBtn: '#delAllBtn',
+};
+
 export class DropDownView extends AppView {
+    get dynamicDropDown() {
+        return this.content.dynamicDropDown;
+    }
+
     async parseContent() {
         const res = {};
 
-        res.inlineDropDown = await DropDown.createFromChild(this, await query('#selinp'));
-        res.editableInlineDropDown = await DropDown.createFromChild(this, await query('#selinp2'));
-        res.fullWidthDropDown = await DropDown.createFromChild(this, await query('#selinp3'));
-        res.halfWidthDropDown = await DropDown.createFromChild(this, await query('#selinp4'));
+        await asyncMap(
+            Object.keys(dropDownSelectors),
+            async (name) => {
+                const selector = dropDownSelectors[name];
+                res[name] = await DropDown.createFromChild(this, await query(selector));
+                assert(res[name], `Failed to initialize component '${name}'`);
+            },
+        );
 
-        res.parsedSelDropDown = await DropDown.createFromChild(this, await query('#sel0'));
-
-        res.parsedSelSelectedDropDown = await DropDown.createFromChild(this, await query('#sel'));
-        res.attachedToBlockDropDown = await DropDown.createFromChild(this, await query('#box'));
-        res.attachedToInlineDropDown = await DropDown.createFromChild(this, await query('#inline'));
-        res.multiSelDropDown = await DropDown.createFromChild(this, await query('#selinp5'));
-
-        res.genMultiSelDropDown = await DropDown.createFromChild(this, await query('#selinp6'));
-
-        res.disabledDropDown = await DropDown.createFromChild(this, await query('#selinp7'));
-        res.enableBtn = await query('#enableBtn');
-
-        res.filterDropDown = await DropDown.createFromChild(this, await query('#selinp8'));
-
-        res.customDropDown = await DropDown.createFromChild(this, await query('#selinp10'));
-        res.nativeSelDropDown = await DropDown.createFromChild(this, await query('#selinp11'));
-        res.enableCustomBtn = await query('#enableCustomBtn');
-
-        res.fullscreenDropDown = await DropDown.createFromChild(this, await query('#selinp12'));
-
-        res.dynamicDropDown = await DropDown.createFromChild(this, await query('#dynamicSel'));
-        res.addItemBtn = await query('#addBtn');
-        res.addDisabledItemBtn = await query('#addDisBtn');
-        res.addHiddenItemBtn = await query('#addHiddenBtn');
-        res.delLastItemBtn = await query('#delBtn');
-        res.delAllItemsBtn = await query('#delAllBtn');
-
-        assert(
-            res.inlineDropDown
-            && res.editableInlineDropDown
-            && res.fullWidthDropDown
-            && res.halfWidthDropDown
-            && res.parsedSelDropDown
-            && res.parsedSelSelectedDropDown
-            && res.attachedToBlockDropDown
-            && res.attachedToInlineDropDown
-            && res.multiSelDropDown
-            && res.genMultiSelDropDown
-            && res.disabledDropDown
-            && res.enableBtn
-            && res.filterDropDown
-            && res.customDropDown
-            && res.nativeSelDropDown
-            && res.enableCustomBtn
-            && res.fullscreenDropDown
-            && res.dynamicDropDown
-            && res.addItemBtn
-            && res.addDisabledItemBtn
-            && res.addHiddenItemBtn
-            && res.delLastItemBtn
-            && res.delAllItemsBtn,
-            'Invalid view',
+        await asyncMap(
+            Object.keys(elemSelectors),
+            async (name) => {
+                const selector = elemSelectors[name];
+                res[name] = await query(selector);
+                assert(res[name], `Element '${name}' not found`);
+            },
         );
 
         return res;
     }
 
+    getComponentByName(name) {
+        assert(this.content[name], `Component ${name} not found`);
+        return this.content[name];
+    }
+
+    async toggleItem(name, value) {
+        let dropdown = this.getComponentByName(name);
+        const origSelected = dropdown.getSelectedValues();
+        let expSelected;
+
+        if (dropdown.multiple) {
+            // Deselect if already selected
+            if (origSelected.includes(value)) {
+                expSelected = origSelected.filter((item) => item !== value);
+            } else {
+                expSelected = [...origSelected, value];
+            }
+        } else {
+            expSelected = [value];
+        }
+
+        await this.performAction(() => dropdown.toggleItem(value));
+        dropdown = this.getComponentByName(name);
+
+        const selected = dropdown.getSelectedValues();
+        assert.exactMeet(selected, expSelected);
+        return true;
+    }
+
+    async deselectByTag(name, value) {
+        let dropdown = this.getComponentByName(name);
+        const origSelected = dropdown.getSelectedValues();
+        assert(origSelected.includes(value), `Item ${value} not found`);
+
+        const expSelected = origSelected.filter((item) => item !== value);
+
+        await this.performAction(() => dropdown.deselectItemByTag(value));
+        dropdown = this.getComponentByName(name);
+
+        const selected = dropdown.getSelectedValues();
+        assert.exactMeet(selected, expSelected);
+        return true;
+    }
+
+    async clearSelection(name) {
+        let dropdown = this.getComponentByName(name);
+        const origSelected = dropdown.getSelectedValues();
+        assert(origSelected.length > 0, 'Nothing selected');
+
+        const expSelected = [];
+
+        await this.performAction(() => dropdown.clearSelection());
+        dropdown = this.getComponentByName(name);
+
+        const selected = dropdown.getSelectedValues();
+        assert.exactMeet(selected, expSelected);
+        return true;
+    }
+
     async addItem() {
-        return this.performAction(() => click(this.content.addItemBtn));
+        const expected = this.dynamicDropDown.model.items;
+        const newId = expected.length + 1;
+        expected.push({
+            id: newId.toString(),
+            text: `Item ${newId}`,
+            selected: false,
+            disabled: false,
+            hidden: false,
+        });
+
+        await this.performAction(() => click(this.content.addItemBtn));
+        await this.performAction(() => this.dynamicDropDown.showList());
+
+        const { items } = this.dynamicDropDown.model;
+        assert.exactMeet(items, expected);
+        return true;
     }
 
     async addDisabledItem() {
-        return this.performAction(() => click(this.content.addDisabledItemBtn));
+        const expected = this.dynamicDropDown.model.items;
+        const newId = expected.length + 1;
+        expected.push({
+            id: newId.toString(),
+            text: `Item ${newId}`,
+            selected: false,
+            disabled: true,
+            hidden: false,
+        });
+
+        await this.performAction(() => click(this.content.addDisabledItemBtn));
+        await this.performAction(() => this.dynamicDropDown.showList());
+
+        const { items } = this.dynamicDropDown.model;
+        assert.exactMeet(items, expected);
+        return true;
     }
 
     async addHiddenItem() {
-        return this.performAction(() => click(this.content.addHiddenItemBtn));
+        const expected = this.dynamicDropDown.model.items;
+        const newId = expected.length + 1;
+        expected.push({
+            id: newId.toString(),
+            text: `Item ${newId}`,
+            selected: false,
+            disabled: true,
+            hidden: true,
+        });
+
+        await this.performAction(() => click(this.content.addHiddenItemBtn));
+        await this.performAction(() => this.dynamicDropDown.showList());
+
+        const { items } = this.dynamicDropDown.model;
+        assert.exactMeet(items, expected);
+        return true;
     }
 
     async removeLastItem() {
-        return this.performAction(() => click(this.content.delLastItemBtn));
+        const expected = this.dynamicDropDown.model.items;
+        expected.splice(expected.length - 1);
+
+        await this.performAction(() => click(this.content.delLastItemBtn));
+
+        const { items } = this.dynamicDropDown.model;
+        assert.exactMeet(items, expected);
+        return true;
     }
 
     async removeAllItems() {
-        return this.performAction(() => click(this.content.delAllItemsBtn));
+        const expected = [];
+
+        await this.performAction(() => click(this.content.delAllItemsBtn));
+
+        const { items } = this.dynamicDropDown.model;
+        assert.exactMeet(items, expected);
+        return true;
     }
 }
