@@ -1,6 +1,7 @@
 import {
     createElement,
     Component,
+    getClassName,
 } from 'jezvejs';
 
 /* CSS classes */
@@ -15,6 +16,10 @@ const defaultProps = {
 export class CustomSelectionItem extends Component {
     static get className() {
         return SELECTION_ITEM_CLASS;
+    }
+
+    static get selector() {
+        return `.${this.className}`;
     }
 
     static get buttonClass() {
@@ -53,7 +58,7 @@ export class CustomSelectionItem extends Component {
         this.titleElem = createElement('span');
 
         this.elem = createElement('span', {
-            props: { className: [SELECTION_ITEM_CLASS, 'dd__custom-selection-item'].join(' ') },
+            props: { className: getClassName(SELECTION_ITEM_CLASS, 'dd__custom-selection-item') },
             children: [this.deselectButton, this.titleElem],
         });
     }
@@ -62,5 +67,6 @@ export class CustomSelectionItem extends Component {
         this.titleElem.textContent = state.title.toLowerCase();
 
         this.elem.classList.toggle(SELECTION_ITEM_ACTIVE_CLASS, state.active);
+        this.elem.dataset.id = state.id;
     }
 }

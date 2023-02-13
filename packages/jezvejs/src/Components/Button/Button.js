@@ -155,8 +155,8 @@ export class Button extends Component {
         }
     }
 
-    /** Set title text */
-    enable(value) {
+    /** Enables/disabled component */
+    enable(value = true) {
         if (this.state.enabled === !!value) {
             return;
         }
