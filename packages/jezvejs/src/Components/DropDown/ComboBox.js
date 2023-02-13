@@ -3,11 +3,8 @@ import {
     show,
     re,
     deepMeet,
-    enable,
     insertAfter,
     prependChild,
-    removeEvents,
-    setEvents,
     isFunction,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
@@ -15,6 +12,7 @@ import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
 import { DropDownClearButton } from './ClearButton.js';
 import { DropDownToggleButton } from './ToggleButton.js';
 import { getSelectedItems } from './utils.js';
+import { DropDownInput } from './Input.js';
 
 /* CSS classes */
 const COMBO_CLASS = 'dd__combo';
@@ -24,8 +22,6 @@ const CONTROLS_CLASS = 'dd__combo-controls';
 const SELECTION_CLASS = 'dd__selection';
 const SINGLE_SELECTION_CLASS = 'dd__single-selection';
 const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
-/* Input */
-const INPUT_CLASS = 'dd__input';
 
 const defaultProps = {
     inputElem: null,
@@ -40,6 +36,7 @@ const defaultProps = {
     onDeleteSelectedItem: null,
     onClearSelection: null,
     components: {
+        Input: DropDownInput,
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
         ClearButton: DropDownClearButton,
@@ -67,16 +64,21 @@ export class DropDownComboBox extends Component {
         };
 
         this.inputEvents = { input: (e) => this.onInput(e) };
-
-        this.inputElem = this.props.inputElem;
-
         this.selectionItems = [];
 
         this.init();
-        this.render(this.state);
     }
 
     init() {
+        const { Input } = this.props.components;
+
+        this.input = Input.create({
+            elem: this.props.inputElem,
+            placeholder: this.props.placeholder,
+            onInput: (e) => this.onInput(e),
+        });
+        this.input.show(this.state.editable);
+
         const valueContainer = createElement('div', { props: { className: VALUE_CLASS } });
         if (this.props.multi) {
             this.selectionElem = createElement('div', {
@@ -85,8 +87,11 @@ export class DropDownComboBox extends Component {
             });
             valueContainer.append(this.selectionElem);
         }
+
         this.staticElem = createElement('span', { props: { className: SINGLE_SELECTION_CLASS } });
-        valueContainer.append(this.staticElem, this.inputElem);
+        show(this.staticElem, !this.state.editable);
+
+        valueContainer.append(this.staticElem, this.input.elem);
 
         const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
 
@@ -107,39 +112,7 @@ export class DropDownComboBox extends Component {
             children: [valueContainer, controls],
         });
 
-        this.makeEditable(this.state.editable);
-    }
-
-    /** Enable/disable text input at combo element  */
-    makeEditable(editable = true) {
-        this.state.editable = editable;
-
-        if (this.props.placeholder) {
-            this.inputElem.placeholder = this.props.placeholder;
-        }
-
-        show(this.staticElem, !this.state.editable);
-        show(this.inputElem, this.state.editable);
-
-        this.inputElem.classList.toggle(INPUT_CLASS, !!this.state.editable);
-        if (this.state.editable) {
-            setEvents(this.inputElem, this.inputEvents);
-            if (this.staticElem) {
-                this.inputElem.value = this.staticElem.textContent;
-            }
-            this.inputElem.autocomplete = 'off';
-        } else {
-            removeEvents(this.inputElem, this.inputEvents);
-
-            if (!this.staticElem) {
-                return;
-            }
-
-            const content = (this.props.placeholder && this.inputElem.value.length === 0)
-                ? this.props.placeholder
-                : this.inputElem.value;
-            this.staticElem.textContent = content;
-        }
+        this.render(this.state);
     }
 
     /** Text input 'input' event handler  */
@@ -169,30 +142,16 @@ export class DropDownComboBox extends Component {
         return this.selectionItems.find((item) => item.id === strId);
     }
 
-    /** Setup tabindexes of component */
-    setTabIndexes(state) {
-        if (!this.inputElem) {
-            return;
-        }
-
-        if (state.disabled) {
-            this.inputElem.removeAttribute('tabindex');
-        } else {
-            this.inputElem.setAttribute('tabindex', (state.editable) ? 0 : -1);
-        }
-    }
-
     /** Set text for single selection */
     renderSingleSelection(state) {
         if (this.props.multi) {
             if (state.editable) {
-                this.inputElem.placeholder = this.props.placeholder;
-                if (state.inputString === null) {
-                    this.inputElem.value = '';
-                } else {
-                    this.inputElem.value = state.inputString;
-                }
-            } else if (this.staticElem) {
+                this.input.setState((inputState) => ({
+                    ...inputState,
+                    placeholder: this.props.placeholder,
+                    value: state.inputString,
+                }));
+            } else {
                 this.staticElem.textContent = this.props.placeholder;
                 this.staticElem.title = this.props.placeholder;
                 this.staticElem.classList.add(PLACEHOLDER_CLASS);
@@ -204,17 +163,15 @@ export class DropDownComboBox extends Component {
         const [selectedItem] = getSelectedItems(state);
         const str = selectedItem?.title ?? '';
         const usePlaceholder = (str.length === 0);
-        const placeholder = ((usePlaceholder) ? this.props.placeholder : str) ?? '';
+        const placeholder = (usePlaceholder) ? this.props.placeholder : str;
 
-        if (state.editable && this.inputElem) {
-            this.inputElem.placeholder = placeholder;
-
-            if (state.inputString == null) {
-                this.inputElem.value = str;
-            } else {
-                this.inputElem.value = state.inputString;
-            }
-        } else if (!state.editable && this.staticElem) {
+        if (state.editable) {
+            this.input.setState((inputState) => ({
+                ...inputState,
+                placeholder,
+                value: state.inputString ?? str,
+            }));
+        } else if (!state.editable) {
             const staticText = placeholder;
             this.staticElem.textContent = staticText;
             this.staticElem.title = staticText;
@@ -280,12 +237,11 @@ export class DropDownComboBox extends Component {
 
     render(state, prevState = {}) {
         if (state.disabled !== prevState?.disabled) {
-            enable(this.inputElem, !state.disabled);
+            this.input.enable(!state.disabled);
             this.clearBtn?.enable(!state.disabled);
             this.toggleBtn?.enable(!state.disabled);
         }
 
-        this.setTabIndexes(state);
         this.renderSelection(state, prevState);
     }
 }

@@ -21,6 +21,7 @@ import {
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { getSelectedItems } from './utils.js';
+import { DropDownInput } from './Input.js';
 import { DropDownListItem } from './ListItem.js';
 import { DropDownComboBox } from './ComboBox.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
@@ -48,8 +49,6 @@ const LIST_GROUP_LABEL_CLASS = 'dd__list-group__label';
 const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
-/* Input */
-const INPUT_CLASS = 'dd__input';
 
 /* List position constants */
 const SCREEN_PADDING = 5;
@@ -78,6 +77,7 @@ const defaultProps = {
     onInput: null,
     className: null,
     components: {
+        Input: DropDownInput,
         ComboBox: DropDownComboBox,
         ListItem: DropDownListItem,
         MultiSelectionItem: DropDownMultiSelectionItem,
@@ -172,6 +172,7 @@ export class DropDown extends Component {
         }, SHOW_LIST_SCROLL_TIMEOUT);
 
         this.isTouch = false;
+        this.inputElem = null;
 
         if (this.props.listAttach) {
             this.attachToElement();
@@ -200,6 +201,7 @@ export class DropDown extends Component {
         if (!this.props.listAttach) {
             const {
                 ComboBox,
+                Input,
                 MultiSelectionItem,
                 ToggleButton,
                 ClearButton,
@@ -219,6 +221,7 @@ export class DropDown extends Component {
                 onDeleteSelectedItem: (e) => this.onDeleteSelectedItem(e),
                 onClearSelection: (e) => this.onClear(e),
                 components: {
+                    Input,
                     MultiSelectionItem,
                     ToggleButton,
                     ClearButton,
@@ -283,7 +286,6 @@ export class DropDown extends Component {
             if (this.selectElem.parentNode) {
                 insertAfter(this.elem, this.selectElem);
             }
-            this.createInput();
         } else {
             if (this.hostElem.parentNode) {
                 insertAfter(this.elem, this.hostElem);
@@ -323,26 +325,19 @@ export class DropDown extends Component {
         this.selectElem = createElement('select');
     }
 
-    /** Creates input element */
-    createInput() {
-        this.inputElem = createElement('input', { props: { type: 'text' } });
-    }
-
     /** Creates list element */
     createList() {
         const children = [];
 
         if (this.props.listAttach && this.props.enableFilter) {
-            this.createInput();
-            this.inputElem.classList.toggle(INPUT_CLASS, true);
+            const { Input } = this.props.components;
+            this.input = Input.create({
+                elem: this.inputElem,
+                placeholder: this.props.placeholder,
+                onInput: (e) => this.onInput(e),
+            });
 
-            if (this.props.placeholder) {
-                this.inputElem.placeholder = this.props.placeholder;
-            }
-            setEvents(this.inputElem, { input: (e) => this.onInput(e) });
-            this.inputElem.autocomplete = 'off';
-
-            children.push(this.inputElem);
+            children.push(this.input.elem);
         }
 
         this.listElem = createElement('ul', {
@@ -458,11 +453,12 @@ export class DropDown extends Component {
         }
 
         this.activate(true);
+        const input = this.getInput();
 
         const index = this.getSelectedItemIndex(e.target);
         if (index !== -1) {
             this.activateSelectedItem(index);
-        } else if (e.target === this.inputElem) {
+        } else if (e.target === input?.elem) {
             this.activateInput();
         }
 
@@ -566,11 +562,12 @@ export class DropDown extends Component {
 
         const { editable } = this.state;
         const { multi } = this.props;
+        const input = this.getInput();
 
         let allowSelectionNavigate = multi;
-        if (multi && editable && e.target === this.inputElem) {
+        if (multi && editable && e.target === input.elem) {
             // Check cursor is at start of input
-            const cursorPos = getCursorPos(this.inputElem);
+            const cursorPos = getCursorPos(input.elem);
             if (cursorPos?.start !== 0 || cursorPos.start !== cursorPos.end) {
                 allowSelectionNavigate = false;
             }
@@ -788,7 +785,7 @@ export class DropDown extends Component {
         if (!this.props.multi) {
             setTimeout(() => this.elem.focus());
         } else if (this.props.enableFilter) {
-            setTimeout(() => this.inputElem.focus());
+            setTimeout(() => this.focusInputIfNeeded());
         }
     }
 
@@ -1042,13 +1039,26 @@ export class DropDown extends Component {
         this.setState(newState);
     }
 
+    getInput() {
+        if (this.props.listAttach) {
+            return this.input;
+        }
+
+        return this.combo.input;
+    }
+
     focusInputIfNeeded() {
+        const input = this.getInput();
+        if (!input) {
+            return;
+        }
+
         if (
             this.props.enableFilter
-            && this.focusedElem !== this.inputElem
+            && this.focusedElem !== input.elem
             && this.state.actSelItemIndex === -1
         ) {
-            this.inputElem.focus();
+            input.focus();
         }
     }
 
@@ -1232,7 +1242,7 @@ export class DropDown extends Component {
         if (this.state.actSelItemIndex === -1) {
             setTimeout(() => {
                 if (this.props.enableFilter) {
-                    this.inputElem.focus();
+                    this.focusInputIfNeeded();
                 } else {
                     this.elem.focus();
                 }
@@ -1923,6 +1933,14 @@ export class DropDown extends Component {
         // Skip render if currently native select is visible
         if (isVisible(this.selectElem, true)) {
             return;
+        }
+
+        if (this.props.listAttach && this.props.enableFilter) {
+            this.input.setState((inputState) => ({
+                ...inputState,
+                placeholder: this.props.placeholder,
+                value: state.inputString,
+            }));
         }
 
         this.renderListContent(state, prevState);
