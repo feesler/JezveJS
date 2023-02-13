@@ -66,5 +66,6 @@ export class CustomSelectionItem extends Component {
         this.titleElem.textContent = state.title.toLowerCase();
 
         this.elem.classList.toggle(SELECTION_ITEM_ACTIVE_CLASS, state.active);
+        this.elem.dataset.id = state.id;
     }
 }
