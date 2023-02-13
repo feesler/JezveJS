@@ -56,7 +56,10 @@ export async function deselectTest(ddname, value) {
 
     const selected = dropdown.getSelectedValues();
 
-    await test(`[DropDown] Deselect by tag (${value})`, () => assert.deepMeet(selected, expSelected));
+    await test(`[DropDown] Deselect by tag (${value})`, () => {
+        assert.exactMeet(selected, expSelected);
+        return true;
+    });
 }
 
 export async function clearTest(ddname) {

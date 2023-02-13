@@ -29,6 +29,7 @@ import { DropDownClearButton } from './ClearButton.js';
 import { DropDownToggleButton } from './ToggleButton.js';
 import '../../css/common.scss';
 import './style.scss';
+import { DropDownMultipleSelection } from './MultipleSelection.js';
 
 /* CSS classes */
 /* Container */
@@ -80,6 +81,7 @@ const defaultProps = {
         Input: DropDownInput,
         ComboBox: DropDownComboBox,
         ListItem: DropDownListItem,
+        MultipleSelection: DropDownMultipleSelection,
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
         ClearButton: DropDownClearButton,
@@ -202,6 +204,7 @@ export class DropDown extends Component {
             const {
                 ComboBox,
                 Input,
+                MultipleSelection,
                 MultiSelectionItem,
                 ToggleButton,
                 ClearButton,
@@ -222,6 +225,7 @@ export class DropDown extends Component {
                 onClearSelection: (e) => this.onClear(e),
                 components: {
                     Input,
+                    MultipleSelection,
                     MultiSelectionItem,
                     ToggleButton,
                     ClearButton,

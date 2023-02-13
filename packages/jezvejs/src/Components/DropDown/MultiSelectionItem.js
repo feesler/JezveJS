@@ -16,6 +16,10 @@ export class DropDownMultiSelectionItem extends Component {
         return SELECTION_ITEM_CLASS;
     }
 
+    static get selector() {
+        return `.${this.className}`;
+    }
+
     static get buttonClass() {
         return SELECTION_ITEM_DEL_BTN_CLASS;
     }
@@ -60,8 +64,12 @@ export class DropDownMultiSelectionItem extends Component {
     }
 
     render(state) {
-        this.titleElem.textContent = state.title;
+        if (!state) {
+            throw new Error('Invalid state');
+        }
 
+        this.titleElem.textContent = state.title;
         this.elem.classList.toggle(SELECTION_ITEM_ACTIVE_CLASS, state.active);
+        this.elem.dataset.id = state.id;
     }
 }

@@ -1,25 +1,17 @@
-import {
-    createElement,
-    show,
-    re,
-    deepMeet,
-    insertAfter,
-    prependChild,
-    isFunction,
-} from '../../js/common.js';
+import { createElement, show, isFunction } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
 import { DropDownClearButton } from './ClearButton.js';
 import { DropDownToggleButton } from './ToggleButton.js';
 import { getSelectedItems } from './utils.js';
 import { DropDownInput } from './Input.js';
+import { DropDownMultipleSelection } from './MultipleSelection.js';
 
 /* CSS classes */
 const COMBO_CLASS = 'dd__combo';
 const VALUE_CLASS = 'dd__combo-value';
 const CONTROLS_CLASS = 'dd__combo-controls';
 /* Selection */
-const SELECTION_CLASS = 'dd__selection';
 const SINGLE_SELECTION_CLASS = 'dd__single-selection';
 const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
 
@@ -37,6 +29,7 @@ const defaultProps = {
     onClearSelection: null,
     components: {
         Input: DropDownInput,
+        MultipleSelection: DropDownMultipleSelection,
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
         ClearButton: DropDownClearButton,
@@ -81,11 +74,12 @@ export class DropDownComboBox extends Component {
 
         const valueContainer = createElement('div', { props: { className: VALUE_CLASS } });
         if (this.props.multi) {
-            this.selectionElem = createElement('div', {
-                props: { className: SELECTION_CLASS },
-                events: { click: (e) => this.onDeleteSelectedItem(e) },
+            const { MultipleSelection, MultiSelectionItem } = this.props.components;
+            this.multipleSelection = MultipleSelection.create({
+                ItemComponent: MultiSelectionItem,
+                onItemClick: (_, e) => this.onDeleteSelectedItem(e),
             });
-            valueContainer.append(this.selectionElem);
+            valueContainer.append(this.multipleSelection.elem);
         }
 
         this.staticElem = createElement('span', { props: { className: SINGLE_SELECTION_CLASS } });
@@ -180,59 +174,25 @@ export class DropDownComboBox extends Component {
     }
 
     /** Render selection elements */
-    renderSelection(state, prevState) {
+    renderSelection(state) {
         this.renderSingleSelection(state);
-        if (this.props.listAttach || !this.props.multi) {
+        if (!this.props.multi) {
             return;
         }
 
-        const prevSelectedItems = getSelectedItems(prevState);
         const selectedItems = getSelectedItems(state);
-        const selectionChanged = (
-            !deepMeet(prevSelectedItems, selectedItems)
-            || state.actSelItemIndex !== prevState.actSelItemIndex
-        );
+        const activeItem = (state.actSelItemIndex === -1)
+            ? null
+            : selectedItems[state.actSelItemIndex];
 
-        if (selectionChanged) {
-            const SelectionItemComponent = this.props.components.MultiSelectionItem;
-            const selectionItems = [];
+        this.multipleSelection.setState((selectionState) => ({
+            ...selectionState,
+            items: selectedItems,
+            activeItemId: activeItem?.id ?? 0,
+        }));
+        this.multipleSelection.show(selectedItems.length > 0);
 
-            selectedItems.forEach((item, index) => {
-                const props = { ...item, active: state.actSelItemIndex === index };
-
-                let selItem = this.getSelectionItemById(item.id);
-                if (selItem) {
-                    selItem.setState(props);
-                } else {
-                    selItem = SelectionItemComponent.create(props);
-                    if (selectionItems.length === 0) {
-                        prependChild(this.selectionElem, selItem.elem);
-                    } else {
-                        const lastItem = selectionItems[selectionItems.length - 1];
-                        insertAfter(selItem.elem, lastItem.elem);
-                    }
-
-                    selItem.elem.tabIndex = -1;
-                    selItem.elem.dataset.id = item.id;
-                }
-
-                selectionItems.push(selItem);
-            });
-
-            // Remove items not included in new state
-            this.selectionItems.forEach((item) => {
-                if (selectionItems.includes(item)) {
-                    return;
-                }
-
-                re(item.elem);
-            });
-
-            this.selectionItems = selectionItems;
-
-            show(this.selectionElem, selectedItems.length > 0);
-            this.clearBtn?.show(selectedItems.length > 0);
-        }
+        this.clearBtn?.show(selectedItems.length > 0);
     }
 
     render(state, prevState = {}) {

@@ -17,6 +17,10 @@ export class CustomSelectionItem extends Component {
         return SELECTION_ITEM_CLASS;
     }
 
+    static get selector() {
+        return `.${this.className}`;
+    }
+
     static get buttonClass() {
         return SELECTION_ITEM_DEL_BTN_CLASS;
     }
