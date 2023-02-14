@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import { ge, setEvents, onReady } from 'jezvejs';
 import { Switch } from 'jezvejs/Switch';
 import { initNavigation } from '../../app.js';

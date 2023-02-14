@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import { ge, onReady } from 'jezvejs';
 import { Progress } from 'jezvejs/Progress';
 import { IndetermProgress } from 'jezvejs/IndetermProgress';
