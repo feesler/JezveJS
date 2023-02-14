@@ -236,6 +236,15 @@ export class ListContainer extends Component {
     }
 
     /**
+     * Performs common preparations for element of list item before to insert to DOM
+     * @param {Component} listItem instance of list item component
+     */
+    prepareListItemElement(listItem, item) {
+        const { elem } = listItem;
+        elem.dataset.id = item.id;
+    }
+
+    /**
      * Compares current and previous states and returns true if list updates must be rendered
      * @param {object} state current state object
      * @param {object} prevState previous state object
@@ -298,6 +307,7 @@ export class ListContainer extends Component {
             } else {
                 const ItemComponent = this.getItemComponent(item, state);
                 listItem = ItemComponent.create(itemProps);
+                this.prepareListItemElement(listItem, item);
             }
 
             if (insertNode) {

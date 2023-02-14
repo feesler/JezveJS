@@ -68,6 +68,5 @@ export class DropDownMultiSelectionItem extends Component {
 
         this.titleElem.textContent = state.title;
         this.elem.classList.toggle(SELECTION_ITEM_ACTIVE_CLASS, state.active);
-        this.elem.dataset.id = state.id;
     }
 }
