@@ -81,9 +81,12 @@ export class ListContainer extends Component {
      * @param {number} id - identifier of item
      */
     getItemById(id) {
-        return (isFunction(this.state.getItemById))
-            ? this.state.getItemById(id)
-            : this.state.items.find((item) => item && item.id === id);
+        if (isFunction(this.state.getItemById)) {
+            return this.state.getItemById(id);
+        }
+
+        const strId = id.toString();
+        return this.state.items.find((item) => item && item.id.toString() === strId);
     }
 
     /**
@@ -91,7 +94,8 @@ export class ListContainer extends Component {
      * @param {number} id - identifier of item
      */
     getItemIndexById(id) {
-        return this.state.items.findIndex((item) => item && item.id === id);
+        const strId = id.toString();
+        return this.state.items.findIndex((item) => item && item.id.toString() === strId);
     }
 
     /**
@@ -126,13 +130,18 @@ export class ListContainer extends Component {
         }
     }
 
+    /**
+     * Toggle selects/deselects item by id
+     * @param {string} id identifier of item to toggle select
+     */
     toggleSelectItem(itemId) {
         if (!this.getItemById(itemId)) {
             return;
         }
 
+        const strId = itemId.toString();
         const toggleItem = (item) => (
-            (item.id === itemId)
+            (item.id.toString() === strId)
                 ? { ...item, selected: !item.selected }
                 : item
         );
@@ -143,6 +152,10 @@ export class ListContainer extends Component {
         });
     }
 
+    /**
+     * Returns default element for 'no data' message
+     * @param {object} props message properties object
+     */
     defaultNoDataMessage(props) {
         return createElement('span', {
             props: {
@@ -152,6 +165,11 @@ export class ListContainer extends Component {
         });
     }
 
+    /**
+     * Renders 'no data' message
+     * @param {object} state current state object
+     * @param {object} prevState previous state object
+     */
     renderNoDataMessage(state, prevState) {
         if (
             state.items === prevState.items
@@ -179,16 +197,31 @@ export class ListContainer extends Component {
         this.elem.append(this.noDataMsg);
     }
 
+    /**
+     * Returns instance of list item component for specified id
+     * @param {string} id identifier of item
+     */
     getListItemById(id) {
-        return this.listItems.find((item) => item.id === id);
+        const strId = id.toString();
+        return this.listItems.find((item) => item.id.toString() === strId);
     }
 
+    /**
+     * Returns render properties for specified item
+     * @param {object} item
+     * @param {object} state current list state object
+     */
     getItemProps(item, state) {
         return isFunction(state.getItemProps)
             ? state.getItemProps(item, state)
             : item;
     }
 
+    /**
+     * Returns component class for specified item
+     * @param {object} item
+     * @param {object} state current state of list
+     */
     getItemComponent(item, state) {
         if (state.ItemComponent?.prototype instanceof Component) {
             return state.ItemComponent;
@@ -202,6 +235,11 @@ export class ListContainer extends Component {
         return res;
     }
 
+    /**
+     * Compares current and previous states and returns true if list updates must be rendered
+     * @param {object} state current state object
+     * @param {object} prevState previous state object
+     */
     isChanged(state, prevState) {
         if (isFunction(state.isListChanged)) {
             return state.isListChanged(state, prevState);
@@ -213,6 +251,11 @@ export class ListContainer extends Component {
         );
     }
 
+    /**
+     * Renders list items
+     * @param {object} state current state object
+     * @param {object} prevState previous state object
+     */
     renderList(state, prevState) {
         if (!this.isChanged(state, prevState)) {
             return;
@@ -242,7 +285,9 @@ export class ListContainer extends Component {
         let lastItem = null;
         state.items.forEach((item, index) => {
             const itemProps = this.getItemProps(item, state);
-            const indexBefore = prevItems.findIndex((prev) => prev.id === item.id);
+            const indexBefore = prevItems.findIndex((prev) => (
+                prev.id.toString() === item.id.toString()
+            ));
 
             let listItem = this.getListItemById(item.id);
             const insertNode = (index !== indexBefore) || !listItem;
@@ -278,6 +323,11 @@ export class ListContainer extends Component {
         this.listItems = listItems;
     }
 
+    /**
+     * Renders current state of component
+     * @param {object} state current state object
+     * @param {object} prevState previous state object
+     */
     render(state, prevState = {}) {
         if (!state) {
             throw new Error('Invalid state object');
