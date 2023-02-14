@@ -283,7 +283,8 @@ export class ListContainer extends Component {
 
         const prevItems = prevState?.items ?? [];
         let lastItem = null;
-        state.items.forEach((item, index) => {
+        for (let index = 0; index < state.items.length; index += 1) {
+            const item = state.items[index];
             const itemProps = this.getItemProps(item, state);
             const indexBefore = prevItems.findIndex((prev) => (
                 prev.id.toString() === item.id.toString()
@@ -310,7 +311,7 @@ export class ListContainer extends Component {
             lastItem = listItem;
             listItems.push(listItem);
             listElems.push(listItem.elem);
-        });
+        }
 
         // Remove items not included in new state
         const childElems = Array.from(this.elem.children);
