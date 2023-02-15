@@ -16,18 +16,22 @@
 }
 
 .bg-btn {
+  --btn-size: auto;
   --btn-title-color: #ffffff;
-  --btn-subtitle-color: #e4c200;
+  --btn-subtitle-color: #ffffff94;
   --btn-icon-color: #ffffff;
   --btn-background: #0044ff;
   --btn-hover-title-color: #dddddd;
-  --btn-hover-subtitle-color: #f7dc47;
+  --btn-hover-subtitle-color: #ffffff94;
   --btn-hover-icon-color: #dddddd;
   --btn-hover-background: #2962ff;
+  --btn-border-radius: 12px;
 
-  padding: 5px 15px 5px 5px;
-  height: 42px;
-  border-radius: 12px;
+  padding: 6px 24px 6px 12px;
+
+  .btn__content {
+    padding: 0 0 0 12px;
+  }
 }
 
 @media (hover: hover) {

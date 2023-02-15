@@ -1,13 +1,33 @@
 /* icon link */
 .btn {
   --btn-size: 32px;
+  --btn-background: none;
+  --btn-border-radius: 0;
+
+  /* Icon */
   --btn-icon-size: 24px;
   --btn-icon-width: var(--btn-icon-size);
   --btn-icon-height: var(--btn-icon-size);
-  --btn-title-color: #000000;
-  --btn-subtitle-color: #003cff;
   --btn-icon-color: #000000;
-  --btn-background: none;
+
+  /* Title */
+  --btn-title-height: 1.1rem;
+  --btn-font-size: 1rem;
+  --btn-font-weight: 400;
+  --btn-title-color: #000000;
+
+  /* Subtitle */
+  --btn-subtitle-height: 0.8rem;
+  --btn-subtitle-font-size: 0.75rem;
+  --btn-subtitle-font-weight: 400;
+  --btn-subtitle-color: #003cff;
+
+  /* Disabled state */
+  --btn-disabled-title-color: var(--btn-title-color);
+  --btn-disabled-subtitle-color: var(--btn-subtitle-color);
+  --btn-disabled-icon-color: var(--btn-icon-color);
+  --btn-disabled-background: var(--btn-background);
+  --btn-disabled-opacity: 0.3;
 
   /* Hover state */
   --btn-hover-title-color: #888888;
@@ -21,10 +41,12 @@
   justify-content: flex-start;
   height: var(--btn-size);
   border: 0 none;
+  border-radius: var(--btn-border-radius);
   padding: 0;
   overflow: hidden;
   vertical-align: middle;
   text-decoration: none;
+  color: var(--btn-title-color);
   background: var(--btn-background);
   cursor: pointer;
 
@@ -49,36 +71,47 @@
   height: var(--btn-size);
   line-height: var(--btn-size);
   white-space: nowrap;
-  font-size: 16px;
-  font-weight: normal;
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
   text-decoration: none;
   text-transform: none;
   color: var(--btn-title-color);
 }
 
 .btn__title {
-  height: 20px;
-  line-height: 20px;
+  height: var(--btn-title-height);
+  line-height: var(--btn-title-height);
   white-space: nowrap;
-  font-size: 16px;
-  font-weight: normal;
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
   text-decoration: none;
   text-transform: none;
+  color: var(--btn-title-color);
 }
 
 .btn__subtitle {
-  height: 12px;
-  line-height: 12px;
-  clear: both;
-  font-size: 10px;
-  font-weight: bold;
+  height: var(--btn-subtitle-height);
+  line-height: var(--btn-subtitle-height);
+  font-size: var(--btn-subtitle-font-size);
+  font-weight: var(--btn-subtitle-font-weight);
   white-space: nowrap;
   color: var(--btn-subtitle-color);
 }
 
 .btn[disabled] {
+  color: var(--btn-disabled-title-color);
+  background: var(--btn-disabled-background);
+  opacity: var(--btn-disabled-opacity);
   pointer-events: none;
-  opacity: 0.3;
+  cursor: default;
+
+  .btn__subtitle {
+    color: var(--btn-disabled-subtitle-color);
+  }
+
+  .btn__icon {
+    fill: var(--btn-disabled-icon-color);
+  }
 }
 
 @media (hover: hover) {
