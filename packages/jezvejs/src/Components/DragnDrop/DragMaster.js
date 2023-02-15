@@ -310,7 +310,7 @@ export class DragMaster {
             }
 
             this.cleanUp();
-            this.removeDocumentEventHandlers();
+            this.removeHandlers();
         }
     }
 
