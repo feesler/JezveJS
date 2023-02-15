@@ -12,6 +12,8 @@ import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import { initNavigation } from '../../app.js';
 import './style.scss';
+import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
+import { XAxisDragZone } from './impl/XAxisDragZone.js';
 
 const logTo = (target, value) => {
     const elem = (typeof target === 'string') ? ge(target) : target;
@@ -36,6 +38,11 @@ const initClonedAvatar = () => {
     DefaultDragZone.create({ elem: ge('sq3') });
     DefaultDropTarget.create({ elem: ge('inner_drop1') });
     DefaultDropTarget.create({ elem: ge('inner_drop2') });
+};
+
+const initXAxisAvatar = () => {
+    XAxisDragZone.create({ elem: ge('xAxisSlider') });
+    XAxisDropTarget.create({ elem: ge('xAxisArea') });
 };
 
 const renderTileIcon = () => createElement('span', {
@@ -482,6 +489,8 @@ const init = () => {
 
     initOriginalAvatar();
     initClonedAvatar();
+
+    initXAxisAvatar();
 
     initSortable();
     initSortableList();

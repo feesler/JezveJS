@@ -24,6 +24,21 @@
   opacity: 0.5;
 }
 
+/* X axis */
+.x-axis-area {
+  position: relative;
+  background-color: #888888;
+  height: 10px;
+}
+
+.x-axis-slider {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 30px;
+  background-color: #3388bb;
+}
+
 /* Sortable tiles list */
 .sortable-tiles {
   display: flex;
