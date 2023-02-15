@@ -93,7 +93,6 @@ export class DropDownGroupItem extends Component {
         }
 
         this.titleElem.textContent = state.title;
-        this.elem.dataset.id = state.id;
 
         this.list.setState((listState) => ({
             ...listState,

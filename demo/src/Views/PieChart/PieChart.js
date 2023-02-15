@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import { ge, onReady, setEvents } from 'jezvejs';
 import { PieChart } from 'jezvejs/PieChart';
 import { initNavigation } from '../../app.js';

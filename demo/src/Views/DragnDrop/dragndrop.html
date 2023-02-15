@@ -26,78 +26,297 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>Drag'n'Drop</h1>
 
-                        <h2>Drag original object. Drop target accept only OriginalDragAvatar</h2>
-                        <section id="drop_area1" class="section-h200">
-                            <div id="sq1" class="square abs_pos_square"></div>
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#original">Drag original object</a></li>
+                                <li><a href="#copy">Drag copy object</a></li>
+                                <li><a href="#xAxis">Drag only by X axis</a></li>
+                                <li><a href="#integer">Integer</a></li>
+                                <li><a href="#sortable">Sortable implementation</a></li>
+                                <li><a href="#sortableList">Sortable list</a></li>
+                                <li><a href="#exchange">Exchangable list</a></li>
+                                <li><a href="#tree">Tree sort</a></li>
+                                <li><a href="#treeExchange">Tree exchange</a></li>
+                                <li><a href="#table1">Sortable table with TBODY rows</a></li>
+                                <li><a href="#table2">Sortable table with single TBODY</a></li>
+                                <li><a href="#table3">Sortable table without TBODY</a></li>
+                                <li><a href="#handle">Drag handle option</a></li>
+                                <li><a href="#onlyRootHandle">onlyRootHandle option</a></li>
+                                <li><a href="#listHandle">Sortable list with drag handle option</a></li>
+                                <li><a href="#single">Sortable with single item</a></li>
+                                <li><a href="#allowSingleItemSort">allowSingleItemSort option</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Drag two objects with semitransparent avatars. Drop targets accept only DefaultDragAvatar
-                        </h2>
-                        <section class="row-section">
-                            <div id="inner_drop1" class="inner-drop">
-                                <div id="sq2" class="square">1</div>
-                                <div id="sq3" class="square">2</div>
-                            </div>
-                            <div id="inner_drop2" class="inner-drop">
-                            </div>
-                        </section>
+                        <div class="content-container">
+                            <h2 id="original">Drag original object. Drop target accept only OriginalDragAvatar</h2>
+                            <section id="drop_area1" class="section-h200">
+                                <div id="sq1" class="square abs_pos_square"></div>
+                            </section>
 
-                        <h2>Sortable implementation</h2>
-                        <section>
-                            <div id="sortableContainer" class="sortable-tiles"></div>
-                        </section>
+                            <h2 id="copy">Drag two objects with semitransparent avatars. Drop targets accept only
+                                DefaultDragAvatar
+                            </h2>
+                            <section class="row-section">
+                                <div id="inner_drop1" class="inner-drop">
+                                    <div id="sq2" class="square">1</div>
+                                    <div id="sq3" class="square">2</div>
+                                </div>
+                                <div id="inner_drop2" class="inner-drop">
+                                </div>
+                            </section>
 
-                        <h2>Sortable list</h2>
-                        <section>
-                            <div id="list_sortable" class="list-area"></div>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="listSortLog"></textarea>
-                            </div>
-                        </section>
+                            <h2 id="xAxis">Drag only by X axis</h2>
+                            <section class="section-h200">
+                                <div id="xAxisArea" class="x-axis-area">
+                                    <div id="xAxisSlider" class="x-axis-slider"></div>
+                                </div>
+                            </section>
 
-                        <h2>Exchangable list</h2>
-                        <h3>Example of usage of same <i>group</i> identifier<br>
-                            Left list uses default dragClass option <i>(.drag)</i>. Right list use own dragClass.</h3>
-                        <section>
-                            <div class="exch-lists-container">
-                                <div id="list_exch_1" class="list-area"></div>
-                                <div id="list_exch_2" class="list-area"></div>
-                            </div>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="exchangeLog"></textarea>
-                            </div>
-                        </section>
+                            <h2 id="sortable">Sortable implementation</h2>
+                            <section>
+                                <div id="sortableContainer" class="sortable-tiles"></div>
+                            </section>
 
-                        <h2>Tree sort</h2>
-                        <section>
-                            <div id="treeRoot" class="tree"></div>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="treeLog"></textarea>
-                            </div>
-                        </section>
+                            <h2 id="sortableList">Sortable list</h2>
+                            <section>
+                                <div id="list_sortable" class="list-area"></div>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="listSortLog"></textarea>
+                                </div>
+                            </section>
 
-                        <h2>Tree exchange</h2>
-                        <section>
-                            <div class="exch-lists-container">
-                                <div id="treeExch1" class="tree"></div>
-                                <div id="treeExch2" class="tree"></div>
-                            </div>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="treeExchLog"></textarea>
-                            </div>
-                        </section>
+                            <h2 id="exchange">Exchangable list</h2>
+                            <h3>Example of usage of same <i>group</i> identifier<br>
+                                Left list uses default dragClass option <i>(.drag)</i>. Right list use own dragClass.
+                            </h3>
+                            <section>
+                                <div class="exch-lists-container">
+                                    <div id="list_exch_1" class="list-area"></div>
+                                    <div id="list_exch_2" class="list-area"></div>
+                                </div>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="exchangeLog"></textarea>
+                                </div>
+                            </section>
 
-                        <h2>Sortable table with TBODY per each row</h2>
-                        <section>
-                            <table id="table_sortable" class="sortable_tbl">
-                                <tbody class="tbl_list_item">
+                            <h2 id="tree">Tree sort</h2>
+                            <section>
+                                <div id="treeRoot" class="tree"></div>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="treeLog"></textarea>
+                                </div>
+                            </section>
+
+                            <h2 id="treeExchange">Tree exchange</h2>
+                            <section>
+                                <div class="exch-lists-container">
+                                    <div id="treeExch1" class="tree"></div>
+                                    <div id="treeExch2" class="tree"></div>
+                                </div>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="treeExchLog"></textarea>
+                                </div>
+                            </section>
+
+                            <h2 id="table1">Sortable table with TBODY per each row</h2>
+                            <section>
+                                <table id="table_sortable" class="sortable_tbl">
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>1</div>
+                                            </td>
+                                            <td>
+                                                <div>10000</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>2</div>
+                                            </td>
+                                            <td>
+                                                <div>354</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>3</div>
+                                            </td>
+                                            <td>
+                                                <div>850110</div>
+                                            </td>
+                                            <td>
+                                                <div>some long long text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>4</div>
+                                            </td>
+                                            <td>
+                                                <div>6000</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>5</div>
+                                            </td>
+                                            <td>
+                                                <div>7860</div>
+                                            </td>
+                                            <td>
+                                                <div>some short text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>6</div>
+                                            </td>
+                                            <td>
+                                                <div>4500</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>7</div>
+                                            </td>
+                                            <td>
+                                                <div>200</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="tableLog"></textarea>
+                                </div>
+                            </section>
+
+                            <h2 id="table2">Sortable table with single TBODY for all rows</h2>
+                            <section>
+                                <table id="table_sortable_2" class="sortable_tbl">
+                                    <tbody class="tbl_list_item">
+                                        <tr>
+                                            <td>
+                                                <div>1</div>
+                                            </td>
+                                            <td>
+                                                <div>10000</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>2</div>
+                                            </td>
+                                            <td>
+                                                <div>354</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>3</div>
+                                            </td>
+                                            <td>
+                                                <div>850110</div>
+                                            </td>
+                                            <td>
+                                                <div>some long long text</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>4</div>
+                                            </td>
+                                            <td>
+                                                <div>6000</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>5</div>
+                                            </td>
+                                            <td>
+                                                <div>7860</div>
+                                            </td>
+                                            <td>
+                                                <div>some short text</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>6</div>
+                                            </td>
+                                            <td>
+                                                <div>4500</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>7</div>
+                                            </td>
+                                            <td>
+                                                <div>200</div>
+                                            </td>
+                                            <td>
+                                                <div>some text</div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            <h2 id="table3">Sortable table without TBODY</h2>
+                            <section>
+                                <table id="table_sortable_3" class="sortable_tbl">
                                     <tr>
                                         <td>
                                             <div>1</div>
@@ -109,107 +328,6 @@
                                             <div>some text</div>
                                         </td>
                                     </tr>
-                                </tbody>
-                                <tbody class="tbl_list_item">
-                                    <tr>
-                                        <td>
-                                            <div>2</div>
-                                        </td>
-                                        <td>
-                                            <div>354</div>
-                                        </td>
-                                        <td>
-                                            <div>some text</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody class="tbl_list_item">
-                                    <tr>
-                                        <td>
-                                            <div>3</div>
-                                        </td>
-                                        <td>
-                                            <div>850110</div>
-                                        </td>
-                                        <td>
-                                            <div>some long long text</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody class="tbl_list_item">
-                                    <tr>
-                                        <td>
-                                            <div>4</div>
-                                        </td>
-                                        <td>
-                                            <div>6000</div>
-                                        </td>
-                                        <td>
-                                            <div>some text</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody class="tbl_list_item">
-                                    <tr>
-                                        <td>
-                                            <div>5</div>
-                                        </td>
-                                        <td>
-                                            <div>7860</div>
-                                        </td>
-                                        <td>
-                                            <div>some short text</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody class="tbl_list_item">
-                                    <tr>
-                                        <td>
-                                            <div>6</div>
-                                        </td>
-                                        <td>
-                                            <div>4500</div>
-                                        </td>
-                                        <td>
-                                            <div>some text</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody class="tbl_list_item">
-                                    <tr>
-                                        <td>
-                                            <div>7</div>
-                                        </td>
-                                        <td>
-                                            <div>200</div>
-                                        </td>
-                                        <td>
-                                            <div>some text</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="tableLog"></textarea>
-                            </div>
-                        </section>
-
-                        <h2>Sortable table with single TBODY for all rows</h2>
-                        <section>
-                            <table id="table_sortable_2" class="sortable_tbl">
-                                <tbody class="tbl_list_item">
-                                    <tr>
-                                        <td>
-                                            <div>1</div>
-                                        </td>
-                                        <td>
-                                            <div>10000</div>
-                                        </td>
-                                        <td>
-                                            <div>some text</div>
-                                        </td>
-                                    </tr>
                                     <tr>
                                         <td>
                                             <div>2</div>
@@ -276,142 +394,59 @@
                                             <div>some text</div>
                                         </td>
                                     </tr>
-                                </tbody>
-                            </table>
-                        </section>
+                                </table>
+                            </section>
 
-                        <h2>Sortable table without TBODY</h2>
-                        <section>
-                            <table id="table_sortable_3" class="sortable_tbl">
-                                <tr>
-                                    <td>
-                                        <div>1</div>
-                                    </td>
-                                    <td>
-                                        <div>10000</div>
-                                    </td>
-                                    <td>
-                                        <div>some text</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>2</div>
-                                    </td>
-                                    <td>
-                                        <div>354</div>
-                                    </td>
-                                    <td>
-                                        <div>some text</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>3</div>
-                                    </td>
-                                    <td>
-                                        <div>850110</div>
-                                    </td>
-                                    <td>
-                                        <div>some long long text</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>4</div>
-                                    </td>
-                                    <td>
-                                        <div>6000</div>
-                                    </td>
-                                    <td>
-                                        <div>some text</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>5</div>
-                                    </td>
-                                    <td>
-                                        <div>7860</div>
-                                    </td>
-                                    <td>
-                                        <div>some short text</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>6</div>
-                                    </td>
-                                    <td>
-                                        <div>4500</div>
-                                    </td>
-                                    <td>
-                                        <div>some text</div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div>7</div>
-                                    </td>
-                                    <td>
-                                        <div>200</div>
-                                    </td>
-                                    <td>
-                                        <div>some text</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </section>
-
-                        <h2>Drag handle option</h2>
-                        <section id="drop_area2" class="section-h200">
-                            <div id="di1" class="drag_item">
-                                <input type="text">
-                            </div>
-                            <div id="di2" class="drag_item" style="top: 50px;">
-                                <input type="text">
-                                <div id="dh2_1" class="drag-handle"></div>
-                            </div>
-                            <div id="di3" class="drag_item" style="top: 100px;">
-                                <input type="text">
-                                <div id="dh3_1" class="drag-handle-btn">
-                                    <svg class="drag-handle-btn__icon" xmlns="http://www.w3.org/2000/svg">
-                                        <use href="#dragHandle">
-                                    </svg>
+                            <h2 id="handle">Drag handle option</h2>
+                            <section id="drop_area2" class="section-h200">
+                                <div id="di1" class="drag_item">
+                                    <input type="text">
                                 </div>
-                                <div id="dh3_2" class="drag-handle-btn">
-                                    <svg class="drag-handle-btn__icon red" xmlns="http://www.w3.org/2000/svg">
-                                        <use href="#dragHandle">
-                                    </svg>
+                                <div id="di2" class="drag_item" style="top: 50px;">
+                                    <input type="text">
+                                    <div id="dh2_1" class="drag-handle"></div>
                                 </div>
-                            </div>
-                        </section>
+                                <div id="di3" class="drag_item" style="top: 100px;">
+                                    <input type="text">
+                                    <div id="dh3_1" class="drag-handle-btn">
+                                        <svg class="drag-handle-btn__icon" xmlns="http://www.w3.org/2000/svg">
+                                            <use href="#dragHandle">
+                                        </svg>
+                                    </div>
+                                    <div id="dh3_2" class="drag-handle-btn">
+                                        <svg class="drag-handle-btn__icon red" xmlns="http://www.w3.org/2000/svg">
+                                            <use href="#dragHandle">
+                                        </svg>
+                                    </div>
+                                </div>
+                            </section>
 
-                        <h2>Sortable list with onlyRootHandle option</h2>
-                        <section>
-                            <div id="sortable_roothnd" class="list-area"></div>
-                        </section>
+                            <h2 id="onlyRootHandle">onlyRootHandle option</h2>
+                            <section>
+                                <div id="sortable_roothnd" class="list-area"></div>
+                            </section>
 
-                        <h2>Sortable list with drag handle option</h2>
-                        <section>
-                            <div id="sortable_hnd" class="list-area"></div>
-                        </section>
+                            <h2 id="listHandle">Sortable list with drag handle option</h2>
+                            <section>
+                                <div id="sortable_hnd" class="list-area"></div>
+                            </section>
 
-                        <h2>Sortable with single item</h2>
-                        <section>
-                            <div id="singleItemSortable" class="list-area">
-                                <div class="list_item"><span>Item 1</span></div>
-                            </div>
-                        </section>
+                            <h2 id="single">Sortable with single item</h2>
+                            <section>
+                                <div id="singleItemSortable" class="list-area">
+                                    <div class="list_item"><span>Item 1</span></div>
+                                </div>
+                            </section>
 
-                        <h2>Sortable with single item and allowSingleItemSort option</h2>
-                        <section>
-                            <div id="singleItemSortableAllow" class="list-area">
-                                <div class="list_item"><span>Item 1</span></div>
-                            </div>
-                        </section>
+                            <h2 id="allowSingleItemSort">allowSingleItemSort option</h2>
+                            <section>
+                                <div id="singleItemSortableAllow" class="list-area">
+                                    <div class="list_item"><span>Item 1</span></div>
+                                </div>
+                            </section>
 
-                    </div>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

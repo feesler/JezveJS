@@ -79,18 +79,14 @@ function initChartContainer(data) {
 
 function initHistogram(data) {
     const contaier = initChartContainer(data);
-    Histogram.create({
-        data,
-        elem: contaier.chartElem,
-    });
+    const chart = Histogram.create({ data });
+    contaier.chartElem.append(chart.elem);
 }
 
 function initLineChart(data) {
     const contaier = initChartContainer(data);
-    LineChart.create({
-        data,
-        elem: contaier.chartElem,
-    });
+    const chart = LineChart.create({ data });
+    contaier.chartElem.append(chart.elem);
 }
 
 function init() {

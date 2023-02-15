@@ -1,4 +1,4 @@
-import { createElement, show, isFunction } from '../../js/common.js';
+import { createElement, isFunction } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
 import { DropDownClearButton } from './ClearButton.js';
@@ -6,14 +6,13 @@ import { DropDownToggleButton } from './ToggleButton.js';
 import { getSelectedItems } from './utils.js';
 import { DropDownInput } from './Input.js';
 import { DropDownMultipleSelection } from './MultipleSelection.js';
+import { DropDownSingleSelection } from './SingleSelection.js';
+import { DropDownPlaceholder } from './Placeholder.js';
 
 /* CSS classes */
 const COMBO_CLASS = 'dd__combo';
 const VALUE_CLASS = 'dd__combo-value';
 const CONTROLS_CLASS = 'dd__combo-controls';
-/* Selection */
-const SINGLE_SELECTION_CLASS = 'dd__single-selection';
-const PLACEHOLDER_CLASS = 'dd__single-selection_placeholder';
 
 const defaultProps = {
     inputElem: null,
@@ -29,6 +28,8 @@ const defaultProps = {
     onClearSelection: null,
     components: {
         Input: DropDownInput,
+        Placeholder: DropDownPlaceholder,
+        SingleSelection: DropDownSingleSelection,
         MultipleSelection: DropDownMultipleSelection,
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
@@ -61,7 +62,7 @@ export class DropDownComboBox extends Component {
     }
 
     init() {
-        const { Input } = this.props.components;
+        const { Input, SingleSelection, Placeholder } = this.props.components;
 
         this.input = Input.create({
             elem: this.props.inputElem,
@@ -80,10 +81,13 @@ export class DropDownComboBox extends Component {
             valueContainer.append(this.multipleSelection.elem);
         }
 
-        this.staticElem = createElement('span', { props: { className: SINGLE_SELECTION_CLASS } });
-        show(this.staticElem, !this.state.editable);
+        this.placeholder = Placeholder.create();
+        this.placeholder.show(!this.state.editable);
 
-        valueContainer.append(this.staticElem, this.input.elem);
+        this.singleSelection = SingleSelection.create();
+        this.singleSelection.show(!this.state.editable);
+
+        valueContainer.append(this.placeholder.elem, this.singleSelection.elem, this.input.elem);
 
         const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
 
@@ -136,24 +140,8 @@ export class DropDownComboBox extends Component {
 
     /** Set text for single selection */
     renderSingleSelection(state) {
-        if (this.props.multi) {
-            if (state.editable) {
-                this.input.setState((inputState) => ({
-                    ...inputState,
-                    placeholder: this.props.placeholder,
-                    value: state.inputString,
-                }));
-            } else {
-                this.staticElem.textContent = this.props.placeholder;
-                this.staticElem.title = this.props.placeholder;
-                this.staticElem.classList.add(PLACEHOLDER_CLASS);
-            }
-
-            return;
-        }
-
-        const [selectedItem] = getSelectedItems(state);
-        const str = selectedItem?.title ?? '';
+        const [item] = getSelectedItems(state);
+        const str = item?.title ?? '';
         const usePlaceholder = (str.length === 0);
         const placeholder = (usePlaceholder) ? this.props.placeholder : str;
 
@@ -163,19 +151,43 @@ export class DropDownComboBox extends Component {
                 placeholder,
                 value: state.inputString ?? str,
             }));
-        } else if (!state.editable) {
-            const staticText = placeholder;
-            this.staticElem.textContent = staticText;
-            this.staticElem.title = staticText;
-            this.staticElem.classList.toggle(PLACEHOLDER_CLASS, usePlaceholder);
+        } else {
+            if (usePlaceholder) {
+                this.placeholder.setState((placeholderState) => ({
+                    ...placeholderState,
+                    placeholder,
+                }));
+            } else {
+                this.singleSelection.setState((selectionState) => ({
+                    ...selectionState,
+                    item,
+                }));
+            }
+            this.placeholder.show(usePlaceholder);
+            this.singleSelection.show(!usePlaceholder);
         }
     }
 
     /** Render selection elements */
     renderSelection(state) {
-        this.renderSingleSelection(state);
         if (!this.props.multi) {
+            this.renderSingleSelection(state);
             return;
+        }
+
+        if (state.editable) {
+            this.input.setState((inputState) => ({
+                ...inputState,
+                placeholder: this.props.placeholder,
+                value: state.inputString,
+            }));
+        } else {
+            this.placeholder.setState((placeholderState) => ({
+                ...placeholderState,
+                placeholder: this.props.placeholder,
+            }));
+            this.placeholder.show(true);
+            this.singleSelection.show(false);
         }
 
         const selectedItems = getSelectedItems(state);

@@ -23,17 +23,17 @@ export class PaginatorView extends AppView {
     async parseContent() {
         const res = {};
 
-        res.simplePaginator = await Paginator.create(this, await query('#simple .paginator'));
-        res.styledPaginator = await Paginator.create(this, await query('#styled .paginator'));
-        res.arrowsPaginator = await Paginator.create(this, await query('#arrows .paginator'));
-        res.activeLinkPaginator = await Paginator.create(this, await query('#active-link .paginator'));
-        res.customURLPaginator = await Paginator.create(this, await query('#custom-url .paginator'));
-        res.noURLPaginator = await Paginator.create(this, await query('#no-url .paginator'));
-        res.handlerPaginator = await Paginator.create(this, await query('#handler .paginator'));
+        res.simplePaginator = await Paginator.create(this, await query('#defaultContainer .paginator'));
+        res.styledPaginator = await Paginator.create(this, await query('#styledContainer .paginator'));
+        res.arrowsPaginator = await Paginator.create(this, await query('#arrowsContainer .paginator'));
+        res.activeLinkPaginator = await Paginator.create(this, await query('#activeLinkContainer .paginator'));
+        res.customURLPaginator = await Paginator.create(this, await query('#customUrlContainer .paginator'));
+        res.noURLPaginator = await Paginator.create(this, await query('#noUrlContainer .paginator'));
+        res.handlerPaginator = await Paginator.create(this, await query('#handlerContainer .paginator'));
         res.handlerStatus = { elem: await query('#handler-status') };
-        res.prerenderedPaginator = await Paginator.create(this, await query('#prerendered'));
-        res.singleOnPaginator = await Paginator.create(this, await query('#single-on .paginator'));
-        res.singleOffPaginator = await Paginator.create(this, await query('#single-off .paginator'));
+        res.prerenderedPaginator = await Paginator.create(this, await query('#prerenderedPaginator'));
+        res.singleOnPaginator = await Paginator.create(this, await query('#showSingleContainer .paginator'));
+        res.singleOffPaginator = await Paginator.create(this, await query('#hideSingleContainer .paginator'));
 
         for (const name of paginatorsList) {
             assert(res[name], `Invalid paginator ${name}`);

@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import {
     ge,
     setEvents,
@@ -27,7 +28,7 @@ const initSimple = () => {
         onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
     });
 
-    ge('simple').append(collapse.elem);
+    ge('defaultContainer').append(collapse.elem);
 };
 
 const initStyled = () => {
@@ -37,7 +38,7 @@ const initStyled = () => {
         onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
     });
 
-    ge('styled').append(collapse.elem);
+    ge('styledContainer').append(collapse.elem);
 };
 
 const initCustomHeader = () => {
@@ -92,7 +93,7 @@ const initMethods = () => {
         header: null,
         content: 'Content',
     });
-    ge('methods').append(collapse.elem);
+    ge('methodsContainer').append(collapse.elem);
 
     setEvents(ge('expandBtn'), { click: () => collapse.expand() });
     setEvents(ge('collapseBtn'), { click: () => collapse.collapse() });

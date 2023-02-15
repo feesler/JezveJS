@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import { ge, onReady } from 'jezvejs';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 import { initNavigation } from '../../app.js';

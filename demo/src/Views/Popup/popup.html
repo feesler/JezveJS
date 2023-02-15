@@ -26,94 +26,117 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>Popup</h1>
 
-                        <h2>Full width dynamic popup</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showFullWidthBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="result"></textarea>
-                            </div>
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#fullwidth">Full width</a></li>
+                                <li><a href="#close">Close button</a></li>
+                                <li><a href="#center">Center</a></li>
+                                <li><a href="#noDim">No dimming</a></li>
+                                <li><a href="#draggable">Draggable</a></li>
+                                <li><a href="#notification">Notification</a></li>
+                                <li><a href="#template">Use template</a></li>
+                                <li><a href="#nested">Nested popups</a></li>
+                                <li><a href="#controls">Update controls</a></li>
+                                <li><a href="#title">Update title</a></li>
+                                <li><a href="#content">Update content</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Full width dynamic popup with close button</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showCloseBtn" class="btn action-btn" type="button" value="Show popup scroll">
-                                <input id="showMsgScrollBtn" class="btn action-btn" type="button"
-                                    value="Show popup message scroll">
-                            </div>
-                        </section>
+                        <div class="content-container">
+                            <h2 id="fullwidth">Full width</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showFullWidthBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="result"></textarea>
+                                </div>
+                            </section>
 
-                        <h2>Center only background</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showCenterOnlyBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
+                            <h2 id="close">Close button</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showCloseBtn" class="btn action-btn" type="button"
+                                        value="Show popup scroll">
+                                    <input id="showMsgScrollBtn" class="btn action-btn" type="button"
+                                        value="Show popup message scroll">
+                                </div>
+                            </section>
 
-                        <h2>No page dimming</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showNoDimBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
+                            <h2 id="center">Center only background</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showCenterOnlyBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
 
-                        <h2>Draggable popup</h2>
-                        <section class="row-section">
-                            <div class="section-controls">
-                                <input id="showDraggableBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
+                            <h2 id="noDim">No dimming</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showNoDimBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
 
-                        <h2>Notification component</h2>
-                        <section class="row-section">
-                            <div class="section-controls">
-                                <input id="showNotifyBtn" class="btn action-btn" type="button" value="Show">
-                                <input id="showSuccessNotifyBtn" class="btn action-btn" type="button" value="Show success">
-                                <input id="showErrorNotifyBtn" class="btn action-btn" type="button" value="Show error">
-                            </div>
-                        </section>
+                            <h2 id="draggable">Draggable</h2>
+                            <section class="row-section">
+                                <div class="section-controls">
+                                    <input id="showDraggableBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
 
-                        <h2>Popup from HTML template</h2>
-                        <section class="row-section">
-                            <div class="section-controls">
-                                <input id="showTplBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
+                            <h2 id="notification">Notification</h2>
+                            <section class="row-section">
+                                <div class="section-controls">
+                                    <input id="showNotifyBtn" class="btn action-btn" type="button" value="Show">
+                                    <input id="showSuccessNotifyBtn" class="btn action-btn" type="button"
+                                        value="Show success">
+                                    <input id="showErrorNotifyBtn" class="btn action-btn" type="button"
+                                        value="Show error">
+                                </div>
+                            </section>
 
-                        <h2>Nested popups</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showNestedBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
+                            <h2 id="template">Use template</h2>
+                            <section class="row-section">
+                                <div class="section-controls">
+                                    <input id="showTplBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
 
-                        <h2>Update controls after create popup</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showControlsUpdBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
+                            <h2 id="nested">Nested popups</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showNestedBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
 
-                        <h2>Update title after create popup</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showTitleUpdBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
+                            <h2 id="controls">Update controls</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showControlsUpdBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
 
-                        <h2>Update content after create popup</h2>
-                        <section>
-                            <div class="section-controls">
-                                <input id="showContentUpdBtn" class="btn action-btn" type="button" value="Show">
-                            </div>
-                        </section>
-                    </div>
+                            <h2 id="title">Update title</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showTitleUpdBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
+
+                            <h2 id="content">Update content</h2>
+                            <section>
+                                <div class="section-controls">
+                                    <input id="showContentUpdBtn" class="btn action-btn" type="button" value="Show">
+                                </div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

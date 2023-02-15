@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import { ge, onReady, setEvents } from 'jezvejs';
 import { Checkbox } from 'jezvejs/Checkbox';
 import { Radio } from 'jezvejs/Radio';

@@ -26,42 +26,56 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>PieChart</h1>
 
-                        <h2>Default settings</h2>
-                        <section>
-                            <div id="defaultPChart" class="std_chart_wrap"></div>
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#default">Default settings</a></li>
+                                <li><a href="#offset">Title and offset sector</a></li>
+                                <li><a href="#innerRadius">'innerRadius' option</a></li>
+                                <li><a href="#single">Single value</a></li>
+                                <li><a href="#setData">Set data</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Title and offset sector</h2>
-                        <section>
-                            <div id="offsetPChart" class="std_chart_wrap"></div>
-                            <div id="hovtitle" class="info-bottom"></div>
-                        </section>
+                        <div class="content-container">
+                            <h2 id="default">Default settings</h2>
+                            <section>
+                                <div id="defaultPChart" class="std_chart_wrap"></div>
+                            </section>
 
-                        <h2>'innerRadius' property</h2>
-                        <section>
-                            <div id="innerPChart" class="std_chart_wrap">
-                                <div id="hovtitle-inner" class="info-inner"></div>
-                            </div>
-                        </section>
+                            <h2 id="offset">Title and offset sector</h2>
+                            <section>
+                                <div id="offsetPChart" class="std_chart_wrap"></div>
+                                <div id="hovtitle" class="info-bottom"></div>
+                            </section>
 
-                        <h2>Single value</h2>
-                        <section class="row-section single-value-section">
-                            <div id="singleValPChart" class="std_chart_wrap"></div>
-                            <div id="singleValInnerPChart" class="std_chart_wrap"></div>
-                        </section>
+                            <h2 id="innerRadius">'innerRadius' option</h2>
+                            <section>
+                                <div id="innerPChart" class="std_chart_wrap">
+                                    <div id="hovtitle-inner" class="info-inner"></div>
+                                </div>
+                            </section>
 
-                        <h2>No data test</h2>
-                        <section>
-                            <div id="noDataPChart" class="std_chart_wrap"></div>
-                            <div class="section-controls">
-                                <button id="setNoDataBtn" class="btn action-btn" type="button">Set no data</button>
-                                <button id="setDataBtn" class="btn action-btn" type="button">Set data</button>
-                            </div>
-                        </section>
-                    </div>
+                            <h2 id="single">Single value</h2>
+                            <section class="row-section single-value-section">
+                                <div id="singleValPChart" class="std_chart_wrap"></div>
+                                <div id="singleValInnerPChart" class="std_chart_wrap"></div>
+                            </section>
+
+                            <h2 id="setData">Set data</h2>
+                            <section>
+                                <div id="noDataPChart" class="std_chart_wrap"></div>
+                                <div class="section-controls">
+                                    <button id="setNoDataBtn" class="btn action-btn" type="button">Set no data</button>
+                                    <button id="setDataBtn" class="btn action-btn" type="button">Set data</button>
+                                </div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

@@ -92,7 +92,6 @@ export class CustomListItem extends Component {
         this.contentElem.classList.toggle(SELECTED_LIST_ITEM_CLASS, selected);
         this.contentElem.classList.toggle(LIST_ITEM_ACTIVE_CLASS, state.active);
 
-        this.elem.dataset.id = state.id;
         this.enable(!state.disabled);
         this.show(!state.hidden);
     }

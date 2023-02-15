@@ -36,7 +36,7 @@ const onPopupResultAndClose = (popup, res) => {
 const createOkBtn = ({ onClick, textContent = 'ok', disabled = false }) => (
     createElement('button', {
         props: {
-            className: 'btn submit-btn',
+            className: 'btn action-btn submit-btn',
             type: 'button',
             textContent,
             disabled,
@@ -48,7 +48,7 @@ const createOkBtn = ({ onClick, textContent = 'ok', disabled = false }) => (
 const createCancelBtn = ({ onClick, textContent = 'cancel', disabled = false }) => (
     createElement('button', {
         props: {
-            className: 'btn cancel-btn',
+            className: 'btn action-btn cancel-btn',
             type: 'button',
             textContent,
             disabled,

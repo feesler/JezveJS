@@ -37,7 +37,7 @@ const initDefault = () => {
             onChange: (checked) => addEventLog(`Checkbox item toggled: ${checked}`),
         }],
     });
-    ge('default').append(menu.elem);
+    ge('defaultContainer').append(menu.elem);
 };
 
 const initAttached = () => {
@@ -59,7 +59,7 @@ const initAttached = () => {
         }],
     });
 
-    menu.attachTo(ge('attached'));
+    menu.attachTo(ge('attachTarget'));
 };
 
 const initClipping = () => {
@@ -127,7 +127,7 @@ const initList = () => {
         }],
     });
 
-    const list = ge('list');
+    const list = ge('listContainer');
     const itemsCount = 20;
     for (let i = 1; i <= itemsCount; i += 1) {
         const itemElem = renderListItem(i, menu);
