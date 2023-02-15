@@ -21,6 +21,8 @@ import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { getSelectedItems } from './utils.js';
 import { DropDownInput } from './Input.js';
+import { DropDownSingleSelection } from './SingleSelection.js';
+import { DropDownPlaceholder } from './Placeholder.js';
 import { DropDownComboBox } from './ComboBox.js';
 import { DropDownMenu } from './Menu.js';
 import { DropDownMenuList } from './MenuList.js';
@@ -78,6 +80,8 @@ const defaultProps = {
     className: null,
     components: {
         Input: DropDownInput,
+        Placeholder: DropDownPlaceholder,
+        SingleSelection: DropDownSingleSelection,
         ComboBox: DropDownComboBox,
         Menu: DropDownMenu,
         MenuList: DropDownMenuList,
@@ -198,6 +202,8 @@ export class DropDown extends Component {
             const {
                 ComboBox,
                 Input,
+                SingleSelection,
+                Placeholder,
                 MultipleSelection,
                 MultiSelectionItem,
                 ToggleButton,
@@ -219,6 +225,8 @@ export class DropDown extends Component {
                 onClearSelection: (e) => this.onClear(e),
                 components: {
                     Input,
+                    SingleSelection,
+                    Placeholder,
                     MultipleSelection,
                     MultiSelectionItem,
                     ToggleButton,
