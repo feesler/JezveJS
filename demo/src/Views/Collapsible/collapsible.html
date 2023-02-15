@@ -26,46 +26,60 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>Collapsible</h1>
 
-                        <h2>Simple container</h2>
-                        <section>
-                            <div id="simple"></div>
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#default">Default settings</a></li>
+                                <li><a href="#styled">Styled container</a></li>
+                                <li><a href="#customHeader">Custom header</a></li>
+                                <li><a href="#toggleOnClick">toggleOnClick option</a></li>
+                                <li><a href="#methods">Methods</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Styled container</h2>
-                        <section>
-                            <div id="styled">
-                                <ul id="styledContent">
-                                    <li>Item 1</li>
-                                    <li>Item 2</li>
-                                    <li>Item 3</li>
-                                    <li>Item 4</li>
-                                </ul>
-                            </div>
-                        </section>
+                        <div class="content-container">
+                            <h2 id="default">Default settings</h2>
+                            <section>
+                                <div id="defaultContainer"></div>
+                            </section>
 
-                        <h2>Custom header</h2>
-                        <section>
-                            <div id="custom"></div>
-                        </section>
+                            <h2 id="styled">Styled container</h2>
+                            <section>
+                                <div id="styledContainer">
+                                    <ul id="styledContent">
+                                        <li>Item 1</li>
+                                        <li>Item 2</li>
+                                        <li>Item 3</li>
+                                        <li>Item 4</li>
+                                    </ul>
+                                </div>
+                            </section>
 
-                        <h2>toggleOnClick option</h2>
-                        <section>
-                            <div id="disabledToggle"></div>
-                        </section>
+                            <h2 id="customHeader">Custom header</h2>
+                            <section>
+                                <div id="custom"></div>
+                            </section>
 
-                        <h2>Methods on component without header</h2>
-                        <section>
-                            <div id="methods"></div>
-                            <div class="section-controls">
-                                <input id="expandBtn" class="btn action-btn" type="button" value="Expand">
-                                <input id="collapseBtn" class="btn action-btn" type="button" value="Collapse">
-                                <input id="toggleBtn" class="btn action-btn" type="button" value="Toggle">
-                            </div>
-                        </section>
-                    </div>
+                            <h2 id="toggleOnClick">toggleOnClick option</h2>
+                            <section>
+                                <div id="disabledToggle"></div>
+                            </section>
+
+                            <h2 id="methods">Methods on component without header</h2>
+                            <section>
+                                <div id="methodsContainer"></div>
+                                <div class="section-controls">
+                                    <input id="expandBtn" class="btn action-btn" type="button" value="Expand">
+                                    <input id="collapseBtn" class="btn action-btn" type="button" value="Collapse">
+                                    <input id="toggleBtn" class="btn action-btn" type="button" value="Toggle">
+                                </div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

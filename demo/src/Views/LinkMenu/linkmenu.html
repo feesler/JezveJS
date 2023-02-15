@@ -26,79 +26,91 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>Link Menu</h1>
 
-                        <h2>Parse component multiple select from DOM</h2>
-                        <section>
-                            <div id="parsed" class="link-menu" multiple>
-                                <a class="link-menu-item" href="#">
-                                    <span class="link-menu-item__title">Show all</span>
-                                </a>
-                                <label class="checkbox link-menu-item" data-value="1">
-                                    <input type="checkbox">
-                                    <span class="checkbox__check"><svg class="checkbox__icon">
-                                            <use xlink:href="#check"></use>
-                                        </svg></span>
-                                    <span class="checkbox__label">
-                                        <a href="#first">
-                                            <span class="link-menu-item__title">First</span>
-                                        </a>
-                                    </span>
-                                </label>
-                                <label class="checkbox link-menu-item" data-value="2">
-                                    <input type="checkbox">
-                                    <span class="checkbox__check"><svg class="checkbox__icon">
-                                            <use xlink:href="#check"></use>
-                                        </svg></span>
-                                    <span class="checkbox__label">
-                                        <a href="#second">
-                                            <span class="link-menu-item__title">Second</span>
-                                        </a>
-                                    </span>
-                                </label>
-                                <label class="checkbox link-menu-item" data-value="3">
-                                    <input type="checkbox">
-                                    <span class="checkbox__check"><svg class="checkbox__icon">
-                                            <use xlink:href="#check"></use>
-                                        </svg></span>
-                                    <span class="checkbox__label">
-                                        <a href="#third">
-                                            <span class="link-menu-item__title">Third</span>
-                                        </a>
-                                    </span>
-                                </label>
-                                <label class="checkbox link-menu-item" data-value="4">
-                                    <input type="checkbox">
-                                    <span class="checkbox__check"><svg class="checkbox__icon">
-                                            <use xlink:href="#check"></use>
-                                        </svg></span>
-                                    <span class="checkbox__label">
-                                        <a href="#fourth">
-                                            <span class="link-menu-item__title">Fourth</span>
-                                        </a>
-                                    </span>
-                                </label>
-                            </div>
-                            <div class="section-controls logs-container">
-                                <label>Events log</label>
-                                <textarea id="eventsLog"></textarea>
-                            </div>
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#parse">Default settings</a></li>
+                                <li><a href="#single">Single select with icons</a></li>
+                                <li><a href="#allowActiveLink">'allowActiveLink' option</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Dynamically created single select LinkMenu with icons</h2>
-                        <section>
-                            <div id="dynamic"></div>
-                        </section>
+                        <div class="content-container">
+                            <h2 id="parse">Parse multiple select component</h2>
+                            <section>
+                                <div id="parsed" class="link-menu" multiple>
+                                    <a class="link-menu-item" href="#">
+                                        <span class="link-menu-item__title">Show all</span>
+                                    </a>
+                                    <label class="checkbox link-menu-item" data-value="1">
+                                        <input type="checkbox">
+                                        <span class="checkbox__check"><svg class="checkbox__icon">
+                                                <use xlink:href="#check"></use>
+                                            </svg></span>
+                                        <span class="checkbox__label">
+                                            <a href="#first">
+                                                <span class="link-menu-item__title">First</span>
+                                            </a>
+                                        </span>
+                                    </label>
+                                    <label class="checkbox link-menu-item" data-value="2">
+                                        <input type="checkbox">
+                                        <span class="checkbox__check"><svg class="checkbox__icon">
+                                                <use xlink:href="#check"></use>
+                                            </svg></span>
+                                        <span class="checkbox__label">
+                                            <a href="#second">
+                                                <span class="link-menu-item__title">Second</span>
+                                            </a>
+                                        </span>
+                                    </label>
+                                    <label class="checkbox link-menu-item" data-value="3">
+                                        <input type="checkbox">
+                                        <span class="checkbox__check"><svg class="checkbox__icon">
+                                                <use xlink:href="#check"></use>
+                                            </svg></span>
+                                        <span class="checkbox__label">
+                                            <a href="#third">
+                                                <span class="link-menu-item__title">Third</span>
+                                            </a>
+                                        </span>
+                                    </label>
+                                    <label class="checkbox link-menu-item" data-value="4">
+                                        <input type="checkbox">
+                                        <span class="checkbox__check"><svg class="checkbox__icon">
+                                                <use xlink:href="#check"></use>
+                                            </svg></span>
+                                        <span class="checkbox__label">
+                                            <a href="#fourth">
+                                                <span class="link-menu-item__title">Fourth</span>
+                                            </a>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="section-controls logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="eventsLog"></textarea>
+                                </div>
+                            </section>
 
-                        <h2>Dynamically created multiple select LinkMenu + allowActiveLink</h2>
-                        <section>
-                            <div id="dynamicMulti"></div>
-                            <div class="section-controls">
-                                <button id="toggleEnableBtn" class="btn action-btn" type="button">Disable</button>
-                            </div>
-                        </section>
-                    </div>
+                            <h2 id="single">Single select with icons</h2>
+                            <section>
+                                <div id="dynamic"></div>
+                            </section>
+
+                            <h2 id="allowActiveLink">'allowActiveLink' option</h2>
+                            <section>
+                                <div id="dynamicMulti"></div>
+                                <div class="section-controls">
+                                    <button id="toggleEnableBtn" class="btn action-btn" type="button">Disable</button>
+                                </div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

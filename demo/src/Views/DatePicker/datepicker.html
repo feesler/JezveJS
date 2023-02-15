@@ -26,91 +26,107 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>DatePicker</h1>
 
-                        <h2>Animated static component</h2>
-                        <section>
-                            <input id="staticDateInp" class="input" type="text">
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#static">Animated static component</a></li>
+                                <li><a href="#popup">Popup component</a></li>
+                                <li><a href="#position">Position</a></li>
+                                <li><a href="#range">Range select</a></li>
+                                <li><a href="#callbacks">Callbacks</a></li>
+                                <li><a href="#setSelection">setSelection() method</a></li>
+                                <li><a href="#locale">Locale</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Popup component</h2>
-                        <section>
-                            <div id="dpPopupGroup" class="input-group">
-                                <input id="popupDateInp" class="input-group__input" type="text">
-                                <button id="showPopupBtn" class="btn input-group__btn" type="button">
-                                    <svg class="btn__icon">
-                                        <use href="#calendar-icon" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </section>
+                        <div class="content-container">
+                            <h2 id="static">Animated static component</h2>
+                            <section>
+                                <input id="staticDateInp" class="input" type="text">
+                            </section>
 
-                        <h2>Position test</h2>
-                        <section>
-                            <div class="right-container">
-                                <input id="showPosBtn" class="btn action-btn" type="button" value="show">
-                            </div>
-                        </section>
+                            <h2 id="popup">Popup component</h2>
+                            <section>
+                                <div id="dpPopupGroup" class="input-group">
+                                    <input id="popupDateInp" class="input-group__input" type="text">
+                                    <button id="showPopupBtn" class="btn input-group__btn" type="button">
+                                        <svg class="btn__icon">
+                                            <use href="#calendar-icon" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </section>
 
-                        <h2>Range select</h2>
-                        <section>
-                            <div id="dpRangeGroup" class="input-group">
-                                <input id="rangeInp" class="input-group__input" type="text">
-                                <button id="showRangeBtn" class="btn input-group__btn" type="button">
-                                    <svg class="btn__icon">
-                                        <use href="#calendar-icon" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </section>
+                            <h2 id="position">Position test</h2>
+                            <section>
+                                <div class="right-container">
+                                    <input id="showPosBtn" class="btn action-btn" type="button" value="show">
+                                </div>
+                            </section>
 
-                        <h2>Callbacks</h2>
-                        <section>
-                            <div><span id="statustext">Waiting</span></div>
-                            <div id="dpCallbacksGroup" class="input-group">
-                                <input id="cbInp" class="input-group__input" type="text">
-                                <button id="showCbBtn" class="btn input-group__btn" type="button">
-                                    <svg class="btn__icon">
-                                        <use href="#calendar-icon" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </section>
+                            <h2 id="range">Range select</h2>
+                            <section>
+                                <div id="dpRangeGroup" class="input-group">
+                                    <input id="rangeInp" class="input-group__input" type="text">
+                                    <button id="showRangeBtn" class="btn input-group__btn" type="button">
+                                        <svg class="btn__icon">
+                                            <use href="#calendar-icon" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </section>
 
-                        <h2>setSelection() method test</h2>
-                        <section>
-                            <div id="dpSelectionGroup" class="input-group">
-                                <input id="setSelInp" class="input-group__input" type="text">
-                                <button id="showSelBtn" class="btn input-group__btn" type="button">
-                                    <svg class="btn__icon">
-                                        <use href="#calendar-icon" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="section-controls">
-                                <input id="select-btn" class="btn action-btn" type="button" value="Select">
-                                <input id="clear-btn" class="btn action-btn" type="button" value="Clear">
-                            </div>
-                        </section>
+                            <h2 id="callbacks">Callbacks</h2>
+                            <section>
+                                <div><span id="statustext">Waiting</span></div>
+                                <div id="dpCallbacksGroup" class="input-group">
+                                    <input id="cbInp" class="input-group__input" type="text">
+                                    <button id="showCbBtn" class="btn input-group__btn" type="button">
+                                        <svg class="btn__icon">
+                                            <use href="#calendar-icon" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </section>
 
-                        <h2>Locale</h2>
-                        <section class="locales-container">
-                            <div class="locales-item">
-                                <h3>en-US</h3>
-                                <div id="dpEnLocale"></div>
-                            </div>
-                            <div class="locales-item">
-                                <h3>fr</h3>
-                                <div id="dpFrLocale"></div>
-                            </div>
-                            <div class="locales-item">
-                                <h3>ru</h3>
-                                <div id="dpRuLocale"></div>
-                            </div>
-                        </section>
+                            <h2 id="setSelection">setSelection() method</h2>
+                            <section>
+                                <div id="dpSelectionGroup" class="input-group">
+                                    <input id="setSelInp" class="input-group__input" type="text">
+                                    <button id="showSelBtn" class="btn input-group__btn" type="button">
+                                        <svg class="btn__icon">
+                                            <use href="#calendar-icon" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="section-controls">
+                                    <input id="select-btn" class="btn action-btn" type="button" value="Select">
+                                    <input id="clear-btn" class="btn action-btn" type="button" value="Clear">
+                                </div>
+                            </section>
 
-                    </div>
+                            <h2 id="locale">Locale</h2>
+                            <section class="locales-container">
+                                <div class="locales-item">
+                                    <h3>en-US</h3>
+                                    <div id="dpEnLocale"></div>
+                                </div>
+                                <div class="locales-item">
+                                    <h3>fr</h3>
+                                    <div id="dpFrLocale"></div>
+                                </div>
+                                <div class="locales-item">
+                                    <h3>ru</h3>
+                                    <div id="dpRuLocale"></div>
+                                </div>
+                            </section>
+
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

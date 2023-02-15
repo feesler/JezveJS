@@ -26,57 +26,76 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>Paginator</h1>
 
-                        <h2>Default settings</h2>
-                        <section id="simple"></section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#default">Default settings</a></li>
+                                <li><a href="#styled">Styled</a></li>
+                                <li><a href="#arrows">Arrows</a></li>
+                                <li><a href="#activeLink">Allow active link</a></li>
+                                <li><a href="#customUrl">Custom URL and page parameter</a></li>
+                                <li><a href="#noUrl">No URL</a></li>
+                                <li><a href="#callbacks">Callbacks</a></li>
+                                <li><a href="#parse">Parse component</a></li>
+                                <li><a href="#showSingleItem">showSingleItem: true</a></li>
+                                <li><a href="#hideSingleItem">showSingleItem: false</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Styled paginator</h2>
-                        <section id="styled"></section>
+                        <div class="content-container">
+                            <h2 id="default">Default settings</h2>
+                            <section id="defaultContainer"></section>
 
-                        <h2>Use arrows</h2>
-                        <section id="arrows"></section>
+                            <h2 id="styled">Styled</h2>
+                            <section id="styledContainer"></section>
 
-                        <h2>Allow active link</h2>
-                        <section id="active-link"></section>
+                            <h2 id="arrows">Arrows</h2>
+                            <section id="arrowsContainer"></section>
 
-                        <h2>Custom URL and page parameter</h2>
-                        <section id="custom-url"></section>
+                            <h2 id="activeLink">Allow active link</h2>
+                            <section id="activeLinkContainer"></section>
 
-                        <h2>Disabled URL</h2>
-                        <section id="no-url"></section>
+                            <h2 id="customUrl">Custom URL and page parameter</h2>
+                            <section id="customUrlContainer"></section>
 
-                        <h2>Change handler</h2>
-                        <section>
-                            <div id="handler"></div>
-                            <div id="handler-status"></div>
-                        </section>
+                            <h2 id="noUrl">No URL</h2>
+                            <section id="noUrlContainer"></section>
 
-                        <h2>Prerendered</h2>
-                        <section>
-                            <div id="prerendered" class="paginator">
-                                <span class="paginator-item paginator-arrow" disabled></span>
-                                <span class="paginator-item paginator-item__active" data-page="1">1</span>
-                                <a class="paginator-item" data-page="2">2</a>
-                                <a class="paginator-item" data-page="3">3</a>
-                                <a class="paginator-item" data-page="4">4</a>
-                                <span class="paginator-item">...</span>
-                                <a class="paginator-item" data-page="100">100</a>
-                                <span class="paginator-item paginator-arrow" data-page="2"></span>
-                            </div>
-                        </section>
+                            <h2 id="callbacks">Callbacks</h2>
+                            <section>
+                                <div id="handlerContainer"></div>
+                                <div id="handler-status"></div>
+                            </section>
 
-                        <h2>showSingleItem: true</h2>
-                        <section>
-                            <div id="single-on"></div>
-                        </section>
+                            <h2 id="parse">Parse component</h2>
+                            <section>
+                                <div id="prerenderedPaginator" class="paginator">
+                                    <span class="paginator-item paginator-arrow" disabled></span>
+                                    <span class="paginator-item paginator-item__active" data-page="1">1</span>
+                                    <a class="paginator-item" data-page="2">2</a>
+                                    <a class="paginator-item" data-page="3">3</a>
+                                    <a class="paginator-item" data-page="4">4</a>
+                                    <span class="paginator-item">...</span>
+                                    <a class="paginator-item" data-page="100">100</a>
+                                    <span class="paginator-item paginator-arrow" data-page="2"></span>
+                                </div>
+                            </section>
 
-                        <h2>showSingleItem: false</h2>
-                        <section>
-                            <div id="single-off"></div>
-                        </section>
-                    </div>
+                            <h2 id="showSingleItem">showSingleItem: true</h2>
+                            <section>
+                                <div id="showSingleContainer"></div>
+                            </section>
+
+                            <h2 id="hideSingleItem">showSingleItem: false</h2>
+                            <section>
+                                <div id="hideSingleContainer"></div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

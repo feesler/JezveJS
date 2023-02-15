@@ -71,6 +71,10 @@ body {
   padding: 65px 12px 50px 12px;
 }
 
+.content-container {
+  min-width: 1px;
+}
+
 /* Typography */
 h1,
 h2,
@@ -90,6 +94,15 @@ h2 {
 
 h3 {
   font-size: 18px;
+}
+
+a,
+a:visited {
+  line-height: 1.5rem;
+  font-size: 1rem;
+  padding: 4px 0;
+  text-decoration: none;
+  color: #0072c6;
 }
 
 .action-btn,
@@ -161,7 +174,6 @@ h3 {
   padding: 0;
 
   > a {
-    text-decoration: none;
     color: #dddddd;
   }
 }
@@ -211,13 +223,40 @@ h3 {
 .nav-menu li {
   display: flex;
   list-style-type: none;
+}
 
-  a,
-  a:visited {
-    padding: 4px 0;
-    text-decoration: none;
-    font-size: 18px;
+/* Table of contents */
+.toc-menu {
+  padding: 0 0 1rem 0;
+
+  label {
+    font-size: 1rem;
+    text-decoration: underline;
     color: #0072c6;
+  }
+
+  .toc-menu-check {
+    display: none;
+  }
+
+  ul {
+    display: none;
+    list-style: none;
+    padding: 0 1rem;
+  }
+
+  .toc-menu-check:checked + ul {
+    display: block;
+  }
+
+  .toc-list-section {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 4px 0;
+  }
+
+  li {
+    margin: 0.5rem 0;
   }
 }
 
@@ -293,6 +332,30 @@ section {
 @media (min-width: 576px) {
   .nav-menu-container {
     flex-flow: row wrap;
+  }
+}
+
+@media (min-width: 992px) {
+  main {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 4fr 1fr;
+  }
+
+  .toc-menu {
+    grid-column: 2;
+    grid-row: span 2;
+    padding: 0 1rem;
+
+    label {
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: #000000;
+    }
+
+    ul {
+      display: block;
+    }
   }
 }
 

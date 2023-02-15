@@ -8,16 +8,16 @@ import { Collapsible } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
 const componentsList = [
-    'simple',
-    'styled',
+    'defaultContainer',
+    'styledContainer',
     'custom',
     'disabledToggle',
-    'methods',
+    'methodsContainer',
 ];
 
 const toggleableList = [
-    'simple',
-    'styled',
+    'defaultContainer',
+    'styledContainer',
     'custom',
 ];
 
@@ -103,7 +103,7 @@ export class CollapsibleView extends AppView {
     }
 
     async expand() {
-        this.model.methods.collapsed = false;
+        this.model.methodsContainer.collapsed = false;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.expandBtn.elem));
@@ -112,7 +112,7 @@ export class CollapsibleView extends AppView {
     }
 
     async collapse() {
-        this.model.methods.collapsed = true;
+        this.model.methodsContainer.collapsed = true;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.collapseBtn.elem));
@@ -121,7 +121,7 @@ export class CollapsibleView extends AppView {
     }
 
     async toggle() {
-        this.model.methods.collapsed = !this.model.methods.collapsed;
+        this.model.methodsContainer.collapsed = !this.model.methodsContainer.collapsed;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.toggleBtn.elem));

@@ -26,39 +26,53 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>DecimalInput</h1>
 
-                        <h2>Default settings</h2>
-                        <section>
-                            <form id="decForm">
-                                <input id="decInput" class="input" name="decvalue" type="text">
-                                <input type="submit" hidden value="Submit">
-                            </form>
-                            <div id="formStatus"></div>
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#default">Default settings</a></li>
+                                <li><a href="#limit">Limit digits</a></li>
+                                <li><a href="#integer">Integer</a></li>
+                                <li><a href="#positive">Disable negative values</a></li>
+                                <li><a href="#leadzero">Multiple leading zeros</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Limit digits after decimal point to 3</h2>
-                        <section>
-                            <input id="decInputDigits" class="input" type="text">
-                        </section>
+                        <div class="content-container">
+                            <h2 id="default">Default settings</h2>
+                            <section>
+                                <form id="decForm">
+                                    <input id="decInput" class="input" name="decvalue" type="text">
+                                    <input type="submit" hidden value="Submit">
+                                </form>
+                                <div id="formStatus"></div>
+                            </section>
 
-                        <h2>Limit digits after decimal point to 0</h2>
-                        <section>
-                            <input id="decInputInteger" class="input" type="text">
-                        </section>
+                            <h2 id="limit">Limit digits after decimal point to 3</h2>
+                            <section>
+                                <input id="decInputDigits" class="input" type="text">
+                            </section>
 
-                        <h2>Disable negative values</h2>
-                        <section>
-                            <input id="decInputPositive" class="input" type="text">
-                        </section>
+                            <h2 id="integer">Limit digits after decimal point to 0</h2>
+                            <section>
+                                <input id="decInputInteger" class="input" type="text">
+                            </section>
 
-                        <h2>Allow multiple leading zeros</h2>
-                        <section>
-                            <input id="decInputZeros" class="input" type="text">
-                        </section>
+                            <h2 id="positive">Disable negative values</h2>
+                            <section>
+                                <input id="decInputPositive" class="input" type="text">
+                            </section>
 
-                    </div>
+                            <h2 id="leadzero">Allow multiple leading zeros</h2>
+                            <section>
+                                <input id="decInputZeros" class="input" type="text">
+                            </section>
+
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

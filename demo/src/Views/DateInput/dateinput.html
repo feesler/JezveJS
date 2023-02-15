@@ -26,41 +26,52 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>DateInput</h1>
 
-                        <h2>Default settings</h2>
-                        <section>
-                            <form id="dateForm">
-                                <input id="dateinput" class="input" type="text" value="01.02.3456">
-                                <input type="submit" hidden value="Submit">
-                            </form>
-                            <div id="inputStatus"></div>
-                            <div id="formStatus"></div>
-                        </section>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#default">Default settings</a></li>
+                                <li><a href="#placeholder">Placeholder</a></li>
+                                <li><a href="#locale">Locales</a></li>
+                            </ul>
+                        </div>
 
-                        <h2>Placeholder</h2>
-                        <section>
-                            <input id="dateInputPh" class="input" type="text">
-                        </section>
+                        <div class="content-container">
+                            <h2 id="default">Default settings</h2>
+                            <section>
+                                <form id="dateForm">
+                                    <input id="dateinput" class="input" type="text" value="01.02.3456">
+                                    <input type="submit" hidden value="Submit">
+                                </form>
+                                <div id="inputStatus"></div>
+                                <div id="formStatus"></div>
+                            </section>
 
-                        <h2>Date input locales</h2>
-                        <section class="locales-container">
-                            <div class="locales-item">
-                                <h3>en-US</h3>
-                                <input id="usDateInput" class="input" type="text">
-                            </div>
-                            <div class="locales-item">
-                                <h3>ko-KR</h3>
-                                <input id="koDateInput" class="input" type="text">
-                            </div>
-                            <div class="locales-item">
-                                <h3>ru-RU</h3>
-                                <input id="ruDateInput" class="input" type="text">
-                            </div>
-                        </section>
+                            <h2 id="placeholder">Placeholder</h2>
+                            <section>
+                                <input id="dateInputPh" class="input" type="text">
+                            </section>
 
-                    </div>
+                            <h2 id="locale">Locales</h2>
+                            <section class="locales-container">
+                                <div class="locales-item">
+                                    <h3>en-US</h3>
+                                    <input id="usDateInput" class="input" type="text">
+                                </div>
+                                <div class="locales-item">
+                                    <h3>ko-KR</h3>
+                                    <input id="koDateInput" class="input" type="text">
+                                </div>
+                                <div class="locales-item">
+                                    <h3>ru-RU</h3>
+                                    <input id="ruDateInput" class="input" type="text">
+                                </div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

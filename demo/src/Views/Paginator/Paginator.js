@@ -9,7 +9,7 @@ function initSimple() {
         pagesCount: 5,
     });
 
-    ge('simple').appendChild(paginator.elem);
+    ge('defaultContainer').appendChild(paginator.elem);
 }
 
 function initStyled() {
@@ -19,7 +19,7 @@ function initStyled() {
         onChange: () => { },
     });
 
-    ge('styled').appendChild(paginator.elem);
+    ge('styledContainer').appendChild(paginator.elem);
 }
 
 function initArrows() {
@@ -30,7 +30,7 @@ function initArrows() {
         onChange: () => { },
     });
 
-    ge('arrows').appendChild(paginator.elem);
+    ge('arrowsContainer').appendChild(paginator.elem);
 }
 
 function initActiveLink() {
@@ -40,7 +40,7 @@ function initActiveLink() {
         onChange: () => { },
     });
 
-    ge('active-link').appendChild(paginator.elem);
+    ge('activeLinkContainer').appendChild(paginator.elem);
 }
 
 function initCustomURL() {
@@ -51,7 +51,7 @@ function initCustomURL() {
         onChange: () => { },
     });
 
-    ge('custom-url').appendChild(paginator.elem);
+    ge('customUrlContainer').appendChild(paginator.elem);
 }
 
 function initDisabledURL() {
@@ -61,7 +61,7 @@ function initDisabledURL() {
         onChange: () => { },
     });
 
-    ge('no-url').appendChild(paginator.elem);
+    ge('noUrlContainer').appendChild(paginator.elem);
 }
 
 function initHandler() {
@@ -73,11 +73,11 @@ function initHandler() {
         },
     });
 
-    ge('handler').appendChild(paginator.elem);
+    ge('handlerContainer').appendChild(paginator.elem);
 }
 
 function initPrerendered() {
-    Paginator.fromElement(ge('prerendered'), {
+    Paginator.fromElement(ge('prerenderedPaginator'), {
         url: null,
         breakLimit: 4,
         onChange: () => { },
@@ -91,7 +91,7 @@ function initSingleItem() {
         onChange: () => { },
         showSingleItem: true,
     });
-    ge('single-on').appendChild(paginatorOn.elem);
+    ge('showSingleContainer').appendChild(paginatorOn.elem);
 
     const paginatorOff = Paginator.create({
         url: null,
@@ -99,7 +99,7 @@ function initSingleItem() {
         onChange: () => { },
         showSingleItem: false,
     });
-    ge('single-off').appendChild(paginatorOff.elem);
+    ge('hideSingleContainer').appendChild(paginatorOff.elem);
 }
 
 onReady(() => {

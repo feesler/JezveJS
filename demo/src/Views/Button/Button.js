@@ -48,7 +48,7 @@ const initStatic = () => {
         title: 'Static button',
         icon: 'del',
     });
-    ge('static').append(dynamicLink.elem);
+    ge('staticBtn').append(dynamicLink.elem);
 };
 
 const initSubtitle = () => {
@@ -58,7 +58,7 @@ const initSubtitle = () => {
         icon: 'calendar-icon',
         className: 'bg-btn',
     });
-    ge('subtitle').append(subtitleBtn.elem);
+    ge('subtitleBtn').append(subtitleBtn.elem);
 };
 
 const initCloseBtn = () => {
@@ -70,14 +70,14 @@ const initNoTitle = () => {
     const btn = Button.create({
         icon: 'calendar-icon',
     });
-    ge('noTitle').append(btn.elem);
+    ge('noTitleBtn').append(btn.elem);
 };
 
 const initNoIcon = () => {
     const noIconBtn = Button.create({
         title: 'No icon',
     });
-    ge('noIcon').append(noIconBtn.elem);
+    ge('noIconBtn').append(noIconBtn.elem);
 };
 
 const initDisabled = () => {
@@ -88,7 +88,7 @@ const initDisabled = () => {
     });
     const disabledLink = Button.create({
         type: 'link',
-        url: '#disabled',
+        url: '#',
         title: 'Disabled link',
         icon: 'update',
         enabled: false,

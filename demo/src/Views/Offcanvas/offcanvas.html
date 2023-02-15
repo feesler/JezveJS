@@ -26,79 +26,93 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>Offcanvas</h1>
 
-                        <h2>Default settings</h2>
-                        <section>
-                            <button id="showDefaultBtn" class="btn action-btn" type="button">Show</button>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="result"></textarea>
-                            </div>
-                            <div id="defaultContent" class="offcanvas-nav" hidden>
-                                <button id="toggleTopBtn" class="btn action-btn" type="button">Toggle</button>
-                                <ul>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#default">Default settings</a></li>
+                                <li><a href="#right">Right placement</a></li>
+                                <li><a href="#top">Top placement</a></li>
+                                <li><a href="#bottom">Bottom placement</a></li>
+                                <li><a href="#responsive">Responsive</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="content-container">
+                            <h2 id="default">Default settings</h2>
+                            <section>
+                                <button id="showDefaultBtn" class="btn action-btn" type="button">Show</button>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="result"></textarea>
+                                </div>
+                                <div id="defaultContent" class="offcanvas-nav" hidden>
+                                    <button id="toggleTopBtn" class="btn action-btn" type="button">Toggle</button>
+                                    <ul>
+                                        <li>Item 1</li>
+                                        <li>Item 2</li>
+                                        <li>Item 3</li>
+                                        <li>Item 4</li>
+                                        <li>Item 5</li>
+                                    </ul>
+                                </div>
+                            </section>
+
+                            <h2 id="right">Right placement</h2>
+                            <section>
+                                <button id="showRightBtn" class="btn action-btn" type="button">Show</button>
+                                <ul id="rightContent" class="offcanvas-nav" hidden>
                                     <li>Item 1</li>
                                     <li>Item 2</li>
                                     <li>Item 3</li>
                                     <li>Item 4</li>
                                     <li>Item 5</li>
                                 </ul>
-                            </div>
-                        </section>
+                            </section>
 
-                        <h2>Offcanvas right placement</h2>
-                        <section>
-                            <button id="showRightBtn" class="btn action-btn" type="button">Show</button>
-                            <ul id="rightContent" class="offcanvas-nav" hidden>
-                                <li>Item 1</li>
-                                <li>Item 2</li>
-                                <li>Item 3</li>
-                                <li>Item 4</li>
-                                <li>Item 5</li>
-                            </ul>
-                        </section>
-
-                        <h2>Offcanvas top placement</h2>
-                        <section>
-                            <button id="showTopBtn" class="btn action-btn" type="button">Show</button>
-                            <ul id="topContent" class="offcanvas-horizontal-nav" hidden>
-                                <li>Item 1</li>
-                                <li>Item 2</li>
-                                <li>Item 3</li>
-                                <li>Item 4</li>
-                                <li>Item 5</li>
-                            </ul>
-                        </section>
-
-                        <h2>Offcanvas bottom placement</h2>
-                        <section>
-                            <button id="showBottomBtn" class="btn action-btn" type="button">Show</button>
-                            <ul id="bottomContent" class="offcanvas-horizontal-nav" hidden>
-                                <li>Item 1</li>
-                                <li>Item 2</li>
-                                <li>Item 3</li>
-                                <li>Item 4</li>
-                                <li>Item 5</li>
-                            </ul>
-                        </section>
-
-                        <h2>Offcanvas responsive</h2>
-                        <section>
-                            <button id="showResponsiveBtn" class="btn action-btn" type="button">Show</button>
-                            <div id="responsiveContent" hidden>
-                                <h3>Responsive</h3>
-                                <ul class="offcanvas-nav">
+                            <h2 id="top">Top placement</h2>
+                            <section>
+                                <button id="showTopBtn" class="btn action-btn" type="button">Show</button>
+                                <ul id="topContent" class="offcanvas-horizontal-nav" hidden>
                                     <li>Item 1</li>
                                     <li>Item 2</li>
                                     <li>Item 3</li>
                                     <li>Item 4</li>
                                     <li>Item 5</li>
                                 </ul>
-                            </div>
-                        </section>
-                    </div>
+                            </section>
+
+                            <h2 id="bottom">Bottom placement</h2>
+                            <section>
+                                <button id="showBottomBtn" class="btn action-btn" type="button">Show</button>
+                                <ul id="bottomContent" class="offcanvas-horizontal-nav" hidden>
+                                    <li>Item 1</li>
+                                    <li>Item 2</li>
+                                    <li>Item 3</li>
+                                    <li>Item 4</li>
+                                    <li>Item 5</li>
+                                </ul>
+                            </section>
+
+                            <h2 id="responsive">Responsive</h2>
+                            <section>
+                                <button id="showResponsiveBtn" class="btn action-btn" type="button">Show</button>
+                                <div id="responsiveContent" hidden>
+                                    <h3>Responsive</h3>
+                                    <ul class="offcanvas-nav">
+                                        <li>Item 1</li>
+                                        <li>Item 2</li>
+                                        <li>Item 3</li>
+                                        <li>Item 4</li>
+                                        <li>Item 5</li>
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

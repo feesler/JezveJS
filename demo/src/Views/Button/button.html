@@ -26,92 +26,112 @@
 
             <div class="page-container">
                 <div class="page-content">
-                    <div class="page-content-wrap">
+                    <main class="page-content-wrap">
                         <h1>Button</h1>
 
-                        <h2>Parse component from DOM</h2>
-                        <section>
-                            <div class="buttons-list">
-                                <button id="createBtn" class="btn" type="button">
-                                    <svg class="btn__icon" version="1.1" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="m11 4v7h-7v2l7 1e-4v7h2v-7l7-1e-4v-2h-7v-7l-2-1e-5z" />
-                                    </svg>
-                                    <span class="btn__content">
-                                        <span>Create</span>
-                                    </span>
-                                </button>
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#parse">Parse component from DOM</a></li>
+                                <li><a href="#button">Button component</a></li>
+                                <li><a href="#link">Link component</a></li>
+                                <li><a href="#static">Static component</a></li>
+                                <li><a href="#subtitle">Subtitle option</a></li>
+                                <li><a href="#close">Close button</a></li>
+                                <li><a href="#notitle">No title</a></li>
+                                <li><a href="#noicon">No icon</a></li>
+                                <li><a href="#disabled">Disabled component</a></li>
+                            </ul>
+                        </div>
 
-                                <button id="updateBtn" class="btn" type="button">
-                                    <svg class="btn__icon" version="1.1" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <use href="#update" />
-                                    </svg>
-                                    <span class="btn__content">
-                                        <span>Update</span>
-                                    </span>
-                                </button>
+                        <div class="content-container">
+                            <h2 id="parse">Parse component from DOM</h2>
+                            <section>
+                                <div class="buttons-list">
+                                    <button id="createBtn" class="btn" type="button">
+                                        <svg class="btn__icon" version="1.1" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="m11 4v7h-7v2l7 1e-4v7h2v-7l7-1e-4v-2h-7v-7l-2-1e-5z" />
+                                        </svg>
+                                        <span class="btn__content">
+                                            <span>Create</span>
+                                        </span>
+                                    </button>
 
-                                <div id="deleteBtn" class="btn">
-                                    <svg class="btn__icon" version="1.1" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <use href="#del" />
-                                    </svg>
-                                    <span class="btn__content">
-                                        <span>Delete</span>
-                                    </span>
+                                    <button id="updateBtn" class="btn" type="button">
+                                        <svg class="btn__icon" version="1.1" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <use href="#update" />
+                                        </svg>
+                                        <span class="btn__content">
+                                            <span>Update</span>
+                                        </span>
+                                    </button>
+
+                                    <div id="deleteBtn" class="btn">
+                                        <svg class="btn__icon" version="1.1" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <use href="#del" />
+                                        </svg>
+                                        <span class="btn__content">
+                                            <span>Delete</span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </section>
+                            </section>
 
-                        <h2>Button component with className option</h2>
-                        <section>
-                            <div id="dynamicButton" class="buttons-list"></div>
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="eventsLog"></textarea>
-                            </div>
-                        </section>
+                            <h2 id="button">Button component</h2>
+                            <section>
+                                <div id="dynamicButton" class="buttons-list"></div>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="eventsLog"></textarea>
+                                </div>
+                            </section>
 
-                        <h2>Link component</h2>
-                        <section>
-                            <div id="dynamicLink"></div>
-                        </section>
+                            <h2 id="link">Link component</h2>
+                            <section>
+                                <div id="dynamicLink"></div>
+                            </section>
 
-                        <h2>Static component</h2>
-                        <section>
-                            <div id="static"></div>
-                        </section>
+                            <h2 id="static">Static component</h2>
+                            <section>
+                                <div id="staticBtn"></div>
+                            </section>
 
-                        <h2>Subtitle option with styled background</h2>
-                        <section>
-                            <div id="subtitle"></div>
-                        </section>
+                            <h2 id="subtitle">Subtitle option with styled background</h2>
+                            <section>
+                                <div id="subtitleBtn"></div>
+                            </section>
 
-                        <h2>Close button</h2>
-                        <section>
-                            <div id="closeBtn"></div>
-                        </section>
+                            <h2 id="close">Close button</h2>
+                            <section>
+                                <div id="closeBtn"></div>
+                            </section>
 
-                        <h2>No title</h2>
-                        <section>
-                            <div id="noTitle"></div>
-                        </section>
+                            <h2 id="notitle">No title</h2>
+                            <section>
+                                <div id="noTitleBtn"></div>
+                            </section>
 
-                        <h2>No icon</h2>
-                        <section>
-                            <div id="noIcon"></div>
-                        </section>
+                            <h2 id="noicon">No icon</h2>
+                            <section>
+                                <div id="noIconBtn"></div>
+                            </section>
 
-                        <h2>Disabled component</h2>
-                        <section>
-                            <div id="disabledContainer"></div>
-                            <div class="section-controls">
-                                <button id="toggleEnableButtonBtn" class="btn action-btn" type="button">Enable button</button>
-                                <button id="toggleEnableLinkBtn" class="btn action-btn" type="button">Enable link</button>
-                            </div>
-                        </section>
-                    </div>
+                            <h2 id="disabled">Disabled component</h2>
+                            <section>
+                                <div id="disabledContainer"></div>
+                                <div class="section-controls">
+                                    <button id="toggleEnableButtonBtn" class="btn action-btn" type="button">Enable
+                                        button</button>
+                                    <button id="toggleEnableLinkBtn" class="btn action-btn" type="button">Enable
+                                        link</button>
+                                </div>
+                            </section>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>

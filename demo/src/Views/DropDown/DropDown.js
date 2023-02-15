@@ -521,7 +521,7 @@ const createPopup = () => {
 
     const popupContent = ge('popupContent');
     popup = Popup.create({
-        id: 'popup',
+        id: 'dropDownPopup',
         title: 'Popup',
         content: popupContent,
         closeButton: true,
