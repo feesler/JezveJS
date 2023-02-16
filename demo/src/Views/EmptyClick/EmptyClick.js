@@ -5,6 +5,7 @@ import {
     setEmptyClick,
     removeEmptyClick,
     onReady,
+    setEvents,
 } from 'jezvejs';
 import { initNavigation } from '../../app.js';
 import './style.scss';
@@ -37,15 +38,14 @@ const showMenu = () => {
 };
 
 const initMenu = () => {
-    const openBtn = ge('openbtn');
-    openBtn.addEventListener('click', () => showMenu());
+    setEvents(ge('openbtn'), { click: () => showMenu() });
 };
 
-function init() {
+const init = () => {
     initNavigation();
 
     initSimple();
     initMenu();
-}
+};
 
 onReady(init);

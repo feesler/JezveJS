@@ -1,0 +1,19 @@
+/* Clear selection button */
+.close-btn.dd__clear-btn {
+  --btn-size: var(--dd-combo-content-height);
+  --btn-icon-size: 14px;
+  --btn-icon-color: var(--dd-btn-fill);
+  --btn-hover-icon-color: var(--dd-btn-hover-fill);
+
+  width: var(--dd-btn-width);
+  justify-content: center;
+  z-index: 2;
+}
+
+/* Disabled drop down */
+.dd__container[disabled],
+.dd__container_attached[disabled] {
+  .dd__clear-btn {
+    display: none;
+  }
+}

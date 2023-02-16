@@ -1,5 +1,6 @@
-import { getClassNames, createSVGElement } from '../../js/common.js';
-import { Button } from '../Button/Button.js';
+import { getClassNames, createSVGElement } from '../../../../js/common.js';
+import { Button } from '../../../Button/Button.js';
+import './style.scss';
 
 /* Toggle icon path */
 const TOGGLE_ICON = 'm0.6 0.88-0.35 0.35 1.6 1.6 1.6-1.6-0.35-0.35-1.2 1.2z';

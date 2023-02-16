@@ -19,19 +19,19 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { getSelectedItems } from './utils.js';
-import { DropDownInput } from './Input.js';
-import { DropDownSingleSelection } from './SingleSelection.js';
-import { DropDownPlaceholder } from './Placeholder.js';
-import { DropDownComboBox } from './ComboBox.js';
-import { DropDownMenu } from './Menu.js';
-import { DropDownMenuList } from './MenuList.js';
-import { DropDownListItem } from './ListItem.js';
-import { DropDownGroupItem } from './GroupItem.js';
-import { DropDownMultipleSelection } from './MultipleSelection.js';
-import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
-import { DropDownClearButton } from './ClearButton.js';
-import { DropDownToggleButton } from './ToggleButton.js';
+import { getSelectedItems, getVisibleItems } from './utils.js';
+import { DropDownInput } from './components/Input/Input.js';
+import { DropDownSingleSelection } from './components/SingleSelection/SingleSelection.js';
+import { DropDownPlaceholder } from './components/Placeholder/Placeholder.js';
+import { DropDownComboBox } from './components/ComboBox/ComboBox.js';
+import { DropDownMenu } from './components/Menu/Menu.js';
+import { DropDownMenuList } from './components/MenuList/MenuList.js';
+import { DropDownListItem } from './components/ListItem/ListItem.js';
+import { DropDownGroupItem } from './components/GroupItem/GroupItem.js';
+import { DropDownMultipleSelection } from './components/MultipleSelection/MultipleSelection.js';
+import { DropDownMultiSelectionItem } from './components/MultiSelectionItem/MultiSelectionItem.js';
+import { DropDownClearButton } from './components/ClearButton/ClearButton.js';
+import { DropDownToggleButton } from './components/ToggleButton/ToggleButton.js';
 import '../../css/common.scss';
 import './style.scss';
 
@@ -163,7 +163,13 @@ export class DropDown extends Component {
             keydown: (e) => this.onKey(e),
         };
         this.viewportEvents = { resize: (e) => this.onViewportResize(e) };
-        this.scrollHandler = (e) => this.onWindowScroll(e);
+        this.windowEvents = {
+            scroll: {
+                listener: (e) => this.onWindowScroll(e),
+                options: { passive: true, capture: true },
+            },
+        };
+
         this.listeningWindow = false;
         this.ignoreScroll = false;
         this.waitForScroll = false;
@@ -346,6 +352,7 @@ export class DropDown extends Component {
             showInput: this.props.listAttach && this.props.enableFilter,
             inputElem: this.inputElem,
             inputPlaceholder: this.props.placeholder,
+            noItemsMessage: () => this.renderNotFound(),
             onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
@@ -371,7 +378,7 @@ export class DropDown extends Component {
         }
 
         setEvents(window.visualViewport, this.viewportEvents);
-        window.addEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+        setEvents(window, this.windowEvents);
 
         this.listeningWindow = true;
     }
@@ -382,7 +389,8 @@ export class DropDown extends Component {
         }
 
         removeEvents(window.visualViewport, this.viewportEvents);
-        window.removeEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+        removeEvents(window, this.windowEvents);
+
         this.listeningWindow = false;
     }
 
@@ -812,11 +820,7 @@ export class DropDown extends Component {
 
     /** Return array of visible(not hidden) list items */
     getVisibleItems(state = this.state) {
-        return state.items.filter((item) => (
-            (state.filtered)
-                ? (item.matchFilter && !item.hidden)
-                : !item.hidden
-        ));
+        return getVisibleItems(state);
     }
 
     isAvailableItem(item, state = this.state) {
@@ -1680,17 +1684,12 @@ export class DropDown extends Component {
             items.push(groupItem);
         });
 
-        const noItemsMessage = (state.filtered && state.filteredCount === 0)
-            ? () => this.renderNotFound()
-            : null;
-
         this.menu.setState((menuState) => ({
             ...menuState,
             inputPlaceholder: this.props.placeholder,
             inputString: state.inputString,
             filtered: state.filtered,
             items,
-            noItemsMessage,
             listScroll: (prevState.visible) ? menuState.listScroll : 0,
         }));
     }

@@ -156,8 +156,13 @@ export class BaseChart extends Component {
         this.chartScroller = createElement('div', {
             props: { className: SCROLLER_CLASS },
             children: this.chart,
+            events: {
+                scroll: {
+                    listener: (e) => this.onScroll(e),
+                    options: { passive: true },
+                },
+            },
         });
-        this.chartScroller.addEventListener('scroll', (e) => this.onScroll(e), { passive: true });
 
         this.chartContainer = createElement('div', {
             props: { className: HORIZONTAL_CONTAINER_CLASS },

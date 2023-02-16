@@ -1,0 +1,35 @@
+/* Menu container */
+.dd__list {
+  position: absolute;
+  flex-flow: column nowrap;
+  display: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: var(--dd-max-list-height);
+  background-color: var(--dd-bg-color);
+  border: var(--dd-border-width) solid var(--dd-border-color);
+  border-radius: var(--dd-list-border-radius);
+  z-index: var(--dd-list-z-index);
+  overflow: hidden;
+
+  ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    list-style-image: none;
+    list-style-type: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--dd-list-item-bg);
+  }
+}
+
+/* Opened state */
+.dd__open .dd__list {
+  display: flex;
+}
+
+/* Active component */
+.dd__container_active .dd__list {
+  border-color: var(--dd-active-border);
+}

@@ -17,7 +17,7 @@ let okRes = null;
 let failRes = null;
 let results = {};
 
-function addResult(descr, res, message) {
+const addResult = (descr, res, message) => {
     const msg = message || '';
 
     results.total += 1;
@@ -40,9 +40,9 @@ function addResult(descr, res, message) {
     });
 
     restbl.append(resultRow);
-}
+};
 
-function addBlock(descr, category) {
+const addBlock = (descr, category) => {
     const blockRow = createElement('tr', {
         props: { className: `res-block-${category}` },
         children: createElement('td', {
@@ -51,10 +51,10 @@ function addBlock(descr, category) {
     });
 
     restbl.append(blockRow);
-}
+};
 
 // Run action, check state and add result to the list
-function test(descr, action) {
+const test = (descr, action) => {
     let res = false;
     let errorMessage = '';
 
@@ -67,10 +67,10 @@ function test(descr, action) {
     }
 
     addResult(descr, res, errorMessage);
-}
+};
 
 /** Type check tests */
-function typeCheckTests() {
+const typeCheckTests = () => {
     const testArray = [1, 2, 3, 4];
     const testFunction = () => { };
     const testDate = new Date();
@@ -84,19 +84,19 @@ function typeCheckTests() {
     test('isDate()', () => (
         isDate(testDate) && !isDate(testArray) && !isDate(testFunction)
     ));
-}
+};
 
 /** DOM tests */
-function setEventResult(text) {
+const setEventResult = (text) => {
     const resultElem = ge('evResult');
     if (!resultElem) {
         return;
     }
 
     resultElem.textContent = text.toString();
-}
+};
 
-function domTests() {
+const domTests = () => {
     addBlock('DOM', 1);
 
     const view = ge('testview');
@@ -171,10 +171,10 @@ function domTests() {
 
         return true;
     });
-}
+};
 
 /** Run all remain tests */
-function runTests() {
+const runTests = () => {
     addBlock('Utils', 1);
 
     addResult('onReady()', true);
@@ -183,17 +183,17 @@ function runTests() {
 
     typeCheckTests();
     domTests();
-}
+};
 
-function onStartClick() {
+const onStartClick = () => {
     results = { total: 0, ok: 0, fail: 0 };
     addResult('Test initialization', true);
 
     setTimeout(runTests);
-}
+};
 
 /** Page initialization */
-function init() {
+const init = () => {
     initNavigation();
 
     const startbtn = ge('startbtn');
@@ -206,6 +206,6 @@ function init() {
     }
 
     startbtn.onclick = onStartClick;
-}
+};
 
 onReady(init);

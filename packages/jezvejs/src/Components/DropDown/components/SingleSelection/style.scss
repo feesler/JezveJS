@@ -1,0 +1,33 @@
+/* Single selection */
+.dd__single-selection {
+  display: flex;
+  flex: 1 0 auto;
+  font-weight: var(--dd-selection-font-weight);
+  font-size: var(--dd-selection-font-size);
+  padding: var(--dd-selection-padding);
+  margin: 0;
+  height: var(--dd-combo-content-height);
+  min-height: var(--dd-combo-content-height);
+  line-height: var(--dd-combo-content-height);
+  align-items: center;
+  background: var(--dd-selection-bg);
+  color: var(--dd-selection-text);
+  cursor: pointer;
+  pointer-events: none;
+}
+
+/* Active component */
+.dd__container_active .dd__single-selection {
+  color: var(--dd-active-selection-text);
+  background: var(--dd-active-selection-bg);
+}
+
+/* Disabled component */
+.dd__container[disabled],
+.dd__container_attached[disabled] {
+  .dd__single-selection {
+    color: var(--dd-disabled-selection-color);
+    background-color: var(--dd-disabled-selection-bg);
+    user-select: none;
+  }
+}
