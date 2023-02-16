@@ -10,6 +10,7 @@ import { Component } from '../../js/Component.js';
 import './style.scss';
 
 const defaultProps = {
+    id: undefined,
     breakLimit: 5,
     groupLimit: 3,
     pageNum: 1,
@@ -32,17 +33,17 @@ const ARROW_CLASS_NEXT = 'paginator-arrow__next';
 const ARROW_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
 
 export class Paginator extends Component {
-    constructor(props) {
-        super(props);
+    static userProps = {
+        elem: ['id'],
+    };
 
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+        });
 
-        this.state = {
-            ...this.props,
-        };
+        this.state = { ...this.props };
 
         if (this.elem) {
             this.parse();
@@ -53,19 +54,14 @@ export class Paginator extends Component {
 
     init() {
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-        this.setHandlers();
-        this.setClassNames();
 
-        this.render(this.state);
+        this.postInit();
     }
 
     parse() {
         if (!this.elem?.classList?.contains(CONTAINER_CLASS)) {
             throw new Error('Invalid element');
         }
-
-        this.setHandlers();
-        this.setClassNames();
 
         const items = Array.from(this.elem.querySelectorAll(`.${ITEM_CLASS}`));
         items.forEach((item) => {
@@ -87,6 +83,14 @@ export class Paginator extends Component {
             }
             this.state.pagesCount = page;
         });
+
+        this.postInit();
+    }
+
+    postInit() {
+        this.setHandlers();
+        this.setUserProps();
+        this.setClassNames();
 
         this.render(this.state);
     }
