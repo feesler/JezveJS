@@ -6,6 +6,8 @@ import { DropDownListItem } from '../ListItem/ListItem.js';
 const defaultProps = {
     items: [],
     multi: false,
+    filtered: false,
+    noItemsMessage: null,
     components: {
         ListItem: DropDownListItem,
         GroupItem: DropDownGroupItem,
@@ -52,6 +54,7 @@ export class DropDownMenuList extends ListContainer {
             !deepMeet(state.items, prevState?.items)
             || state.multi !== prevState?.multi
             || state.filtered !== prevState?.filtered
+            || state.noItemsMessage !== prevState?.noItemsMessage
         );
     }
 }

@@ -1,5 +1,6 @@
 import { createElement } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
+import { isVisibleItem } from '../../utils.js';
 import './style.scss';
 
 /* CSS classes */
@@ -102,9 +103,7 @@ export class DropDownGroupItem extends Component {
             multi: state.multi,
         }));
 
-        const showGroup = state.items.some((item) => (
-            !item.hidden && (!state.filtered || (state.filtered && item.matchFilter))
-        ));
+        const showGroup = state.items.some((item) => isVisibleItem(item, state));
         this.show(showGroup);
     }
 }

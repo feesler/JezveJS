@@ -46,15 +46,23 @@ export class DropDown extends TestComponent {
         const validContainer = await DropDown.isValidContainer(this.elem);
         assert(validContainer, 'Invalid drop down element');
 
-        const selectElem = await query(this.elem, 'select');
+        const res = {
+            selectElem: await query(this.elem, 'select'),
+            items: [],
+            selectedItems: [],
+        };
 
-        const res = await evaluate((elem, select) => ({
-            isAttached: elem.classList.contains('dd__container_attached'),
-            disabled: elem.hasAttribute('disabled'),
-            isMulti: select.hasAttribute('multiple'),
-            value: select.value,
-        }), this.elem, selectElem);
-        res.selectElem = selectElem;
+        [
+            res.isAttached,
+            res.disabled,
+            res.isMulti,
+            res.value,
+        ] = await evaluate((elem, select) => ([
+            elem.classList.contains('dd__container_attached'),
+            elem.hasAttribute('disabled'),
+            select.hasAttribute('multiple'),
+            select.value,
+        ]), this.elem, res.selectElem);
 
         if (res.isAttached) {
             res.toggleBtn = await query(this.elem, ':scope > *');
@@ -119,7 +127,8 @@ export class DropDown extends TestComponent {
         }), item));
 
         res.listContainer = await query(this.elem, '.dd__list');
-        if (!res.listContainer) {
+        res.noItemsMessage = { elem: await query(this.elem, '.dd__not-found-message') };
+        if (!res.listContainer || res.noItemsMessage.elem) {
             return res;
         }
 

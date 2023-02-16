@@ -1,5 +1,6 @@
 import { createElement, isFunction } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
+import { getVisibleItems } from '../../utils.js';
 import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
 import { DropDownInput } from '../Input/Input.js';
 import { DropDownListItem } from '../ListItem/ListItem.js';
@@ -22,6 +23,7 @@ const defaultProps = {
     onItemClick: null,
     multi: false,
     filtered: false,
+    noItemsMessage: null,
     components: {
         Input: DropDownInput,
         MenuList: DropDownMenuList,
@@ -72,7 +74,9 @@ export class DropDownMenu extends Component {
 
         this.list = MenuList.create({
             multi: this.props.multi,
+            noItemsMessage: this.props.noItemsMessage,
             onItemClick: (id, e) => this.onItemClick(id, e),
+            isEmptyList: (state) => (getVisibleItems(state).length === 0),
             components: {
                 ListItem,
                 GroupItem,

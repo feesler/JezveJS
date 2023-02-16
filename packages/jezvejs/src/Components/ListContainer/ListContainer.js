@@ -258,6 +258,7 @@ export class ListContainer extends Component {
         return (
             state.items !== prevState.items
             || state.listMode !== prevState.listMode
+            || state.noItemsMessage !== prevState.noItemsMessage
         );
     }
 

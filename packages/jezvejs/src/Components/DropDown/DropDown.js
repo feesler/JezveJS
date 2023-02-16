@@ -19,7 +19,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { getSelectedItems } from './utils.js';
+import { getSelectedItems, getVisibleItems } from './utils.js';
 import { DropDownInput } from './components/Input/Input.js';
 import { DropDownSingleSelection } from './components/SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from './components/Placeholder/Placeholder.js';
@@ -352,6 +352,7 @@ export class DropDown extends Component {
             showInput: this.props.listAttach && this.props.enableFilter,
             inputElem: this.inputElem,
             inputPlaceholder: this.props.placeholder,
+            noItemsMessage: () => this.renderNotFound(),
             onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
@@ -819,11 +820,7 @@ export class DropDown extends Component {
 
     /** Return array of visible(not hidden) list items */
     getVisibleItems(state = this.state) {
-        return state.items.filter((item) => (
-            (state.filtered)
-                ? (item.matchFilter && !item.hidden)
-                : !item.hidden
-        ));
+        return getVisibleItems(state);
     }
 
     isAvailableItem(item, state = this.state) {
@@ -1687,17 +1684,12 @@ export class DropDown extends Component {
             items.push(groupItem);
         });
 
-        const noItemsMessage = (state.filtered && state.filteredCount === 0)
-            ? () => this.renderNotFound()
-            : null;
-
         this.menu.setState((menuState) => ({
             ...menuState,
             inputPlaceholder: this.props.placeholder,
             inputString: state.inputString,
             filtered: state.filtered,
             items,
-            noItemsMessage,
             listScroll: (prevState.visible) ? menuState.listScroll : 0,
         }));
     }
