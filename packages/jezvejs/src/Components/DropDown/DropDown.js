@@ -163,7 +163,13 @@ export class DropDown extends Component {
             keydown: (e) => this.onKey(e),
         };
         this.viewportEvents = { resize: (e) => this.onViewportResize(e) };
-        this.scrollHandler = (e) => this.onWindowScroll(e);
+        this.windowEvents = {
+            scroll: {
+                listener: (e) => this.onWindowScroll(e),
+                options: { passive: true, capture: true },
+            },
+        };
+
         this.listeningWindow = false;
         this.ignoreScroll = false;
         this.waitForScroll = false;
@@ -371,7 +377,7 @@ export class DropDown extends Component {
         }
 
         setEvents(window.visualViewport, this.viewportEvents);
-        window.addEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+        setEvents(window, this.windowEvents);
 
         this.listeningWindow = true;
     }
@@ -382,7 +388,8 @@ export class DropDown extends Component {
         }
 
         removeEvents(window.visualViewport, this.viewportEvents);
-        window.removeEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
+        removeEvents(window, this.windowEvents);
+
         this.listeningWindow = false;
     }
 

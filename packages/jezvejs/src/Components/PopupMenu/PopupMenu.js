@@ -66,7 +66,13 @@ export class PopupMenu extends Component {
         this.items = {};
 
         this.emptyClickHandler = () => this.hideMenu();
-        this.scrollHandler = (e) => this.onScroll(e);
+        this.windowEvents = {
+            scroll: {
+                listener: (e) => this.onScroll(e),
+                options: { passive: true, capture: true },
+            },
+        };
+
         this.togglerEvents = { click: (e) => this.toggleMenu(e) };
 
         this.init();
@@ -122,7 +128,7 @@ export class PopupMenu extends Component {
             return;
         }
 
-        this.setScrollEvents();
+        setEvents(window, this.windowEvents);
         setTimeout(() => {
             this.ignoreScroll = false;
         }, this.props.ignoreScrollTimeout);
@@ -131,16 +137,8 @@ export class PopupMenu extends Component {
     removeHandlers() {
         removeEmptyClick(this.emptyClickHandler);
         if (this.props.hideOnScroll) {
-            this.removeScrollEvents();
+            removeEvents(window, this.windowEvents);
         }
-    }
-
-    setScrollEvents() {
-        window.addEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
-    }
-
-    removeScrollEvents() {
-        window.removeEventListener('scroll', this.scrollHandler, { passive: true, capture: true });
     }
 
     onScroll(e) {
