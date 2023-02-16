@@ -15,6 +15,7 @@ const defaultProps = {
     getItemProps: null, // optional callback to map items to props
     getItemById: null, // optional callback to obtain item by id
     isListChanged: null, // optional callback to verify list content was changed
+    isEmptyList: null, // optional callback to verify list is empty
     items: [],
     noItemsMessageClass: 'nodata-message',
     noItemsMessage: null, // string, function returns string or null for no message
@@ -188,7 +189,7 @@ export class ListContainer extends Component {
         }
 
         this.noDataMsg = (isFunction(state.noItemsMessage))
-            ? this.state.noItemsMessage()
+            ? state.noItemsMessage()
             : this.defaultNoDataMessage({
                 message: state.noItemsMessage,
                 className: state.noItemsMessageClass,
@@ -261,6 +262,22 @@ export class ListContainer extends Component {
     }
 
     /**
+     * Returns true if list is empty or all items are hidden
+     * @param {object} state current state object
+     */
+    isEmptyList(state) {
+        if (isFunction(state?.isEmptyList)) {
+            return state.isEmptyList(state);
+        }
+
+        return (
+            !Array.isArray(state?.items)
+            || state.items.length === 0
+            || state.items.every((item) => item.hidden)
+        );
+    }
+
+    /**
      * Renders list items
      * @param {object} state current state object
      * @param {object} prevState previous state object
@@ -274,8 +291,8 @@ export class ListContainer extends Component {
             throw new Error('Invalid state');
         }
 
-        const emptyList = state.items.length === 0;
-        const emptyBefore = !prevState.items || prevState.items.length === 0;
+        const emptyList = this.isEmptyList(state);
+        const emptyBefore = this.isEmptyList(prevState);
         if ((emptyList || emptyBefore) && emptyList !== emptyBefore) {
             removeChilds(this.elem);
             this.noDataMsg = null;
