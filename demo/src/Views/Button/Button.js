@@ -26,6 +26,7 @@ const initDynamicButton = () => {
     ge('dynamicButton').append(dynamicBtn.elem);
 
     const noTitleBtn = Button.create({
+        type: 'submit',
         icon: 'del',
         className: 'circle-icon',
         onClick: () => addEventLog('Del button clicked'),

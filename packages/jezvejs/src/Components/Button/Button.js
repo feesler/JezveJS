@@ -25,6 +25,8 @@ const defaultProps = {
     tabIndex: undefined,
 };
 
+const buttonTypes = ['button', 'submit', 'reset'];
+
 /**
  * Button component
  */
@@ -58,22 +60,28 @@ export class Button extends Component {
         return this.state.enabled;
     }
 
+    getTagName(type) {
+        if (type === 'link') {
+            return 'a';
+        }
+        if (type === 'static') {
+            return 'div';
+        }
+        if (buttonTypes.includes(type)) {
+            return 'button';
+        }
+
+        throw new Error('Invalid button type');
+    }
+
     init() {
         const { type } = this.props;
-
-        if (type === 'link') {
-            this.elem = createElement('a', {
-                props: { className: CONTAINER_CLASS },
-            });
-        } else if (type === 'static') {
-            this.elem = createElement('div', {
-                props: { className: CONTAINER_CLASS },
-            });
-        } else {
-            this.elem = createElement('button', {
-                props: { className: CONTAINER_CLASS, type: 'button' },
-            });
+        const tagName = this.getTagName(type);
+        const props = { className: CONTAINER_CLASS };
+        if (tagName === 'button') {
+            props.type = type;
         }
+        this.elem = createElement(tagName, { props });
 
         this.postInit();
     }
@@ -83,11 +91,16 @@ export class Button extends Component {
             throw new Error('Invalid element specified');
         }
 
-        if (this.elem.tagName === 'A' && typeof this.state.url === 'undefined') {
+        const { tagName } = this.elem;
+
+        if (tagName === 'A' && typeof this.state.url === 'undefined') {
             this.state.type = 'link';
             this.state.url = this.elem.href;
-        } else if (this.elem.tagName === 'BUTTON') {
-            this.state.type = 'button';
+        } else if (
+            tagName === 'BUTTON'
+            || (tagName === 'INPUT' && buttonTypes.includes(this.elem.type))
+        ) {
+            this.state.type = this.elem.type;
         } else {
             this.state.type = 'static';
         }
