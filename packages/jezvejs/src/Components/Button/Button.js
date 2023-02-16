@@ -13,20 +13,19 @@ import './style.scss';
 const CONTAINER_CLASS = 'btn';
 const ICON_CLASS = 'btn__icon';
 const CONTENT_CLASS = 'btn__content';
-const TITLE_CLASS = 'btn__title';
-const SUBTITLE_CLASS = 'btn__subtitle';
 
 const defaultProps = {
     type: 'button', // button, link or static
     enabled: true,
     url: undefined,
     title: undefined,
-    subtitle: undefined,
     icon: undefined,
     onClick: null,
     id: undefined,
     tabIndex: undefined,
 };
+
+const buttonTypes = ['button', 'submit', 'reset'];
 
 /**
  * Button component
@@ -37,16 +36,12 @@ export class Button extends Component {
     };
 
     constructor(props) {
-        super(props);
-
-        this.props = {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+        });
 
-        this.state = {
-            ...this.props,
-        };
+        this.state = { ...this.props };
 
         if (this.elem) {
             this.parse();
@@ -65,22 +60,28 @@ export class Button extends Component {
         return this.state.enabled;
     }
 
+    getTagName(type) {
+        if (type === 'link') {
+            return 'a';
+        }
+        if (type === 'static') {
+            return 'div';
+        }
+        if (buttonTypes.includes(type)) {
+            return 'button';
+        }
+
+        throw new Error('Invalid button type');
+    }
+
     init() {
         const { type } = this.props;
-
-        if (type === 'link') {
-            this.elem = createElement('a', {
-                props: { className: CONTAINER_CLASS },
-            });
-        } else if (type === 'static') {
-            this.elem = createElement('div', {
-                props: { className: CONTAINER_CLASS },
-            });
-        } else {
-            this.elem = createElement('button', {
-                props: { className: CONTAINER_CLASS, type: 'button' },
-            });
+        const tagName = this.getTagName(type);
+        const props = { className: CONTAINER_CLASS };
+        if (tagName === 'button') {
+            props.type = type;
         }
+        this.elem = createElement(tagName, { props });
 
         this.postInit();
     }
@@ -90,11 +91,16 @@ export class Button extends Component {
             throw new Error('Invalid element specified');
         }
 
-        if (this.elem.tagName === 'A' && typeof this.state.url === 'undefined') {
+        const { tagName } = this.elem;
+
+        if (tagName === 'A' && typeof this.state.url === 'undefined') {
             this.state.type = 'link';
             this.state.url = this.elem.href;
-        } else if (this.elem.tagName === 'BUTTON') {
-            this.state.type = 'button';
+        } else if (
+            tagName === 'BUTTON'
+            || (tagName === 'INPUT' && buttonTypes.includes(this.elem.type))
+        ) {
+            this.state.type = this.elem.type;
         } else {
             this.state.type = 'static';
         }
@@ -112,20 +118,10 @@ export class Button extends Component {
         }
 
         this.contentElem = this.elem.querySelector(`.${CONTENT_CLASS}`);
-        if (this.contentElem) {
-            const titleElem = this.contentElem.querySelector(`.${TITLE_CLASS}`);
-            if (typeof this.state.title === 'undefined') {
-                this.state.title = (titleElem)
-                    ? titleElem.textContent.trim()
-                    : this.contentElem.textContent.trim();
-            }
-
-            const subtitleElem = this.contentElem.querySelector(`.${SUBTITLE_CLASS}`);
-            if (typeof this.state.subtitle === 'undefined') {
-                this.state.subtitle = (subtitleElem)
-                    ? subtitleElem.textContent.trim()
-                    : null;
-            }
+        if (typeof this.state.title === 'undefined') {
+            this.state.title = (this.contentElem)
+                ? this.contentElem.textContent.trim()
+                : this.elem.textContent.trim();
         }
 
         this.state.enabled = !this.elem.hasAttribute('disabled');
@@ -190,19 +186,6 @@ export class Button extends Component {
         this.setState({ ...this.state, title });
     }
 
-    /** Set subtitle text */
-    setSubtitle(subtitle) {
-        if (subtitle && typeof subtitle !== 'string') {
-            throw new Error('Invalid subtitle specified');
-        }
-
-        if (this.state.subtitle === subtitle) {
-            return;
-        }
-
-        this.setState({ ...this.state, subtitle });
-    }
-
     /** Set URL for link element */
     setURL(url) {
         if (typeof url !== 'string') {
@@ -235,34 +218,24 @@ export class Button extends Component {
     }
 
     renderContent(state, prevState) {
-        if (state.title === prevState.title && state.subtitle === prevState.subtitle) {
+        if (state.icon === prevState.icon && state.title === prevState.title) {
             return;
         }
 
         re(this.contentElem);
-        if (!state.title) {
-            return;
-        }
 
-        this.contentElem = createElement('div', {
-            props: { className: CONTENT_CLASS },
-            children: [
-                createElement('span', {
-                    props: {
-                        className: (state.subtitle) ? TITLE_CLASS : '',
-                        textContent: state.title,
-                    },
-                }),
-            ],
-        });
-        if (state.subtitle) {
-            const subtitleElem = createElement('span', {
-                props: { className: SUBTITLE_CLASS, textContent: state.subtitle },
+        if (state.icon) {
+            this.contentElem = createElement('span', {
+                props: {
+                    className: CONTENT_CLASS,
+                    textContent: state.title,
+                },
             });
-            this.contentElem.append(subtitleElem);
-        }
 
-        this.elem.append(this.contentElem);
+            this.elem.append(this.contentElem);
+        } else {
+            this.elem.textContent = state.title ?? '';
+        }
     }
 
     /** Render component */

@@ -7,13 +7,13 @@
   --popupmenu-background: #ffffff;
   --popupmenu-z-index: 2000;
   --popupmenu-title-color: #000000;
-  --popupmenu-subtitle-color: #003cff;
   --popupmenu-icon-color: #000000;
+  --popupmenu-padding: 8px;
+  --popupmenu-icon-gap: 10px;
 
   /* Item hover */
   --popupmenu-hover-background: #3078e2;
   --popupmenu-hover-title-color: #ffffff;
-  --popupmenu-hover-subtitle-color: #cfdaff;
   --popupmenu-hover-icon-color: #ffffff;
 }
 
@@ -74,23 +74,25 @@
   .btn.popup-menu__btn {
     --btn-background: none;
     --btn-title-color: var(--popupmenu-title-color);
-    --btn-subtitle-color: var(--popupmenu-subtitle-color);
     --btn-hover-background: var(--popupmenu-hover-background);
     --btn-hover-icon-color: var(--popupmenu-hover-icon-color);
     --btn-hover-title-color: var(--popupmenu-hover-title-color);
-    --btn-hover-subtitle-color: var(--popupmenu-hover-subtitle-color);
+    --btn-content-padding: 0;
 
     height: auto;
     flex-shrink: 0;
-    padding: 8px;
+    padding-top: var(--popupmenu-padding);
+    padding-bottom: var(--popupmenu-padding);
+    padding-left: calc(
+      var(--popupmenu-padding) + var(--btn-size) + var(--popupmenu-icon-gap)
+    );
+    padding-right: var(--popupmenu-padding);
     width: 100%;
+    position: relative;
 
-    .btn__content {
-      padding: 0 10px 0 42px;
-    }
-
-    .btn__icon + .btn__content {
-      padding: 0 10px;
+    .btn__icon {
+      position: absolute;
+      left: var(--popupmenu-padding);
     }
   }
 

@@ -26,6 +26,7 @@ const initDynamicButton = () => {
     ge('dynamicButton').append(dynamicBtn.elem);
 
     const noTitleBtn = Button.create({
+        type: 'submit',
         icon: 'del',
         className: 'circle-icon',
         onClick: () => addEventLog('Del button clicked'),
@@ -51,14 +52,13 @@ const initStatic = () => {
     ge('staticBtn').append(dynamicLink.elem);
 };
 
-const initSubtitle = () => {
-    const subtitleBtn = Button.create({
+const initBackground = () => {
+    const btn = Button.create({
         title: 'Button title',
-        subtitle: 'Subtitle',
         icon: 'calendar-icon',
         className: 'bg-btn',
     });
-    ge('subtitleBtn').append(subtitleBtn.elem);
+    ge('backgroundBtn').append(btn.elem);
 };
 
 const initCloseBtn = () => {
@@ -122,7 +122,7 @@ const init = () => {
     initDynamicButton();
     initDynamicLink();
     initStatic();
-    initSubtitle();
+    initBackground();
     initCloseBtn();
     initNoTitle();
     initNoIcon();
