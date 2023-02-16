@@ -59,7 +59,7 @@ const initPosition = () => {
     });
     insertAfter(datePicker.elem, btn);
 
-    btn.addEventListener('click', () => datePicker.show());
+    setEvents(btn, { click: () => datePicker.show() });
 };
 
 const initRangeSelect = () => {
@@ -79,19 +79,19 @@ const initRangeSelect = () => {
 
 const initCallbacks = () => {
     const inpGroup = ge('dpCallbacksGroup');
-    const statustext = ge('statustext');
+    const cbStatusText = ge('cbStatusText');
     const datePicker = DatePicker.create({
         relparent: inpGroup,
         range: true,
         onDateSelect: (date) => {
-            statustext.textContent = `Date selected: ${formatDate(date)}`;
+            cbStatusText.textContent = `Date selected: ${formatDate(date)}`;
         },
         onRangeSelect: (range) => formatRangeToInput(range, 'cbInp'),
         onShow: () => {
-            statustext.textContent = 'Select range...';
+            cbStatusText.textContent = 'Select range...';
         },
         onHide: () => {
-            statustext.textContent = 'Loading...';
+            cbStatusText.textContent = 'Loading...';
         },
     });
     insertAfter(datePicker.elem, inpGroup);
@@ -108,11 +108,11 @@ const initSetSelection = () => {
     datePicker.setSelection('01.12.2020', '07.12.2020');
     insertAfter(datePicker.elem, inpGroup);
 
-    setEvents(ge('showSelBtn'), { click: () => datePicker.show() });
-    setEvents(ge('select-btn'), {
+    setEvents(ge('showSelectionBtn'), { click: () => datePicker.show() });
+    setEvents(ge('setSelectionBtn'), {
         click: () => datePicker.setSelection('08.12.2020', '14.12.2020'),
     });
-    setEvents(ge('clear-btn'), { click: () => datePicker.clearSelection() });
+    setEvents(ge('clearSelectionBtn'), { click: () => datePicker.clearSelection() });
 };
 
 const initLocales = () => {

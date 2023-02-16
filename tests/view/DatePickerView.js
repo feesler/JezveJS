@@ -1,97 +1,78 @@
 import {
     assert,
     query,
-    prop,
     click,
+    evaluate,
+    asyncMap,
 } from 'jezve-test';
 import { DatePicker } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 import { formatDate } from '../../packages/jezvejs/src/js/DateUtils.js';
 
+const datePickerSelectors = {
+    staticDatePicker: '#staticDateInp + .dp__container',
+    popupDatePicker: '#dpPopupGroup + .dp__container',
+    rangeDatePicker: '#dpRangeGroup + .dp__container',
+    callbacksDatePicker: '#dpCallbacksGroup + .dp__container',
+    selDatePicker: '#dpSelectionGroup + .dp__container',
+    enLocaleDatePicker: '#dpEnLocale .dp__container',
+    frLocaleDatePicker: '#dpFrLocale .dp__container',
+    ruLocaleDatePicker: '#dpRuLocale .dp__container',
+};
+
+const controlIds = [
+    'staticDateInp',
+    'popupDateInp',
+    'showPopupBtn',
+    'rangeInp',
+    'showRangeBtn',
+    'cbInp',
+    'cbStatusText',
+    'showCbBtn',
+    'setSelInp',
+    'showSelectionBtn',
+    'setSelectionBtn',
+    'clearSelectionBtn',
+];
+
 export class DatePickerView extends AppView {
     async parseContent() {
         const res = {};
 
-        res.staticDateInp = { elem: await query('#staticDateInp') };
-        res.staticDatePicker = await DatePicker.create(
-            this,
-            await query('#staticDateInp + .dp__container'),
-        );
+        await asyncMap(Object.keys(datePickerSelectors), async (name) => {
+            const selector = datePickerSelectors[name];
+            res[name] = await DatePicker.create(this, await query(selector));
+            assert(res[name], `Failed to initialize component '${name}'`);
+        });
 
-        res.popupDateInp = { elem: await query('#popupDateInp') };
-        res.showPopupBtn = await query('#showPopupBtn');
-        res.popupDatePicker = await DatePicker.create(
-            this,
-            await query('#dpPopupGroup + .dp__container'),
-        );
+        await asyncMap(controlIds, async (id) => {
+            res[id] = { elem: await query(`#${id}`) };
+            assert(res[id].elem, `Failed to initialize control '${id}'`);
+        });
 
-        res.rangeInp = { elem: await query('#rangeInp') };
-        res.showRangeBtn = await query('#showRangeBtn');
-        res.rangeDatePicker = await DatePicker.create(
-            this,
-            await query('#dpRangeGroup + .dp__container'),
+        [
+            res.staticDateInp.value,
+            res.popupDateInp.value,
+            res.rangeInp.value,
+            res.cbInp.value,
+            res.cbStatusText.title,
+            res.setSelInp.value,
+        ] = await evaluate(
+            (stInp, popupInp, rangeInp, chInp, statusEl, selInp) => ([
+                stInp.value,
+                popupInp.value,
+                rangeInp.value,
+                chInp.value,
+                statusEl.textContent,
+                selInp.value,
+            ]),
+            res.staticDateInp.elem,
+            res.popupDateInp.elem,
+            res.rangeInp.elem,
+            res.cbInp.elem,
+            res.cbStatusText.elem,
+            res.setSelInp.elem,
         );
-
-        res.cbInp = { elem: await query('#cbInp') };
-        res.cbStatusText = { elem: await query('#statustext') };
-        res.showCbBtn = await query('#showCbBtn');
-        res.callbacksDatePicker = await DatePicker.create(
-            this,
-            await query('#dpCallbacksGroup + .dp__container'),
-        );
-
-        res.setSelInp = { elem: await query('#setSelInp') };
-        res.showSelBtn = await query('#showSelBtn');
-        res.setSelBtn = await query('#select-btn');
-        res.clearSelBtn = await query('#clear-btn');
-        res.selDatePicker = await DatePicker.create(
-            this,
-            await query('#dpSelectionGroup + .dp__container'),
-        );
-
-        res.enLocaleDatePicker = await DatePicker.create(
-            this,
-            await query('#dpEnLocale .dp__container'),
-        );
-        res.frLocaleDatePicker = await DatePicker.create(
-            this,
-            await query('#dpFrLocale .dp__container'),
-        );
-        res.ruLocaleDatePicker = await DatePicker.create(
-            this,
-            await query('#dpRuLocale .dp__container'),
-        );
-
-        assert(
-            res.staticDateInp.elem
-            && res.staticDatePicker
-            && res.popupDateInp.elem
-            && res.showPopupBtn
-            && res.popupDatePicker
-            && res.rangeInp.elem
-            && res.showRangeBtn
-            && res.rangeDatePicker
-            && res.cbInp.elem
-            && res.cbStatusText.elem
-            && res.showCbBtn
-            && res.callbacksDatePicker
-            && res.setSelInp.elem
-            && res.showSelBtn
-            && res.setSelBtn
-            && res.clearSelBtn
-            && res.selDatePicker
-            && res.enLocaleDatePicker
-            && res.frLocaleDatePicker
-            && res.ruLocaleDatePicker,
-            'Invalid view',
-        );
-
-        res.staticDateInp.value = await prop(res.staticDateInp.elem, 'value');
-        res.popupDateInp.value = await prop(res.popupDateInp.elem, 'value');
-        res.rangeInp.value = await prop(res.rangeInp.elem, 'value');
-        res.cbInp.value = await prop(res.cbInp.elem, 'value');
-        res.cbStatusText.title = await prop(res.cbStatusText.elem, 'textContent');
-        res.setSelInp.value = await prop(res.setSelInp.elem, 'value');
 
         return res;
     }
@@ -110,7 +91,7 @@ export class DatePickerView extends AppView {
     }
 
     async clickShowButton(btn, datePicker) {
-        assert(this.content[btn], 'Invalid button');
+        assert(this.content[btn]?.elem, 'Invalid button');
         assert(this.content[datePicker], 'Invalid DatePicker');
 
         const expected = {
@@ -119,7 +100,7 @@ export class DatePickerView extends AppView {
             },
         };
 
-        await this.performAction(() => click(this.content[btn]));
+        await this.performAction(() => click(this.content[btn].elem));
 
         return this.checkState(expected);
     }
@@ -165,14 +146,14 @@ export class DatePickerView extends AppView {
     }
 
     async toggleSetSelection() {
-        return this.clickShowButton('showSelBtn', 'selDatePicker');
+        return this.clickShowButton('showSelectionBtn', 'selDatePicker');
     }
 
     async clearSelection() {
-        await this.performAction(() => click(this.content.clearSelBtn));
+        await this.performAction(() => click(this.content.clearSelectionBtn.elem));
     }
 
     async updateSelection() {
-        await this.performAction(() => click(this.content.setSelBtn));
+        await this.performAction(() => click(this.content.setSelectionBtn.elem));
     }
 }

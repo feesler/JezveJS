@@ -1,6 +1,6 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import { ge, onReady } from 'jezvejs';
+import { ge, onReady, setEvents } from 'jezvejs';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 import { initNavigation } from '../../app.js';
 import './style.scss';
@@ -21,10 +21,8 @@ const initDefault = () => {
         onClosed: () => logTo('result', 'Closed'),
     });
 
-    const btn = ge('showDefaultBtn');
-    btn.addEventListener('click', () => offcanvas.open());
-    const toggleBtn = ge('toggleTopBtn');
-    toggleBtn.addEventListener('click', () => offcanvas.toggle());
+    setEvents(ge('showDefaultBtn'), { click: () => offcanvas.open() });
+    setEvents(ge('toggleTopBtn'), { click: () => offcanvas.toggle() });
 };
 
 const initRight = () => {
@@ -33,8 +31,7 @@ const initRight = () => {
         placement: 'right',
     });
 
-    const btn = ge('showRightBtn');
-    btn.addEventListener('click', () => offcanvas.open());
+    setEvents(ge('showRightBtn'), { click: () => offcanvas.open() });
 };
 
 const initTop = () => {
@@ -43,8 +40,7 @@ const initTop = () => {
         placement: 'top',
     });
 
-    const btn = ge('showTopBtn');
-    btn.addEventListener('click', () => offcanvas.open());
+    setEvents(ge('showTopBtn'), { click: () => offcanvas.open() });
 };
 
 const initBottom = () => {
@@ -53,8 +49,7 @@ const initBottom = () => {
         placement: 'bottom',
     });
 
-    const btn = ge('showBottomBtn');
-    btn.addEventListener('click', () => offcanvas.open());
+    setEvents(ge('showBottomBtn'), { click: () => offcanvas.open() });
 };
 
 const initResponsive = () => {
@@ -63,8 +58,7 @@ const initResponsive = () => {
         className: 'offcanvas-responsive',
     });
 
-    const btn = ge('showResponsiveBtn');
-    btn.addEventListener('click', () => offcanvas.open());
+    setEvents(ge('showResponsiveBtn'), { click: () => offcanvas.open() });
 };
 
 const init = () => {

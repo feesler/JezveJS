@@ -7,7 +7,7 @@ import {
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
-function init() {
+const init = () => {
     initNavigation();
 
     const realDPI = getRealDPI();
@@ -15,6 +15,6 @@ function init() {
 
     testpic.classList.add((realDPI > 1) ? 'pic-double' : 'pic-single');
     ge('status').textContent = `Real DPI: ${realDPI}`;
-}
+};
 
 onReady(init);

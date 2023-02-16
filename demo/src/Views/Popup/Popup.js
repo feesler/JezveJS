@@ -285,8 +285,10 @@ const showNestedChildPopup = () => {
         });
         show(content, true);
 
-        ge('valueselect').addEventListener('change', (e) => {
-            ge('valueresult').textContent = selectedValue(e.target);
+        setEvents(ge('valueselect'), {
+            change: (e) => {
+                ge('valueresult').textContent = selectedValue(e.target);
+            },
         });
     }
 

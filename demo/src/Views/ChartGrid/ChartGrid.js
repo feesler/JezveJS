@@ -19,7 +19,7 @@ const assert = {
     },
 };
 
-function runTests() {
+const runTests = () => {
     const exponentTestsData = [
         { value: 0, expected: 1 },
         { value: 1, expected: 1 },
@@ -52,9 +52,9 @@ function runTests() {
         const res = grid.getExp(data.value);
         assert.equal(res.exponent, data.expected);
     });
-}
+};
 
-function initChartContainer(data) {
+const initChartContainer = (data) => {
     const testCharts = ge('testCharts');
     const res = {};
 
@@ -75,21 +75,21 @@ function initChartContainer(data) {
     testCharts.appendChild(res.elem);
 
     return res;
-}
+};
 
-function initHistogram(data) {
+const initHistogram = (data) => {
     const contaier = initChartContainer(data);
     const chart = Histogram.create({ data });
     contaier.chartElem.append(chart.elem);
-}
+};
 
-function initLineChart(data) {
+const initLineChart = (data) => {
     const contaier = initChartContainer(data);
     const chart = LineChart.create({ data });
     contaier.chartElem.append(chart.elem);
-}
+};
 
-function init() {
+const init = () => {
     initNavigation();
 
     runTests();
@@ -151,6 +151,6 @@ function init() {
         values: [100, 100, 100, 100],
         series: [['02.01.2021', 4]],
     });
-}
+};
 
 onReady(init);

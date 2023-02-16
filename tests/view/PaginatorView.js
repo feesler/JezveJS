@@ -2,45 +2,35 @@ import {
     assert,
     query,
     prop,
+    asyncMap,
 } from 'jezve-test';
 import { Paginator } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
-const paginatorsList = [
-    'simplePaginator',
+const paginatorIds = [
+    'defaultPaginator',
     'styledPaginator',
     'arrowsPaginator',
     'activeLinkPaginator',
-    'customURLPaginator',
-    'noURLPaginator',
-    'handlerPaginator',
+    'customUrlPaginator',
+    'noUrlPaginator',
+    'callbacksPaginator',
     'prerenderedPaginator',
-    'singleOnPaginator',
-    'singleOffPaginator',
+    'showSinglePaginator',
+    'hideSinglePaginator',
 ];
 
 export class PaginatorView extends AppView {
     async parseContent() {
         const res = {};
 
-        res.simplePaginator = await Paginator.create(this, await query('#defaultContainer .paginator'));
-        res.styledPaginator = await Paginator.create(this, await query('#styledContainer .paginator'));
-        res.arrowsPaginator = await Paginator.create(this, await query('#arrowsContainer .paginator'));
-        res.activeLinkPaginator = await Paginator.create(this, await query('#activeLinkContainer .paginator'));
-        res.customURLPaginator = await Paginator.create(this, await query('#customUrlContainer .paginator'));
-        res.noURLPaginator = await Paginator.create(this, await query('#noUrlContainer .paginator'));
-        res.handlerPaginator = await Paginator.create(this, await query('#handlerContainer .paginator'));
-        res.handlerStatus = { elem: await query('#handler-status') };
-        res.prerenderedPaginator = await Paginator.create(this, await query('#prerenderedPaginator'));
-        res.singleOnPaginator = await Paginator.create(this, await query('#showSingleContainer .paginator'));
-        res.singleOffPaginator = await Paginator.create(this, await query('#hideSingleContainer .paginator'));
+        await asyncMap(paginatorIds, async (id) => {
+            res[id] = await Paginator.create(this, await query(`#${id}`));
+            assert(res[id], `Failed to initialize component '${id}'`);
+        });
 
-        for (const name of paginatorsList) {
-            assert(res[name], `Invalid paginator ${name}`);
-        }
-
+        res.handlerStatus = { elem: await query('#handlerStatus') };
         assert(res.handlerStatus.elem, 'Failed to parse view');
-
         res.handlerStatus.value = await prop(res.handlerStatus.elem, 'textContent');
 
         return res;
@@ -60,7 +50,7 @@ export class PaginatorView extends AppView {
             handlerStatus: cont.handlerStatus.value,
         };
 
-        for (const name of paginatorsList) {
+        for (const name of paginatorIds) {
             res[name] = this.buildPaginatorModel(cont[name]);
         }
 
@@ -79,11 +69,11 @@ export class PaginatorView extends AppView {
     getExpectedState(model = this.model) {
         const res = {};
 
-        for (const name of paginatorsList) {
+        for (const name of paginatorIds) {
             res[name] = this.getPaginatorExpectedState(model[name]);
         }
 
-        const handlerPage = model.handlerPaginator.page;
+        const handlerPage = model.callbacksPaginator.page;
         if (handlerPage !== 1 || model.handlerStatus !== '') {
             res.handlerStatus = `Page ${handlerPage} selected`;
         }

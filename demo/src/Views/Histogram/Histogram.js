@@ -11,8 +11,6 @@ import { initNavigation } from '../../app.js';
 import largeData from './largeData.json';
 import './style.scss';
 
-/* eslint-disable no-unused-vars */
-
 const chartData = {
     values: [
         30, 25639, 30, 1653.72, 10496, 974, 195, 30, 845, 890, 1165, 30, 4990, 2750,
@@ -178,25 +176,25 @@ const negPosData = {
     series: [['x1', 5]],
 };
 
-function setHistogramEvent(str) {
+const setHistogramEvent = (str) => {
     ge('histogram_events').textContent = str;
-}
+};
 
-function onChartsScroll() {
+const onChartsScroll = () => {
     setHistogramEvent('Histogram scroll');
-}
+};
 
-function onBarClick({ item }) {
+const onBarClick = ({ item }) => {
     setHistogramEvent(`Clicked bar, value=${item.value}`);
-}
+};
 
-function onBarOver({ item }) {
+const onBarOver = ({ item }) => {
     setHistogramEvent(`Mouse over bar, value=${item.value}`);
-}
+};
 
-function onBarOut({ item }) {
+const onBarOut = ({ item }) => {
     setHistogramEvent(`Mouse out bar, value=${item.value}`);
-}
+};
 
 const renderMultiColumnPopup = (target) => {
     if (!target.group) {

@@ -15,6 +15,6 @@ export const paginatorTests = async () => {
     await PaginatorTests.goToLastPage('styledPaginator');
     await PaginatorTests.goToFirstPage('styledPaginator');
 
-    await PaginatorTests.goToNextPage('handlerPaginator');
-    await PaginatorTests.goToLastPage('handlerPaginator');
+    await PaginatorTests.goToNextPage('callbacksPaginator');
+    await PaginatorTests.goToLastPage('callbacksPaginator');
 };

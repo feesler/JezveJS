@@ -1,6 +1,6 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import { ge, onReady } from 'jezvejs';
+import { ge, onReady, setEvents } from 'jezvejs';
 import { Progress } from 'jezvejs/Progress';
 import { IndetermProgress } from 'jezvejs/IndetermProgress';
 import { Spinner } from 'jezvejs/Spinner';
@@ -16,12 +16,9 @@ const initDefaultProgress = () => {
 
     section.append(defProgress.elem, defProgress50.elem, defProgress100.elem);
 
-    const set0Btn = ge('set0Btn');
-    set0Btn.addEventListener('click', () => defProgress.setProgress(0));
-    const set50Btn = ge('set50Btn');
-    set50Btn.addEventListener('click', () => defProgress.setProgress(50));
-    const set100Btn = ge('set100Btn');
-    set100Btn.addEventListener('click', () => defProgress.setProgress(100));
+    setEvents(ge('set0Btn'), { click: () => defProgress.setProgress(0) });
+    setEvents(ge('set50Btn'), { click: () => defProgress.setProgress(50) });
+    setEvents(ge('set100Btn'), { click: () => defProgress.setProgress(100) });
 };
 
 const initStyledProgress = () => {
@@ -57,14 +54,16 @@ const initIndetermProgress = () => {
     container3.append(pr3.elem);
 
     const toggleBtn = ge('toggleBtn');
-    toggleBtn.addEventListener('click', () => {
-        if (pr.running) {
-            toggleBtn.textContent = 'Start';
-            pr.stop();
-        } else {
-            toggleBtn.textContent = 'Stop';
-            pr.start();
-        }
+    setEvents(toggleBtn, {
+        click: () => {
+            if (pr.running) {
+                toggleBtn.textContent = 'Start';
+                pr.stop();
+            } else {
+                toggleBtn.textContent = 'Stop';
+                pr.start();
+            }
+        },
     });
 
     setTimeout(() => {

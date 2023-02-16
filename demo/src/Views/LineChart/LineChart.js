@@ -11,8 +11,6 @@ import { initNavigation } from '../../app.js';
 import largeData from '../Histogram/largeData.json';
 import './style.scss';
 
-/* eslint-disable no-unused-vars */
-
 const chartData = {
     values: [
         30, 25639, 30, 1653.72, 10496, 974, 195, 30, 845, 890, 1165, 30, 4990, 2750,
@@ -133,25 +131,25 @@ const negPosData = {
     series: [['x1', 5]],
 };
 
-function setLinechartEvent(str) {
+const setLinechartEvent = (str) => {
     ge('linechart_events').textContent = str;
-}
+};
 
-function onChartsScroll() {
+const onChartsScroll = () => {
     setLinechartEvent('LineChart scroll');
-}
+};
 
-function onNodeClick({ item }) {
+const onNodeClick = ({ item }) => {
     setLinechartEvent(`Clicked node, value=${item.value}`);
-}
+};
 
-function onNodeOver({ item }) {
+const onNodeOver = ({ item }) => {
     setLinechartEvent(`Mouse over node, value=${item.value}`);
-}
+};
 
-function onNodeOut({ item }) {
+const onNodeOut = ({ item }) => {
     setLinechartEvent(`Mouse out node, value=${item.value}`);
-}
+};
 
 const renderMultiColumnPopup = (target) => {
     if (!target.group) {
@@ -236,7 +234,7 @@ const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
 const callbacks = () => {
     const chart = LineChart.create({
-        data: chartData,
+        data: chartData2,
         height: 320,
         marginTop: 35,
         scrollToEnd: true,

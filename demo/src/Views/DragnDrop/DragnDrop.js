@@ -24,10 +24,6 @@ const logTo = (target, value) => {
     elem.value += `${value}\r\n`;
 };
 
-/* eslint-disable-next-line no-unused-vars */
-function onSort(srcElem, destElem) {
-}
-
 const initOriginalAvatar = () => {
     DefaultDragZone.create({ elem: ge('sq1'), dragOriginal: true });
     OriginalDropTarget.create({ elem: ge('drop_area1') });
@@ -81,7 +77,7 @@ const initSortable = () => {
 
     Sortable.create({
         elem: sortableContainer,
-        onInsertAt: onSort,
+        onInsertAt: () => { },
         selector: '.sortable-tile',
         placeholderClass: 'sortable-tile_placeholder',
         group: 'tiles',
@@ -367,7 +363,7 @@ const initTableEachBody = () => {
 const initTableSingleBody = () => {
     Sortable.create({
         elem: 'table_sortable_2',
-        onInsertAt: onSort,
+        onInsertAt: () => { },
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl2',
@@ -380,7 +376,7 @@ const initTableSingleBody = () => {
 const initTableNoBody = () => {
     Sortable.create({
         elem: 'table_sortable_3',
-        onInsertAt: onSort,
+        onInsertAt: () => { },
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl3',
