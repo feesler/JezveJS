@@ -317,17 +317,6 @@ section {
   gap: 2rem;
 }
 
-@media (hover: hover) {
-  .nav-header__logo > a:hover {
-    color: #ffffff;
-  }
-
-  .nav-menu li a:hover {
-    text-decoration: underline;
-    color: #0093ff;
-  }
-}
-
 /* Desktop */
 @media (min-width: 576px) {
   .nav-menu-container {
@@ -360,6 +349,16 @@ section {
 }
 
 @media (hover: hover) {
+  .nav-header__logo > a:hover {
+    color: #ffffff;
+  }
+
+  .nav-menu li a:hover,
+  .toc-menu li a:hover {
+    text-decoration: underline;
+    color: #0093ff;
+  }
+
   .submit-btn:hover {
     background-color: var(--action-btn-hover-bg);
   }
