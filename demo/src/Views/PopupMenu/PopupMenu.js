@@ -17,7 +17,6 @@ const initDefault = () => {
             id: 'selectBtnItem',
             icon: 'select',
             title: 'Button item',
-            subtitle: 'With subtitle',
             onClick: () => addEventLog('Button item clicked'),
         }, {
             id: 'linkItem',
