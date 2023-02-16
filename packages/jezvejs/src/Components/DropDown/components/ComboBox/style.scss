@@ -1,0 +1,53 @@
+/* Combo box */
+.dd__combo {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  min-height: var(--dd-combo-height);
+  border-width: var(--dd-border-width);
+  border-style: solid;
+  border-color: var(--dd-border-color);
+  border-radius: var(--dd-combo-border-radius);
+  background-color: var(--dd-bg-color);
+}
+
+/* Container for selection, input and placegolder */
+.dd__combo-value {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: var(--dd-combo-content-height);
+  border-radius: var(--dd-combo-border-radius);
+  flex: 1 1 auto;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Controls */
+.dd__combo-controls {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--dd-combo-content-height);
+  flex: 0 0 auto;
+}
+
+/* Active container */
+.dd__container_active .dd__combo {
+  background-color: var(--dd-active-bg);
+  border-color: var(--dd-active-border);
+}
+
+/* Disabled drop down */
+.dd__container[disabled],
+.dd__container_attached[disabled] {
+  .dd__combo {
+    border-color: var(--dd-disabled-border);
+    background-color: var(--dd-disabled-bg);
+  }
+}

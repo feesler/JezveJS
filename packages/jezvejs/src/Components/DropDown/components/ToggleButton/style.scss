@@ -1,0 +1,18 @@
+/* Select Drop Down button */
+.btn.dd__toggle-btn {
+  --btn-size: var(--dd-combo-content-height);
+  --btn-icon-size: 16px;
+  --btn-icon-color: var(--dd-btn-fill);
+  --btn-hover-icon-color: var(--dd-btn-hover-fill);
+
+  justify-content: center;
+  width: var(--dd-btn-width);
+}
+
+/* Disabled component */
+.dd__container[disabled],
+.dd__container_attached[disabled] {
+  .btn.dd__toggle-btn {
+    --btn-icon-color: var(--dd-disabled-btn-fill);
+  }
+}

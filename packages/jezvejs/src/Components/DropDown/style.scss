@@ -121,6 +121,10 @@
   /* Disabled component: Multiple selection items */
   --dd-disabled-selection-item-text: #a0a0a0;
   --dd-disabled-selection-item-bg: #dfdfdf;
+
+  select {
+    display: none;
+  }
 }
 
 /* Container of drop down control */
@@ -132,253 +136,6 @@
 
 .dd__background {
   display: none;
-}
-
-.dd__combo {
-  display: inline-flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-  box-sizing: border-box;
-  position: relative;
-  width: 100%;
-  min-height: var(--dd-combo-height);
-  border-width: var(--dd-border-width);
-  border-style: solid;
-  border-color: var(--dd-border-color);
-  border-radius: var(--dd-combo-border-radius);
-  background-color: var(--dd-bg-color);
-}
-
-/* Current selection items */
-.dd__selection {
-  display: flex;
-  flex-flow: row wrap;
-  padding: var(--dd-selection-items-gap);
-  gap: var(--dd-selection-items-gap);
-  font-weight: 400;
-  font-size: 1rem;
-  vertical-align: middle;
-  background: var(--dd-multi-selection-bg);
-}
-
-.dd__selection-item {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  padding: var(--dd-selection-item-padding);
-  height: var(--dd-selection-item-height);
-  font-weight: normal;
-  white-space: nowrap;
-  background-color: var(--dd-selection-item-bg);
-  color: var(--dd-selection-item-text);
-  border-radius: var(--dd-selection-item-border-radius);
-}
-
-.close-btn.dd__del-selection-item-btn {
-  --btn-size: 12px;
-  --btn-icon-size: 12px;
-  --btn-icon-color: var(--dd-selection-item-btn);
-  --btn-hover-icon-color: var(--dd-selection-item-btn-hover);
-
-  padding: 0 0 0 7px;
-}
-
-/* Single selection */
-.dd__single-selection,
-.dd__placeholder {
-  display: flex;
-  flex: 1 0 auto;
-  font-weight: var(--dd-selection-font-weight);
-  font-size: var(--dd-selection-font-size);
-  padding: var(--dd-selection-padding);
-  margin: 0;
-  height: var(--dd-combo-content-height);
-  min-height: var(--dd-combo-content-height);
-  line-height: var(--dd-combo-content-height);
-  align-items: center;
-  background: var(--dd-selection-bg);
-  color: var(--dd-selection-text);
-  cursor: pointer;
-  pointer-events: none;
-}
-
-.dd__placeholder {
-  color: var(--dd-placeholder);
-}
-
-/* Input */
-.dd__input {
-  display: flex;
-  flex: 1 1 auto;
-  font-family: inherit;
-  font-weight: var(--dd-input-font-weight);
-  font-size: var(--dd-input-font-size);
-  padding: var(--dd-input-padding);
-  margin: 0;
-  height: var(--dd-combo-content-height);
-  min-width: 50px;
-  background: var(--dd-input-bg);
-  color: var(--dd-input-text);
-
-  &:placeholder {
-    color: var(--dd-placeholder) !important;
-    font-weight: var(--dd-input-font-weight) !important;
-  }
-}
-
-.dd__list .dd__input {
-  flex: 0 0 auto;
-}
-
-/* Controls */
-.dd__combo-value {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: var(--dd-combo-content-height);
-  border-radius: var(--dd-combo-border-radius);
-  flex: 1 1 auto;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-/* Controls */
-.dd__combo-controls {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--dd-combo-content-height);
-  flex: 0 0 auto;
-}
-
-/* Clear selection button */
-.close-btn.dd__clear-btn {
-  --btn-size: var(--dd-combo-content-height);
-  --btn-icon-size: 14px;
-  --btn-icon-color: var(--dd-btn-fill);
-  --btn-hover-icon-color: var(--dd-btn-hover-fill);
-
-  width: var(--dd-btn-width);
-  justify-content: center;
-  z-index: 2;
-}
-
-/* Select Drop Down button */
-.btn.dd__toggle-btn {
-  --btn-size: var(--dd-combo-content-height);
-  --btn-icon-size: 16px;
-  --btn-icon-color: var(--dd-btn-fill);
-  --btn-hover-icon-color: var(--dd-btn-hover-fill);
-
-  justify-content: center;
-  width: var(--dd-btn-width);
-}
-
-/* Drop down list */
-.dd__list {
-  position: absolute;
-  flex-flow: column nowrap;
-  display: none;
-  box-sizing: border-box;
-  max-width: 100%;
-  max-height: var(--dd-max-list-height);
-  background-color: var(--dd-bg-color);
-  border: var(--dd-border-width) solid var(--dd-border-color);
-  border-radius: var(--dd-list-border-radius);
-  z-index: var(--dd-list-z-index);
-  overflow: hidden;
-
-  ul {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    list-style-image: none;
-    list-style-type: none;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: var(--dd-list-item-bg);
-  }
-}
-
-.dd__open .dd__list {
-  display: flex;
-}
-
-/* List item */
-.dd__list-item {
-  padding: 10px;
-  font-size: 1rem;
-  text-align: left;
-  border-width: 0;
-  border-style: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-  color: var(--dd-list-item-text);
-  background-color: var(--dd-list-item-bg);
-
-  .dd__check-icon {
-    vertical-align: middle;
-    display: inline-block;
-    visibility: hidden;
-    margin: 0 10px 0 0;
-    fill: var(--dd-list-item-check);
-  }
-
-  &.dd__list-item_active {
-    color: var(--dd-active-list-item-text);
-    background-color: var(--dd-active-list-item-bg);
-
-    .dd__check-icon {
-      fill: var(--dd-active-list-item-check);
-    }
-  }
-
-  &.dd__list-item_selected .dd__check-icon {
-    visibility: visible;
-  }
-}
-
-/* Disabled list item */
-.dd__list li[disabled] {
-  pointer-events: none;
-
-  .dd__list-item {
-    background-color: var(--dd-disabled-list-item-bg);
-    color: var(--dd-disabled-list-item-text);
-  }
-}
-
-/* List group */
-.dd__list-group {
-  display: flex;
-  flex-flow: column nowrap;
-  padding: 0;
-  border-width: 0;
-  border-style: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-
-  .dd__list-group__label {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 6px 10px;
-    margin: 0;
-    text-align: left;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--dd-list-group-text);
-    background-color: var(--dd-list-group-bg);
-  }
-
-  ul {
-    padding: 0 0 0 var(--dd-list-group-padding);
-  }
 }
 
 /* Not found message */
@@ -396,31 +153,25 @@
   background-color: var(--dd-list-item-bg);
 }
 
-.dd__container_attached select,
-.dd__container select {
-  display: none;
-}
-
 /* useNative container */
 .dd__container_native.dd__container_attached,
 .dd__container_native.dd__container {
   position: relative;
-}
 
-.dd__container_native.dd__container_attached select,
-.dd__container_native.dd__container select {
-  display: block;
-  position: absolute;
-  top: 0;
-  opacity: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
+  select {
+    display: block;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+  }
 }
 
 .dd__container.dd__container_native.dd__editable select {
   right: 0;
-  width: 24px;
+  width: var(--dd-btn-width);
 }
 
 /* Full screen drop down */
@@ -469,109 +220,12 @@
     outline: 2px var(--dd-active-outline) solid;
     outline-offset: 0.1rem;
   }
-
-  .dd__list {
-    border: var(--dd-border-width) solid var(--dd-border-color);
-    border-radius: var(--dd-list-border-radius);
-    width: auto;
-    min-width: 130px;
-    max-width: 250px;
-  }
 }
 
-/* Active container */
-.dd__container_active {
-  .dd__combo,
-  .dd__selection {
-    background-color: var(--dd-active-bg);
-  }
-
-  .dd__input {
-    color: var(--dd-active-input-text);
-    background-color: var(--dd-active-input-bg);
-
-    &:placeholder {
-      color: var(--dd-active-placeholder) !important;
-    }
-  }
-
-  .dd__single-selection {
-    color: var(--dd-active-selection-text);
-    background: var(--dd-active-selection-bg);
-  }
-
-  .dd__placeholder {
-    color: var(--dd-active-placeholder);
-    background: var(--dd-active-selection-bg);
-  }
-
-  .dd__selection-item {
-    color: var(--dd-active-selection-item-text);
-    background-color: var(--dd-active-selection-item-bg);
-  }
-
-  /* Active selection item */
-  .dd__selection-item_active {
-    color: var(--dd-selection-item-active-text);
-    background-color: var(--dd-selection-item-active-bg);
-
-    .close-btn.dd__del-selection-item-btn {
-      --btn-icon-color: var(--dd-selection-item-active-btn);
-    }
-  }
-
-  .dd__combo,
-  .dd__list {
-    border-color: var(--dd-active-border);
-  }
-}
-
-/* Disabled drop down */
+/* Disabled component */
 .dd__container[disabled],
 .dd__container_attached[disabled] {
   pointer-events: none;
-
-  .dd__combo {
-    border-color: var(--dd-disabled-border);
-    background-color: var(--dd-disabled-bg);
-  }
-
-  .dd__single-selection,
-  .dd__placeholder {
-    color: var(--dd-disabled-selection-color);
-    background-color: var(--dd-disabled-selection-bg);
-    user-select: none;
-  }
-
-  .dd__input {
-    background-color: var(--dd-disabled-input-bg);
-    color: var(--dd-disabled-input-text);
-    -webkit-text-fill-color: var(--dd-disabled-input-text);
-
-    &:placeholder {
-      color: var(--dd-disabled-input-text) !important;
-      font-weight: var(--dd-input-font-weight) !important;
-    }
-  }
-
-  .dd__toggle-icon {
-    fill: var(--dd-disabled-btn-fill);
-  }
-
-  .dd__clear-btn,
-  .dd__del-selection-item-btn {
-    display: none;
-  }
-
-  .dd__selection {
-    background-color: var(--dd-disabled-bg);
-  }
-
-  .dd__selection-item {
-    color: var(--dd-disabled-selection-item-text);
-    background-color: var(--dd-disabled-selection-item-bg);
-    user-select: none;
-  }
 }
 
 /* Hidden option wrapper for iOS */
@@ -581,21 +235,10 @@
 
 /* Don't use native select on large screens even useNativeSelect option is set */
 @media (min-width: 768px) {
-  .dd__container_native.dd__container_attached select,
-  .dd__container_native.dd__container select {
-    display: none;
-  }
-}
-
-@media (hover: hover) {
-  .dd__selection-item {
-    &:hover {
-      color: var(--dd-selection-item-hover-text);
-      background-color: var(--dd-selection-item-hover-bg);
-
-      .dd__del-selection-item-btn {
-        --btn-icon-color: var(--dd-selection-item-hover-btn);
-      }
+  .dd__container_native.dd__container_attached,
+  .dd__container_native.dd__container {
+    select {
+      display: none;
     }
   }
 }

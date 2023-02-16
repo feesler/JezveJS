@@ -1,13 +1,14 @@
-import { createElement, isFunction } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
-import { DropDownMultiSelectionItem } from './MultiSelectionItem.js';
-import { DropDownClearButton } from './ClearButton.js';
-import { DropDownToggleButton } from './ToggleButton.js';
-import { getSelectedItems } from './utils.js';
-import { DropDownInput } from './Input.js';
-import { DropDownMultipleSelection } from './MultipleSelection.js';
-import { DropDownSingleSelection } from './SingleSelection.js';
-import { DropDownPlaceholder } from './Placeholder.js';
+import { createElement, isFunction } from '../../../../js/common.js';
+import { Component } from '../../../../js/Component.js';
+import { getSelectedItems } from '../../utils.js';
+import { DropDownMultiSelectionItem } from '../MultiSelectionItem/MultiSelectionItem.js';
+import { DropDownClearButton } from '../ClearButton/ClearButton.js';
+import { DropDownToggleButton } from '../ToggleButton/ToggleButton.js';
+import { DropDownInput } from '../Input/Input.js';
+import { DropDownMultipleSelection } from '../MultipleSelection/MultipleSelection.js';
+import { DropDownSingleSelection } from '../SingleSelection/SingleSelection.js';
+import { DropDownPlaceholder } from '../Placeholder/Placeholder.js';
+import './style.scss';
 
 /* CSS classes */
 const COMBO_CLASS = 'dd__combo';

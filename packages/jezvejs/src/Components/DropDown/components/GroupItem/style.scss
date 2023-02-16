@@ -1,0 +1,28 @@
+/* List group */
+.dd__list-group {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 0;
+  border-width: 0;
+  border-style: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+
+  .dd__list-group__label {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 6px 10px;
+    margin: 0;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--dd-list-group-text);
+    background-color: var(--dd-list-group-bg);
+  }
+
+  ul {
+    padding: 0 0 0 var(--dd-list-group-padding);
+  }
+}

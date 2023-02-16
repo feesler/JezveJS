@@ -1,5 +1,6 @@
-import { createElement } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
+import { createElement } from '../../../../js/common.js';
+import { Component } from '../../../../js/Component.js';
+import './style.scss';
 
 /* CSS classes */
 const GROUP_CLASS = 'dd__list-group';

@@ -1,9 +1,10 @@
-import { createElement, isFunction } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
-import { DropDownGroupItem } from './GroupItem.js';
-import { DropDownInput } from './Input.js';
-import { DropDownListItem } from './ListItem.js';
-import { DropDownMenuList } from './MenuList.js';
+import { createElement, isFunction } from '../../../../js/common.js';
+import { Component } from '../../../../js/Component.js';
+import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
+import { DropDownInput } from '../Input/Input.js';
+import { DropDownListItem } from '../ListItem/ListItem.js';
+import { DropDownMenuList } from '../MenuList/MenuList.js';
+import './style.scss';
 
 /* CSS classes */
 const LIST_CLASS = 'dd__list';

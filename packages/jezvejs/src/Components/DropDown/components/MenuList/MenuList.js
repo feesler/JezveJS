@@ -1,7 +1,7 @@
-import { deepMeet } from '../../js/common.js';
-import { ListContainer } from '../ListContainer/ListContainer.js';
-import { DropDownGroupItem } from './GroupItem.js';
-import { DropDownListItem } from './ListItem.js';
+import { deepMeet } from '../../../../js/common.js';
+import { ListContainer } from '../../../ListContainer/ListContainer.js';
+import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
+import { DropDownListItem } from '../ListItem/ListItem.js';
 
 const defaultProps = {
     items: [],
