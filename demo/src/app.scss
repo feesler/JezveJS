@@ -252,17 +252,6 @@ a:visited {
   }
 }
 
-/* Admin action button */
-.adm_act_btn {
-  padding: 3px 10px;
-  background-color: #44aaff;
-  color: #ffffff;
-}
-
-.adm_act_btn:disabled {
-  background-color: #708290;
-}
-
 section {
   display: flex;
   flex-flow: column nowrap;
@@ -349,9 +338,5 @@ section {
   .toc-menu li a:hover {
     text-decoration: underline;
     color: #0093ff;
-  }
-
-  .submit-btn:hover {
-    background-color: var(--action-btn-hover-bg);
   }
 }
