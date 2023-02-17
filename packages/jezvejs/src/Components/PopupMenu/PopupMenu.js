@@ -9,17 +9,17 @@ import {
     removeChilds,
     setEmptyClick,
     removeEmptyClick,
+    insertAfter,
+    insertBefore,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
 import { Button } from '../Button/Button.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { PopupMenuButton } from './PopupMenuButton.js';
 import './style.scss';
 
-export { PopupMenuButton };
-
 /* CSS classes */
+const MENU_CLASS = 'popup-menu';
 const LIST_CLASS = 'popup-menu-list';
 const LIST_SELECTOR = `.${LIST_CLASS}`;
 const FIXED_LIST_CLASS = 'popup-menu-list_fixed';
@@ -33,7 +33,6 @@ const LIST_MARGIN = 5;
 
 const defaultProps = {
     icon: 'ellipsis',
-    attached: false,
     attachTo: null,
     hideOnScroll: true,
     ignoreScrollTimeout: 500,
@@ -46,6 +45,10 @@ const defaultProps = {
 };
 
 export class PopupMenu extends Component {
+    static userProps = {
+        elem: ['id'],
+    };
+
     static activeInstance = null;
 
     static hideActive() {
@@ -62,6 +65,8 @@ export class PopupMenu extends Component {
             ...this.props,
         };
 
+        this.hostElem = null;
+        this.containerElem = null;
         this.ignoreScroll = false;
         this.items = {};
 
@@ -79,11 +84,11 @@ export class PopupMenu extends Component {
     }
 
     init() {
-        this.menuList = createElement('div', { props: { className: LIST_CLASS } });
-        show(this.menuList, false);
+        this.elem = createElement('div', { props: { className: LIST_CLASS } });
+        show(this.elem, false);
 
         if (this.props.fixed) {
-            this.menuList.classList.add(FIXED_LIST_CLASS);
+            this.elem.classList.add(FIXED_LIST_CLASS);
         }
 
         if (this.props.items) {
@@ -91,36 +96,16 @@ export class PopupMenu extends Component {
         } else {
             this.setContent(this.props.content);
         }
-
-        if (this.props.attached) {
-            this.elem = this.menuList;
-            if (this.props.attachTo) {
-                this.attachTo(this.props.attachTo);
-            }
-        } else {
-            this.container = PopupMenuButton.create({
-                icon: this.props.icon,
-            });
-            this.elem = this.container.elem;
-            if (this.props.fixed) {
-                document.body.append(this.menuList);
-            } else {
-                this.elem.append(this.menuList);
-            }
-            setEvents(this.container.button, this.togglerEvents);
-
-            this.relElem = this.elem;
-        }
-
-        if (this.props.id) {
-            this.menuList.id = this.props.id;
-        }
-
         this.setClassNames();
+        this.setUserProps();
+
+        if (this.props.attachTo) {
+            this.attachTo(this.props.attachTo);
+        }
     }
 
     setHandlers() {
-        setEmptyClick(this.emptyClickHandler, [this.menuList, this.relElem]);
+        setEmptyClick(this.emptyClickHandler, [this.elem, this.hostElem]);
     }
 
     setScrollHandlers() {
@@ -147,7 +132,7 @@ export class PopupMenu extends Component {
         }
         // Ignore scroll of menu itself
         const listElem = (isFunction(e.target.closest)) ? e.target.closest(LIST_SELECTOR) : null;
-        if (listElem === this.menuList) {
+        if (listElem === this.elem) {
             return;
         }
 
@@ -155,20 +140,25 @@ export class PopupMenu extends Component {
     }
 
     isMenuVisible() {
-        return !this.menuList.hasAttribute('hidden');
+        return !this.elem.hasAttribute('hidden');
     }
 
     detach() {
-        this.removeHandlers();
-        if (this.hostElem) {
-            removeEvents(this.hostElem, this.togglerEvents);
-            this.hostElem = null;
-            this.relElem = null;
-        } else if (this.container) {
-            removeEvents(this.container.button, this.togglerEvents);
+        if (!this.hostElem) {
+            return;
         }
 
-        show(this.menuList, false);
+        this.removeHandlers();
+        removeEvents(this.hostElem, this.togglerEvents);
+
+        if (this.containerElem) {
+            insertBefore(this.hostElem, this.containerElem);
+            this.containerElem = null;
+        }
+
+        this.hostElem = null;
+
+        show(this.elem, false);
         re(this.elem);
     }
 
@@ -183,10 +173,19 @@ export class PopupMenu extends Component {
         this.detach();
 
         this.hostElem = elem;
-        this.relElem = this.hostElem;
         setEvents(this.hostElem, this.togglerEvents);
 
-        this.hostElem.append(this.elem);
+        if (this.props.fixed) {
+            document.body.append(this.elem);
+            return;
+        }
+
+        this.containerElem = createElement('div', {
+            props: { className: MENU_CLASS },
+        });
+
+        insertAfter(this.containerElem, this.hostElem);
+        this.containerElem.append(this.hostElem, this.elem);
     }
 
     attachAndShow(elem) {
@@ -197,11 +196,11 @@ export class PopupMenu extends Component {
     }
 
     setContent(content) {
-        removeChilds(this.menuList);
+        removeChilds(this.elem);
         if (!content) {
             return;
         }
-        this.menuList.append(...asArray(content));
+        this.elem.append(...asArray(content));
     }
 
     append(items) {
@@ -261,7 +260,7 @@ export class PopupMenu extends Component {
             ...rest,
             onClick: (...args) => this.onItemClick(button, onClick, ...args),
         });
-        this.menuList.append(button.elem);
+        this.elem.append(button.elem);
 
         return button;
     }
@@ -281,28 +280,28 @@ export class PopupMenu extends Component {
             ...rest,
             onChange: (...args) => this.onItemClick(button, onChange, ...args),
         });
-        this.menuList.append(button.elem);
+        this.elem.append(button.elem);
 
         return button;
     }
 
     addSeparator() {
         const separator = createElement('div', { props: { className: SEPARATOR_CLASS } });
-        this.menuList.append(separator);
+        this.elem.append(separator);
         return separator;
     }
 
     showMenu() {
-        show(this.menuList, true);
-        if (!this.props.fixed && !this.menuList.offsetParent) {
-            show(this.menuList, false);
+        show(this.elem, true);
+        if (!this.props.fixed && !this.elem.offsetParent) {
+            show(this.elem, false);
             return;
         }
 
         this.ignoreScroll = true;
         PopupPosition.calculate({
-            elem: this.menuList,
-            refElem: this.relElem,
+            elem: this.elem,
+            refElem: this.hostElem,
             margin: LIST_MARGIN,
             screenPadding: SCREEN_PADDING,
             allowResize: this.props.hideOnScroll,
@@ -318,8 +317,8 @@ export class PopupMenu extends Component {
     }
 
     hideMenu() {
-        show(this.menuList, false);
-        PopupPosition.reset(this.menuList);
+        show(this.elem, false);
+        PopupPosition.reset(this.elem);
 
         PopupMenu.activeInstance = null;
         this.removeHandlers();

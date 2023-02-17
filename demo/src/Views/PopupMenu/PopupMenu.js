@@ -1,6 +1,7 @@
 import 'jezvejs/style';
 import { createElement, ge, onReady } from 'jezvejs';
-import { PopupMenu, PopupMenuButton } from 'jezvejs/PopupMenu';
+import { MenuButton } from 'jezvejs/MenuButton';
+import { PopupMenu } from 'jezvejs/PopupMenu';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
@@ -10,8 +11,12 @@ const addEventLog = (value) => {
 };
 
 const initDefault = () => {
-    const menu = PopupMenu.create({
+    const btn = MenuButton.create();
+    ge('defaultContainer').append(btn.elem);
+
+    PopupMenu.create({
         id: 'listMenu',
+        attachTo: btn.elem,
         onItemClick: (id) => addEventLog(`Item '${id}' clicked`),
         items: [{
             id: 'selectBtnItem',
@@ -36,13 +41,11 @@ const initDefault = () => {
             onChange: (checked) => addEventLog(`Checkbox item toggled: ${checked}`),
         }],
     });
-    ge('defaultContainer').append(menu.elem);
 };
 
 const initAttached = () => {
     const menu = PopupMenu.create({
         id: 'contextMenu',
-        attached: true,
         hideOnScroll: false,
         fixed: false,
         items: [{
@@ -62,8 +65,12 @@ const initAttached = () => {
 };
 
 const initClipping = () => {
-    const menu = PopupMenu.create({
+    const btn = MenuButton.create();
+    ge('headerContent').append(btn.elem);
+
+    PopupMenu.create({
         id: 'clipingMenu',
+        attachTo: btn.elem,
         items: [{
             icon: 'select',
             title: 'Item 1',
@@ -78,20 +85,19 @@ const initClipping = () => {
             title: 'Item 4',
         }],
     });
-    ge('headerContent').append(menu.elem);
 };
 
 const onListMenuClick = (e, menu) => {
-    const listItemElem = e.target.closest('.list-item');
-    if (!listItemElem) {
+    const elem = e.target.closest('.list-item');
+    if (!elem) {
         return;
     }
-    const menuContainer = listItemElem.querySelector('.popup-menu');
-    if (!menuContainer) {
+    const btn = elem.querySelector('.menu-btn');
+    if (!btn) {
         return;
     }
 
-    menu.attachTo(menuContainer);
+    menu.attachAndShow(btn);
 };
 
 const renderListItem = (id, menu) => (
@@ -102,14 +108,13 @@ const renderListItem = (id, menu) => (
         },
         children: [
             createElement('span', { props: { textContent: `Item ${id}` } }),
-            PopupMenuButton.create({ onClick: (e) => onListMenuClick(e, menu) }).elem,
+            MenuButton.create({ onClick: (e) => onListMenuClick(e, menu) }).elem,
         ],
     })
 );
 
 const initList = () => {
     const menu = PopupMenu.create({
-        attached: true,
         items: [{
             id: 'selectModeBtn',
             icon: 'select',
