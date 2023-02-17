@@ -86,9 +86,10 @@
     padding-left: calc(
       var(--popupmenu-padding) + var(--btn-size) + var(--popupmenu-icon-gap)
     );
-    padding-right: var(--popupmenu-padding);
+    padding-right: calc(var(--popupmenu-padding) + var(--popupmenu-icon-gap));
     width: 100%;
     position: relative;
+    white-space: nowrap;
 
     .btn__icon {
       position: absolute;
