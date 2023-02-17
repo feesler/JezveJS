@@ -214,25 +214,29 @@ export class Button extends Component {
             return;
         }
 
+        const title = state.title ?? '';
         this.elem.textContent = '';
-
-        if (state.icon) {
-            const icon = Icon.create({
-                icon: state.icon,
-                className: ICON_CLASS,
-            });
-            this.iconElem = icon.elem;
-
-            const contentElem = createElement('span', {
-                props: {
-                    className: CONTENT_CLASS,
-                    textContent: state.title,
-                },
-            });
-
-            this.elem.append(icon.elem, contentElem);
-        } else {
-            this.elem.textContent = state.title ?? '';
+        if (!state.icon) {
+            this.elem.textContent = title;
+            return;
         }
+
+        const icon = Icon.create({
+            icon: state.icon,
+            className: ICON_CLASS,
+        });
+        this.elem.append(icon.elem);
+
+        if (title.length === 0) {
+            return;
+        }
+
+        const contentElem = createElement('span', {
+            props: {
+                className: CONTENT_CLASS,
+                textContent: title,
+            },
+        });
+        this.elem.append(contentElem);
     }
 }
