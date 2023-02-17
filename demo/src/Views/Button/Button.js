@@ -81,9 +81,12 @@ const initNoIcon = () => {
 };
 
 const initDisabled = () => {
+    const btnTitle = 'Disabled button';
+    const btnIcon = 'plus';
+
     const disabledBtn = Button.create({
-        title: 'Disabled button',
-        icon: 'plus',
+        title: btnTitle,
+        icon: btnIcon,
         enabled: false,
     });
     const disabledLink = Button.create({
@@ -111,6 +114,24 @@ const initDisabled = () => {
             const { enabled } = disabledLink;
             toggleEnableLinkBtn.textContent = (enabled) ? 'Enable link' : 'Disable link';
             disabledLink.enable(!enabled);
+        },
+    });
+
+    const toggleIconBtn = ge('toggleIconBtn');
+    setEvents(toggleIconBtn, {
+        click: () => {
+            const { icon } = disabledBtn.state;
+            toggleIconBtn.textContent = (icon) ? 'Add icon' : 'Remove icon';
+            disabledBtn.setIcon((icon) ? null : btnIcon);
+        },
+    });
+
+    const toggleTitleBtn = ge('toggleTitleBtn');
+    setEvents(toggleTitleBtn, {
+        click: () => {
+            const { title } = disabledBtn.state;
+            toggleTitleBtn.textContent = (title) ? 'Add title' : 'Remove title';
+            disabledBtn.setTitle((title) ? null : btnTitle);
         },
     });
 };

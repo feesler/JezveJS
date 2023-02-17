@@ -3,7 +3,6 @@ import {
     createElement,
     setEvents,
     enable,
-    re,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Icon } from '../Icon/Icon.js';
@@ -112,16 +111,14 @@ export class Button extends Component {
             this.props.tabIndex = this.elem.getAttribute('tabindex');
         }
 
-        this.iconElem = this.elem.querySelector(`.${ICON_CLASS}`);
+        const iconElem = this.elem.querySelector(`.${ICON_CLASS}`);
         if (typeof this.state.icon === 'undefined') {
-            this.state.icon = this.iconElem;
+            this.state.icon = iconElem;
         }
 
-        this.contentElem = this.elem.querySelector(`.${CONTENT_CLASS}`);
+        const contentElem = this.elem.querySelector(`.${CONTENT_CLASS}`) ?? this.elem;
         if (typeof this.state.title === 'undefined') {
-            this.state.title = (this.contentElem)
-                ? this.contentElem.textContent.trim()
-                : this.elem.textContent.trim();
+            this.state.title = contentElem.textContent.trim();
         }
 
         this.state.enabled = !this.elem.hasAttribute('disabled');
@@ -175,7 +172,7 @@ export class Button extends Component {
 
     /** Set title text */
     setTitle(title) {
-        if (typeof title !== 'string') {
+        if (title && typeof title !== 'string') {
             throw new Error('Invalid title specified');
         }
 
@@ -199,45 +196,6 @@ export class Button extends Component {
         this.setState({ ...this.state, url });
     }
 
-    renderIcon(state, prevState) {
-        if (state.icon === prevState.icon) {
-            return;
-        }
-
-        re(this.iconElem);
-        if (!state.icon) {
-            return;
-        }
-
-        const icon = Icon.create({
-            icon: state.icon,
-            className: ICON_CLASS,
-        });
-        this.iconElem = icon.elem;
-        this.elem.prepend(this.iconElem);
-    }
-
-    renderContent(state, prevState) {
-        if (state.icon === prevState.icon && state.title === prevState.title) {
-            return;
-        }
-
-        re(this.contentElem);
-
-        if (state.icon) {
-            this.contentElem = createElement('span', {
-                props: {
-                    className: CONTENT_CLASS,
-                    textContent: state.title,
-                },
-            });
-
-            this.elem.append(this.contentElem);
-        } else {
-            this.elem.textContent = state.title ?? '';
-        }
-    }
-
     /** Render component */
     render(state, prevState = {}) {
         enable(this.elem, state.enabled);
@@ -249,7 +207,29 @@ export class Button extends Component {
                 : -1;
         }
 
-        this.renderIcon(state, prevState);
-        this.renderContent(state, prevState);
+        if (state.icon === prevState.icon && state.title === prevState.title) {
+            return;
+        }
+
+        this.elem.textContent = '';
+
+        if (state.icon) {
+            const icon = Icon.create({
+                icon: state.icon,
+                className: ICON_CLASS,
+            });
+            this.iconElem = icon.elem;
+
+            const contentElem = createElement('span', {
+                props: {
+                    className: CONTENT_CLASS,
+                    textContent: state.title,
+                },
+            });
+
+            this.elem.append(icon.elem, contentElem);
+        } else {
+            this.elem.textContent = state.title ?? '';
+        }
     }
 }
