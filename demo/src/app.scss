@@ -20,6 +20,7 @@
   --action-btn-border-radius: 6px;
   --action-btn-bg: #0072c6;
   --action-btn-hover-bg: #1e82cc;
+  --action-btn-active-bg: #104b79;
 }
 
 /* Main layout */
@@ -107,28 +108,21 @@ a:visited {
 
 .action-btn,
 .action-btn:visited {
+  --btn-title-color: #ffffff;
   --btn-background: var(--action-btn-bg);
+  --btn-hover-title-color: #ffffff;
   --btn-hover-background: var(--action-btn-hover-bg);
+  --btn-border-radius: var(--action-btn-border-radius);
+  --btn-active-background: var(--action-btn-active-bg);
+  --btn-disabled-background: #5082aa;
+  --btn-padding: 0 22px;
 
-  font-weight: normal;
-  font-size: 16px;
-  color: #ffffff;
-  text-decoration: none;
-  width: fit-content;
-  padding: 4px 22px;
   margin-right: 15px;
-  overflow: visible;
-  border-radius: var(--action-btn-border-radius);
 }
 
 .action-btn:focus {
   outline: 2px #aee5ff solid;
   outline-offset: 0.1rem;
-}
-
-.action-btn[disabled] {
-  background-color: #5082aa;
-  opacity: 0.3;
 }
 
 .input {
@@ -260,17 +254,6 @@ a:visited {
   }
 }
 
-/* Admin action button */
-.adm_act_btn {
-  padding: 3px 10px;
-  background-color: #44aaff;
-  color: #ffffff;
-}
-
-.adm_act_btn:disabled {
-  background-color: #708290;
-}
-
 section {
   display: flex;
   flex-flow: column nowrap;
@@ -357,9 +340,5 @@ section {
   .toc-menu li a:hover {
     text-decoration: underline;
     color: #0093ff;
-  }
-
-  .submit-btn:hover {
-    background-color: var(--action-btn-hover-bg);
   }
 }

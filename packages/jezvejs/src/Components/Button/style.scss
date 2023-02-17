@@ -25,9 +25,14 @@
   --btn-disabled-opacity: 0.3;
 
   /* Hover state */
-  --btn-hover-title-color: #888888;
-  --btn-hover-icon-color: #888888;
+  --btn-hover-title-color: var(--btn-title-color);
+  --btn-hover-icon-color: var(--btn-icon-color);
   --btn-hover-background: none;
+
+  /* Active state */
+  --btn-active-title-color: var(--btn-hover-title-color);
+  --btn-active-icon-color: var(--btn-hover-icon-color);
+  --btn-active-background: var(--btn-hover-background);
 
   display: inline-flex;
   flex-flow: row nowrap;
@@ -75,6 +80,15 @@
   color: var(--btn-title-color);
 }
 
+.btn:active {
+  color: var(--btn-active-title-color);
+  background: var(--btn-active-background);
+
+  .btn__icon {
+    fill: var(--btn-active-icon-color);
+  }
+}
+
 .btn[disabled] {
   color: var(--btn-disabled-title-color);
   background: var(--btn-disabled-background);
@@ -98,6 +112,15 @@
 
     .btn__content {
       color: var(--btn-hover-title-color);
+    }
+  }
+
+  .btn:active:hover {
+    color: var(--btn-active-title-color);
+    background: var(--btn-active-background);
+
+    .btn__icon {
+      fill: var(--btn-active-icon-color);
     }
   }
 }

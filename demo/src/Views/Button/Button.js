@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge, setEvents, onReady } from 'jezvejs';
+import { ge, onReady } from 'jezvejs';
 import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { initNavigation } from '../../app.js';
@@ -81,9 +81,12 @@ const initNoIcon = () => {
 };
 
 const initDisabled = () => {
+    const btnTitle = 'Disabled button';
+    const btnIcon = 'plus';
+
     const disabledBtn = Button.create({
-        title: 'Disabled button',
-        icon: 'plus',
+        title: btnTitle,
+        icon: btnIcon,
         enabled: false,
     });
     const disabledLink = Button.create({
@@ -96,21 +99,35 @@ const initDisabled = () => {
 
     ge('disabledContainer').append(disabledBtn.elem, disabledLink.elem);
 
-    const toggleEnableButtonBtn = ge('toggleEnableButtonBtn');
-    setEvents(toggleEnableButtonBtn, {
-        click: () => {
+    const toggleEnableButtonBtn = Button.fromElement(ge('toggleEnableButtonBtn'), {
+        onClick: () => {
             const { enabled } = disabledBtn;
-            toggleEnableButtonBtn.textContent = (enabled) ? 'Enable button' : 'Disable button';
+            toggleEnableButtonBtn.setTitle((enabled) ? 'Enable button' : 'Disable button');
             disabledBtn.enable(!enabled);
         },
     });
 
-    const toggleEnableLinkBtn = ge('toggleEnableLinkBtn');
-    setEvents(toggleEnableLinkBtn, {
-        click: () => {
+    const toggleEnableLinkBtn = Button.fromElement(ge('toggleEnableLinkBtn'), {
+        onClick: () => {
             const { enabled } = disabledLink;
-            toggleEnableLinkBtn.textContent = (enabled) ? 'Enable link' : 'Disable link';
+            toggleEnableLinkBtn.setTitle((enabled) ? 'Enable link' : 'Disable link');
             disabledLink.enable(!enabled);
+        },
+    });
+
+    const toggleIconBtn = Button.fromElement(ge('toggleIconBtn'), {
+        onClick: () => {
+            const { icon } = disabledBtn.state;
+            toggleIconBtn.setTitle((icon) ? 'Add icon' : 'Remove icon');
+            disabledBtn.setIcon((icon) ? null : btnIcon);
+        },
+    });
+
+    const toggleTitleBtn = Button.fromElement(ge('toggleTitleBtn'), {
+        onClick: () => {
+            const { title } = disabledBtn.state;
+            toggleTitleBtn.setTitle((title) ? 'Add title' : 'Remove title');
+            disabledBtn.setTitle((title) ? null : btnTitle);
         },
     });
 };

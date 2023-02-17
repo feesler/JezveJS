@@ -84,14 +84,6 @@
 }
 
 /* Controls */
-.btn.submit-btn {
-  margin-right: 10px;
-}
-
-.btn.cancel-btn {
-  background-color: #888888;
-}
-
 .stretch_input {
   border: 1px solid #000000;
   padding: 3px;
@@ -102,14 +94,4 @@
   > select {
     width: 100%;
   }
-}
-
-.controls_test .btn.submit-btn,
-.controls_test .btn.cancel-btn {
-  background-color: #88bbff;
-}
-
-.controls_test .btn.submit-btn[disabled],
-.controls_test .btn.cancel-btn[disabled] {
-  background-color: #888888;
 }
