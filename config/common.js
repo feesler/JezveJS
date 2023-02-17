@@ -28,6 +28,7 @@ export default {
         LineChart: './src/Components/LineChart/LineChart.js',
         LinkMenu: './src/Components/LinkMenu/LinkMenu.js',
         ListContainer: './src/Components/ListContainer/ListContainer.js',
+        MenuButton: './src/Components/MenuButton/MenuButton.js',
         Offcanvas: './src/Components/Offcanvas/Offcanvas.js',
         Paginator: './src/Components/Paginator/Paginator.js',
         PieChart: './src/Components/PieChart/PieChart.js',

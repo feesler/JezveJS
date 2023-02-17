@@ -13,8 +13,8 @@
   overflow: hidden;
 }
 
-.nav-header__content .popup-menu-btn__icon {
-  fill: #ffffff;
+.nav-header__content .menu-btn {
+  --btn-icon-color: #ffffff;
 }
 
 /* List element */
