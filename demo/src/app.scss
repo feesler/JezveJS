@@ -20,6 +20,7 @@
   --action-btn-border-radius: 6px;
   --action-btn-bg: #0072c6;
   --action-btn-hover-bg: #1e82cc;
+  --action-btn-active-bg: #104b79;
 }
 
 /* Main layout */
@@ -112,6 +113,7 @@ a:visited {
   --btn-hover-title-color: #ffffff;
   --btn-hover-background: var(--action-btn-hover-bg);
   --btn-border-radius: var(--action-btn-border-radius);
+  --btn-active-background: var(--action-btn-active-bg);
   --btn-disabled-background: #5082aa;
   --btn-padding: 0 22px;
 

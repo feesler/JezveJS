@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge, setEvents, onReady } from 'jezvejs';
+import { ge, onReady } from 'jezvejs';
 import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { initNavigation } from '../../app.js';
@@ -99,38 +99,34 @@ const initDisabled = () => {
 
     ge('disabledContainer').append(disabledBtn.elem, disabledLink.elem);
 
-    const toggleEnableButtonBtn = ge('toggleEnableButtonBtn');
-    setEvents(toggleEnableButtonBtn, {
-        click: () => {
+    const toggleEnableButtonBtn = Button.fromElement(ge('toggleEnableButtonBtn'), {
+        onClick: () => {
             const { enabled } = disabledBtn;
-            toggleEnableButtonBtn.textContent = (enabled) ? 'Enable button' : 'Disable button';
+            toggleEnableButtonBtn.setTitle((enabled) ? 'Enable button' : 'Disable button');
             disabledBtn.enable(!enabled);
         },
     });
 
-    const toggleEnableLinkBtn = ge('toggleEnableLinkBtn');
-    setEvents(toggleEnableLinkBtn, {
-        click: () => {
+    const toggleEnableLinkBtn = Button.fromElement(ge('toggleEnableLinkBtn'), {
+        onClick: () => {
             const { enabled } = disabledLink;
-            toggleEnableLinkBtn.textContent = (enabled) ? 'Enable link' : 'Disable link';
+            toggleEnableLinkBtn.setTitle((enabled) ? 'Enable link' : 'Disable link');
             disabledLink.enable(!enabled);
         },
     });
 
-    const toggleIconBtn = ge('toggleIconBtn');
-    setEvents(toggleIconBtn, {
-        click: () => {
+    const toggleIconBtn = Button.fromElement(ge('toggleIconBtn'), {
+        onClick: () => {
             const { icon } = disabledBtn.state;
-            toggleIconBtn.textContent = (icon) ? 'Add icon' : 'Remove icon';
+            toggleIconBtn.setTitle((icon) ? 'Add icon' : 'Remove icon');
             disabledBtn.setIcon((icon) ? null : btnIcon);
         },
     });
 
-    const toggleTitleBtn = ge('toggleTitleBtn');
-    setEvents(toggleTitleBtn, {
-        click: () => {
+    const toggleTitleBtn = Button.fromElement(ge('toggleTitleBtn'), {
+        onClick: () => {
             const { title } = disabledBtn.state;
-            toggleTitleBtn.textContent = (title) ? 'Add title' : 'Remove title';
+            toggleTitleBtn.setTitle((title) ? 'Add title' : 'Remove title');
             disabledBtn.setTitle((title) ? null : btnTitle);
         },
     });

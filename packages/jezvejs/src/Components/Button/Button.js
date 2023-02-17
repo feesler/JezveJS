@@ -134,7 +134,10 @@ export class Button extends Component {
     }
 
     setHandlers() {
-        setEvents(this.elem, { click: (e) => this.onClick(e) });
+        setEvents(this.elem, {
+            touchstart: () => { },
+            click: (e) => this.onClick(e),
+        });
     }
 
     onClick(e) {
