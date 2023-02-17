@@ -25,8 +25,8 @@
   --btn-disabled-opacity: 0.3;
 
   /* Hover state */
-  --btn-hover-title-color: #888888;
-  --btn-hover-icon-color: #888888;
+  --btn-hover-title-color: var(--btn-title-color);
+  --btn-hover-icon-color: var(--btn-icon-color);
   --btn-hover-background: none;
 
   display: inline-flex;

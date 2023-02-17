@@ -107,28 +107,20 @@ a:visited {
 
 .action-btn,
 .action-btn:visited {
+  --btn-title-color: #ffffff;
   --btn-background: var(--action-btn-bg);
+  --btn-hover-title-color: #ffffff;
   --btn-hover-background: var(--action-btn-hover-bg);
+  --btn-border-radius: var(--action-btn-border-radius);
+  --btn-disabled-background: #5082aa;
+  --btn-padding: 0 22px;
 
-  font-weight: normal;
-  font-size: 16px;
-  color: #ffffff;
-  text-decoration: none;
-  width: fit-content;
-  padding: 4px 22px;
   margin-right: 15px;
-  overflow: visible;
-  border-radius: var(--action-btn-border-radius);
 }
 
 .action-btn:focus {
   outline: 2px #aee5ff solid;
   outline-offset: 0.1rem;
-}
-
-.action-btn[disabled] {
-  background-color: #5082aa;
-  opacity: 0.3;
 }
 
 .input {
