@@ -45,7 +45,7 @@
   display: inline-flex;
   flex-flow: row nowrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   height: var(--btn-size);
   line-height: var(--btn-size);
   border: 0 none;
@@ -54,6 +54,7 @@
   overflow: hidden;
   font-size: var(--btn-font-size);
   font-weight: var(--btn-font-weight);
+  text-align: center;
   vertical-align: middle;
   text-decoration: none;
   color: var(--btn-title-color);
@@ -71,7 +72,9 @@
 .btn__content {
   display: inline-flex;
   flex-flow: column nowrap;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   vertical-align: middle;
   padding: var(--btn-content-padding);
   height: var(--btn-size);

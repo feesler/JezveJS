@@ -24,12 +24,12 @@
   --btn-hover-icon-color: #dddddd;
   --btn-hover-background: #2962ff;
   --btn-border-radius: 12px;
+  --btn-padding: 6px 24px 6px 12px;
+  --btn-content-padding: 0 0 0 12px;
+}
 
-  padding: 6px 24px 6px 12px;
-
-  .btn__content {
-    padding: 0 0 0 12px;
-  }
+.fullwidth-container {
+  display: grid;
 }
 
 @media (hover: hover) {

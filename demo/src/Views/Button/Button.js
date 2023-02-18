@@ -61,6 +61,15 @@ const initBackground = () => {
     ge('backgroundBtn').append(btn.elem);
 };
 
+const initFullWidth = () => {
+    const btn = Button.create({
+        title: 'Button title',
+        icon: 'calendar-icon',
+        className: 'bg-btn',
+    });
+    ge('fullwidthContainer').append(btn.elem);
+};
+
 const initCloseBtn = () => {
     const btn = CloseButton.create();
     ge('closeBtn').append(btn.elem);
@@ -140,6 +149,7 @@ const init = () => {
     initDynamicLink();
     initStatic();
     initBackground();
+    initFullWidth();
     initCloseBtn();
     initNoTitle();
     initNoIcon();
