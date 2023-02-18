@@ -1,5 +1,6 @@
 /* icon link */
-.btn {
+.btn,
+.btn:visited {
   --btn-size: 32px;
   --btn-background: none;
   --btn-border-radius: 0;
@@ -51,10 +52,6 @@
   color: var(--btn-title-color);
   background: var(--btn-background);
   cursor: pointer;
-
-  &:focus-visible {
-    box-shadow: var(--focus-shadow);
-  }
 }
 
 .btn__icon {
@@ -80,6 +77,12 @@
   color: var(--btn-title-color);
 }
 
+/* Focused state */
+.btn:focus-visible {
+  box-shadow: var(--focus-shadow);
+}
+
+/* Active state */
 .btn:active {
   color: var(--btn-active-title-color);
   background: var(--btn-active-background);
@@ -89,6 +92,7 @@
   }
 }
 
+/* Disabled state */
 .btn[disabled] {
   color: var(--btn-disabled-title-color);
   background: var(--btn-disabled-background);
