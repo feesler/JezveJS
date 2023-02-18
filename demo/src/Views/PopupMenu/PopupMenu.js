@@ -1,5 +1,10 @@
 import 'jezvejs/style';
-import { createElement, ge, onReady } from 'jezvejs';
+import {
+    createElement,
+    ge,
+    onReady,
+    setEvents,
+} from 'jezvejs';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 import { initNavigation } from '../../app.js';
@@ -100,7 +105,7 @@ const onListMenuClick = (e, menu) => {
     menu.attachAndShow(btn);
 };
 
-const renderListItem = (id, menu) => (
+const renderListItem = (id) => (
     createElement('div', {
         props: {
             className: 'list-item',
@@ -108,7 +113,7 @@ const renderListItem = (id, menu) => (
         },
         children: [
             createElement('span', { props: { textContent: `Item ${id}` } }),
-            MenuButton.create({ onClick: (e) => onListMenuClick(e, menu) }).elem,
+            MenuButton.create().elem,
         ],
     })
 );
@@ -134,9 +139,10 @@ const initList = () => {
     const list = ge('listContainer');
     const itemsCount = 20;
     for (let i = 1; i <= itemsCount; i += 1) {
-        const itemElem = renderListItem(i, menu);
+        const itemElem = renderListItem(i);
         list.append(itemElem);
     }
+    setEvents(list, { click: (e) => onListMenuClick(e, menu) });
 };
 
 const init = () => {
