@@ -176,8 +176,8 @@ const attachToBlockElement = () => {
 // Attach drop down to inline element
 const attachToInlineElement = () => {
     DropDown.create({
-        elem: 'inline',
-        className: 'link_inline_cont',
+        elem: 'inlineTarget',
+        className: 'dd_inline',
         listAttach: true,
         data: initItems('Long Item Lorem Lorem ', 10),
     });

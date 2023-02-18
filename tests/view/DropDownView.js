@@ -15,7 +15,7 @@ const dropDownSelectors = {
     parsedSelDropDown: '#sel0',
     parsedSelSelectedDropDown: '#sel',
     attachedToBlockDropDown: '#box',
-    attachedToInlineDropDown: '#inline',
+    attachedToInlineDropDown: '#inlineTarget',
     multiSelDropDown: '#selinp5',
     genMultiSelDropDown: '#selinp6',
     disabledDropDown: '#selinp7',
