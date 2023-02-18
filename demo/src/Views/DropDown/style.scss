@@ -51,11 +51,11 @@
   box-sizing: border-box;
 }
 
-.link_inline_cont {
+.dd_inline {
   display: inline-block;
   cursor: pointer;
 
-  .link_inline {
+  .link-inline {
     color: #2020ff;
   }
 }
@@ -216,7 +216,7 @@
 }
 
 @media (hover: hover) {
-  .link_inline_cont:hover .link_inline {
+  .dd_inline:hover .link-inline {
     text-decoration: underline;
   }
 

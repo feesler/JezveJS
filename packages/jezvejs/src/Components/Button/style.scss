@@ -1,5 +1,6 @@
 /* icon link */
-.btn {
+.btn,
+.btn:visited {
   --btn-size: 32px;
   --btn-background: none;
   --btn-border-radius: 0;
@@ -34,6 +35,13 @@
   --btn-active-icon-color: var(--btn-hover-icon-color);
   --btn-active-background: var(--btn-hover-background);
 
+  /* Focused state */
+  --btn-focus-title-color: var(--btn-title-color);
+  --btn-focus-icon-color: var(--btn-icon-color);
+  --btn-focus-background: var(--btn-background);
+  --btn-focus-shadow: 0 0 0 0.25rem #0d6efd40;
+  --btn-focus-outline: none;
+
   display: inline-flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -51,10 +59,6 @@
   color: var(--btn-title-color);
   background: var(--btn-background);
   cursor: pointer;
-
-  &:focus-visible {
-    box-shadow: var(--focus-shadow);
-  }
 }
 
 .btn__icon {
@@ -80,6 +84,19 @@
   color: var(--btn-title-color);
 }
 
+/* Focused state */
+.btn:focus-visible {
+  color: var(--btn-focus-title-color);
+  background: var(--btn-focus-background);
+  box-shadow: var(--btn-focus-shadow);
+  outline: var(--btn-focus-outline);
+
+  .btn__icon {
+    fill: var(--btn-focus-icon-color);
+  }
+}
+
+/* Active state */
 .btn:active {
   color: var(--btn-active-title-color);
   background: var(--btn-active-background);
@@ -89,6 +106,7 @@
   }
 }
 
+/* Disabled state */
 .btn[disabled] {
   color: var(--btn-disabled-title-color);
   background: var(--btn-disabled-background);

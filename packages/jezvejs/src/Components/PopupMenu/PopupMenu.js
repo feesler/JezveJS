@@ -153,6 +153,7 @@ export class PopupMenu extends Component {
 
         if (this.containerElem) {
             insertBefore(this.hostElem, this.containerElem);
+            re(this.containerElem);
             this.containerElem = null;
         }
 
