@@ -4,11 +4,6 @@ import { removeEvents, setEvents } from '../../js/common.js';
 export class DragMaster {
     static instance = null;
 
-    static props = {
-        touchMoveTimeout: 200,
-        mouseMoveThreshold: 5,
-    };
-
     static getInstance() {
         if (!this.instance) {
             this.instance = new DragMaster();
@@ -182,7 +177,7 @@ export class DragMaster {
         this.touchTimeout = setTimeout(() => {
             this.touchMoveReady = true;
             this.handleMove(e);
-        }, DragMaster.props.touchMoveTimeout);
+        }, this.dragZone.touchMoveTimeout);
     }
 
     /** Clears touch move timeout */
@@ -221,7 +216,7 @@ export class DragMaster {
 
         if (!this.isTouch) {
             const coords = DragMaster.getEventPageCoordinates(e);
-            const { mouseMoveThreshold } = DragMaster.props;
+            const { mouseMoveThreshold } = this.dragZone;
             if (
                 Math.abs(this.downX - coords.x) < mouseMoveThreshold
                 && Math.abs(this.downY - coords.y) < mouseMoveThreshold

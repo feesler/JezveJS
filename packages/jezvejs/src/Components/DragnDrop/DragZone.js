@@ -3,6 +3,8 @@ import { DragMaster } from './DragMaster.js';
 
 const defaultProps = {
     handles: null,
+    mouseMoveThreshold: 5,
+    touchMoveTimeout: 200,
 };
 
 /**
@@ -32,12 +34,22 @@ export class DragZone {
         DragMaster.makeDraggable(this.elem);
     }
 
-    /** Return element of drag zone */
+    /** Returns mouse move threshold */
+    get mouseMoveThreshold() {
+        return this.props.mouseMoveThreshold;
+    }
+
+    /** Returns touch move timeout */
+    get touchMoveTimeout() {
+        return this.props.touchMoveTimeout;
+    }
+
+    /** Returns element of drag zone */
     getElement() {
         return this.elem;
     }
 
-    /** Return avatar specific for zone */
+    /** Returns avatar specific for zone */
     makeAvatar() { }
 
     /**
