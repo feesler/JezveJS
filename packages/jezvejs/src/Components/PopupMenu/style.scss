@@ -10,6 +10,7 @@
   --popupmenu-icon-color: #000000;
   --popupmenu-padding: 8px;
   --popupmenu-icon-gap: 10px;
+  --popupmenu-icon-margin: 6px;
 
   /* Item hover */
   --popupmenu-hover-background: #3078e2;
@@ -25,24 +26,6 @@
   justify-content: center;
   position: relative;
   width: fit-content;
-
-  /* Toggle show/hide menu button */
-  .popup-menu-btn {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background: none;
-    cursor: pointer;
-  }
-
-  .popup-menu-btn__icon {
-    width: 24px;
-    height: 24px;
-  }
 }
 
 .popup-menu-list {
@@ -95,6 +78,7 @@
     .btn__icon {
       position: absolute;
       left: var(--popupmenu-padding);
+      margin: var(--popupmenu-icon-margin)
     }
   }
 
@@ -103,13 +87,13 @@
     --checkbox-text: var(--popupmenu-title-color);
 
     display: flex;
-    padding: 8px;
+    padding: var(--popupmenu-padding);
     margin: 0;
     flex-shrink: 0;
     cursor: pointer;
 
     .checkbox__check {
-      margin: 6px;
+      margin: var(--popupmenu-icon-margin);
     }
 
     .checkbox__label {
