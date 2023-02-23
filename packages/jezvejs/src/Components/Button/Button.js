@@ -206,9 +206,12 @@ export class Button extends Component {
         if (state.type === 'link') {
             this.elem.href = state.url ?? '';
         }
-        this.elem.tabIndex = (state.enabled)
-            ? (this.props.tabIndex ?? '')
-            : -1;
+
+        if (state.enabled && typeof this.props.tabIndex !== 'undefined') {
+            this.elem.setAttribute('tabindex', this.props.tabIndex);
+        } else {
+            this.elem.removeAttribute('tabindex');
+        }
 
         if (state.icon === prevState.icon && state.title === prevState.title) {
             return;

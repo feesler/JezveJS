@@ -488,27 +488,28 @@ export class DateInput extends Component {
         const expectedYear = expectedParts[this.yearRange.order];
 
         const search = new RegExp(`${this.props.guideChar}`, 'g');
+
         const dayStr = expectedDay.replaceAll(search, '');
-        const monthStr = expectedMonth.replaceAll(search, '');
-        const yearStr = expectedYear.replaceAll(search, '');
-
         const dayVal = parseInt(dayStr, 10);
-        const monthVal = parseInt(monthStr, 10);
-        const yearVal = parseInt(yearStr, 10);
-
         if (dayStr.length > 0 && (!isNum(dayStr) || !(dayVal >= 0 && dayVal <= 31))) {
             return this.state;
         }
         if (dayStr.length === 2 && dayVal === 0) {
             return this.state;
         }
+
+        const monthStr = expectedMonth.replaceAll(search, '');
+        const monthVal = parseInt(monthStr, 10);
         if (monthStr.length > 0 && (!isNum(monthStr) || !(monthVal >= 0 && monthVal <= 12))) {
             return this.state;
         }
         if (monthStr.length === 2 && monthVal === 0) {
             return this.state;
         }
-        if (yearStr.length > 0 && !isNum(yearVal)) {
+
+        const yearStr = expectedYear.replaceAll(search, '');
+        const yearVal = parseInt(yearStr, 10);
+        if (yearStr.length > 0 && (!isNum(yearStr) || yearVal < 1)) {
             return this.state;
         }
 
