@@ -32,6 +32,7 @@ const initDefaultSlider = () => {
     setEvents(ge('slideToStartBtn'), { click: () => slider.slideTo(0) });
     setEvents(ge('slidePrevBtn'), { click: () => slider.slide(true) });
     setEvents(ge('slideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('switchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
 const initVerticalSlider = () => {
@@ -53,6 +54,7 @@ const initVerticalSlider = () => {
     setEvents(ge('vSlideToStartBtn'), { click: () => slider.slideTo(0) });
     setEvents(ge('vSlidePrevBtn'), { click: () => slider.slide(true) });
     setEvents(ge('vSlideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('vSwitchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
 const init = () => {
