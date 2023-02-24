@@ -2,10 +2,11 @@ import {
     ge,
     px,
     createElement,
-    transform,
 } from '../../js/common.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
+import { SliderDragZone } from './components/SliderDragZone.js';
+import { SliderDropTarget } from './components/SliderDropTarget.js';
 import './style.scss';
 
 /* CSS classes */
@@ -13,6 +14,9 @@ const SLIDER_CLASS = 'slider';
 const CONTENT_CLASS = 'slider__content';
 const VERTICAL_CLASS = 'slider_vertical';
 const ANIMATE_CLASS = 'animate';
+
+const TRANSITION_END_TIMEOUT = 700;
+const SWIPE_THRESHODL = 35;
 
 const defaultProps = {
     width: 400,
@@ -37,6 +41,7 @@ export class Slider extends Component {
         this.curslide = 0;
         this.slidecount = 0;
         this.update = null;
+        this.waitingForAnimation = false;
 
         this.init();
     }
@@ -51,6 +56,18 @@ export class Slider extends Component {
         this.elem = createElement('div', {
             props: { className: SLIDER_CLASS },
             children: this.content,
+        });
+        this.setContentPosition(0);
+
+        SliderDragZone.create({
+            elem: this.content,
+            vertical: this.state.vertical,
+            isReady: () => !this.waitingForAnimation,
+            updatePosition: (position) => this.setContentPosition(position),
+        });
+        SliderDropTarget.create({
+            elem: this.elem,
+            onDragEnd: (...args) => this.onDragEnd(...args),
         });
 
         this.slidecount = 0;
@@ -76,10 +93,31 @@ export class Slider extends Component {
         if (this.update) {
             this.update();
         }
+
+        this.waitingForAnimation = false;
     }
 
-    onTransitionEnd() {
-        this.complete();
+    onDragEnd(position, distance) {
+        const passThreshold = Math.abs(distance) > SWIPE_THRESHODL;
+        let slideNum = -position / this.clsize();
+        if (passThreshold) {
+            slideNum = (distance > 0) ? Math.ceil(slideNum) : Math.floor(slideNum);
+        } else {
+            slideNum = Math.round(slideNum);
+        }
+
+        const num = Math.max(0, Math.min(this.slidecount - 1, slideNum));
+        this.slideTo(num);
+    }
+
+    onTransitionEnd(e) {
+        if (e.target !== this.content) {
+            return;
+        }
+
+        if (this.waitingForAnimation) {
+            this.complete();
+        }
     }
 
     slide(dir) {
@@ -92,7 +130,7 @@ export class Slider extends Component {
     }
 
     slideTo(num) {
-        if (num < 0 || num > this.slidecount - 1 || num === this.curslide) {
+        if (num < 0 || num > this.slidecount - 1) {
             return;
         }
 
@@ -106,8 +144,13 @@ export class Slider extends Component {
 
         this.content.classList.add(ANIMATE_CLASS);
 
-        const translate = (this.state.vertical) ? 'translateY' : 'translateX';
-        transform(this.content, `${translate}(${this.curshift}px)`);
+        this.waitingForAnimation = true;
+        this.setContentPosition(this.curshift);
+        setTimeout(() => {
+            if (this.waitingForAnimation) {
+                this.complete();
+            }
+        }, TRANSITION_END_TIMEOUT);
     }
 
     switchTo(num) {
@@ -121,10 +164,16 @@ export class Slider extends Component {
 
         this.content.classList.remove(ANIMATE_CLASS);
 
-        const translate = (this.state.vertical) ? 'translateY' : 'translateX';
-        transform(this.content, `${translate}(${this.curshift}px)`);
-
+        this.setContentPosition(this.curshift);
         this.complete();
+    }
+
+    setContentPosition(position) {
+        if (this.state.vertical) {
+            this.content.style.top = px(position);
+        } else {
+            this.content.style.left = px(position);
+        }
     }
 
     addSlide(slideId) {

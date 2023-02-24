@@ -11,9 +11,9 @@ import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import { initNavigation } from '../../app.js';
-import './style.scss';
 import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
 import { XAxisDragZone } from './impl/XAxisDragZone.js';
+import './style.scss';
 
 const logTo = (target, value) => {
     const elem = (typeof target === 'string') ? ge(target) : target;
