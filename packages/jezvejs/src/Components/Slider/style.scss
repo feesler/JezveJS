@@ -7,6 +7,8 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
+  position: relative;
+  width: fit-content;
 }
 
 .slider_vertical .slider__content {
@@ -14,7 +16,7 @@
 }
 
 .slider__content.animate {
-  transition: transform 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 .slide {
