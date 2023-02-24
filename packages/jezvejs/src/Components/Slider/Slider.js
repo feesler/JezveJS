@@ -2,6 +2,7 @@ import {
     ge,
     px,
     createElement,
+    asArray,
 } from '../../js/common.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
@@ -22,6 +23,7 @@ const defaultProps = {
     width: 400,
     height: 300,
     vertical: false,
+    items: [],
 };
 
 // Slider constructor
@@ -59,6 +61,10 @@ export class Slider extends Component {
         });
         this.setContentPosition(0);
 
+        if (this.props.items) {
+            this.append(this.props.items);
+        }
+
         SliderDragZone.create({
             elem: this.content,
             vertical: this.state.vertical,
@@ -69,8 +75,6 @@ export class Slider extends Component {
             elem: this.elem,
             onDragEnd: (...args) => this.onDragEnd(...args),
         });
-
-        this.slidecount = 0;
 
         this.render(this.state);
     }
@@ -130,7 +134,7 @@ export class Slider extends Component {
     }
 
     slideTo(num) {
-        if (num < 0 || num > this.slidecount - 1) {
+        if (num < 0 || num > this.slidecount - 1 || this.waitingForAnimation) {
             return;
         }
 
@@ -154,7 +158,7 @@ export class Slider extends Component {
     }
 
     switchTo(num) {
-        if (num < 0 || num > this.slidecount - 1 || num === this.curslide) {
+        if (num < 0 || num > this.slidecount - 1 || this.waitingForAnimation) {
             return;
         }
 
@@ -176,22 +180,34 @@ export class Slider extends Component {
         }
     }
 
-    addSlide(slideId) {
-        if (!this.content) {
+    append(items) {
+        asArray(items).forEach((item) => this.addSlide(item));
+    }
+
+    addSlide(slide) {
+        const { content, id, name } = slide;
+        if (!content) {
             return false;
         }
 
-        const slDiv = createElement('div', {
+        const slideContainer = createElement('div', {
             props: {
-                id: slideId,
                 className: 'slide',
                 style: {
                     width: px(this.state.width),
                     height: px(this.state.height),
                 },
             },
+            children: content,
         });
-        this.content.append(slDiv);
+        if (typeof id !== 'undefined') {
+            slideContainer.id = id;
+        }
+        if (typeof name !== 'undefined') {
+            slideContainer.dataset.name = name;
+        }
+
+        this.content.append(slideContainer);
 
         this.slidecount += 1;
 
@@ -199,16 +215,12 @@ export class Slider extends Component {
     }
 
     removeSlide(slideId) {
-        if (!this.content) {
+        const slideContainer = ge(slideId);
+        if (!slideContainer || !this.content?.contains(slideContainer)) {
             return false;
         }
 
-        const slDiv = ge(slideId);
-        if (!slDiv) {
-            return false;
-        }
-
-        this.content.removeChild(slDiv);
+        this.content.removeChild(slideContainer);
 
         this.slidecount -= 1;
         const contentSize = (this.state.vertical)
