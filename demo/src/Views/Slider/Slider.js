@@ -18,20 +18,25 @@ const initDefaultSlider = () => {
     const slider = new Slider({
         width: 300,
         height: 200,
+        items: [{
+            id: 'horslide',
+            name: 'horslide-1',
+            content: createSlideContent('Slide 1'),
+        }, {
+            name: 'horslide-2',
+            content: createSlideContent('Slide 2'),
+        }, {
+            name: 'horslide-3',
+            content: createSlideContent('Slide 3'),
+        }],
     });
     const container = ge('defaultSlider');
     container.append(slider.elem);
 
-    slider.addSlide('slide-1');
-    ge('slide-1').append(createSlideContent('Slide 1'));
-    slider.addSlide('slide-2');
-    ge('slide-2').append(createSlideContent('Slide 2'));
-    slider.addSlide('slide-3');
-    ge('slide-3').append(createSlideContent('Slide 3'));
-
     setEvents(ge('slideToStartBtn'), { click: () => slider.slideTo(0) });
     setEvents(ge('slidePrevBtn'), { click: () => slider.slide(true) });
     setEvents(ge('slideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('switchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
 const initVerticalSlider = () => {
@@ -43,16 +48,24 @@ const initVerticalSlider = () => {
     const container = ge('verticalSlider');
     container.append(slider.elem);
 
-    slider.addSlide('vslide-1');
-    ge('vslide-1').append(createSlideContent('Slide 1'));
-    slider.addSlide('vslide-2');
-    ge('vslide-2').append(createSlideContent('Slide 2'));
-    slider.addSlide('vslide-3');
-    ge('vslide-3').append(createSlideContent('Slide 3'));
+    slider.addSlide({
+        id: 'vslide',
+        name: 'vertslide-1',
+        content: createSlideContent('Slide 1'),
+    });
+    slider.addSlide({
+        name: 'vertslide-2',
+        content: createSlideContent('Slide 2'),
+    });
+    slider.addSlide({
+        name: 'vertslide-3',
+        content: createSlideContent('Slide 3'),
+    });
 
     setEvents(ge('vSlideToStartBtn'), { click: () => slider.slideTo(0) });
     setEvents(ge('vSlidePrevBtn'), { click: () => slider.slide(true) });
     setEvents(ge('vSlideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('vSwitchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
 const init = () => {

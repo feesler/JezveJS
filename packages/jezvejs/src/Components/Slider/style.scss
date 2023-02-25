@@ -3,6 +3,10 @@
   overflow: hidden;
 }
 
+.slider.slider_vertical {
+  touch-action: none;
+}
+
 .slider__content {
   display: flex;
   flex-flow: row nowrap;

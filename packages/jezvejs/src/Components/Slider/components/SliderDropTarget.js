@@ -7,7 +7,7 @@ const defaultProps = {
 };
 
 /**
- * X axis drop target
+ * Slider drop target
  */
 export class SliderDropTarget extends DropTarget {
     constructor(props = {}) {

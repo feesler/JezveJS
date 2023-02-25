@@ -237,7 +237,7 @@ export default {
             ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
-            template: './Views/Slider/Slider.html',
+            template: './Views/Slider/slider.html',
             filename: 'demo/slider.html',
             chunks: ['polyfills', 'sliderDemo'],
             ...htmlCommonOptions,
