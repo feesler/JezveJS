@@ -11,7 +11,7 @@ const defalutProps = {
 };
 
 /**
- * X axis drag zone
+ * Slider drag zone
  */
 export class SliderDragZone extends DragZone {
     constructor(props = {}) {

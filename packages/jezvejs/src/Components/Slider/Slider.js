@@ -17,7 +17,7 @@ const VERTICAL_CLASS = 'slider_vertical';
 const ANIMATE_CLASS = 'animate';
 
 const TRANSITION_END_TIMEOUT = 700;
-const SWIPE_THRESHODL = 35;
+const SWIPE_THRESHODL = 20;
 
 const defaultProps = {
     width: 400,
@@ -92,6 +92,7 @@ export class Slider extends Component {
     }
 
     complete() {
+        this.content.classList.remove(ANIMATE_CLASS);
         this.curslide = Math.round(-this.curshift / (this.clsize() - 1));
 
         if (this.update) {
@@ -165,8 +166,6 @@ export class Slider extends Component {
         this.direction = (num < this.curslide);
         this.slidesize = (this.clsize() - 1) * Math.abs(num - this.curslide);
         this.curshift += (this.direction ? this.slidesize : -this.slidesize);
-
-        this.content.classList.remove(ANIMATE_CLASS);
 
         this.setContentPosition(this.curshift);
         this.complete();
