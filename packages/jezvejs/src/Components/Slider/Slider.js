@@ -3,6 +3,7 @@ import {
     px,
     createElement,
     asArray,
+    minmax,
 } from '../../js/common.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
@@ -111,7 +112,7 @@ export class Slider extends Component {
             slideNum = Math.round(slideNum);
         }
 
-        const num = Math.max(0, Math.min(this.slidecount - 1, slideNum));
+        const num = minmax(0, this.slidecount - 1, slideNum);
         this.slideTo(num);
     }
 

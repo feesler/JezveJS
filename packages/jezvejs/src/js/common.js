@@ -74,6 +74,14 @@ export const asArray = (value) => {
     return Array.isArray(value) ? value : [value];
 };
 
+/** Returns value normalized to specified range */
+export const minmax = (min, max, value) => (
+    Math.max(
+        Math.min(min, max),
+        Math.min(Math.max(min, max), value),
+    )
+);
+
 /** Return DOM element by id */
 export const ge = (id) => document.getElementById(id);
 
