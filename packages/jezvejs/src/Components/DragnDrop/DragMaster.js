@@ -170,9 +170,14 @@ export class DragMaster {
     }
 
     /** Sets touch move timeout */
-    initMoveTimeout(e) {
-        this.touchMoveReady = false;
+    initTouchMove(e) {
         this.resetMoveTimeout();
+
+        this.touchMoveReady = (this.dragZone.touchMoveTimeout <= 0);
+        if (this.touchMoveReady) {
+            this.handleMove(e);
+            return;
+        }
 
         this.touchTimeout = setTimeout(() => {
             this.touchMoveReady = true;
@@ -329,7 +334,7 @@ export class DragMaster {
         this.setupHandlers();
 
         if (this.isTouch) {
-            this.initMoveTimeout(e);
+            this.initTouchMove(e);
         }
     }
 }
