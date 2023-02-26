@@ -9,6 +9,7 @@ import {
     isSameYearMonth,
     isSameDate,
 } from '../../js/DateUtils.js';
+import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from './utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container';
@@ -20,8 +21,6 @@ const WEEKDAY_CELL_CLASS = 'dp__weekday-cell';
 const TODAY_CELL_CLASS = 'dp__today-cell';
 const HIGHLIGHT_CELL_CLASS = 'dp__cell_hl';
 const ACTIVE_CELL_CLASS = 'dp__cell_act';
-
-export const MONTH_VIEW = 'month';
 
 export class DatePickerMonthView extends Component {
     constructor(props) {
@@ -62,8 +61,8 @@ export class DatePickerMonthView extends Component {
 
         this.state.title = `${monthLong} ${rYear}`;
         this.state.nav = {
-            prev: new Date(rYear, rMonth - 1, 1),
-            next: new Date(rYear, rMonth + 1, 1),
+            prev: getPrevViewDate(date, this.type),
+            next: getNextViewDate(date, this.type),
         };
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
 

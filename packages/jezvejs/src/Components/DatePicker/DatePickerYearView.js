@@ -1,13 +1,12 @@
 import { createElement, isDate } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { getShortMonthName, MONTHS_COUNT } from '../../js/DateUtils.js';
+import { getNextViewDate, getPrevViewDate, YEAR_VIEW } from './utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container';
 const CELL_CLASS = 'dp__cell';
 const YEAR_CELL_CLASS = 'dp__year-view__cell';
-
-export const YEAR_VIEW = 'year';
 
 export class DatePickerYearView extends Component {
     constructor(props) {
@@ -44,8 +43,8 @@ export class DatePickerYearView extends Component {
 
         this.state.title = rYear;
         this.state.nav = {
-            prev: new Date(rYear - 1, 1, 1),
-            next: new Date(rYear + 1, 1, 1),
+            prev: getPrevViewDate(date, this.type),
+            next: getNextViewDate(date, this.type),
         };
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
 

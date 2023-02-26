@@ -1,15 +1,17 @@
 import { createElement, isDate } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
+import {
+    getNextViewDate,
+    getPrevViewDate,
+    YEARRANGE_VIEW,
+    YEAR_RANGE_LENGTH,
+} from './utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container';
 const CELL_CLASS = 'dp__cell';
 const OTHER_CELL_CLASS = 'dp__other-month-cell';
 const YEARRANGE_CELL_CLASS = 'dp__year-range-view__cell';
-
-const YEAR_RANGE_LENGTH = 10;
-
-export const YEARRANGE_VIEW = 'yearrange';
 
 export class DatePickerYearRangeView extends Component {
     constructor(props) {
@@ -47,8 +49,8 @@ export class DatePickerYearRangeView extends Component {
 
         this.state.title = `${startYear + 1}-${startYear + YEAR_RANGE_LENGTH}`;
         this.state.nav = {
-            prev: new Date(rYear - YEAR_RANGE_LENGTH, 1, 1),
-            next: new Date(rYear + YEAR_RANGE_LENGTH, 1, 1),
+            prev: getPrevViewDate(date, this.type),
+            next: getNextViewDate(date, this.type),
         };
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
 

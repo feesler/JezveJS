@@ -1,3 +1,4 @@
+import '../../css/common.scss';
 import {
     ge,
     createSVGElement,
@@ -17,16 +18,26 @@ import {
 import { isSameYearMonth } from '../../js/DateUtils.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { DatePickerMonthView, MONTH_VIEW } from './DatePickerMonthView.js';
-import { DatePickerYearView, YEAR_VIEW } from './DatePickerYearView.js';
-import { DatePickerYearRangeView, YEARRANGE_VIEW } from './DatePickerYearRangeView.js';
-import '../../css/common.scss';
+import { DatePickerMonthView } from './DatePickerMonthView.js';
+import { DatePickerYearView } from './DatePickerYearView.js';
+import { DatePickerYearRangeView } from './DatePickerYearRangeView.js';
+import {
+    toCSSValue,
+    compareViewTypes,
+    getNextViewDate,
+    getPrevViewDate,
+    MONTH_VIEW,
+    YEAR_VIEW,
+    YEARRANGE_VIEW,
+} from './utils.js';
 import './style.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'dp__container';
 const WRAPPER_CLASS = 'dp__wrapper';
+const SLIDER_CLASS = 'dp__slider';
 const STATIC_WRAPPER_CLASS = 'dp__static-wrapper';
+const CURRENT_CLASS = 'dp__current-view';
 /* Header */
 const HEADER_CLASS = 'dp__header';
 const HEADER_ITEM_CLASS = 'dp__header_item';
@@ -46,8 +57,6 @@ const TOP_TO_CLASS = 'top_to';
 const BOTTOM_TO_CLASS = 'bottom_to';
 
 const NAV_ICON_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
-
-const toCSSValue = (val) => (+val.toFixed(4));
 
 const defaultProps = {
     relparent: null,
@@ -94,9 +103,10 @@ export class DatePicker extends Component {
             actDate: null,
         };
 
+        this.prevView = null;
         this.currView = null;
         this.nextView = null;
-        this.nextCallbacks = null;
+        this.newView = null;
 
         this.transitionEvents = { transitionend: (e) => this.onTransitionEnd(e) };
         this.emptyClickHandler = () => this.showView(false);
@@ -113,7 +123,11 @@ export class DatePicker extends Component {
         }
 
         const header = this.renderHead();
-        this.cellsContainer = createElement('div', { props: { className: VIEW_CLASS } });
+        this.slider = createElement('div', { props: { className: SLIDER_CLASS } });
+        this.cellsContainer = createElement('div', {
+            props: { className: VIEW_CLASS },
+            children: this.slider,
+        });
 
         this.wrapper = createElement('div', {
             props: { className: WRAPPER_CLASS },
@@ -134,7 +148,25 @@ export class DatePicker extends Component {
             children: this.wrapper,
         });
 
+        this.observeSliderSize();
+
         this.render(this.state);
+    }
+
+    /** Creates ResizeObserver for slider element */
+    observeSliderSize() {
+        const observer = new ResizeObserver(() => this.onResize());
+        observer.observe(this.slider);
+    }
+
+    /** Updates height of container */
+    onResize() {
+        const { offsetHeight } = this.currView.elem;
+        if (offsetHeight === 0) {
+            return;
+        }
+
+        this.cellsContainer.style.height = px(offsetHeight);
     }
 
     sendShowEvents(value = true) {
@@ -430,23 +462,37 @@ export class DatePicker extends Component {
      * @param {Event} e - Event object
      */
     onTransitionEnd(e) {
-        if (e?.target !== this.currView.elem || e?.propertyName !== 'transform') {
+        if (
+            (e?.propertyName !== 'transform')
+            || (e?.target !== this.currView.elem && e?.target !== this.slider)
+        ) {
             return;
         }
 
         this.wrapper.classList.remove(ANIMATED_CLASS);
         this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
-        this.nextView.elem.classList.remove(
+
+        this.newView.current.elem.classList.remove(
             LAYER_VIEW_CLASS,
             BOTTOM_TO_CLASS,
             TOP_TO_CLASS,
         );
-        this.nextView.elem.style.left = '';
-        transform(this.nextView.elem, '');
+        this.newView.current.elem.style.left = '';
+        transform(this.newView.current.elem, '');
+
+        transform(this.slider, '');
+
         this.cellsContainer.style.width = '';
-        this.cellsContainer.style.height = '';
+        // this.cellsContainer.style.height = '';
+        re(this.prevView.elem);
         re(this.currView.elem);
-        this.applyView(this.nextView, this.nextCallbacks);
+        re(this.nextView.elem);
+
+        const { prev, current, next } = this.newView;
+        this.slider.append(prev.elem, current.elem, next.elem);
+        show(this.slider, true);
+
+        this.applyView(this.newView);
 
         this.state.animation = false;
         removeEvents(this.cellsContainer, this.transitionEvents);
@@ -456,8 +502,16 @@ export class DatePicker extends Component {
      * Set new view
      * @param {object} newView - view object
      */
-    applyView(newView) {
-        this.currView = newView;
+    applyView(views) {
+        const { prev, current, next } = views;
+        this.prevView = prev;
+        this.currView = current;
+        this.nextView = next;
+
+        prev.elem.classList.toggle(CURRENT_CLASS, false);
+        current.elem.classList.toggle(CURRENT_CLASS, true);
+        next.elem.classList.toggle(CURRENT_CLASS, false);
+
         this.setTitle(this.currView.title);
     }
 
@@ -465,22 +519,33 @@ export class DatePicker extends Component {
      * Set new view or replace current view with specified
      * @param {object} newView - view object
      */
-    setView(newView) {
-        if (this.currView === newView) {
+    setView(views) {
+        if (this.currView === views.current) {
             return;
         }
 
-        const view = newView;
+        const view = views.current;
         if (!this.cellsContainer || !view) {
             return;
         }
 
         if (!this.currView?.elem || !this.props.animated) {
-            this.cellsContainer.append(view.elem);
+            this.slider.append(views.prev.elem);
+            if (this.prevView?.elem && !this.props.animated) {
+                re(this.prevView.elem);
+            }
+
+            this.slider.append(view.elem);
             if (this.currView?.elem && !this.props.animated) {
                 re(this.currView.elem);
             }
-            this.applyView(view);
+
+            this.slider.append(views.next.elem);
+            if (this.nextView?.elem && !this.props.animated) {
+                re(this.nextView.elem);
+            }
+
+            this.applyView(views);
             return;
         }
 
@@ -489,34 +554,34 @@ export class DatePicker extends Component {
         const currTblWidth = this.cellsContainer.offsetWidth;
         const currTblHeight = this.cellsContainer.offsetHeight;
 
-        this.cellsContainer.append(view.elem);
         this.cellsContainer.style.width = px(currTblWidth);
         this.cellsContainer.style.height = px(currTblHeight);
 
         // If new view is the same type as current then animate slide
         if (this.currView.type === view.type) {
-            const leftToRight = this.currView.date < view.date;
-
-            this.currView.elem.classList.add(LAYER_VIEW_CLASS);
-            view.elem.classList.add(LAYER_VIEW_CLASS);
-            view.elem.style.width = px(currTblWidth);
-            view.elem.style.left = px(leftToRight ? currTblWidth : -currTblWidth);
+            const leftToRight = this.currView.date > view.date;
 
             this.wrapper.classList.add(ANIMATED_CLASS);
             this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
 
-            this.cellsContainer.style.height = px(view.elem.offsetHeight);
-            const trMatrix = [1, 0, 0, 1, (leftToRight ? -currTblWidth : currTblWidth), 0];
-            transform(this.currView.elem, `matrix(${trMatrix.join()})`);
-            transform(view.elem, `matrix(${trMatrix.join()})`);
+            const targetView = (leftToRight) ? this.prevView : this.nextView;
+            this.cellsContainer.style.height = px(targetView.elem.offsetHeight);
 
-            this.nextView = view;
+            const distance = (leftToRight) ? currTblWidth : -currTblWidth;
+            const trMatrix = [1, 0, 0, 1, distance, 0];
+            transform(this.slider, `matrix(${trMatrix.join()})`);
+
+            this.newView = views;
 
             setEvents(this.cellsContainer, this.transitionEvents);
             return;
         }
 
-        const goUp = (this.currView.type < view.type);
+        this.cellsContainer.append(this.currView.elem);
+        this.cellsContainer.append(view.elem);
+        show(this.slider, false);
+
+        const goUp = compareViewTypes(this.currView.type, view.type) < 0;
         const cellView = (goUp) ? view : this.currView;
         const relView = (goUp) ? this.currView : view;
         const relYear = relView.date.getFullYear();
@@ -575,7 +640,7 @@ export class DatePicker extends Component {
                 `matrix(${(goUp ? cellTrans : viewTrans).join()})`,
             );
 
-            this.nextView = view;
+            this.newView = views;
 
             setEvents(this.cellsContainer, this.transitionEvents);
         });
@@ -617,42 +682,119 @@ export class DatePicker extends Component {
         });
     }
 
+    renderPrevView(state) {
+        const { viewType } = state;
+        const date = getPrevViewDate(state.date, viewType);
+        return this.renderDateView(date, state);
+    }
+
+    renderNextView(state) {
+        const { viewType } = state;
+        const date = getNextViewDate(state.date, viewType);
+        return this.renderDateView(date, state);
+    }
+
+    renderDateView(date, state) {
+        const { viewType } = state;
+
+        if (viewType === MONTH_VIEW) {
+            return DatePickerMonthView.create({
+                date,
+                locales: this.props.locales,
+                actDate: state.actDate,
+                range: this.props.range,
+                curRange: state.curRange,
+            });
+        }
+
+        if (viewType === YEAR_VIEW) {
+            return DatePickerYearView.create({
+                date,
+                locales: this.props.locales,
+            });
+        }
+
+        if (viewType === YEARRANGE_VIEW) {
+            return DatePickerYearRangeView.create({
+                date,
+                locales: this.props.locales,
+            });
+        }
+
+        throw new Error('Invalid view type');
+    }
+
     renderView(state, prevState = {}) {
         const typeChanged = (state.viewType !== prevState?.viewType);
 
+        const res = {
+            prev: null,
+            current: null,
+            next: null,
+        };
+
         if (state.viewType === MONTH_VIEW) {
             if (typeChanged || !isSameYearMonth(state.date, prevState?.date)) {
-                return DatePickerMonthView.create({
+                res.prev = this.renderPrevView(state);
+                res.next = this.renderNextView(state);
+
+                res.current = DatePickerMonthView.create({
                     date: state.date,
                     locales: this.props.locales,
                     actDate: state.actDate,
                     range: this.props.range,
                     curRange: state.curRange,
                 });
+
+                return res;
             }
 
+            this.prevView.setState((viewState) => ({
+                ...viewState,
+                actDate: state.actDate,
+                range: this.props.range,
+                curRange: state.curRange,
+            }));
             this.currView.setState((viewState) => ({
                 ...viewState,
                 actDate: state.actDate,
                 range: this.props.range,
                 curRange: state.curRange,
             }));
+            this.nextView.setState((viewState) => ({
+                ...viewState,
+                actDate: state.actDate,
+                range: this.props.range,
+                curRange: state.curRange,
+            }));
 
-            return this.currView;
+            res.prev = this.prevView;
+            res.current = this.currView;
+            res.next = this.nextView;
+
+            return res;
         }
 
         if (state.viewType === YEAR_VIEW) {
-            return DatePickerYearView.create({
+            res.prev = this.renderPrevView(state);
+            res.next = this.renderNextView(state);
+            res.current = DatePickerYearView.create({
                 date: state.date,
                 locales: this.props.locales,
             });
+
+            return res;
         }
 
         if (state.viewType === YEARRANGE_VIEW) {
-            return DatePickerYearRangeView.create({
+            res.prev = this.renderPrevView(state);
+            res.next = this.renderNextView(state);
+            res.current = DatePickerYearRangeView.create({
                 date: state.date,
                 locales: this.props.locales,
             });
+
+            return res;
         }
 
         throw new Error('Invalid view type');

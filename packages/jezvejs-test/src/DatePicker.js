@@ -37,7 +37,7 @@ export class DatePicker extends TestComponent {
         res.titleElem = await query(res.wrapper, '.dp__header .dp__header_title');
         res.title = await prop(res.titleElem, 'textContent');
 
-        const elems = await queryAll(res.wrapper, '.dp__view-container .dp__cell');
+        const elems = await queryAll(res.wrapper, '.dp__current-view .dp__cell');
 
         res.viewType = await evaluate((elem) => {
             if (elem.classList.contains('dp__year-view__cell')) {
