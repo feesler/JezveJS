@@ -162,7 +162,7 @@ export class Slider extends Component {
         this.targetPos = this.curshift + (dir ? distance : -distance);
         this.startPos = this.curshift;
         this.curshift = this.targetPos;
-        this.curslide = Math.round(-this.curshift / (this.clsize() - 1));
+        this.curslide = Math.round(-this.curshift / this.clsize());
 
         this.content.classList.add(ANIMATE_CLASS);
 
@@ -180,9 +180,9 @@ export class Slider extends Component {
         this.resetAnimation();
 
         this.direction = (num < this.curslide);
-        this.slidesize = (this.clsize() - 1) * Math.abs(num - this.curslide);
+        this.slidesize = this.clsize() * Math.abs(num - this.curslide);
         this.curshift += (this.direction ? this.slidesize : -this.slidesize);
-        this.curslide = Math.round(-this.curshift / (this.clsize() - 1));
+        this.curslide = Math.round(-this.curshift / this.clsize());
 
         this.setContentPosition(this.curshift);
         this.complete();
@@ -244,7 +244,7 @@ export class Slider extends Component {
             : this.content.offsetWidth;
 
         this.curshift = Math.max(this.curshift, -contentSize + this.clsize());
-        this.curslide = Math.round(-this.curshift / (this.clsize() - 1));
+        this.curslide = Math.round(-this.curshift / this.clsize());
 
         return true;
     }
