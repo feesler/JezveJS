@@ -7,8 +7,7 @@ import {
 } from '../../js/common.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
-import { SliderDragZone } from './components/SliderDragZone.js';
-import { SliderDropTarget } from './components/SliderDropTarget.js';
+import { Slidable } from '../Slidable/Slidable.js';
 import './style.scss';
 
 /* CSS classes */
@@ -71,15 +70,13 @@ export class Slider extends Component {
         }
 
         if (slideByMouse || slideByTouch) {
-            SliderDragZone.create({
-                elem: this.content,
+            Slidable.create({
+                elem: this.elem,
+                content: this.content,
                 vertical,
                 slideByMouse,
                 slideByTouch,
                 updatePosition: (position) => this.setContentPosition(position),
-            });
-            SliderDropTarget.create({
-                elem: this.elem,
                 onDragEnd: (...args) => this.onDragEnd(...args),
             });
         }
