@@ -1,11 +1,11 @@
-import { createElement, isDate } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
+import { createElement, isDate } from '../../../../js/common.js';
+import { Component } from '../../../../js/Component.js';
 import {
     getNextViewDate,
     getPrevViewDate,
     YEARRANGE_VIEW,
     YEAR_RANGE_LENGTH,
-} from './utils.js';
+} from '../../utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container';

@@ -1,7 +1,7 @@
-import { createElement, isDate } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
-import { getShortMonthName, MONTHS_COUNT } from '../../js/DateUtils.js';
-import { getNextViewDate, getPrevViewDate, YEAR_VIEW } from './utils.js';
+import { createElement, isDate } from '../../../../js/common.js';
+import { Component } from '../../../../js/Component.js';
+import { getShortMonthName, MONTHS_COUNT } from '../../../../js/DateUtils.js';
+import { getNextViewDate, getPrevViewDate, YEAR_VIEW } from '../../utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container';
