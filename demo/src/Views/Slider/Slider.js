@@ -34,8 +34,8 @@ const initDefaultSlider = () => {
     container.append(slider.elem);
 
     setEvents(ge('slideToStartBtn'), { click: () => slider.slideTo(0) });
-    setEvents(ge('slidePrevBtn'), { click: () => slider.slide(true) });
-    setEvents(ge('slideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('slidePrevBtn'), { click: () => slider.slideToPrev() });
+    setEvents(ge('slideNextBtn'), { click: () => slider.slideToNext() });
     setEvents(ge('switchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
@@ -63,8 +63,8 @@ const initVerticalSlider = () => {
     });
 
     setEvents(ge('vSlideToStartBtn'), { click: () => slider.slideTo(0) });
-    setEvents(ge('vSlidePrevBtn'), { click: () => slider.slide(true) });
-    setEvents(ge('vSlideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('vSlidePrevBtn'), { click: () => slider.slideToPrev() });
+    setEvents(ge('vSlideNextBtn'), { click: () => slider.slideToNext() });
     setEvents(ge('vSwitchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
@@ -101,8 +101,8 @@ const initNoTouchSlider = () => {
     const container = ge('noTouchSlider');
     container.append(slider.elem);
 
-    setEvents(ge('noTouchPrevBtn'), { click: () => slider.slide(true) });
-    setEvents(ge('noTouchNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('noTouchPrevBtn'), { click: () => slider.slideToPrev() });
+    setEvents(ge('noTouchNextBtn'), { click: () => slider.slideToNext() });
 };
 
 const init = () => {

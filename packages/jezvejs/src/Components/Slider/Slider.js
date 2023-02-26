@@ -147,10 +147,6 @@ export class Slider extends Component {
         this.onAnimationDone();
     }
 
-    slide(dir) {
-        this.slideTo(this.slideIndex + (dir ? -1 : 1));
-    }
-
     calculatePosition(num) {
         if (num < 0 || num > this.items.length - 1) {
             return false;
@@ -162,6 +158,14 @@ export class Slider extends Component {
         this.slideIndex = Math.round(-this.position / this.clientSize);
 
         return true;
+    }
+
+    slideToPrev() {
+        this.slideTo(this.slideIndex + -1);
+    }
+
+    slideToNext() {
+        this.slideTo(this.slideIndex + 1);
     }
 
     slideTo(num) {
