@@ -1,7 +1,7 @@
 import {
-    ge,
     px,
     createElement,
+    re,
     asArray,
     minmax,
 } from '../../js/common.js';
@@ -27,7 +27,7 @@ const defaultProps = {
     items: [],
 };
 
-// Slider constructor
+/** Slider component */
 export class Slider extends Component {
     constructor(props = {}) {
         super({
@@ -39,11 +39,10 @@ export class Slider extends Component {
             ...this.props,
         };
 
-        this.curshift = 0;
-        this.direction = false;
-        this.curslide = 0;
-        this.slidecount = 0;
-        this.update = null;
+        this.items = [];
+        this.position = 0;
+        this.slideIndex = 0;
+        this.items.length = 0;
         this.waitingForAnimation = false;
         this.animationTimeout = 0;
 
@@ -80,16 +79,20 @@ export class Slider extends Component {
         this.render(this.state);
     }
 
-    clsize() {
-        return ((this.state.vertical) ? this.elem.clientHeight : this.elem.clientWidth);
+    get clientSize() {
+        return (this.state.vertical) ? this.elem.clientHeight : this.elem.clientWidth;
+    }
+
+    get contentSize() {
+        return (this.state.vertical) ? this.content.offsetHeight : this.content.offsetWidth;
     }
 
     isFirst() {
-        return (this.curslide === 0);
+        return (this.slideIndex === 0);
     }
 
     isLast() {
-        return (this.curslide === this.slidecount - 1);
+        return (this.slideIndex === this.items.length - 1);
     }
 
     resetAnimationTimer() {
@@ -106,11 +109,6 @@ export class Slider extends Component {
 
     complete() {
         this.content.classList.remove(ANIMATE_CLASS);
-
-        if (this.update) {
-            this.update();
-        }
-
         this.resetAnimation();
     }
 
@@ -122,14 +120,14 @@ export class Slider extends Component {
 
     onDragEnd(position, distance) {
         const passThreshold = Math.abs(distance) > SWIPE_THRESHODL;
-        let slideNum = -position / this.clsize();
+        let slideNum = -position / this.clientSize;
         if (passThreshold) {
             slideNum = (distance > 0) ? Math.ceil(slideNum) : Math.floor(slideNum);
         } else {
             slideNum = Math.round(slideNum);
         }
 
-        const num = minmax(0, this.slidecount - 1, slideNum);
+        const num = minmax(0, this.items.length - 1, slideNum);
         this.slideTo(num);
     }
 
@@ -142,49 +140,42 @@ export class Slider extends Component {
     }
 
     slide(dir) {
-        // check slide is applicable
-        if ((!dir && this.curslide === this.slidecount) || (dir && this.curslide === 0)) {
-            return;
+        this.slideTo(this.slideIndex + (dir ? -1 : 1));
+    }
+
+    calculatePosition(num) {
+        if (num < 0 || num > this.items.length - 1) {
+            return false;
         }
 
-        this.slideTo(this.curslide + (dir ? -1 : 1));
+        const direction = (num < this.slideIndex) ? 1 : -1;
+        const distance = this.clientSize * Math.abs(num - this.slideIndex);
+        this.position += (distance * direction);
+        this.slideIndex = Math.round(-this.position / this.clientSize);
+
+        return true;
     }
 
     slideTo(num) {
-        if (num < 0 || num > this.slidecount - 1) {
+        if (!this.calculatePosition(num)) {
             return;
         }
-
-        const dir = (num < this.curslide);
-        this.direction = dir;
-
-        const distance = this.clsize() * Math.abs(num - this.curslide);
-        this.targetPos = this.curshift + (dir ? distance : -distance);
-        this.startPos = this.curshift;
-        this.curshift = this.targetPos;
-        this.curslide = Math.round(-this.curshift / this.clsize());
 
         this.content.classList.add(ANIMATE_CLASS);
 
         this.waitingForAnimation = true;
-        this.setContentPosition(this.curshift);
+        this.setContentPosition(this.position);
         this.resetAnimationTimer();
         this.animationTimeout = setTimeout(() => this.onAnimationDone(), TRANSITION_END_TIMEOUT);
     }
 
     switchTo(num) {
-        if (num < 0 || num > this.slidecount - 1) {
+        if (!this.calculatePosition(num)) {
             return;
         }
 
         this.resetAnimation();
-
-        this.direction = (num < this.curslide);
-        this.slidesize = this.clsize() * Math.abs(num - this.curslide);
-        this.curshift += (this.direction ? this.slidesize : -this.slidesize);
-        this.curslide = Math.round(-this.curshift / this.clsize());
-
-        this.setContentPosition(this.curshift);
+        this.setContentPosition(this.position);
         this.complete();
     }
 
@@ -200,13 +191,13 @@ export class Slider extends Component {
         asArray(items).forEach((item) => this.addSlide(item));
     }
 
-    addSlide(slide) {
-        const { content, id, name } = slide;
+    addSlide(props) {
+        const { content, id, name } = props;
         if (!content) {
             return false;
         }
 
-        const slideContainer = createElement('div', {
+        const elem = createElement('div', {
             props: {
                 className: 'slide',
                 style: {
@@ -217,34 +208,35 @@ export class Slider extends Component {
             children: content,
         });
         if (typeof id !== 'undefined') {
-            slideContainer.id = id;
+            elem.id = id;
         }
         if (typeof name !== 'undefined') {
-            slideContainer.dataset.name = name;
+            elem.dataset.name = name;
         }
 
-        this.content.append(slideContainer);
+        this.content.append(elem);
 
-        this.slidecount += 1;
+        this.items.push({
+            ...props,
+            elem,
+        });
 
         return true;
     }
 
     removeSlide(slideId) {
-        const slideContainer = ge(slideId);
-        if (!slideContainer || !this.content?.contains(slideContainer)) {
+        const index = this.items.findIndex((item) => item.id === slideId);
+        if (index === -1) {
             return false;
         }
 
-        this.content.removeChild(slideContainer);
+        const itemToRemove = this.items[index];
+        re(itemToRemove?.elem);
 
-        this.slidecount -= 1;
-        const contentSize = (this.state.vertical)
-            ? this.content.offsetHeight
-            : this.content.offsetWidth;
+        this.position = Math.max(this.position, -this.contentSize + this.clientSize);
+        this.slideIndex = Math.round(-this.position / this.clientSize);
 
-        this.curshift = Math.max(this.curshift, -contentSize + this.clsize());
-        this.curslide = Math.round(-this.curshift / this.clsize());
+        this.items.splice(index, 1);
 
         return true;
     }
