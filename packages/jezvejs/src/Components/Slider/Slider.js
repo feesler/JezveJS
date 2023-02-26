@@ -17,7 +17,7 @@ const CONTENT_CLASS = 'slider__content';
 const VERTICAL_CLASS = 'slider_vertical';
 const ANIMATE_CLASS = 'animate';
 
-const TRANSITION_END_TIMEOUT = 700;
+const TRANSITION_END_TIMEOUT = 500;
 const SWIPE_THRESHODL = 20;
 
 const defaultProps = {
@@ -45,6 +45,7 @@ export class Slider extends Component {
         this.slidecount = 0;
         this.update = null;
         this.waitingForAnimation = false;
+        this.animationTimeout = 0;
 
         this.init();
     }
@@ -69,7 +70,6 @@ export class Slider extends Component {
         SliderDragZone.create({
             elem: this.content,
             vertical: this.state.vertical,
-            isReady: () => !this.waitingForAnimation,
             updatePosition: (position) => this.setContentPosition(position),
         });
         SliderDropTarget.create({
@@ -92,15 +92,32 @@ export class Slider extends Component {
         return (this.curslide === this.slidecount - 1);
     }
 
+    resetAnimationTimer() {
+        if (this.animationTimeout) {
+            clearTimeout(this.animationTimeout);
+            this.animationTimeout = 0;
+        }
+    }
+
+    resetAnimation() {
+        this.resetAnimationTimer();
+        this.waitingForAnimation = false;
+    }
+
     complete() {
         this.content.classList.remove(ANIMATE_CLASS);
-        this.curslide = Math.round(-this.curshift / (this.clsize() - 1));
 
         if (this.update) {
             this.update();
         }
 
-        this.waitingForAnimation = false;
+        this.resetAnimation();
+    }
+
+    onAnimationDone() {
+        if (this.waitingForAnimation) {
+            this.complete();
+        }
     }
 
     onDragEnd(position, distance) {
@@ -121,9 +138,7 @@ export class Slider extends Component {
             return;
         }
 
-        if (this.waitingForAnimation) {
-            this.complete();
-        }
+        this.onAnimationDone();
     }
 
     slide(dir) {
@@ -136,7 +151,7 @@ export class Slider extends Component {
     }
 
     slideTo(num) {
-        if (num < 0 || num > this.slidecount - 1 || this.waitingForAnimation) {
+        if (num < 0 || num > this.slidecount - 1) {
             return;
         }
 
@@ -147,26 +162,27 @@ export class Slider extends Component {
         this.targetPos = this.curshift + (dir ? distance : -distance);
         this.startPos = this.curshift;
         this.curshift = this.targetPos;
+        this.curslide = Math.round(-this.curshift / (this.clsize() - 1));
 
         this.content.classList.add(ANIMATE_CLASS);
 
         this.waitingForAnimation = true;
         this.setContentPosition(this.curshift);
-        setTimeout(() => {
-            if (this.waitingForAnimation) {
-                this.complete();
-            }
-        }, TRANSITION_END_TIMEOUT);
+        this.resetAnimationTimer();
+        this.animationTimeout = setTimeout(() => this.onAnimationDone(), TRANSITION_END_TIMEOUT);
     }
 
     switchTo(num) {
-        if (num < 0 || num > this.slidecount - 1 || this.waitingForAnimation) {
+        if (num < 0 || num > this.slidecount - 1) {
             return;
         }
+
+        this.resetAnimation();
 
         this.direction = (num < this.curslide);
         this.slidesize = (this.clsize() - 1) * Math.abs(num - this.curslide);
         this.curshift += (this.direction ? this.slidesize : -this.slidesize);
+        this.curslide = Math.round(-this.curshift / (this.clsize() - 1));
 
         this.setContentPosition(this.curshift);
         this.complete();
