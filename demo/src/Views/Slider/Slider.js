@@ -34,8 +34,8 @@ const initDefaultSlider = () => {
     container.append(slider.elem);
 
     setEvents(ge('slideToStartBtn'), { click: () => slider.slideTo(0) });
-    setEvents(ge('slidePrevBtn'), { click: () => slider.slide(true) });
-    setEvents(ge('slideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('slidePrevBtn'), { click: () => slider.slideToPrev() });
+    setEvents(ge('slideNextBtn'), { click: () => slider.slideToNext() });
     setEvents(ge('switchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
@@ -63,9 +63,46 @@ const initVerticalSlider = () => {
     });
 
     setEvents(ge('vSlideToStartBtn'), { click: () => slider.slideTo(0) });
-    setEvents(ge('vSlidePrevBtn'), { click: () => slider.slide(true) });
-    setEvents(ge('vSlideNextBtn'), { click: () => slider.slide(false) });
+    setEvents(ge('vSlidePrevBtn'), { click: () => slider.slideToPrev() });
+    setEvents(ge('vSlideNextBtn'), { click: () => slider.slideToNext() });
     setEvents(ge('vSwitchToStartBtn'), { click: () => slider.switchTo(0) });
+};
+
+const initMouseSlider = () => {
+    const slider = new Slider({
+        width: 300,
+        height: 200,
+        slideByMouse: true,
+        items: [{
+            content: createSlideContent('Slide 1'),
+        }, {
+            content: createSlideContent('Slide 2'),
+        }, {
+            content: createSlideContent('Slide 3'),
+        }],
+    });
+    const container = ge('mouseSlider');
+    container.append(slider.elem);
+};
+
+const initNoTouchSlider = () => {
+    const slider = new Slider({
+        width: 300,
+        height: 200,
+        slideByTouch: false,
+        items: [{
+            content: createSlideContent('Slide 1'),
+        }, {
+            content: createSlideContent('Slide 2'),
+        }, {
+            content: createSlideContent('Slide 3'),
+        }],
+    });
+    const container = ge('noTouchSlider');
+    container.append(slider.elem);
+
+    setEvents(ge('noTouchPrevBtn'), { click: () => slider.slideToPrev() });
+    setEvents(ge('noTouchNextBtn'), { click: () => slider.slideToNext() });
 };
 
 const init = () => {
@@ -73,6 +110,8 @@ const init = () => {
 
     initDefaultSlider();
     initVerticalSlider();
+    initMouseSlider();
+    initNoTouchSlider();
 };
 
 onReady(init);

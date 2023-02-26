@@ -2,6 +2,7 @@
 .dp__container {
   --dp-bg-color: #ffffff;
   --dp-border-color: #000000;
+  --dp-border-width: 2px;
   --dp-text-color: #000000;
   --dp-other-text-color: #b0b0b0;
   --dp-active-color: #20d0ff;
@@ -24,7 +25,7 @@
   overflow: hidden;
   background-color: var(--dp-bg-color);
   color: var(--dp-text-color);
-  border: 2px solid var(--dp-border-color);
+  border: var(--dp-border-width) solid var(--dp-border-color);
   font-size: 1rem;
   z-index: 1000;
 }
@@ -133,8 +134,18 @@
   overflow: hidden;
 }
 
+.dp__slider {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  width: fit-content;
+  position: relative;
+  left: -100%;
+}
+
 /* Container of view cells */
 .dp__view-container {
+  flex-shrink: 0;
   max-width: 100%;
   transform: none;
   transition-delay: 0s;
@@ -147,7 +158,8 @@
 }
 
 .dp__animated-view,
-.dp__animated-view > .dp__view-container {
+.dp__animated-view > .dp__view-container,
+.dp__animated-view .dp__slider {
   transition-property: all;
   transition-duration: 0.5s;
 }
@@ -180,9 +192,12 @@
 
 @media screen and (min-width: 768px) {
   .dp__container,
-  .dp__wrapper,
   .dp__view-container {
     width: 19rem;
+  }
+
+  .dp__wrapper {
+    width: calc(19rem + var(--dp-border-width) * 2);
   }
 
   .dp__day-cell {

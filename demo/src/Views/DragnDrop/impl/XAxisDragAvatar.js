@@ -1,4 +1,4 @@
-import { getOffset, px } from 'jezvejs';
+import { getOffset, minmax, px } from 'jezvejs';
 import { DragAvatar, DragMaster } from 'jezvejs/DragnDrop';
 
 /**
@@ -30,7 +30,8 @@ export class XAxisDragAvatar extends DragAvatar {
         this.currentTargetElem = this.dragZoneElem;
 
         const x = client.x - this.offset.left - this.shiftX;
-        const left = Math.max(0, Math.min(this.offset.width - this.rect.width, x));
+        const maxPos = Math.round(this.offset.width - this.rect.width);
+        const left = minmax(0, maxPos, x);
         this.elem.style.left = px(left);
     }
 

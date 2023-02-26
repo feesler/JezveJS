@@ -6,7 +6,16 @@ import { DragAvatar } from '../../DragnDrop/DragAvatar.js';
  * Slider drag avatar
  */
 export class SliderDragAvatar extends DragAvatar {
-    initFromEvent(downX, downY) {
+    initFromEvent(downX, downY, e) {
+        const { slideByMouse, slideByTouch } = this.dragZone;
+        const isTouch = !!e.touches;
+        if (
+            (isTouch && !slideByTouch)
+            || (!isTouch && !slideByMouse)
+        ) {
+            return false;
+        }
+
         this.dragZoneElem = this.dragZone.getElement();
         const elem = this.dragZoneElem;
         this.elem = elem;

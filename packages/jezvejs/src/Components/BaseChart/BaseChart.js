@@ -11,6 +11,7 @@ import {
     px,
     createElement,
     debounce,
+    minmax,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
@@ -632,7 +633,7 @@ export class BaseChart extends Component {
             return null;
         }
 
-        const ind = Math.max(0, Math.min(index, state.seriesMap.length - 1));
+        const ind = minmax(0, state.seriesMap.length - 1, index);
         const seriesIndex = state.seriesMap[ind];
         const [value] = state.data.series[seriesIndex];
         return value;

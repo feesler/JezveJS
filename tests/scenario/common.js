@@ -2,10 +2,9 @@ import { setBlock } from 'jezve-test';
 import * as CommonTests from '../run/common.js';
 import { App } from '../app.js';
 
-export const commonTests = async () => {
-    setBlock('Common', 1);
+const deepMeetTests = async () => {
+    setBlock('deepMeet() function', 1);
 
-    setBlock('deepMeet() function', 2);
     const data = [{
         value: 1, expected: 1, result: true, descr: 'Compare numbers',
     }, {
@@ -77,4 +76,47 @@ export const commonTests = async () => {
     }];
 
     await App.scenario.runner.runGroup(CommonTests.deepMeetTest, data);
+};
+
+const minMaxTests = async () => {
+    setBlock('minmax() function', 1);
+
+    setBlock('Integer values', 2);
+    await CommonTests.minMaxTest(1, 10, 5, 5);
+    await CommonTests.minMaxTest(1, 10, 15, 10);
+    await CommonTests.minMaxTest(1, 10, 0, 1);
+    await CommonTests.minMaxTest(1, 10, -5, 1);
+
+    setBlock('Float values', 2);
+    await CommonTests.minMaxTest(-15.5, 15.5, 5.5, 5.5);
+    await CommonTests.minMaxTest(-15.5, 15.5, 15.6, 15.5);
+    await CommonTests.minMaxTest(-15.5, 15.5, 0, 0);
+    await CommonTests.minMaxTest(-15.5, 15.5, -15.55, -15.5);
+
+    setBlock('Inverted range arguments', 2);
+    await CommonTests.minMaxTest(20, 10, 15, 15);
+    await CommonTests.minMaxTest(-10, -20, 15, -10);
+
+    setBlock('Same range arguments', 2);
+    await CommonTests.minMaxTest(10, 10, 15, 10);
+    await CommonTests.minMaxTest(10, 10, -15, 10);
+    await CommonTests.minMaxTest(10, 10, 10, 10);
+    await CommonTests.minMaxTest(-10, -10, 15, -10);
+    await CommonTests.minMaxTest(-10, -10, 0, -10);
+    await CommonTests.minMaxTest(-10, -10, -10, -10);
+
+    setBlock('Invalid arguments', 2);
+    await CommonTests.minMaxTest(null, -10, 1, 0);
+    await CommonTests.minMaxTest(undefined, 1, 5, NaN);
+    await CommonTests.minMaxTest(NaN, null, undefined, NaN);
+    await CommonTests.minMaxTest({}, null, 5, NaN);
+    await CommonTests.minMaxTest(() => { }, null, 5, NaN);
+    await CommonTests.minMaxTest(1, 10, NaN, NaN);
+};
+
+export const commonTests = async () => {
+    setBlock('Common', 1);
+
+    await deepMeetTests();
+    await minMaxTests();
 };

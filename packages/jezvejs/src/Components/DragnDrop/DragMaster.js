@@ -70,6 +70,7 @@ export class DragMaster {
         this.isTouch = false;
         this.touchTimeout = 0;
         this.touchMoveReady = false;
+        this.touchHandlerSet = false;
 
         this.handlers = {
             keydown: (e) => this.onKey(e),
@@ -78,6 +79,10 @@ export class DragMaster {
             end: (e) => this.mouseUp(e),
             cancel: (e) => this.mouseUp(e),
             preventDefault: (e) => e.preventDefault(),
+        };
+
+        this.touchMoveHandler = {
+            touchmove: (e) => this.mouseMove(e),
         };
 
         this.touchEvents = {
@@ -101,6 +106,11 @@ export class DragMaster {
             mousedown: this.handlers.start,
             touchstart: this.handlers.start,
         });
+
+        if (!this.touchHandlerSet) {
+            this.touchHandlerSet = true;
+            setEvents(document, this.touchMoveHandler, { passive: false });
+        }
     }
 
     /** Returns true if event is valid to start drag */
@@ -126,13 +136,17 @@ export class DragMaster {
         const { move, end, cancel } = (this.isTouch) ? this.touchEvents : this.mouseEvents;
         const events = {
             keydown: this.handlers.keydown,
-            [move]: {
-                listener: this.handlers.move,
-                options: { passive: false },
-            },
             [end]: this.handlers.end,
             dragstart: this.handlers.preventDefault,
         };
+
+        if (!this.isTouch) {
+            events[move] = {
+                listener: this.handlers.move,
+                options: { passive: false },
+            };
+        }
+
         if (cancel) {
             events[cancel] = this.handlers.cancel;
         }
@@ -194,8 +208,8 @@ export class DragMaster {
     }
 
     /** Search for drag zone object */
-    findDragZone(e) {
-        let elem = e.target;
+    findDragZone(target) {
+        let elem = target;
 
         while (elem !== document && !elem.dragZone) {
             elem = elem.parentNode;
@@ -268,6 +282,10 @@ export class DragMaster {
 
     /** Document mouse move event handler */
     mouseMove(e) {
+        if (!this.dragZone) {
+            return;
+        }
+
         if (this.isTouch) {
             if (!this.touchMoveReady) {
                 this.resetMoveTimeout();
@@ -322,8 +340,9 @@ export class DragMaster {
 
         this.isTouch = e.type === 'touchstart';
 
-        this.dragZone = this.findDragZone(e);
+        this.dragZone = this.findDragZone(e.target);
         if (!this.dragZone?.isValidDragHandle(e.target)) {
+            this.dragZone = null;
             return;
         }
 

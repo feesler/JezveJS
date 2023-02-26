@@ -1,8 +1,29 @@
 /* eslint no-restricted-globals: "off" */
 /* eslint no-bitwise: "off" */
 
-/** Return DOM element by id */
-export const ge = (id) => document.getElementById(id);
+/** Check is specified string is number */
+export const isNum = (val) => {
+    const fval = parseFloat(val);
+    if (Number.isNaN(fval)) {
+        return false;
+    }
+
+    if (fval === 0) {
+        return true;
+    }
+
+    return !!(val / val);
+};
+
+/** Check parameter is integer */
+export const isInt = (x) => {
+    const y = parseInt(x, 10);
+    if (Number.isNaN(y)) {
+        return false;
+    }
+
+    return x === y && x.toString() === y.toString();
+};
 
 /** Check parameter is date */
 export const isDate = (obj) => (
@@ -52,6 +73,17 @@ export const asArray = (value) => {
 
     return Array.isArray(value) ? value : [value];
 };
+
+/** Returns value normalized to specified range */
+export const minmax = (min, max, value) => (
+    Math.max(
+        Math.min(min, max),
+        Math.min(Math.max(min, max), value),
+    )
+);
+
+/** Return DOM element by id */
+export const ge = (id) => document.getElementById(id);
 
 /**
  * Assign properties from second object to first
@@ -245,34 +277,8 @@ export const getClassNames = (...args) => (
 /** Returns arguments converted to className string */
 export const getClassName = (...args) => getClassNames(...args).join(' ');
 
-/** Check is specified string is number */
-export const isNum = (val) => {
-    const fval = parseFloat(val);
-    if (Number.isNaN(fval)) {
-        return false;
-    }
-
-    if (fval === 0) {
-        return true;
-    }
-
-    return !!(val / val);
-};
-
-/** Check parameter is integer */
-export const isInt = (x) => {
-    const y = parseInt(x, 10);
-    if (Number.isNaN(y)) {
-        return false;
-    }
-
-    return x === y && x.toString() === y.toString();
-};
-
 /** Check bit flag is set */
-/* eslint-disable no-bitwise */
 export const hasFlag = (x, flag) => ((x & flag) === flag);
-/* eslint-enable no-bitwise */
 
 /** Return current computed style of element */
 export const computedStyle = (elem) => {
