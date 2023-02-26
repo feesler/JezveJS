@@ -6,6 +6,8 @@ const defalutProps = {
     mouseMoveThreshold: 0,
     touchMoveTimeout: 0,
     vertical: false,
+    slideByMouse: false,
+    slideByTouch: true,
     updatePosition: null,
 };
 
@@ -22,6 +24,14 @@ export class SliderDragZone extends DragZone {
 
     get vertical() {
         return this.props.vertical;
+    }
+
+    get slideByMouse() {
+        return this.props.slideByMouse;
+    }
+
+    get slideByTouch() {
+        return this.props.slideByTouch;
     }
 
     makeAvatar() {

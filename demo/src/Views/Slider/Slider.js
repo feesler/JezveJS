@@ -68,11 +68,50 @@ const initVerticalSlider = () => {
     setEvents(ge('vSwitchToStartBtn'), { click: () => slider.switchTo(0) });
 };
 
+const initMouseSlider = () => {
+    const slider = new Slider({
+        width: 300,
+        height: 200,
+        slideByMouse: true,
+        items: [{
+            content: createSlideContent('Slide 1'),
+        }, {
+            content: createSlideContent('Slide 2'),
+        }, {
+            content: createSlideContent('Slide 3'),
+        }],
+    });
+    const container = ge('mouseSlider');
+    container.append(slider.elem);
+};
+
+const initNoTouchSlider = () => {
+    const slider = new Slider({
+        width: 300,
+        height: 200,
+        slideByTouch: false,
+        items: [{
+            content: createSlideContent('Slide 1'),
+        }, {
+            content: createSlideContent('Slide 2'),
+        }, {
+            content: createSlideContent('Slide 3'),
+        }],
+    });
+    const container = ge('noTouchSlider');
+    container.append(slider.elem);
+
+    setEvents(ge('noTouchPrevBtn'), { click: () => slider.slide(true) });
+    setEvents(ge('noTouchNextBtn'), { click: () => slider.slide(false) });
+};
+
 const init = () => {
     initNavigation();
 
     initDefaultSlider();
     initVerticalSlider();
+    initMouseSlider();
+    initNoTouchSlider();
 };
 
 onReady(init);

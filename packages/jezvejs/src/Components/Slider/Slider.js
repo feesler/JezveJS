@@ -25,6 +25,8 @@ const defaultProps = {
     height: 300,
     vertical: false,
     items: [],
+    slideByMouse: false,
+    slideByTouch: true,
 };
 
 /** Slider component */
@@ -50,6 +52,8 @@ export class Slider extends Component {
     }
 
     init() {
+        const { vertical, slideByMouse, slideByTouch } = this.props;
+
         this.content = createElement('div', {
             props: { className: CONTENT_CLASS },
             events: {
@@ -66,15 +70,19 @@ export class Slider extends Component {
             this.append(this.props.items);
         }
 
-        SliderDragZone.create({
-            elem: this.content,
-            vertical: this.state.vertical,
-            updatePosition: (position) => this.setContentPosition(position),
-        });
-        SliderDropTarget.create({
-            elem: this.elem,
-            onDragEnd: (...args) => this.onDragEnd(...args),
-        });
+        if (slideByMouse || slideByTouch) {
+            SliderDragZone.create({
+                elem: this.content,
+                vertical,
+                slideByMouse,
+                slideByTouch,
+                updatePosition: (position) => this.setContentPosition(position),
+            });
+            SliderDropTarget.create({
+                elem: this.elem,
+                onDragEnd: (...args) => this.onDragEnd(...args),
+            });
+        }
 
         this.render(this.state);
     }
