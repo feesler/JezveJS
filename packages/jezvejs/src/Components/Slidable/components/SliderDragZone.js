@@ -8,6 +8,7 @@ const defalutProps = {
     vertical: false,
     slideByMouse: false,
     slideByTouch: true,
+    isReady: true,
     updatePosition: null,
 };
 
@@ -34,7 +35,15 @@ export class SliderDragZone extends DragZone {
         return this.props.slideByTouch;
     }
 
+    isReady() {
+        return isFunction(this.props.isReady) ? this.props.isReady() : true;
+    }
+
     makeAvatar() {
+        if (!this.isReady()) {
+            return false;
+        }
+
         return SliderDragAvatar.create({
             dragZone: this,
             elem: this.elem,

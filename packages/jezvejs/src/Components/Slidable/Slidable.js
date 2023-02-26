@@ -6,6 +6,7 @@ const defaultProps = {
     vertical: false,
     slideByMouse: false,
     slideByTouch: true,
+    isReady: true,
     updatePosition: null,
     onDragEnd: null,
 };
@@ -27,6 +28,7 @@ export class Slidable {
             vertical,
             slideByMouse,
             slideByTouch,
+            isReady,
         } = this.props;
 
         this.elem = (typeof elem === 'string') ? ge(elem) : elem;
@@ -43,6 +45,7 @@ export class Slidable {
             vertical,
             slideByMouse,
             slideByTouch,
+            isReady,
             updatePosition: (...args) => this.onUpdatePosition(...args),
         });
         this.dropTarget = SliderDropTarget.create({

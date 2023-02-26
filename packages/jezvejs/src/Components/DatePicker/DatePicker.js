@@ -14,10 +14,12 @@ import {
     createElement,
     setEvents,
     removeEvents,
+    minmax,
 } from '../../js/common.js';
 import { isSameYearMonth } from '../../js/DateUtils.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
+import { Slidable } from '../Slidable/Slidable.js';
 import { DatePickerMonthView } from './DatePickerMonthView.js';
 import { DatePickerYearView } from './DatePickerYearView.js';
 import { DatePickerYearRangeView } from './DatePickerYearRangeView.js';
@@ -55,6 +57,9 @@ const TOP_FROM_CLASS = 'top_from';
 const BOTTOM_FROM_CLASS = 'bottom_from';
 const TOP_TO_CLASS = 'top_to';
 const BOTTOM_TO_CLASS = 'bottom_to';
+
+const TRANSITION_END_TIMEOUT = 500;
+const SWIPE_THRESHOLD = 20;
 
 const NAV_ICON_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
 
@@ -97,12 +102,14 @@ export class DatePicker extends Component {
         this.state = {
             viewType: MONTH_VIEW,
             date: isDate(this.props.date) ? this.props.date : new Date(),
-            animation: false,
             curRange: { start: null, end: null },
             selRange: { start: null, end: null },
             actDate: null,
         };
 
+        this.animationTimeout = 0;
+        this.waitingForAnimation = false;
+        this.position = 0;
         this.prevView = null;
         this.currView = null;
         this.nextView = null;
@@ -148,6 +155,14 @@ export class DatePicker extends Component {
             children: this.wrapper,
         });
 
+        Slidable.create({
+            elem: this.cellsContainer,
+            content: this.slider,
+            isReady: () => !this.waitingForAnimation,
+            updatePosition: (position) => this.setContentPosition(position),
+            onDragEnd: (...args) => this.onDragEnd(...args),
+        });
+
         this.observeSliderSize();
 
         this.render(this.state);
@@ -167,6 +182,9 @@ export class DatePicker extends Component {
         }
 
         this.cellsContainer.style.height = px(offsetHeight);
+
+        const width = this.cellsContainer.offsetWidth;
+        this.setContentPosition(-width);
     }
 
     sendShowEvents(value = true) {
@@ -285,21 +303,24 @@ export class DatePicker extends Component {
 
         if (
             !this.currView?.nav
-            || this.state.animation
+            || this.waitingForAnimation
             || e.deltaY === 0
         ) {
             return;
         }
 
-        const dir = (e.wheelDelta > 0);
-        const nav = (dir) ? this.currView.nav.prev : this.currView.nav.next;
-        this.setViewDate(nav);
+        const direction = (e.wheelDelta > 0);
+        if (direction) {
+            this.navigateToPrev();
+        } else {
+            this.navigateToNext();
+        }
     }
 
     /** View 'click' event delegate */
     onViewClick(e) {
         e.stopPropagation();
-        if (!this.currView || this.state.animation) {
+        if (!this.currView || this.waitingForAnimation) {
             return;
         }
         // Header
@@ -308,11 +329,11 @@ export class DatePicker extends Component {
             return;
         }
         if (this.navPrevElem.contains(e.target)) {
-            this.setViewDate(this.currView.nav.prev);
+            this.navigateToPrev();
             return;
         }
         if (this.navNextElem.contains(e.target)) {
-            this.setViewDate(this.currView.nav.next);
+            this.navigateToNext();
             return;
         }
         // Cells
@@ -340,6 +361,14 @@ export class DatePicker extends Component {
             ...this.state,
             date,
         });
+    }
+
+    navigateToPrev() {
+        this.setViewDate(this.currView.nav.prev);
+    }
+
+    navigateToNext() {
+        this.setViewDate(this.currView.nav.next);
     }
 
     navigateUp() {
@@ -457,6 +486,79 @@ export class DatePicker extends Component {
         });
     }
 
+    setContentPosition(position) {
+        const width = this.cellsContainer.offsetWidth;
+
+        this.position = minmax(-width * 2, 0, position);
+        this.slider.style.left = px(this.position);
+    }
+
+    onDragEnd(position, distance) {
+        const width = this.cellsContainer.offsetWidth;
+
+        const passThreshold = Math.abs(distance) > SWIPE_THRESHOLD;
+        let slideNum = -position / width;
+        if (passThreshold) {
+            slideNum = (distance > 0) ? Math.ceil(slideNum) : Math.floor(slideNum);
+        } else {
+            slideNum = Math.round(slideNum);
+        }
+
+        const num = minmax(-1, 1, slideNum - 1);
+        if (num === 0) {
+            this.setContentPosition(-width);
+            return;
+        }
+
+        if (num > 0) {
+            this.navigateToNext();
+        } else {
+            this.navigateToPrev();
+        }
+    }
+
+    resetAnimationTimer() {
+        if (this.animationTimeout) {
+            clearTimeout(this.animationTimeout);
+            this.animationTimeout = 0;
+        }
+    }
+
+    onAnimationDone() {
+        if (!this.waitingForAnimation) {
+            return;
+        }
+
+        this.wrapper.classList.remove(ANIMATED_CLASS);
+        this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
+
+        this.newView.current.elem.classList.remove(
+            LAYER_VIEW_CLASS,
+            BOTTOM_TO_CLASS,
+            TOP_TO_CLASS,
+        );
+        transform(this.newView.current.elem, '');
+
+        const width = this.cellsContainer.offsetWidth;
+        this.setContentPosition(-width);
+
+        transform(this.slider, '');
+
+        this.cellsContainer.style.width = '';
+        re(this.prevView.elem);
+        re(this.currView.elem);
+        re(this.nextView.elem);
+
+        const { prev, current, next } = this.newView;
+        this.slider.append(prev.elem, current.elem, next.elem);
+        show(this.slider, true);
+
+        this.applyView(this.newView);
+
+        this.waitingForAnimation = false;
+        removeEvents(this.cellsContainer, this.transitionEvents);
+    }
+
     /**
      * 'transitionend' event handler
      * @param {Event} e - Event object
@@ -469,33 +571,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.wrapper.classList.remove(ANIMATED_CLASS);
-        this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
-
-        this.newView.current.elem.classList.remove(
-            LAYER_VIEW_CLASS,
-            BOTTOM_TO_CLASS,
-            TOP_TO_CLASS,
-        );
-        this.newView.current.elem.style.left = '';
-        transform(this.newView.current.elem, '');
-
-        transform(this.slider, '');
-
-        this.cellsContainer.style.width = '';
-        // this.cellsContainer.style.height = '';
-        re(this.prevView.elem);
-        re(this.currView.elem);
-        re(this.nextView.elem);
-
-        const { prev, current, next } = this.newView;
-        this.slider.append(prev.elem, current.elem, next.elem);
-        show(this.slider, true);
-
-        this.applyView(this.newView);
-
-        this.state.animation = false;
-        removeEvents(this.cellsContainer, this.transitionEvents);
+        this.onAnimationDone();
     }
 
     /**
@@ -545,11 +621,14 @@ export class DatePicker extends Component {
                 re(this.nextView.elem);
             }
 
+            const width = this.cellsContainer.offsetWidth;
+            this.setContentPosition(-width);
+
             this.applyView(views);
             return;
         }
 
-        this.state.animation = true;
+        this.waitingForAnimation = true;
 
         const currTblWidth = this.cellsContainer.offsetWidth;
         const currTblHeight = this.cellsContainer.offsetHeight;
@@ -567,13 +646,21 @@ export class DatePicker extends Component {
             const targetView = (leftToRight) ? this.prevView : this.nextView;
             this.cellsContainer.style.height = px(targetView.elem.offsetHeight);
 
-            const distance = (leftToRight) ? currTblWidth : -currTblWidth;
+            const distance = (leftToRight)
+                ? (-this.position)
+                : (-this.position - (currTblWidth * 2));
             const trMatrix = [1, 0, 0, 1, distance, 0];
             transform(this.slider, `matrix(${trMatrix.join()})`);
 
             this.newView = views;
 
             setEvents(this.cellsContainer, this.transitionEvents);
+
+            this.resetAnimationTimer();
+            this.animationTimeout = setTimeout(() => (
+                this.onAnimationDone()
+            ), TRANSITION_END_TIMEOUT);
+
             return;
         }
 
@@ -643,6 +730,11 @@ export class DatePicker extends Component {
             this.newView = views;
 
             setEvents(this.cellsContainer, this.transitionEvents);
+
+            this.resetAnimationTimer();
+            this.animationTimeout = setTimeout(() => (
+                this.onAnimationDone()
+            ), TRANSITION_END_TIMEOUT);
         });
     }
 

@@ -17,7 +17,7 @@ const VERTICAL_CLASS = 'slider_vertical';
 const ANIMATE_CLASS = 'animate';
 
 const TRANSITION_END_TIMEOUT = 500;
-const SWIPE_THRESHODL = 20;
+const SWIPE_THRESHOLD = 20;
 
 const defaultProps = {
     width: 400,
@@ -124,7 +124,7 @@ export class Slider extends Component {
     }
 
     onDragEnd(position, distance) {
-        const passThreshold = Math.abs(distance) > SWIPE_THRESHODL;
+        const passThreshold = Math.abs(distance) > SWIPE_THRESHOLD;
         let slideNum = -position / this.clientSize;
         if (passThreshold) {
             slideNum = (distance > 0) ? Math.ceil(slideNum) : Math.floor(slideNum);
