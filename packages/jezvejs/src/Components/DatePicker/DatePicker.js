@@ -110,6 +110,8 @@ export class DatePicker extends Component {
         this.animationTimeout = 0;
         this.waitingForAnimation = false;
         this.position = 0;
+        this.width = 0;
+        this.height = 0;
         this.prevView = null;
         this.currView = null;
         this.nextView = null;
@@ -183,8 +185,9 @@ export class DatePicker extends Component {
 
         this.cellsContainer.style.height = px(offsetHeight);
 
-        const width = this.cellsContainer.offsetWidth;
-        this.setContentPosition(-width);
+        this.width = this.cellsContainer.offsetWidth;
+        this.height = offsetHeight;
+        this.setContentPosition(-this.width);
     }
 
     sendShowEvents(value = true) {
@@ -487,17 +490,13 @@ export class DatePicker extends Component {
     }
 
     setContentPosition(position) {
-        const width = this.cellsContainer.offsetWidth;
-
-        this.position = minmax(-width * 2, 0, position);
+        this.position = minmax(-this.width * 2, 0, position);
         this.slider.style.left = px(this.position);
     }
 
     onDragEnd(position, distance) {
-        const width = this.cellsContainer.offsetWidth;
-
         const passThreshold = Math.abs(distance) > SWIPE_THRESHOLD;
-        let slideNum = -position / width;
+        let slideNum = -position / this.width;
         if (passThreshold) {
             slideNum = (distance > 0) ? Math.ceil(slideNum) : Math.floor(slideNum);
         } else {
@@ -506,7 +505,7 @@ export class DatePicker extends Component {
 
         const num = minmax(-1, 1, slideNum - 1);
         if (num === 0) {
-            this.setContentPosition(-width);
+            this.setContentPosition(-this.width);
             return;
         }
 
@@ -539,8 +538,7 @@ export class DatePicker extends Component {
         );
         transform(this.newView.current.elem, '');
 
-        const width = this.cellsContainer.offsetWidth;
-        this.setContentPosition(-width);
+        this.setContentPosition(-this.width);
 
         transform(this.slider, '');
         this.cellsContainer.style.width = '';
@@ -603,8 +601,9 @@ export class DatePicker extends Component {
             removeChilds(this.slider);
             this.slider.append(prev.elem, current.elem, next.elem);
 
-            const width = this.cellsContainer.offsetWidth;
-            this.setContentPosition(-width);
+            if (this.width > 0) {
+                this.setContentPosition(-this.width);
+            }
 
             this.applyView(views);
             return;
@@ -612,11 +611,8 @@ export class DatePicker extends Component {
 
         this.waitingForAnimation = true;
 
-        const currTblWidth = this.cellsContainer.offsetWidth;
-        const currTblHeight = this.cellsContainer.offsetHeight;
-
-        this.cellsContainer.style.width = px(currTblWidth);
-        this.cellsContainer.style.height = px(currTblHeight);
+        this.cellsContainer.style.width = px(this.width);
+        this.cellsContainer.style.height = px(this.height);
 
         // If new view is the same type as current then animate slide
         if (this.currView.type === current.type) {
@@ -630,7 +626,7 @@ export class DatePicker extends Component {
 
             const distance = (leftToRight)
                 ? (-this.position)
-                : (-this.position - (currTblWidth * 2));
+                : (-this.position - (this.width * 2));
             const trMatrix = [1, 0, 0, 1, distance, 0];
             transform(this.slider, `matrix(${trMatrix.join()})`);
 
@@ -678,8 +674,8 @@ export class DatePicker extends Component {
 
         const cellX = elem.offsetLeft;
         const cellY = elem.offsetTop;
-        const scaleX = elem.offsetWidth / currTblWidth;
-        const scaleY = elem.offsetHeight / currTblHeight;
+        const scaleX = elem.offsetWidth / this.width;
+        const scaleY = elem.offsetHeight / this.height;
         const cellTrans = [scaleX, 0, 0, scaleY, cellX, cellY].map(toCSSValue);
         const viewTrans = [
             1 / scaleX,
