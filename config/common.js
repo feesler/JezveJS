@@ -39,11 +39,13 @@ export default {
         PopupPosition: './src/Components/PopupPosition/PopupPosition.js',
         Progress: './src/Components/Progress/Progress.js',
         Radio: './src/Components/Radio/Radio.js',
+        Slidable: './src/Components/Slidable/Slidable.js',
         Slider: './src/Components/Slider/Slider.js',
         Sortable: './src/Components/Sortable/Sortable.js',
         SortableListContainer: './src/Components/SortableListContainer/SortableListContainer.js',
         Spinner: './src/Components/Spinner/Spinner.js',
         Switch: './src/Components/Switch/Switch.js',
+        TabList: './src/Components/TabList/TabList.js',
     },
     output: {
         filename: '[name].js',
