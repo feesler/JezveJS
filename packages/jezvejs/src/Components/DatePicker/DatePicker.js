@@ -1,6 +1,7 @@
 import '../../css/common.scss';
 import {
     ge,
+    re,
     createSVGElement,
     show,
     isDate,
@@ -24,7 +25,6 @@ import { DatePickerYearView } from './components/YearView/YearView.js';
 import { DatePickerYearRangeView } from './components/YearRangeView/YearRangeView.js';
 import {
     toCSSValue,
-    compareViewTypes,
     getNextViewDate,
     getPrevViewDate,
     MONTH_VIEW,
@@ -104,6 +104,7 @@ export class DatePicker extends Component {
             curRange: { start: null, end: null },
             selRange: { start: null, end: null },
             actDate: null,
+            transition: null,
         };
 
         this.waitingForAnimation = false;
@@ -318,6 +319,10 @@ export class DatePicker extends Component {
         }
     }
 
+    findViewItemByElem(elem) {
+        return this.currView.items.find((i) => i.elem === elem);
+    }
+
     /** View 'click' event delegate */
     onViewClick(e) {
         e.stopPropagation();
@@ -326,7 +331,7 @@ export class DatePicker extends Component {
         }
         // Header
         if (this.titleEl.contains(e.target)) {
-            this.navigateUp();
+            this.zoomOut();
             return;
         }
         if (this.navPrevElem.contains(e.target)) {
@@ -342,49 +347,99 @@ export class DatePicker extends Component {
         if (!item) {
             return;
         }
-        const { date } = item;
         const { viewType } = this.state;
         if (viewType === MONTH_VIEW) {
-            this.onDayClick(date);
-        } else if (viewType === YEAR_VIEW) {
-            this.showMonth(date);
-        } else if (viewType === YEARRANGE_VIEW) {
-            this.showYear(date);
+            this.onDayClick(item.date);
+        } else if (viewType === YEAR_VIEW || viewType === YEARRANGE_VIEW) {
+            this.zoomIn(item.date);
         }
     }
 
-    findViewItemByElem(elem) {
-        return this.currView.items.find((i) => i.elem === elem);
+    navigateTo(state) {
+        this.setState({ ...this.state, ...state });
+
+        if (!this.props.animated) {
+            this.onStateReady();
+        }
     }
 
-    setViewDate(date) {
-        this.setState({
-            ...this.state,
+    onStateReady() {
+        this.setState({ ...this.state, transition: null });
+    }
+
+    zoomIn(date) {
+        const { viewType } = this.state;
+        if (viewType !== YEAR_VIEW && viewType !== YEARRANGE_VIEW) {
+            return;
+        }
+
+        this.navigateTo({
             date,
+            viewType: (viewType === YEAR_VIEW) ? MONTH_VIEW : YEAR_VIEW,
+            transition: 'zoomIn',
+        });
+    }
+
+    zoomOut() {
+        const { viewType } = this.state;
+        if (viewType !== MONTH_VIEW && viewType !== YEAR_VIEW) {
+            return;
+        }
+
+        this.navigateTo({
+            viewType: (viewType === MONTH_VIEW) ? YEAR_VIEW : YEARRANGE_VIEW,
+            transition: 'zoomOut',
         });
     }
 
     navigateToPrev() {
-        this.setViewDate(this.currView.nav.prev);
+        this.navigateTo({
+            date: getPrevViewDate(this.state.date, this.state.viewType),
+            transition: 'slideLeft',
+        });
     }
 
     navigateToNext() {
-        this.setViewDate(this.currView.nav.next);
+        this.navigateTo({
+            date: getNextViewDate(this.state.date, this.state.viewType),
+            transition: 'slideRight',
+        });
     }
 
-    navigateUp() {
-        const { viewType } = this.state;
-        if (viewType === MONTH_VIEW) {
-            this.setState({
-                ...this.state,
-                viewType: YEAR_VIEW,
-            });
-        } else if (viewType === YEAR_VIEW) {
-            this.setState({
-                ...this.state,
-                viewType: YEARRANGE_VIEW,
-            });
-        }
+    /**
+     * Show month view to select day
+     * @param {Date} date - date object of month to show
+     */
+    showMonth(date) {
+        this.setState({
+            ...this.state,
+            viewType: MONTH_VIEW,
+            date,
+        });
+    }
+
+    /**
+     * Show year view to select month
+     * @param {Date} date - date object of year to show
+     */
+    showYear(date) {
+        this.setState({
+            ...this.state,
+            viewType: YEAR_VIEW,
+            date,
+        });
+    }
+
+    /**
+     * Show year range view to select year
+     * @param {Date} date - date object of year range to show
+     */
+    showYearRange(date) {
+        this.setState({
+            ...this.state,
+            viewType: YEARRANGE_VIEW,
+            date,
+        });
     }
 
     /** Day cell click inner callback */
@@ -503,7 +558,6 @@ export class DatePicker extends Component {
 
         const num = minmax(-1, 1, slideNum - 1);
         if (num === 0) {
-            this.newView = null;
             this.slideTo(0);
             return;
         }
@@ -519,6 +573,8 @@ export class DatePicker extends Component {
         if (!this.waitingForAnimation) {
             return;
         }
+
+        this.waitingForAnimation = false;
 
         this.wrapper.classList.remove(ANIMATED_CLASS);
         this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
@@ -538,15 +594,31 @@ export class DatePicker extends Component {
         this.cellsContainer.style.width = '';
 
         if (this.newView) {
-            const { prev, current, next } = this.newView;
-            removeChilds(this.slider);
-            this.slider.append(prev.elem, current.elem, next.elem);
-            show(this.slider, true);
+            const { prev, next } = this.newView;
+
+            if (this.currView === prev) {
+                re(this.prevView.elem);
+                this.slider.append(next.elem);
+            } else if (this.currView === next) {
+                re(this.nextView.elem);
+                this.slider.prepend(prev.elem);
+            } else {
+                this.renderSlider(this.newView);
+                removeChilds(this.cellsContainer);
+                this.cellsContainer.append(this.slider);
+            }
 
             this.applyView(this.newView);
+            this.newView = null;
         }
 
-        this.waitingForAnimation = false;
+        this.onStateReady();
+    }
+
+    renderSlider(views) {
+        const { prev, current, next } = views;
+        removeChilds(this.slider);
+        this.slider.append(prev.elem, current.elem, next.elem);
     }
 
     /**
@@ -604,21 +676,18 @@ export class DatePicker extends Component {
      * Set new view or replace current view with specified
      * @param {object} newView - view object
      */
-    setView(views) {
+    setView(views, state) {
         if (this.currView === views.current || !views.current) {
             return;
         }
 
-        const { prev, current, next } = views;
+        const { current } = views;
 
         if (!this.currView?.elem || !this.props.animated) {
-            removeChilds(this.slider);
-            this.slider.append(prev.elem, current.elem, next.elem);
-
+            this.renderSlider(views);
             if (this.width > 0) {
                 this.setContentPosition(-this.width);
             }
-
             this.applyView(views);
             return;
         }
@@ -636,13 +705,12 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.cellsContainer.append(this.currView.elem);
-        this.cellsContainer.append(current.elem);
-        show(this.slider, false);
+        removeChilds(this.cellsContainer);
+        this.cellsContainer.append(this.currView.elem, current.elem);
 
-        const goUp = compareViewTypes(this.currView.type, current.type) < 0;
-        const cellView = (goUp) ? current : this.currView;
-        const relView = (goUp) ? this.currView : current;
+        const zoomingOut = state.transition === 'zoomOut';
+        const cellView = (zoomingOut) ? current : this.currView;
+        const relView = (zoomingOut) ? this.currView : current;
         const relYear = relView.date.getFullYear();
         const relMonth = relView.date.getMonth();
 
@@ -664,7 +732,7 @@ export class DatePicker extends Component {
 
         const { elem } = cellObj;
 
-        current.elem.classList.add(LAYER_VIEW_CLASS, (goUp) ? BOTTOM_TO_CLASS : TOP_TO_CLASS);
+        current.elem.classList.add(LAYER_VIEW_CLASS, (zoomingOut) ? BOTTOM_TO_CLASS : TOP_TO_CLASS);
 
         const cellX = elem.offsetLeft;
         const cellY = elem.offsetTop;
@@ -680,11 +748,11 @@ export class DatePicker extends Component {
             -cellY / scaleY,
         ].map(toCSSValue);
 
-        transform(current.elem, `matrix(${(goUp ? viewTrans : cellTrans).join()})`);
+        transform(current.elem, `matrix(${(zoomingOut ? viewTrans : cellTrans).join()})`);
 
         this.currView.elem.classList.add(
             LAYER_VIEW_CLASS,
-            (goUp) ? TOP_FROM_CLASS : BOTTOM_FROM_CLASS,
+            (zoomingOut) ? TOP_FROM_CLASS : BOTTOM_FROM_CLASS,
         );
 
         setTimeout(() => {
@@ -696,7 +764,7 @@ export class DatePicker extends Component {
             transform(current.elem, '');
             transform(
                 this.currView.elem,
-                `matrix(${(goUp ? cellTrans : viewTrans).join()})`,
+                `matrix(${(zoomingOut ? cellTrans : viewTrans).join()})`,
             );
 
             this.newView = views;
@@ -709,51 +777,17 @@ export class DatePicker extends Component {
         });
     }
 
-    /**
-     * Show month view to select day
-     * @param {Date} date - date object of month to show
-     */
-    showMonth(date) {
-        this.setState({
-            ...this.state,
-            viewType: MONTH_VIEW,
-            date,
-        });
-    }
-
-    /**
-     * Show year view to select month
-     * @param {Date} date - date object of year to show
-     */
-    showYear(date) {
-        this.setState({
-            ...this.state,
-            viewType: YEAR_VIEW,
-            date,
-        });
-    }
-
-    /**
-     * Show year range view to select year
-     * @param {Date} date - date object of year range to show
-     */
-    showYearRange(date) {
-        this.setState({
-            ...this.state,
-            viewType: YEARRANGE_VIEW,
-            date,
-        });
-    }
-
     renderPrevView(state) {
-        const { viewType } = state;
-        const date = getPrevViewDate(state.date, viewType);
+        const date = getPrevViewDate(state.date, state.viewType);
         return this.renderDateView(date, state);
     }
 
+    renderCurrentView(state) {
+        return this.renderDateView(state.date, state);
+    }
+
     renderNextView(state) {
-        const { viewType } = state;
-        const date = getNextViewDate(state.date, viewType);
+        const date = getNextViewDate(state.date, state.viewType);
         return this.renderDateView(date, state);
     }
 
@@ -799,6 +833,22 @@ export class DatePicker extends Component {
     renderView(state, prevState = {}) {
         const typeChanged = (state.viewType !== prevState?.viewType);
 
+        if (state.transition === 'slideRight') {
+            return {
+                prev: this.currView,
+                current: this.nextView,
+                next: this.renderNextView(state),
+            };
+        }
+
+        if (state.transition === 'slideLeft') {
+            return {
+                prev: this.renderPrevView(state),
+                current: this.prevView,
+                next: this.currView,
+            };
+        }
+
         if (
             state.viewType === MONTH_VIEW
             && !typeChanged
@@ -817,8 +867,8 @@ export class DatePicker extends Component {
 
         return {
             prev: this.renderPrevView(state),
+            current: this.renderCurrentView(state),
             next: this.renderNextView(state),
-            current: this.renderDateView(state.date, state),
         };
     }
 
@@ -860,6 +910,6 @@ export class DatePicker extends Component {
         }
 
         const view = this.renderView(state, prevState);
-        this.setView(view);
+        this.setView(view, state);
     }
 }
