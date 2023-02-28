@@ -142,7 +142,6 @@ export class DatePicker extends Component {
             children: [header, this.cellsContainer],
             events: {
                 click: (e) => this.onViewClick(e),
-                wheel: (e) => this.onWheel(e),
             },
         });
         if (this.props.static) {
@@ -162,6 +161,7 @@ export class DatePicker extends Component {
             isReady: () => !this.waitingForAnimation,
             updatePosition: (position) => this.setContentPosition(position),
             onDragEnd: (...args) => this.onDragEnd(...args),
+            onWheel: (e) => this.onWheel(e),
         });
 
         this.observeSliderSize();
@@ -304,18 +304,11 @@ export class DatePicker extends Component {
      * @param {Event} e - wheel event object
      */
     onWheel(e) {
-        e.preventDefault();
-
-        if (
-            !this.currView?.nav
-            || this.waitingForAnimation
-            || e.deltaY === 0
-        ) {
+        if (this.waitingForAnimation) {
             return;
         }
 
-        const direction = (e.wheelDelta > 0);
-        if (direction) {
+        if (e.wheelDelta > 0) {
             this.navigateToPrev();
         } else {
             this.navigateToNext();

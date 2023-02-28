@@ -27,6 +27,7 @@ const defaultProps = {
     items: [],
     allowMouse: false,
     allowTouch: true,
+    allowWheel: true,
 };
 
 /** Slider component */
@@ -51,7 +52,12 @@ export class Slider extends Component {
     }
 
     init() {
-        const { vertical, allowMouse, allowTouch } = this.props;
+        const {
+            vertical,
+            allowMouse,
+            allowTouch,
+            allowWheel,
+        } = this.props;
 
         this.content = createElement('div', {
             props: { className: CONTENT_CLASS },
@@ -66,7 +72,7 @@ export class Slider extends Component {
             this.append(this.props.items);
         }
 
-        if (allowMouse || allowTouch) {
+        if (allowMouse || allowTouch || allowWheel) {
             Slidable.create({
                 elem: this.elem,
                 content: this.content,
@@ -75,6 +81,7 @@ export class Slider extends Component {
                 allowTouch,
                 updatePosition: (position) => this.setContentPosition(position),
                 onDragEnd: (...args) => this.onDragEnd(...args),
+                onWheel: (allowWheel) ? (e) => this.onWheel(e) : null,
             });
         }
 
@@ -123,6 +130,18 @@ export class Slider extends Component {
 
         const num = minmax(0, this.items.length - 1, slideNum);
         this.slideTo(num);
+    }
+
+    onWheel(e) {
+        if (!this.props.allowWheel || this.waitingForAnimation) {
+            return;
+        }
+
+        if (e.wheelDelta > 0) {
+            this.slideToPrev();
+        } else {
+            this.slideToNext();
+        }
     }
 
     calculatePosition(num) {
