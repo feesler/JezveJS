@@ -1,14 +1,15 @@
-import { ge, isFunction } from '../../js/common.js';
+import { ge, isFunction, setEvents } from '../../js/common.js';
 import { SliderDragZone } from './components/SliderDragZone.js';
 import { SliderDropTarget } from './components/SliderDropTarget.js';
 
 const defaultProps = {
     vertical: false,
-    slideByMouse: false,
-    slideByTouch: true,
+    allowMouse: false,
+    allowTouch: true,
     isReady: true,
     updatePosition: null,
     onDragEnd: null,
+    onWheel: null,
 };
 
 export class Slidable {
@@ -22,12 +23,18 @@ export class Slidable {
             ...props,
         };
 
+        this.wheelHandler = { wheel: (e) => this.onWheel(e) };
+
+        this.init();
+    }
+
+    init() {
         const {
             elem,
             content,
             vertical,
-            slideByMouse,
-            slideByTouch,
+            allowMouse,
+            allowTouch,
             isReady,
         } = this.props;
 
@@ -43,8 +50,8 @@ export class Slidable {
         this.dragZone = SliderDragZone.create({
             elem: this.content,
             vertical,
-            slideByMouse,
-            slideByTouch,
+            allowMouse,
+            allowTouch,
             isReady,
             updatePosition: (...args) => this.onUpdatePosition(...args),
         });
@@ -52,6 +59,24 @@ export class Slidable {
             elem: this.elem,
             onDragEnd: (...args) => this.onDragEnd(...args),
         });
+
+        if (isFunction(this.props.onWheel)) {
+            setEvents(this.elem, this.wheelHandler);
+        }
+    }
+
+    /**
+     * Mouse whell event handler
+     * @param {Event} e - wheel event object
+     */
+    onWheel(e) {
+        e.preventDefault();
+
+        if (e.deltaY === 0) {
+            return;
+        }
+
+        this.props.onWheel(e);
     }
 
     onUpdatePosition(...args) {

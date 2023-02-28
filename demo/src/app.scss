@@ -82,19 +82,19 @@ h2,
 h3 {
   font-family: "Segoe UI", Arial, sans-serif;
   font-weight: normal;
-  padding: 10px 0 5px 0;
+  padding: 0.5rem 0 0.25rem 0;
 }
 
 h1 {
-  font-size: 22px;
+  font-size: 1.5rem;
 }
 
 h2 {
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 h3 {
-  font-size: 18px;
+  font-size: 1.1rem;
 }
 
 a,
@@ -221,9 +221,15 @@ a:visited {
 
 /* Table of contents */
 .toc-menu {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-end;
   padding: 0 0 1rem 0;
+  margin-top: -1.75rem;
 
   label {
+    height: 1.5rem;
+    margin-left: auto;
     font-size: 1rem;
     text-decoration: underline;
     color: #0072c6;
@@ -314,9 +320,11 @@ section {
   }
 
   .toc-menu {
+    display: block;
     grid-column: 2;
     grid-row: span 2;
     padding: 0 1rem;
+    margin: 0;
 
     label {
       font-size: 1.1rem;

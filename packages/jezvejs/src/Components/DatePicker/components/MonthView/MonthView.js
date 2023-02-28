@@ -1,5 +1,5 @@
-import { createElement, isDate } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
+import { createElement, isDate } from '../../../../js/common.js';
+import { Component } from '../../../../js/Component.js';
 import {
     DAYS_IN_WEEK,
     getWeekdayShort,
@@ -8,8 +8,8 @@ import {
     getWeekDays,
     isSameYearMonth,
     isSameDate,
-} from '../../js/DateUtils.js';
-import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from './utils.js';
+} from '../../../../js/DateUtils.js';
+import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from '../../utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container';

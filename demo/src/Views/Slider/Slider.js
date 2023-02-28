@@ -72,7 +72,7 @@ const initMouseSlider = () => {
     const slider = new Slider({
         width: 300,
         height: 200,
-        slideByMouse: true,
+        allowMouse: true,
         items: [{
             content: createSlideContent('Slide 1'),
         }, {
@@ -89,7 +89,7 @@ const initNoTouchSlider = () => {
     const slider = new Slider({
         width: 300,
         height: 200,
-        slideByTouch: false,
+        allowTouch: false,
         items: [{
             content: createSlideContent('Slide 1'),
         }, {
@@ -105,6 +105,23 @@ const initNoTouchSlider = () => {
     setEvents(ge('noTouchNextBtn'), { click: () => slider.slideToNext() });
 };
 
+const initNoWheelSlider = () => {
+    const slider = new Slider({
+        width: 300,
+        height: 200,
+        allowWheel: false,
+        items: [{
+            content: createSlideContent('Slide 1'),
+        }, {
+            content: createSlideContent('Slide 2'),
+        }, {
+            content: createSlideContent('Slide 3'),
+        }],
+    });
+    const container = ge('noWheelSlider');
+    container.append(slider.elem);
+};
+
 const init = () => {
     initNavigation();
 
@@ -112,6 +129,7 @@ const init = () => {
     initVerticalSlider();
     initMouseSlider();
     initNoTouchSlider();
+    initNoWheelSlider();
 };
 
 onReady(init);

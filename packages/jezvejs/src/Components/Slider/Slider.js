@@ -4,6 +4,7 @@ import {
     re,
     asArray,
     minmax,
+    afterTransition,
 } from '../../js/common.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
@@ -17,15 +18,16 @@ const VERTICAL_CLASS = 'slider_vertical';
 const ANIMATE_CLASS = 'animate';
 
 const TRANSITION_END_TIMEOUT = 500;
-const SWIPE_THRESHOLD = 20;
+const SWIPE_THRESHOLD = 0.1;
 
 const defaultProps = {
     width: 400,
     height: 300,
     vertical: false,
     items: [],
-    slideByMouse: false,
-    slideByTouch: true,
+    allowMouse: false,
+    allowTouch: true,
+    allowWheel: true,
 };
 
 /** Slider component */
@@ -45,19 +47,20 @@ export class Slider extends Component {
         this.slideIndex = 0;
         this.items.length = 0;
         this.waitingForAnimation = false;
-        this.animationTimeout = 0;
 
         this.init();
     }
 
     init() {
-        const { vertical, slideByMouse, slideByTouch } = this.props;
+        const {
+            vertical,
+            allowMouse,
+            allowTouch,
+            allowWheel,
+        } = this.props;
 
         this.content = createElement('div', {
             props: { className: CONTENT_CLASS },
-            events: {
-                transitionend: (e) => this.onTransitionEnd(e),
-            },
         });
         this.elem = createElement('div', {
             props: { className: SLIDER_CLASS },
@@ -69,15 +72,16 @@ export class Slider extends Component {
             this.append(this.props.items);
         }
 
-        if (slideByMouse || slideByTouch) {
+        if (allowMouse || allowTouch || allowWheel) {
             Slidable.create({
                 elem: this.elem,
                 content: this.content,
                 vertical,
-                slideByMouse,
-                slideByTouch,
+                allowMouse,
+                allowTouch,
                 updatePosition: (position) => this.setContentPosition(position),
                 onDragEnd: (...args) => this.onDragEnd(...args),
+                onWheel: (allowWheel) ? (e) => this.onWheel(e) : null,
             });
         }
 
@@ -100,15 +104,7 @@ export class Slider extends Component {
         return (this.slideIndex === this.items.length - 1);
     }
 
-    resetAnimationTimer() {
-        if (this.animationTimeout) {
-            clearTimeout(this.animationTimeout);
-            this.animationTimeout = 0;
-        }
-    }
-
     resetAnimation() {
-        this.resetAnimationTimer();
         this.waitingForAnimation = false;
     }
 
@@ -123,8 +119,8 @@ export class Slider extends Component {
         }
     }
 
-    onDragEnd(position, distance) {
-        const passThreshold = Math.abs(distance) > SWIPE_THRESHOLD;
+    onDragEnd(position, distance, velocity) {
+        const passThreshold = Math.abs(velocity) > SWIPE_THRESHOLD;
         let slideNum = -position / this.clientSize;
         if (passThreshold) {
             slideNum = (distance > 0) ? Math.ceil(slideNum) : Math.floor(slideNum);
@@ -136,12 +132,16 @@ export class Slider extends Component {
         this.slideTo(num);
     }
 
-    onTransitionEnd(e) {
-        if (e.target !== this.content) {
+    onWheel(e) {
+        if (!this.props.allowWheel || this.waitingForAnimation) {
             return;
         }
 
-        this.onAnimationDone();
+        if (e.wheelDelta > 0) {
+            this.slideToPrev();
+        } else {
+            this.slideToNext();
+        }
     }
 
     calculatePosition(num) {
@@ -174,8 +174,11 @@ export class Slider extends Component {
 
         this.waitingForAnimation = true;
         this.setContentPosition(this.position);
-        this.resetAnimationTimer();
-        this.animationTimeout = setTimeout(() => this.onAnimationDone(), TRANSITION_END_TIMEOUT);
+
+        afterTransition(this.content, {
+            duration: TRANSITION_END_TIMEOUT,
+            target: this.content,
+        }, () => this.onAnimationDone());
     }
 
     switchTo(num) {
