@@ -505,7 +505,8 @@ export class DatePicker extends Component {
 
         const num = minmax(-1, 1, slideNum - 1);
         if (num === 0) {
-            this.setContentPosition(-this.width);
+            this.newView = null;
+            this.slideTo(0);
             return;
         }
 
@@ -531,24 +532,28 @@ export class DatePicker extends Component {
         this.wrapper.classList.remove(ANIMATED_CLASS);
         this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
 
-        this.newView.current.elem.classList.remove(
-            LAYER_VIEW_CLASS,
-            BOTTOM_TO_CLASS,
-            TOP_TO_CLASS,
-        );
-        transform(this.newView.current.elem, '');
+        if (this.newView) {
+            this.newView.current.elem.classList.remove(
+                LAYER_VIEW_CLASS,
+                BOTTOM_TO_CLASS,
+                TOP_TO_CLASS,
+            );
+            transform(this.newView.current.elem, '');
+        }
 
         this.setContentPosition(-this.width);
 
         transform(this.slider, '');
         this.cellsContainer.style.width = '';
 
-        const { prev, current, next } = this.newView;
-        removeChilds(this.slider);
-        this.slider.append(prev.elem, current.elem, next.elem);
-        show(this.slider, true);
+        if (this.newView) {
+            const { prev, current, next } = this.newView;
+            removeChilds(this.slider);
+            this.slider.append(prev.elem, current.elem, next.elem);
+            show(this.slider, true);
 
-        this.applyView(this.newView);
+            this.applyView(this.newView);
+        }
 
         this.waitingForAnimation = false;
         removeEvents(this.cellsContainer, this.transitionEvents);
@@ -587,6 +592,35 @@ export class DatePicker extends Component {
     }
 
     /**
+     * Animates container sliding to the specified position
+     * @param {Number} index - slide position, -1 for previous, 0 for current and 1 for next
+     */
+    slideTo(index) {
+        this.wrapper.classList.add(ANIMATED_CLASS);
+        this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
+
+        const targetView = (index === 0)
+            ? this.currView
+            : ((index < 0) ? this.prevView : this.nextView);
+        const targetPos = -(index + 1) * this.width;
+        const distance = targetPos - this.position;
+
+        this.waitingForAnimation = true;
+
+        this.cellsContainer.style.height = px(targetView.elem.offsetHeight);
+
+        const trMatrix = [1, 0, 0, 1, distance, 0];
+        transform(this.slider, `matrix(${trMatrix.join()})`);
+
+        setEvents(this.cellsContainer, this.transitionEvents);
+
+        this.resetAnimationTimer();
+        this.animationTimeout = setTimeout(() => (
+            this.onAnimationDone()
+        ), TRANSITION_END_TIMEOUT);
+    }
+
+    /**
      * Set new view or replace current view with specified
      * @param {object} newView - view object
      */
@@ -617,28 +651,8 @@ export class DatePicker extends Component {
         // If new view is the same type as current then animate slide
         if (this.currView.type === current.type) {
             const leftToRight = this.currView.date > current.date;
-
-            this.wrapper.classList.add(ANIMATED_CLASS);
-            this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
-
-            const targetView = (leftToRight) ? this.prevView : this.nextView;
-            this.cellsContainer.style.height = px(targetView.elem.offsetHeight);
-
-            const distance = (leftToRight)
-                ? (-this.position)
-                : (-this.position - (this.width * 2));
-            const trMatrix = [1, 0, 0, 1, distance, 0];
-            transform(this.slider, `matrix(${trMatrix.join()})`);
-
             this.newView = views;
-
-            setEvents(this.cellsContainer, this.transitionEvents);
-
-            this.resetAnimationTimer();
-            this.animationTimeout = setTimeout(() => (
-                this.onAnimationDone()
-            ), TRANSITION_END_TIMEOUT);
-
+            this.slideTo((leftToRight) ? -1 : 1);
             return;
         }
 
