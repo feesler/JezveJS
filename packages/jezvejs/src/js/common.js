@@ -807,6 +807,54 @@ export const transform = (elem, value) => {
 };
 /* eslint-enable no-param-reassign */
 
+/**
+ * Runs specified callback after transition end or timeout
+ * @param {Element} elem
+ * @param {Object} options
+ * @param {Function} callback
+ */
+export const afterTransition = (elem, options, callback) => {
+    if (!elem) {
+        throw new Error('Invalid element');
+    }
+    if (!isFunction(callback)) {
+        throw new Error('Invalid callback function');
+    }
+
+    const {
+        property = null,
+        target = null,
+        duration = 500,
+    } = options;
+
+    let timeout = 0;
+    let waiting = true;
+
+    const handler = (e) => {
+        if (!waiting) {
+            return;
+        }
+
+        if (
+            (e && property && e.propertyName !== property)
+            || (e && target && e.target !== target)
+        ) {
+            return;
+        }
+
+        waiting = false;
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        removeEvents(elem, { transitionend: handler });
+
+        callback();
+    };
+
+    setEvents(elem, { transitionend: handler });
+    timeout = setTimeout(handler, duration);
+};
+
 /** Return fixed DPI value */
 export const getRealDPI = () => {
     if (window.devicePixelRatio) {

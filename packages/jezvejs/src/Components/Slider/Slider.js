@@ -4,6 +4,7 @@ import {
     re,
     asArray,
     minmax,
+    afterTransition,
 } from '../../js/common.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
@@ -45,7 +46,6 @@ export class Slider extends Component {
         this.slideIndex = 0;
         this.items.length = 0;
         this.waitingForAnimation = false;
-        this.animationTimeout = 0;
 
         this.init();
     }
@@ -55,9 +55,6 @@ export class Slider extends Component {
 
         this.content = createElement('div', {
             props: { className: CONTENT_CLASS },
-            events: {
-                transitionend: (e) => this.onTransitionEnd(e),
-            },
         });
         this.elem = createElement('div', {
             props: { className: SLIDER_CLASS },
@@ -100,15 +97,7 @@ export class Slider extends Component {
         return (this.slideIndex === this.items.length - 1);
     }
 
-    resetAnimationTimer() {
-        if (this.animationTimeout) {
-            clearTimeout(this.animationTimeout);
-            this.animationTimeout = 0;
-        }
-    }
-
     resetAnimation() {
-        this.resetAnimationTimer();
         this.waitingForAnimation = false;
     }
 
@@ -134,14 +123,6 @@ export class Slider extends Component {
 
         const num = minmax(0, this.items.length - 1, slideNum);
         this.slideTo(num);
-    }
-
-    onTransitionEnd(e) {
-        if (e.target !== this.content) {
-            return;
-        }
-
-        this.onAnimationDone();
     }
 
     calculatePosition(num) {
@@ -174,8 +155,11 @@ export class Slider extends Component {
 
         this.waitingForAnimation = true;
         this.setContentPosition(this.position);
-        this.resetAnimationTimer();
-        this.animationTimeout = setTimeout(() => this.onAnimationDone(), TRANSITION_END_TIMEOUT);
+
+        afterTransition(this.content, {
+            duration: TRANSITION_END_TIMEOUT,
+            target: this.content,
+        }, () => this.onAnimationDone());
     }
 
     switchTo(num) {

@@ -11,10 +11,9 @@ import {
     removeEmptyClick,
     px,
     createElement,
-    setEvents,
-    removeEvents,
     minmax,
     removeChilds,
+    afterTransition,
 } from '../../js/common.js';
 import { isSameYearMonth } from '../../js/DateUtils.js';
 import { Component } from '../../js/Component.js';
@@ -107,7 +106,6 @@ export class DatePicker extends Component {
             actDate: null,
         };
 
-        this.animationTimeout = 0;
         this.waitingForAnimation = false;
         this.position = 0;
         this.width = 0;
@@ -517,13 +515,6 @@ export class DatePicker extends Component {
         }
     }
 
-    resetAnimationTimer() {
-        if (this.animationTimeout) {
-            clearTimeout(this.animationTimeout);
-            this.animationTimeout = 0;
-        }
-    }
-
     onAnimationDone() {
         if (!this.waitingForAnimation) {
             return;
@@ -556,22 +547,6 @@ export class DatePicker extends Component {
         }
 
         this.waitingForAnimation = false;
-        removeEvents(this.cellsContainer, this.transitionEvents);
-    }
-
-    /**
-     * 'transitionend' event handler
-     * @param {Event} e - Event object
-     */
-    onTransitionEnd(e) {
-        if (
-            (e?.propertyName !== 'transform')
-            || (e?.target !== this.currView.elem && e?.target !== this.slider)
-        ) {
-            return;
-        }
-
-        this.onAnimationDone();
     }
 
     /**
@@ -591,6 +566,14 @@ export class DatePicker extends Component {
         this.setTitle(this.currView.title);
     }
 
+    getTargetViewByIndex(index) {
+        if (index === 0) {
+            return this.currView;
+        }
+
+        return (index < 0) ? this.prevView : this.nextView;
+    }
+
     /**
      * Animates container sliding to the specified position
      * @param {Number} index - slide position, -1 for previous, 0 for current and 1 for next
@@ -599,9 +582,7 @@ export class DatePicker extends Component {
         this.wrapper.classList.add(ANIMATED_CLASS);
         this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
 
-        const targetView = (index === 0)
-            ? this.currView
-            : ((index < 0) ? this.prevView : this.nextView);
+        const targetView = this.getTargetViewByIndex(index);
         const targetPos = -(index + 1) * this.width;
         const distance = targetPos - this.position;
 
@@ -612,12 +593,11 @@ export class DatePicker extends Component {
         const trMatrix = [1, 0, 0, 1, distance, 0];
         transform(this.slider, `matrix(${trMatrix.join()})`);
 
-        setEvents(this.cellsContainer, this.transitionEvents);
-
-        this.resetAnimationTimer();
-        this.animationTimeout = setTimeout(() => (
-            this.onAnimationDone()
-        ), TRANSITION_END_TIMEOUT);
+        afterTransition(this.cellsContainer, {
+            property: 'transform',
+            duration: TRANSITION_END_TIMEOUT,
+            target: this.slider,
+        }, () => this.onAnimationDone());
     }
 
     /**
@@ -721,12 +701,11 @@ export class DatePicker extends Component {
 
             this.newView = views;
 
-            setEvents(this.cellsContainer, this.transitionEvents);
-
-            this.resetAnimationTimer();
-            this.animationTimeout = setTimeout(() => (
-                this.onAnimationDone()
-            ), TRANSITION_END_TIMEOUT);
+            afterTransition(this.cellsContainer, {
+                property: 'transform',
+                duration: TRANSITION_END_TIMEOUT,
+                target: this.currView.elem,
+            }, () => this.onAnimationDone());
         });
     }
 
