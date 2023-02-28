@@ -105,7 +105,7 @@ export class PopupPosition {
             : { top: 0, left: 0, height: screenHeight };
 
         const offset = (fixedElement)
-            ? { top: 0, left: 0 }
+            ? { top: 0, left: 0, height: screenHeight }
             : elem.offsetParent.getBoundingClientRect();
 
         const reference = refElem.getBoundingClientRect();
@@ -174,12 +174,15 @@ export class PopupPosition {
             )
         );
 
+        let flipBottom = 0;
         if (flip) {
             initialTop = reference.top - offset.top - height - margin;
 
             if (fixedParent && fixedParent === elem.offsetParent && !fixedElement) {
                 initialTop += scrollTop;
             }
+
+            flipBottom = offset.height - initialTop - height;
         }
 
         const elemOverflow = (flip) ? overflowTop : overflowBottom;
@@ -212,7 +215,11 @@ export class PopupPosition {
             waitForScroll = true;
             setTimeout(() => {
                 if (fixedElement || absoluteParent) {
-                    style.top = px(initialTop - distance);
+                    if (flip) {
+                        style.bottom = px(flipBottom - distance);
+                    } else {
+                        style.top = px(initialTop - distance);
+                    }
                 }
 
                 scrollParent.scrollTop = newScrollTop;
@@ -234,7 +241,8 @@ export class PopupPosition {
             }
         }
         if (flip) {
-            style.top = px(initialTop);
+            style.top = '';
+            style.bottom = px(flipBottom);
         }
 
         if (!waitForScroll) {
@@ -281,6 +289,7 @@ export class PopupPosition {
 
         const { style } = elem;
         style.top = '';
+        style.bottom = '';
         style.left = '';
         style.minWidth = '';
         style.width = '';
