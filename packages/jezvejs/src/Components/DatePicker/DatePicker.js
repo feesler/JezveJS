@@ -694,6 +694,10 @@ export class DatePicker extends Component {
             if (this.width > 0) {
                 this.setContentPosition(-this.width);
             }
+
+            this.height = current.elem.offsetHeight;
+            this.cellsContainer.style.height = px(this.height);
+
             this.applyView(views);
             return;
         }
