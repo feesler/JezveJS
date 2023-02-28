@@ -58,7 +58,7 @@ const TOP_TO_CLASS = 'top_to';
 const BOTTOM_TO_CLASS = 'bottom_to';
 
 const TRANSITION_END_TIMEOUT = 500;
-const SWIPE_THRESHOLD = 20;
+const SWIPE_THRESHOLD = 0.1;
 
 const NAV_ICON_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
 
@@ -547,8 +547,8 @@ export class DatePicker extends Component {
         this.slider.style.left = px(this.position);
     }
 
-    onDragEnd(position, distance) {
-        const passThreshold = Math.abs(distance) > SWIPE_THRESHOLD;
+    onDragEnd(position, distance, velocity) {
+        const passThreshold = Math.abs(velocity) > SWIPE_THRESHOLD;
         let slideNum = -position / this.width;
         if (passThreshold) {
             slideNum = (distance > 0) ? Math.ceil(slideNum) : Math.floor(slideNum);
@@ -651,14 +651,17 @@ export class DatePicker extends Component {
      * @param {Number} index - slide position, -1 for previous, 0 for current and 1 for next
      */
     slideTo(index) {
-        this.wrapper.classList.add(ANIMATED_CLASS);
-        this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
-
         const targetView = this.getTargetViewByIndex(index);
         const targetPos = -(index + 1) * this.width;
         const distance = targetPos - this.position;
+        if (distance === 0) {
+            return;
+        }
 
         this.waitingForAnimation = true;
+
+        this.wrapper.classList.add(ANIMATED_CLASS);
+        this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
 
         this.cellsContainer.style.height = px(targetView.elem.offsetHeight);
 

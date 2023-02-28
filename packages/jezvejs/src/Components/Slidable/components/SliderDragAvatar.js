@@ -32,6 +32,8 @@ export class SliderDragAvatar extends DragAvatar {
             y: downY,
         });
         this.distance = 0;
+        this.lastTime = e.timeStamp;
+        this.velocity = 0;
 
         return true;
     }
@@ -51,9 +53,17 @@ export class SliderDragAvatar extends DragAvatar {
         this.currentTargetElem = this.dragZoneElem;
 
         const position = this.getPositionForCoordinates(client);
-        this.distance = this.position - position;
+        const distance = this.position - position;
         this.position = position;
 
-        this.dragZone.updatePosition(this.position);
+        const duration = e.timeStamp - this.lastTime;
+        this.lastTime = e.timeStamp;
+
+        this.velocity = (duration === 0) ? 0 : ((this.distance - distance) / duration);
+        this.distance = distance;
+
+        if (Math.abs(distance) > 0) {
+            this.dragZone.updatePosition(this.position);
+        }
     }
 }
