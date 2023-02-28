@@ -4,8 +4,8 @@ import { SliderDropTarget } from './components/SliderDropTarget.js';
 
 const defaultProps = {
     vertical: false,
-    slideByMouse: false,
-    slideByTouch: true,
+    allowMouse: false,
+    allowTouch: true,
     isReady: true,
     updatePosition: null,
     onDragEnd: null,
@@ -26,8 +26,8 @@ export class Slidable {
             elem,
             content,
             vertical,
-            slideByMouse,
-            slideByTouch,
+            allowMouse,
+            allowTouch,
             isReady,
         } = this.props;
 
@@ -43,8 +43,8 @@ export class Slidable {
         this.dragZone = SliderDragZone.create({
             elem: this.content,
             vertical,
-            slideByMouse,
-            slideByTouch,
+            allowMouse,
+            allowTouch,
             isReady,
             updatePosition: (...args) => this.onUpdatePosition(...args),
         });

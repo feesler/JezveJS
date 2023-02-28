@@ -7,11 +7,11 @@ import { DragAvatar } from '../../DragnDrop/DragAvatar.js';
  */
 export class SliderDragAvatar extends DragAvatar {
     initFromEvent(downX, downY, e) {
-        const { slideByMouse, slideByTouch } = this.dragZone;
+        const { allowMouse, allowTouch } = this.dragZone;
         const isTouch = !!e.touches;
         if (
-            (isTouch && !slideByTouch)
-            || (!isTouch && !slideByMouse)
+            (isTouch && !allowTouch)
+            || (!isTouch && !allowMouse)
         ) {
             return false;
         }

@@ -72,7 +72,7 @@ const initMouseSlider = () => {
     const slider = new Slider({
         width: 300,
         height: 200,
-        slideByMouse: true,
+        allowMouse: true,
         items: [{
             content: createSlideContent('Slide 1'),
         }, {
@@ -89,7 +89,7 @@ const initNoTouchSlider = () => {
     const slider = new Slider({
         width: 300,
         height: 200,
-        slideByTouch: false,
+        allowTouch: false,
         items: [{
             content: createSlideContent('Slide 1'),
         }, {

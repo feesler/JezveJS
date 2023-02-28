@@ -6,8 +6,8 @@ const defalutProps = {
     mouseMoveThreshold: 0,
     touchMoveTimeout: 0,
     vertical: false,
-    slideByMouse: false,
-    slideByTouch: true,
+    allowMouse: false,
+    allowTouch: true,
     isReady: true,
     updatePosition: null,
 };
@@ -27,12 +27,12 @@ export class SliderDragZone extends DragZone {
         return this.props.vertical;
     }
 
-    get slideByMouse() {
-        return this.props.slideByMouse;
+    get allowMouse() {
+        return this.props.allowMouse;
     }
 
-    get slideByTouch() {
-        return this.props.slideByTouch;
+    get allowTouch() {
+        return this.props.allowTouch;
     }
 
     isReady() {

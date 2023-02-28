@@ -25,8 +25,8 @@ const defaultProps = {
     height: 300,
     vertical: false,
     items: [],
-    slideByMouse: false,
-    slideByTouch: true,
+    allowMouse: false,
+    allowTouch: true,
 };
 
 /** Slider component */
@@ -51,7 +51,7 @@ export class Slider extends Component {
     }
 
     init() {
-        const { vertical, slideByMouse, slideByTouch } = this.props;
+        const { vertical, allowMouse, allowTouch } = this.props;
 
         this.content = createElement('div', {
             props: { className: CONTENT_CLASS },
@@ -66,13 +66,13 @@ export class Slider extends Component {
             this.append(this.props.items);
         }
 
-        if (slideByMouse || slideByTouch) {
+        if (allowMouse || allowTouch) {
             Slidable.create({
                 elem: this.elem,
                 content: this.content,
                 vertical,
-                slideByMouse,
-                slideByTouch,
+                allowMouse,
+                allowTouch,
                 updatePosition: (position) => this.setContentPosition(position),
                 onDragEnd: (...args) => this.onDragEnd(...args),
             });
