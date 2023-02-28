@@ -45,6 +45,7 @@ export default {
         SortableListContainer: './src/Components/SortableListContainer/SortableListContainer.js',
         Spinner: './src/Components/Spinner/Spinner.js',
         Switch: './src/Components/Switch/Switch.js',
+        TabList: './src/Components/TabList/TabList.js',
     },
     output: {
         filename: '[name].js',

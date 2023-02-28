@@ -1,0 +1,22 @@
+.styled {
+  --styled-border-color: #999999;
+  --styled-bg-color: #fbfbfb;
+
+  .tab-list_header {
+    border-bottom: 1px solid var(--styled-border-color);
+  }
+
+  .link-menu-item {
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+  }
+
+  .link-menu-item_selected {
+    border: 1px solid var(--styled-border-color);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    background-color: var(--styled-bg-color);
+  }
+}

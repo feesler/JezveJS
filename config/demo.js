@@ -44,6 +44,7 @@ export default {
         progressDemo: './Views/Progress/Progress.js',
         sliderDemo: './Views/Slider/Slider.js',
         switchDemo: './Views/Switch/Switch.js',
+        tabListDemo: './Views/TabList/TabList.js',
     },
     output: {
         filename: 'demo/js/[name].[fullhash].js',
@@ -246,6 +247,12 @@ export default {
             template: './Views/Switch/switch.html',
             filename: 'demo/switch.html',
             chunks: ['polyfills', 'switchDemo'],
+            ...htmlCommonOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: './Views/TabList/tablist.html',
+            filename: 'demo/tablist.html',
+            chunks: ['polyfills', 'tabListDemo'],
             ...htmlCommonOptions,
         }),
     ],

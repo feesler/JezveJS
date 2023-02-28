@@ -31,6 +31,7 @@ const routeMap = {
     progress: AppView,
     slider: AppView,
     switch: AppView,
+    tablist: AppView,
 };
 
 /** Process request url and return view class if match */

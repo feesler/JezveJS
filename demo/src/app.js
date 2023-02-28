@@ -47,6 +47,7 @@ const navigationMenu = [{
         { title: 'Progress and Spinner', url: 'demo/progress.html' },
         { title: 'Slider', url: 'demo/slider.html' },
         { title: 'Switch', url: 'demo/switch.html' },
+        { title: 'Tab List', url: 'demo/tablist.html' },
     ],
 }];
 

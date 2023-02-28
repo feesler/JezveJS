@@ -1,0 +1,24 @@
+.tab-list {
+  --tab-padding: 0.5rem 1rem;
+  --tab-font-size: 1rem;
+  --tab-content-background: #fefefe;
+  --tab-content-padding: 0.5rem 1rem;
+
+  display: flex;
+  flex-flow: column nowrap;
+
+  .link-menu {
+    --link-menu-font-size: var(--tab-font-size);
+
+    column-gap: 1px;
+  }
+
+  .link-menu-item {
+    padding: var(--tab-padding);
+  }
+
+  .tab-list__content {
+    padding: var(--tab-content-padding);
+    background: var(--tab-content-background);
+  }
+}
