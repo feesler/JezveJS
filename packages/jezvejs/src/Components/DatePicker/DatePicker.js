@@ -215,6 +215,9 @@ export class DatePicker extends Component {
             PopupPosition.calculate({
                 elem: this.wrapper,
                 refElem: this.relativeParent,
+                scrollOnOverflow: true,
+                allowResize: false,
+                allowFlip: false,
             });
         } else {
             this.wrapper.style.top = '';
