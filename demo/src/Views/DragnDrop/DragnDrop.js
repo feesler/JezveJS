@@ -346,8 +346,35 @@ const onTableSort = (srcElem, destElem) => {
     logTo(tableLog, `srcId: ${srcId}; destId: ${destId}`);
 };
 
+const renderTableRow = (columns) => createElement('tr', {
+    children: asArray(columns).map((textContent) => (
+        createElement('td', {
+            children: createElement('div', { props: { textContent } }),
+        })
+    )),
+});
+
+const renderTBody = (children) => createElement('tbody', {
+    props: { className: 'tbl_list_item' },
+    children,
+});
+
+const tableData = [
+    [1, 10000, 'some text'],
+    [2, 354, 'some text'],
+    [3, 850110, 'some long long text'],
+    [4, 6000, 'some text'],
+    [5, 7860, 'some short text'],
+    [6, 4500, 'some text'],
+    [7, 200, 'some text'],
+];
+
 /** Sortable table with TBODY per each row */
 const initTableEachBody = () => {
+    const table = ge('table_sortable');
+    const rows = tableData.map((row) => renderTBody(renderTableRow(row)));
+    table.append(...rows);
+
     Sortable.create({
         elem: 'table_sortable',
         onInsertAt: onTableSort,
@@ -361,6 +388,10 @@ const initTableEachBody = () => {
 
 /** Sortable table with single TBODY for all rows */
 const initTableSingleBody = () => {
+    const table = ge('table_sortable_2');
+    const rows = tableData.map((row) => renderTableRow(row));
+    table.append(renderTBody(rows));
+
     Sortable.create({
         elem: 'table_sortable_2',
         onInsertAt: () => { },
@@ -374,6 +405,10 @@ const initTableSingleBody = () => {
 
 /** Sortable table without TBODY */
 const initTableNoBody = () => {
+    const table = ge('table_sortable_3');
+    const rows = tableData.map((row) => renderTableRow(row));
+    table.append(...rows);
+
     Sortable.create({
         elem: 'table_sortable_3',
         onInsertAt: () => { },
