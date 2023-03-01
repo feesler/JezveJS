@@ -9,6 +9,7 @@
   --link-menu-column-gap: 12px;
   --link-menu-row-gap: 6px;
   --link-menu-item-gap: 6px;
+  --link-menu-focus-shadow: 0 0 0 0.25rem #0d6efd40;
 
   display: flex;
   flex-flow: row wrap;
@@ -29,7 +30,8 @@
   margin: 0;
 
   &:focus-visible {
-    box-shadow: var(--focus-shadow);
+    box-shadow: var(--link-menu-focus-shadow);
+    z-index: 2;
   }
 
   .checkbox__check {
@@ -48,6 +50,11 @@
   margin: 0;
   font-size: var(--link-menu-font-size);
   font-weight: var(--link-menu-font-weight);
+
+  &:focus-visible {
+    box-shadow: var(--link-menu-focus-shadow);
+    z-index: 2;
+  }
 }
 
 .link-menu-item__title {
