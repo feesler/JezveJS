@@ -70,6 +70,7 @@ const renderMenuItem = ({ title, url }, baseURL) => (
         children: createElement('a', {
             props: {
                 href: `${baseURL}${url}`,
+                className: 'nav-menu-link',
                 textContent: title,
             },
         }),
