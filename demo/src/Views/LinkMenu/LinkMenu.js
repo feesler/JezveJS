@@ -48,12 +48,52 @@ const initDynamicMultiple = () => {
     });
 
     ge('dynamicMulti').append(menu.elem);
+};
 
-    const toggleEnableBtn = ge('toggleEnableBtn');
-    setEvents(toggleEnableBtn, {
+const initDisabledItem = () => {
+    const menu = LinkMenu.create({
+        itemParam: 'action',
+        multiple: true,
+        items: [
+            { title: 'Clear' },
+            { title: 'Create', value: 'create' },
+            { title: 'Update', value: 'update' },
+            { title: 'Delete', value: 'delete', disabled: true },
+        ],
+    });
+
+    ge('disabledItemContainer').append(menu.elem);
+
+    const btn = ge('toggleEnableItemBtn');
+    setEvents(btn, {
+        click: () => {
+            const item = menu.getItemByValue('delete');
+            btn.textContent = (item.disabled) ? 'Disable item' : 'Enable item';
+            menu.enableItem('delete', item.disabled);
+        },
+    });
+};
+
+const initDisabledComponent = () => {
+    const menu = LinkMenu.create({
+        itemParam: 'action',
+        multiple: true,
+        disabled: true,
+        items: [
+            { title: 'Clear' },
+            { title: 'Create', value: 'create' },
+            { title: 'Update', value: 'update' },
+            { title: 'Delete', value: 'delete', disabled: true },
+        ],
+    });
+
+    ge('disabledContainer').append(menu.elem);
+
+    const btn = ge('toggleEnableBtn');
+    setEvents(btn, {
         click: () => {
             const { enabled } = menu;
-            toggleEnableBtn.textContent = (enabled) ? 'Enable' : 'Disable';
+            btn.textContent = (enabled) ? 'Enable' : 'Disable';
             menu.enable(!enabled);
         },
     });
@@ -65,6 +105,8 @@ const init = () => {
     initParsed();
     initDynamicSingle();
     initDynamicMultiple();
+    initDisabledItem();
+    initDisabledComponent();
 };
 
 onReady(init);

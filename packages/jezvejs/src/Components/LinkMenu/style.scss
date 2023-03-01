@@ -1,23 +1,31 @@
 .link-menu {
   --link-menu-font-size: 16px;
+  --link-menu-font-weight: 400;
+  --link-menu-selected-font-weight: 600;
   --link-menu-icon-size: 24px;
   --link-menu-icon-color: #0072c6;
   --link-menu-disabled-color: #7e7e7e;
+  --link-menu-item-padding: 2px;
+  --link-menu-column-gap: 12px;
+  --link-menu-row-gap: 6px;
+  --link-menu-item-gap: 6px;
 
   display: flex;
   flex-flow: row wrap;
-  column-gap: 12px;
-  row-gap: 6px;
+  column-gap: var(--link-menu-column-gap);
+  row-gap: var(--link-menu-row-gap);
   font-size: var(--link-menu-font-size);
+  font-weight: var(--link-menu-font-weight);
 }
 
-.link-menu-item {
+.link-menu-item,
+.link-menu-item:visited {
   display: inline-flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-start;
-  padding: 2px;
-  column-gap: 6px;
+  padding: var(--link-menu-item-padding);
+  gap: var(--link-menu-item-gap);
   margin: 0;
 
   &:focus-visible {
@@ -29,12 +37,22 @@
   }
 }
 
-b.link-menu-item_selected {
-  font-weight: 600;
+/* Content inside checkbox */
+.link-menu-item__content,
+.link-menu-item__content:visited {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+  font-size: var(--link-menu-font-size);
+  font-weight: var(--link-menu-font-weight);
 }
 
 .link-menu-item__title {
-  font-size: 16px;
+  font-size: var(--link-menu-font-size);
+  font-weight: var(--link-menu-font-weight);
 }
 
 .link-menu-item__icon {
@@ -49,14 +67,23 @@ b.link-menu-item_selected {
   }
 }
 
+/* Selected item state */
+b.link-menu-item_selected {
+  font-weight: var(--link-menu-selected-font-weight);
+
+  .link-menu-item__title {
+    font-weight: var(--link-menu-selected-font-weight);
+  }
+}
+
 /* Disabled state */
 .link-menu[disabled],
 .link-menu-item[disabled] {
   cursor: default;
   pointer-events: none;
 
-  b {
-    font-weight: 600;
+  b.link-menu-item_selected {
+    font-weight: var(--link-menu-selected-font-weight);
   }
 
   .link-menu-item__title {
