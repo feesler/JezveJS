@@ -1,5 +1,9 @@
 import '../../css/common.scss';
-import { isFunction, createElement } from '../../js/common.js';
+import {
+    isFunction,
+    createElement,
+    enable,
+} from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { LinkMenu } from '../LinkMenu/LinkMenu.js';
 import { ListContainer } from '../ListContainer/ListContainer.js';
@@ -12,6 +16,7 @@ const CONTENT_CLASS = 'tab-list__content';
 
 const defaultProps = {
     items: [],
+    disabled: false,
     selectedId: null,
     onChange: null,
 };
@@ -37,6 +42,10 @@ export class TabList extends Component {
         };
 
         this.init();
+    }
+
+    get disabled() {
+        return this.state.disabled;
     }
 
     init() {
@@ -91,6 +100,43 @@ export class TabList extends Component {
         }
     }
 
+    getItem(id) {
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return null;
+        }
+
+        return this.state.items.find((item) => item.id.toString() === strId);
+    }
+
+    enable(value = true) {
+        const disabled = !value;
+        if (this.state.disabled === disabled) {
+            return;
+        }
+        this.setState({ ...this.state, disabled });
+    }
+
+    enableItem(id, value = true) {
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            items: this.state.items.map((item) => (
+                (item.id.toString() !== strId)
+                    ? item
+                    : { ...item, disabled: !value }
+            )),
+        });
+    }
+
+    disableItem(id) {
+        this.enableItem(id, false);
+    }
+
     setItems(items) {
         if (this.state.items === items) {
             return;
@@ -111,17 +157,22 @@ export class TabList extends Component {
 
         if (
             state.items === prevState?.items
+            && state.disabled === prevState?.disabled
             && state.selectedId === prevState?.selectedId
         ) {
             return;
         }
 
+        enable(this.elem, !state.disabled);
+
         this.tabs.setState((tabsState) => ({
             ...tabsState,
+            disabled: state.disabled,
             items: state.items.map((item) => ({
                 title: item.title,
                 value: item.value,
                 selected: item.id.toString() === state.selectedId,
+                disabled: item.disabled,
             })),
         }));
 

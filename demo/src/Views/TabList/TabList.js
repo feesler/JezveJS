@@ -4,6 +4,7 @@ import {
     createElement,
     ge,
     onReady,
+    setEvents,
 } from 'jezvejs';
 import { TabList } from 'jezvejs/TabList';
 import { initNavigation } from '../../app.js';
@@ -26,7 +27,7 @@ const renderListItem = (textContent) => createElement('div', {
 
 const renderArrayContent = () => Array(5).fill('Item').map((item, index) => renderListItem(`${item} ${index}`));
 
-const getItems = () => ([{
+const getItems = (disableLast = false) => ([{
     id: 1,
     title: 'First',
     value: 1,
@@ -41,6 +42,7 @@ const getItems = () => ([{
     title: 'Array content',
     value: 'str',
     content: renderArrayContent(),
+    disabled: disableLast,
 }]);
 
 const initDefault = () => {
@@ -63,11 +65,52 @@ const initStyled = () => {
     container.append(tabList.elem);
 };
 
+const initDisabledItem = () => {
+    const tabList = TabList.create({
+        className: 'styled',
+        items: getItems(true),
+    });
+
+    const container = ge('disabledItemContainer');
+    container.append(tabList.elem);
+
+    const btn = ge('toggleEnableItemBtn');
+    setEvents(btn, {
+        click: () => {
+            const item = tabList.getItem('str');
+            btn.textContent = (item.disabled) ? 'Disable item' : 'Enable item';
+            tabList.enableItem('str', item.disabled);
+        },
+    });
+};
+
+const initDisabled = () => {
+    const tabList = TabList.create({
+        disabled: true,
+        className: 'styled',
+        items: getItems(),
+    });
+
+    const container = ge('disabledContainer');
+    container.append(tabList.elem);
+
+    const btn = ge('toggleEnableBtn');
+    setEvents(btn, {
+        click: () => {
+            const { disabled } = tabList;
+            btn.textContent = (disabled) ? 'Disable' : 'Enable';
+            tabList.enable(disabled);
+        },
+    });
+};
+
 const init = () => {
     initNavigation();
 
     initDefault();
     initStyled();
+    initDisabledItem();
+    initDisabled();
 };
 
 onReady(init);

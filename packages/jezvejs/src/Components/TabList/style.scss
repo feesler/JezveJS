@@ -1,20 +1,20 @@
 .tab-list {
   --tab-padding: 0.5rem 1rem;
   --tab-font-size: 1rem;
+  --tab-font-weight: 400;
   --tab-content-background: #fefefe;
   --tab-content-padding: 0.5rem 1rem;
+  --tab-disabled-color: #7e7e7e;
 
   display: flex;
   flex-flow: column nowrap;
 
   .link-menu {
     --link-menu-font-size: var(--tab-font-size);
-
-    column-gap: 1px;
-  }
-
-  .link-menu-item {
-    padding: var(--tab-padding);
+    --link-menu-font-weigth: var(--tab-font-weight);
+    --link-menu-column-gap: 1px;
+    --link-menu-item-padding: var(--tab-padding);
+    --link-menu-disabled-color: var(--tab-disabled-color);
   }
 
   .tab-list__content {
