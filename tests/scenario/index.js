@@ -10,6 +10,7 @@ import { datePickerTests } from './DatePicker.js';
 import { dropDownTests } from './DropDown.js';
 import { paginatorTests } from './Paginator.js';
 import { loadTests } from './Load.js';
+import { tabListTests } from './TabList.js';
 
 const storiesMap = {
     common: commonTests,
@@ -17,6 +18,7 @@ const storiesMap = {
     dropDown: dropDownTests,
     datePicker: datePickerTests,
     paginator: paginatorTests,
+    tabList: tabListTests,
     load: loadTests,
 };
 

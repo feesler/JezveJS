@@ -1,8 +1,9 @@
+import { AppView } from './view/AppView.js';
 import { CollapsibleView } from './view/CollapsibleView.js';
 import { DropDownView } from './view/DropDownView.js';
 import { DatePickerView } from './view/DatePickerView.js';
 import { PaginatorView } from './view/PaginatorView.js';
-import { AppView } from './view/AppView.js';
+import { TabListView } from './view/TabListView.js';
 
 const routeMap = {
     dropdown: DropDownView,
@@ -31,7 +32,7 @@ const routeMap = {
     progress: AppView,
     slider: AppView,
     switch: AppView,
-    tablist: AppView,
+    tablist: TabListView,
 };
 
 /** Process request url and return view class if match */
