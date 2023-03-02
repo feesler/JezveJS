@@ -4,7 +4,35 @@
   --tab-font-weight: 400;
   --tab-content-background: #fefefe;
   --tab-content-padding: 0.5rem 1rem;
+  --tab-item-color: #0072c6;
+  --tab-item-bg: none;
+  --tab-border-width: 1px;
+  --tab-border-color: transparent;
+  --tab-border-radius: 0;
+  --tab-content-border-radius: 0;
+
+  /* Selected item */
+  --tab-selected-color: var(--tab-color);
+  --tab-selected-bg: var(--tab-bg);
+  --tab-selected-border-color: var(--tab-border-color);
+
+  /* Disabled state */
   --tab-disabled-color: #7e7e7e;
+  --tab-disabled-bg: var(--tab-item-bg);
+  --tab-disabled-border-color: var(--tab-border-color);
+
+  /* Hover state */
+  --tab-hover-color: var(--tab-item-color);
+  --tab-hover-bg: var(--tab-item-bg);
+  --tab-hover-border-color: var(--tab-border-color);
+
+  /* Active state */
+  --tab-active-color: #000000;
+  --tab-active-bg: var(--tab-bg);
+  --tab-active-border-color: var(--tab-border-color);
+
+  /* Focused state */
+  --tab-focus-shadow: 0 0 0 0.25rem #0d6efd40;
 
   display: flex;
   flex-flow: column nowrap;
@@ -14,11 +42,33 @@
     --link-menu-font-weigth: var(--tab-font-weight);
     --link-menu-column-gap: 1px;
     --link-menu-item-padding: var(--tab-padding);
+    --link-menu-color: var(--tab-item-color);
+    --link-menu-bg: var(--tab-item-bg);
+    --link-menu-border-width: var(--tab-border-width);
+    --link-menu-border-color: var(--tab-border-color);
+    --link-menu-selected-color: var(--tab-selected-color);
+    --link-menu-selected-bg: var(--tab-selected-bg);
+    --link-menu-selected-border-color: var(--tab-selected-border-color);
     --link-menu-disabled-color: var(--tab-disabled-color);
+    --link-menu-disabled-bg: var(--tab-disabled-bg);
+    --link-menu-disabled-border-color: var(--tab-disabled-border-color);
+    --link-menu-hover-color: var(--tab-hover-color);
+    --link-menu-hover-bg: var(--tab-hover-bg);
+    --link-menu-hover-border-color: var(--tab-hover-border-color);
+    --link-menu-active-color: var(--tab-active-color);
+    --link-menu-active-bg: var(--tab-active-bg);
+    --link-menu-active-border-color: var(--tab-active-border-color);
+    --link-menu-focus-shadow: var(--tab-focus-shadow);
+  }
+
+  .link-menu-item {
+    border-top-left-radius: var(--tab-border-radius);
+    border-top-right-radius: var(--tab-border-radius);
   }
 
   .tab-list__content {
     padding: var(--tab-content-padding);
     background: var(--tab-content-background);
+    border-radius: var(--tab-content-border-radius);
   }
 }

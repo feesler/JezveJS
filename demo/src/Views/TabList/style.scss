@@ -1,22 +1,24 @@
 .styled {
-  --styled-border-color: #999999;
-  --styled-bg-color: #fbfbfb;
+  --tab-hover-bg: #e8e8e8;
+  --tab-active-color: #ffffff;
+  --tab-active-bg: #cecece;
+  --tab-selected-bg: #fbfbfb;
+  --tab-content-background: #fbfbfb;
+  --tab-border-color: transparent;
+  --tab-selected-border-color: #999999;
+  --tab-border-radius: 6px;
+  --tab-border-width: 1px;
+  --tab-padding: 0.5rem 1rem;
 
   .tab-list_header {
-    border-bottom: 1px solid var(--styled-border-color);
+    border-bottom: var(--tab-border-width) solid
+      var(--tab-selected-border-color);
   }
 
-  .link-menu-item {
-    padding: 0.5rem 1rem;
-    border: 1px solid transparent;
-  }
+}
 
-  .link-menu-item_selected {
-    border: 1px solid var(--styled-border-color);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-bottom: 1px solid transparent;
-    margin-bottom: -1px;
-    background-color: var(--styled-bg-color);
-  }
+.styled b.link-menu-item_selected,
+.styled[disabled] b.link-menu-item_selected {
+  border-bottom: var(--tab-border-width) solid var(--tab-selected-bg);
+  margin-bottom: calc(var(--tab-border-width) * -1);
 }
