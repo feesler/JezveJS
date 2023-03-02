@@ -14,11 +14,15 @@
     border-bottom: var(--tab-border-width) solid
       var(--tab-selected-border-color);
   }
-
 }
 
 .styled b.link-menu-item_selected,
 .styled[disabled] b.link-menu-item_selected {
   border-bottom: var(--tab-border-width) solid var(--tab-selected-bg);
   margin-bottom: calc(var(--tab-border-width) * -1);
+}
+
+.bold {
+  --tab-font-weight: 600;
+  --tab-selected-font-weight: bold;
 }

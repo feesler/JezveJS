@@ -10,8 +10,10 @@
   --tab-border-color: transparent;
   --tab-border-radius: 0;
   --tab-content-border-radius: 0;
+  --tab-gap: 1px;
 
   /* Selected item */
+  --tab-selected-font-weight: 400;
   --tab-selected-color: var(--tab-color);
   --tab-selected-bg: var(--tab-bg);
   --tab-selected-border-color: var(--tab-border-color);
@@ -39,13 +41,14 @@
 
   .link-menu {
     --link-menu-font-size: var(--tab-font-size);
-    --link-menu-font-weigth: var(--tab-font-weight);
-    --link-menu-column-gap: 1px;
+    --link-menu-font-weight: var(--tab-font-weight);
+    --link-menu-column-gap: var(--tab-gap);
     --link-menu-item-padding: var(--tab-padding);
     --link-menu-color: var(--tab-item-color);
     --link-menu-bg: var(--tab-item-bg);
     --link-menu-border-width: var(--tab-border-width);
     --link-menu-border-color: var(--tab-border-color);
+    --link-menu-selected-font-weight: var(--tab-selected-font-weight);
     --link-menu-selected-color: var(--tab-selected-color);
     --link-menu-selected-bg: var(--tab-selected-bg);
     --link-menu-selected-border-color: var(--tab-selected-border-color);
