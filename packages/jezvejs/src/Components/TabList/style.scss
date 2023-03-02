@@ -12,6 +12,7 @@
   --tab-content-border-radius: 0;
 
   /* Selected item */
+  --tab-selected-font-weight: 400;
   --tab-selected-color: var(--tab-color);
   --tab-selected-bg: var(--tab-bg);
   --tab-selected-border-color: var(--tab-border-color);
@@ -46,6 +47,7 @@
     --link-menu-bg: var(--tab-item-bg);
     --link-menu-border-width: var(--tab-border-width);
     --link-menu-border-color: var(--tab-border-color);
+    --link-menu-selected-font-weight: var(--tab-selected-font-weight);
     --link-menu-selected-color: var(--tab-selected-color);
     --link-menu-selected-bg: var(--tab-selected-bg);
     --link-menu-selected-border-color: var(--tab-selected-border-color);
