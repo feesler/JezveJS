@@ -8,6 +8,7 @@ const ITEM_CLASS = 'tab-list__content-item';
 const defaultProps = {
     value: null,
     active: false,
+    disabled: false,
     content: null,
 };
 
@@ -58,5 +59,6 @@ export class TabContentItem extends Component {
 
         this.elem.dataset.id = state.id;
         this.show(state.active);
+        this.enable(!state.disabled);
     }
 }

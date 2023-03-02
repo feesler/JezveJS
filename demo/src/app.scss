@@ -99,9 +99,7 @@ h3 {
 
 a,
 a:visited {
-  line-height: 1.5rem;
   font-size: 1rem;
-  padding: 4px 0;
   text-decoration: none;
   color: #0072c6;
 }
@@ -217,6 +215,12 @@ a:visited {
 .nav-menu li {
   display: flex;
   list-style-type: none;
+
+  .nav-menu-link,
+  .nav-menu-link:visited {
+    line-height: 1.5rem;
+    padding: 4px 0;
+  }
 }
 
 /* Table of contents */
@@ -257,6 +261,12 @@ a:visited {
 
   li {
     margin: 0.5rem 0;
+  }
+
+  .toc-menu-link,
+  .toc-menu-link:visited {
+    line-height: 1.5rem;
+    padding: 4px 0;
   }
 }
 
@@ -343,8 +353,8 @@ section {
     color: #ffffff;
   }
 
-  .nav-menu li a:hover,
-  .toc-menu li a:hover {
+  .nav-menu-link:hover,
+  .toc-menu-link:hover {
     text-decoration: underline;
     color: #0093ff;
   }

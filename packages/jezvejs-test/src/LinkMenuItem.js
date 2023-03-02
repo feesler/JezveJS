@@ -20,10 +20,10 @@ export class LinkMenuItem extends TestComponent {
             tagName: elem.tagName,
             title: title.textContent.trim(),
             value: elem.dataset.value,
+            disabled: elem.hasAttribute('disabled'),
             isCheckbox: elem.classList.contains('checkbox'),
             selected: elem.classList.contains('link-menu-item_selected'),
         }), this.elem, titleElem);
-
         if (res.tagName === 'A') {
             res.linkElem = this.elem;
         } else {
@@ -38,12 +38,20 @@ export class LinkMenuItem extends TestComponent {
         return res;
     }
 
+    get title() {
+        return this.content.title;
+    }
+
     get value() {
         return this.content.value;
     }
 
     get selected() {
         return this.content.selected;
+    }
+
+    get disabled() {
+        return this.content.disabled;
     }
 
     async toggle() {

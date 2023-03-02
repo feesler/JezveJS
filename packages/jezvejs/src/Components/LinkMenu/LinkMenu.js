@@ -15,6 +15,7 @@ import './style.scss';
 const CONTAINER_CLASS = 'link-menu';
 const ITEM_CLASS = 'link-menu-item';
 const SELECTED_ITEM_CLASS = 'link-menu-item_selected';
+const ITEM_CONTENT_CLASS = 'link-menu-item__content';
 const ITEM_TITLE_CLASS = 'link-menu-item__title';
 const ITEM_ICON_CONTAINER_CLASS = 'link-menu-item__icon';
 const ITEM_ICON_CLASS = 'icon';
@@ -34,13 +35,11 @@ const defaultProps = {
  * Link Menu component
  */
 export class LinkMenu extends Component {
-    constructor(props) {
-        super(props);
-
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+        });
 
         this.state = {
             ...this.props,
@@ -59,10 +58,8 @@ export class LinkMenu extends Component {
 
     init() {
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-        this.setHandlers();
-        this.setClassNames();
 
-        this.render(this.state);
+        this.postInit();
     }
 
     parse() {
@@ -70,13 +67,17 @@ export class LinkMenu extends Component {
             throw new Error('Invalid element');
         }
 
-        this.setHandlers();
-        this.setClassNames();
-
         this.state.multiple = this.elem.hasAttribute('multiple');
 
         const itemElems = Array.from(this.elem.querySelectorAll(`.${ITEM_CLASS}`));
         this.state.items = itemElems.map((item) => this.parseItem(item));
+
+        this.postInit();
+    }
+
+    postInit() {
+        this.setHandlers();
+        this.setClassNames();
 
         this.render(this.state);
     }
@@ -99,6 +100,10 @@ export class LinkMenu extends Component {
         };
 
         return res;
+    }
+
+    getItemByValue(value) {
+        return this.state.items.find((item) => item.value === value);
     }
 
     getItemValue(elem) {
@@ -214,6 +219,21 @@ export class LinkMenu extends Component {
         this.setState({ ...this.state, disabled });
     }
 
+    enableItem(id, value = true) {
+        this.setState({
+            ...this.state,
+            items: this.state.items.map((item) => (
+                (item.value !== id)
+                    ? item
+                    : { ...item, disabled: !value }
+            )),
+        });
+    }
+
+    disableItem(id) {
+        this.enableItem(id, false);
+    }
+
     setActive(value) {
         this.setState({
             ...this.state,
@@ -273,6 +293,7 @@ export class LinkMenu extends Component {
 
     renderCheckboxItem(item, state) {
         const content = this.renderItemContent(item, state);
+        content.classList.add(ITEM_CONTENT_CLASS);
 
         const checkbox = Checkbox.create({
             className: ITEM_CLASS,
@@ -332,6 +353,7 @@ export class LinkMenu extends Component {
         if (item.value) {
             elem.setAttribute('data-value', item.value);
         }
+        enable(elem, !(item.disabled || state.disabled));
 
         return elem;
     }

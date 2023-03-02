@@ -7,3 +7,4 @@ export { LinkMenu } from './src/LinkMenu.js';
 export { LinkMenuItem } from './src/LinkMenuItem.js';
 export { Paginator } from './src/Paginator.js';
 export { Switch } from './src/Switch.js';
+export { TabList } from './src/TabList.js';
