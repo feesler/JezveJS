@@ -57,7 +57,7 @@ const initDefault = () => {
 
 const initStyled = () => {
     const tabList = TabList.create({
-        className: 'styled',
+        className: 'styled bold',
         items: getItems(),
     });
 
