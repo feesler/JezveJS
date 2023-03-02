@@ -1,18 +1,18 @@
 import { test } from 'jezve-test';
 import { App } from '../app.js';
 
-export async function goToNextPage(name) {
+export const goToNextPage = async (name) => {
     await test(`[${name}] Go to next page`, () => App.view.goToNextPage(name));
-}
+};
 
-export async function goToPrevPage(name) {
+export const goToPrevPage = async (name) => {
     await test(`[${name}] Go to previous page`, () => App.view.goToPrevPage(name));
-}
+};
 
-export async function goToFirstPage(name) {
+export const goToFirstPage = async (name) => {
     await test(`[${name}] Go to first page`, () => App.view.goToFirstPage(name));
-}
+};
 
-export async function goToLastPage(name) {
+export const goToLastPage = async (name) => {
     await test(`[${name}] Go to last page`, () => App.view.goToLastPage(name));
-}
+};
