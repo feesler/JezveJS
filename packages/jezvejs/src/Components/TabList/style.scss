@@ -10,6 +10,7 @@
   --tab-border-color: transparent;
   --tab-border-radius: 0;
   --tab-content-border-radius: 0;
+  --tab-gap: 1px;
 
   /* Selected item */
   --tab-selected-font-weight: 400;
@@ -41,7 +42,7 @@
   .link-menu {
     --link-menu-font-size: var(--tab-font-size);
     --link-menu-font-weight: var(--tab-font-weight);
-    --link-menu-column-gap: 1px;
+    --link-menu-column-gap: var(--tab-gap);
     --link-menu-item-padding: var(--tab-padding);
     --link-menu-color: var(--tab-item-color);
     --link-menu-bg: var(--tab-item-bg);
