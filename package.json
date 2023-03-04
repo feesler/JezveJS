@@ -38,7 +38,13 @@
         "update": "npm update --save",
         "publish": "npm-run-all i-jezvejs update p-jezvejs",
         "publish-test": "npm-run-all i-jezvejs-test update p-jezvejs-test",
-        "release": "npm-run-all all publish deploy"
+        "release": "npm-run-all all publish deploy",
+        "ver-major": "node ./scripts/version.js major",
+        "ver-minor": "node ./scripts/version.js minor",
+        "ver-patch": "node ./scripts/version.js patch",
+        "release-major": "npm-run-all ver-major release",
+        "release-minor": "npm-run-all ver-minor release",
+        "release-patch": "npm-run-all ver-patch release"
     },
     "author": "Henry Feesler",
     "license": "ISC",

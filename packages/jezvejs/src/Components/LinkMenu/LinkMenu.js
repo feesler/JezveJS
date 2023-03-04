@@ -35,6 +35,10 @@ const defaultProps = {
  * Link Menu component
  */
 export class LinkMenu extends Component {
+    static userProps = {
+        elem: ['id'],
+    };
+
     constructor(props = {}) {
         super({
             ...defaultProps,
@@ -78,6 +82,7 @@ export class LinkMenu extends Component {
     postInit() {
         this.setHandlers();
         this.setClassNames();
+        this.setUserProps();
 
         this.render(this.state);
     }
