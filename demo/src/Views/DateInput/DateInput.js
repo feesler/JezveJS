@@ -26,6 +26,15 @@ const initPlaceholder = () => {
     DateInput.create({ elem: ge('dateInputPh'), placeholder: 'Input date' });
 };
 
+const initCreate = () => {
+    const dateInput = DateInput.create({
+        className: 'input',
+        placeholder: 'Created input element',
+    });
+    const container = ge('createContainer');
+    container.append(dateInput.elem);
+};
+
 const initLocales = () => {
     DateInput.create({ elem: ge('usDateInput'), locales: ['en-US'] });
     DateInput.create({ elem: ge('koDateInput'), locales: ['ko-KR'] });
@@ -37,6 +46,7 @@ const init = () => {
 
     initDefault();
     initPlaceholder();
+    initCreate();
     initLocales();
 };
 

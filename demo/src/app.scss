@@ -283,6 +283,11 @@ section {
   flex-flow: row nowrap;
 }
 
+.section-content {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
 .section-controls {
   margin-top: 1rem;
 
