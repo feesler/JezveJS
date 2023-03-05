@@ -5,9 +5,18 @@ import {
     setEvents,
     removeEvents,
     createElement,
+    setProps,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
+
+const inputProps = {
+    inputMode: 'decimal',
+    autocomplete: 'off',
+    autocapitalize: 'none',
+    autocorrect: 'off',
+    spellcheck: false,
+};
 
 const defaultProps = {
     id: undefined,
@@ -55,7 +64,7 @@ export class DecimalInput extends Component {
             }
         }
 
-        this.elem.inputMode = 'decimal';
+        setProps(this.elem, inputProps);
         this.setUserProps();
 
         this.beforeInputHandler = (e) => this.validateInput(e);
