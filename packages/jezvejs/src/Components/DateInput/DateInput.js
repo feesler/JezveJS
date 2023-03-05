@@ -6,11 +6,21 @@ import {
     isNum,
     removeEvents,
     createElement,
+    setProps,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
 const DEFAULT_SEPARATOR = '.';
+
+const inputProps = {
+    inputMode: 'decimal',
+    autocomplete: 'off',
+    autocapitalize: 'none',
+    autocorrect: 'off',
+    spellcheck: false,
+};
+
 const defaultProps = {
     guideChar: '_',
     locales: [],
@@ -63,7 +73,7 @@ export class DateInput extends Component {
             ...this.emptyState,
         };
 
-        this.elem.inputMode = 'decimal';
+        setProps(this.elem, inputProps);
         this.props.placeholder = this.props.placeholder ?? this.formatMask;
         this.setUserProps();
 
