@@ -163,9 +163,11 @@ a:visited {
 }
 
 .nav-header__logo {
+  display: flex;
   padding: 0;
 
   > a {
+    font-size: 1.1rem;
     color: #dddddd;
   }
 }
@@ -219,7 +221,7 @@ a:visited {
   .nav-menu-link,
   .nav-menu-link:visited {
     line-height: 1.5rem;
-    padding: 4px 0;
+    padding: 0.375rem 0;
   }
 }
 
@@ -260,13 +262,13 @@ a:visited {
   }
 
   li {
-    margin: 0.5rem 0;
+    display: flex;
   }
 
   .toc-menu-link,
   .toc-menu-link:visited {
     line-height: 1.5rem;
-    padding: 4px 0;
+    padding: 0.375rem 0;
   }
 }
 
