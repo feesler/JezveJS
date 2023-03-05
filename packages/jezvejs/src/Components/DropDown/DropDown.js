@@ -47,7 +47,9 @@ const FULLSCREEN_BG_CLASS = 'dd__background';
 const EDITABLE_CLASS = 'dd__editable';
 
 /* List */
+const FIXED_LIST_CLASS = 'dd__list_fixed';
 const LIST_OPEN_CLASS = 'dd__open';
+const MENU_OPEN_CLASS = 'dd__list_open';
 const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
@@ -66,6 +68,7 @@ const defaultProps = {
     form: undefined,
     multi: false,
     listAttach: false,
+    fixedMenu: false,
     enableFilter: false,
     openOnFocus: false,
     noResultsMessage: 'No items',
@@ -348,6 +351,7 @@ export class DropDown extends Component {
         } = this.props.components;
 
         this.menu = Menu.create({
+            className: (this.props.fixedMenu) ? FIXED_LIST_CLASS : null,
             multi: this.props.multi,
             showInput: this.props.listAttach && this.props.enableFilter,
             inputElem: this.inputElem,
@@ -364,7 +368,11 @@ export class DropDown extends Component {
             },
         });
 
-        this.elem.append(this.menu.elem);
+        if (this.props.fixedMenu) {
+            document.body.append(this.menu.elem);
+        } else {
+            this.elem.append(this.menu.elem);
+        }
     }
 
     /* Event handlers */
@@ -556,13 +564,12 @@ export class DropDown extends Component {
 
     /** 'keydown' event handler */
     onKey(e) {
-        let newItem = null;
-
         e.stopPropagation();
 
         const { editable } = this.state;
         const { multi } = this.props;
         const input = this.getInput();
+        let newItem = null;
 
         let allowSelectionNavigate = multi;
         if (multi && editable && e.target === input.elem) {
@@ -607,7 +614,10 @@ export class DropDown extends Component {
         const activeItem = this.getActiveItem();
         let focusInput = false;
 
-        if (e.code === 'ArrowDown') {
+        if (e.code === 'Space' && !editable) {
+            this.toggleList();
+            e.preventDefault();
+        } else if (e.code === 'ArrowDown') {
             const availItems = this.getAvailableItems(this.state);
 
             if (!this.state.visible && !activeItem) {
@@ -1331,7 +1341,7 @@ export class DropDown extends Component {
         for (let i = 0, l = elem.children.length; i < l; i += 1) {
             const childElem = elem.children[i];
             if (childElem.tagName === 'OPTGROUP') {
-                const group = this.createGroup(childElem.label);
+                const group = this.createGroup({ title: childElem.label }, groups);
                 if (!group) {
                     return false;
                 }
@@ -1502,8 +1512,8 @@ export class DropDown extends Component {
      * Create new group
      * @param {string} label
      */
-    addGroup(label, disabled = false) {
-        const group = this.createGroup(label, disabled);
+    addGroup(options) {
+        const group = this.createGroup(options);
         if (!group) {
             return null;
         }
@@ -1513,19 +1523,35 @@ export class DropDown extends Component {
         return group;
     }
 
+    generateGroupId(groups) {
+        while (true) {
+            const id = `group${Date.now()}${Math.random() * 10000}`;
+            const found = groups.find((item) => item.id === id);
+            if (!found) {
+                return id;
+            }
+        }
+    }
+
     /**
      * Create new group
      * @param {string} label
      */
-    createGroup(title, disabled = false) {
-        const id = `group${Date.now()}${Math.random() * 10000}`;
+    createGroup(options = {}, groups = []) {
+        const { title, disabled = false } = options;
+
         const group = {
-            id,
+            id: options.id?.toString() ?? this.generateGroupId(groups),
             title,
             disabled,
         };
 
         return group;
+    }
+
+    getGroupById(id) {
+        const strId = id?.toString();
+        return this.state.groups.find((item) => item.id === strId);
     }
 
     /** Remove item by id */
@@ -1758,7 +1784,11 @@ export class DropDown extends Component {
             return;
         }
 
-        this.elem.classList.toggle(LIST_OPEN_CLASS, state.visible);
+        if (this.props.fixedMenu) {
+            this.menu.elem.classList.toggle(MENU_OPEN_CLASS, state.visible);
+        } else {
+            this.elem.classList.toggle(LIST_OPEN_CLASS, state.visible);
+        }
         this.renderListContent(state, prevState);
 
         if (!state.visible) {

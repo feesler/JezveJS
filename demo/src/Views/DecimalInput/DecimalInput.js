@@ -45,6 +45,14 @@ const initLeadingZeros = () => {
     });
 };
 
+const initCreate = () => {
+    const decInput = DecimalInput.create({
+        className: 'input',
+    });
+    const container = ge('createContainer');
+    container.append(decInput.elem);
+};
+
 const init = () => {
     initNavigation();
 
@@ -53,6 +61,7 @@ const init = () => {
     initInteger();
     initOnlyPositive();
     initLeadingZeros();
+    initCreate();
 };
 
 onReady(init);

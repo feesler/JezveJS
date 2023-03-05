@@ -28,7 +28,6 @@ const views = {
     progress: 'Progress',
     slider: 'Slider',
     switch: 'Switch',
-    tablist: 'TabList',
 };
 
 const loadView = async (view) => test(`${views[view]} view`, async () => {

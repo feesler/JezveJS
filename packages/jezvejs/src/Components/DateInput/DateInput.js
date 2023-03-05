@@ -5,17 +5,30 @@ import {
     setCursorPos,
     isNum,
     removeEvents,
+    createElement,
+    setProps,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
 const DEFAULT_SEPARATOR = '.';
+
+const inputProps = {
+    inputMode: 'decimal',
+    autocomplete: 'off',
+    autocapitalize: 'none',
+    autocorrect: 'off',
+    spellcheck: false,
+};
+
 const defaultProps = {
     guideChar: '_',
     locales: [],
+    id: undefined,
     name: undefined,
     form: undefined,
     placeholder: undefined,
+    tabIndex: undefined,
     onInput: null,
 };
 
@@ -25,7 +38,7 @@ const defaultProps = {
  */
 export class DateInput extends Component {
     static userProps = {
-        elem: ['id', 'name', 'form', 'placeholder'],
+        elem: ['id', 'name', 'form', 'placeholder', 'tabIndex'],
     };
 
     constructor(props = {}) {
@@ -39,7 +52,7 @@ export class DateInput extends Component {
 
     init() {
         if (!this.elem) {
-            throw new Error('Invalid input element specified');
+            this.elem = createElement('input', { props: { type: 'text' } });
         }
 
         this.getDateFormat();
@@ -60,7 +73,7 @@ export class DateInput extends Component {
             ...this.emptyState,
         };
 
-        this.elem.inputMode = 'decimal';
+        setProps(this.elem, inputProps);
         this.props.placeholder = this.props.placeholder ?? this.formatMask;
         this.setUserProps();
 

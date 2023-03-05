@@ -97,6 +97,7 @@ export class DropDownMenu extends Component {
             },
         });
 
+        this.setClassNames();
         this.render(this.state);
     }
 

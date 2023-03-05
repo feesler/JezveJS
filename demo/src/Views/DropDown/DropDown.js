@@ -102,6 +102,16 @@ const initStandardStretch = () => {
     });
 };
 
+// Fixed menu
+const initFixed = () => {
+    const dropDown = DropDown.create({
+        fixedMenu: true,
+        data: initItems('Item', 50),
+    });
+    const container = ge('fixedContainer');
+    container.append(dropDown.elem);
+};
+
 // Parse select element (with no default selection)
 const initParseSingleNoSelection = () => {
     DropDown.create({
@@ -134,24 +144,27 @@ const initParseOptGroups = () => {
 
 // Dynamic groups create
 const dynamicOptGroups = () => {
-    const groupsDropDown = DropDown.create({
+    const dropDown = DropDown.create({
         elem: 'optgroupsdyn',
         className: 'dd__styled-group',
     });
-    const visibleGroup = groupsDropDown.addGroup('Visible');
+    const visibleGroup = dropDown.addGroup({ id: 'grVisible', title: 'Visible' });
     const visibleGroupItems = initItems('Visible item', 3);
     visibleGroupItems.forEach(
-        (item) => groupsDropDown.addItem({ ...item, group: visibleGroup }),
+        (item) => dropDown.addItem({ ...item, group: visibleGroup }),
     );
 
-    const hiddenGroup = groupsDropDown.addGroup('Hidden');
+    const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
     const hiddenGroupItems = initItems('Hidden item', 3);
     hiddenGroupItems.forEach(
-        (item) => groupsDropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
+        (item) => dropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
     );
 
-    groupsDropDown.addItem({ id: 3, title: 'Visible item 3', group: visibleGroup });
-    groupsDropDown.addItem({ id: 6, title: 'Hidden item 3', group: hiddenGroup });
+    const group1 = dropDown.getGroupById('grVisible');
+    dropDown.addItem({ id: 3, title: 'Visible item 3', group: group1 });
+
+    const group2 = dropDown.getGroupById(hiddenGroup.id);
+    dropDown.addItem({ id: 6, title: 'Hidden item 3', group: group2 });
 };
 
 // Create drop down without host element in DOM
@@ -550,6 +563,7 @@ const init = () => {
 
     initStandardInline();
     initStandardStretch();
+    initFixed();
 
     initParseSingleNoSelection();
     initParseSingleWithSelection();
