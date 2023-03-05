@@ -1,0 +1,133 @@
+import {
+    isFunction,
+    createElement,
+    setEvents,
+    enable,
+} from '../../js/common.js';
+import { Component } from '../../js/Component.js';
+import './style.scss';
+
+/* CSS classes */
+const INPUT_CLASS = 'input';
+
+const defaultProps = {
+    id: undefined,
+    name: undefined,
+    form: undefined,
+    tabIndex: undefined,
+    type: 'text', // button, link or static
+    disabled: false,
+    value: undefined,
+    onInput: null,
+    onFocus: null,
+    onBlur: null,
+    onChange: null,
+};
+
+/**
+ * Input component
+ */
+export class Input extends Component {
+    static userProps = {
+        elem: ['id', 'name', 'form', 'tabIndex', 'value'],
+    };
+
+    constructor(props) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
+
+        this.state = { ...this.props };
+
+        if (this.elem) {
+            this.parse();
+        } else {
+            this.init();
+        }
+    }
+
+    /** Returns id of root element of component */
+    get id() {
+        return this.props.id;
+    }
+
+    /** Returns enabled state of component */
+    get enabled() {
+        return this.state.enabled;
+    }
+
+    init() {
+        this.elem = createElement('input', {
+            props: { className: INPUT_CLASS },
+        });
+
+        this.postInit();
+    }
+
+    parse() {
+        if (!this.elem) {
+            throw new Error('Invalid element specified');
+        }
+
+        this.postInit();
+    }
+
+    postInit() {
+        this.setClassNames();
+        this.setHandlers();
+        this.setUserProps();
+        this.render(this.state);
+    }
+
+    setHandlers() {
+        setEvents(this.elem, {
+            focus: (e) => this.onFocus(e),
+            blur: (e) => this.onBlur(e),
+            input: (e) => this.onInput(e),
+            change: (e) => this.onChange(e),
+        });
+    }
+
+    onFocus(e) {
+        if (isFunction(this.props.onFocus)) {
+            this.props.onFocus(e);
+        }
+    }
+
+    onBlur(e) {
+        if (isFunction(this.props.onBlur)) {
+            this.props.onBlur(e);
+        }
+    }
+
+    onInput(e) {
+        if (isFunction(this.props.onInput)) {
+            this.props.onInput(e);
+        }
+    }
+
+    onChange(e) {
+        if (isFunction(this.props.onChange)) {
+            this.props.onChange(e);
+        }
+    }
+
+    /** Enables/disabled component */
+    enable(value = true) {
+        if (this.state.disabled === !value) {
+            return;
+        }
+
+        this.setState({ ...this.state, disabled: !value });
+    }
+
+    /** Render component */
+    render(state) {
+        if (!state) {
+            throw new Error('Invalid state');
+        }
+
+        enable(this.elem, !state.disabled);
+    }
+}

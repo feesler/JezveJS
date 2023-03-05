@@ -1,0 +1,43 @@
+:root {
+  --input-color: #000000;
+  --input-bg: #ffffff;
+  --input-padding: 0 0.5rem;
+  --input-border-radius: 5px;
+  --input-height: 2.3rem;
+  --input-border-width: 1px;
+  --input-border-color: #ced4da;
+
+  /* Disabled input */
+  --input-disabled-color: #a0a0a0;
+  --input-disabled-bg: #eeeeee;
+  --input-disabled-border: #ced4da;
+
+  /* Focused input */
+  --input-focus-bg: var(--input-bg);
+  --input-focus-border: #49b3ff;
+}
+
+.input {
+  flex: 1 1 auto;
+  height: var(--input-height);
+  padding: var(--input-padding);
+  color: var(--input-color);
+  background-color: var(--input-bg);
+  border-radius: var(--input-border-radius);
+  border-style: solid;
+  border-width: var(--input-border-width);
+  border-color: var(--input-border-color);
+}
+
+/* Disabled state */
+.input[disabled] {
+  color: var(--input-disabled-color);
+  background-color: var(--input-disabled-bg);
+  border-color: var(--input-disabled-border-color);
+}
+
+/* Focused state */
+.input:focus {
+  background-color: var(--input-focus-bg);
+  border-color: var(--input-focus-border);
+}

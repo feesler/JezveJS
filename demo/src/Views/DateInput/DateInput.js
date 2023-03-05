@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Input';
 import { ge, onReady, setEvents } from 'jezvejs';
 import { DateInput } from 'jezvejs/DateInput';
 import { initNavigation } from '../../app.js';

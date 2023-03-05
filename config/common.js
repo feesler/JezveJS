@@ -25,6 +25,7 @@ export default {
         Histogram: './src/Components/Histogram/Histogram.js',
         Icon: './src/Components/Icon/Icon.js',
         IndetermProgress: './src/Components/IndetermProgress/IndetermProgress.js',
+        Input: './src/Components/Input/Input.js',
         InputGroup: './src/Components/InputGroup/InputGroup.js',
         LineChart: './src/Components/LineChart/LineChart.js',
         LinkMenu: './src/Components/LinkMenu/LinkMenu.js',
