@@ -349,10 +349,23 @@ const groupsSelectFilter = () => {
     );
 };
 
-// Built-in items filter with multiple select
+// Built-in items filter with single select
 const attachedFilter = () => {
     DropDown.create({
         elem: 'boxFilter',
+        listAttach: true,
+        enableFilter: true,
+        noResultsMessage: 'Nothing found',
+        placeholder: 'Type to filter',
+        useSingleSelectionAsPlaceholder: false,
+        data: initItems('Filter item', 100),
+    });
+};
+
+// Built-in items filter with multiple select
+const attachedFilterMulti = () => {
+    DropDown.create({
+        elem: 'boxFilterMulti',
         listAttach: true,
         enableFilter: true,
         noResultsMessage: 'Nothing found',
@@ -588,6 +601,7 @@ const init = () => {
     multiSelectFilter();
     groupsSelectFilter();
     attachedFilter();
+    attachedFilterMulti();
 
     customRender();
     useNativeSelect();
