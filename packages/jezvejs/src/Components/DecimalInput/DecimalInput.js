@@ -4,6 +4,7 @@ import {
     isInt,
     setEvents,
     removeEvents,
+    createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -44,7 +45,7 @@ export class DecimalInput extends Component {
 
     init() {
         if (!this.elem) {
-            throw new Error('Invalid input element specified');
+            this.elem = createElement('input', { props: { type: 'text' } });
         }
 
         this.useFixed = (typeof this.props.digits !== 'undefined');
