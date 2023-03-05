@@ -556,13 +556,12 @@ export class DropDown extends Component {
 
     /** 'keydown' event handler */
     onKey(e) {
-        let newItem = null;
-
         e.stopPropagation();
 
         const { editable } = this.state;
         const { multi } = this.props;
         const input = this.getInput();
+        let newItem = null;
 
         let allowSelectionNavigate = multi;
         if (multi && editable && e.target === input.elem) {
@@ -607,7 +606,10 @@ export class DropDown extends Component {
         const activeItem = this.getActiveItem();
         let focusInput = false;
 
-        if (e.code === 'ArrowDown') {
+        if (e.code === 'Space' && !editable) {
+            this.toggleList();
+            e.preventDefault();
+        } else if (e.code === 'ArrowDown') {
             const availItems = this.getAvailableItems(this.state);
 
             if (!this.state.visible && !activeItem) {
