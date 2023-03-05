@@ -1341,7 +1341,7 @@ export class DropDown extends Component {
         for (let i = 0, l = elem.children.length; i < l; i += 1) {
             const childElem = elem.children[i];
             if (childElem.tagName === 'OPTGROUP') {
-                const group = this.createGroup(childElem.label);
+                const group = this.createGroup({ title: childElem.label }, groups);
                 if (!group) {
                     return false;
                 }
@@ -1512,8 +1512,8 @@ export class DropDown extends Component {
      * Create new group
      * @param {string} label
      */
-    addGroup(label, disabled = false) {
-        const group = this.createGroup(label, disabled);
+    addGroup(options) {
+        const group = this.createGroup(options);
         if (!group) {
             return null;
         }
@@ -1523,19 +1523,35 @@ export class DropDown extends Component {
         return group;
     }
 
+    generateGroupId(groups) {
+        while (true) {
+            const id = `group${Date.now()}${Math.random() * 10000}`;
+            const found = groups.find((item) => item.id === id);
+            if (!found) {
+                return id;
+            }
+        }
+    }
+
     /**
      * Create new group
      * @param {string} label
      */
-    createGroup(title, disabled = false) {
-        const id = `group${Date.now()}${Math.random() * 10000}`;
+    createGroup(options = {}, groups = []) {
+        const { title, disabled = false } = options;
+
         const group = {
-            id,
+            id: options.id?.toString() ?? this.generateGroupId(groups),
             title,
             disabled,
         };
 
         return group;
+    }
+
+    getGroupById(id) {
+        const strId = id?.toString();
+        return this.state.groups.find((item) => item.id === strId);
     }
 
     /** Remove item by id */
