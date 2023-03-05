@@ -102,6 +102,16 @@ const initStandardStretch = () => {
     });
 };
 
+// Fixed menu
+const initFixed = () => {
+    const dropDown = DropDown.create({
+        fixedMenu: true,
+        data: initItems('Item', 50),
+    });
+    const container = ge('fixedContainer');
+    container.append(dropDown.elem);
+};
+
 // Parse select element (with no default selection)
 const initParseSingleNoSelection = () => {
     DropDown.create({
@@ -550,6 +560,7 @@ const init = () => {
 
     initStandardInline();
     initStandardStretch();
+    initFixed();
 
     initParseSingleNoSelection();
     initParseSingleWithSelection();

@@ -24,8 +24,14 @@
   }
 }
 
+/* Fixed menu */
+.dd__list.dd__list_fixed {
+  position: fixed;
+}
+
 /* Opened state */
-.dd__open .dd__list {
+.dd__open .dd__list,
+.dd__list.dd__list_open {
   display: flex;
 }
 

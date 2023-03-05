@@ -47,7 +47,9 @@ const FULLSCREEN_BG_CLASS = 'dd__background';
 const EDITABLE_CLASS = 'dd__editable';
 
 /* List */
+const FIXED_LIST_CLASS = 'dd__list_fixed';
 const LIST_OPEN_CLASS = 'dd__open';
+const MENU_OPEN_CLASS = 'dd__list_open';
 const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
@@ -66,6 +68,7 @@ const defaultProps = {
     form: undefined,
     multi: false,
     listAttach: false,
+    fixedMenu: false,
     enableFilter: false,
     openOnFocus: false,
     noResultsMessage: 'No items',
@@ -348,6 +351,7 @@ export class DropDown extends Component {
         } = this.props.components;
 
         this.menu = Menu.create({
+            className: (this.props.fixedMenu) ? FIXED_LIST_CLASS : null,
             multi: this.props.multi,
             showInput: this.props.listAttach && this.props.enableFilter,
             inputElem: this.inputElem,
@@ -364,7 +368,11 @@ export class DropDown extends Component {
             },
         });
 
-        this.elem.append(this.menu.elem);
+        if (this.props.fixedMenu) {
+            document.body.append(this.menu.elem);
+        } else {
+            this.elem.append(this.menu.elem);
+        }
     }
 
     /* Event handlers */
@@ -1760,7 +1768,11 @@ export class DropDown extends Component {
             return;
         }
 
-        this.elem.classList.toggle(LIST_OPEN_CLASS, state.visible);
+        if (this.props.fixedMenu) {
+            this.menu.elem.classList.toggle(MENU_OPEN_CLASS, state.visible);
+        } else {
+            this.elem.classList.toggle(LIST_OPEN_CLASS, state.visible);
+        }
         this.renderListContent(state, prevState);
 
         if (!state.visible) {
