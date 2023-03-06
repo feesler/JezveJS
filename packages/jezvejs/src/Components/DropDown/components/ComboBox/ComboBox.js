@@ -143,7 +143,10 @@ export class DropDownComboBox extends Component {
     renderSingleSelection(state) {
         const [item] = getSelectedItems(state);
         const str = item?.title ?? '';
-        const usePlaceholder = (str.length === 0);
+        const usePlaceholder = (
+            !this.props.useSingleSelectionAsPlaceholder
+            && this.props.placeholder?.length > 0
+        );
         const placeholder = (usePlaceholder) ? this.props.placeholder : str;
 
         if (state.editable) {

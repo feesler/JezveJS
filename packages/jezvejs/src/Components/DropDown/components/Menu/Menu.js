@@ -1,6 +1,6 @@
 import { createElement, isFunction } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
-import { getVisibleItems } from '../../utils.js';
+import { getSelectedItems, getVisibleItems } from '../../utils.js';
 import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
 import { DropDownInput } from '../Input/Input.js';
 import { DropDownListItem } from '../ListItem/ListItem.js';
@@ -18,6 +18,7 @@ const defaultProps = {
     inputElem: null,
     inputString: '',
     inputPlaceholder: '',
+    useSingleSelectionAsPlaceholder: false,
     onInput: null,
     onItemActivate: null,
     onItemClick: null,
@@ -212,9 +213,20 @@ export class DropDownMenu extends Component {
         }
 
         if (this.input) {
+            let placeholder = state.inputPlaceholder;
+            if (!this.props.multi) {
+                const [item] = getSelectedItems(state);
+                const str = item?.title ?? '';
+                const usePlaceholder = (
+                    !this.props.useSingleSelectionAsPlaceholder
+                    && placeholder?.length > 0
+                );
+                placeholder = (usePlaceholder) ? state.inputPlaceholder : str;
+            }
+
             this.input.setState((inputState) => ({
                 ...inputState,
-                placeholder: state.inputPlaceholder,
+                placeholder,
                 value: state.inputString,
             }));
         }

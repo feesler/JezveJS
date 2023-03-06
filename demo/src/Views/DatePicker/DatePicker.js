@@ -1,5 +1,6 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
+import 'jezvejs/style/Input';
 import 'jezvejs/style/InputGroup';
 import {
     ge,
