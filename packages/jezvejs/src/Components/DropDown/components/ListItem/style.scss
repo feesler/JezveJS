@@ -1,7 +1,7 @@
 /* List item */
 .dd__list-item {
-  padding: 10px;
-  font-size: 1rem;
+  padding: var(--dd-list-item-padding);
+  font-size: var(--dd-list-item-font-size);
   text-align: left;
   border-width: 0;
   border-style: none;
