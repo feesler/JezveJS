@@ -75,18 +75,23 @@
   padding: 5px;
 }
 
-/* Custom list item */
+/* Custom DropDown */
 .dd__custom {
   --dd-bg-color: #181818;
-  --dd-active-bg: #202020;
   --dd-placeholder: #85803a;
-  --dd-active-placeholder: #ffcf00;
   --dd-list-item-text: #dddddd;
   --dd-list-item-bg: #202020;
   --dd-selection-item-border-radius: 5px;
   --dd-selection-item-bg: #ffcf00;
   --dd-selection-item-hover-bg: #ff7c00;
   --dd-selection-item-text: #000000;
+
+  /* Active state */
+  --dd-active-bg: #202020;
+  --dd-active-placeholder: #ffcf00;
+  --dd-active-selection-item-text: #000000;
+  --dd-active-selection-bg: none;
+  --dd-active-selection-item-bg: #ffcf00;
 }
 
 .dd__custom-list-item {
