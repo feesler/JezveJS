@@ -942,7 +942,7 @@ export class DropDown extends Component {
         const nativeSelectVisible = isVisible(this.selectElem, true);
 
         this.selectElem.setAttribute('tabindex', (nativeSelectVisible) ? 0 : -1);
-        this.elem.setAttribute('tabindex', (nativeSelectVisible || (state.visible && state.editable)) ? -1 : 0);
+        this.elem.setAttribute('tabindex', (nativeSelectVisible || state.editable) ? -1 : 0);
     }
 
     /** Enable or disable component */
