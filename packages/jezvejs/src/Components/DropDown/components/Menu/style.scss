@@ -36,6 +36,7 @@
 }
 
 /* Active component */
-.dd__container_active .dd__list {
+.dd__container_active .dd__list,
+.dd__list.dd__list_active {
   border-color: var(--dd-active-border);
 }
