@@ -1,4 +1,6 @@
-:root {
+.dd__container,
+.dd__container_attached,
+.dd__list_fixed {
   --dd-bg-color: #ffffff;
   --dd-border-color: #dfdfdf;
   --dd-border-width: 1px;
@@ -128,10 +130,7 @@
   /* Disabled component: Multiple selection items */
   --dd-disabled-selection-item-text: #a0a0a0;
   --dd-disabled-selection-item-bg: #dfdfdf;
-}
 
-.dd__container,
-.dd__container_attached {
   select {
     display: none;
   }

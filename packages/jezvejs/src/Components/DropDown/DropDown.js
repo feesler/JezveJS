@@ -40,6 +40,7 @@ import './style.scss';
 const CONTAINER_CLASS = 'dd__container';
 const MULTIPLE_CLASS = 'dd__container_multiple';
 const ACTIVE_CLASS = 'dd__container_active';
+const MENU_ACTIVE_CLASS = 'dd__list_active';
 const ATTACHED_CLASS = 'dd__container_attached';
 const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
@@ -453,14 +454,7 @@ export class DropDown extends Component {
 
         const selOptions = Array.from(this.selectElem.selectedOptions);
         const selValues = selOptions.map((option) => option.value);
-
-        this.setState({
-            ...this.state,
-            items: this.state.items.map((item) => ({
-                ...item,
-                selected: selValues.includes(item.id),
-            })),
-        });
+        this.setSelection(selValues);
 
         this.sendItemSelectEvent();
         this.state.changed = true;
@@ -1828,6 +1822,10 @@ export class DropDown extends Component {
     render(state, prevState = {}) {
         this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
         this.elem.classList.toggle(EDITABLE_CLASS, !!state.editable);
+
+        if (this.props.fixedMenu) {
+            this.menu.elem.classList.toggle(MENU_ACTIVE_CLASS, !!state.active);
+        }
 
         if (state.disabled !== prevState?.disabled) {
             enable(this.elem, !state.disabled);
