@@ -42,9 +42,9 @@
         "ver-major": "node ./scripts/version.js major",
         "ver-minor": "node ./scripts/version.js minor",
         "ver-patch": "node ./scripts/version.js patch",
-        "release-major": "npm-run-all ver-major release",
-        "release-minor": "npm-run-all ver-minor release",
-        "release-patch": "npm-run-all ver-patch release"
+        "release-major": "npm-run-all all ver-major publish deploy",
+        "release-minor": "npm-run-all all ver-minor publish deploy",
+        "release-patch": "npm-run-all all ver-patch publish deploy"
     },
     "author": "Henry Feesler",
     "license": "ISC",
