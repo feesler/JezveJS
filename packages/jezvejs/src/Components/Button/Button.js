@@ -3,6 +3,7 @@ import {
     createElement,
     setEvents,
     enable,
+    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Icon } from '../Icon/Icon.js';
@@ -25,6 +26,19 @@ const defaultProps = {
 };
 
 const buttonTypes = ['button', 'submit', 'reset'];
+
+const setContent = (elem, content) => {
+    const el = elem;
+    const cont = content ?? '';
+
+    if (el.tagName === 'INPUT') {
+        el.value = cont;
+        return;
+    }
+
+    const contentItems = asArray(cont).filter((item) => item);
+    el.append(...contentItems);
+};
 
 /**
  * Button component
@@ -219,8 +233,8 @@ export class Button extends Component {
 
         const title = state.title ?? '';
         this.elem.textContent = '';
-        if (!state.icon) {
-            this.elem.textContent = title;
+        if (!state.icon || this.elem.tagName === 'INPUT') {
+            setContent(this.elem, title);
             return;
         }
 
@@ -234,12 +248,8 @@ export class Button extends Component {
             return;
         }
 
-        const contentElem = createElement('span', {
-            props: {
-                className: CONTENT_CLASS,
-                textContent: title,
-            },
-        });
+        const contentElem = createElement('span', { props: { className: CONTENT_CLASS } });
+        setContent(contentElem, title);
         this.elem.append(contentElem);
     }
 }

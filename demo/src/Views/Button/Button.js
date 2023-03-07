@@ -2,6 +2,7 @@ import 'jezvejs/style';
 import { ge, onReady } from 'jezvejs';
 import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
+import { Icon } from 'jezvejs/Icon';
 import { initNavigation } from '../../app.js';
 import './style.scss';
 
@@ -11,6 +12,9 @@ const addEventLog = (value) => {
 };
 
 const initParsed = () => {
+    const inputBtn = Button.fromElement(ge('inputBtn'));
+    inputBtn.setTitle('Input button');
+
     Button.fromElement(ge('createBtn'));
     Button.fromElement(ge('updateBtn'));
     Button.fromElement(ge('deleteBtn'));
@@ -35,21 +39,33 @@ const initDynamicButton = () => {
 };
 
 const initDynamicLink = () => {
-    const dynamicLink = Button.create({
+    const btn = Button.create({
         type: 'link',
         title: 'Icon link',
         icon: 'del',
     });
-    ge('dynamicLink').append(dynamicLink.elem);
+    ge('dynamicLink').append(btn.elem);
 };
 
 const initStatic = () => {
-    const dynamicLink = Button.create({
+    const btn = Button.create({
         type: 'static',
         title: 'Static button',
         icon: 'del',
     });
-    ge('staticBtn').append(dynamicLink.elem);
+    ge('staticBtn').append(btn.elem);
+};
+
+const initCustomContent = () => {
+    const icon = Icon.create({
+        icon: 'del',
+        className: 'btn__icon',
+    });
+
+    const btn = Button.create({
+        title: ['Custom', icon.elem],
+    });
+    ge('customBtn').append(btn.elem);
 };
 
 const initBackground = () => {
@@ -148,6 +164,7 @@ const init = () => {
     initDynamicButton();
     initDynamicLink();
     initStatic();
+    initCustomContent();
     initBackground();
     initFullWidth();
     initCloseBtn();
