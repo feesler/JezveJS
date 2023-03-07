@@ -454,14 +454,7 @@ export class DropDown extends Component {
 
         const selOptions = Array.from(this.selectElem.selectedOptions);
         const selValues = selOptions.map((option) => option.value);
-
-        this.setState({
-            ...this.state,
-            items: this.state.items.map((item) => ({
-                ...item,
-                selected: selValues.includes(item.id),
-            })),
-        });
+        this.setSelection(selValues);
 
         this.sendItemSelectEvent();
         this.state.changed = true;
