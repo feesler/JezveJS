@@ -32,6 +32,7 @@
 /* Disabled state */
 .input[disabled] {
   color: var(--input-disabled-color);
+  -webkit-text-fill-color: var(--input-disabled-color);
   background-color: var(--input-disabled-bg);
   border-color: var(--input-disabled-border-color);
 }

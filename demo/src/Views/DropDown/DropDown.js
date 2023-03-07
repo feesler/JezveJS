@@ -335,15 +335,15 @@ const groupsSelectFilter = () => {
         placeholder: 'Type to filter',
     });
 
-    const group10 = dropDown.addGroup('1 - 9');
+    const group10 = dropDown.addGroup({ title: '1 - 9' });
     initItems('Item', 9).forEach(
         (item) => dropDown.addItem({ ...item, group: group10 }),
     );
-    const group20 = dropDown.addGroup('10 - 19');
+    const group20 = dropDown.addGroup({ title: '10 - 19' });
     initItems('Item', 10, 10).forEach(
         (item) => dropDown.addItem({ ...item, group: group20 }),
     );
-    const group30 = dropDown.addGroup('20 - 29');
+    const group30 = dropDown.addGroup({ title: '20 - 29' });
     initItems('Item', 10, 20).forEach(
         (item) => dropDown.addItem({ ...item, group: group30 }),
     );

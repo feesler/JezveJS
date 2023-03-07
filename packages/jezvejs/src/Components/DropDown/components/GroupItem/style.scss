@@ -13,11 +13,12 @@
   .dd__list-group__label {
     box-sizing: border-box;
     width: 100%;
-    padding: 6px 10px;
+    padding: var(--dd-list-group-header-padding);
     margin: 0;
     text-align: left;
-    font-size: 0.8rem;
-    font-weight: 600;
+    line-height: var(--dd-list-group-header-line-height);
+    font-size: var(--dd-list-group-header-font-size);
+    font-weight: var(--dd-list-group-header-font-weight);
     color: var(--dd-list-group-text);
     background-color: var(--dd-list-group-bg);
   }
