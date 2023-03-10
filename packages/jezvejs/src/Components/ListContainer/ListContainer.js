@@ -86,7 +86,11 @@ export class ListContainer extends Component {
             return this.state.getItemById(id);
         }
 
-        const strId = id.toString();
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return null;
+        }
+
         return this.state.items.find((item) => item && item.id.toString() === strId);
     }
 
@@ -95,7 +99,11 @@ export class ListContainer extends Component {
      * @param {number} id - identifier of item
      */
     getItemIndexById(id) {
-        const strId = id.toString();
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return null;
+        }
+
         return this.state.items.findIndex((item) => item && item.id.toString() === strId);
     }
 
@@ -203,7 +211,11 @@ export class ListContainer extends Component {
      * @param {string} id identifier of item
      */
     getListItemById(id) {
-        const strId = id.toString();
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return null;
+        }
+
         return this.listItems.find((item) => item.id.toString() === strId);
     }
 

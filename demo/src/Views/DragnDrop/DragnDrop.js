@@ -6,11 +6,13 @@ import {
     asArray,
 } from 'jezvejs';
 import { Sortable } from 'jezvejs/Sortable';
+import { SortableListContainer } from 'jezvejs/SortableListContainer';
 import { Icon } from 'jezvejs/Icon';
+import { initNavigation } from '../../app.js';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
-import { initNavigation } from '../../app.js';
+import { ListItem } from './impl/ListItem.js';
 import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
 import { XAxisDragZone } from './impl/XAxisDragZone.js';
 import './style.scss';
@@ -94,6 +96,13 @@ const getItemIdByElem = (elem) => {
 };
 
 // Sortable list
+const onItemClick = (id) => {
+    const listSortLog = ge('listSortLog');
+
+    logTo(listSortLog, `onItemClick() id: ${id}`);
+};
+
+// Sortable list
 const onListSort = (srcElem, destElem) => {
     const listSortLog = ge('listSortLog');
 
@@ -118,20 +127,28 @@ const renderListItem = (title = 'Item') => createElement('div', {
 });
 
 const initSortableList = () => {
-    const listSortable = ge('list_sortable');
+    const items = [];
     for (let i = 1; i <= 10; i += 1) {
-        const item = renderListItem(`Item ${i}`);
-        listSortable.append(item);
+        items.push({ id: i, title: `Item ${i}` });
     }
 
-    Sortable.create({
-        elem: 'list_sortable',
-        onInsertAt: onListSort,
-        selector: '.list_item',
+    const sortableList = SortableListContainer.create({
+        ItemComponent: ListItem,
+        items,
+        getItemProps: (item) => ({ ...item }),
+        className: 'list-area',
+        itemSelector: ListItem.selector,
+        itemSortSelector: ListItem.sortSelector,
+        sortModeClass: 'list-area_sort',
         placeholderClass: 'list_item_placeholder',
-        copyWidth: true,
-        group: 'list',
+        listMode: 'sort',
+        sortGroup: 'list',
+        onItemClick: (id, e) => onItemClick(id, e),
+        onSort: (id, pos) => onListSort(id, pos),
     });
+
+    const listContainer = ge('list_sortable');
+    listContainer.prepend(sortableList.elem);
 };
 
 // Exchangable lists

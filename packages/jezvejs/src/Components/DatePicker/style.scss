@@ -1,5 +1,7 @@
 /* Relative container of Date Picker */
 .dp__container {
+  --dp-header-font-size: 1rem;
+  --dp-header-font-weight: 400;
   --dp-bg-color: #ffffff;
   --dp-border-color: #000000;
   --dp-border-width: 2px;
@@ -13,6 +15,8 @@
   --dp-hl-color: #ffffff;
   --dp-nav-fill: #b0b0b0;
   --dp-nav-hover-fill: #80d0ff;
+  --dp-width: 19rem;
+  --dp-min-width: 300px;
 
   position: relative;
   max-width: 100%;
@@ -20,8 +24,11 @@
 
 /* View wrapper */
 .dp__wrapper {
+  display: flex;
+  flex-flow: column nowrap;
   position: absolute;
-  min-width: 300px;
+  min-width: var(--dp-min-width);
+  width: calc(var(--dp-width) + var(--dp-border-width) * 2);
   overflow: hidden;
   background-color: var(--dp-bg-color);
   color: var(--dp-text-color);
@@ -36,7 +43,10 @@
 }
 
 .dp__header {
+  display: grid;
+  grid-template-columns: 1fr 6fr 1fr;
   text-align: center;
+  align-items: center;
 }
 
 .dp__header_item {
@@ -44,23 +54,24 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  height: 2rem;
-  line-height: 2rem;
   cursor: pointer;
 }
 
 .dp__header_title {
-  width: 80%;
+  height: 2rem;
+  line-height: 2rem;
+  font-size: var(--dp-header-font-size);
+  font-weight: var(--dp-header-font-weight);
 }
 
 .dp__header_nav {
-  width: 10%;
+  aspect-ratio: 4 / 3;
 
   .dp__header_nav-icon {
-    width: 25%;
-    vertical-align: middle;
+    height: 32px;
+    width: 32px;
+    padding: 0.5rem;
     fill: var(--dp-nav-fill);
-    display: inline-block;
   }
 
   &.dp__header_nav-next .dp__header_nav-icon {
@@ -68,30 +79,68 @@
   }
 }
 
+/* View layer */
+.dp__view {
+  position: relative;
+  overflow: hidden;
+}
+
+.dp__slider {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  position: relative;
+  left: -100%;
+}
+
+/* Container of view cells */
+.dp__view-container {
+  display: grid;
+  flex-shrink: 0;
+  max-width: 100%;
+  min-width: var(--dp-min-width);
+  width: var(--dp-width);
+  transform: none;
+  transition-delay: 0s;
+  transform-origin: 0 0;
+}
+
 /* Common class for all kind of cells */
 .dp__cell {
-  display: inline-block;
-  box-sizing: border-box;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 4 / 3;
   color: var(--dp-text-color);
   border: 1px solid var(--dp-bg-color);
   background-color: var(--dp-bg-color);
 }
 
 /* Year view */
+.dp__year-view {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Year range view */
+.dp__year-range-view {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .dp__year-range-view__cell,
 .dp__year-view__cell {
-  width: 25%;
-  padding: 3% 4%;
+  padding: 0.25rem;
   font-weight: normal;
   font-size: 1.125rem;
-  line-height: 2rem;
+  line-height: 2.5rem;
   cursor: pointer;
 }
 
 /* Month view */
+.dp__month-view {
+  grid-template-columns: repeat(7, 1fr);
+}
+
 .dp__month-view_cell {
-  width: 14.2857%;
   font-weight: 400;
   padding: 0.2rem;
   font-size: 0.85rem;
@@ -100,13 +149,13 @@
 .dp__weekday-cell {
   text-align: center;
   font-weight: 500;
+  line-height: 1.4rem;
 }
 
 .dp__day-cell {
   font-size: 1rem;
-  text-align: right;
   cursor: pointer;
-  padding: 1.75% 4%;
+  padding: 0 0.6rem;
   line-height: 1.4rem;
 }
 
@@ -126,30 +175,6 @@
   background-color: var(--dp-hl-bg-color);
   border: 1px solid var(--dp-hl-bg-color);
   color: var(--dp-hl-color);
-}
-
-/* View layer */
-.dp__view {
-  position: relative;
-  overflow: hidden;
-}
-
-.dp__slider {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: flex-start;
-  width: fit-content;
-  position: relative;
-  left: -100%;
-}
-
-/* Container of view cells */
-.dp__view-container {
-  flex-shrink: 0;
-  max-width: 100%;
-  transform: none;
-  transition-delay: 0s;
-  transform-origin: 0 0;
 }
 
 /* Animation */
@@ -188,26 +213,6 @@
   &.bottom_to {
     z-index: 2;
     opacity: 0;
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .dp__container,
-  .dp__view-container {
-    width: 19rem;
-  }
-
-  .dp__wrapper {
-    width: calc(19rem + var(--dp-border-width) * 2);
-  }
-
-  .dp__day-cell {
-    padding: 0 0.6rem;
-  }
-
-  .dp__year-range-view__cell,
-  .dp__year-view__cell {
-    padding: 0.2rem;
   }
 }
 

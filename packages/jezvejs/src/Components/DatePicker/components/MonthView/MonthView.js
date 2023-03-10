@@ -12,7 +12,7 @@ import {
 import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from '../../utils.js';
 
 /* CSS classes */
-const VIEW_CONTAINER_CLASS = 'dp__view-container';
+const VIEW_CONTAINER_CLASS = 'dp__view-container dp__month-view';
 const CELL_CLASS = 'dp__cell';
 const OTHER_CELL_CLASS = 'dp__other-month-cell';
 const MONTH_CELL_CLASS = 'dp__month-view_cell';

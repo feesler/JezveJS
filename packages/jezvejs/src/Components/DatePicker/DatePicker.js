@@ -2,7 +2,6 @@ import '../../css/common.scss';
 import {
     ge,
     re,
-    createSVGElement,
     show,
     isDate,
     isFunction,
@@ -32,6 +31,7 @@ import {
     YEARRANGE_VIEW,
 } from './utils.js';
 import './style.scss';
+import { DatePickerHeader } from './components/Header/Header.js';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'dp__container';
@@ -39,13 +39,6 @@ const WRAPPER_CLASS = 'dp__wrapper';
 const SLIDER_CLASS = 'dp__slider';
 const STATIC_WRAPPER_CLASS = 'dp__static-wrapper';
 const CURRENT_CLASS = 'dp__current-view';
-/* Header */
-const HEADER_CLASS = 'dp__header';
-const HEADER_ITEM_CLASS = 'dp__header_item';
-const HEADER_TITLE_CLASS = 'dp__header_title';
-const HEADER_NAV_CLASS = 'dp__header_nav';
-const HEADER_NEXT_NAV_CLASS = 'dp__header_nav-next';
-const NAV_ICON_CLASS = 'dp__header_nav-icon';
 /* View */
 const VIEW_CLASS = 'dp__view';
 /* Animation */
@@ -59,8 +52,6 @@ const BOTTOM_TO_CLASS = 'bottom_to';
 
 const TRANSITION_END_TIMEOUT = 500;
 const SWIPE_THRESHOLD = 0.1;
-
-const NAV_ICON_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
 
 const defaultProps = {
     relparent: null,
@@ -130,7 +121,12 @@ export class DatePicker extends Component {
                 : relparent;
         }
 
-        const header = this.renderHead();
+        this.header = DatePickerHeader.create({
+            onClickTitle: () => this.zoomOut(),
+            onClickPrev: () => this.navigateToPrev(),
+            onClickNext: () => this.navigateToNext(),
+        });
+
         this.slider = createElement('div', { props: { className: SLIDER_CLASS } });
         this.cellsContainer = createElement('div', {
             props: { className: VIEW_CLASS },
@@ -139,7 +135,7 @@ export class DatePicker extends Component {
 
         this.wrapper = createElement('div', {
             props: { className: WRAPPER_CLASS },
-            children: [header, this.cellsContainer],
+            children: [this.header.elem, this.cellsContainer],
             events: {
                 click: (e) => this.onViewClick(e),
             },
@@ -166,6 +162,7 @@ export class DatePicker extends Component {
 
         this.observeSliderSize();
 
+        this.setClassNames();
         this.render(this.state);
     }
 
@@ -254,51 +251,6 @@ export class DatePicker extends Component {
         return isVisible(this.wrapper);
     }
 
-    renderNavIcon() {
-        return createSVGElement('svg', {
-            attrs: { class: NAV_ICON_CLASS, viewBox: '0 0 2.1 3.4' },
-            children: createSVGElement('path', { attrs: { d: NAV_ICON_PATH } }),
-        });
-    }
-
-    /**
-     * Render header element
-     */
-    renderHead() {
-        this.titleEl = createElement('div', {
-            props: { className: `${HEADER_ITEM_CLASS} ${HEADER_TITLE_CLASS}` },
-        });
-        this.navPrevElem = createElement('div', {
-            props: { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS}` },
-            children: this.renderNavIcon(),
-        });
-        this.navNextElem = createElement('div', {
-            props: { className: `${HEADER_ITEM_CLASS} ${HEADER_NAV_CLASS} ${HEADER_NEXT_NAV_CLASS}` },
-            children: this.renderNavIcon(),
-        });
-
-        const headTbl = createElement('div', {
-            props: { className: HEADER_CLASS },
-            children: [
-                this.navPrevElem,
-                this.titleEl,
-                this.navNextElem,
-            ],
-        });
-
-        return headTbl;
-    }
-
-    /**
-     * Set title
-     * @param {string} title - title text
-     */
-    setTitle(title) {
-        if (title && this.titleEl) {
-            this.titleEl.textContent = title;
-        }
-    }
-
     /**
      * Mouse whell event handler
      * @param {Event} e - wheel event object
@@ -325,19 +277,7 @@ export class DatePicker extends Component {
         if (!this.currView || this.waitingForAnimation) {
             return;
         }
-        // Header
-        if (this.titleEl.contains(e.target)) {
-            this.zoomOut();
-            return;
-        }
-        if (this.navPrevElem.contains(e.target)) {
-            this.navigateToPrev();
-            return;
-        }
-        if (this.navNextElem.contains(e.target)) {
-            this.navigateToNext();
-            return;
-        }
+
         // Cells
         const item = this.findViewItemByElem(e.target);
         if (!item) {
@@ -352,6 +292,10 @@ export class DatePicker extends Component {
     }
 
     navigateTo(state) {
+        if (!this.currView || this.waitingForAnimation) {
+            return;
+        }
+
         this.setState({ ...this.state, ...state });
 
         if (!this.props.animated) {
@@ -631,7 +575,7 @@ export class DatePicker extends Component {
         current.elem.classList.toggle(CURRENT_CLASS, true);
         next.elem.classList.toggle(CURRENT_CLASS, false);
 
-        this.setTitle(this.currView.title);
+        this.header.setTitle(this.currView.title);
     }
 
     getTargetViewByIndex(index) {

@@ -4,7 +4,7 @@ import { getShortMonthName, MONTHS_COUNT } from '../../../../js/DateUtils.js';
 import { getNextViewDate, getPrevViewDate, YEAR_VIEW } from '../../utils.js';
 
 /* CSS classes */
-const VIEW_CONTAINER_CLASS = 'dp__view-container';
+const VIEW_CONTAINER_CLASS = 'dp__view-container dp__year-view';
 const CELL_CLASS = 'dp__cell';
 const YEAR_CELL_CLASS = 'dp__year-view__cell';
 

@@ -39,6 +39,17 @@ const initStatic = () => {
     insertAfter(datePicker.elem, ge('staticDateInp'));
 };
 
+const initFillWidth = () => {
+    const datePicker = DatePicker.create({
+        static: true,
+        animated: true,
+        className: 'dp_full-width',
+        onDateSelect: (date) => formatDateToInput(date, 'fillWidthDateInp'),
+    });
+
+    insertAfter(datePicker.elem, ge('fillWidthDateInp'));
+};
+
 const initPopup = () => {
     const inpGroup = ge('dpPopupGroup');
     const datePicker = DatePicker.create({
@@ -140,6 +151,7 @@ const init = () => {
     initNavigation();
 
     initStatic();
+    initFillWidth();
     initPopup();
     initPosition();
     initRangeSelect();
