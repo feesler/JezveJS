@@ -118,6 +118,7 @@ export class PopupPosition {
             initialTop += scrollTop;
         }
         style.top = px(initialTop);
+        style.bottom = '';
 
         const scrollHeight = (scrollAvailable) ? scrollParent.scrollHeight : screenBottom;
 
@@ -217,8 +218,10 @@ export class PopupPosition {
                 if (fixedElement || absoluteParent) {
                     if (flip) {
                         style.bottom = px(flipBottom - distance);
+                        style.top = '';
                     } else {
                         style.top = px(initialTop - distance);
+                        style.bottom = '';
                     }
                 }
 

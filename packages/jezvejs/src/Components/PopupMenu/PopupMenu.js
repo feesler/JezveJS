@@ -160,6 +160,7 @@ export class PopupMenu extends Component {
         this.hostElem = null;
 
         show(this.elem, false);
+        PopupPosition.reset(this.elem);
         re(this.elem);
     }
 
