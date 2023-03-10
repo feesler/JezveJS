@@ -8,7 +8,7 @@ import {
 } from '../../utils.js';
 
 /* CSS classes */
-const VIEW_CONTAINER_CLASS = 'dp__view-container';
+const VIEW_CONTAINER_CLASS = 'dp__view-container dp__year-range-view';
 const CELL_CLASS = 'dp__cell';
 const OTHER_CELL_CLASS = 'dp__other-month-cell';
 const YEARRANGE_CELL_CLASS = 'dp__year-range-view__cell';

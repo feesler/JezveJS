@@ -166,6 +166,7 @@ export class DatePicker extends Component {
 
         this.observeSliderSize();
 
+        this.setClassNames();
         this.render(this.state);
     }
 

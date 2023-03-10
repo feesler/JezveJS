@@ -5,6 +5,14 @@
   --btn-hover-background: var(--action-btn-hover-bg);
 }
 
+.width-container {
+  max-width: 600px;
+}
+
+.dp_full-width {
+  --dp-width: 100%;
+}
+
 .right-container {
   width: 5rem;
   margin-left: auto;
