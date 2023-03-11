@@ -33,7 +33,7 @@ export class SortableListContainer extends ListContainer {
         }
 
         this.listSortable = Sortable.create({
-            onInsertAt: (...args) => this.onSort(...args),
+            onSort: (...args) => this.onSort(...args),
             elem: this.elem,
             group: state.sortGroup,
             selector: state.itemSortSelector,
@@ -46,13 +46,11 @@ export class SortableListContainer extends ListContainer {
 
     /**
      * Item reorder handler
-     * @param {Element} elem - element of moving item
-     * @param {Element} refElem - element of replaced item
-     * @param {Object} newPos - new position of element
+     * @param {Object} info - sort event information object
      */
-    onSort(elem, refElem, newPos) {
+    onSort(info) {
         if (this.state.treeSort) {
-            this.onTreeSort(elem, newPos);
+            this.onTreeSort(info);
             return;
         }
 
@@ -60,29 +58,24 @@ export class SortableListContainer extends ListContainer {
             return;
         }
 
-        const item = this.itemFromElem(elem);
-        if (!item) {
+        const itemId = this.itemIdFromElem(info.elem);
+        const parentId = this.itemIdFromElem(info.elem?.parentNode);
+        if (!itemId) {
             return;
         }
 
-        const prev = (this.props.ascending) ? newPos.prev : newPos.next;
-        const next = (this.props.ascending) ? newPos.next : newPos.prev;
-        const prevItem = this.itemFromElem(prev);
-        const nextItem = this.itemFromElem(next);
-        if (!prevItem && !nextItem) {
-            return;
-        }
+        const prev = (this.props.ascending) ? info.targetPos.prev : info.targetPos.next;
+        const next = (this.props.ascending) ? info.targetPos.next : info.targetPos.prev;
+        const prevId = this.itemIdFromElem(prev);
+        const nextId = this.itemIdFromElem(next);
 
-        let itemPos;
-        if (nextItem) {
-            itemPos = (item.pos < nextItem.pos)
-                ? (nextItem.pos - 1) // moving down
-                : nextItem.pos; // moving up
-        } else {
-            itemPos = prevItem.pos;
-        }
-
-        this.props.onSort(item.id, itemPos);
+        this.props.onSort({
+            ...info,
+            itemId,
+            parentId,
+            prevId,
+            nextId,
+        });
     }
 
     /**

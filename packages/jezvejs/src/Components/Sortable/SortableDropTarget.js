@@ -174,13 +174,20 @@ export class SortableDropTarget extends DropTarget {
             return;
         }
 
-        const newPos = avatar.getSortPosition();
-        if (
-            avatarInfo.initialPos.prev !== newPos.prev
-            || avatarInfo.initialPos.next !== newPos.next
-        ) {
-            avatarInfo.dragZone.onInsertAt(avatarInfo.dragZoneElem, avatarInfo.sortTarget, newPos);
+        const { initialPos } = avatarInfo;
+        const targetPos = avatar.getSortPosition();
+
+        if (initialPos.prev === targetPos.prev && initialPos.next === targetPos.next) {
+            return;
         }
+
+        avatarInfo.dragZone.onSortEnd({
+            e,
+            elem: avatarInfo.dragZoneElem,
+            initialPos,
+            targetPos,
+            targetElem: avatarInfo.sortTarget,
+        });
     }
 
     cancelSort(avatar, e) {

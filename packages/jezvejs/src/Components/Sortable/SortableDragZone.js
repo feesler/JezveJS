@@ -6,7 +6,7 @@ import { DragZone } from '../DragnDrop/DragZone.js';
 const defaultProps = {
     group: null,
     onDragStart: null,
-    onInsertAt: null,
+    onSort: null,
     table: false,
     copyWidth: false,
     selector: null,
@@ -52,7 +52,7 @@ export class SortableDragZone extends DragZone {
             return false;
         }
 
-        if (this.props && isFunction(this.props.onDragStart)) {
+        if (isFunction(this.props.onDragStart)) {
             this.props.onDragStart(avatar.dragZoneElem);
         }
 
@@ -133,17 +133,17 @@ export class SortableDragZone extends DragZone {
 
     // Return class for drag avatar element
     getDragClass() {
-        if (this.props && this.props.dragClass) {
+        if (this.props?.dragClass) {
             return (this.props.dragClass === true) ? 'drag' : this.props.dragClass;
         }
 
         return null;
     }
 
-    // Insert event handler
-    onInsertAt(srcElem, elem, newPos) {
-        if (this.props && isFunction(this.props.onInsertAt)) {
-            this.props.onInsertAt(srcElem, elem, newPos);
+    /** Sort done event handler */
+    onSortEnd(info) {
+        if (isFunction(this.props.onSort)) {
+            this.props.onSort(info);
         }
     }
 }
