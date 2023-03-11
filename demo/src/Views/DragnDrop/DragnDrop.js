@@ -79,7 +79,6 @@ const initSortable = () => {
 
     Sortable.create({
         elem: sortableContainer,
-        onInsertAt: () => { },
         selector: '.sortable-tile',
         placeholderClass: 'sortable-tile_placeholder',
         group: 'tiles',
@@ -103,20 +102,20 @@ const onItemClick = (id) => {
 };
 
 // Sortable list
-const onListSort = (srcElem, destElem) => {
+const onListSort = (info) => {
     const listSortLog = ge('listSortLog');
 
-    if (!srcElem) {
+    if (!info.elem) {
         logTo(listSortLog, 'Missing source item');
         return;
     }
-    if (!destElem) {
+    if (!info.targetElem) {
         logTo(listSortLog, 'Missing destination item');
         return;
     }
 
-    const srcId = getItemIdByElem(srcElem);
-    const destId = getItemIdByElem(destElem);
+    const srcId = getItemIdByElem(info.elem);
+    const destId = getItemIdByElem(info.targetElem);
 
     logTo(listSortLog, `srcId: ${srcId}; destId: ${destId}`);
 };
@@ -152,23 +151,23 @@ const initSortableList = () => {
 };
 
 // Exchangable lists
-const onExchange = (srcElem, destElem) => {
+const onExchange = (info) => {
     const exchangeLog = ge('exchangeLog');
 
-    if (!srcElem) {
+    if (!info.elem) {
         logTo(exchangeLog, 'Missing source item');
         return;
     }
-    if (!destElem) {
+    if (!info.targetElem) {
         logTo(exchangeLog, 'Missing destination item');
         return;
     }
 
-    const isContainer = destElem.matches('.list-area');
+    const isContainer = info.targetElem.matches('.list-area');
 
-    const srcId = getItemIdByElem(srcElem);
-    const destId = (isContainer) ? null : getItemIdByElem(destElem);
-    const destParent = (isContainer) ? destElem : destElem.parentNode;
+    const srcId = getItemIdByElem(info.elem);
+    const destId = (isContainer) ? null : getItemIdByElem(info.targetElem);
+    const destParent = (isContainer) ? info.targetElem : info.targetElem.parentNode;
 
     logTo(exchangeLog, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent.id}`);
 };
@@ -191,7 +190,7 @@ const initExchangable = () => {
 
     Sortable.create({
         elem: 'list_exch_1',
-        onInsertAt: onExchange,
+        onSort: onExchange,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         dragClass: true,
@@ -201,7 +200,7 @@ const initExchangable = () => {
     });
     Sortable.create({
         elem: 'list_exch_2',
-        onInsertAt: onExchange,
+        onSort: onExchange,
         selector: '.list_item',
         placeholderClass: 'list_item_placeholder',
         dragClass: 'list_item_drag',
@@ -249,11 +248,11 @@ const getTreeItemParentId = (elem) => {
     return tree?.id ?? null;
 };
 
-const onTreeSort = (srcElem, destElem, newPos) => {
-    const srdId = getTreeItemIdByElem(srcElem);
-    const parentId = getTreeItemParentId(srcElem);
-    const prevId = getTreeItemIdByElem(newPos.prev);
-    const nextId = getTreeItemIdByElem(newPos.next);
+const onTreeSort = (info) => {
+    const srdId = getTreeItemIdByElem(info.elem);
+    const parentId = getTreeItemParentId(info.elem);
+    const prevId = getTreeItemIdByElem(info.targetPos.prev);
+    const nextId = getTreeItemIdByElem(info.targetPos.next);
 
     logTo(ge('treeLog'), `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
 };
@@ -269,7 +268,7 @@ const initTree = () => {
 
     Sortable.create({
         elem: treeRoot,
-        onInsertAt: onTreeSort,
+        onSort: onTreeSort,
         selector: '.tree-item',
         containerSelector: '.tree-item__content',
         placeholderClass: 'tree-item__placeholder',
@@ -280,11 +279,11 @@ const initTree = () => {
     });
 };
 
-const onTreeExchange = (srcElem, destElem, newPos) => {
-    const srdId = getTreeItemIdByElem(srcElem);
-    const parentId = getTreeItemParentId(srcElem);
-    const prevId = getTreeItemIdByElem(newPos.prev);
-    const nextId = getTreeItemIdByElem(newPos.next);
+const onTreeExchange = (info) => {
+    const srdId = getTreeItemIdByElem(info.elem);
+    const parentId = getTreeItemParentId(info.elem);
+    const prevId = getTreeItemIdByElem(info.targetPos.prev);
+    const nextId = getTreeItemIdByElem(info.targetPos.next);
 
     logTo('treeExchLog', `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
 };
@@ -310,7 +309,7 @@ const initTreeExchange = () => {
 
     Sortable.create({
         elem: treeExch1,
-        onInsertAt: onTreeExchange,
+        onSort: onTreeExchange,
         selector: '.tree-item',
         containerSelector: '.tree-item__content',
         placeholderClass: 'tree-item__placeholder',
@@ -323,7 +322,7 @@ const initTreeExchange = () => {
 
     Sortable.create({
         elem: treeExch2,
-        onInsertAt: onTreeExchange,
+        onSort: onTreeExchange,
         selector: '.tree-item',
         containerSelector: '.tree-item__content',
         placeholderClass: 'tree-item__placeholder',
@@ -394,7 +393,7 @@ const initTableEachBody = () => {
 
     Sortable.create({
         elem: 'table_sortable',
-        onInsertAt: onTableSort,
+        onSort: onTableSort,
         selector: 'tbody',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl',
@@ -411,7 +410,7 @@ const initTableSingleBody = () => {
 
     Sortable.create({
         elem: 'table_sortable_2',
-        onInsertAt: () => { },
+        onSort: () => { },
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl2',
@@ -428,7 +427,7 @@ const initTableNoBody = () => {
 
     Sortable.create({
         elem: 'table_sortable_3',
-        onInsertAt: () => { },
+        onSort: () => { },
         selector: 'tr',
         placeholderClass: 'list_item_placeholder',
         group: 'tbl3',
