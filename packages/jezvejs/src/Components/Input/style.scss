@@ -20,6 +20,7 @@
 .input {
   flex: 1 1 auto;
   height: var(--input-height);
+  line-height: var(--input-height);
   padding: var(--input-padding);
   color: var(--input-color);
   background-color: var(--input-bg);
