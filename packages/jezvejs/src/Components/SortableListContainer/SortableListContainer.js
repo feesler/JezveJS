@@ -80,22 +80,21 @@ export class SortableListContainer extends ListContainer {
 
     /**
      * Tree item reorder handler
-     * @param {Element} elem - element of moving item
-     * @param {Object} newPos - new position of element
+     * @param {Object} info - sort event information object
      */
-    onTreeSort(elem, newPos) {
+    onTreeSort(info) {
         if (!isFunction(this.props.onTreeSort)) {
             return;
         }
 
-        const itemId = this.itemIdFromElem(elem);
-        const parentId = this.itemIdFromElem(elem?.parentNode);
+        const itemId = this.itemIdFromElem(info?.elem);
         if (!itemId) {
             return;
         }
 
-        const prevId = this.itemIdFromElem(newPos.prev);
-        const nextId = this.itemIdFromElem(newPos.next);
+        const parentId = this.itemIdFromElem(info.elem.parentNode);
+        const prevId = this.itemIdFromElem(info.targetPos?.prev);
+        const nextId = this.itemIdFromElem(info.targetPos?.next);
 
         this.props.onTreeSort(itemId, parentId, prevId, nextId);
     }
