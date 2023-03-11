@@ -140,6 +140,7 @@
 }
 
 /* Focused buttons */
+.input-group__input:focus,
 .input-group__btn:focus,
 .input-group__inner-btn:focus {
   z-index: 2;

@@ -19,7 +19,7 @@ const initDynamic = () => {
 
     const input = createElement('input', {
         props: {
-            className: 'input-group__input stretch-input',
+            className: 'input input-group__input stretch-input',
             type: 'text',
         },
     });
