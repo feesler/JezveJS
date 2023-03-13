@@ -15,6 +15,9 @@ export const isVisibleItem = (item, state) => (
 /** Returns array of visible items */
 export const getVisibleItems = (state) => (
     Array.isArray(state?.items)
-        ? state.items.filter((item) => isVisibleItem(item, state))
+        ? state.items.filter((item) => (
+            (item.isGroup && getVisibleItems(item).length > 0)
+            || isVisibleItem(item, state)
+        ))
         : []
 );

@@ -23,6 +23,22 @@ export const clearTest = async (name) => {
     await test(`[DropDown] Clear selection of ${name}`, () => App.view.clearSelection(name));
 };
 
+export const toggleEnableFilter = async () => {
+    await test('[DropDown] Toggle enable filter', () => App.view.toggleEnableFilter());
+};
+
+export const toggleEnableMultiFilter = async () => {
+    await test('[DropDown] Toggle enable filter multiple select', () => (
+        App.view.toggleEnableMultiFilter()
+    ));
+};
+
+export const filterTest = async (name, value) => {
+    assert.isString(name, 'Invalid name of component');
+
+    await test(`[DropDown] Filter ${name} by '${value}'`, () => App.view.filter(name, value));
+};
+
 export const addItemTest = async () => {
     await test('[DropDown] Add item', () => App.view.addItem());
 };
