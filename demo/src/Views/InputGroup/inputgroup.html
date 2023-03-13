@@ -37,6 +37,7 @@
                                 <li><a href="#button" class="toc-menu-link">Input group with button</a></li>
                                 <li><a href="#multipleInputs" class="toc-menu-link">Multiple inputs</a></li>
                                 <li><a href="#innerButton" class="toc-menu-link">Inner buttons</a></li>
+                                <li><a href="#outerContainer" class="toc-menu-link">Input outer container</a></li>
                                 <li><a href="#disabled" class="toc-menu-link">Disabled</a></li>
                                 <li><a href="#create" class="toc-menu-link">Create</a></li>
                             </ul>
@@ -150,20 +151,40 @@
                                         <div class="input-group__btn-title">.00</div>
                                     </button>
                                 </div>
+                            </section>
+
+                            <h2 id="outerContainer">Input outer container</h2>
+                            <section>
+                                <div class="input-group">
+                                    <div class="input-group__input-outer">
+                                        <input class="input input-group__input stretch-input amount-input" type="text"
+                                            autocomplete="off">
+                                        <button class="btn input-group__inner-btn" type="button">
+                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                                <use xlink:href="#close-icon"></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <button class="btn input-group__btn" type="button">
+                                        <div class="input-group__btn-title">.00</div>
+                                    </button>
+                                </div>
 
                                 <div class="input-group">
-                                    <button class="btn input-group__inner-btn" type="button">
-                                        <svg class="btn__icon" viewBox="0 0 14 14">
-                                            <use xlink:href="#close-icon"></use>
-                                        </svg>
-                                    </button>
-                                    <button class="btn input-group__inner-btn" type="button">
-                                        <svg class="btn__icon" viewBox="0 0 14 14">
-                                            <use xlink:href="#close-icon"></use>
-                                        </svg>
-                                    </button>
-                                    <input class="input input-group__input stretch-input amount-input" type="text"
-                                        autocomplete="off">
+                                    <div class="input-group__input-outer">
+                                        <button class="btn input-group__inner-btn" type="button">
+                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                                <use xlink:href="#close-icon"></use>
+                                            </svg>
+                                        </button>
+                                        <button class="btn input-group__inner-btn" type="button">
+                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                                <use xlink:href="#close-icon"></use>
+                                            </svg>
+                                        </button>
+                                        <input class="input input-group__input stretch-input amount-input" type="text"
+                                            autocomplete="off">
+                                    </div>
                                     <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">.00</div>
                                     </button>

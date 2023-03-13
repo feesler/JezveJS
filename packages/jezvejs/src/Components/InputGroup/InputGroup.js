@@ -1,28 +1,12 @@
 import { Component } from '../../js/Component.js';
-import { createElement, setEvents } from '../../js/common.js';
+import { asArray, createElement } from '../../js/common.js';
 import '../../css/common.scss';
 import './style.scss';
 
 /** CSS classes */
 const CONTAINER_CLASS = 'input-group';
-const INNER_BUTTON_CLASS = 'input-group__inner-btn';
-const INNER_BTN_ACTIVE_CLASS = 'input-group__inner-btn_active';
 
-const textInputTypes = [
-    'date',
-    'datetime',
-    'datetime-local',
-    'email',
-    'month',
-    'number',
-    'password',
-    'search',
-    'tel',
-    'text',
-    'time',
-    'url',
-];
-
+/** Input group component */
 export class InputGroup extends Component {
     constructor(props) {
         super(props);
@@ -32,63 +16,25 @@ export class InputGroup extends Component {
         } else {
             this.init();
         }
+        this.postInit();
     }
 
     init() {
-        if (!Array.isArray(this.props.children)) {
-            this.props.children = [this.props.children];
-        }
-
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-        this.elem.append(...this.props.children);
-        this.queryInputs();
 
-        this.setClassNames();
-        this.setHandlers();
+        this.props.children = asArray(this.props.children).filter((item) => !!item);
+        if (this.props.children.length > 0) {
+            this.elem.append(...this.props.children);
+        }
     }
 
     parse() {
         if (!this.elem?.classList?.contains(CONTAINER_CLASS)) {
             throw new Error('Invalid element');
         }
+    }
 
-        this.queryInputs();
-
+    postInit() {
         this.setClassNames();
-        this.setHandlers();
-    }
-
-    queryInputs() {
-        const allInputs = Array.from(this.elem.querySelectorAll('input'));
-        this.inputs = allInputs.filter(
-            (input) => textInputTypes.includes(input.type.toLowerCase()),
-        );
-    }
-
-    setHandlers() {
-        const handlers = {
-            focus: (e) => this.onFocus(e),
-            blur: (e) => this.onBlur(e),
-        };
-
-        this.inputs.forEach((input) => setEvents(input, handlers));
-    }
-
-    onFocus(e) {
-        const input = e.target;
-        let prevElem = input.previousElementSibling;
-        while (prevElem?.classList?.contains(INNER_BUTTON_CLASS)) {
-            prevElem.classList.add(INNER_BTN_ACTIVE_CLASS);
-            prevElem = prevElem.previousElementSibling;
-        }
-    }
-
-    onBlur(e) {
-        const input = e.target;
-        let prevElem = input.previousElementSibling;
-        while (prevElem?.classList?.contains(INNER_BUTTON_CLASS)) {
-            prevElem.classList.remove(INNER_BTN_ACTIVE_CLASS);
-            prevElem = prevElem.previousElementSibling;
-        }
     }
 }
