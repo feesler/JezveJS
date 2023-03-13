@@ -40,7 +40,7 @@
   border-width: var(--input-border-width);
   border-color: var(--input-border-color);
 
-  &:placeholder {
+  &::placeholder {
     color: var(--input-placeholder-color) !important;
     font-weight: var(--input-font-weight) !important;
   }
@@ -53,7 +53,7 @@
   background-color: var(--input-disabled-bg);
   border-color: var(--input-disabled-border);
 
-  &:placeholder {
+  &::placeholder {
     color: var(--input-disabled-color) !important;
     font-weight: var(--input-font-weight) !important;
   }
