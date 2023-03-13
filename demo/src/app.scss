@@ -232,6 +232,12 @@ a:visited {
   }
 }
 
+/* Section header */
+.content-container h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+
 section {
   display: flex;
   flex-flow: column nowrap;
