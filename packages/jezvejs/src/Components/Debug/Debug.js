@@ -1,7 +1,7 @@
 import { createElement, isFunction } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
-import './debug.scss';
+import './Debug.scss';
 
 const defaultProps = {
     className: 'bottom left',

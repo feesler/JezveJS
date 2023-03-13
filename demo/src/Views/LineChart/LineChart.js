@@ -9,7 +9,7 @@ import {
 import { LineChart } from 'jezvejs/LineChart';
 import { initNavigation } from '../../app.js';
 import largeData from '../Histogram/largeData.json';
-import './style.scss';
+import './LineChartView.scss';
 
 const chartData = {
     values: [

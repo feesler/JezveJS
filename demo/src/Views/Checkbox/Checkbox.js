@@ -4,7 +4,7 @@ import { ge, onReady, setEvents } from 'jezvejs';
 import { Checkbox } from 'jezvejs/Checkbox';
 import { Radio } from 'jezvejs/Radio';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './CheckboxView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

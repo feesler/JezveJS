@@ -10,7 +10,7 @@ import {
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
 import { Icon } from '../Icon/Icon.js';
-import './style.scss';
+import './LinkMenu.scss';
 
 const CONTAINER_CLASS = 'link-menu';
 const ITEM_CLASS = 'link-menu-item';

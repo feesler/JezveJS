@@ -13,7 +13,7 @@ import { Popup } from 'jezvejs/Popup';
 import { initNavigation } from '../../app.js';
 import { CustomListItem } from './impl/CustomListItem.js';
 import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
-import './style.scss';
+import './DropDownView.scss';
 
 const initItems = (title, count, startFrom = 1) => {
     const res = [];

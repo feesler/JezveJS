@@ -7,7 +7,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Icon } from '../Icon/Icon.js';
-import './style.scss';
+import './Button.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'btn';

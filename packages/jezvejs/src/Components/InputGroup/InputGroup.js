@@ -1,7 +1,7 @@
 import { Component } from '../../js/Component.js';
 import { asArray, createElement } from '../../js/common.js';
 import '../../css/common.scss';
-import './style.scss';
+import './InputGroup.scss';
 
 /** CSS classes */
 const CONTAINER_CLASS = 'input-group';

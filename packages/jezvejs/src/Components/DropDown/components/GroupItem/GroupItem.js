@@ -1,7 +1,7 @@
 import { createElement } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import { isVisibleItem } from '../../utils.js';
-import './style.scss';
+import './GroupItem.scss';
 
 /* CSS classes */
 const GROUP_CLASS = 'dd__list-group';

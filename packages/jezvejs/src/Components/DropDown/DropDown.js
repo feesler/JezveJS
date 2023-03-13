@@ -33,7 +33,7 @@ import { DropDownMultiSelectionItem } from './components/MultiSelectionItem/Mult
 import { DropDownClearButton } from './components/ClearButton/ClearButton.js';
 import { DropDownToggleButton } from './components/ToggleButton/ToggleButton.js';
 import '../../css/common.scss';
-import './style.scss';
+import './DropDown.scss';
 
 /* CSS classes */
 /* Container */

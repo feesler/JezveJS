@@ -8,7 +8,7 @@ import {
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './PopupMenuView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

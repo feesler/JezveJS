@@ -3,7 +3,7 @@ import { ge, onReady } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './InputView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

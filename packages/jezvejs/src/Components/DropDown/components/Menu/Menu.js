@@ -5,7 +5,7 @@ import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
 import { DropDownInput } from '../Input/Input.js';
 import { DropDownListItem } from '../ListItem/ListItem.js';
 import { DropDownMenuList } from '../MenuList/MenuList.js';
-import './style.scss';
+import './Menu.scss';
 
 /* CSS classes */
 const LIST_CLASS = 'dd__list';

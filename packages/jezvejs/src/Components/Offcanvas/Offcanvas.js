@@ -6,7 +6,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
-import './style.scss';
+import './Offcanvas.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'offcanvas';

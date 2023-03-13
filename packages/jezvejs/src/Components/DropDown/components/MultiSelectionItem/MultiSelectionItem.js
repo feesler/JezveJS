@@ -1,7 +1,7 @@
 import { createElement } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import { CloseButton } from '../../../CloseButton/CloseButton.js';
-import './style.scss';
+import './MultiSelectionItem.scss';
 
 /* CSS classes */
 const SELECTION_ITEM_CLASS = 'dd__selection-item';

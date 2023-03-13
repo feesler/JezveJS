@@ -8,7 +8,7 @@ import {
 } from 'jezvejs';
 import { InputGroup } from 'jezvejs/InputGroup';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './InputGroupView.scss';
 
 const initParsed = () => {
     const allInputs = Array.from(document.querySelectorAll('.input-group'));

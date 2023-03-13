@@ -1,6 +1,6 @@
 import { getClassNames } from '../../js/common.js';
 import { Popup } from '../Popup/Popup.js';
-import './style.scss';
+import './Notification.scss';
 
 const NOTIFICATION_CLASS = 'notification';
 const DEFAULT_CLASS = 'default';

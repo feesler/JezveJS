@@ -8,7 +8,7 @@ import {
 } from 'jezvejs';
 import { Slider } from 'jezvejs/Slider';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './SliderView.scss';
 
 const createSlideContent = (text) => createElement('div', {
     props: { className: 'slide-content', textContent: text },

@@ -6,7 +6,7 @@ import {
     setProps,
 } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
-import './style.scss';
+import './Input.scss';
 
 /* CSS classes */
 const INPUT_CLASS = 'dd__input';

@@ -7,7 +7,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
-import './style.scss';
+import './Collapsible.scss';
 
 const CONTAINER_CLASS = 'collapsible';
 const CONTENT_CLASS = 'collapsible-content';

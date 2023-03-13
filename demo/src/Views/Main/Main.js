@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { onReady } from 'jezvejs';
 import { renderVersion, renderNavigationMenu } from '../../app.js';
 import '../../app.scss';
-import './style.scss';
+import './MainView.scss';
 
 const init = () => {
     const navMenu = renderNavigationMenu();

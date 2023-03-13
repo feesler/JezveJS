@@ -9,7 +9,7 @@ import {
 import { Histogram } from 'jezvejs/Histogram';
 import { initNavigation } from '../../app.js';
 import largeData from './largeData.json';
-import './style.scss';
+import './HistogramView.scss';
 
 const chartData = {
     values: [

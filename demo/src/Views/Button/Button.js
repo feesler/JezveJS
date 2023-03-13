@@ -4,7 +4,7 @@ import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './ButtonView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

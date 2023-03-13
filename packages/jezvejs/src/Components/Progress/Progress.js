@@ -1,7 +1,7 @@
 import { createElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
-import './style.scss';
+import './Progress.scss';
 
 /** CSS classes */
 const CONTAINER_CLASS = 'progress';

@@ -3,7 +3,7 @@ import {
     createSVGElement,
 } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
-import './style.scss';
+import './ListItem.scss';
 
 /* CSS classes */
 const LIST_ITEM_CLASS = 'dd__list-item';

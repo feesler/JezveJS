@@ -5,7 +5,7 @@ import { Progress } from 'jezvejs/Progress';
 import { IndetermProgress } from 'jezvejs/IndetermProgress';
 import { Spinner } from 'jezvejs/Spinner';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './ProgressView.scss';
 
 const initDefaultProgress = () => {
     const section = ge('defaultProgress');

@@ -9,7 +9,7 @@ import {
     createElement,
 } from 'jezvejs';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './CommonTestsView.scss';
 
 let restbl = null;
 let totalRes = null;

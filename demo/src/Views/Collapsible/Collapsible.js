@@ -9,7 +9,7 @@ import {
 import { Collapsible } from 'jezvejs/Collapsible';
 import { Icon } from 'jezvejs/Icon';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './CollapsibleView.scss';
 
 const CUSTOM_BTN_CLASS = 'custom-header-btn';
 const CUSTOM_ICON_CLASS = 'custom-header-icon';

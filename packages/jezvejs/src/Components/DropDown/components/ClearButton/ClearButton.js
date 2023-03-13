@@ -1,6 +1,6 @@
 import { getClassNames } from '../../../../js/common.js';
 import { CloseButton } from '../../../CloseButton/CloseButton.js';
-import './style.scss';
+import './ClearButton.scss';
 
 /* CSS classes */
 const BUTTON_CLASS = 'dd__clear-btn';

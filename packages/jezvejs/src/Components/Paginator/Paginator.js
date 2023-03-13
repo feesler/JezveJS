@@ -7,7 +7,7 @@ import {
     createElement,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import './style.scss';
+import './Paginator.scss';
 
 const defaultProps = {
     id: undefined,

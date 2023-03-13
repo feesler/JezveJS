@@ -16,7 +16,7 @@ import {
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 import '../../css/common.scss';
-import './style.scss';
+import './BaseChart.scss';
 
 /* CSS classes */
 const CHART_CLASS = 'chart';

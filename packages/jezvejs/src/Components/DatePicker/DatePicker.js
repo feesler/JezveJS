@@ -19,6 +19,7 @@ import { isSameYearMonth } from '../../js/DateUtils.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { Slidable } from '../Slidable/Slidable.js';
+import { DatePickerHeader } from './components/Header/Header.js';
 import { DatePickerMonthView } from './components/MonthView/MonthView.js';
 import { DatePickerYearView } from './components/YearView/YearView.js';
 import { DatePickerYearRangeView } from './components/YearRangeView/YearRangeView.js';
@@ -30,8 +31,7 @@ import {
     YEAR_VIEW,
     YEARRANGE_VIEW,
 } from './utils.js';
-import './style.scss';
-import { DatePickerHeader } from './components/Header/Header.js';
+import './DatePicker.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'dp__container';
