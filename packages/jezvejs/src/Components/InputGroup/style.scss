@@ -7,11 +7,9 @@
   --ig-border-color: #ced4da;
 
   /* Input element */
-  --ig-input-color: #000000;
   --ig-input-bg: #ffffff;
 
   /* Disabled input element */
-  --ig-input-disabled-color: #a0a0a0;
   --ig-input-disabled-bg: #eeeeee;
   --ig-input-disabled-border: #ced4da;
 
@@ -22,16 +20,6 @@
   --ig-text-color: #2c2c2c;
   --ig-text-border: #ced4da;
   --ig-text-bg: #dfdfdf;
-
-  /* Buttons */
-  --ig-button-color: #ffffff;
-  --ig-button-border: #0062a8;
-  --ig-button-bg: #0072c6;
-
-  /* Disabled buttons */
-  --ig-button-disabled-color: #2c2c2c;
-  --ig-button-disabled-border: #ced4da;
-  --ig-button-disabled-bg: #dfdfdf;
 
   /* Inner buttons */
   --ig-inner-button-color: #888888;
@@ -47,7 +35,6 @@
 
 .input-group__input,
 .input-group__text,
-.input-group__btn,
 .input-group__inner-btn {
   box-sizing: border-box;
   margin: 0;
@@ -61,9 +48,6 @@
 /* Input element */
 .input-group__input {
   flex-shrink: 1;
-  color: var(--ig-input-color);
-  background-color: var(--ig-input-bg);
-  padding: 0 0.5rem;
 }
 
 /* Input group text */
@@ -91,27 +75,27 @@
 }
 
 /* Input group button */
-.input-group__btn,
-.input-group__btn:focus {
+.btn.input-group__btn {
+  --btn-size: var(--ig-height);
+  --btn-padding: 0;
+
   min-width: var(--ig-height);
   margin: 0;
-  padding: 0;
-  color: var(--ig-button-color);
-  border-color: var(--ig-button-border);
-  background-color: var(--ig-button-bg);
 }
 
 /* Inner button */
-.input-group__inner-btn,
-.input-group__inner-btn:focus {
-  padding: 0 0.25rem;
-  background-color: var(--ig-input-bg);
-}
-
-.input-group__inner-btn__icon {
-  width: 14px;
-  height: 14px;
-  fill: var(--ig-inner-button-color);
+.btn.input-group__inner-btn {
+  --btn-background: var(--ig-input-bg);
+  --btn-padding: 0 0.25rem;
+  --btn-icon-size: 14px;
+  --btn-icon-color: var(--ig-inner-button-color);
+  --btn-border-color: var(--ig-border-color);
+  --btn-hover-border-color: var(--ig-border-color);
+  --btn-hover-background: var(--ig-input-bg);
+  --btn-hover-icon-color: var(--ig-inner-button-active-color);
+  --btn-focus-icon-color: var(--ig-inner-button-active-color);
+  --btn-focus-border-color: var(--ig-border-color);
+  --btn-focus-background: var(--ig-input-bg);
 }
 
 /* Borders of first element of groups */
@@ -144,34 +128,12 @@
 .input-group__btn:focus,
 .input-group__inner-btn:focus {
   z-index: 2;
-  box-shadow: 0 0 0 0.25rem var(--ig-focus-shadow);
-}
-
-.input-group__inner-btn:focus .input-group__inner-btn__icon {
-  fill: var(--ig-inner-button-active-color);
 }
 
 /* Highlight border of inner buttons for focused input */
 .input-group__input:focus ~ .input-group__inner-btn,
 .input-group__inner-btn_active {
   border-color: var(--ig-input-active-border);
-}
-
-/* Disabled input */
-.input-group__input[disabled] {
-  color: var(--ig-input-disabled-color);
-  -webkit-text-fill-color: var(--ig-input-disabled-color);
-  background-color: var(--ig-input-disabled-bg);
-  border-color: var(--ig-input-disabled-border);
-}
-
-/* Disabled buttons */
-.input-group__btn[disabled] {
-  cursor: default;
-  pointer-events: none;
-  color: var(--ig-button-disabled-color);
-  border-color: var(--ig-button-disabled-border);
-  background-color: var(--ig-button-disabled-bg);
 }
 
 .input-group__inner-btn[disabled] {
@@ -195,10 +157,4 @@
   height: 100%;
   line-height: 100%;
   white-space: nowrap;
-}
-
-@media (hover: hover) {
-  .input-group__inner-btn:hover .input-group__inner-btn__icon {
-    fill: var(--ig-inner-button-active-color);
-  }
 }

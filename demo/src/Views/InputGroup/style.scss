@@ -10,3 +10,17 @@
 .amount-input {
   text-align: right;
 }
+
+/* Input group button */
+.btn.input-group__btn,
+.btn.input-group__btn:focus {
+  --btn-title-color: #ffffff;
+  --btn-background: var(--action-btn-bg);
+  --btn-border-style: solid;
+  --btn-border-color: #0062a8;
+  --btn-hover-background: var(--action-btn-hover-bg);
+  --btn-active-background: var(--action-btn-active-bg);
+
+  min-width: var(--ig-height);
+  margin: 0;
+}
