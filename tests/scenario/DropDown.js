@@ -15,6 +15,8 @@ export const dropDownTests = async () => {
 
     setBlock('Drop Down component', 1);
 
+    setBlock('Single item select', 2);
+
     await DropDownTests.selectTest('inlineDropDown', '2');
     await DropDownTests.selectTest('editableInlineDropDown', '3');
     await DropDownTests.selectTest('fullWidthDropDown', '1');
@@ -42,6 +44,8 @@ export const dropDownTests = async () => {
         )));
     await DropDownTests.selectTest('attachedToInlineDropDown', '3');
 
+    setBlock('Multiple items select', 2);
+
     const expectedSelectedItems = [
         { id: '1', title: 'Item 1' },
         { id: '2', title: 'Item 2' },
@@ -64,6 +68,24 @@ export const dropDownTests = async () => {
 
     await DropDownTests.deselectTest('multiSelDropDown', '5');
     await DropDownTests.clearTest('multiSelDropDown');
+
+    setBlock('Filter items', 2);
+
+    await DropDownTests.toggleEnableFilter();
+    await DropDownTests.filterTest('filterDropDown', '1');
+    await DropDownTests.filterTest('filterDropDown', '10');
+    await DropDownTests.filterTest('filterDropDown', '100');
+
+    await DropDownTests.toggleEnableMultiFilter();
+    await DropDownTests.filterTest('multiFilterDropDown', '1');
+    await DropDownTests.filterTest('multiFilterDropDown', '10');
+    await DropDownTests.filterTest('multiFilterDropDown', '100');
+
+    await DropDownTests.filterTest('groupsFilterDropDown', '1');
+    await DropDownTests.filterTest('groupsFilterDropDown', '10');
+    await DropDownTests.filterTest('groupsFilterDropDown', '100');
+
+    setBlock('Component methods', 2);
 
     await DropDownTests.addRemoveItemsTest();
 };

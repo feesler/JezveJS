@@ -20,6 +20,8 @@ const dropDownSelectors = {
     genMultiSelDropDown: '#selinp6',
     disabledDropDown: '#selinp7',
     filterDropDown: '#selinp8',
+    multiFilterDropDown: '#multiSelFilterInp',
+    groupsFilterDropDown: '#groupFilterInp',
     customDropDown: '#selinp10',
     nativeSelDropDown: '#selinp11',
     fullscreenDropDown: '#selinp12',
@@ -29,6 +31,8 @@ const dropDownSelectors = {
 const elemSelectors = {
     enableBtn: '#enableBtn',
     enableCustomBtn: '#enableCustomBtn',
+    enableFilterBtn: '#enableFilterBtn',
+    enableMultiFilterBtn: '#enableMultiFilterBtn',
     addItemBtn: '#addBtn',
     addDisabledItemBtn: '#addDisBtn',
     addHiddenItemBtn: '#addHiddenBtn',
@@ -121,6 +125,49 @@ export class DropDownView extends AppView {
 
         const selected = dropdown.getSelectedValues();
         assert.exactMeet(selected, expSelected);
+        return true;
+    }
+
+    async toggleEnableFilter() {
+        const expected = {
+            filterDropDown: {
+                visible: true,
+                disabled: !this.content.filterDropDown.disabled,
+            },
+        };
+
+        await this.performAction(() => click(this.content.enableFilterBtn));
+
+        return this.checkState(expected);
+    }
+
+    async toggleEnableMultiFilter() {
+        const expected = {
+            multiFilterDropDown: {
+                visible: true,
+                disabled: !this.content.multiFilterDropDown.disabled,
+            },
+        };
+
+        await this.performAction(() => click(this.content.enableMultiFilterBtn));
+
+        return this.checkState(expected);
+    }
+
+    async filter(name, value) {
+        let dropdown = this.getComponentByName(name);
+
+        const lValue = value.toLowerCase();
+        const expVisible = dropdown.items.filter((item) => (
+            item.text.toLowerCase().includes(lValue)
+        ));
+
+        await this.performAction(() => dropdown.filter(value));
+
+        dropdown = this.getComponentByName(name);
+
+        const visible = dropdown.getVisibleItems();
+        assert.exactMeet(visible, expVisible);
         return true;
     }
 

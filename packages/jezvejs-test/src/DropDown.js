@@ -10,6 +10,7 @@ import {
     closest,
     evaluate,
     asArray,
+    input,
 } from 'jezve-test';
 
 export class DropDown extends TestComponent {
@@ -56,11 +57,13 @@ export class DropDown extends TestComponent {
             res.isAttached,
             res.disabled,
             res.isMulti,
+            res.editable,
             res.value,
         ] = await evaluate((elem, select) => ([
             elem.classList.contains('dd__container_attached'),
             elem.hasAttribute('disabled'),
             select.hasAttribute('multiple'),
+            elem.classList.contains('dd__editable'),
             select.value,
         ]), this.elem, res.selectElem);
 
@@ -71,18 +74,18 @@ export class DropDown extends TestComponent {
         }
         assert(res.toggleBtn, 'Select button not found');
 
+        res.inputElem = await query(this.elem, 'input[type="text"]');
+
         if (!res.isAttached) {
             res.statSel = await query(this.elem, '.dd__single-selection');
             assert(res.statSel, 'Static select element not found');
-            res.inputElem = await query(this.elem, 'input[type="text"]');
             assert(res.inputElem, 'Input element not found');
+        }
 
-            res.editable = await isVisible(res.inputElem);
-            if (res.editable) {
-                res.textValue = await prop(res.inputElem, 'value');
-            } else {
-                res.textValue = await prop(res.statSel, 'textContent');
-            }
+        if (res.editable) {
+            res.textValue = await prop(res.inputElem, 'value');
+        } else if (res.statSel) {
+            res.textValue = await prop(res.statSel, 'textContent');
         }
 
         if (res.isMulti) {
@@ -98,18 +101,10 @@ export class DropDown extends TestComponent {
                 deselectBtn: deselectButtons[ind],
             }));
             res.selectedItems = await asyncMap(selItems, async ({ elem, deselectBtn }) => {
-                const item = await evaluate((el) => {
-                    let title = el.textContent;
-                    const closePos = title.indexOf('×');
-                    if (closePos !== -1) {
-                        title = title.substring(0, closePos);
-                    }
-
-                    return {
-                        id: el.dataset.id,
-                        title,
-                    };
-                }, elem);
+                const item = await evaluate((el) => ({
+                    id: el.dataset.id,
+                    title: el.textContent.trim(),
+                }), elem);
                 item.deselectBtn = deselectBtn;
 
                 return item;
@@ -229,6 +224,10 @@ export class DropDown extends TestComponent {
         return this.getSelectedItems().map((item) => item.id);
     }
 
+    getVisibleItems() {
+        return this.content.items.filter((item) => !item.hidden);
+    }
+
     async showList(show = true) {
         assert(!this.content.disabled, 'Component is disabled');
 
@@ -336,5 +335,12 @@ export class DropDown extends TestComponent {
         }
 
         await this.showList(false);
+    }
+
+    async filter(value) {
+        assert(!this.content.disabled, 'Component is disabled');
+        assert(this.content.editable, 'Component is not editable');
+
+        await input(this.content.inputElem, value);
     }
 }
