@@ -69,6 +69,7 @@ const defaultProps = {
     form: undefined,
     multi: false,
     listAttach: false,
+    isValidToggleTarget: null,
     fixedMenu: false,
     enableFilter: false,
     openOnFocus: false,
@@ -705,6 +706,7 @@ export class DropDown extends Component {
             || this.isMenuTarget(e.target)
             || this.isClearButtonTarget(e.target)
             || this.isSelectionItemDeleteButtonTarget(e.target)
+            || !this.isValidToggleTarget(e.target)
         ) {
             return;
         }
@@ -1062,6 +1064,14 @@ export class DropDown extends Component {
     isSelectionItemDeleteButtonTarget(elem) {
         const { MultiSelectionItem } = this.props.components;
         return elem?.closest(`.${MultiSelectionItem.buttonClass}`);
+    }
+
+    /** Returns true if element is allowed to toggle menu list */
+    isValidToggleTarget(elem) {
+        return (
+            !isFunction(this.props.isValidToggleTarget)
+            || this.props.isValidToggleTarget(elem)
+        );
     }
 
     /** Return selected items data for 'itemselect' and 'change' events */
