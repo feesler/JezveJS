@@ -8,11 +8,12 @@
   padding: var(--dd-input-padding);
   margin: 0;
   height: var(--dd-combo-content-height);
+  line-height: var(--dd-combo-content-height);
   min-width: 50px;
   background: var(--dd-input-bg);
   color: var(--dd-input-text);
 
-  &:placeholder {
+  &::placeholder {
     color: var(--dd-placeholder) !important;
     font-weight: var(--dd-input-font-weight) !important;
   }
@@ -28,7 +29,7 @@
   color: var(--dd-active-input-text);
   background-color: var(--dd-active-input-bg);
 
-  &:placeholder {
+  &::placeholder {
     color: var(--dd-active-placeholder) !important;
   }
 }
@@ -41,7 +42,7 @@
     color: var(--dd-disabled-input-text);
     -webkit-text-fill-color: var(--dd-disabled-input-text);
 
-    &:placeholder {
+    &::placeholder {
       color: var(--dd-disabled-input-text) !important;
       font-weight: var(--dd-input-font-weight) !important;
     }

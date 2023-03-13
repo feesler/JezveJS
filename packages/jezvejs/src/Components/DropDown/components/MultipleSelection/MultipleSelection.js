@@ -1,7 +1,7 @@
 import { deepMeet } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 import { DropDownMultiSelectionItem } from '../MultiSelectionItem/MultiSelectionItem.js';
-import './style.scss';
+import './MultipleSelection.scss';
 
 const defaultProps = {
     ItemComponent: DropDownMultiSelectionItem,

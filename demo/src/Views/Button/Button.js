@@ -4,7 +4,7 @@ import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './ButtonView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');
@@ -54,6 +54,14 @@ const initStatic = () => {
         icon: 'del',
     });
     ge('staticBtn').append(btn.elem);
+};
+
+const initBorder = () => {
+    const btn = Button.create({
+        title: 'Border',
+        className: 'btn-border',
+    });
+    ge('borderBtn').append(btn.elem);
 };
 
 const initCustomContent = () => {
@@ -164,6 +172,8 @@ const init = () => {
     initDynamicButton();
     initDynamicLink();
     initStatic();
+
+    initBorder();
     initCustomContent();
     initBackground();
     initFullWidth();

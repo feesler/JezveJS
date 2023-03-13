@@ -8,7 +8,7 @@ import { Component } from '../../js/Component.js';
 import { LinkMenu } from '../LinkMenu/LinkMenu.js';
 import { ListContainer } from '../ListContainer/ListContainer.js';
 import { TabContentItem } from './TabContentItem.js';
-import './style.scss';
+import './TabList.scss';
 
 const CONTAINER_CLASS = 'tab-list';
 const HEADER_CLASS = 'tab-list_header';

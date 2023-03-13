@@ -13,7 +13,7 @@ import {
     circularArc,
 } from './utils.js';
 import '../../css/common.scss';
-import './style.scss';
+import './PieChart.scss';
 
 /** CSS classes */
 const PIE_CHART_CLASS = 'pie-chart';

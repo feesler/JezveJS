@@ -1,6 +1,6 @@
 import { asArray, createSVGElement } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
-import './style.scss';
+import './Histogram.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'histogram';

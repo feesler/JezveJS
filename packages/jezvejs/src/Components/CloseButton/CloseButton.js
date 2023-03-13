@@ -1,6 +1,6 @@
 import { createSVGElement, getClassNames } from '../../js/common.js';
 import { Button } from '../Button/Button.js';
-import './style.scss';
+import './CloseButton.scss';
 
 /* CSS classes */
 const CLOSE_BUTTON_CLASS = 'close-btn';

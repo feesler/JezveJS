@@ -8,7 +8,7 @@ import {
 } from 'jezvejs';
 import { TabList } from 'jezvejs/TabList';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './TabListView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

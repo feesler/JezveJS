@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1,initial-scale=1,user-scalable=0">
+    <title>Jezve JS | Input</title>
+</head>
+
+<body>
+    <div class="page">
+        <div class="page-wrapper">
+
+            <div class="nav-header">
+                <button class="nav-toggle-btn">
+                    <svg class="nav-toggle-icon" version="1.1" viewBox="0 4 20 12" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m2 4h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 9h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                        <path d="m2 14h16c.554 0 1 .446 1 1s-.446 1-1 1h-16c-.554 0-1-.446-1-1s.446-1 1-1z" />
+                    </svg>
+                </button>
+
+                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+                <div id="version" class="nav-header__version"></div>
+            </div>
+
+            <div class="page-container">
+                <div class="page-content">
+                    <main class="page-content-wrap">
+                        <h1>Input</h1>
+
+                        <div class="toc-menu">
+                            <label for="showTocCheck">Table of contents</label>
+                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
+                            <ul>
+                                <li><a href="#default" class="toc-menu-link">Default settings</a></li>
+                                <li><a href="#placeholder" class="toc-menu-link">Placeholder</a></li>
+                                <li><a href="#fullwidth" class="toc-menu-link">Full width</a></li>
+                                <li><a href="#disabled" class="toc-menu-link">Disabled component</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="content-container">
+                            <h2 id="default">Default settings</h2>
+                            <section>
+                                <div id="defaultContainer" class="buttons-list">
+                                    <input id="defaultInput" class="input" type="text">
+                                </div>
+                                <div class="logs-container">
+                                    <label>Events log</label>
+                                    <textarea id="eventsLog"></textarea>
+                                </div>
+                            </section>
+
+                            <h2 id="placeholder">Placeholder</h2>
+                            <section>
+                                <div id="placeholderContainer"></div>
+                            </section>
+
+                            <h2 id="fullwidth">Full width</h2>
+                            <section>
+                                <div id="fullwidthContainer" class="fullwidth-container"></div>
+                            </section>
+
+                            <h2 id="styled">Styled</h2>
+                            <section>
+                                <div id="styledContainer"></div>
+                            </section>
+
+                            <h2 id="disabled">Disabled component</h2>
+                            <section>
+                                <div id="disabledContainer"></div>
+                                <div class="section-controls">
+                                    <button id="toggleEnableBtn" class="btn action-btn" type="button">Enable</button>
+                                </div>
+                            </section>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

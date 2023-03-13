@@ -8,7 +8,7 @@ import { ChartGrid } from 'jezvejs/ChartGrid';
 import { Histogram } from 'jezvejs/Histogram';
 import { LineChart } from 'jezvejs/LineChart';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './ChartGridView.scss';
 
 const assert = {
     equal(a, b) {

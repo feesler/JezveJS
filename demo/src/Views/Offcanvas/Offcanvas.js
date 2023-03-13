@@ -3,7 +3,7 @@ import 'jezvejs/style/Button';
 import { ge, onReady, setEvents } from 'jezvejs';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './OffcanvasView.scss';
 
 const logTo = (target, value) => {
     const elem = (typeof target === 'string') ? ge(target) : target;

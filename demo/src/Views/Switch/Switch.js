@@ -3,7 +3,7 @@ import 'jezvejs/style/Button';
 import { ge, setEvents, onReady } from 'jezvejs';
 import { Switch } from 'jezvejs/Switch';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './SwitchView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');

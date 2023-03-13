@@ -12,11 +12,12 @@ import {
     insertAfter,
     insertBefore,
 } from '../../js/common.js';
+import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
 import { Button } from '../Button/Button.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import './style.scss';
+import './PopupMenu.scss';
 
 /* CSS classes */
 const MENU_CLASS = 'popup-menu';

@@ -1,6 +1,6 @@
 import { createElement, removeChilds, addChilds } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import './style.scss';
+import './TabList.scss';
 
 /* CSS classes */
 const ITEM_CLASS = 'tab-list__content-item';

@@ -1,6 +1,6 @@
 import { createSVGElement, insertBefore, asArray } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
-import './style.scss';
+import './LineChart.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'linechart';

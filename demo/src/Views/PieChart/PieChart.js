@@ -3,7 +3,7 @@ import 'jezvejs/style/Button';
 import { ge, onReady, setEvents } from 'jezvejs';
 import { PieChart } from 'jezvejs/PieChart';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './PieChartView.scss';
 
 const initSmall = () => {
     const container = ge('defaultPChart');

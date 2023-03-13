@@ -8,7 +8,7 @@ import { DropDownInput } from '../Input/Input.js';
 import { DropDownMultipleSelection } from '../MultipleSelection/MultipleSelection.js';
 import { DropDownSingleSelection } from '../SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from '../Placeholder/Placeholder.js';
-import './style.scss';
+import './ComboBox.scss';
 
 /* CSS classes */
 const COMBO_CLASS = 'dd__combo';

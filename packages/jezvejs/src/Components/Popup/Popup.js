@@ -10,10 +10,10 @@ import {
     createElement,
     addChilds,
 } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
+import { Component } from '../../js/Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';
-import './style.scss';
+import './Popup.scss';
 
 /* CSS classes */
 const POPUP_CLASS = 'popup';

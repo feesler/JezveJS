@@ -8,7 +8,7 @@ import {
     setEvents,
 } from 'jezvejs';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './EmptyClickView.scss';
 
 let count = 0;
 

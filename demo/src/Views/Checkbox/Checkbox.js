@@ -2,9 +2,10 @@ import 'jezvejs/style';
 import 'jezvejs/style/Button';
 import { ge, onReady, setEvents } from 'jezvejs';
 import { Checkbox } from 'jezvejs/Checkbox';
+import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './CheckboxView.scss';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');
@@ -15,12 +16,20 @@ const initParsed = () => {
     Checkbox.fromElement(ge('defaultCheckboxNoLabel'), {
         onChange: (checked) => addEventLog(`Parsed Checkbox change. checked: ${checked}`),
     });
-    Checkbox.fromElement(ge('defaultCheckboxLabel'), {
-        onChange: (checked) => addEventLog(`Parsed Checkbox with label change. checked: ${checked}`),
-    });
     Checkbox.fromElement(ge('circleCheckboxLabel'), {
         onChange: (checked) => addEventLog(`Parsed Checkbox with custom label change. checked: ${checked}`),
     });
+};
+
+const initIcon = () => {
+    const icon = Icon.create({
+        icon: 'close-icon',
+        className: 'checkbox__icon',
+    });
+    const checkbox = Checkbox.create({
+        checkIcon: icon.elem,
+    });
+    ge('iconContainer').appendChild(checkbox.elem);
 };
 
 const initDynamic = () => {
@@ -110,8 +119,10 @@ const init = () => {
     initNavigation();
 
     initParsed();
+    initIcon();
     initDynamic();
     initLarge();
+
     initParsedRadio();
     initDynamicRadio();
 };

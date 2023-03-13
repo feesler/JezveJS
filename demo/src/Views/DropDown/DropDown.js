@@ -8,12 +8,13 @@ import {
     enable,
     isVisible,
 } from 'jezvejs';
+import { CloseButton } from 'jezvejs/CloseButton';
 import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
 import { initNavigation } from '../../app.js';
 import { CustomListItem } from './impl/CustomListItem.js';
 import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
-import './style.scss';
+import './DropDownView.scss';
 
 const initItems = (title, count, startFrom = 1) => {
     const res = [];
@@ -179,9 +180,14 @@ const createUnattached = () => {
 
 // Attach drop down to block element
 const attachToBlockElement = () => {
+    const btn = CloseButton.create();
+    const box = ge('box');
+    box.append(btn.elem);
+
     DropDown.create({
-        elem: 'box',
+        elem: box,
         listAttach: true,
+        isValidToggleTarget: (elem) => !elem.closest('.close-btn'),
         data: initItems('Long Item Lorem Lorem', 10),
     });
 };
@@ -351,8 +357,12 @@ const groupsSelectFilter = () => {
 
 // Built-in items filter with single select
 const attachedFilter = () => {
+    const btn = CloseButton.create();
+    const box = ge('boxFilter');
+    box.append(btn.elem);
+
     DropDown.create({
-        elem: 'boxFilter',
+        elem: box,
         listAttach: true,
         enableFilter: true,
         noResultsMessage: 'Nothing found',
@@ -364,8 +374,12 @@ const attachedFilter = () => {
 
 // Built-in items filter with multiple select
 const attachedFilterMulti = () => {
+    const btn = CloseButton.create();
+    const box = ge('boxFilterMulti');
+    box.append(btn.elem);
+
     DropDown.create({
-        elem: 'boxFilterMulti',
+        elem: box,
         listAttach: true,
         enableFilter: true,
         noResultsMessage: 'Nothing found',

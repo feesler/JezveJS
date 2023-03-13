@@ -9,7 +9,7 @@ import {
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
-import './style.scss';
+import './Checkbox.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'checkbox';
@@ -27,6 +27,7 @@ const defaultProps = {
     checked: undefined,
     disabled: undefined,
     label: undefined,
+    checkIcon: null,
     onChange: null,
 };
 
@@ -73,10 +74,11 @@ export class Checkbox extends Component {
 
     init() {
         this.input = createElement('input', { props: { type: 'checkbox' } });
-        const checkSVG = this.createCheckPath();
+
+        const icon = this.props.checkIcon ?? this.createCheckPath();
         this.checkIcon = createElement('span', {
             props: { className: CHECK_CLASS },
-            children: checkSVG,
+            children: icon,
         });
         this.elem = createElement('label', {
             props: { className: CONTAINER_CLASS },

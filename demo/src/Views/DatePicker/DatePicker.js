@@ -11,7 +11,7 @@ import {
 } from 'jezvejs';
 import { DatePicker } from 'jezvejs/DatePicker';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './DatePickerView.scss';
 
 const formatDateToInput = (date, inputId) => {
     const input = ge(inputId);

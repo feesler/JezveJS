@@ -15,7 +15,7 @@ import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import { ListItem } from './impl/ListItem.js';
 import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
 import { XAxisDragZone } from './impl/XAxisDragZone.js';
-import './style.scss';
+import './DragnDropView.scss';
 
 const logTo = (target, value) => {
     const elem = (typeof target === 'string') ? ge(target) : target;

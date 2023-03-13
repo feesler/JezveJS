@@ -12,7 +12,7 @@ import { Notification } from 'jezvejs/Notification';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './PopupView.scss';
 
 const logTo = (target, value) => {
     const elem = (typeof target === 'string') ? ge(target) : target;

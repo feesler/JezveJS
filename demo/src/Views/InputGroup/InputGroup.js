@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import 'jezvejs/style/Input';
 import {
     ge,
@@ -7,7 +8,7 @@ import {
 } from 'jezvejs';
 import { InputGroup } from 'jezvejs/InputGroup';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './InputGroupView.scss';
 
 const initParsed = () => {
     const allInputs = Array.from(document.querySelectorAll('.input-group'));
@@ -19,7 +20,7 @@ const initDynamic = () => {
 
     const input = createElement('input', {
         props: {
-            className: 'input-group__input stretch-input',
+            className: 'input input-group__input stretch-input',
             type: 'text',
         },
     });

@@ -37,6 +37,7 @@
                                 <li><a href="#button" class="toc-menu-link">Input group with button</a></li>
                                 <li><a href="#multipleInputs" class="toc-menu-link">Multiple inputs</a></li>
                                 <li><a href="#innerButton" class="toc-menu-link">Inner buttons</a></li>
+                                <li><a href="#outerContainer" class="toc-menu-link">Input outer container</a></li>
                                 <li><a href="#disabled" class="toc-menu-link">Disabled</a></li>
                                 <li><a href="#create" class="toc-menu-link">Create</a></li>
                             </ul>
@@ -46,20 +47,20 @@
                             <h2 id="text">Input group with text</h2>
                             <section>
                                 <div class="input-group">
-                                    <input class="input-group__input stretch-input amount-input" type="text"
-                                        autocomplete="off">
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
+                                        placeholder="Input value" autocomplete="off">
                                     <div class="input-group__text">.00</div>
                                 </div>
 
                                 <div class="input-group">
                                     <div class="input-group__text">$</div>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
-                                        autocomplete="off">
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
+                                        value="1000.00" placeholder="Input value" autocomplete="off">
                                 </div>
 
                                 <div class="input-group">
                                     <div class="input-group__text">$</div>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
                                     <div class="input-group__text">.00</div>
                                 </div>
@@ -67,7 +68,7 @@
                                 <div class="input-group">
                                     <div class="input-group__text">€</div>
                                     <div class="input-group__text">$</div>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
                                     <div class="input-group__text">.00</div>
                                     <div class="input-group__text">$</div>
@@ -77,45 +78,45 @@
                             <h2 id="button">Input group with button</h2>
                             <section>
                                 <div class="input-group">
-                                    <input class="input-group__input stretch-input amount-input" type="text"
-                                        autocomplete="off">
-                                    <button class="input-group__btn" type="button">
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
+                                        placeholder="Input value" autocomplete="off">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">.00</div>
                                     </button>
                                 </div>
 
                                 <div class="input-group">
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">$</div>
                                     </button>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
-                                        autocomplete="off">
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
+                                        value="1000.00" placeholder="Input value" autocomplete="off">
                                 </div>
 
                                 <div class="input-group">
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">$</div>
                                     </button>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">.00</div>
                                     </button>
                                 </div>
 
                                 <div class="input-group">
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">$</div>
                                     </button>
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">€</div>
                                     </button>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">.00</div>
                                     </button>
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">$</div>
                                     </button>
                                 </div>
@@ -125,12 +126,12 @@
                             <section>
                                 <div class="input-group">
                                     <div class="input-group__text">Login</div>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
                                     <div class="input-group__text">Password</div>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">Submit</div>
                                     </button>
                                 </div>
@@ -139,32 +140,52 @@
                             <h2 id="innerButton">Inner buttons</h2>
                             <section>
                                 <div class="input-group">
-                                    <input class="input-group__input stretch-input amount-input" type="text"
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
-                                    <button class="input-group__inner-btn" type="button">
-                                        <svg class="input-group__inner-btn__icon" viewBox="0 0 14 14">
+                                    <button class="btn input-group__inner-btn" type="button">
+                                        <svg class="btn__icon" viewBox="0 0 14 14">
                                             <use xlink:href="#close-icon"></use>
                                         </svg>
                                     </button>
-                                    <button class="input-group__btn" type="button">
+                                    <button class="btn input-group__btn" type="button">
+                                        <div class="input-group__btn-title">.00</div>
+                                    </button>
+                                </div>
+                            </section>
+
+                            <h2 id="outerContainer">Input outer container</h2>
+                            <section>
+                                <div class="input-group">
+                                    <div class="input-group__input-outer">
+                                        <input class="input input-group__input stretch-input amount-input" type="text"
+                                            autocomplete="off">
+                                        <button class="btn input-group__inner-btn" type="button">
+                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                                <use xlink:href="#close-icon"></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">.00</div>
                                     </button>
                                 </div>
 
                                 <div class="input-group">
-                                    <button class="input-group__inner-btn" type="button">
-                                        <svg class="input-group__inner-btn__icon" viewBox="0 0 14 14">
-                                            <use xlink:href="#close-icon"></use>
-                                        </svg>
-                                    </button>
-                                    <button class="input-group__inner-btn" type="button">
-                                        <svg class="input-group__inner-btn__icon" viewBox="0 0 14 14">
-                                            <use xlink:href="#close-icon"></use>
-                                        </svg>
-                                    </button>
-                                    <input class="input-group__input stretch-input amount-input" type="text"
-                                        autocomplete="off">
-                                    <button class="input-group__btn" type="button">
+                                    <div class="input-group__input-outer">
+                                        <button class="btn input-group__inner-btn" type="button">
+                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                                <use xlink:href="#close-icon"></use>
+                                            </svg>
+                                        </button>
+                                        <button class="btn input-group__inner-btn" type="button">
+                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                                <use xlink:href="#close-icon"></use>
+                                            </svg>
+                                        </button>
+                                        <input class="input input-group__input stretch-input amount-input" type="text"
+                                            autocomplete="off">
+                                    </div>
+                                    <button class="btn input-group__btn" type="button">
                                         <div class="input-group__btn-title">.00</div>
                                     </button>
                                 </div>
@@ -173,13 +194,14 @@
                             <h2 id="disabled">Disabled</h2>
                             <section>
                                 <div class="input-group">
-                                    <input class="input-group__input stretch-input amount-input" type="text" disabled>
-                                    <button class="input-group__inner-btn" type="button" disabled>
-                                        <svg class="input-group__inner-btn__icon" viewBox="0 0 14 14">
+                                    <input class="input input-group__input stretch-input amount-input" type="text"
+                                        disabled>
+                                    <button class="btn input-group__inner-btn" type="button" disabled>
+                                        <svg class="btn__icon" viewBox="0 0 14 14">
                                             <use xlink:href="#close-icon"></use>
                                         </svg>
                                     </button>
-                                    <button class="input-group__btn" type="button" disabled>
+                                    <button class="btn input-group__btn" type="button" disabled>
                                         <div class="input-group__btn-title">.00</div>
                                     </button>
                                 </div>

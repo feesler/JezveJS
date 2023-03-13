@@ -9,7 +9,7 @@ import {
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
 import { Slidable } from '../Slidable/Slidable.js';
-import './style.scss';
+import './Slider.scss';
 
 /* CSS classes */
 const SLIDER_CLASS = 'slider';

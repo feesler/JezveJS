@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { ge, onReady } from 'jezvejs';
 import { Paginator } from 'jezvejs/Paginator';
 import { initNavigation } from '../../app.js';
-import './style.scss';
+import './PaginatorView.scss';
 
 const initSimple = () => {
     const paginator = Paginator.create({

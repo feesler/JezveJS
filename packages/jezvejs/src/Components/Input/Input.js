@@ -5,7 +5,7 @@ import {
     enable,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
-import './style.scss';
+import './Input.scss';
 
 /* CSS classes */
 const INPUT_CLASS = 'input';
@@ -15,6 +15,7 @@ const defaultProps = {
     name: undefined,
     form: undefined,
     tabIndex: undefined,
+    placeholder: '',
     type: 'text', // button, link or static
     disabled: false,
     value: undefined,
@@ -29,7 +30,7 @@ const defaultProps = {
  */
 export class Input extends Component {
     static userProps = {
-        elem: ['id', 'name', 'form', 'tabIndex', 'value'],
+        elem: ['id', 'name', 'form', 'tabIndex', 'value', 'placeholder'],
     };
 
     constructor(props) {
@@ -52,9 +53,9 @@ export class Input extends Component {
         return this.props.id;
     }
 
-    /** Returns enabled state of component */
-    get enabled() {
-        return this.state.enabled;
+    /** Returns disabled state of component */
+    get disabled() {
+        return this.state.disabled;
     }
 
     init() {

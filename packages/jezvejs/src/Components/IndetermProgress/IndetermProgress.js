@@ -1,7 +1,7 @@
 import { createElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
-import './style.scss';
+import './IndetermProgress.scss';
 
 /** CSS classes */
 const PROGRESS_CLASS = 'indeterm-progress';

@@ -1,6 +1,6 @@
 import { createElement } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
-import './style.scss';
+import './Placeholder.scss';
 
 /* CSS classes */
 const PLACEHOLDER_CLASS = 'dd__placeholder';
