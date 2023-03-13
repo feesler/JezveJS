@@ -63,20 +63,6 @@
   cursor: pointer;
 }
 
-/* Input outer container */
-.input-group__input-outer {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  flex: 1 1 auto;
-  background: var(--ig-input-bg);
-
-  &:focus-within {
-    border-color: var(--ig-input-active-border);
-    box-shadow: var(--input-focus-shadow);
-  }
-}
-
 .input-group > .input-group__input,
 .input-group > .input-group__text,
 .input-group > .input-group__input-outer,
@@ -97,6 +83,31 @@
 
   min-width: var(--ig-height);
   margin: 0;
+}
+
+/* Input outer container */
+.input-group.input-group__input-outer {
+  box-sizing: border-box;
+  height: var(--ig-height);
+  border-style: solid;
+  border-width: var(--ig-border-width);
+  border-color: var(--ig-border-color);
+  border-radius: var(--ig-border-radius);
+}
+
+/* Input outer container */
+.input-group > .input-group__input-outer,
+.input-group.input-group__input-outer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  flex: 1 1 auto;
+  background: var(--ig-input-bg);
+
+  &:focus-within {
+    border-color: var(--ig-input-active-border);
+    box-shadow: var(--input-focus-shadow);
+  }
 }
 
 /* Inner button */

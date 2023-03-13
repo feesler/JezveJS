@@ -143,7 +143,7 @@
                                     <input class="input input-group__input stretch-input amount-input" type="text"
                                         autocomplete="off">
                                     <button class="btn input-group__inner-btn" type="button">
-                                        <svg class="btn__icon" viewBox="0 0 14 14">
+                                        <svg class="btn__icon">
                                             <use xlink:href="#close-icon"></use>
                                         </svg>
                                     </button>
@@ -155,12 +155,27 @@
 
                             <h2 id="outerContainer">Input outer container</h2>
                             <section>
+                                <div class="input-group input-group__input-outer">
+                                    <button class="btn input-group__inner-btn search-btn" type="button">
+                                        <svg class="btn__icon">
+                                            <use xlink:href="#search"></use>
+                                        </svg>
+                                    </button>
+                                    <input class="input input-group__input stretch-input" type="text"
+                                        autocomplete="off">
+                                    <button class="btn input-group__inner-btn" type="button">
+                                        <svg class="btn__icon">
+                                            <use xlink:href="#close-icon"></use>
+                                        </svg>
+                                    </button>
+                                </div>
+
                                 <div class="input-group">
                                     <div class="input-group__input-outer">
                                         <input class="input input-group__input stretch-input amount-input" type="text"
                                             autocomplete="off">
                                         <button class="btn input-group__inner-btn" type="button">
-                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                            <svg class="btn__icon">
                                                 <use xlink:href="#close-icon"></use>
                                             </svg>
                                         </button>
@@ -172,13 +187,13 @@
 
                                 <div class="input-group">
                                     <div class="input-group__input-outer">
-                                        <button class="btn input-group__inner-btn" type="button">
-                                            <svg class="btn__icon" viewBox="0 0 14 14">
-                                                <use xlink:href="#close-icon"></use>
+                                        <button class="btn input-group__inner-btn search-btn" type="button">
+                                            <svg class="btn__icon">
+                                                <use xlink:href="#search"></use>
                                             </svg>
                                         </button>
                                         <button class="btn input-group__inner-btn" type="button">
-                                            <svg class="btn__icon" viewBox="0 0 14 14">
+                                            <svg class="btn__icon">
                                                 <use xlink:href="#close-icon"></use>
                                             </svg>
                                         </button>
@@ -197,7 +212,7 @@
                                     <input class="input input-group__input stretch-input amount-input" type="text"
                                         disabled>
                                     <button class="btn input-group__inner-btn" type="button" disabled>
-                                        <svg class="btn__icon" viewBox="0 0 14 14">
+                                        <svg class="btn__icon">
                                             <use xlink:href="#close-icon"></use>
                                         </svg>
                                     </button>
@@ -218,6 +233,15 @@
     </div>
 
     <svg width="0" height="0" display="none" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="search" viewBox="0 0 24 24">
+            <g transform="translate(-4 -4)">
+                <path
+                    d="m13.006 7.8004c-1.3248 0-2.6496.53709-3.6522 1.5397-2.041 2.0409-2.041 5.3351 0 7.376 2.0051 2.041 5.2993 2.041 7.3402 0 2.041-2.0409 2.041-5.3351 0-7.376-1.0025-1.0026-2.3632-1.5397-3.688-1.5397zm0 1.6646c.931 0 1.8086.35806 2.4889 1.0384 1.4323 1.4322 1.4323 3.6172 0 5.0136-1.3964 1.3964-3.5813 1.3964-5.0136 0-1.3964-1.3964-1.3964-3.5814 0-5.0136.7161-.68032 1.5938-1.0384 2.5247-1.0384z"
+                    fill-rule="evenodd" />
+                <path d="m15.834 17.003 1.1816-1.1458 7.1612 6.9105-1.4322 1.4323z" />
+            </g>
+        </symbol>
+
         <symbol id="close-icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M 1.1415,2.4266 5.7838,7 1.1415,11.5356 2.4644,12.8585 7,8.2162 11.5734,12.8585 12.8585,11.5356 8.2162,7 12.8585,2.4266 11.5734,1.1415 7,5.7838 2.4644,1.1415 Z"
