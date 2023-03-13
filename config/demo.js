@@ -34,6 +34,7 @@ export default {
         emptyClickDemo: './Views/EmptyClick/EmptyClick.js',
         histogramDemo: './Views/Histogram/Histogram.js',
         linkMenuDemo: './Views/LinkMenu/LinkMenu.js',
+        inputDemo: './Views/Input/Input.js',
         inputGroupDemo: './Views/InputGroup/InputGroup.js',
         linechartDemo: './Views/LineChart/LineChart.js',
         offcanvasDemo: './Views/Offcanvas/Offcanvas.js',
@@ -187,6 +188,12 @@ export default {
             template: './Views/Button/button.html',
             filename: 'demo/button.html',
             chunks: ['polyfills', 'buttonDemo'],
+            ...htmlCommonOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: './Views/Input/input.html',
+            filename: 'demo/input.html',
+            chunks: ['polyfills', 'inputDemo'],
             ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({

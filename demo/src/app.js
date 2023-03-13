@@ -19,6 +19,7 @@ const navigationMenu = [{
 }, {
     title: 'Input',
     items: [
+        { title: 'Input', url: 'demo/input.html' },
         { title: 'Input group', url: 'demo/inputgroup.html' },
         { title: 'Decimal input', url: 'demo/decimal.html' },
         { title: 'Date input', url: 'demo/dateinput.html' },
