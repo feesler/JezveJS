@@ -52,9 +52,9 @@ export class Input extends Component {
         return this.props.id;
     }
 
-    /** Returns enabled state of component */
-    get enabled() {
-        return this.state.enabled;
+    /** Returns disabled state of component */
+    get disabled() {
+        return this.state.disabled;
     }
 
     init() {
