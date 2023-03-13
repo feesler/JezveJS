@@ -3,9 +3,14 @@
 .btn:visited {
   --btn-size: 32px;
   --btn-background: none;
-  --btn-border-radius: 0;
   --btn-padding: 0;
   --btn-content-padding: 0 0 0 5px;
+
+  /* Border */
+  --btn-border-width: 0;
+  --btn-border-color: #00000000;
+  --btn-border-style: none;
+  --btn-border-radius: 0;
 
   /* Icon */
   --btn-icon-size: 24px;
@@ -22,21 +27,25 @@
   /* Disabled state */
   --btn-disabled-title-color: var(--btn-title-color);
   --btn-disabled-icon-color: var(--btn-icon-color);
+  --btn-disabled-border-color: var(--btn-border-color);
   --btn-disabled-background: var(--btn-background);
   --btn-disabled-opacity: 0.3;
 
   /* Hover state */
   --btn-hover-title-color: var(--btn-title-color);
+  --btn-hover-border-color: var(--btn-border-color);
   --btn-hover-icon-color: var(--btn-icon-color);
   --btn-hover-background: none;
 
   /* Active state */
   --btn-active-title-color: var(--btn-hover-title-color);
+  --btn-active-border-color: var(--btn-border-color);
   --btn-active-icon-color: var(--btn-hover-icon-color);
   --btn-active-background: var(--btn-hover-background);
 
   /* Focused state */
   --btn-focus-title-color: var(--btn-title-color);
+  --btn-focus-border-color: var(--btn-border-color);
   --btn-focus-icon-color: var(--btn-icon-color);
   --btn-focus-background: var(--btn-background);
   --btn-focus-shadow: 0 0 0 0.25rem #0d6efd40;
@@ -48,7 +57,9 @@
   justify-content: center;
   height: var(--btn-size);
   line-height: var(--btn-size);
-  border: 0 none;
+  border-width: var(--btn-border-width);
+  border-style: var(--btn-border-style);
+  border-color: var(--btn-border-color);
   border-radius: var(--btn-border-radius);
   padding: var(--btn-padding);
   overflow: hidden;
@@ -90,6 +101,7 @@
 .btn:focus-visible {
   color: var(--btn-focus-title-color);
   background: var(--btn-focus-background);
+  border-color: var(--btn-focus-border-color);
   box-shadow: var(--btn-focus-shadow);
   outline: var(--btn-focus-outline);
 
@@ -101,6 +113,7 @@
 /* Active state */
 .btn:active {
   color: var(--btn-active-title-color);
+  border-color: var(--btn-active-border-color);
   background: var(--btn-active-background);
 
   .btn__icon {
@@ -111,6 +124,7 @@
 /* Disabled state */
 .btn[disabled] {
   color: var(--btn-disabled-title-color);
+  border-color: var(--btn-disabled-border-color);
   background: var(--btn-disabled-background);
   opacity: var(--btn-disabled-opacity);
   pointer-events: none;
@@ -124,6 +138,7 @@
 @media (hover: hover) {
   .btn:hover {
     color: var(--btn-hover-title-color);
+    border-color: var(--btn-hover-border-color);
     background: var(--btn-hover-background);
 
     .btn__icon {
@@ -137,6 +152,7 @@
 
   .btn:active:hover {
     color: var(--btn-active-title-color);
+    border-color: var(--btn-active-border-color);
     background: var(--btn-active-background);
 
     .btn__icon {

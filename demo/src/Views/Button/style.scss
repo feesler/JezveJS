@@ -15,6 +15,20 @@
   }
 }
 
+/* Button with border */
+.btn.btn-border {
+  --btn-border-width: 1px;
+  --btn-border-color: #0044ff;
+  --btn-title-color: #0044ff;
+  --btn-border-style: solid;
+  --btn-border-radius: 5px;
+  --btn-padding: 0 24px;
+  --btn-hover-background: #0044ff;
+  --btn-hover-title-color: #ffffff;
+  --btn-active-background: #104b79;
+  --btn-active-border-color: #104b79;
+}
+
 .bg-btn {
   --btn-size: auto;
   --btn-title-color: #ffffff;

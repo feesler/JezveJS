@@ -56,6 +56,14 @@ const initStatic = () => {
     ge('staticBtn').append(btn.elem);
 };
 
+const initBorder = () => {
+    const btn = Button.create({
+        title: 'Border',
+        className: 'btn-border',
+    });
+    ge('borderBtn').append(btn.elem);
+};
+
 const initCustomContent = () => {
     const icon = Icon.create({
         icon: 'del',
@@ -164,6 +172,8 @@ const init = () => {
     initDynamicButton();
     initDynamicLink();
     initStatic();
+
+    initBorder();
     initCustomContent();
     initBackground();
     initFullWidth();
