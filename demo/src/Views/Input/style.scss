@@ -5,3 +5,15 @@
 .fullwidth-container {
   display: grid;
 }
+
+.input.styled {
+  --input-color: #ff3131;
+  --input-focus-color: #ff3131;
+  --input-border-color: #ff8282;
+  --input-placeholder-color: #f99191;
+  --input-focus-border: #f31b1b;
+  --input-focus-shadow: 0 0 0 0.25rem #f31b1b40;
+  --input-height: 3rem;
+  --input-font-size: 1.5rem;
+  --input-font-weight: 200;
+}

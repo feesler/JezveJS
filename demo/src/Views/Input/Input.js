@@ -33,6 +33,14 @@ const initFullWidth = () => {
     ge('fullwidthContainer').append(input.elem);
 };
 
+const initStyled = () => {
+    const input = Input.create({
+        className: 'styled',
+        placeholder: 'Input correct value',
+    });
+    ge('styledContainer').append(input.elem);
+};
+
 const initDisabled = () => {
     const disabledInp = Input.create({
         value: 'Disabled input',
@@ -56,6 +64,7 @@ const init = () => {
     initDefault();
     initPlaceholder();
     initFullWidth();
+    initStyled();
     initDisabled();
 };
 
