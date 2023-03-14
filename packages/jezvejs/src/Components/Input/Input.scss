@@ -39,6 +39,7 @@
   border-style: solid;
   border-width: var(--input-border-width);
   border-color: var(--input-border-color);
+  appearance: none;
 
   &::placeholder {
     color: var(--input-placeholder-color) !important;

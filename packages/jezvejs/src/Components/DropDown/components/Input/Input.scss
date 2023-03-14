@@ -12,6 +12,7 @@
   min-width: 50px;
   background: var(--dd-input-bg);
   color: var(--dd-input-text);
+  appearance: none;
 
   &::placeholder {
     color: var(--dd-placeholder) !important;
