@@ -11,9 +11,11 @@ import { dropDownTests } from './DropDown.js';
 import { paginatorTests } from './Paginator.js';
 import { loadTests } from './Load.js';
 import { tabListTests } from './TabList.js';
+import { storeTests } from './Store.js';
 
 const storiesMap = {
     common: commonTests,
+    store: storeTests,
     collapsible: collapsibleTests,
     dropDown: dropDownTests,
     datePicker: datePickerTests,
