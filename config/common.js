@@ -45,6 +45,7 @@ export default {
         Sortable: './src/Components/Sortable/Sortable.js',
         SortableListContainer: './src/Components/SortableListContainer/SortableListContainer.js',
         Spinner: './src/Components/Spinner/Spinner.js',
+        Store: './src/Components/Store/Store.js',
         Switch: './src/Components/Switch/Switch.js',
         TabList: './src/Components/TabList/TabList.js',
     },
