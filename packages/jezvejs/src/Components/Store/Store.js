@@ -58,21 +58,20 @@ export const createSlice = (reducers) => {
     const slice = {
         actions: {},
         reducers: {},
+        reducer(state, action) {
+            if (!(action.type in slice.reducers)) {
+                throw new Error('Invalid action type');
+            }
+
+            const reduceFunc = slice.reducers[action.type];
+            return reduceFunc(state, action.payload);
+        },
     };
 
-    Object.keys(reducers).forEach((action) => {
+    Object.entries(reducers).forEach(([action, reducer]) => {
         slice.actions[action] = (payload) => ({ type: action, payload });
-        slice.reducers[action] = reducers[action];
+        slice.reducers[action] = reducer;
     });
-
-    slice.reducer = (state, action) => {
-        if (!(action.type in slice.reducers)) {
-            throw new Error('Invalid action type');
-        }
-
-        const reduceFunc = slice.reducers[action.type];
-        return reduceFunc(state, action.payload);
-    };
 
     return slice;
 };
