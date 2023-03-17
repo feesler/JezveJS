@@ -11,7 +11,6 @@ const navigationMenu = [{
 }, {
     title: 'Utils',
     items: [
-        { title: 'Common', url: 'demo/common.html' },
         { title: 'DPI test', url: 'demo/dpitest.html' },
         { title: 'Empty click', url: 'demo/emptyclick.html' },
         { title: 'Drag\'n\'Drop and Sortable', url: 'demo/dragndrop.html' },

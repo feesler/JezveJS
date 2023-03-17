@@ -1,4 +1,4 @@
 export const config = {
     nodeURL: 'https://localtest/jezvejs/dist/',
-    testsExpected: 151,
+    testsExpected: 150,
 };
