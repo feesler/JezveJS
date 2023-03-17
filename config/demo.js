@@ -22,7 +22,6 @@ export default {
         buttonDemo: './Views/Button/Button.js',
         chartGridDemo: './Views/ChartGrid/ChartGrid.js',
         checkboxDemo: './Views/Checkbox/Checkbox.js',
-        commonTestsDemo: './Views/CommonTests/CommonTests.js',
         collapsibleDemo: './Views/Collapsible/Collapsible.js',
         dateInputDemo: './Views/DateInput/DateInput.js',
         datePickerDemo: './Views/DatePicker/DatePicker.js',
@@ -110,12 +109,6 @@ export default {
             template: './Views/Checkbox/checkbox.html',
             filename: 'demo/checkbox.html',
             chunks: ['polyfills', 'checkboxDemo'],
-            ...htmlCommonOptions,
-        }),
-        new HtmlWebpackPlugin({
-            template: './Views/CommonTests/common.html',
-            filename: 'demo/common.html',
-            chunks: ['polyfills', 'commonTestsDemo'],
             ...htmlCommonOptions,
         }),
         new HtmlWebpackPlugin({
