@@ -262,7 +262,7 @@ export class DropDown extends TestComponent {
         const li = this.getItem(itemId);
         assert(li, `List item ${itemId} not found`);
 
-        if (li.selected) {
+        if (li.selected && this.content.isMulti) {
             return;
         }
 
