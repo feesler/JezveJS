@@ -261,6 +261,7 @@ export class DropDown extends TestComponent {
 
         const li = this.getItem(itemId);
         assert(li, `List item ${itemId} not found`);
+        assert(!li.hidden, `List item ${itemId} is hidden`);
 
         if (li.selected && this.content.isMulti) {
             return;
@@ -283,6 +284,7 @@ export class DropDown extends TestComponent {
 
         const li = this.getItem(itemId);
         assert(li, `List item ${itemId} not found`);
+        assert(!li.hidden, `List item ${itemId} is hidden`);
 
         if (!li.selected) {
             return;
