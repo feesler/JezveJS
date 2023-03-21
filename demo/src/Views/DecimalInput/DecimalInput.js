@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import 'jezvejs/style/Button';
 import 'jezvejs/style/Input';
 import { ge, onReady, setEvents } from 'jezvejs';
 import { DecimalInput } from 'jezvejs/DecimalInput';
@@ -32,6 +33,22 @@ const initInteger = () => {
     });
 };
 
+const initChangeProps = () => {
+    const dinput = DecimalInput.create({
+        elem: ge('decInputChange'),
+        digits: 2,
+    });
+
+    setEvents(ge('changeDigitsBtn'), {
+        click: () => {
+            dinput.setState((state) => ({
+                ...state,
+                digits: (state.digits === 2) ? 3 : 2,
+            }));
+        },
+    });
+};
+
 const initOnlyPositive = () => {
     DecimalInput.create({
         elem: ge('decInputPositive'),
@@ -60,6 +77,7 @@ const init = () => {
     initDefault();
     initDigitsLimit();
     initInteger();
+    initChangeProps();
     initOnlyPositive();
     initLeadingZeros();
     initCreate();

@@ -49,6 +49,8 @@ export class DecimalInput extends Component {
             ...props,
         });
 
+        this.state = { ...this.props };
+
         this.init();
     }
 
@@ -57,9 +59,8 @@ export class DecimalInput extends Component {
             this.elem = createElement('input', { props: { type: 'text' } });
         }
 
-        this.useFixed = (typeof this.props.digits !== 'undefined');
-        if (this.useFixed) {
-            if (!isInt(this.props.digits)) {
+        if (typeof this.state.digits !== 'undefined') {
+            if (!isInt(this.state.digits)) {
                 throw new Error('Invalid digits property specified');
             }
         }
@@ -72,10 +73,9 @@ export class DecimalInput extends Component {
             keypress: this.beforeInputHandler,
             paste: this.beforeInputHandler,
             beforeinput: this.beforeInputHandler,
+            input: (e) => this.handleInput(e),
         };
-        if (isFunction(this.props.onInput)) {
-            this.eventHandlers.input = (e) => this.handleInput(e);
-        }
+
         setEvents(this.elem, this.eventHandlers);
 
         this.observeInputValue();
@@ -185,6 +185,18 @@ export class DecimalInput extends Component {
         return /^-?00/g.test(value);
     }
 
+    /** Returns length of fractional part of number: decimal point and digits after */
+    getFractionalPartLength(value) {
+        const fixed = this.fixFloat(value);
+        const dotPos = fixed.indexOf('.');
+        return (dotPos === -1) ? 0 : (fixed.length - dotPos);
+    }
+
+    /** Returns allowed length of fractional part of number: decimal point and digits after */
+    getAllowedFractionalPartLength(state) {
+        return (state.digits === 0) ? 0 : (state.digits + 1);
+    }
+
     /** Validate specified value */
     isValidValue(value) {
         const fixed = this.fixFloat(value);
@@ -192,24 +204,19 @@ export class DecimalInput extends Component {
             return false;
         }
 
-        if (!this.props.allowMultipleLeadingZeros && this.isMultipleLeadingZeros(fixed)) {
+        if (!this.state.allowMultipleLeadingZeros && this.isMultipleLeadingZeros(fixed)) {
             return false;
         }
 
         const float = parseFloat(fixed);
-        if (!this.props.allowNegative && (float < 0 || fixed.startsWith('-'))) {
+        if (!this.state.allowNegative && (float < 0 || fixed.startsWith('-'))) {
             return false;
         }
 
-        if (this.useFixed) {
-            const intPart = Math.trunc(float).toString();
-
-            if (this.props.digits === 0) {
-                return fixed.length <= intPart.length;
-            }
-
-            const dotOffset = (float < 0) ? 2 : 1;
-            return fixed.length <= intPart.length + this.props.digits + dotOffset;
+        if (typeof this.state.digits !== 'undefined') {
+            const length = this.getFractionalPartLength(value);
+            const allowedLength = this.getAllowedFractionalPartLength(this.state);
+            return length <= allowedLength;
         }
 
         return true;
@@ -234,8 +241,25 @@ export class DecimalInput extends Component {
 
     /** 'input' event handler */
     handleInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
+        if (isFunction(this.state.onInput)) {
+            this.state.onInput(e);
+        }
+    }
+
+    render(state, prevState = {}) {
+        if (!state) {
+            throw new Error('Invalid state');
+        }
+
+        if (state.digits === prevState?.digits) {
+            return;
+        }
+
+        const length = this.getFractionalPartLength(this.value);
+        const allowedLength = this.getAllowedFractionalPartLength(state);
+        const diff = length - allowedLength;
+        if (diff > 0) {
+            this.value = this.value.substring(0, this.value.length - diff);
         }
     }
 }
