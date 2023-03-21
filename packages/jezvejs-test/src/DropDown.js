@@ -83,7 +83,12 @@ export class DropDown extends TestComponent {
         }
 
         if (res.editable) {
-            res.textValue = await prop(res.inputElem, 'value');
+            const [value, placeholder] = await evaluate((el) => ([
+                el?.value,
+                el?.placeholder,
+            ]), res.inputElem);
+
+            res.textValue = (value?.length > 0) ? value : placeholder;
         } else if (res.statSel) {
             res.textValue = await prop(res.statSel, 'textContent');
         }
