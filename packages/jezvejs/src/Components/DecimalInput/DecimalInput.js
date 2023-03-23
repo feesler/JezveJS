@@ -7,6 +7,13 @@ import {
     createElement,
     setProps,
 } from '../../js/common.js';
+import {
+    fixFloat,
+    getDecimalPlaces,
+    isMultipleLeadingZeros,
+    isNumberString,
+    trimDecimalPlaces,
+} from '../../js/NumberUtils.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
@@ -150,48 +157,6 @@ export class DecimalInput extends Component {
         return null;
     }
 
-    /**
-     * Fix string to correct float number format
-     * @param {string} str - decimal value string
-     */
-    fixFloat(str) {
-        if (typeof str === 'number') {
-            return str.toString();
-        }
-
-        if (typeof str !== 'string') {
-            return null;
-        }
-
-        let res = str.replace(/,/g, '.');
-        if (res.indexOf('-') === 0
-            && (
-                res.length === 1
-                || res.indexOf('.') === 1
-            )) {
-            res = `-0${res.substring(1)}`;
-        }
-        if (res.indexOf('.') === 0 || !res.length) {
-            res = `0${res}`;
-        }
-        return res;
-    }
-
-    isNumber(value) {
-        return /^-?\d*\.?\d*$/g.test(value);
-    }
-
-    isMultipleLeadingZeros(value) {
-        return /^-?00/g.test(value);
-    }
-
-    /** Returns length of fractional part of number: decimal point and digits after */
-    getFractionalPartLength(value) {
-        const fixed = this.fixFloat(value);
-        const dotPos = fixed.indexOf('.');
-        return (dotPos === -1) ? 0 : (fixed.length - dotPos);
-    }
-
     /** Returns allowed length of fractional part of number: decimal point and digits after */
     getAllowedFractionalPartLength(state) {
         return (state.digits === 0) ? 0 : (state.digits + 1);
@@ -199,12 +164,12 @@ export class DecimalInput extends Component {
 
     /** Validate specified value */
     isValidValue(value) {
-        const fixed = this.fixFloat(value);
-        if (!this.isNumber(fixed)) {
+        const fixed = fixFloat(value);
+        if (!isNumberString(fixed)) {
             return false;
         }
 
-        if (!this.state.allowMultipleLeadingZeros && this.isMultipleLeadingZeros(fixed)) {
+        if (!this.state.allowMultipleLeadingZeros && isMultipleLeadingZeros(fixed)) {
             return false;
         }
 
@@ -214,7 +179,7 @@ export class DecimalInput extends Component {
         }
 
         if (typeof this.state.digits !== 'undefined') {
-            const length = this.getFractionalPartLength(value);
+            const length = getDecimalPlaces(value);
             const allowedLength = this.getAllowedFractionalPartLength(this.state);
             return length <= allowedLength;
         }
@@ -255,11 +220,7 @@ export class DecimalInput extends Component {
             return;
         }
 
-        const length = this.getFractionalPartLength(this.value);
         const allowedLength = this.getAllowedFractionalPartLength(state);
-        const diff = length - allowedLength;
-        if (diff > 0) {
-            this.value = this.value.substring(0, this.value.length - diff);
-        }
+        this.value = trimDecimalPlaces(this.value, allowedLength);
     }
 }
