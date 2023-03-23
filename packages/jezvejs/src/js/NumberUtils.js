@@ -57,13 +57,14 @@ export const trimDecimalPlaces = (value, limit) => {
         throw new Error('Invalid value');
     }
 
-    const length = getDecimalPlaces(str);
     const lim = parseInt(limit, 10);
     if (Number.isNaN(lim) || lim < 0) {
         throw new Error('Invalid limit value');
     }
 
-    const diff = length - limit;
+    const length = getDecimalPlaces(str);
+    const digits = (length === 0) ? 0 : (length - 1);
+    const diff = (lim === 0) ? length : (digits - lim);
     return (diff > 0)
         ? str.substring(0, str.length - diff)
         : str;
