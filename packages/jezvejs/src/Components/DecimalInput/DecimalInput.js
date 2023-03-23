@@ -9,6 +9,7 @@ import {
 } from '../../js/common.js';
 import {
     fixFloat,
+    getAllowedDecimalPlaces,
     getDecimalPlaces,
     isMultipleLeadingZeros,
     isNumberString,
@@ -157,11 +158,6 @@ export class DecimalInput extends Component {
         return null;
     }
 
-    /** Returns allowed length of fractional part of number: decimal point and digits after */
-    getAllowedFractionalPartLength(state) {
-        return (state.digits === 0) ? 0 : (state.digits + 1);
-    }
-
     /** Validate specified value */
     isValidValue(value) {
         const fixed = fixFloat(value);
@@ -180,7 +176,7 @@ export class DecimalInput extends Component {
 
         if (typeof this.state.digits !== 'undefined') {
             const length = getDecimalPlaces(value);
-            const allowedLength = this.getAllowedFractionalPartLength(this.state);
+            const allowedLength = getAllowedDecimalPlaces(this.state.digits);
             return length <= allowedLength;
         }
 
@@ -220,7 +216,7 @@ export class DecimalInput extends Component {
             return;
         }
 
-        const allowedLength = this.getAllowedFractionalPartLength(state);
+        const allowedLength = getAllowedDecimalPlaces(state.digits);
         this.value = trimDecimalPlaces(this.value, allowedLength);
     }
 }

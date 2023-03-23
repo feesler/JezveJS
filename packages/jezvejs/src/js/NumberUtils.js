@@ -69,6 +69,11 @@ export const trimDecimalPlaces = (value, limit) => {
         : str;
 };
 
+/** Returns allowed length of fractional part of number: decimal point and digits after */
+export const getAllowedDecimalPlaces = (digits) => (
+    (digits === 0) ? 0 : (digits + 1)
+);
+
 /**
  * Returns true if string matches to decimal value pattern
  * @param {String} value
