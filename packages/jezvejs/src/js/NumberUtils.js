@@ -52,7 +52,12 @@ export const getDecimalPlaces = (value) => {
  * @param {Number} limit
  */
 export const trimDecimalPlaces = (value, limit) => {
-    const length = getDecimalPlaces(value);
+    const str = value?.toString() ?? null;
+    if (str === null) {
+        throw new Error('Invalid value');
+    }
+
+    const length = getDecimalPlaces(str);
     const lim = parseInt(limit, 10);
     if (Number.isNaN(lim) || lim < 0) {
         throw new Error('Invalid limit value');
@@ -60,8 +65,8 @@ export const trimDecimalPlaces = (value, limit) => {
 
     const diff = length - limit;
     return (diff > 0)
-        ? value.substring(0, value.length - diff)
-        : value;
+        ? str.substring(0, str.length - diff)
+        : str;
 };
 
 /**
