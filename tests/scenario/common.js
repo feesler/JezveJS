@@ -114,9 +114,31 @@ const minMaxTests = async () => {
     await CommonTests.minMaxTest(1, 10, NaN, NaN);
 };
 
+const trimDecimalTests = async () => {
+    setBlock('trimDecimalPlaces() function', 1);
+
+    await CommonTests.trimDecimalTest('10.12345', 7, '10.12345');
+    await CommonTests.trimDecimalTest('10.12345', 6, '10.12345');
+    await CommonTests.trimDecimalTest('10.12345', 5, '10.12345');
+    await CommonTests.trimDecimalTest('10.12345', 4, '10.1234');
+    await CommonTests.trimDecimalTest('10.12345', 3, '10.123');
+    await CommonTests.trimDecimalTest('10.12345', 2, '10.12');
+    await CommonTests.trimDecimalTest('10.12345', 1, '10.1');
+    await CommonTests.trimDecimalTest('10.12345', 0, '10');
+    await CommonTests.trimDecimalTest('-10.12345', 7, '-10.12345');
+    await CommonTests.trimDecimalTest('-10.12345', 6, '-10.12345');
+    await CommonTests.trimDecimalTest('-10.12345', 5, '-10.12345');
+    await CommonTests.trimDecimalTest('-10.12345', 4, '-10.1234');
+    await CommonTests.trimDecimalTest('-10.12345', 3, '-10.123');
+    await CommonTests.trimDecimalTest('-10.12345', 2, '-10.12');
+    await CommonTests.trimDecimalTest('-10.12345', 1, '-10.1');
+    await CommonTests.trimDecimalTest('-10.12345', 0, '-10');
+};
+
 export const commonTests = async () => {
     setBlock('Common', 1);
 
     await deepMeetTests();
     await minMaxTests();
+    await trimDecimalTests();
 };
