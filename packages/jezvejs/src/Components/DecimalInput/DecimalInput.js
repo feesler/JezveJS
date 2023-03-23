@@ -216,7 +216,6 @@ export class DecimalInput extends Component {
             return;
         }
 
-        const allowedLength = getAllowedDecimalPlaces(state.digits);
-        this.value = trimDecimalPlaces(this.value, allowedLength);
+        this.value = trimDecimalPlaces(this.value, state.digits);
     }
 }
