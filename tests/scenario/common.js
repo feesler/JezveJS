@@ -114,6 +114,57 @@ const minMaxTests = async () => {
     await CommonTests.minMaxTest(1, 10, NaN, NaN);
 };
 
+const fixFloatTests = async () => {
+    setBlock('fixFloat', 1);
+
+    setBlock('Number values', 2);
+    await CommonTests.fixFloatTest('Integer number', 100, '100');
+    await CommonTests.fixFloatTest('Float number', 100.5, '100.5');
+
+    setBlock('Invalid values', 2);
+    await CommonTests.fixFloatTest('null value', null, null);
+    await CommonTests.fixFloatTest('undefined value', undefined, null);
+    await CommonTests.fixFloatTest('NaN value', NaN, null);
+
+    setBlock('Zero strings', 2);
+    // [value, expected result]
+    const zeroPairs = [
+        ['.', '0.'],
+        ['.0', '0.0'],
+        ['.00', '0.00'],
+        ['0', '0'],
+        ['0.', '0.'],
+        ['0.0', '0.0'],
+        ['0.00', '0.00'],
+    ];
+    const negZeroPairs = [
+        ['-', '-0'],
+        ['-.', '-0.'],
+        ['-.0', '-0.0'],
+        ['-0', '-0'],
+        ['-0.', '-0.'],
+        ['-0.0', '-0.0'],
+        ['-0.00', '-0.00'],
+    ];
+
+    await App.scenario.runner.runGroup(([value, expected]) => (
+        CommonTests.fixFloatTest(`Zero string '${value}'`, value, expected)
+    ), zeroPairs);
+
+    setBlock('Negative zero strings', 2);
+    await App.scenario.runner.runGroup(([value, expected]) => (
+        CommonTests.fixFloatTest(`Negative zero string '${value}'`, value, expected)
+    ), negZeroPairs);
+
+    setBlock('Strings', 2);
+    await CommonTests.fixFloatTest('Empty string', '', '0');
+    await CommonTests.fixFloatTest('Integer number string', '123', '123');
+    await CommonTests.fixFloatTest('Float number string with point', '123.5', '123.5');
+    await CommonTests.fixFloatTest('Float number string with comma', '123,5', '123.5');
+    await CommonTests.fixFloatTest('Float number string starts with point', '.56', '0.56');
+    await CommonTests.fixFloatTest('Float number string starts with comma', ',56', '0.56');
+};
+
 const trimDecimalTests = async () => {
     setBlock('trimDecimalPlaces() function', 1);
 
@@ -140,5 +191,6 @@ export const commonTests = async () => {
 
     await deepMeetTests();
     await minMaxTests();
+    await fixFloatTests();
     await trimDecimalTests();
 };
