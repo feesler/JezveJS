@@ -3,7 +3,7 @@
  * @param {String|Number} str - decimal value string
  */
 export const fixFloat = (str) => {
-    if (typeof str === 'number') {
+    if (typeof str === 'number' && !Number.isNaN(str) && Number.isFinite(str)) {
         return str.toString();
     }
 

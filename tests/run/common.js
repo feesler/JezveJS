@@ -1,6 +1,6 @@
 import { assert, test } from 'jezve-test';
 import { deepMeet, minmax } from '../../packages/jezvejs/src/js/common.js';
-import { trimDecimalPlaces } from '../../packages/jezvejs/src/js/NumberUtils.js';
+import { fixFloat, trimDecimalPlaces } from '../../packages/jezvejs/src/js/NumberUtils.js';
 
 export const deepMeetTest = async ({
     descr,
@@ -28,6 +28,13 @@ export const minMaxTest = async (
 
         assert.equal(funcResult, result, `Unexpected result: ${funcResult}. ${result} is expected.`);
 
+        return true;
+    });
+};
+
+export const fixFloatTest = async (descr, value, result) => {
+    await test(descr, () => {
+        assert.equal(fixFloat(value), result);
         return true;
     });
 };

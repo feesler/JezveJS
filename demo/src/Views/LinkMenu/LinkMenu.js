@@ -74,6 +74,30 @@ const initDisabledItem = () => {
     });
 };
 
+const initHiddenItem = () => {
+    const menu = LinkMenu.create({
+        itemParam: 'action',
+        multiple: true,
+        items: [
+            { title: 'Clear' },
+            { title: 'Create', value: 'create' },
+            { title: 'Update', value: 'update' },
+            { title: 'Delete', value: 'delete' },
+        ],
+    });
+
+    ge('hiddenItemContainer').append(menu.elem);
+
+    const btn = ge('toggleShowItemBtn');
+    setEvents(btn, {
+        click: () => {
+            const item = menu.getItemByValue('delete');
+            btn.textContent = (item.hidden) ? 'Hide item' : 'Show item';
+            menu.showItem('delete', !!item.hidden);
+        },
+    });
+};
+
 const initDisabledComponent = () => {
     const menu = LinkMenu.create({
         itemParam: 'action',
@@ -106,6 +130,7 @@ const init = () => {
     initDynamicSingle();
     initDynamicMultiple();
     initDisabledItem();
+    initHiddenItem();
     initDisabledComponent();
 };
 
