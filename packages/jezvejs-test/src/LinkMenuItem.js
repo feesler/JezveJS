@@ -21,6 +21,7 @@ export class LinkMenuItem extends TestComponent {
             title: title.textContent.trim(),
             value: elem.dataset.value,
             disabled: elem.hasAttribute('disabled'),
+            hidden: elem.hidden,
             isCheckbox: elem.classList.contains('checkbox'),
             selected: elem.classList.contains('link-menu-item_selected'),
         }), this.elem, titleElem);
@@ -52,6 +53,10 @@ export class LinkMenuItem extends TestComponent {
 
     get disabled() {
         return this.content.disabled;
+    }
+
+    get hidden() {
+        return this.content.hidden;
     }
 
     async toggle() {

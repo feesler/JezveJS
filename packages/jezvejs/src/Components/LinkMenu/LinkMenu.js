@@ -6,6 +6,7 @@ import {
     removeChilds,
     setEvents,
     enable,
+    show,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
@@ -224,6 +225,21 @@ export class LinkMenu extends Component {
         this.setState({ ...this.state, disabled });
     }
 
+    showItem(id, value = true) {
+        this.setState({
+            ...this.state,
+            items: this.state.items.map((item) => (
+                (item.value !== id)
+                    ? item
+                    : { ...item, hidden: !value }
+            )),
+        });
+    }
+
+    hideItem(id) {
+        this.showItem(id, false);
+    }
+
     enableItem(id, value = true) {
         this.setState({
             ...this.state,
@@ -309,6 +325,7 @@ export class LinkMenu extends Component {
         });
 
         checkbox.elem.setAttribute('data-value', item.value);
+        checkbox.show(!item.hidden);
 
         return checkbox.elem;
     }
@@ -358,6 +375,7 @@ export class LinkMenu extends Component {
         if (item.value) {
             elem.setAttribute('data-value', item.value);
         }
+        show(elem, !item.hidden);
         enable(elem, !(item.disabled || state.disabled));
 
         return elem;
