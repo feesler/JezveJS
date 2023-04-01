@@ -59,13 +59,21 @@ export class LinkMenuItem extends TestComponent {
         return this.content.hidden;
     }
 
+    assertAvailable() {
+        assert(!this.disabled, 'Menu item is disabled');
+        assert(!this.hidden, 'Menu item is not visible');
+    }
+
     async toggle() {
         assert(this.content.checkbox, 'Toggle not available');
+        this.assertAvailable();
 
         await this.content.checkbox.toggle();
     }
 
     async click() {
+        this.assertAvailable();
+
         await click(this.content.linkElem);
     }
 }
