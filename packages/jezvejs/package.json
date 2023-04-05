@@ -1,6 +1,6 @@
 {
     "name": "jezvejs",
-    "version": "1.90.0",
+    "version": "1.91.0",
     "type": "module",
     "module": "index.js",
     "files": [
@@ -21,7 +21,7 @@
     "license": "ISC",
     "dependencies": {
         "@babel/runtime": "^7.21.0",
-        "core-js": "^3.29.1",
+        "core-js": "^3.30.0",
         "whatwg-fetch": "^3.6.2"
     },
     "main": "index.js",
