@@ -28,6 +28,7 @@ export class ListItem extends Component {
             children: this.titleElem,
         });
 
+        this.setClassNames();
         this.render(this.state);
     }
 
@@ -38,5 +39,8 @@ export class ListItem extends Component {
     render(state) {
         this.elem.dataset.id = state.id;
         this.titleElem.textContent = state.title;
+        if (state.group) {
+            this.elem.dataset.group = state.group;
+        }
     }
 }

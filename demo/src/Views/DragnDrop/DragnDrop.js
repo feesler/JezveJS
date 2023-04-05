@@ -210,6 +210,36 @@ const initExchangable = () => {
     });
 };
 
+const initCustomGroups = () => {
+    const items = [];
+    for (let i = 1; i <= 10; i += 1) {
+        items.push({
+            id: i,
+            title: `Item ${i}`,
+            className: (i <= 5) ? null : 'list_item_2',
+            group: (i <= 5) ? 'group1' : 'group2',
+        });
+    }
+
+    const sortableList = SortableListContainer.create({
+        ItemComponent: ListItem,
+        items,
+        getItemProps: (item) => ({ ...item }),
+        className: 'list-area',
+        itemSelector: ListItem.selector,
+        itemSortSelector: ListItem.sortSelector,
+        sortModeClass: 'list-area_sort',
+        placeholderClass: 'list_item_placeholder',
+        listMode: 'sort',
+        sortGroup: (elem) => elem?.dataset.group,
+        onItemClick: (id, e) => onItemClick(id, e),
+        onSort: (id, pos) => onListSort(id, pos),
+    });
+
+    const listContainer = ge('customGroupsList');
+    listContainer.prepend(sortableList.elem);
+};
+
 const renderTreeItem = (title, content = [], className = []) => createElement('div', {
     props: { className: ['tree-item', ...asArray(className)].join(' ') },
     children: [
@@ -542,6 +572,7 @@ const init = () => {
     initSortable();
     initSortableList();
     initExchangable();
+    initCustomGroups();
 
     initTree();
     initTreeExchange();

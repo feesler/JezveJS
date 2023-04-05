@@ -3,6 +3,7 @@ import {
     insertAfter,
     insertBefore,
     hasFlag,
+    isFunction,
 } from '../../js/common.js';
 import { DropTarget } from '../DragnDrop/DropTarget.js';
 import { SortableDragAvatar } from './SortableDragAvatar.js';
@@ -48,6 +49,12 @@ export class SortableDropTarget extends DropTarget {
         return (el?.dragZone) ? el : null;
     }
 
+    /** Returns sortable group */
+    getGroup() {
+        const group = this.props?.group ?? null;
+        return isFunction(group) ? group(this.targetElem) : group;
+    }
+
     onDragMove(avatar, event) {
         const newTargetElem = this.getTargetElem(avatar, event);
         if (this.targetElem === newTargetElem) {
@@ -59,10 +66,13 @@ export class SortableDropTarget extends DropTarget {
         this.showHoverIndication(avatar);
 
         const dragInfo = avatar.getDragInfo();
+        const currentGroup = this.getGroup();
+        const targetGroup = dragInfo.dragZone.getGroup(dragInfo.dragZoneElem);
+
         if (
             !this.targetElem
             || !(avatar instanceof SortableDragAvatar)
-            || (dragInfo.dragZone.getGroup() !== this.props.group)
+            || (targetGroup !== currentGroup)
         ) {
             return;
         }

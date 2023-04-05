@@ -112,8 +112,9 @@ export class SortableDragZone extends DragZone {
     }
 
     /** Returns sortable group */
-    getGroup() {
-        return this.props?.group ?? null;
+    getGroup(elem) {
+        const group = this.props?.group ?? null;
+        return isFunction(group) ? group(elem ?? this.elem) : group;
     }
 
     /** Returns CSS class for placeholder element */
