@@ -466,7 +466,7 @@ export class DatePicker extends Component {
             };
             newState.selRange = { start: null, end: null };
         } else {
-            newState.actDate = date;
+            newState.actDate = new Date(date);
         }
 
         this.setState(newState);
