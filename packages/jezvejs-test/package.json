@@ -1,6 +1,6 @@
 {
     "name": "jezvejs-test",
-    "version": "1.7.4",
+    "version": "1.7.5",
     "description": "JezveJS library test components",
     "type": "module",
     "module": "index.js",
@@ -24,6 +24,6 @@
     },
     "homepage": "https://github.com/feesler/JezveJS#readme",
     "dependencies": {
-        "jezve-test": "^1.6.0"
+        "jezve-test": "^1.6.1"
     }
 }
