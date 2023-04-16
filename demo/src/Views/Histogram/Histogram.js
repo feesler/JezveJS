@@ -337,6 +337,7 @@ const callbacks = () => {
         showPopupOnClick: true,
         activateOnClick: true,
         renderPopup: (target) => formatAsUSD(target.item.value),
+        renderXAxisLabel: formatDecimalValue,
         renderYAxisLabel: formatDecimalValue,
         onItemClick: onBarClick,
         onScroll: onChartsScroll,
