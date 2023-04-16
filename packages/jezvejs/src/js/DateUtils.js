@@ -89,8 +89,8 @@ export const parseDateString = (str, locales = []) => {
 };
 
 /** Returns true if specified argument is valid date string for current locale */
-export const isValidDateString = (str) => {
-    const date = parseDateString(str, window.app.locale);
+export const isValidDateString = (str, locales = []) => {
+    const date = parseDateString(str, locales);
     return isDate(date);
 };
 
