@@ -242,6 +242,7 @@ const callbacks = () => {
         animate: true,
         showPopupOnClick: true,
         renderPopup: (target) => formatAsUSD(target.item.value),
+        renderXAxisLabel: formatDecimalValue,
         renderYAxisLabel: formatDecimalValue,
         activateOnHover: true,
         onItemClick: onNodeClick,

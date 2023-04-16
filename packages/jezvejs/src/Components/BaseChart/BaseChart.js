@@ -60,6 +60,7 @@ const defaultProps = {
     resizeTimeout: 200,
     activateOnClick: false,
     activateOnHover: false,
+    renderXAxisLabel: null,
     renderYAxisLabel: null,
     showLegend: false,
     renderLegend: null,
@@ -526,7 +527,7 @@ export class BaseChart extends Component {
 
         const formatFunction = isFunction(state.renderYAxisLabel)
             ? state.renderYAxisLabel
-            : (value) => value.toString();
+            : (value) => value?.toString();
         const xOffset = 5;
         const dyOffset = 5.5;
         let curY = grid.yFirst;
@@ -574,12 +575,16 @@ export class BaseChart extends Component {
 
         const groupOuterWidth = this.getGroupOuterWidth(state);
 
+        const formatFunction = isFunction(state.renderXAxisLabel)
+            ? state.renderXAxisLabel
+            : (value) => value?.toString();
+
         this.xAxisLabelsGroup?.remove();
         this.xAxisLabelsGroup = createSVGElement('g');
 
         const labels = [];
         for (let i = 0; i < state.data.series.length; i += 1) {
-            const [itemDate, itemsCount] = state.data.series[i];
+            const [itemValue, itemsCount] = state.data.series[i];
             const txtEl = createSVGElement('text', {
                 attrs: {
                     class: 'chart__text chart-xaxis__label',
@@ -587,7 +592,7 @@ export class BaseChart extends Component {
                     y: lblY + dyOffset,
                 },
             });
-            txtEl.textContent = itemDate.toString();
+            txtEl.textContent = formatFunction(itemValue);
 
             this.xAxisLabelsGroup.append(txtEl);
             labels.push(txtEl);
