@@ -161,7 +161,7 @@ export class DateInput extends Component {
     }
 
     getDateFormat() {
-        const formatter = Intl.DateTimeFormat(this.props.locales);
+        const formatter = Intl.DateTimeFormat(this.props.locales, { dateStyle: 'short' });
         const parts = formatter.formatToParts();
 
         this.separator = null;

@@ -40,6 +40,7 @@ const initLocales = () => {
     DateInput.create({ elem: ge('usDateInput'), locales: ['en-US'] });
     DateInput.create({ elem: ge('koDateInput'), locales: ['ko-KR'] });
     DateInput.create({ elem: ge('ruDateInput'), locales: ['ru-RU'] });
+    DateInput.create({ elem: ge('esDateInput'), locales: ['es'] });
 };
 
 const init = () => {
