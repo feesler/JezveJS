@@ -39,9 +39,9 @@
         "publish": "npm-run-all i-jezvejs update build p-jezvejs",
         "publish-test": "npm-run-all i-jezvejs-test update p-jezvejs-test",
         "release": "npm-run-all publish deploy",
-        "ver-major": "node ./scripts/version.js major",
-        "ver-minor": "node ./scripts/version.js minor",
-        "ver-patch": "node ./scripts/version.js patch",
+        "ver-major": "npm version major -w jezvejs",
+        "ver-minor": "npm version minor -w jezvejs",
+        "ver-patch": "npm version patch -w jezvejs",
         "release-major": "npm-run-all all ver-major release",
         "release-minor": "npm-run-all all ver-minor release",
         "release-patch": "npm-run-all all ver-patch release"
