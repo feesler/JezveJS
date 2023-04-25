@@ -12,13 +12,13 @@ function firstUpperCase(str, locales = []) {
 }
 
 /** Returns fixed date locale string without RTL characters */
-export const formatDate = (date, locales = [], options = {}) => (
-    date.toLocaleDateString(locales, options).replace(/\u200e/g, '')
+export const formatDate = (date, params = {}) => (
+    date.toLocaleDateString(params?.locales ?? [], params?.options ?? {}).replace(/\u200e/g, '')
 );
 
 /** Returns object with positions of date parts and separator */
-export const getLocaleDateFormat = (locales = [], options = {}) => {
-    const formatter = Intl.DateTimeFormat(locales, options);
+export const getLocaleDateFormat = (params = {}) => {
+    const formatter = Intl.DateTimeFormat(params?.locales ?? [], params?.options ?? {});
     const parts = formatter.formatToParts();
 
     const res = {
@@ -53,12 +53,12 @@ export const getLocaleDateFormat = (locales = [], options = {}) => {
 };
 
 /** Returns date parsed from string accodring to specified locale */
-export const parseDateString = (str, locales = [], options = {}) => {
+export const parseDateString = (str, params = {}) => {
     if (typeof str !== 'string' || str.length === 0) {
         return NaN;
     }
 
-    const format = getLocaleDateFormat(locales, options);
+    const format = getLocaleDateFormat(params);
     if (
         !format
         || format.dayIndex === -1
@@ -90,10 +90,9 @@ export const parseDateString = (str, locales = [], options = {}) => {
 };
 
 /** Returns true if specified argument is valid date string for current locale */
-export const isValidDateString = (str, locales = [], options = {}) => {
-    const date = parseDateString(str, locales, options);
-    return isDate(date);
-};
+export const isValidDateString = (str, params = {}) => (
+    isDate(parseDateString(str, params))
+);
 
 /** Shift date to specified count of days */
 export const shiftDate = (date, shift) => (
@@ -165,7 +164,7 @@ export const isSameDate = (dateA, dateB) => (
  * Returns long weekday name for specified date
  */
 export const getWeekdayLong = (date, locales = []) => {
-    const weekdayName = formatDate(date, locales, { weekday: 'long' });
+    const weekdayName = formatDate(date, { locales, options: { weekday: 'long' } });
     return firstUpperCase(weekdayName, locales);
 };
 
@@ -173,7 +172,7 @@ export const getWeekdayLong = (date, locales = []) => {
  * Returns short weekday name for specified date
  */
 export const getWeekdayShort = (date, locales = []) => {
-    const weekdayName = formatDate(date, locales, { weekday: 'short' });
+    const weekdayName = formatDate(date, { locales, options: { weekday: 'short' } });
     return firstUpperCase(weekdayName.substr(0, 3), locales);
 };
 
@@ -181,7 +180,7 @@ export const getWeekdayShort = (date, locales = []) => {
  * Returns long month name for specified date
  */
 export const getLongMonthName = (date, locales = []) => {
-    const monthName = formatDate(date, locales, { month: 'long' });
+    const monthName = formatDate(date, { locales, options: { month: 'long' } });
     return firstUpperCase(monthName, locales);
 };
 
@@ -189,6 +188,6 @@ export const getLongMonthName = (date, locales = []) => {
  * Returns short month name for specified date
  */
 export const getShortMonthName = (date, locales = []) => {
-    const monthName = formatDate(date, locales, { month: 'short' });
+    const monthName = formatDate(date, { locales, options: { month: 'short' } });
     return firstUpperCase(monthName.substr(0, 3), locales);
 };
