@@ -3,7 +3,7 @@ import {
     goTo,
     setBlock,
 } from 'jezve-test';
-import * as DatePickerTests from '../run/DatePicker.js';
+import * as DatePickerTests from '../actions/DatePicker.js';
 import { App } from '../app.js';
 
 export const datePickerTests = async () => {

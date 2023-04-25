@@ -3,7 +3,7 @@ import {
     goTo,
     setBlock,
 } from 'jezve-test';
-import * as Actions from '../run/TabList.js';
+import * as Actions from '../actions/TabList.js';
 
 export const tabListTests = async () => {
     const pageUrl = `${baseUrl()}demo/tablist.html`;

@@ -3,7 +3,7 @@ import {
     goTo,
     setBlock,
 } from 'jezve-test';
-import * as PaginatorTests from '../run/Paginator.js';
+import * as PaginatorTests from '../actions/Paginator.js';
 
 export const paginatorTests = async () => {
     const pageUrl = `${baseUrl()}demo/paginator.html`;
