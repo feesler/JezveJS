@@ -90,7 +90,7 @@ export class DatePicker extends TestComponent {
 
             const monthInfo = this.getMonthByName(month, false);
             res.month = monthInfo.index;
-            assert(res.month !== -1, 'Invalid month string');
+            assert(res.month !== -1, `Invalid month string: ${month}`);
             res.year = parseInt(year, 10);
         } else if (viewType === 'year') {
             res.year = parseInt(title, 10);
