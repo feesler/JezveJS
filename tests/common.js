@@ -1,81 +1,9 @@
-import {
-    isDate,
-    isNum,
-    isObject,
-} from 'jezve-test';
-
-/** Convert date string from DD.MM.YYYY to timestamp */
-export function convDate(dateStr) {
-    if (typeof dateStr !== 'string') {
-        return null;
-    }
-
-    const res = Date.parse(dateStr.split('.').reverse().join('-'));
-    if (Number.isNaN(res)) {
-        return null;
-    }
-
-    return res;
-}
-
-/** Return timestamp for the start of the day */
-export function cutDate(date) {
-    if (!isDate(date)) {
-        return null;
-    }
-
-    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
-// Convert Date object, timestamp or DD.MM.YYYY string to the timestamp of the start of day
-export function fixDate(date) {
-    if (isDate(date)) {
-        return cutDate(date);
-    }
-
-    if (typeof date === 'number') {
-        return cutDate(new Date(date));
-    }
-
-    return convDate(date);
-}
-
-/** Check string is correct date in dd.mm.yyyy format */
-export function checkDate(str) {
-    if (typeof str !== 'string' || !str.length) {
-        return false;
-    }
-
-    const sparr = str.split('.');
-    if (sparr.length !== 3) {
-        return false;
-    }
-
-    if (!isNum(sparr[0]) || !isNum(sparr[1]) || !isNum(sparr[2])) {
-        return false;
-    }
-
-    if (
-        sparr[0] < 1
-        || sparr[0] > 31
-        || sparr[1] < 1
-        || sparr[1] > 12
-        || sparr[2] < 1970
-    ) {
-        return false;
-    }
-
-    return true;
-}
+import { isObject } from 'jezve-test';
 
 /** Format specified value */
 export function formatValue(val) {
     return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 }
-
-/*
-* Other
-*/
 
 /** Join parameters and values of object to URL */
 export function urlJoin(obj) {
