@@ -60,6 +60,7 @@ const defaultProps = {
     range: false,
     locales: [],
     animated: false,
+    disabledDateFilter: null,
     onRangeSelect: null,
     onDateSelect: null,
     onShow: null,
@@ -482,6 +483,14 @@ export class DatePicker extends Component {
         });
     }
 
+    setDisabledDateFilter(disabledDateFilter) {
+        if (this.state.disabledDateFilter === disabledDateFilter) {
+            return;
+        }
+
+        this.setState({ ...this.state, disabledDateFilter });
+    }
+
     setContentPosition(position) {
         this.position = minmax(-this.width * 2, 0, position);
         this.slider.style.left = px(this.position);
@@ -748,6 +757,7 @@ export class DatePicker extends Component {
                 actDate: state.actDate,
                 range: this.props.range,
                 curRange: state.curRange,
+                disabledDateFilter: state.disabledDateFilter,
             });
         }
 
@@ -774,6 +784,7 @@ export class DatePicker extends Component {
             actDate: state.actDate,
             range: this.props.range,
             curRange: state.curRange,
+            disabledDateFilter: state.disabledDateFilter,
         }));
     }
 
@@ -833,6 +844,7 @@ export class DatePicker extends Component {
                 || state.actDate !== prevState.actDate
                 || state.curRange?.start !== prevState.curRange?.start
                 || state.curRange?.end !== prevState.curRange?.end
+                || state.disabledDateFilter !== prevState.disabledDateFilter
             );
         }
         if (state.viewType === YEAR_VIEW) {

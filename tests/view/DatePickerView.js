@@ -15,6 +15,7 @@ const datePickerSelectors = {
     rangeDatePicker: '#dpRangeGroup + .dp__container',
     callbacksDatePicker: '#dpCallbacksGroup + .dp__container',
     selDatePicker: '#dpSelectionGroup + .dp__container',
+    disabledFilterDatePicker: '#dpDisabledDateGroup + .dp__container',
     enLocaleDatePicker: '#dpEnLocale .dp__container',
     frLocaleDatePicker: '#dpFrLocale .dp__container',
     ruLocaleDatePicker: '#dpRuLocale .dp__container',
@@ -33,6 +34,9 @@ const controlIds = [
     'showSelectionBtn',
     'setSelectionBtn',
     'clearSelectionBtn',
+    'showDisabledDateBtn',
+    'setDisabledBtn',
+    'clearDisabledBtn',
 ];
 
 export class DatePickerView extends AppView {
@@ -155,5 +159,17 @@ export class DatePickerView extends AppView {
 
     async updateSelection() {
         await this.performAction(() => click(this.content.setSelectionBtn.elem));
+    }
+
+    async toggleDisabledFilter() {
+        return this.clickShowButton('showDisabledDateBtn', 'disabledFilterDatePicker');
+    }
+
+    async clearDisabledFilter() {
+        await this.performAction(() => click(this.content.clearDisabledBtn.elem));
+    }
+
+    async setDisabledFilter() {
+        await this.performAction(() => click(this.content.setDisabledBtn.elem));
     }
 }

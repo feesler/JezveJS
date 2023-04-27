@@ -37,4 +37,7 @@ export const datePickerTests = async () => {
 
     setBlock('setSelection() method', 2);
     await DatePickerTests.testSetSelection();
+
+    setBlock('Disable date filter', 2);
+    await DatePickerTests.testDisabledDateFilter();
 };

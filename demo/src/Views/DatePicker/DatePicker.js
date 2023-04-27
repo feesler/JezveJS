@@ -127,6 +127,38 @@ const initSetSelection = () => {
     setEvents(ge('clearSelectionBtn'), { click: () => datePicker.clearSelection() });
 };
 
+const inDateRange = (date, { start = null, end = null }) => (
+    (start === null || date - start >= 0)
+    && (end === null || date - end <= 0)
+);
+
+const enabledRange = {
+    start: new Date(2020, 1, 8),
+    end: new Date(2020, 1, 12),
+};
+const disabledOutsideRange = (date) => !inDateRange(date, enabledRange);
+
+const initDisabledDate = () => {
+    const inpGroup = ge('dpDisabledDateGroup');
+    const datePicker = DatePicker.create({
+        relparent: inpGroup,
+        range: true,
+        disabledDate: disabledOutsideRange,
+        onDateSelect: (date) => {
+            formatDateToInput(date, 'disabledDateInp');
+            datePicker.hide();
+        },
+    });
+    datePicker.setSelection('10.02.2010');
+    insertAfter(datePicker.elem, inpGroup);
+
+    setEvents(ge('showDisabledDateBtn'), { click: () => datePicker.show() });
+    setEvents(ge('setDisabledBtn'), {
+        click: () => datePicker.setDisabledDateFilter(disabledOutsideRange),
+    });
+    setEvents(ge('clearDisabledBtn'), { click: () => datePicker.setDisabledDateFilter(null) });
+};
+
 const initLocales = () => {
     const enDatePicker = DatePicker.create({
         static: true,
@@ -157,6 +189,7 @@ const init = () => {
     initRangeSelect();
     initCallbacks();
     initSetSelection();
+    initDisabledDate();
     initLocales();
 };
 
