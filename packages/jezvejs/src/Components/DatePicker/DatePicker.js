@@ -95,6 +95,7 @@ export class DatePicker extends Component {
             date: isDate(this.props.date) ? this.props.date : new Date(),
             curRange: { start: null, end: null },
             selRange: { start: null, end: null },
+            disabledDateFilter: this.props.disabledDateFilter,
             actDate: null,
             transition: null,
         };

@@ -84,6 +84,8 @@ export class DatePickerMonthView extends Component {
         this.elem.append(...headerElems);
 
         // days
+        const disabledFilter = isFunction(this.state.disabledDateFilter);
+
         do {
             week.forEach((weekday) => {
                 const item = {
@@ -98,6 +100,9 @@ export class DatePickerMonthView extends Component {
 
                 item.elem.classList.toggle(OTHER_CELL_CLASS, !isSameYearMonth(date, weekday));
                 item.elem.classList.toggle(TODAY_CELL_CLASS, isSameDate(weekday, today));
+
+                const disabled = disabledFilter && this.state.disabledDateFilter(item.date);
+                enable(item.elem, !disabled);
 
                 this.items.push(item);
                 this.elem.append(item.elem);

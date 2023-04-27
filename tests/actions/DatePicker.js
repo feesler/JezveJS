@@ -145,7 +145,7 @@ const getDisabledCells = (start, end, monthDays) => {
     for (let day = 1; day <= monthDays; day += 1) {
         res.push({
             title: day.toString(),
-            disabled: (day >= start && day <= end),
+            disabled: !(day >= start && day <= end),
         });
     }
 

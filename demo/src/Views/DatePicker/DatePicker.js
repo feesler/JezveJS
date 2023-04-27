@@ -128,13 +128,13 @@ const initSetSelection = () => {
 };
 
 const inDateRange = (date, { start = null, end = null }) => (
-    (start === null || date - start >= 0)
-    && (end === null || date - end <= 0)
+    ((start === null) || (date - start >= 0))
+    && ((end === null) || (date - end <= 0))
 );
 
 const enabledRange = {
-    start: new Date(2020, 1, 8),
-    end: new Date(2020, 1, 12),
+    start: new Date(Date.UTC(2010, 1, 8)),
+    end: new Date(Date.UTC(2010, 1, 12)),
 };
 const disabledOutsideRange = (date) => !inDateRange(date, enabledRange);
 
