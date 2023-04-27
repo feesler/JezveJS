@@ -1,5 +1,5 @@
 import { setBlock } from 'jezve-test';
-import * as CommonTests from '../actions/common.js';
+import * as Actions from '../actions/common.js';
 import { App } from '../app.js';
 
 const deepMeetTests = async () => {
@@ -75,56 +75,56 @@ const deepMeetTests = async () => {
         descr: 'Compare arrays of objects',
     }];
 
-    await App.scenario.runner.runGroup(CommonTests.deepMeetTest, data);
+    await App.scenario.runner.runGroup(Actions.deepMeetTest, data);
 };
 
 const minMaxTests = async () => {
     setBlock('minmax() function', 1);
 
     setBlock('Integer values', 2);
-    await CommonTests.minMaxTest(1, 10, 5, 5);
-    await CommonTests.minMaxTest(1, 10, 15, 10);
-    await CommonTests.minMaxTest(1, 10, 0, 1);
-    await CommonTests.minMaxTest(1, 10, -5, 1);
+    await Actions.minMaxTest(1, 10, 5, 5);
+    await Actions.minMaxTest(1, 10, 15, 10);
+    await Actions.minMaxTest(1, 10, 0, 1);
+    await Actions.minMaxTest(1, 10, -5, 1);
 
     setBlock('Float values', 2);
-    await CommonTests.minMaxTest(-15.5, 15.5, 5.5, 5.5);
-    await CommonTests.minMaxTest(-15.5, 15.5, 15.6, 15.5);
-    await CommonTests.minMaxTest(-15.5, 15.5, 0, 0);
-    await CommonTests.minMaxTest(-15.5, 15.5, -15.55, -15.5);
+    await Actions.minMaxTest(-15.5, 15.5, 5.5, 5.5);
+    await Actions.minMaxTest(-15.5, 15.5, 15.6, 15.5);
+    await Actions.minMaxTest(-15.5, 15.5, 0, 0);
+    await Actions.minMaxTest(-15.5, 15.5, -15.55, -15.5);
 
     setBlock('Inverted range arguments', 2);
-    await CommonTests.minMaxTest(20, 10, 15, 15);
-    await CommonTests.minMaxTest(-10, -20, 15, -10);
+    await Actions.minMaxTest(20, 10, 15, 15);
+    await Actions.minMaxTest(-10, -20, 15, -10);
 
     setBlock('Same range arguments', 2);
-    await CommonTests.minMaxTest(10, 10, 15, 10);
-    await CommonTests.minMaxTest(10, 10, -15, 10);
-    await CommonTests.minMaxTest(10, 10, 10, 10);
-    await CommonTests.minMaxTest(-10, -10, 15, -10);
-    await CommonTests.minMaxTest(-10, -10, 0, -10);
-    await CommonTests.minMaxTest(-10, -10, -10, -10);
+    await Actions.minMaxTest(10, 10, 15, 10);
+    await Actions.minMaxTest(10, 10, -15, 10);
+    await Actions.minMaxTest(10, 10, 10, 10);
+    await Actions.minMaxTest(-10, -10, 15, -10);
+    await Actions.minMaxTest(-10, -10, 0, -10);
+    await Actions.minMaxTest(-10, -10, -10, -10);
 
     setBlock('Invalid arguments', 2);
-    await CommonTests.minMaxTest(null, -10, 1, 0);
-    await CommonTests.minMaxTest(undefined, 1, 5, NaN);
-    await CommonTests.minMaxTest(NaN, null, undefined, NaN);
-    await CommonTests.minMaxTest({}, null, 5, NaN);
-    await CommonTests.minMaxTest(() => { }, null, 5, NaN);
-    await CommonTests.minMaxTest(1, 10, NaN, NaN);
+    await Actions.minMaxTest(null, -10, 1, 0);
+    await Actions.minMaxTest(undefined, 1, 5, NaN);
+    await Actions.minMaxTest(NaN, null, undefined, NaN);
+    await Actions.minMaxTest({}, null, 5, NaN);
+    await Actions.minMaxTest(() => { }, null, 5, NaN);
+    await Actions.minMaxTest(1, 10, NaN, NaN);
 };
 
 const fixFloatTests = async () => {
     setBlock('fixFloat', 1);
 
     setBlock('Number values', 2);
-    await CommonTests.fixFloatTest('Integer number', 100, '100');
-    await CommonTests.fixFloatTest('Float number', 100.5, '100.5');
+    await Actions.fixFloatTest('Integer number', 100, '100');
+    await Actions.fixFloatTest('Float number', 100.5, '100.5');
 
     setBlock('Invalid values', 2);
-    await CommonTests.fixFloatTest('null value', null, null);
-    await CommonTests.fixFloatTest('undefined value', undefined, null);
-    await CommonTests.fixFloatTest('NaN value', NaN, null);
+    await Actions.fixFloatTest('null value', null, null);
+    await Actions.fixFloatTest('undefined value', undefined, null);
+    await Actions.fixFloatTest('NaN value', NaN, null);
 
     setBlock('Zero strings', 2);
     // [value, expected result]
@@ -148,42 +148,42 @@ const fixFloatTests = async () => {
     ];
 
     await App.scenario.runner.runGroup(([value, expected]) => (
-        CommonTests.fixFloatTest(`Zero string '${value}'`, value, expected)
+        Actions.fixFloatTest(`Zero string '${value}'`, value, expected)
     ), zeroPairs);
 
     setBlock('Negative zero strings', 2);
     await App.scenario.runner.runGroup(([value, expected]) => (
-        CommonTests.fixFloatTest(`Negative zero string '${value}'`, value, expected)
+        Actions.fixFloatTest(`Negative zero string '${value}'`, value, expected)
     ), negZeroPairs);
 
     setBlock('Strings', 2);
-    await CommonTests.fixFloatTest('Empty string', '', '0');
-    await CommonTests.fixFloatTest('Integer number string', '123', '123');
-    await CommonTests.fixFloatTest('Float number string with point', '123.5', '123.5');
-    await CommonTests.fixFloatTest('Float number string with comma', '123,5', '123.5');
-    await CommonTests.fixFloatTest('Float number string starts with point', '.56', '0.56');
-    await CommonTests.fixFloatTest('Float number string starts with comma', ',56', '0.56');
+    await Actions.fixFloatTest('Empty string', '', '0');
+    await Actions.fixFloatTest('Integer number string', '123', '123');
+    await Actions.fixFloatTest('Float number string with point', '123.5', '123.5');
+    await Actions.fixFloatTest('Float number string with comma', '123,5', '123.5');
+    await Actions.fixFloatTest('Float number string starts with point', '.56', '0.56');
+    await Actions.fixFloatTest('Float number string starts with comma', ',56', '0.56');
 };
 
 const trimDecimalTests = async () => {
     setBlock('trimDecimalPlaces() function', 1);
 
-    await CommonTests.trimDecimalTest('10.12345', 7, '10.12345');
-    await CommonTests.trimDecimalTest('10.12345', 6, '10.12345');
-    await CommonTests.trimDecimalTest('10.12345', 5, '10.12345');
-    await CommonTests.trimDecimalTest('10.12345', 4, '10.1234');
-    await CommonTests.trimDecimalTest('10.12345', 3, '10.123');
-    await CommonTests.trimDecimalTest('10.12345', 2, '10.12');
-    await CommonTests.trimDecimalTest('10.12345', 1, '10.1');
-    await CommonTests.trimDecimalTest('10.12345', 0, '10');
-    await CommonTests.trimDecimalTest('-10.12345', 7, '-10.12345');
-    await CommonTests.trimDecimalTest('-10.12345', 6, '-10.12345');
-    await CommonTests.trimDecimalTest('-10.12345', 5, '-10.12345');
-    await CommonTests.trimDecimalTest('-10.12345', 4, '-10.1234');
-    await CommonTests.trimDecimalTest('-10.12345', 3, '-10.123');
-    await CommonTests.trimDecimalTest('-10.12345', 2, '-10.12');
-    await CommonTests.trimDecimalTest('-10.12345', 1, '-10.1');
-    await CommonTests.trimDecimalTest('-10.12345', 0, '-10');
+    await Actions.trimDecimalTest('10.12345', 7, '10.12345');
+    await Actions.trimDecimalTest('10.12345', 6, '10.12345');
+    await Actions.trimDecimalTest('10.12345', 5, '10.12345');
+    await Actions.trimDecimalTest('10.12345', 4, '10.1234');
+    await Actions.trimDecimalTest('10.12345', 3, '10.123');
+    await Actions.trimDecimalTest('10.12345', 2, '10.12');
+    await Actions.trimDecimalTest('10.12345', 1, '10.1');
+    await Actions.trimDecimalTest('10.12345', 0, '10');
+    await Actions.trimDecimalTest('-10.12345', 7, '-10.12345');
+    await Actions.trimDecimalTest('-10.12345', 6, '-10.12345');
+    await Actions.trimDecimalTest('-10.12345', 5, '-10.12345');
+    await Actions.trimDecimalTest('-10.12345', 4, '-10.1234');
+    await Actions.trimDecimalTest('-10.12345', 3, '-10.123');
+    await Actions.trimDecimalTest('-10.12345', 2, '-10.12');
+    await Actions.trimDecimalTest('-10.12345', 1, '-10.1');
+    await Actions.trimDecimalTest('-10.12345', 0, '-10');
 };
 
 export const commonTests = async () => {

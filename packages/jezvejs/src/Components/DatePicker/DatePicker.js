@@ -60,6 +60,7 @@ const defaultProps = {
     range: false,
     locales: [],
     animated: false,
+    disabledDateFilter: null,
     onRangeSelect: null,
     onDateSelect: null,
     onShow: null,
@@ -94,6 +95,7 @@ export class DatePicker extends Component {
             date: isDate(this.props.date) ? this.props.date : new Date(),
             curRange: { start: null, end: null },
             selRange: { start: null, end: null },
+            disabledDateFilter: this.props.disabledDateFilter,
             actDate: null,
             transition: null,
         };
@@ -420,36 +422,16 @@ export class DatePicker extends Component {
     }
 
     /**
-     * Convert Date object or DD.MM.YYYY date string to timestamp
-     * @param {string} date
-     */
-    convDate(date) {
-        if (isDate(date)) {
-            return date.getTime();
-        }
-        if (typeof date !== 'string') {
-            return null;
-        }
-
-        const [day, month, year] = date.split('.');
-        if (!day || !month || !year) {
-            return null;
-        }
-
-        return Date.UTC(year, month - 1, day);
-    }
-
-    /**
      * Set up selected items range
      * @param {Date} startDate - date to start selection from
      * @param {Date} endDate  - date to finnish selection at
      */
     setSelection(startDate, endDate, navigateToFirst = true) {
-        const date = this.convDate(startDate);
-        if (!date) {
+        if (!isDate(startDate)) {
             return;
         }
 
+        const date = startDate.getTime();
         const newState = {
             ...this.state,
         };
@@ -458,8 +440,8 @@ export class DatePicker extends Component {
             newState.date = new Date(date);
         }
 
-        const dateTo = this.convDate(endDate);
-        if (dateTo) {
+        if (isDate(endDate)) {
+            const dateTo = endDate.getTime();
             newState.curRange = {
                 start: new Date(Math.min(date, dateTo)),
                 end: new Date(Math.max(date, dateTo)),
@@ -480,6 +462,14 @@ export class DatePicker extends Component {
             selRange: { start: null, end: null },
             actDate: null,
         });
+    }
+
+    setDisabledDateFilter(disabledDateFilter) {
+        if (this.state.disabledDateFilter === disabledDateFilter) {
+            return;
+        }
+
+        this.setState({ ...this.state, disabledDateFilter });
     }
 
     setContentPosition(position) {
@@ -748,6 +738,7 @@ export class DatePicker extends Component {
                 actDate: state.actDate,
                 range: this.props.range,
                 curRange: state.curRange,
+                disabledDateFilter: state.disabledDateFilter,
             });
         }
 
@@ -774,6 +765,7 @@ export class DatePicker extends Component {
             actDate: state.actDate,
             range: this.props.range,
             curRange: state.curRange,
+            disabledDateFilter: state.disabledDateFilter,
         }));
     }
 
@@ -833,6 +825,7 @@ export class DatePicker extends Component {
                 || state.actDate !== prevState.actDate
                 || state.curRange?.start !== prevState.curRange?.start
                 || state.curRange?.end !== prevState.curRange?.end
+                || state.disabledDateFilter !== prevState.disabledDateFilter
             );
         }
         if (state.viewType === YEAR_VIEW) {

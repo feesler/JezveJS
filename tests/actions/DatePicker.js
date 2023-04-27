@@ -139,3 +139,60 @@ export const testSetSelection = async () => {
         return App.view.checkState(expected);
     });
 };
+
+const getDisabledCells = (start, end, monthDays) => {
+    const res = [];
+    for (let day = 1; day <= monthDays; day += 1) {
+        res.push({
+            title: day.toString(),
+            disabled: !!start && !!end && !(day >= start && day <= end),
+        });
+    }
+
+    return res;
+};
+
+export const testDisabledDateFilter = async () => {
+    const expectedDefaults = {
+        disabledFilterDatePicker: {
+            visible: true,
+            cells: getDisabledCells(8, 12, 28),
+            current: {
+                month: 1,
+                year: 2010,
+            },
+        },
+    };
+
+    await test('Initial state of disabled date filter', async () => {
+        await App.view.toggleDisabledFilter();
+        return App.view.checkState(expectedDefaults);
+    });
+
+    await test('Clear disabled date filter', async () => {
+        await App.view.toggleDisabledFilter();
+        await App.view.clearDisabledFilter();
+        await App.view.toggleDisabledFilter();
+
+        const expected = {
+            disabledFilterDatePicker: {
+                visible: true,
+                cells: getDisabledCells(null, null, 28),
+                current: {
+                    month: 1,
+                    year: 2010,
+                },
+            },
+        };
+
+        return App.view.checkState(expected);
+    });
+
+    await test('Set disabled date filter', async () => {
+        await App.view.toggleDisabledFilter();
+        await App.view.setDisabledFilter();
+        await App.view.toggleDisabledFilter();
+
+        return App.view.checkState(expectedDefaults);
+    });
+};

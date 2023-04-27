@@ -1,4 +1,10 @@
-import { createElement, getClassName, isDate } from '../../../../js/common.js';
+import {
+    createElement,
+    enable,
+    getClassName,
+    isDate,
+    isFunction,
+} from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import {
     DAYS_IN_WEEK,
@@ -78,6 +84,8 @@ export class DatePickerMonthView extends Component {
         this.elem.append(...headerElems);
 
         // days
+        const disabledFilter = isFunction(this.state.disabledDateFilter);
+
         do {
             week.forEach((weekday) => {
                 const item = {
@@ -92,6 +100,9 @@ export class DatePickerMonthView extends Component {
 
                 item.elem.classList.toggle(OTHER_CELL_CLASS, !isSameYearMonth(date, weekday));
                 item.elem.classList.toggle(TODAY_CELL_CLASS, isSameDate(weekday, today));
+
+                const disabled = disabledFilter && this.state.disabledDateFilter(item.date);
+                enable(item.elem, !disabled);
 
                 this.items.push(item);
                 this.elem.append(item.elem);
@@ -122,9 +133,12 @@ export class DatePickerMonthView extends Component {
             state.actDate === prevState?.actDate
             && state.curRange?.start === prevState.curRange?.start
             && state.curRange?.end === prevState.curRange?.end
+            && state.disabledDateFilter === prevState.disabledDateFilter
         ) {
             return;
         }
+
+        const disabledFilter = isFunction(state.disabledDateFilter);
 
         this.items.forEach((item) => {
             const isActive = state.actDate && isSameDate(item.date, state.actDate);
@@ -132,6 +146,9 @@ export class DatePickerMonthView extends Component {
 
             const highlight = state.range && this.inRange(item.date, state.curRange);
             item.elem.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
+
+            const disabled = disabledFilter && state.disabledDateFilter(item.date);
+            enable(item.elem, !disabled);
         });
     }
 }

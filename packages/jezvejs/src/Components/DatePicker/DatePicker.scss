@@ -6,6 +6,7 @@
   --dp-border-color: #000000;
   --dp-border-width: 2px;
   --dp-text-color: #000000;
+  --dp-disabled-text-color: #dddddd;
   --dp-other-text-color: #b0b0b0;
   --dp-active-color: #20d0ff;
   --dp-today-color: #20d0ff;
@@ -157,6 +158,13 @@
   cursor: pointer;
   padding: 0 0.6rem;
   line-height: 1.4rem;
+}
+
+.dp__day-cell[disabled] {
+  color: var(--dp-disabled-text-color);
+  border-color: var(--dp-bg-color);
+  background-color: var(--dp-bg-color);
+  pointer-events: none;
 }
 
 .dp__other-month-cell {

@@ -117,14 +117,52 @@ const initSetSelection = () => {
         relparent: inpGroup,
         range: true,
     });
-    datePicker.setSelection('01.12.2020', '07.12.2020');
+    datePicker.setSelection(
+        new Date(Date.UTC(2020, 11, 1)),
+        new Date(Date.UTC(2020, 11, 7)),
+    );
     insertAfter(datePicker.elem, inpGroup);
 
     setEvents(ge('showSelectionBtn'), { click: () => datePicker.show() });
     setEvents(ge('setSelectionBtn'), {
-        click: () => datePicker.setSelection('08.12.2020', '14.12.2020'),
+        click: () => datePicker.setSelection(
+            new Date(Date.UTC(2020, 11, 8)),
+            new Date(Date.UTC(2020, 11, 14)),
+        ),
     });
     setEvents(ge('clearSelectionBtn'), { click: () => datePicker.clearSelection() });
+};
+
+const inDateRange = (date, { start = null, end = null }) => (
+    ((start === null) || (date - start >= 0))
+    && ((end === null) || (date - end <= 0))
+);
+
+const enabledRange = {
+    start: new Date(Date.UTC(2010, 1, 8)),
+    end: new Date(Date.UTC(2010, 1, 12)),
+};
+const disabledOutsideRange = (date) => !inDateRange(date, enabledRange);
+
+const initDisabledDate = () => {
+    const inpGroup = ge('dpDisabledDateGroup');
+    const datePicker = DatePicker.create({
+        relparent: inpGroup,
+        range: true,
+        disabledDateFilter: disabledOutsideRange,
+        onDateSelect: (date) => {
+            formatDateToInput(date, 'disabledDateInp');
+            datePicker.hide();
+        },
+    });
+    datePicker.setSelection(new Date(Date.UTC(2010, 1, 10)));
+    insertAfter(datePicker.elem, inpGroup);
+
+    setEvents(ge('showDisabledDateBtn'), { click: () => datePicker.show() });
+    setEvents(ge('setDisabledBtn'), {
+        click: () => datePicker.setDisabledDateFilter(disabledOutsideRange),
+    });
+    setEvents(ge('clearDisabledBtn'), { click: () => datePicker.setDisabledDateFilter(null) });
 };
 
 const initLocales = () => {
@@ -157,6 +195,7 @@ const init = () => {
     initRangeSelect();
     initCallbacks();
     initSetSelection();
+    initDisabledDate();
     initLocales();
 };
 

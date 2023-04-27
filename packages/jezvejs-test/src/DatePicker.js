@@ -50,18 +50,20 @@ export class DatePicker extends TestComponent {
             return 'month';
         }, elems[0]);
 
-        res.cells = await asyncMap(elems, async (elem) => {
+        res.allCells = await asyncMap(elems, async (elem) => {
             const cell = await evaluate((el) => ({
                 title: el.textContent,
+                weekday: el.classList.contains('dp__weekday-cell'),
                 other: el.classList.contains('dp__other-month-cell'),
                 active: el.classList.contains('dp__cell_act'),
                 highlighted: el.classList.contains('dp__cell_hl'),
+                disabled: el.hasAttribute('disabled'),
             }), elem);
             cell.elem = elem;
 
             return cell;
         });
-        res.cells = res.cells.filter((item) => !item.other);
+        res.cells = res.allCells.filter((item) => !item.other && !item.weekday);
 
         res.current = this.parseHeader(res.title, res.viewType);
 
@@ -112,6 +114,7 @@ export class DatePicker extends TestComponent {
         const lval = val.toString().toLowerCase();
         const cell = this.content.cells.find((item) => item.title.toLowerCase() === lval);
         assert(cell, 'Specified cell not found');
+        assert(!cell.disabled, 'Specified cell is disabled');
 
         return click(cell.elem);
     }
