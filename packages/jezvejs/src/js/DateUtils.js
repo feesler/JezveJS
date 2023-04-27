@@ -94,7 +94,25 @@ export const isValidDateString = (str, params = {}) => (
     isDate(parseDateString(str, params))
 );
 
-/** Shift date to specified count of days */
+/** Returns a new date shifted by the specified number of years */
+export const shiftYear = (date, shift) => (
+    new Date(Date.UTC(
+        date.getFullYear() + shift,
+        date.getMonth(),
+        date.getDate(),
+    ))
+);
+
+/** Returns a new date shifted by the specified number of months */
+export const shiftMonth = (date, shift) => (
+    new Date(Date.UTC(
+        date.getFullYear(),
+        date.getMonth() + shift,
+        date.getDate(),
+    ))
+);
+
+/** Returns a new date shifted by the specified number of days */
 export const shiftDate = (date, shift) => (
     new Date(Date.UTC(
         date.getFullYear(),
