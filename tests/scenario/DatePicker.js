@@ -40,4 +40,7 @@ export const datePickerTests = async () => {
 
     setBlock('Disable date filter', 2);
     await Actions.testDisabledDateFilter();
+
+    setBlock('Date range parts', 2);
+    await Actions.testRangeParts();
 };

@@ -8,6 +8,7 @@ import {
     onReady,
     formatDate,
     insertAfter,
+    parseDateString,
 } from 'jezvejs';
 import { DatePicker } from 'jezvejs/DatePicker';
 import { initNavigation } from '../../app.js';
@@ -18,6 +19,11 @@ const formatDateToInput = (date, inputId) => {
     if (input) {
         input.value = formatDate(date);
     }
+};
+
+const parseDateFromInput = (inputId) => {
+    const input = ge(inputId);
+    return parseDateString(input?.value);
 };
 
 const formatRangeToInput = (range, inputId) => {
@@ -165,6 +171,52 @@ const initDisabledDate = () => {
     setEvents(ge('clearDisabledBtn'), { click: () => datePicker.setDisabledDateFilter(null) });
 };
 
+const initRangePart = () => {
+    const inpGroup = ge('dpRangePartGroup');
+
+    const datePicker = DatePicker.create({
+        relparent: inpGroup,
+        disabledDateFilter: (date, state) => {
+            const rangePart = state?.rangePart;
+            if (rangePart !== 'start' && rangePart !== 'end') {
+                return false;
+            }
+
+            const limitInput = (rangePart === 'start') ? 'endDateInp' : 'startDateInp';
+            const limitDate = parseDateFromInput(limitInput);
+            if (!limitDate) {
+                return false;
+            }
+
+            return (rangePart === 'start') ? (limitDate - date < 0) : (limitDate - date > 0);
+        },
+        onDateSelect: (date) => {
+            if (datePicker.state.rangePart === 'start') {
+                formatDateToInput(date, 'startDateInp');
+            } else if (datePicker.state.rangePart === 'end') {
+                formatDateToInput(date, 'endDateInp');
+            }
+            datePicker.hide();
+        },
+    });
+    datePicker.setSelection(new Date(Date.UTC(2010, 1, 10)));
+    insertAfter(datePicker.elem, inpGroup);
+
+    setEvents(ge('selectStartDateBtn'), {
+        click: () => {
+            datePicker.setRangePart('start');
+            datePicker.show();
+        },
+    });
+
+    setEvents(ge('selectEndDateBtn'), {
+        click: () => {
+            datePicker.setRangePart('end');
+            datePicker.show();
+        },
+    });
+};
+
 const initLocales = () => {
     const enDatePicker = DatePicker.create({
         static: true,
@@ -196,6 +248,7 @@ const init = () => {
     initCallbacks();
     initSetSelection();
     initDisabledDate();
+    initRangePart();
     initLocales();
 };
 
