@@ -1,4 +1,4 @@
-import { createElement, isDate } from '../../../../js/common.js';
+import { createElement, getClassName, isDate } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import {
     getNextViewDate,
@@ -61,7 +61,7 @@ export class DatePickerYearRangeView extends Component {
                 date: yearDate,
                 elem: createElement('div', {
                     props: {
-                        className: `${CELL_CLASS} ${YEARRANGE_CELL_CLASS}`,
+                        className: getClassName(CELL_CLASS, YEARRANGE_CELL_CLASS),
                         textContent: yearDate.getFullYear(),
                     },
                 }),

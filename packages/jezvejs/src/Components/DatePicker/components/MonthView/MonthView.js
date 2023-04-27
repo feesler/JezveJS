@@ -1,4 +1,4 @@
-import { createElement, isDate } from '../../../../js/common.js';
+import { createElement, getClassName, isDate } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import {
     DAYS_IN_WEEK,
@@ -71,7 +71,7 @@ export class DatePickerMonthView extends Component {
         let week = getWeekDays(firstMonthDay);
         const headerElems = week.map((weekday) => createElement('div', {
             props: {
-                className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${WEEKDAY_CELL_CLASS}`,
+                className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, WEEKDAY_CELL_CLASS),
                 textContent: getWeekdayShort(weekday, this.props.locales),
             },
         }));
@@ -84,18 +84,14 @@ export class DatePickerMonthView extends Component {
                     date: weekday,
                     elem: createElement('div', {
                         props: {
-                            className: `${CELL_CLASS} ${MONTH_CELL_CLASS} ${DAY_CELL_CLASS}`,
+                            className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
                             textContent: weekday.getDate(),
                         },
                     }),
                 };
 
-                if (!isSameYearMonth(date, weekday)) {
-                    item.elem.classList.add(OTHER_CELL_CLASS);
-                }
-                if (isSameDate(weekday, today)) {
-                    item.elem.classList.add(TODAY_CELL_CLASS);
-                }
+                item.elem.classList.toggle(OTHER_CELL_CLASS, !isSameYearMonth(date, weekday));
+                item.elem.classList.toggle(TODAY_CELL_CLASS, isSameDate(weekday, today));
 
                 this.items.push(item);
                 this.elem.append(item.elem);

@@ -5,6 +5,7 @@ import {
     removeChilds,
     setEvents,
     createElement,
+    getClassName,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import './Paginator.scss';
@@ -236,7 +237,7 @@ export class Paginator extends Component {
         if (item.active && !this.state.allowActiveLink) {
             return createElement('span', {
                 props: {
-                    className: `${ITEM_CLASS} ${ACTIVE_ITEM_CLASS}`,
+                    className: getClassName(ITEM_CLASS, ACTIVE_ITEM_CLASS),
                     textContent: item.page,
                 },
             });
@@ -258,9 +259,7 @@ export class Paginator extends Component {
             res.href = url;
         }
 
-        if (item.active) {
-            res.classList.add(ACTIVE_ITEM_CLASS);
-        }
+        res.classList.toggle(ACTIVE_ITEM_CLASS, item.active);
 
         return res;
     }
@@ -273,7 +272,7 @@ export class Paginator extends Component {
 
         const arrowNavClass = (isNext) ? ARROW_CLASS_NEXT : ARROW_CLASS_PREV;
         return createElement('a', {
-            props: { className: `${ITEM_CLASS} ${ARROW_CLASS} ${arrowNavClass}` },
+            props: { className: getClassName(ITEM_CLASS, ARROW_CLASS, arrowNavClass) },
             children: arrowIcon,
         });
     }
