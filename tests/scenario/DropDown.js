@@ -6,7 +6,7 @@ import {
     setBlock,
     isVisible,
 } from 'jezve-test';
-import * as DropDownTests from '../actions/DropDown.js';
+import * as Actions from '../actions/DropDown.js';
 import { App } from '../app.js';
 
 export const dropDownTests = async () => {
@@ -17,32 +17,32 @@ export const dropDownTests = async () => {
 
     setBlock('Single item select', 2);
 
-    await DropDownTests.selectTest('inlineDropDown', '2');
-    await DropDownTests.selectTest('editableInlineDropDown', '3');
-    await DropDownTests.selectTest('fullWidthDropDown', '1');
-    await DropDownTests.selectTest('halfWidthDropDown', '2');
+    await Actions.selectTest('inlineDropDown', '2');
+    await Actions.selectTest('editableInlineDropDown', '3');
+    await Actions.selectTest('fullWidthDropDown', '1');
+    await Actions.selectTest('halfWidthDropDown', '2');
 
     await test('Parse select',
         () => App.view.content.parsedSelDropDown.textValue === 'Item 1');
 
-    await DropDownTests.selectTest('parsedSelDropDown', '3');
+    await Actions.selectTest('parsedSelDropDown', '3');
     await test('Selected value update',
         () => App.view.content.parsedSelDropDown.textValue === 'Item 3');
 
     await test('Parse select with selected option',
         () => App.view.content.parsedSelSelectedDropDown.textValue === 'Item 3');
-    await DropDownTests.selectTest('parsedSelDropDown', '5');
+    await Actions.selectTest('parsedSelDropDown', '5');
 
     await test('Attached to block element', () => (
         !App.view.content.attachedToBlockDropDown.listContainer?.visible
     ));
-    await DropDownTests.selectTest('attachedToBlockDropDown', '2');
+    await Actions.selectTest('attachedToBlockDropDown', '2');
 
     await test('Attached to inline element',
         async () => !(await isVisible(
             App.view.content.attachedToInlineDropDown.content.listContainer, true,
         )));
-    await DropDownTests.selectTest('attachedToInlineDropDown', '3');
+    await Actions.selectTest('attachedToInlineDropDown', '3');
 
     setBlock('Multiple items select', 2);
 
@@ -58,34 +58,34 @@ export const dropDownTests = async () => {
                 App.view.content.multiSelDropDown.content.selectedItems,
                 expectedSelectedItems,
             ));
-    await DropDownTests.selectTest('multiSelDropDown', '3');
-    await DropDownTests.selectTest('multiSelDropDown', '5');
+    await Actions.selectTest('multiSelDropDown', '3');
+    await Actions.selectTest('multiSelDropDown', '5');
 
     await test('List of multi select Drop Down not closed after click by item',
         () => (isVisible(
             App.view.content.multiSelDropDown.content.listContainer, true,
         )));
 
-    await DropDownTests.deselectTest('multiSelDropDown', '5');
-    await DropDownTests.clearTest('multiSelDropDown');
+    await Actions.deselectTest('multiSelDropDown', '5');
+    await Actions.clearTest('multiSelDropDown');
 
     setBlock('Filter items', 2);
 
-    await DropDownTests.toggleEnableFilter();
-    await DropDownTests.filterTest('filterDropDown', '1');
-    await DropDownTests.filterTest('filterDropDown', '10');
-    await DropDownTests.filterTest('filterDropDown', '100');
+    await Actions.toggleEnableFilter();
+    await Actions.filterTest('filterDropDown', '1');
+    await Actions.filterTest('filterDropDown', '10');
+    await Actions.filterTest('filterDropDown', '100');
 
-    await DropDownTests.toggleEnableMultiFilter();
-    await DropDownTests.filterTest('multiFilterDropDown', '1');
-    await DropDownTests.filterTest('multiFilterDropDown', '10');
-    await DropDownTests.filterTest('multiFilterDropDown', '100');
+    await Actions.toggleEnableMultiFilter();
+    await Actions.filterTest('multiFilterDropDown', '1');
+    await Actions.filterTest('multiFilterDropDown', '10');
+    await Actions.filterTest('multiFilterDropDown', '100');
 
-    await DropDownTests.filterTest('groupsFilterDropDown', '1');
-    await DropDownTests.filterTest('groupsFilterDropDown', '10');
-    await DropDownTests.filterTest('groupsFilterDropDown', '100');
+    await Actions.filterTest('groupsFilterDropDown', '1');
+    await Actions.filterTest('groupsFilterDropDown', '10');
+    await Actions.filterTest('groupsFilterDropDown', '100');
 
     setBlock('Component methods', 2);
 
-    await DropDownTests.addRemoveItemsTest();
+    await Actions.addRemoveItemsTest();
 };

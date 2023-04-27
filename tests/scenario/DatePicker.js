@@ -3,7 +3,7 @@ import {
     goTo,
     setBlock,
 } from 'jezve-test';
-import * as DatePickerTests from '../actions/DatePicker.js';
+import * as Actions from '../actions/DatePicker.js';
 import { App } from '../app.js';
 
 export const datePickerTests = async () => {
@@ -13,31 +13,31 @@ export const datePickerTests = async () => {
     setBlock('Date Picker component', 1);
 
     setBlock('Static Date Picker', 2);
-    await DatePickerTests.selectDateStatic(App.dates.yesterday);
-    await DatePickerTests.selectDateStatic(App.dates.weekAgo);
-    await DatePickerTests.selectDateStatic(App.dates.weekAfter);
-    await DatePickerTests.selectDateStatic(App.dates.monthAgo);
-    await DatePickerTests.selectDateStatic(App.dates.yearAgo);
+    await Actions.selectDateStatic(App.dates.yesterday);
+    await Actions.selectDateStatic(App.dates.weekAgo);
+    await Actions.selectDateStatic(App.dates.weekAfter);
+    await Actions.selectDateStatic(App.dates.monthAgo);
+    await Actions.selectDateStatic(App.dates.yearAgo);
 
     setBlock('Popup Date Picker', 2);
-    await DatePickerTests.selectDatePopup(App.dates.yesterday);
-    await DatePickerTests.selectDatePopup(App.dates.monthAgo);
+    await Actions.selectDatePopup(App.dates.yesterday);
+    await Actions.selectDatePopup(App.dates.monthAgo);
 
     setBlock('Range select', 2);
-    await DatePickerTests.selectDateRange({
+    await Actions.selectDateRange({
         start: App.dates.monthAgo,
         end: App.dates.weekAfter,
     });
 
     setBlock('Callbacks', 2);
-    await DatePickerTests.testCallbacks({
+    await Actions.testCallbacks({
         start: App.dates.monthAgo,
         end: App.dates.yearAgo,
     });
 
     setBlock('setSelection() method', 2);
-    await DatePickerTests.testSetSelection();
+    await Actions.testSetSelection();
 
     setBlock('Disable date filter', 2);
-    await DatePickerTests.testDisabledDateFilter();
+    await Actions.testDisabledDateFilter();
 };
