@@ -58,6 +58,7 @@ const defaultProps = {
     date: new Date(),
     static: false,
     range: false,
+    rangePart: null, // possible values: 'start', 'end' or null
     locales: [],
     animated: false,
     disabledDateFilter: null,
@@ -74,6 +75,7 @@ const defaultProps = {
  * @param {Date} props.date - initial date to show
  * @param {boolean} props.static - if true, date picker will be statically placed
  * @param {boolean} props.range - if true turn on date range select mode
+ * @param {String|null} props.rangePart - currently selecting part of date range
  * @param {String|[]} props.locales - locales to render component
  * @param {boolean} props.animated - animate transitions between views if possible
  * @param {function} props.onRangeSelect - date range select callback
@@ -95,6 +97,7 @@ export class DatePicker extends Component {
             date: isDate(this.props.date) ? this.props.date : new Date(),
             curRange: { start: null, end: null },
             selRange: { start: null, end: null },
+            rangePart: this.props.rangePart,
             disabledDateFilter: this.props.disabledDateFilter,
             actDate: null,
             transition: null,
@@ -303,6 +306,14 @@ export class DatePicker extends Component {
         if (!this.props.animated) {
             this.onStateReady();
         }
+    }
+
+    setRangePart(rangePart) {
+        if (this.state.rangePart === rangePart) {
+            return;
+        }
+
+        this.setState({ ...this.state, rangePart });
     }
 
     onStateReady() {
@@ -739,6 +750,7 @@ export class DatePicker extends Component {
                 range: this.props.range,
                 curRange: state.curRange,
                 disabledDateFilter: state.disabledDateFilter,
+                rangePart: state.rangePart,
             });
         }
 
@@ -766,6 +778,7 @@ export class DatePicker extends Component {
             range: this.props.range,
             curRange: state.curRange,
             disabledDateFilter: state.disabledDateFilter,
+            rangePart: state.rangePart,
         }));
     }
 
@@ -826,6 +839,7 @@ export class DatePicker extends Component {
                 || state.curRange?.start !== prevState.curRange?.start
                 || state.curRange?.end !== prevState.curRange?.end
                 || state.disabledDateFilter !== prevState.disabledDateFilter
+                || state.rangePart !== prevState.rangePart
             );
         }
         if (state.viewType === YEAR_VIEW) {

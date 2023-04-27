@@ -196,3 +196,61 @@ export const testDisabledDateFilter = async () => {
         return App.view.checkState(expectedDefaults);
     });
 };
+
+export const testRangeParts = async () => {
+    await test('Select start date', async () => {
+        const expected = {
+            rangePartDatePicker: {
+                visible: true,
+                cells: getDisabledCells(null, null, 28),
+                current: {
+                    month: 1,
+                    year: 2010,
+                },
+            },
+        };
+
+        await App.view.toggleStartDate();
+        App.view.checkState(expected);
+
+        await App.view.selectRangePartDate(new Date(Date.UTC(2010, 1, 10)));
+
+        return true;
+    });
+
+    await test('Select end date', async () => {
+        const expected = {
+            rangePartDatePicker: {
+                visible: true,
+                cells: getDisabledCells(10, 28, 28),
+                current: {
+                    month: 1,
+                    year: 2010,
+                },
+            },
+        };
+
+        await App.view.toggleEndDate();
+        App.view.checkState(expected);
+
+        await App.view.selectRangePartDate(new Date(Date.UTC(2010, 1, 18)));
+
+        return true;
+    });
+
+    await test('Select start date when end date is selected', async () => {
+        const expected = {
+            rangePartDatePicker: {
+                visible: true,
+                cells: getDisabledCells(1, 18, 28),
+                current: {
+                    month: 1,
+                    year: 2010,
+                },
+            },
+        };
+
+        await App.view.toggleStartDate();
+        return App.view.checkState(expected);
+    });
+};

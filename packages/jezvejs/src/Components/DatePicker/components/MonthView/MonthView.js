@@ -134,6 +134,7 @@ export class DatePickerMonthView extends Component {
             && state.curRange?.start === prevState.curRange?.start
             && state.curRange?.end === prevState.curRange?.end
             && state.disabledDateFilter === prevState.disabledDateFilter
+            && state.rangePart === prevState.rangePart
         ) {
             return;
         }
@@ -147,7 +148,7 @@ export class DatePickerMonthView extends Component {
             const highlight = state.range && this.inRange(item.date, state.curRange);
             item.elem.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
 
-            const disabled = disabledFilter && state.disabledDateFilter(item.date);
+            const disabled = disabledFilter && state.disabledDateFilter(item.date, state);
             enable(item.elem, !disabled);
         });
     }
