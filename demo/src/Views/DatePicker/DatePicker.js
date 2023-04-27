@@ -117,12 +117,12 @@ const initSetSelection = () => {
         relparent: inpGroup,
         range: true,
     });
-    datePicker.setSelection('01.12.2020', '07.12.2020');
+    datePicker.setSelection(new Date(2020, 11, 1), new Date(2020, 11, 7));
     insertAfter(datePicker.elem, inpGroup);
 
     setEvents(ge('showSelectionBtn'), { click: () => datePicker.show() });
     setEvents(ge('setSelectionBtn'), {
-        click: () => datePicker.setSelection('08.12.2020', '14.12.2020'),
+        click: () => datePicker.setSelection(new Date(2020, 11, 8), new Date(2020, 11, 14)),
     });
     setEvents(ge('clearSelectionBtn'), { click: () => datePicker.clearSelection() });
 };
@@ -149,7 +149,7 @@ const initDisabledDate = () => {
             datePicker.hide();
         },
     });
-    datePicker.setSelection('10.02.2010');
+    datePicker.setSelection(new Date(2010, 1, 10));
     insertAfter(datePicker.elem, inpGroup);
 
     setEvents(ge('showDisabledDateBtn'), { click: () => datePicker.show() });

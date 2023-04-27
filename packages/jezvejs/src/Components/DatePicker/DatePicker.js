@@ -421,36 +421,16 @@ export class DatePicker extends Component {
     }
 
     /**
-     * Convert Date object or DD.MM.YYYY date string to timestamp
-     * @param {string} date
-     */
-    convDate(date) {
-        if (isDate(date)) {
-            return date.getTime();
-        }
-        if (typeof date !== 'string') {
-            return null;
-        }
-
-        const [day, month, year] = date.split('.');
-        if (!day || !month || !year) {
-            return null;
-        }
-
-        return Date.UTC(year, month - 1, day);
-    }
-
-    /**
      * Set up selected items range
      * @param {Date} startDate - date to start selection from
      * @param {Date} endDate  - date to finnish selection at
      */
     setSelection(startDate, endDate, navigateToFirst = true) {
-        const date = this.convDate(startDate);
-        if (!date) {
+        if (!isDate(startDate)) {
             return;
         }
 
+        const date = startDate.getTime();
         const newState = {
             ...this.state,
         };
@@ -459,8 +439,8 @@ export class DatePicker extends Component {
             newState.date = new Date(date);
         }
 
-        const dateTo = this.convDate(endDate);
-        if (dateTo) {
+        if (isDate(endDate)) {
+            const dateTo = endDate.getTime();
             newState.curRange = {
                 start: new Date(Math.min(date, dateTo)),
                 end: new Date(Math.max(date, dateTo)),
