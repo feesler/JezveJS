@@ -1,5 +1,5 @@
 import { setBlock } from 'jezve-test';
-import * as Actions from '../run/Collapsible.js';
+import * as Actions from '../actions/Collapsible.js';
 
 export const collapsibleTests = async () => {
     setBlock('Collapsible component', 1);

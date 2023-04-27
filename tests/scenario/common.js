@@ -1,5 +1,5 @@
 import { setBlock } from 'jezve-test';
-import * as CommonTests from '../run/common.js';
+import * as CommonTests from '../actions/common.js';
 import { App } from '../app.js';
 
 const deepMeetTests = async () => {
