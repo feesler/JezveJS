@@ -162,6 +162,8 @@
 
 .dp__day-cell[disabled] {
   color: var(--dp-disabled-text-color);
+  border-color: var(--dp-bg-color);
+  background-color: var(--dp-bg-color);
   pointer-events: none;
 }
 
