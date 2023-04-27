@@ -143,7 +143,7 @@ const initDisabledDate = () => {
     const datePicker = DatePicker.create({
         relparent: inpGroup,
         range: true,
-        disabledDate: disabledOutsideRange,
+        disabledDateFilter: disabledOutsideRange,
         onDateSelect: (date) => {
             formatDateToInput(date, 'disabledDateInp');
             datePicker.hide();
