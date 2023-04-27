@@ -145,7 +145,7 @@ const getDisabledCells = (start, end, monthDays) => {
     for (let day = 1; day <= monthDays; day += 1) {
         res.push({
             title: day.toString(),
-            disabled: !(day >= start && day <= end),
+            disabled: !!start && !!end && !(day >= start && day <= end),
         });
     }
 
@@ -177,7 +177,7 @@ export const testDisabledDateFilter = async () => {
         const expected = {
             disabledFilterDatePicker: {
                 visible: true,
-                cells: getDisabledCells(-1, -1, 28),
+                cells: getDisabledCells(null, null, 28),
                 current: {
                     month: 1,
                     year: 2010,
@@ -190,7 +190,7 @@ export const testDisabledDateFilter = async () => {
 
     await test('Set disabled date filter', async () => {
         await App.view.toggleDisabledFilter();
-        await App.view.updateSelection();
+        await App.view.setDisabledFilter();
         await App.view.toggleDisabledFilter();
 
         return App.view.checkState(expectedDefaults);

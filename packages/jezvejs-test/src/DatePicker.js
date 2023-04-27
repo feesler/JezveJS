@@ -53,6 +53,7 @@ export class DatePicker extends TestComponent {
         res.allCells = await asyncMap(elems, async (elem) => {
             const cell = await evaluate((el) => ({
                 title: el.textContent,
+                weekday: el.classList.contains('dp__weekday-cell'),
                 other: el.classList.contains('dp__other-month-cell'),
                 active: el.classList.contains('dp__cell_act'),
                 highlighted: el.classList.contains('dp__cell_hl'),
@@ -62,7 +63,7 @@ export class DatePicker extends TestComponent {
 
             return cell;
         });
-        res.cells = res.allCells.filter((item) => !item.other);
+        res.cells = res.allCells.filter((item) => !item.other && !item.weekday);
 
         res.current = this.parseHeader(res.title, res.viewType);
 
