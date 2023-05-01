@@ -216,18 +216,6 @@ export class DateInput extends Component {
         return groups.map((group) => group[0]).join(this.separator);
     }
 
-    /** Returns range of specified group('d', 'm' or 'y') for current format */
-    getGroupRange(group) {
-        const res = {
-            start: this.formatMask.indexOf(group),
-        };
-        res.end = this.formatMask.indexOf(this.separator, res.start + 1);
-        if (res.end === -1) {
-            res.end = this.maxLength;
-        }
-        return res;
-    }
-
     /**
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
