@@ -259,7 +259,7 @@ export class Paginator extends Component {
             res.href = url;
         }
 
-        res.classList.toggle(ACTIVE_ITEM_CLASS, item.active);
+        res.classList.toggle(ACTIVE_ITEM_CLASS, !!item.active);
 
         return res;
     }
