@@ -452,28 +452,6 @@ export const selectText = (input, startPos, endPos) => {
  */
 export const setCursorPos = (input, pos) => selectText(input, pos, pos);
 
-/** Check string is correct date in dd.mm.yyyy format */
-export const checkDate = (str) => {
-    if (typeof str !== 'string' || !str.length) {
-        return false;
-    }
-
-    const sparr = str.split('.');
-    if (sparr.length !== 3) {
-        return false;
-    }
-
-    if (!isNum(sparr[0]) || !isNum(sparr[1]) || !isNum(sparr[2])) {
-        return false;
-    }
-
-    if (sparr[0] < 1 || sparr[0] > 31 || sparr[1] < 1 || sparr[1] > 12 || sparr[2] < 1970) {
-        return false;
-    }
-
-    return true;
-};
-
 /** Return text of selected option of select object */
 export const selectedText = (selectObj) => {
     if (!selectObj?.options || selectObj.selectedIndex === -1) {
@@ -745,34 +723,6 @@ export const childCount = (obj) => {
 
 /** Return string for value in pixels */
 export const px = (val) => `${parseInt(val, 10)}px`;
-
-/** Join parameters and values of object to URL */
-export const urlJoin = (obj) => {
-    const arr = [];
-
-    if (!isObject(obj)) {
-        return '';
-    }
-
-    Object.keys(obj).forEach((key) => {
-        const val = obj[key];
-        if (Array.isArray(val)) {
-            val.forEach((arrItem) => {
-                if (!isObject(arrItem)) {
-                    const eKey = encodeURIComponent(key);
-                    const eValue = encodeURIComponent(arrItem.toString());
-                    arr.push(`${eKey}[]=${eValue}`);
-                }
-            });
-        } else if (!isObject(val)) {
-            const eKey = encodeURIComponent(key);
-            const eValue = encodeURIComponent(val.toString());
-            arr.push(`${eKey}=${eValue}`);
-        }
-    });
-
-    return arr.join('&');
-};
 
 /** Cross-browser find head element */
 export const head = () => {
