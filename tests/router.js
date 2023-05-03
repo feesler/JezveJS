@@ -1,5 +1,6 @@
 import { AppView } from './view/AppView.js';
 import { CollapsibleView } from './view/CollapsibleView.js';
+import { DateInputView } from './view/DateInputView.js';
 import { DropDownView } from './view/DropDownView.js';
 import { DatePickerView } from './view/DatePickerView.js';
 import { PaginatorView } from './view/PaginatorView.js';
@@ -13,7 +14,7 @@ const routeMap = {
     checkbox: AppView,
     collapsible: CollapsibleView,
     common: AppView,
-    dateinput: AppView,
+    dateinput: DateInputView,
     debug: AppView,
     decimal: AppView,
     dpitest: AppView,

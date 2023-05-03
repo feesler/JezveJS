@@ -8,7 +8,6 @@ import {
 const views = {
     chartgrid: 'ChartGrid',
     checkbox: 'Checkbox',
-    dateinput: 'DateInput',
     debug: 'Debug',
     decimal: 'DecimalInput',
     dpitest: 'DPI test',
