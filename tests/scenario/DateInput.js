@@ -9,16 +9,16 @@ const typeToEmpty = async () => {
     await Actions.inputToEmpty('usLocaleInput', '11', '11/__/__');
     await Actions.inputToEmpty('usLocaleInput', '112', '11/2_/__');
     await Actions.inputToEmpty('usLocaleInput', '1122', '11/22/__');
-    await Actions.inputToEmpty('usLocaleInput', '11223', '11/22/3_');
-    await Actions.inputToEmpty('usLocaleInput', '112233', '11/22/33');
+    await Actions.inputToEmpty('usLocaleInput', '11220', '11/22/0_');
+    await Actions.inputToEmpty('usLocaleInput', '112203', '11/22/03');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputToEmpty('koLocaleInput', '3', '3_. __. __');
-    await Actions.inputToEmpty('koLocaleInput', '33', '33. __. __');
-    await Actions.inputToEmpty('koLocaleInput', '331', '33. 1_. __');
-    await Actions.inputToEmpty('koLocaleInput', '3311', '33. 11. __');
-    await Actions.inputToEmpty('koLocaleInput', '33112', '33. 11. 2_');
-    await Actions.inputToEmpty('koLocaleInput', '331122', '33. 11. 22');
+    await Actions.inputToEmpty('koLocaleInput', '0', '0_. __. __');
+    await Actions.inputToEmpty('koLocaleInput', '03', '03. __. __');
+    await Actions.inputToEmpty('koLocaleInput', '031', '03. 1_. __');
+    await Actions.inputToEmpty('koLocaleInput', '0311', '03. 11. __');
+    await Actions.inputToEmpty('koLocaleInput', '03112', '03. 11. 2_');
+    await Actions.inputToEmpty('koLocaleInput', '031122', '03. 11. 22');
 
     setBlock('ru-RU locale', 2);
     await Actions.inputToEmpty('ruLocaleInput', '2', '2_.__.____');
@@ -109,22 +109,24 @@ const pasteToEmpty = async () => {
     setBlock('en-US locale', 2);
     await Actions.pasteToEmpty('usLocaleInput', '11', '11/__/__');
     await Actions.pasteToEmpty('usLocaleInput', '1122', '11/22/__');
-    await Actions.pasteToEmpty('usLocaleInput', '112233', '11/22/33');
+    await Actions.pasteToEmpty('usLocaleInput', '11220', '11/22/0_');
+    await Actions.pasteToEmpty('usLocaleInput', '112203', '11/22/03');
     await Actions.pasteToEmpty('usLocaleInput', '11/22', '11/22/__');
     await Actions.pasteToEmpty('usLocaleInput', '11/22/', '11/22/__');
-    await Actions.pasteToEmpty('usLocaleInput', '11/22/33', '11/22/33');
+    await Actions.pasteToEmpty('usLocaleInput', '11/22/03', '11/22/03');
     await Actions.pasteToEmpty('usLocaleInput', '4', '04/__/__');
     await Actions.pasteToEmpty('usLocaleInput', '045', '04/05/__');
+    await Actions.pasteToEmpty('usLocaleInput', '04050', '04/05/0_');
 
     setBlock('ko-KR locale', 2);
-    await Actions.pasteToEmpty('koLocaleInput', '33', '33. __. __');
-    await Actions.pasteToEmpty('koLocaleInput', '3311', '33. 11. __');
-    await Actions.pasteToEmpty('koLocaleInput', '331122', '33. 11. 22');
-    await Actions.pasteToEmpty('koLocaleInput', '33. 11', '33. 11. __');
-    await Actions.pasteToEmpty('koLocaleInput', '33. 11. ', '33. 11. __');
-    await Actions.pasteToEmpty('koLocaleInput', '33. 11. 22', '33. 11. 22');
-    await Actions.pasteToEmpty('koLocaleInput', '334', '33. 04. __');
-    await Actions.pasteToEmpty('koLocaleInput', '33045', '33. 04. 05');
+    await Actions.pasteToEmpty('koLocaleInput', '03', '03. __. __');
+    await Actions.pasteToEmpty('koLocaleInput', '0311', '03. 11. __');
+    await Actions.pasteToEmpty('koLocaleInput', '031122', '03. 11. 22');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 11', '03. 11. __');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 11. ', '03. 11. __');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 11. 22', '03. 11. 22');
+    await Actions.pasteToEmpty('koLocaleInput', '034', '03. 04. __');
+    await Actions.pasteToEmpty('koLocaleInput', '03045', '03. 04. 05');
 
     setBlock('ru-RU locale', 2);
     await Actions.pasteToEmpty('ruLocaleInput', '22', '22.__.____');
@@ -139,9 +141,10 @@ const pasteToEmpty = async () => {
     setBlock('es-ES locale', 2);
     await Actions.pasteToEmpty('esLocaleInput', '22', '22/__/__');
     await Actions.pasteToEmpty('esLocaleInput', '2211', '22/11/__');
-    await Actions.pasteToEmpty('esLocaleInput', '221133', '22/11/33');
+    await Actions.pasteToEmpty('esLocaleInput', '22110', '22/11/0_');
+    await Actions.pasteToEmpty('esLocaleInput', '221103', '22/11/03');
     await Actions.pasteToEmpty('esLocaleInput', '22/11', '22/11/__');
-    await Actions.pasteToEmpty('esLocaleInput', '22/11/33', '22/11/33');
+    await Actions.pasteToEmpty('esLocaleInput', '22/11/03', '22/11/03');
     await Actions.pasteToEmpty('esLocaleInput', '4', '04/__/__');
     await Actions.pasteToEmpty('esLocaleInput', '045', '04/05/__');
 };

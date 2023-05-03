@@ -510,7 +510,10 @@ export class DateInput extends Component {
 
         const yearStr = expectedYear.replaceAll(search, '');
         const yearVal = parseInt(yearStr, 10);
-        if (yearStr.length > 0 && (!isNum(yearStr) || yearVal < 1)) {
+        if (
+            yearStr.length > 0
+            && (!isNum(yearStr) || (this.yearRange.length === 4 && yearVal < 1))
+        ) {
             return this.state;
         }
 
