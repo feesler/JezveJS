@@ -217,6 +217,32 @@ export class DateInput extends Component {
     }
 
     /**
+     * Checks specified position is in range
+     * @param {Date} position - date to check
+     * @param {object} range - range object
+     */
+    inRange(position, range) {
+        return (position >= range.start && position <= range.end);
+    }
+
+    fixCursorPos(pos) {
+        if (
+            this.inRange(pos, this.dayRange)
+            || this.inRange(pos, this.monthRange)
+            || this.inRange(pos, this.yearRange)
+        ) {
+            return pos;
+        }
+
+        const [validPos] = [this.dayRange, this.monthRange, this.yearRange]
+            .flatMap((range) => ([range.start, range.end]))
+            .map((value) => ({ value, diff: Math.abs(value - pos) }))
+            .sort((a, b) => a.diff - b.diff);
+
+        return validPos.value;
+    }
+
+    /**
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
      */
@@ -232,6 +258,9 @@ export class DateInput extends Component {
         const range = (replaceAll)
             ? { start: 0, end: origValue.length }
             : getCursorPos(this.elem);
+
+        range.start = this.fixCursorPos(range.start);
+        range.end = this.fixCursorPos(range.end);
 
         const beforeSelection = origValue.substring(0, range.start);
         const afterSelection = origValue.substring(range.end);
