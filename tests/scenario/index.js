@@ -6,6 +6,7 @@ import {
 } from 'jezve-test';
 import { commonTests } from './common.js';
 import { collapsibleTests } from './Collapsible.js';
+import { decimalInputTests } from './DecimalInput.js';
 import { datePickerTests } from './DatePicker.js';
 import { dropDownTests } from './DropDown.js';
 import { paginatorTests } from './Paginator.js';
@@ -18,6 +19,7 @@ const storiesMap = {
     common: commonTests,
     store: storeTests,
     collapsible: collapsibleTests,
+    decimalInput: decimalInputTests,
     dateInput: dateInputTests,
     dropDown: dropDownTests,
     datePicker: datePickerTests,
