@@ -102,12 +102,12 @@ export const deleteFromPos = async (name, value, pos, expected) => {
     });
 };
 
-export const deleteSelection = async (name, initial, start, end, value, expected) => {
+export const deleteSelection = async (name, initial, start, end, expected) => {
     await test(
         `[${name}] Press Delete key to selection ${start}-${end} of '${initial}' -> '${expected}'`,
         async () => {
             await checkNavigation();
-            return App.view.deleteSelection(name, initial, start, end, value, expected);
+            return App.view.deleteSelection(name, initial, start, end, expected);
         },
     );
 };

@@ -122,6 +122,9 @@ const pasteToEmpty = async () => {
     await Actions.pasteToEmpty('koLocaleInput', '03', '03. __. __');
     await Actions.pasteToEmpty('koLocaleInput', '0311', '03. 11. __');
     await Actions.pasteToEmpty('koLocaleInput', '031122', '03. 11. 22');
+    await Actions.pasteToEmpty('koLocaleInput', '03.', '03. __. __');
+    await Actions.pasteToEmpty('koLocaleInput', '03. ', '03. __. __');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 1', '03. 1_. __');
     await Actions.pasteToEmpty('koLocaleInput', '03. 11', '03. 11. __');
     await Actions.pasteToEmpty('koLocaleInput', '03. 11. ', '03. 11. __');
     await Actions.pasteToEmpty('koLocaleInput', '03. 11. 22', '03. 11. 22');
@@ -279,6 +282,9 @@ const inputFromPos = async () => {
     setBlock('en-US locale', 2);
     await Actions.inputFromPos('usLocaleInput', '11/__/33', 3, '2', '11/2_/33');
     await Actions.inputFromPos('usLocaleInput', '11/2_/33', 4, '2', '11/22/33');
+    await Actions.inputFromPos('usLocaleInput', '1_/__/__', 1, '/', '01/__/__');
+    await Actions.inputFromPos('usLocaleInput', '01/2_/__', 4, '/', '01/02/__');
+    await Actions.inputFromPos('usLocaleInput', '01/02/0_', 7, '/', '01/02/0_');
 
     setBlock('ko-KR locale', 2);
     await Actions.inputFromPos('koLocaleInput', '33. __. 22', 2, '1', '33. 1_. 22');
@@ -286,14 +292,30 @@ const inputFromPos = async () => {
     await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, '1', '33. 1_. 22');
     await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, '7', '33. 07. 22');
     await Actions.inputFromPos('koLocaleInput', '33. 1_. 22', 5, '1', '33. 11. 22');
+    await Actions.inputFromPos('koLocaleInput', '33. 1_. __', 5, '.', '33. 01. __');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 6, '.', '33. 01. __');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 6, ' ', '33. 01. __');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 7, '.', '33. 01. __');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 7, ' ', '33. 01. __');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. 2_', 9, '.', '33. 01. 02');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. 2_', 9, ' ', '33. 01. 02');
+    await Actions.inputFromPos('koLocaleInput', '3_. __. __', 1, '.', '3_. __. __');
+    await Actions.inputFromPos('koLocaleInput', '3_. __. __', 1, ' ', '3_. __. __');
 
     setBlock('ru-RU locale', 2);
     await Actions.inputFromPos('ruLocaleInput', '22.__.3333', 3, '1', '22.1_.3333');
     await Actions.inputFromPos('ruLocaleInput', '22.1_.3333', 4, '1', '22.11.3333');
+    await Actions.inputFromPos('ruLocaleInput', '2_.__.____', 1, '.', '02.__.____');
+    await Actions.inputFromPos('ruLocaleInput', '02.__.____', 2, '.', '02.__.____');
+    await Actions.inputFromPos('ruLocaleInput', '02.1_.____', 4, '.', '02.01.____');
+    await Actions.inputFromPos('ruLocaleInput', '02.01.1___', 7, '.', '02.01.1___');
 
     setBlock('es-ES locale', 2);
     await Actions.inputFromPos('esLocaleInput', '22/__/33', 3, '1', '22/1_/33');
     await Actions.inputFromPos('esLocaleInput', '22/1_/33', 4, '1', '22/11/33');
+    await Actions.inputFromPos('esLocaleInput', '2_/__/__', 1, '/', '02/__/__');
+    await Actions.inputFromPos('esLocaleInput', '02/__/__', 2, '/', '02/__/__');
+    await Actions.inputFromPos('esLocaleInput', '02/1_/__', 4, '/', '02/01/__');
 };
 
 const inputInvalidFromPos = async () => {
@@ -374,14 +396,18 @@ const pasteToSelection = async () => {
     await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, '1', '33. 11. _2');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 9, '3', '3_. __. _2');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 10, '30. 1', '30. 1_. __');
 
     setBlock('ru-RU locale', 2);
     await Actions.pasteToSelection('ruLocaleInput', '22.11.3333', 1, 4, '2', '22._1.3333');
     await Actions.pasteToSelection('ruLocaleInput', '22.11.3333', 0, 9, '2', '2_.__.___3');
+    await Actions.pasteToSelection('ruLocaleInput', '22.11.3333', 0, 10, '20.1', '20.1_.____');
 
     setBlock('es-ES locale', 2);
     await Actions.pasteToSelection('esLocaleInput', '22/11/33', 1, 4, '2', '22/_1/33');
     await Actions.pasteToSelection('esLocaleInput', '22/11/33', 0, 7, '2', '2_/__/_3');
+    await Actions.pasteToSelection('esLocaleInput', '22/11/33', 0, 8, '201', '20/1_/__');
+    await Actions.pasteToSelection('esLocaleInput', '22/11/33', 0, 8, '20/1', '20/1_/__');
 };
 
 const pasteInvalidToSelection = async () => {
@@ -416,6 +442,10 @@ const pasteFromPos = async () => {
     await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 3, '1', '33. 1_. 22');
     await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, '1', '33. 1_. 22');
     await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, '7', '33. 07. 22');
+    await Actions.pasteFromPos('koLocaleInput', '3_. __. 22', 1, '3. 1', '33. 1_. 22');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '. 1', '33. 1_. 22');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '. ', '33. __. 22');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, ' ', '33. __. 22');
     await Actions.pasteFromPos('koLocaleInput', '33. 1_. 22', 5, '1', '33. 11. 22');
 
     setBlock('ru-RU locale', 2);
