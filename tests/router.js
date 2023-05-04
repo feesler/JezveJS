@@ -1,5 +1,6 @@
 import { AppView } from './view/AppView.js';
 import { CollapsibleView } from './view/CollapsibleView.js';
+import { DecimalInputView } from './view/DecimalInputView.js';
 import { DateInputView } from './view/DateInputView.js';
 import { DropDownView } from './view/DropDownView.js';
 import { DatePickerView } from './view/DatePickerView.js';
@@ -16,7 +17,7 @@ const routeMap = {
     common: AppView,
     dateinput: DateInputView,
     debug: AppView,
-    decimal: AppView,
+    decimal: DecimalInputView,
     dpitest: AppView,
     dragndrop: AppView,
     emptyclick: AppView,

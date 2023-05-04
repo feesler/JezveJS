@@ -60,6 +60,7 @@ const defaultProps = {
     range: false,
     rangePart: null, // possible values: 'start', 'end' or null
     locales: [],
+    firstDay: null,
     animated: false,
     disabledDateFilter: null,
     onRangeSelect: null,
@@ -77,6 +78,7 @@ const defaultProps = {
  * @param {boolean} props.range - if true turn on date range select mode
  * @param {String|null} props.rangePart - currently selecting part of date range
  * @param {String|[]} props.locales - locales to render component
+ * @param {number} props.firstDay - first day of week(1 - Monday, 7 - Sunday)
  * @param {boolean} props.animated - animate transitions between views if possible
  * @param {function} props.onRangeSelect - date range select callback
  * @param {function} props.onDateSelect - single date select callback
@@ -746,6 +748,7 @@ export class DatePicker extends Component {
             return DatePickerMonthView.create({
                 date,
                 locales: this.props.locales,
+                firstDay: this.props.firstDay,
                 actDate: state.actDate,
                 range: this.props.range,
                 curRange: state.curRange,

@@ -9,7 +9,6 @@ const views = {
     chartgrid: 'ChartGrid',
     checkbox: 'Checkbox',
     debug: 'Debug',
-    decimal: 'DecimalInput',
     dpitest: 'DPI test',
     dragndrop: 'DragnDrop',
     emptyclick: 'emptyClick',

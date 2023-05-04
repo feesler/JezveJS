@@ -1,6 +1,7 @@
 import { isDate } from './common.js';
 
 export const DAYS_IN_WEEK = 7;
+export const DEFAULT_FIRST_DAY_OF_WEEK = 7;
 export const MONTHS_COUNT = 12;
 
 function firstUpperCase(str, locales = []) {
@@ -137,19 +138,39 @@ export const getMondayBasedDayOfWeek = (date) => {
     return (day || DAYS_IN_WEEK) - 1;
 };
 
+export const getLocaleFirstDayOfWeek = (locales) => {
+    try {
+        const resolved = new Intl.DateTimeFormat(locales).resolvedOptions();
+        const locale = new Intl.Locale(resolved.locale);
+        return locale.weekInfo?.firstDay;
+    } catch {
+        return null;
+    }
+};
+
 /**
  * Return monday on week of the specified date
  */
-export const getFirstDayOfWeek = (date) => {
-    const day = getMondayBasedDayOfWeek(date);
+export const getFirstDayOfWeek = (date, params = {}) => {
+    let firstDay = params?.options?.firstDay;
+
+    if (typeof firstDay !== 'number') {
+        firstDay = (params?.locales)
+            ? getLocaleFirstDayOfWeek(params.locales)
+            : DEFAULT_FIRST_DAY_OF_WEEK;
+    }
+
+    const day = (firstDay === 1)
+        ? getMondayBasedDayOfWeek(date)
+        : date.getDay();
     return shiftDate(date, -day);
 };
 
 /**
  * Returns array of days for week of the specified date
  */
-export const getWeekDays = (date) => {
-    let day = getFirstDayOfWeek(date);
+export const getWeekDays = (date, params = {}) => {
+    let day = getFirstDayOfWeek(date, params);
     const res = [day];
     let i = DAYS_IN_WEEK - 1;
     while (i) {
