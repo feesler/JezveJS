@@ -217,6 +217,70 @@ export class DateInput extends Component {
     }
 
     /**
+     * Returns true if specified position is in range
+     * @param {Number} position - position to check
+     * @param {object} range - range object
+     */
+    inRange(position, range) {
+        return (position >= range.start && position <= range.end);
+    }
+
+    /**
+     * Returns true if specified position is in day range
+     * @param {Number} position - position to check
+     */
+    inDayRange(position) {
+        return this.inRange(position, this.dayRange);
+    }
+
+    /**
+     * Returns true if specified position is in month range
+     * @param {Number} position - position to check
+     */
+    inMonthRange(position) {
+        return this.inRange(position, this.monthRange);
+    }
+
+    /**
+     * Returns true if specified position is in year range
+     * @param {Number} position - position to check
+     */
+    inYearRange(position) {
+        return this.inRange(position, this.yearRange);
+    }
+
+    /**
+     * Returns type of range for specified position
+     * @param {Number} position - position to check
+     */
+    getRangeTypeByPosition(position) {
+        if (this.inDayRange(position)) {
+            return 'day';
+        }
+        if (this.inMonthRange(position)) {
+            return 'month';
+        }
+        if (this.inYearRange(position)) {
+            return 'year';
+        }
+
+        return null;
+    }
+
+    fixCursorPos(pos) {
+        if (this.getRangeTypeByPosition(pos)) {
+            return pos;
+        }
+
+        const [validPos] = [this.dayRange, this.monthRange, this.yearRange]
+            .flatMap((range) => ([range.start, range.end]))
+            .map((value) => ({ value, diff: Math.abs(value - pos) }))
+            .sort((a, b) => a.diff - b.diff);
+
+        return validPos.value;
+    }
+
+    /**
      * Replace current selection by specified string or insert it to cursor position
      * @param {string} text - string to insert
      */
@@ -232,6 +296,9 @@ export class DateInput extends Component {
         const range = (replaceAll)
             ? { start: 0, end: origValue.length }
             : getCursorPos(this.elem);
+
+        range.start = this.fixCursorPos(range.start);
+        range.end = this.fixCursorPos(range.end);
 
         const beforeSelection = origValue.substring(0, range.start);
         const afterSelection = origValue.substring(range.end);
@@ -281,18 +348,26 @@ export class DateInput extends Component {
             return origValue;
         }
 
-        let value = this.removeSeparators(fixedText + after);
+        let value = fixedText + after;
         let res = beforeSelection;
         let valueToReplace = selection + afterSelection;
         while (valueToReplace.length > 0) {
             const maskChar = valueToReplace.charAt(0);
-            valueToReplace = valueToReplace.substring(1);
 
             if (this.separator.includes(maskChar)) {
                 res += maskChar;
-                if (!replaceAll && textValue.length > 0) {
+
+                const char = value.charAt(0);
+                const isSeparatorChar = value.length > 0 && this.separator.includes(char);
+
+                if (
+                    !replaceAll
+                    && (textValue.length > 0 || isSeparatorChar)
+                ) {
                     this.cursorPos += 1;
                 }
+
+                valueToReplace = valueToReplace.substring(1);
 
                 continue;
             }
@@ -300,9 +375,29 @@ export class DateInput extends Component {
             if (value.length > 0) {
                 const char = value.charAt(0);
                 value = value.substring(1);
+                const isSeparatorChar = this.separator.includes(char);
+
+                if (isSeparatorChar) {
+                    const lastSepPos = res.lastIndexOf(this.separator);
+                    const startPos = (lastSepPos !== -1) ? (lastSepPos + this.separator.length) : 0;
+                    const rangeType = this.getRangeTypeByPosition(this.cursorPos);
+                    const isDayOrMonth = rangeType === 'day' || rangeType === 'month';
+
+                    if (!replaceAll && isDayOrMonth && this.cursorPos - startPos === 1) {
+                        const currentPart = res.substring(startPos, this.cursorPos);
+                        const beforeCurrentPart = res.substring(0, startPos);
+                        res = `${beforeCurrentPart}0${currentPart}`;
+
+                        this.cursorPos += 1;
+
+                        valueToReplace = valueToReplace.substring(1);
+                    }
+
+                    continue;
+                }
 
                 res += char;
-                if (textValue.length > 0) {
+                if (textValue.length > 0 && !isSeparatorChar) {
                     if (!replaceAll) {
                         this.cursorPos += 1;
                     }
@@ -311,6 +406,8 @@ export class DateInput extends Component {
             } else {
                 res += this.props.guideChar;
             }
+
+            valueToReplace = valueToReplace.substring(1);
         }
 
         return res;
@@ -389,8 +486,9 @@ export class DateInput extends Component {
     }
 
     removeSeparators(str) {
-        const escaped = this.escapeRegExp(this.separator);
-        const expr = new RegExp(escaped, 'g');
+        const chars = this.separator.split('');
+        const escaped = chars.map((char) => this.escapeRegExp(char)).join('');
+        const expr = new RegExp(`[${escaped}]+`, 'g');
 
         return str.replaceAll(expr, '');
     }
@@ -510,7 +608,10 @@ export class DateInput extends Component {
 
         const yearStr = expectedYear.replaceAll(search, '');
         const yearVal = parseInt(yearStr, 10);
-        if (yearStr.length > 0 && (!isNum(yearStr) || yearVal < 1)) {
+        if (
+            yearStr.length > 0
+            && (!isNum(yearStr) || (this.yearRange.length === 4 && yearVal < 1))
+        ) {
             return this.state;
         }
 
