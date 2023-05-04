@@ -217,6 +217,22 @@ const initRangePart = () => {
     });
 };
 
+const initFirstDay = () => {
+    const mondayWeekDatePicker = DatePicker.create({
+        static: true,
+        locales: ['en-US'],
+        firstDay: 1,
+    });
+    ge('dpMondayWeek').append(mondayWeekDatePicker.elem);
+
+    const subdayWeekDatePicker = DatePicker.create({
+        static: true,
+        locales: ['en-US'],
+        firstDay: 7,
+    });
+    ge('dpSundayWeek').append(subdayWeekDatePicker.elem);
+};
+
 const initLocales = () => {
     const enDatePicker = DatePicker.create({
         static: true,
@@ -249,6 +265,7 @@ const init = () => {
     initSetSelection();
     initDisabledDate();
     initRangePart();
+    initFirstDay();
     initLocales();
 };
 

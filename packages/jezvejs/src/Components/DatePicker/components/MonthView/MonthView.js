@@ -74,7 +74,16 @@ export class DatePickerMonthView extends Component {
 
         // header
         const firstMonthDay = new Date(rYear, rMonth, 1);
-        let week = getWeekDays(firstMonthDay);
+        const weekDayParams = {
+            locales: this.props.locales,
+        };
+        if (typeof this.props.firstDay === 'number') {
+            weekDayParams.options = {
+                firstDay: this.props.firstDay,
+            };
+        }
+
+        let week = getWeekDays(firstMonthDay, weekDayParams);
         const headerElems = week.map((weekday) => createElement('div', {
             props: {
                 className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, WEEKDAY_CELL_CLASS),
@@ -110,7 +119,7 @@ export class DatePickerMonthView extends Component {
 
             const nextWeekDay = shiftDate(week[0], DAYS_IN_WEEK);
             week = isSameYearMonth(date, nextWeekDay)
-                ? getWeekDays(nextWeekDay)
+                ? getWeekDays(nextWeekDay, weekDayParams)
                 : null;
         } while (week);
     }
