@@ -185,10 +185,7 @@ export class DecimalInput extends Component {
 
     /** Before input events('keypress', 'paste', 'beforeinput) handler */
     validateInput(e) {
-        const inputContent = this.getInputContent(e);
-        if (!inputContent || inputContent.length === 0) {
-            return true;
-        }
+        const inputContent = this.getInputContent(e) ?? '';
 
         const expectedContent = this.replaceSelection(inputContent);
         const res = this.isValidValue(expectedContent);

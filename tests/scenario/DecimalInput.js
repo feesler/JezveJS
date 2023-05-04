@@ -542,6 +542,8 @@ const backspaceSelection = async () => {
     await Actions.backspaceSelection('defaultInput', '123.456', 2, 5, '1256');
     await Actions.backspaceSelection('defaultInput', '.123456', 4, 7, '.123');
     await Actions.backspaceSelection('defaultInput', '-123456', 4, 7, '-123');
+    await Actions.backspaceSelection('defaultInput', '0.000123', 1, 3, '0.000123');
+    await Actions.backspaceSelection('defaultInput', '-0.000123', 2, 4, '-0.000123');
 };
 
 const deleteSelection = async () => {
@@ -551,6 +553,8 @@ const deleteSelection = async () => {
     await Actions.deleteSelection('defaultInput', '123.456', 2, 5, '1256');
     await Actions.deleteSelection('defaultInput', '.123456', 4, 7, '.123');
     await Actions.deleteSelection('defaultInput', '-123456', 4, 7, '-123');
+    await Actions.deleteSelection('defaultInput', '0.000123', 1, 3, '0.000123');
+    await Actions.deleteSelection('defaultInput', '-0.000123', 2, 4, '-0.000123');
 };
 
 const cutSelection = async () => {
@@ -560,6 +564,8 @@ const cutSelection = async () => {
     await Actions.cutSelection('defaultInput', '123.456', 2, 5, '1256');
     await Actions.cutSelection('defaultInput', '.123456', 4, 7, '.123');
     await Actions.cutSelection('defaultInput', '-123456', 4, 7, '-123');
+    await Actions.cutSelection('defaultInput', '0.000123', 1, 3, '0.000123');
+    await Actions.cutSelection('defaultInput', '-0.000123', 2, 4, '-0.000123');
 };
 
 export const decimalInputTests = async () => {
