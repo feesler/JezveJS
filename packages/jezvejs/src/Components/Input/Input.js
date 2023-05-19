@@ -16,7 +16,7 @@ const defaultProps = {
     form: undefined,
     tabIndex: undefined,
     placeholder: '',
-    type: 'text', // button, link or static
+    type: 'text',
     disabled: false,
     value: undefined,
     onInput: null,
@@ -30,7 +30,7 @@ const defaultProps = {
  */
 export class Input extends Component {
     static userProps = {
-        elem: ['id', 'name', 'form', 'tabIndex', 'value', 'placeholder'],
+        elem: ['id', 'type', 'name', 'form', 'tabIndex', 'value', 'placeholder'],
     };
 
     constructor(props) {
