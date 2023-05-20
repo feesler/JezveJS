@@ -53,6 +53,18 @@ export class Input extends Component {
         return this.props.id;
     }
 
+    /** Returns value of input element */
+    get value() {
+        return (this.elem) ? this.elem.value : null;
+    }
+
+    /** Sets new value for input element */
+    set value(val) {
+        if (this.elem) {
+            this.elem.value = val;
+        }
+    }
+
     /** Returns disabled state of component */
     get disabled() {
         return this.state.disabled;
