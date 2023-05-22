@@ -55,6 +55,8 @@ const SWIPE_THRESHOLD = 0.1;
 
 const defaultProps = {
     relparent: null,
+    popupMargin: 5,
+    popupScreenPadding: 5,
     date: new Date(),
     static: false,
     range: false,
@@ -219,15 +221,14 @@ export class DatePicker extends Component {
             PopupPosition.calculate({
                 elem: this.wrapper,
                 refElem: this.relativeParent,
+                margin: this.props.popupMargin,
+                screenPadding: this.props.popupScreenPadding,
                 scrollOnOverflow: true,
                 allowResize: false,
                 allowFlip: false,
             });
         } else {
-            this.wrapper.style.top = '';
-            this.wrapper.style.bottom = '';
-            this.wrapper.style.left = '';
-            this.wrapper.style.right = '';
+            PopupPosition.reset(this.wrapper);
         }
 
         // set automatic hide on empty click
