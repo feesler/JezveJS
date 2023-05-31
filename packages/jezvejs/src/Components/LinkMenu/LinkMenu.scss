@@ -85,6 +85,7 @@
   font-weight: var(--link-menu-font-weight);
   color: var(--link-menu-color);
   background: none;
+  cursor: pointer;
 }
 
 .link-menu-item__title {
@@ -170,7 +171,9 @@ b.link-menu-item_selected[disabled] {
 
 /* Hover state */
 @media (hover: hover) {
-  a.link-menu-item:hover {
+  a.link-menu-item:hover,
+  button.link-menu-item:hover,
+  label.link-menu-item:hover {
     color: var(--link-menu-hover-color);
     background: var(--link-menu-hover-bg);
     border-color: var(--link-menu-hover-border-color);
@@ -184,7 +187,9 @@ b.link-menu-item_selected[disabled] {
     }
   }
 
-  a.link-menu-item:active:hover {
+  a.link-menu-item:active:hover,
+  button.link-menu-item:active:hover,
+  label.link-menu-item:active:hover {
     color: var(--link-menu-active-color);
     background: var(--link-menu-active-bg);
     border-color: var(--link-menu-active-border-color);
