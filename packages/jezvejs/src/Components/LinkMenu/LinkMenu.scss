@@ -27,6 +27,19 @@
   --link-menu-disabled-icon-color: var(--link-menu-disabled-color);
   --link-menu-disabled-border-color: var(--link-menu-border-color);
 
+  /* Disabled selected state */
+  --link-menu-disabled-selected-font-weight: var(
+    --link-menu-selected-font-weight
+  );
+  --link-menu-disabled-selected-color: var(--link-menu-disabled-color);
+  --link-menu-disabled-selected-bg: var(--link-menu-disabled-bg);
+  --link-menu-disabled-selected-icon-color: var(
+    --link-menu-disabled-icon-color
+  );
+  --link-menu-disabled-selected-border-color: var(
+    --link-menu-disabled-border-color
+  );
+
   /* Hover state */
   --link-menu-hover-color: var(--link-menu-color);
   --link-menu-hover-bg: var(--link-menu-bg);
@@ -108,7 +121,7 @@
 }
 
 /* Selected item state */
-b.link-menu-item_selected {
+.link-menu-item_selected {
   font-weight: var(--link-menu-selected-font-weight);
   color: var(--link-menu-selected-color);
   background: var(--link-menu-selected-bg);
@@ -148,10 +161,11 @@ b.link-menu-item_selected {
 }
 
 /* Disabled state */
-.link-menu[disabled],
-.link-menu-item[disabled] {
+.link-menu[disabled] .link-menu-item,
+.link-menu .link-menu-item[disabled] {
   cursor: default;
   pointer-events: none;
+  background: var(--link-menu-disabled-bg);
   border-color: var(--link-menu-disabled-border-color);
 
   .link-menu-item__title {
@@ -159,14 +173,23 @@ b.link-menu-item_selected {
   }
 
   .icon {
-    fill: var(--link-menu-disabled-color);
+    fill: var(--link-menu-disabled-icon-color);
   }
 }
 
-.link-menu[disabled] b.link-menu-item_selected,
-b.link-menu-item_selected[disabled] {
-  font-weight: var(--link-menu-selected-font-weight);
-  border-color: var(--link-menu-selected-border-color);
+.link-menu[disabled] .link-menu-item_selected,
+.link-menu .link-menu-item_selected[disabled] {
+  font-weight: var(--link-menu-disabled-selected-font-weight);
+  border-color: var(--link-menu-disabled-selected-border-color);
+  background: var(--link-menu-disabled-selected-bg);
+
+  .link-menu-item__title {
+    color: var(--link-menu-disabled-selected-color);
+  }
+
+  .icon {
+    fill: var(--link-menu-disabled-selected-icon-color);
+  }
 }
 
 /* Hover state */

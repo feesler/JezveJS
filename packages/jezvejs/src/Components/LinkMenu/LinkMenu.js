@@ -184,9 +184,7 @@ export class LinkMenu extends Component {
             this.setSelection([]);
         }
 
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(value);
-        }
+        this.sendChangeEvent();
     }
 
     sendChangeEvent() {
@@ -261,18 +259,19 @@ export class LinkMenu extends Component {
     }
 
     setActive(value) {
+        const strValue = value?.toString();
         this.setState({
             ...this.state,
             items: this.state.items.map((item) => ({
                 ...item,
-                selected: item.value === value,
+                selected: item.value?.toString() === strValue,
             })),
         });
     }
 
     setSelection(selectedItems) {
-        const items = asArray(selectedItems);
-        const showAll = (items.length === 0 || items.includes(0));
+        const items = asArray(selectedItems).map((value) => value.toString());
+        const showAll = (items.length === 0 || items.includes('0'));
 
         this.setState({
             ...this.state,
@@ -280,7 +279,7 @@ export class LinkMenu extends Component {
                 ...item,
                 selected: (
                     (showAll && !item.value)
-                    || items.includes(item.value)
+                    || items.includes(item.value?.toString())
                 ),
             })),
         });
@@ -337,6 +336,10 @@ export class LinkMenu extends Component {
             onChange: () => this.onToggleItem(item.value),
         });
 
+        if (item.selected) {
+            checkbox.elem.classList.add(SELECTED_ITEM_CLASS);
+        }
+
         checkbox.elem.setAttribute('data-value', item.value);
         checkbox.show(!item.hidden);
 
@@ -348,9 +351,6 @@ export class LinkMenu extends Component {
         const elem = createElement(tagName, {
             children: this.renderItemContent(item),
         });
-        if (item.selected) {
-            elem.classList.add(SELECTED_ITEM_CLASS);
-        }
 
         return elem;
     }
@@ -374,10 +374,6 @@ export class LinkMenu extends Component {
         }
 
         const elem = createElement(tagName, { props, children });
-        if (item.selected) {
-            elem.classList.add(SELECTED_ITEM_CLASS);
-        }
-
         return elem;
     }
 
@@ -411,6 +407,9 @@ export class LinkMenu extends Component {
 
         const elem = this.renderActiveItem(item, state);
         elem.classList.add(ITEM_CLASS);
+        if (item.selected) {
+            elem.classList.add(SELECTED_ITEM_CLASS);
+        }
         if (item.value) {
             elem.setAttribute('data-value', item.value);
         }

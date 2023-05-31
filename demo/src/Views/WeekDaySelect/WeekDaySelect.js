@@ -16,7 +16,7 @@ const addEventLog = (value) => {
 
 const initDefault = () => {
     const select = WeekDaySelect.create({
-        onChange: (sel) => addEventLog(`Selected: [${sel.id}]`),
+        onChange: (sel) => addEventLog(`Selected: [${sel}]`),
     });
 
     const container = ge('defaultContainer');
@@ -38,6 +38,7 @@ const initMultiSelect = () => {
         multiple: true,
         type: 'buttons',
     });
+    select.setSelection(['1', '2']);
 
     const container = ge('multiSelectContainer');
     container.append(select.elem);
