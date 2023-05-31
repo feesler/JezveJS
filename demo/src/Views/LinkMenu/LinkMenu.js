@@ -50,6 +50,20 @@ const initDynamicMultiple = () => {
     ge('dynamicMulti').append(menu.elem);
 };
 
+const initButtonsType = () => {
+    const menu = LinkMenu.create({
+        type: 'buttons',
+        multiple: true,
+        items: [
+            { title: 'Create', value: 'create' },
+            { title: 'Update', value: 'update' },
+            { title: 'Delete', value: 'delete' },
+        ],
+    });
+
+    ge('buttonTypeContainer').append(menu.elem);
+};
+
 const initDisabledItem = () => {
     const menu = LinkMenu.create({
         itemParam: 'action',
@@ -129,6 +143,7 @@ const init = () => {
     initParsed();
     initDynamicSingle();
     initDynamicMultiple();
+    initButtonsType();
     initDisabledItem();
     initHiddenItem();
     initDisabledComponent();

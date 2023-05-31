@@ -25,6 +25,7 @@ const views = {
     progress: 'Progress',
     slider: 'Slider',
     switch: 'Switch',
+    weekdayselect: 'WeekDaySelect',
 };
 
 const loadView = async (view) => test(`${views[view]} view`, async () => {

@@ -45,6 +45,7 @@ export default {
         sliderDemo: './Views/Slider/Slider.js',
         switchDemo: './Views/Switch/Switch.js',
         tabListDemo: './Views/TabList/TabList.js',
+        weekDaySelectDemo: './Views/WeekDaySelect/WeekDaySelect.js',
     },
     output: {
         filename: 'demo/js/[name].[fullhash].js',
@@ -253,6 +254,12 @@ export default {
             template: './Views/TabList/tablist.html',
             filename: 'demo/tablist.html',
             chunks: ['polyfills', 'tabListDemo'],
+            ...htmlCommonOptions,
+        }),
+        new HtmlWebpackPlugin({
+            template: './Views/WeekDaySelect/weekdayselect.html',
+            filename: 'demo/weekdayselect.html',
+            chunks: ['polyfills', 'weekDaySelectDemo'],
             ...htmlCommonOptions,
         }),
     ],
