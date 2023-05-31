@@ -3,8 +3,11 @@
   --link-menu-border-width: 1px;
   --link-menu-border-color: #ff3c00;
   --link-menu-color: #ff3c00;
+  --link-menu-selected-color: #ffffff;
+  --link-menu-selected-bg: #ff3c00;
   --link-menu-hover-color: #ffffff;
   --link-menu-hover-bg: #ff3c00;
+  --link-menu-disabled-border-color: var(--link-menu-disabled-color);
 
   .link-menu-item,
   .link-menu-item:visited {
@@ -12,6 +15,7 @@
     border-radius: 100vh;
     width: var(--wds-item-size);
     height: var(--wds-item-size);
+    line-height: var(--wds-item-size);
   }
 
   .checkbox__check {
