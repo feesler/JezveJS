@@ -61,6 +61,10 @@ export class LinkMenu extends Component {
         return !this.state.disabled;
     }
 
+    get disabled() {
+        return this.state.disabled;
+    }
+
     init() {
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
 
