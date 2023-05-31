@@ -48,6 +48,7 @@ export default {
         Store: './src/Components/Store/Store.js',
         Switch: './src/Components/Switch/Switch.js',
         TabList: './src/Components/TabList/TabList.js',
+        WeekDaySelect: './src/Components/WeekDaySelect/WeekDaySelect.js',
     },
     output: {
         filename: '[name].js',

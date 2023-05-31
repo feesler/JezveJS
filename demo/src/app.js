@@ -48,6 +48,7 @@ const navigationMenu = [{
         { title: 'Slider', url: 'demo/slider.html' },
         { title: 'Switch', url: 'demo/switch.html' },
         { title: 'Tab List', url: 'demo/tablist.html' },
+        { title: 'Week day select', url: 'demo/weekdayselect.html' },
     ],
 }];
 

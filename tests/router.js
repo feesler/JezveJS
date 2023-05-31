@@ -35,6 +35,7 @@ const routeMap = {
     slider: AppView,
     switch: AppView,
     tablist: TabListView,
+    weekdayselect: AppView,
 };
 
 /** Process request url and return view class if match */
