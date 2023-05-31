@@ -164,11 +164,6 @@ export class LinkMenu extends Component {
     }
 
     onSelectItem(e) {
-        const link = e.target.closest('a');
-        if (!link) {
-            return;
-        }
-
         e.preventDefault();
         e.stopPropagation();
 
