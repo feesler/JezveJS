@@ -25,10 +25,10 @@ export class LinkMenuItem extends TestComponent {
             isCheckbox: elem.classList.contains('checkbox'),
             selected: elem.classList.contains('link-menu-item_selected'),
         }), this.elem, titleElem);
-        if (res.tagName === 'A') {
+        if (res.tagName === 'A' || res.tagName === 'BUTTON') {
             res.linkElem = this.elem;
         } else {
-            res.linkElem = await query(this.elem, 'a');
+            res.linkElem = await query(this.elem, 'a,button');
         }
 
         if (res.isCheckbox) {
