@@ -985,8 +985,8 @@ export class BaseChart extends Component {
 
         const categories = [];
         state.dataSets.forEach((dataSet, index) => {
-            const category = (state.data.stacked && dataSet.category)
-                ? dataSet.category
+            const category = (state.data.stacked)
+                ? (dataSet.category ?? null)
                 : index;
             if (!categories.includes(category)) {
                 categories.push(category);
