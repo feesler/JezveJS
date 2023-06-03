@@ -75,7 +75,9 @@ export const parseDateString = (str, params = {}) => {
     const month = parseInt(dateParts[format.monthIndex], 10);
     let year = parseInt(dateParts[format.yearIndex], 10);
 
-    if (year < 100) {
+    const { fixShortYear = true } = params;
+
+    if (year < 100 && (fixShortYear || format.yearLength === 2)) {
         year += (year >= 70) ? 1900 : 2000;
     }
 
