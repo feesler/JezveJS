@@ -2,6 +2,7 @@ import '../../css/common.scss';
 import { getClassNames } from '../../js/common.js';
 import { getWeekDays, getWeekdayShort } from '../../js/DateUtils.js';
 import { LinkMenu } from '../LinkMenu/LinkMenu.js';
+import './WeekDaySelect.scss';
 
 const SELECT_CLASS = 'weekday-select';
 

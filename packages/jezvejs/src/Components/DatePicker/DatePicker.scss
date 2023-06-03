@@ -63,6 +63,7 @@
   line-height: 2rem;
   font-size: var(--dp-header-font-size);
   font-weight: var(--dp-header-font-weight);
+  text-transform: capitalize;
 }
 
 .dp__header_nav {
@@ -130,6 +131,7 @@
 .dp__year-range-view__cell,
 .dp__year-view__cell {
   padding: 0.25rem;
+  text-transform: capitalize;
   font-weight: normal;
   font-size: 1.125rem;
   line-height: 2.5rem;
@@ -149,6 +151,7 @@
 
 .dp__weekday-cell {
   text-align: center;
+  text-transform: capitalize;
   font-weight: 500;
   line-height: 1.4rem;
 }
