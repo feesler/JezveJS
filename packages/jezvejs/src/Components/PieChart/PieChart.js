@@ -2,7 +2,6 @@ import {
     createSVGElement,
     isObject,
     isFunction,
-    copyObject,
     setEvents,
     asArray,
 } from '../../js/common.js';
@@ -309,7 +308,7 @@ export class PieChart extends Component {
         let prevColor;
         const sectorsGroup = createSVGElement('g');
         this.sectors = values.map((item, ind) => {
-            const sector = copyObject(item);
+            const sector = structuredClone(item);
             sector.start = start;
             sector.elem = this.drawSector(
                 width / 2,

@@ -7,7 +7,6 @@ import {
     isVisible,
     click,
     wait,
-    copyObject,
     evaluate,
     asyncMap,
 } from 'jezve-test';
@@ -238,6 +237,6 @@ export class DatePicker extends TestComponent {
     }
 
     getSelectedRange() {
-        return copyObject(this.content.value);
+        return structuredClone(this.content.value);
     }
 }

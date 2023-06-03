@@ -46,25 +46,6 @@ export const isObject = (obj) => (
     && Object.prototype.toString.call(obj) === '[object Object]'
 );
 
-/** Return deep copy of object */
-export const copyObject = (item) => {
-    if (Array.isArray(item)) {
-        return item.map(copyObject);
-    }
-
-    if (isObject(item)) {
-        const res = {};
-
-        Object.keys(item).forEach((key) => {
-            res[key] = copyObject(item[key]);
-        });
-
-        return res;
-    }
-
-    return item;
-};
-
 /** Returns parameter if it is array, else wrap value to array */
 export const asArray = (value) => {
     if (value === null || value === undefined) {
