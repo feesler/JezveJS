@@ -63,6 +63,15 @@ export const minmax = (min, max, value) => (
     )
 );
 
+/** Returns capitalized string */
+export const firstUpperCase = (str, locales = []) => {
+    const first = str.substring(0, 1);
+    const rest = str.substring(1);
+
+    return first.toLocaleUpperCase(locales)
+        .concat(rest.toLocaleLowerCase(locales));
+};
+
 /** Return DOM element by id */
 export const ge = (id) => document.getElementById(id);
 
