@@ -46,25 +46,6 @@ export const isObject = (obj) => (
     && Object.prototype.toString.call(obj) === '[object Object]'
 );
 
-/** Return deep copy of object */
-export const copyObject = (item) => {
-    if (Array.isArray(item)) {
-        return item.map(copyObject);
-    }
-
-    if (isObject(item)) {
-        const res = {};
-
-        Object.keys(item).forEach((key) => {
-            res[key] = copyObject(item[key]);
-        });
-
-        return res;
-    }
-
-    return item;
-};
-
 /** Returns parameter if it is array, else wrap value to array */
 export const asArray = (value) => {
     if (value === null || value === undefined) {
@@ -81,6 +62,15 @@ export const minmax = (min, max, value) => (
         Math.min(Math.max(min, max), value),
     )
 );
+
+/** Returns capitalized string */
+export const firstUpperCase = (str, locales = []) => {
+    const first = str.substring(0, 1);
+    const rest = str.substring(1);
+
+    return first.toLocaleUpperCase(locales)
+        .concat(rest.toLocaleLowerCase(locales));
+};
 
 /** Return DOM element by id */
 export const ge = (id) => document.getElementById(id);

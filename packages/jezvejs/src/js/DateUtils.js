@@ -4,14 +4,6 @@ export const DAYS_IN_WEEK = 7;
 export const DEFAULT_FIRST_DAY_OF_WEEK = 7;
 export const MONTHS_COUNT = 12;
 
-function firstUpperCase(str, locales = []) {
-    const first = str.substring(0, 1);
-    const rest = str.substring(1);
-
-    return first.toLocaleUpperCase(locales)
-        .concat(rest.toLocaleLowerCase(locales));
-}
-
 /** Returns fixed date locale string without RTL characters */
 export const formatDate = (date, params = {}) => (
     date.toLocaleDateString(params?.locales ?? [], params?.options ?? {}).replace(/\u200e/g, '')
@@ -75,7 +67,9 @@ export const parseDateString = (str, params = {}) => {
     const month = parseInt(dateParts[format.monthIndex], 10);
     let year = parseInt(dateParts[format.yearIndex], 10);
 
-    if (year < 100) {
+    const { fixShortYear = true } = params;
+
+    if (year < 100 && (fixShortYear || format.yearLength === 2)) {
         year += (year >= 70) ? 1900 : 2000;
     }
 
@@ -202,31 +196,29 @@ export const isSameDate = (dateA, dateB) => (
 /**
  * Returns long weekday name for specified date
  */
-export const getWeekdayLong = (date, locales = []) => {
-    const weekdayName = formatDate(date, { locales, options: { weekday: 'long' } });
-    return firstUpperCase(weekdayName, locales);
-};
+export const getWeekdayLong = (date, locales = []) => (
+    formatDate(date, { locales, options: { weekday: 'long' } })
+);
 
 /**
  * Returns short weekday name for specified date
  */
-export const getWeekdayShort = (date, locales = []) => {
-    const weekdayName = formatDate(date, { locales, options: { weekday: 'short' } });
-    return firstUpperCase(weekdayName.substr(0, 3), locales);
-};
+export const getWeekdayShort = (date, locales = []) => (
+    formatDate(date, { locales, options: { weekday: 'short' } })
+        .substring(0, 3)
+);
 
 /**
  * Returns long month name for specified date
  */
-export const getLongMonthName = (date, locales = []) => {
-    const monthName = formatDate(date, { locales, options: { month: 'long' } });
-    return firstUpperCase(monthName, locales);
-};
+export const getLongMonthName = (date, locales = []) => (
+    formatDate(date, { locales, options: { month: 'long' } })
+);
 
 /**
  * Returns short month name for specified date
  */
-export const getShortMonthName = (date, locales = []) => {
-    const monthName = formatDate(date, { locales, options: { month: 'short' } });
-    return firstUpperCase(monthName.substr(0, 3), locales);
-};
+export const getShortMonthName = (date, locales = []) => (
+    formatDate(date, { locales, options: { month: 'short' } })
+        .substring(0, 3)
+);
