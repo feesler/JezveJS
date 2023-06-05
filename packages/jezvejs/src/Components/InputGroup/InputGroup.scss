@@ -169,23 +169,23 @@
 
 /* Reset border and box-shadow of input inside outer input container */
 .input-group__input-outer .input.input-group__input {
-  --input-height: var(--ig-inner-height);
   --input-focus-shadow: none;
   --input-focus-outline: none;
   --input-border-width: 0;
 
   background: none;
   border: 0 none;
+  height: var(--ig-inner-height);
 }
 
 /* Reset border and box-shadow of inner button inside outer input container */
 .input-group__input-outer .btn.input-group__inner-btn {
-  --btn-size: var(--ig-inner-height);
   --btn-focus-shadow: none;
   --btn-focus-outline: none;
 
   border: 0 none;
   background: none;
+  height: var(--ig-inner-height);
 }
 
 /* Highlight border of inner buttons for focused input */
