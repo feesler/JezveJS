@@ -39,7 +39,7 @@ const defaultProps = {
     fixed: true,
     content: null,
     items: [],
-    id: null,
+    id: undefined,
     onClose: null,
     onItemClick: null,
 };
