@@ -7,11 +7,10 @@ import {
     asArray,
     show,
     removeChilds,
-    setEmptyClick,
-    removeEmptyClick,
     insertAfter,
     insertBefore,
 } from '../../js/common.js';
+import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';

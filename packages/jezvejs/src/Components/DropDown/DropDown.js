@@ -6,8 +6,6 @@ import {
     px,
     insertAfter,
     prependChild,
-    setEmptyClick,
-    removeEmptyClick,
     getOffset,
     isVisible,
     getCursorPos,
@@ -17,6 +15,7 @@ import {
     asArray,
     debounce,
 } from '../../js/common.js';
+import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { getSelectedItems, getVisibleItems } from './utils.js';
