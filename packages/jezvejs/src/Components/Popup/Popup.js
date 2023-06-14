@@ -4,12 +4,11 @@ import {
     re,
     insertAfter,
     show,
-    setEmptyClick,
-    removeEmptyClick,
     removeChilds,
     createElement,
     addChilds,
 } from '../../js/common.js';
+import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';

@@ -20,7 +20,7 @@ const initDefault = () => {
     ge('defaultContainer').append(btn.elem);
 
     PopupMenu.create({
-        id: 'listMenu',
+        id: 'defaultMenu',
         attachTo: btn.elem,
         onItemClick: (id) => addEventLog(`Item '${id}' clicked`),
         items: [{
@@ -50,7 +50,7 @@ const initDefault = () => {
 
 const initAttached = () => {
     const menu = PopupMenu.create({
-        id: 'contextMenu',
+        id: 'absPosMenu',
         hideOnScroll: false,
         fixed: false,
         items: [{
@@ -74,7 +74,7 @@ const initClipping = () => {
     ge('headerContent').append(btn.elem);
 
     PopupMenu.create({
-        id: 'clipingMenu',
+        id: 'clippingMenu',
         attachTo: btn.elem,
         items: [{
             icon: 'select',
@@ -120,6 +120,7 @@ const renderListItem = (id) => (
 
 const initList = () => {
     const menu = PopupMenu.create({
+        id: 'listMenu',
         items: [{
             id: 'selectModeBtn',
             icon: 'select',

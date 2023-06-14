@@ -3,8 +3,6 @@ import {
     isFunction,
     isObject,
     show,
-    setEmptyClick,
-    removeEmptyClick,
     getOffset,
     re,
     removeChilds,
@@ -13,6 +11,7 @@ import {
     debounce,
     minmax,
 } from '../../js/common.js';
+import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 import '../../css/common.scss';

@@ -7,11 +7,10 @@ import {
     asArray,
     show,
     removeChilds,
-    setEmptyClick,
-    removeEmptyClick,
     insertAfter,
     insertBefore,
 } from '../../js/common.js';
+import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
 import { Checkbox } from '../Checkbox/Checkbox.js';
@@ -25,8 +24,7 @@ const LIST_CLASS = 'popup-menu-list';
 const LIST_SELECTOR = `.${LIST_CLASS}`;
 const FIXED_LIST_CLASS = 'popup-menu-list_fixed';
 const SEPARATOR_CLASS = 'popup-menu-list__separator';
-const BTN_CLASS = 'popup-menu__btn';
-const CHECKBOX_CLASS = 'action-checkbox';
+const MENU_ITEM_CLASS = 'popup-menu-item';
 
 /* List position constants */
 const SCREEN_PADDING = 5;
@@ -40,7 +38,7 @@ const defaultProps = {
     fixed: true,
     content: null,
     items: [],
-    id: null,
+    id: undefined,
     onClose: null,
     onItemClick: null,
 };
@@ -259,7 +257,7 @@ export class PopupMenu extends Component {
 
         const { className = [], onClick = null, ...rest } = item;
         const button = Button.create({
-            className: [BTN_CLASS, ...asArray(className)],
+            className: [MENU_ITEM_CLASS, ...asArray(className)],
             ...rest,
             onClick: (...args) => this.onItemClick(button, onClick, ...args),
         });
@@ -279,7 +277,7 @@ export class PopupMenu extends Component {
             rest.label = rest.title;
         }
         const button = Checkbox.create({
-            className: [CHECKBOX_CLASS, ...asArray(className)],
+            className: [MENU_ITEM_CLASS, ...asArray(className)],
             ...rest,
             onChange: (...args) => this.onItemClick(button, onChange, ...args),
         });

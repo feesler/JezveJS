@@ -21,7 +21,6 @@ const views = {
     offcanvas: 'Offcanvas',
     piechart: 'PieChart',
     popup: 'Popup',
-    popupmenu: 'PopupMenu',
     progress: 'Progress',
     slider: 'Slider',
     switch: 'Switch',
