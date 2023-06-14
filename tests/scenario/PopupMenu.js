@@ -17,4 +17,10 @@ export const popupMenuTests = async () => {
     await Actions.toggleListMenu(0);
     await Actions.toggleListMenu(4);
     await Actions.toggleListMenu(4);
+
+    await Actions.selectItemByIndex('default', 0);
+    await Actions.selectItemByIndex('default', 1);
+    await Actions.selectItemByIndex('default', 2);
+    await Actions.selectItemById('absPosition', 'selectAllBtn');
+    await Actions.selectItemById('list', 'selectAllBtn', 1);
 };

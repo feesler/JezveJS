@@ -16,3 +16,11 @@ export const toggleClipping = async () => {
 export const toggleListMenu = async (index) => {
     await test(`Toggle list menu by index [${index}]`, () => App.view.toggleListMenu(index));
 };
+
+export const selectItemByIndex = async (name, index, ...args) => {
+    await test(`Select item of '${name}' menu by index [${index}]`, () => App.view.selectItemByIndex(name, index, ...args));
+};
+
+export const selectItemById = async (name, id, ...args) => {
+    await test(`Select item of '${name}' menu by id '${id}'`, () => App.view.selectItemById(name, id, ...args));
+};
