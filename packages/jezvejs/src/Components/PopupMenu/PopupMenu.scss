@@ -54,7 +54,7 @@
   }
 
   /* Menu item with icon */
-  .btn.popup-menu__btn {
+  .btn.popup-menu-item {
     --btn-background: none;
     --btn-title-color: var(--popupmenu-title-color);
     --btn-hover-background: var(--popupmenu-hover-background);
@@ -78,12 +78,12 @@
     .btn__icon {
       position: absolute;
       left: var(--popupmenu-padding);
-      margin: var(--popupmenu-icon-margin)
+      margin: var(--popupmenu-icon-margin);
     }
   }
 
   /* Menu item with checkbox */
-  .action-checkbox {
+  .checkbox.popup-menu-item {
     --checkbox-text: var(--popupmenu-title-color);
 
     display: flex;
@@ -106,7 +106,7 @@
 
 @media (hover: hover) {
   .popup-menu-list {
-    .action-checkbox:hover {
+    .popup-menu-item:hover {
       --checkbox-text: var(--popupmenu-hover-title-color);
 
       background-color: var(--popupmenu-hover-background);

@@ -24,8 +24,7 @@ const LIST_CLASS = 'popup-menu-list';
 const LIST_SELECTOR = `.${LIST_CLASS}`;
 const FIXED_LIST_CLASS = 'popup-menu-list_fixed';
 const SEPARATOR_CLASS = 'popup-menu-list__separator';
-const BTN_CLASS = 'popup-menu__btn';
-const CHECKBOX_CLASS = 'action-checkbox';
+const MENU_ITEM_CLASS = 'popup-menu-item';
 
 /* List position constants */
 const SCREEN_PADDING = 5;
@@ -258,7 +257,7 @@ export class PopupMenu extends Component {
 
         const { className = [], onClick = null, ...rest } = item;
         const button = Button.create({
-            className: [BTN_CLASS, ...asArray(className)],
+            className: [MENU_ITEM_CLASS, ...asArray(className)],
             ...rest,
             onClick: (...args) => this.onItemClick(button, onClick, ...args),
         });
@@ -278,7 +277,7 @@ export class PopupMenu extends Component {
             rest.label = rest.title;
         }
         const button = Checkbox.create({
-            className: [CHECKBOX_CLASS, ...asArray(className)],
+            className: [MENU_ITEM_CLASS, ...asArray(className)],
             ...rest,
             onChange: (...args) => this.onItemClick(button, onChange, ...args),
         });
