@@ -6,5 +6,7 @@ export { Button } from './src/Button.js';
 export { LinkMenu } from './src/LinkMenu.js';
 export { LinkMenuItem } from './src/LinkMenuItem.js';
 export { Paginator } from './src/Paginator.js';
+export { PopupMenu } from './src/PopupMenu.js';
+export { PopupMenuItem } from './src/PopupMenuItem.js';
 export { Switch } from './src/Switch.js';
 export { TabList } from './src/TabList.js';

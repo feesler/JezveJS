@@ -14,6 +14,7 @@ import { loadTests } from './Load.js';
 import { tabListTests } from './TabList.js';
 import { storeTests } from './Store.js';
 import { dateInputTests } from './DateInput.js';
+import { popupMenuTests } from './PopupMenu.js';
 
 const storiesMap = {
     common: commonTests,
@@ -24,6 +25,7 @@ const storiesMap = {
     dropDown: dropDownTests,
     datePicker: datePickerTests,
     paginator: paginatorTests,
+    popupMenu: popupMenuTests,
     tabList: tabListTests,
     load: loadTests,
 };

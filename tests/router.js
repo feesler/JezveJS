@@ -5,6 +5,7 @@ import { DateInputView } from './view/DateInputView.js';
 import { DropDownView } from './view/DropDownView.js';
 import { DatePickerView } from './view/DatePickerView.js';
 import { PaginatorView } from './view/PaginatorView.js';
+import { PopupMenuView } from './view/PopupMenuView.js';
 import { TabListView } from './view/TabListView.js';
 
 const routeMap = {
@@ -30,7 +31,7 @@ const routeMap = {
     offcanvas: AppView,
     piechart: AppView,
     popup: AppView,
-    popupmenu: AppView,
+    popupmenu: PopupMenuView,
     progress: AppView,
     slider: AppView,
     switch: AppView,
