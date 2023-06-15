@@ -18,6 +18,12 @@ export class PopupMenuItem extends TestComponent {
                 isCheckbox: el.classList.contains('checkbox'),
             };
 
+            const linkEl = (el.tagName === 'A') ? el : el.querySelector('a');
+            content.isLink = !!linkEl;
+            if (content.isLink) {
+                content.link = linkEl.href;
+            }
+
             if (content.isCheckbox) {
                 content.checked = el.querySelector('input[type="checkbox"]')?.checked;
                 content.title = el.querySelector('.checkbox__label')?.textContent;
@@ -37,6 +43,14 @@ export class PopupMenuItem extends TestComponent {
 
     get title() {
         return this.content.title;
+    }
+
+    get isLink() {
+        return this.content.isLink;
+    }
+
+    get link() {
+        return this.content.link;
     }
 
     get isCheckbox() {
