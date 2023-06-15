@@ -76,6 +76,6 @@ export class PopupMenuItem extends TestComponent {
 
     async click() {
         this.assertAvailable();
-        await click(this.content.linkElem);
+        await click(this.elem);
     }
 }
