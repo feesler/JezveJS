@@ -7,10 +7,12 @@ import {
     show,
     enable,
     isVisible,
+    asArray,
 } from 'jezvejs';
 import { CloseButton } from 'jezvejs/CloseButton';
 import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
+import { Tags } from 'jezvejs/Tags';
 
 import { initNavigation } from '../../app.js';
 import { CustomListItem } from './impl/CustomListItem.js';
@@ -356,6 +358,40 @@ const groupsSelectFilter = () => {
     );
 };
 
+// 'showMultipleSelection' option
+const showMultipleSelection = () => {
+    let dropDown = null;
+    let tags = null;
+
+    const renderTags = (selection) => (
+        tags.setState((tagsState) => ({
+            ...tagsState,
+            items: asArray(selection).map((selItem) => ({
+                id: selItem.id,
+                title: selItem.value,
+            })),
+        }))
+    );
+
+    tags = Tags.create({
+        closeable: true,
+        onCloseItem: (itemId) => dropDown.deselectItem(itemId),
+    });
+
+    dropDown = DropDown.create({
+        enableFilter: true,
+        showMultipleSelection: false,
+        noResultsMessage: 'Nothing found',
+        multi: true,
+        placeholder: 'Type to filter',
+        data: initItems('Filter item', 20),
+        onItemSelect: renderTags,
+        onChange: renderTags,
+    });
+
+    ge('showMultipleContainer').append(tags.elem, dropDown.elem);
+};
+
 // Built-in items filter with single select
 const attachedFilter = () => {
     const btn = CloseButton.create();
@@ -615,6 +651,7 @@ const init = () => {
     singleSelectFilter();
     multiSelectFilter();
     groupsSelectFilter();
+    showMultipleSelection();
     attachedFilter();
     attachedFilterMulti();
 

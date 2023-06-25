@@ -73,7 +73,7 @@ export class DropDownComboBox extends Component {
         this.input.show(this.state.editable);
 
         const valueContainer = createElement('div', { props: { className: VALUE_CLASS } });
-        if (this.props.multi) {
+        if (this.props.multi && this.props.showMultipleSelection) {
             const { MultipleSelection, MultiSelectionItem } = this.props.components;
             this.multipleSelection = MultipleSelection.create({
                 ItemComponent: MultiSelectionItem,
@@ -196,16 +196,19 @@ export class DropDownComboBox extends Component {
         }
 
         const selectedItems = getSelectedItems(state);
-        const activeItem = (state.actSelItemIndex === -1)
-            ? null
-            : selectedItems[state.actSelItemIndex];
 
-        this.multipleSelection.setState((selectionState) => ({
-            ...selectionState,
-            items: selectedItems,
-            activeItemId: activeItem?.id ?? 0,
-        }));
-        this.multipleSelection.show(selectedItems.length > 0);
+        if (this.props.showMultipleSelection) {
+            const activeItem = (state.actSelItemIndex === -1)
+                ? null
+                : selectedItems[state.actSelItemIndex];
+
+            this.multipleSelection.setState((selectionState) => ({
+                ...selectionState,
+                items: selectedItems,
+                activeItemId: activeItem?.id ?? 0,
+            }));
+            this.multipleSelection.show(selectedItems.length > 0);
+        }
 
         this.clearBtn?.show(selectedItems.length > 0);
     }
