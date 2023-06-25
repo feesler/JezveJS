@@ -33,7 +33,7 @@ export class Tags extends SortableListContainer {
 
         const { ItemComponent } = listProps;
         listProps.itemSelector = ItemComponent.selector;
-        listProps.itemSortSelector = ItemComponent.sortSelector;
+        listProps.itemSortSelector = ItemComponent.sortSelector ?? ItemComponent.selector;
         listProps.placeholderClass = ItemComponent.placeholderClass;
 
         super(listProps);

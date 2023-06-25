@@ -11,6 +11,7 @@
   --tag-border-style: solid;
   --tag-border-color: transparent;
   --tag-close-btn-color: #ffffff70;
+  --tag-close-btn-size: 12px;
   --tag-inner-height: calc(var(--tag-height) - var(--tag-border-width) * 2);
 
   /* Active state */
@@ -59,8 +60,8 @@
 
 /* Remove selection item button */
 .close-btn.tag__close-btn {
-  --btn-size: 12px;
-  --btn-icon-size: 12px;
+  --btn-size: var(--tag-close-btn-size);
+  --btn-icon-size: var(--tag-close-btn-size);
   --btn-icon-color: var(--tag-close-btn-color);
   --btn-hover-icon-color: var(--tag-close-btn-hover-color);
 }

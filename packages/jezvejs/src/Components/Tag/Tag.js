@@ -75,6 +75,8 @@ export class Tag extends Component {
             props: { className: TAG_CLASS },
             children: [this.titleElem],
         });
+
+        this.setClassNames();
     }
 
     createCloseButton() {

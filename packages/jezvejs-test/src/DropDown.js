@@ -97,8 +97,12 @@ export class DropDown extends TestComponent {
             res.clearBtn = await query(this.elem, '.dd__clear-btn');
             assert(res.clearBtn, 'Clear button not found');
 
-            const selItemElems = await queryAll(this.elem, '.dd__selection > .dd__selection-item');
-            const deselectButtons = await queryAll(this.elem, '.dd__del-selection-item-btn');
+            const itemsSelector = '.dd__selection > .dd__selection-item';
+            const selItemElems = await queryAll(this.elem, itemsSelector);
+
+            const buttonsSelector = `${itemsSelector} .close-btn`;
+            const deselectButtons = await queryAll(this.elem, buttonsSelector);
+
             assert(selItemElems.length === deselectButtons.length, 'Invalid selection element');
 
             const selItems = selItemElems.map((elem, ind) => ({

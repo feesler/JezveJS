@@ -77,7 +77,8 @@ export class DropDownComboBox extends Component {
             const { MultipleSelection, MultiSelectionItem } = this.props.components;
             this.multipleSelection = MultipleSelection.create({
                 ItemComponent: MultiSelectionItem,
-                onItemClick: (_, e) => this.onDeleteSelectedItem(e),
+                closeable: true,
+                onCloseItem: (_, e) => this.onDeleteSelectedItem(e),
             });
             valueContainer.append(this.multipleSelection.elem);
         }

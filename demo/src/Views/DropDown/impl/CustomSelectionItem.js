@@ -53,12 +53,16 @@ export class CustomSelectionItem extends Component {
 
     init() {
         this.deselectButton = createElement('span', {
-            props: { className: SELECTION_ITEM_DEL_BTN_CLASS },
+            props: {
+                className: getClassName(SELECTION_ITEM_DEL_BTN_CLASS, 'close-btn'),
+            },
         });
         this.titleElem = createElement('span');
 
         this.elem = createElement('span', {
-            props: { className: getClassName(SELECTION_ITEM_CLASS, 'dd__custom-selection-item') },
+            props: {
+                className: getClassName(SELECTION_ITEM_CLASS, 'dd__custom-selection-item', 'tag'),
+            },
             children: [this.deselectButton, this.titleElem],
         });
     }
