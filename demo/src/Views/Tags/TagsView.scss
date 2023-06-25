@@ -1,0 +1,18 @@
+.styled {
+  .tag {
+    --tag-text-color: #0072c6;
+    --tag-border-width: 1px;
+    --tag-border-color: #0072c6;
+    --tag-background-color: transparent;
+    --tag-close-btn-color: #0072c670;
+
+    /* Hover state */
+    --tag-hover-close-btn-color: #ffffff70;
+    --tag-close-btn-hover-color: #ffffff;
+
+    /* Disabled state */
+    --tag-disabled-text-color: #888888;
+    --tag-disabled-background-color: transparent;
+    --tag-disabled-border-color: #888888;
+  }
+}
