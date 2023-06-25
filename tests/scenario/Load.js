@@ -24,6 +24,7 @@ const views = {
     progress: 'Progress',
     slider: 'Slider',
     switch: 'Switch',
+    tags: 'Tags',
     weekdayselect: 'WeekDaySelect',
 };
 

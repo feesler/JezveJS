@@ -2,6 +2,7 @@
   --checkbox-size: 20px;
   --checkbox-border: #cccccc;
   --checkbox-border-width: 1px;
+  --checkbox-border-radius: 0;
   --checkbox-bg: #ffffff;
   --checkbox-text: #000000;
   --checkbox-hover-bg: #cccccc;
@@ -50,6 +51,7 @@
   padding: 0;
   margin: 0 6px 0 0;
   border: 1px solid var(--checkbox-border);
+  border-radius: var(--checkbox-border-radius);
   background-color: var(--checkbox-bg);
   cursor: pointer;
 

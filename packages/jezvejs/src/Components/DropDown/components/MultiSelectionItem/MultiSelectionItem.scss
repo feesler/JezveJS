@@ -1,66 +1,25 @@
 /* Multiple selection item */
 .dd__selection-item {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  padding: var(--dd-selection-item-padding);
-  height: var(--dd-selection-item-height);
-  font-weight: normal;
-  white-space: nowrap;
-  background-color: var(--dd-selection-item-bg);
-  color: var(--dd-selection-item-text);
-  border-radius: var(--dd-selection-item-border-radius);
-}
+  --tag-padding: var(--dd-selection-item-padding);
+  --tag-height: var(--dd-selection-item-height);
+  --tag-text-color: var(--dd-selection-item-text);
+  --tag-background-color: var(--dd-selection-item-bg);
+  --tag-border-radius: var(--dd-selection-item-border-radius);
+  --tag-close-btn-color: var(--dd-selection-item-btn);
+  --tag-close-btn-size: 12px;
 
-/* Remove selection item button */
-.close-btn.dd__del-selection-item-btn {
-  --btn-size: 12px;
-  --btn-icon-size: 12px;
-  --btn-icon-color: var(--dd-selection-item-btn);
-  --btn-hover-icon-color: var(--dd-selection-item-btn-hover);
+  /* Hover state */
+  --tag-hover-text-color: var(--dd-selection-item-hover-text);
+  --tag-hover-background-color: var(--dd-selection-item-hover-bg);
+  --tag-hover-close-btn-color: var(--dd-selection-item-hover-btn);
+  --tag-close-btn-hover-color: var(--dd-selection-item-btn-hover);
 
-  padding: 0 0 0 7px;
-}
+  /* Active state */
+  --tag-active-text-color: var(--dd-selection-item-active-text);
+  --tag-active-background-color: var(--dd-selection-item-active-bg);
+  --tag-active-close-btn-color: var(--dd-selection-item-active-btn);
 
-/* Active component */
-.dd__container_active {
-  .dd__selection-item {
-    color: var(--dd-active-selection-item-text);
-    background-color: var(--dd-active-selection-item-bg);
-  }
-
-  /* Active selection item */
-  .dd__selection-item_active {
-    color: var(--dd-selection-item-active-text);
-    background-color: var(--dd-selection-item-active-bg);
-
-    .close-btn.dd__del-selection-item-btn {
-      --btn-icon-color: var(--dd-selection-item-active-btn);
-    }
-  }
-}
-
-/* Disabled component */
-.dd__container[disabled],
-.dd__container_attached[disabled] {
-  .dd__selection-item {
-    color: var(--dd-disabled-selection-item-text);
-    background-color: var(--dd-disabled-selection-item-bg);
-    user-select: none;
-  }
-
-  .dd__del-selection-item-btn {
-    display: none;
-  }
-}
-
-@media (hover: hover) {
-  .dd__selection-item:hover {
-    color: var(--dd-selection-item-hover-text);
-    background-color: var(--dd-selection-item-hover-bg);
-
-    .dd__del-selection-item-btn {
-      --btn-icon-color: var(--dd-selection-item-hover-btn);
-    }
-  }
+  /* Disabled state */
+  --tag-disabled-text-color: var(--dd-disabled-selection-item-text);
+  --tag-disabled-background-color: var(--dd-disabled-selection-item-bg);
 }

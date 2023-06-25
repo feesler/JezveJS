@@ -5,6 +5,7 @@ import {
     re,
     removeChilds,
     insertAfter,
+    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
@@ -62,9 +63,7 @@ export class ListContainer extends Component {
     }
 
     setHandlers() {
-        if (isFunction(this.props.onItemClick)) {
-            setEvents(this.elem, { click: (e) => this.onItemClick(e) });
-        }
+        setEvents(this.elem, { click: (e) => this.onItemClick(e) });
     }
 
     /** Returns array of list items */
@@ -158,6 +157,22 @@ export class ListContainer extends Component {
         this.setState({
             ...this.state,
             items: this.state.items.map(toggleItem),
+        });
+    }
+
+    /**
+     * Removes item by id
+     * @param {string} itemId id or array of ids of items to remove
+     */
+    removeItemsById(itemId) {
+        const ids = asArray(itemId).map((id) => id?.toString());
+        if (ids.length === 0) {
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            items: this.state.items.filter((item) => !ids.includes(item.id.toString())),
         });
     }
 

@@ -1,0 +1,23 @@
+/* Multiple selection container */
+.tags {
+  --tags-background: none;
+  --tags-padding: 0;
+  --tags-items-gap: 2px;
+
+  /* Disabled state */
+  --tags-disabled-background: none;
+
+  display: flex;
+  flex-flow: row wrap;
+  padding: var(--tags-padding);
+  gap: var(--tags-items-gap);
+  font-weight: 400;
+  font-size: 1rem;
+  vertical-align: middle;
+  background: var(--tags-background);
+}
+
+/* Disabled drop down */
+.tags[disabled] {
+  background-color: var(--tags-disabled-background);
+}

@@ -36,6 +36,7 @@ const routeMap = {
     slider: AppView,
     switch: AppView,
     tablist: TabListView,
+    tags: AppView,
     weekdayselect: AppView,
 };
 

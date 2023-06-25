@@ -80,6 +80,11 @@ export class PopupMenuView extends AppView {
         return res;
     }
 
+    getComponent(name) {
+        assert(this.content[name], 'Invalid component');
+        return this.content[name];
+    }
+
     onToggleMenu(name, model = this.model) {
         const components = Object.keys(componentSelectors);
         components.forEach((key) => {
@@ -134,6 +139,46 @@ export class PopupMenuView extends AppView {
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.listContainer.menuButtons[index]));
+
+        return this.checkState(expected);
+    }
+
+    async toggleMenu(name, ...args) {
+        const menuTogglersMap = {
+            default: 'toggleDefault',
+            absPosition: 'toggleAbsPosition',
+            clipping: 'toggleClipping',
+            list: 'toggleListMenu',
+        };
+
+        const method = menuTogglersMap[name];
+        assert.isFunction(this[method], `Invalid component '${name}'`);
+
+        return this[method](...args);
+    }
+
+    async openMenu(name, ...args) {
+        if (this.model[name]?.visible) {
+            return true;
+        }
+
+        return this.toggleMenu(name, ...args);
+    }
+
+    async selectItemByIndex(name, index, ...args) {
+        await this.openMenu(name, ...args);
+        const expected = this.getExpectedState();
+
+        await this.performAction(() => this.getComponent(name)?.selectItemByIndex(index));
+
+        return this.checkState(expected);
+    }
+
+    async selectItemById(name, id, ...args) {
+        await this.openMenu(name, ...args);
+        const expected = this.getExpectedState();
+
+        await this.performAction(() => this.getComponent(name)?.selectItemById(id));
 
         return this.checkState(expected);
     }

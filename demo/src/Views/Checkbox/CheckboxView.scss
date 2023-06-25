@@ -1,6 +1,6 @@
 /* Circle */
-.checkbox.checkbox-circle .checkbox__check {
-  border-radius: 100vh;
+.checkbox.checkbox-circle {
+  --checkbox-border-radius: 100vh;
 }
 
 /* Large */

@@ -12,10 +12,17 @@ export class PopupMenu extends TestComponent {
         const validClass = await hasClass(this.elem, 'popup-menu-list');
         assert(validClass, 'Unexpected stucture of popup menu');
 
+        const res = {};
+
         const itemElems = await queryAll(this.elem, '.popup-menu-item');
-        const res = {
-            items: await asyncMap(itemElems, (elem) => PopupMenuItem.create(this, elem)),
-        };
+        res.items = await asyncMap(itemElems, async (elem) => {
+            const item = await PopupMenuItem.create(this, elem);
+            if (item?.id) {
+                res[item.id] = item;
+            }
+
+            return item;
+        });
 
         return res;
     }
