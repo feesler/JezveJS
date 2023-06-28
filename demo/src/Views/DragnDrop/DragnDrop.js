@@ -2,13 +2,13 @@ import 'jezvejs/style';
 import {
     ge,
     createElement,
-    onReady,
     asArray,
 } from 'jezvejs';
 import { Sortable } from 'jezvejs/Sortable';
 import { SortableListContainer } from 'jezvejs/SortableListContainer';
 import { Icon } from 'jezvejs/Icon';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
@@ -561,31 +561,34 @@ const initSingleItem = () => {
     });
 };
 
-const init = () => {
-    initNavigation();
+class DragAndDropView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initOriginalAvatar();
+        initClonedAvatar();
 
-    initOriginalAvatar();
-    initClonedAvatar();
+        initXAxisAvatar();
 
-    initXAxisAvatar();
+        initSortable();
+        initSortableList();
+        initExchangable();
+        initCustomGroups();
 
-    initSortable();
-    initSortableList();
-    initExchangable();
-    initCustomGroups();
+        initTree();
+        initTreeExchange();
 
-    initTree();
-    initTreeExchange();
+        initTableEachBody();
+        initTableSingleBody();
+        initTableNoBody();
 
-    initTableEachBody();
-    initTableSingleBody();
-    initTableNoBody();
+        initHandles();
+        initRootOnlyHandle();
+        initQueryHandles();
 
-    initHandles();
-    initRootOnlyHandle();
-    initQueryHandles();
+        initSingleItem();
+    }
+}
 
-    initSingleItem();
-};
-
-onReady(init);
+DragAndDropView.create();

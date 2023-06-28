@@ -1,9 +1,10 @@
 import 'jezvejs/style';
-import { ge, onReady } from 'jezvejs';
+import { ge } from 'jezvejs';
 import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './ButtonView.scss';
 
 const addEventLog = (value) => {
@@ -165,22 +166,25 @@ const initDisabled = () => {
     });
 };
 
-const init = () => {
-    initNavigation();
+class ButtonView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initParsed();
+        initDynamicButton();
+        initDynamicLink();
+        initStatic();
 
-    initParsed();
-    initDynamicButton();
-    initDynamicLink();
-    initStatic();
+        initBorder();
+        initCustomContent();
+        initBackground();
+        initFullWidth();
+        initCloseBtn();
+        initNoTitle();
+        initNoIcon();
+        initDisabled();
+    }
+}
 
-    initBorder();
-    initCustomContent();
-    initBackground();
-    initFullWidth();
-    initCloseBtn();
-    initNoTitle();
-    initNoIcon();
-    initDisabled();
-};
-
-onReady(init);
+ButtonView.create();

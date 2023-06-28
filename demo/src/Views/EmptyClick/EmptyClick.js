@@ -4,10 +4,10 @@ import {
     ge,
     setEmptyClick,
     removeEmptyClick,
-    onReady,
     setEvents,
 } from 'jezvejs';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './EmptyClickView.scss';
 
 let count = 0;
@@ -41,11 +41,14 @@ const initMenu = () => {
     setEvents(ge('openbtn'), { click: () => showMenu() });
 };
 
-const init = () => {
-    initNavigation();
+class EmptyClickView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initSimple();
+        initMenu();
+    }
+}
 
-    initSimple();
-    initMenu();
-};
-
-onReady(init);
+EmptyClickView.create();

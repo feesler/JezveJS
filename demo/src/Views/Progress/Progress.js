@@ -1,10 +1,11 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import { ge, onReady, setEvents } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { Progress } from 'jezvejs/Progress';
 import { IndetermProgress } from 'jezvejs/IndetermProgress';
 import { Spinner } from 'jezvejs/Spinner';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './ProgressView.scss';
 
 const initDefaultProgress = () => {
@@ -79,15 +80,18 @@ const initSpinner = () => {
     ge('spinnerContainer').append(spinner.elem);
 };
 
-const init = () => {
-    initNavigation();
+class ProgressView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefaultProgress();
+        initStyledProgress();
 
-    initDefaultProgress();
-    initStyledProgress();
+        initIndetermProgress();
 
-    initIndetermProgress();
+        initSpinner();
+    }
+}
 
-    initSpinner();
-};
-
-onReady(init);
+ProgressView.create();

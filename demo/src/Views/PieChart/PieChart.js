@@ -1,8 +1,9 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import { ge, onReady, setEvents } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { PieChart } from 'jezvejs/PieChart';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './PieChartView.scss';
 
 const initSmall = () => {
@@ -162,14 +163,17 @@ const initNoData = () => {
     setEvents(setDataBtn, { click: () => chart.setData(initialData) });
 };
 
-const init = () => {
-    initNavigation();
+class PieChartView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initSmall();
+        initOffset();
+        initInnerRadius();
+        initSingleValue();
+        initNoData();
+    }
+}
 
-    initSmall();
-    initOffset();
-    initInnerRadius();
-    initSingleValue();
-    initNoData();
-};
-
-onReady(init);
+PieChartView.create();

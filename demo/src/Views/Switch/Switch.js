@@ -1,8 +1,9 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import { ge, setEvents, onReady } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { Switch } from 'jezvejs/Switch';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './SwitchView.scss';
 
 const addEventLog = (value) => {
@@ -45,12 +46,15 @@ const initLarge = () => {
     ge('largeContainer').appendChild(largeSwitch.elem);
 };
 
-const init = () => {
-    initNavigation();
+class SwitchView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initParsed();
+        initDynamic();
+        initLarge();
+    }
+}
 
-    initParsed();
-    initDynamic();
-    initLarge();
-};
-
-onReady(init);
+SwitchView.create();

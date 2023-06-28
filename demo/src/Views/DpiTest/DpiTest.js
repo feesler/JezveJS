@@ -1,20 +1,20 @@
 import 'jezvejs/style';
-import {
-    ge,
-    getRealDPI,
-    onReady,
-} from 'jezvejs';
-import { initNavigation } from '../../app.js';
+import { ge, getRealDPI } from 'jezvejs';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './DpiTestView.scss';
 
-const init = () => {
-    initNavigation();
+class DpiTestView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        const realDPI = getRealDPI();
+        const testpic = ge('testpic');
 
-    const realDPI = getRealDPI();
-    const testpic = ge('testpic');
+        testpic.classList.add((realDPI > 1) ? 'pic-double' : 'pic-single');
+        ge('status').textContent = `Real DPI: ${realDPI}`;
+    }
+}
 
-    testpic.classList.add((realDPI > 1) ? 'pic-double' : 'pic-single');
-    ge('status').textContent = `Real DPI: ${realDPI}`;
-};
-
-onReady(init);
+DpiTestView.create();

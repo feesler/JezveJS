@@ -1,13 +1,10 @@
 import 'jezvejs/style';
-import {
-    ge,
-    onReady,
-    createElement,
-} from 'jezvejs';
+import { ge, createElement } from 'jezvejs';
 import { ChartGrid } from 'jezvejs/ChartGrid';
 import { Histogram } from 'jezvejs/Histogram';
 import { LineChart } from 'jezvejs/LineChart';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './ChartGridView.scss';
 
 const assert = {
@@ -89,68 +86,71 @@ const initLineChart = (data) => {
     contaier.chartElem.append(chart.elem);
 };
 
-const init = () => {
-    initNavigation();
+class ChartGridView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        runTests();
 
-    runTests();
+        initHistogram({
+            values: [16925],
+            series: [['01.01.2021', 1]],
+        });
+        initHistogram({
+            values: [-16925],
+            series: [['01.01.2021', 1]],
+        });
+        initHistogram({
+            values: [16925, -16925],
+            series: [['01.01.2021', 2]],
+        });
+        initHistogram({
+            values: [2580, 2],
+            series: [['02.01.2021', 2]],
+        });
+        initHistogram({
+            values: [-6925, -300],
+            series: [['02.01.2021', 2]],
+        });
+        initHistogram({
+            values: [2580, 2, -6925, -300],
+            series: [['02.01.2021', 4]],
+        });
+        initHistogram({
+            values: [0, 0, 0, 0],
+            series: [['02.01.2021', 4]],
+        });
 
-    initHistogram({
-        values: [16925],
-        series: [['01.01.2021', 1]],
-    });
-    initHistogram({
-        values: [-16925],
-        series: [['01.01.2021', 1]],
-    });
-    initHistogram({
-        values: [16925, -16925],
-        series: [['01.01.2021', 2]],
-    });
-    initHistogram({
-        values: [2580, 2],
-        series: [['02.01.2021', 2]],
-    });
-    initHistogram({
-        values: [-6925, -300],
-        series: [['02.01.2021', 2]],
-    });
-    initHistogram({
-        values: [2580, 2, -6925, -300],
-        series: [['02.01.2021', 4]],
-    });
-    initHistogram({
-        values: [0, 0, 0, 0],
-        series: [['02.01.2021', 4]],
-    });
+        initLineChart({
+            values: [55.5336, 67.2652, 58.1207],
+            series: [['01.01.2021', 2], ['02.01.2021', 1]],
+        });
+        initLineChart({
+            values: [46.5, 48.26],
+            series: [['01.01.2021', 2]],
+        });
+        initLineChart({
+            values: [5500.536, 5517.652, 5441.1207],
+            series: [['01.01.2021', 2], ['02.01.2021', 1]],
+        });
+        initLineChart({
+            values: [1.007536, 1.00652, 1.01207],
+            series: [['01.01.2021', 2], ['02.01.2021', 1]],
+        });
+        initLineChart({
+            values: [0.007536, 0.00652, 0.01207],
+            series: [['01.01.2021', 2], ['02.01.2021', 1]],
+        });
+        initLineChart({
+            values: [0.00036, 0.00002],
+            series: [['01.01.2021', 2]],
+        });
+        initLineChart({
+            values: [100, 100, 100, 100],
+            series: [['02.01.2021', 4]],
+        });
+    }
+}
 
-    initLineChart({
-        values: [55.5336, 67.2652, 58.1207],
-        series: [['01.01.2021', 2], ['02.01.2021', 1]],
-    });
-    initLineChart({
-        values: [46.5, 48.26],
-        series: [['01.01.2021', 2]],
-    });
-    initLineChart({
-        values: [5500.536, 5517.652, 5441.1207],
-        series: [['01.01.2021', 2], ['02.01.2021', 1]],
-    });
-    initLineChart({
-        values: [1.007536, 1.00652, 1.01207],
-        series: [['01.01.2021', 2], ['02.01.2021', 1]],
-    });
-    initLineChart({
-        values: [0.007536, 0.00652, 0.01207],
-        series: [['01.01.2021', 2], ['02.01.2021', 1]],
-    });
-    initLineChart({
-        values: [0.00036, 0.00002],
-        series: [['01.01.2021', 2]],
-    });
-    initLineChart({
-        values: [100, 100, 100, 100],
-        series: [['02.01.2021', 4]],
-    });
-};
-
-onReady(init);
+ChartGridView.create();

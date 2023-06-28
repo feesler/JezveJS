@@ -1,12 +1,9 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import {
-    ge,
-    onReady,
-    setEvents,
-} from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { WeekDaySelect } from 'jezvejs/WeekDaySelect';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './WeekDaySelectView.scss';
 
 const addEventLog = (value) => {
@@ -98,15 +95,18 @@ const initDisabled = () => {
     });
 };
 
-const init = () => {
-    initNavigation();
+class WeekDaySelectView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initStyled();
+        initMultiSelect();
+        initLocale();
+        initDisabledItem();
+        initDisabled();
+    }
+}
 
-    initDefault();
-    initStyled();
-    initMultiSelect();
-    initLocale();
-    initDisabledItem();
-    initDisabled();
-};
-
-onReady(init);
+WeekDaySelectView.create();

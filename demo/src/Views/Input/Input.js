@@ -1,8 +1,9 @@
 import 'jezvejs/style';
-import { ge, onReady } from 'jezvejs';
+import { ge } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './InputView.scss';
 
 const addEventLog = (value) => {
@@ -58,14 +59,17 @@ const initDisabled = () => {
     });
 };
 
-const init = () => {
-    initNavigation();
+class InputView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initPlaceholder();
+        initFullWidth();
+        initStyled();
+        initDisabled();
+    }
+}
 
-    initDefault();
-    initPlaceholder();
-    initFullWidth();
-    initStyled();
-    initDisabled();
-};
-
-onReady(init);
+InputView.create();

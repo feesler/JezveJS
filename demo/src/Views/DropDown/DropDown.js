@@ -3,7 +3,6 @@ import {
     isObject,
     ge,
     setEvents,
-    onReady,
     show,
     enable,
     isVisible,
@@ -14,7 +13,7 @@ import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
 import { Tags } from 'jezvejs/Tags';
 
-import { initNavigation } from '../../app.js';
+import { DemoView } from '../../Application/DemoView.js';
 import { CustomListItem } from './impl/CustomListItem.js';
 import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
 import './DropDownView.scss';
@@ -622,46 +621,49 @@ const popupOverflow = () => {
     setEvents(popupBtn, { click: () => showPopup() });
 };
 
-const init = () => {
-    initNavigation();
+class DropDownView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initStandardInline();
+        initStandardStretch();
+        initFixed();
 
-    initStandardInline();
-    initStandardStretch();
-    initFixed();
+        initParseSingleNoSelection();
+        initParseSingleWithSelection();
 
-    initParseSingleNoSelection();
-    initParseSingleWithSelection();
+        initParseDisabledOptions();
+        initParseOptGroups();
+        dynamicOptGroups();
 
-    initParseDisabledOptions();
-    initParseOptGroups();
-    dynamicOptGroups();
+        createUnattached();
+        attachToBlockElement();
+        attachToInlineElement();
 
-    createUnattached();
-    attachToBlockElement();
-    attachToInlineElement();
+        clippingTest();
 
-    clippingTest();
+        parseMultipleSelect();
+        dynamicMultipleSelect();
 
-    parseMultipleSelect();
-    dynamicMultipleSelect();
+        parseDisabledSingleSelect();
+        parseDisabledMultiSelect();
 
-    parseDisabledSingleSelect();
-    parseDisabledMultiSelect();
+        singleSelectFilter();
+        multiSelectFilter();
+        groupsSelectFilter();
+        showMultipleSelection();
+        attachedFilter();
+        attachedFilterMulti();
 
-    singleSelectFilter();
-    multiSelectFilter();
-    groupsSelectFilter();
-    showMultipleSelection();
-    attachedFilter();
-    attachedFilterMulti();
+        customRender();
+        useNativeSelect();
+        fullScreen();
 
-    customRender();
-    useNativeSelect();
-    fullScreen();
+        dynamicAddRemoveItems();
 
-    dynamicAddRemoveItems();
+        popupOverflow();
+    }
+}
 
-    popupOverflow();
-};
-
-onReady(init);
+DropDownView.create();

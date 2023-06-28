@@ -3,11 +3,11 @@ import 'jezvejs/style/Button';
 import {
     asArray,
     ge,
-    onReady,
     setEvents,
 } from 'jezvejs';
 import { LinkMenu } from 'jezvejs/LinkMenu';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 
 const addEventLog = (value) => {
     const logElem = ge('eventsLog');
@@ -137,16 +137,19 @@ const initDisabledComponent = () => {
     });
 };
 
-const init = () => {
-    initNavigation();
+class LinkMenuView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initParsed();
+        initDynamicSingle();
+        initDynamicMultiple();
+        initButtonsType();
+        initDisabledItem();
+        initHiddenItem();
+        initDisabledComponent();
+    }
+}
 
-    initParsed();
-    initDynamicSingle();
-    initDynamicMultiple();
-    initButtonsType();
-    initDisabledItem();
-    initHiddenItem();
-    initDisabledComponent();
-};
-
-onReady(init);
+LinkMenuView.create();
