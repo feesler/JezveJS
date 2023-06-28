@@ -1,7 +1,8 @@
 import 'jezvejs/style';
-import { ge, onReady } from 'jezvejs';
+import { ge } from 'jezvejs';
 import { Paginator } from 'jezvejs/Paginator';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './PaginatorView.scss';
 
 const initSimple = () => {
@@ -111,16 +112,21 @@ const initSingleItem = () => {
     ge('hideSingleContainer').appendChild(paginatorOff.elem);
 };
 
-onReady(() => {
-    initNavigation();
+class PaginatorView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initSimple();
+        initStyled();
+        initArrows();
+        initActiveLink();
+        initCustomURL();
+        initDisabledURL();
+        initCallbacks();
+        initPrerendered();
+        initSingleItem();
+    }
+}
 
-    initSimple();
-    initStyled();
-    initArrows();
-    initActiveLink();
-    initCustomURL();
-    initDisabledURL();
-    initCallbacks();
-    initPrerendered();
-    initSingleItem();
-});
+PaginatorView.create();

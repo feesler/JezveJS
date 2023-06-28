@@ -1,12 +1,9 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import {
-    ge,
-    onReady,
-    setEvents,
-} from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { Tags } from 'jezvejs/Tags';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './TagsView.scss';
 
 const addEventLog = (value) => {
@@ -143,16 +140,19 @@ const initDisabled = () => {
     });
 };
 
-const init = () => {
-    initNavigation();
+class TagsView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initStyled();
+        initActive();
+        initCloseable();
+        initSortable();
+        initDisabledItem();
+        initDisabled();
+    }
+}
 
-    initDefault();
-    initStyled();
-    initActive();
-    initCloseable();
-    initSortable();
-    initDisabledItem();
-    initDisabled();
-};
-
-onReady(init);
+TagsView.create();

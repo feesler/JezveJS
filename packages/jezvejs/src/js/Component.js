@@ -27,11 +27,7 @@ export class Component {
     }
 
     constructor(props = {}) {
-        this.props = props;
-
-        if (this.props.parent) {
-            this.parent = this.props.parent;
-        }
+        this.props = props ?? {};
 
         if (typeof this.props.elem === 'string') {
             this.elem = ge(this.props.elem);
@@ -102,6 +98,36 @@ export class Component {
                     this[elemName][prop] = this.props[prop];
                 }
             });
+        });
+    }
+
+    /**
+     * Obtain specified elements from DOM and assign as properties to component instance
+     * @param {Array|String} ids - id or array of element ids
+     */
+    loadElementsByIds(ids) {
+        asArray(ids).forEach((id) => {
+            if (typeof id !== 'string') {
+                throw new Error('Invalid element id');
+            }
+
+            this[id] = ge(id);
+            if (!this[id]) {
+                throw new Error(`Failed to initialize view: element '${id}' not found`);
+            }
+        });
+    }
+
+    /** Subscribes view to store updates */
+    subscribeToStore(store) {
+        if (!store) {
+            throw new Error('Invalid store');
+        }
+
+        store.subscribe((state, prevState) => {
+            if (state !== prevState) {
+                this.render(state, prevState);
+            }
         });
     }
 

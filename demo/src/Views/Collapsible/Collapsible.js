@@ -3,12 +3,12 @@ import 'jezvejs/style/Button';
 import {
     ge,
     setEvents,
-    onReady,
     createElement,
 } from 'jezvejs';
 import { Collapsible } from 'jezvejs/Collapsible';
 import { Icon } from 'jezvejs/Icon';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './CollapsibleView.scss';
 
 const CUSTOM_BTN_CLASS = 'custom-header-btn';
@@ -100,12 +100,17 @@ const initMethods = () => {
     setEvents(ge('toggleBtn'), { click: () => collapse.toggle() });
 };
 
-onReady(() => {
-    initNavigation();
+class CollapsibleView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initSimple();
+        initStyled();
+        initCustomHeader();
+        initDisabledToggle();
+        initMethods();
+    }
+}
 
-    initSimple();
-    initStyled();
-    initCustomHeader();
-    initDisabledToggle();
-    initMethods();
-});
+CollapsibleView.create();

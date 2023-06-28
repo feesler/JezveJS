@@ -267,6 +267,33 @@ export const getClassNames = (...args) => (
 /** Returns arguments converted to className string */
 export const getClassName = (...args) => getClassNames(...args).join(' ');
 
+/**
+ * Obtain request data of specified form element
+ * @param {HTMLFormElement} form - form element to obtain data from
+ */
+export const getFormData = (form) => {
+    if (!form || !form.elements) {
+        return null;
+    }
+
+    const res = {};
+    for (let i = 0; i < form.elements.length; i += 1) {
+        const inputEl = form.elements[i];
+        if (inputEl.disabled || inputEl.name === '') {
+            continue;
+        }
+
+        if ((inputEl.type === 'checkbox' || inputEl.type === 'radio')
+            && !inputEl.checked) {
+            continue;
+        }
+
+        res[inputEl.name] = inputEl.value;
+    }
+
+    return res;
+};
+
 /** Check bit flag is set */
 export const hasFlag = (x, flag) => ((x & flag) === flag);
 

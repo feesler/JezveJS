@@ -1,13 +1,10 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
 import 'jezvejs/style/Input';
-import {
-    ge,
-    createElement,
-    onReady,
-} from 'jezvejs';
+import { ge, createElement } from 'jezvejs';
 import { InputGroup } from 'jezvejs/InputGroup';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './InputGroupView.scss';
 
 const initParsed = () => {
@@ -37,11 +34,14 @@ const initDynamic = () => {
     container.append(inputGroup.elem);
 };
 
-const init = () => {
-    initNavigation();
+class InputGroupView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initParsed();
+        initDynamic();
+    }
+}
 
-    initParsed();
-    initDynamic();
-};
-
-onReady(init);
+InputGroupView.create();

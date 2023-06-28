@@ -1,13 +1,13 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
 import {
-    onReady,
     ge,
     createElement,
     setEvents,
 } from 'jezvejs';
 import { LineChart } from 'jezvejs/LineChart';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import largeData from '../Histogram/largeData.json';
 import './LineChartView.scss';
 
@@ -356,23 +356,26 @@ const setData = () => {
     setEvents(ge('largeDataBtn'), { click: () => chart.setData(largeData) });
 };
 
-const init = () => {
-    initNavigation();
+class LineChartView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        columnWidthAndGap();
+        fitToWidth();
+        autoScale();
+        callbacks();
+        multiple();
+        stacked();
+        stackedNegative();
+        // Different data tests
+        noData();
+        singleNegative();
+        onlyPositive();
+        onlyNegative();
+        negativeAndPositive();
+        setData();
+    }
+}
 
-    columnWidthAndGap();
-    fitToWidth();
-    autoScale();
-    callbacks();
-    multiple();
-    stacked();
-    stackedNegative();
-    // Different data tests
-    noData();
-    singleNegative();
-    onlyPositive();
-    onlyNegative();
-    negativeAndPositive();
-    setData();
-};
-
-onReady(init);
+LineChartView.create();

@@ -2,12 +2,12 @@ import 'jezvejs/style';
 import {
     createElement,
     ge,
-    onReady,
     setEvents,
 } from 'jezvejs';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './PopupMenuView.scss';
 
 const addEventLog = (value) => {
@@ -146,13 +146,16 @@ const initList = () => {
     setEvents(list, { click: (e) => onListMenuClick(e, menu) });
 };
 
-const init = () => {
-    initNavigation();
+class PopupMenuView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initAttached();
+        initClipping();
+        initList();
+    }
+}
 
-    initDefault();
-    initAttached();
-    initClipping();
-    initList();
-};
-
-onReady(init);
+PopupMenuView.create();

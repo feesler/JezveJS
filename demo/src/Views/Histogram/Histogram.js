@@ -1,13 +1,13 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
 import {
-    onReady,
     ge,
     setEvents,
     createElement,
 } from 'jezvejs';
 import { Histogram } from 'jezvejs/Histogram';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import largeData from './largeData.json';
 import './HistogramView.scss';
 
@@ -498,26 +498,29 @@ const setData = () => {
     setEvents(ge('largeDataBtn'), { click: () => histogram.setData(largeData) });
 };
 
-const init = () => {
-    initNavigation();
+class HistogramView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        columnWidthAndGap();
+        fitToWidth();
 
-    columnWidthAndGap();
-    fitToWidth();
+        autoScale();
+        callbacks();
+        multiColumn();
+        stacked();
+        stackedNegative();
+        stackedGrouped();
+        stackedCategories();
+        // Different data tests
+        noData();
+        singleNegative();
+        onlyPositive();
+        onlyNegative();
+        negativeAndPositive();
+        setData();
+    }
+}
 
-    autoScale();
-    callbacks();
-    multiColumn();
-    stacked();
-    stackedNegative();
-    stackedGrouped();
-    stackedCategories();
-    // Different data tests
-    noData();
-    singleNegative();
-    onlyPositive();
-    onlyNegative();
-    negativeAndPositive();
-    setData();
-};
-
-onReady(init);
+HistogramView.create();

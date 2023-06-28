@@ -1,8 +1,9 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Input';
-import { ge, onReady, setEvents } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { DateInput } from 'jezvejs/DateInput';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 
 const onInput = (e) => {
     ge('inputStatus').textContent = e.target.value;
@@ -43,13 +44,16 @@ const initLocales = () => {
     DateInput.create({ elem: ge('esDateInput'), locales: ['es'] });
 };
 
-const init = () => {
-    initNavigation();
+class DateInputView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initPlaceholder();
+        initCreate();
+        initLocales();
+    }
+}
 
-    initDefault();
-    initPlaceholder();
-    initCreate();
-    initLocales();
-};
-
-onReady(init);
+DateInputView.create();

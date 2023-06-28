@@ -1,10 +1,11 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import { ge, onReady, setEvents } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { Checkbox } from 'jezvejs/Checkbox';
 import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './CheckboxView.scss';
 
 const addEventLog = (value) => {
@@ -115,16 +116,19 @@ const initDynamicRadio = () => {
     setEvents(ge('resetRadioBtn'), { click: () => form.reset() });
 };
 
-const init = () => {
-    initNavigation();
+class CheckboxView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initParsed();
+        initIcon();
+        initDynamic();
+        initLarge();
 
-    initParsed();
-    initIcon();
-    initDynamic();
-    initLarge();
+        initParsedRadio();
+        initDynamicRadio();
+    }
+}
 
-    initParsedRadio();
-    initDynamicRadio();
-};
-
-onReady(init);
+CheckboxView.create();

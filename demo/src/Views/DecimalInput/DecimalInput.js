@@ -1,9 +1,10 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
 import 'jezvejs/style/Input';
-import { ge, onReady, setEvents } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { DecimalInput } from 'jezvejs/DecimalInput';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 
 const onSubmitForm = (e) => {
     e.preventDefault();
@@ -71,16 +72,19 @@ const initCreate = () => {
     container.append(decInput.elem);
 };
 
-const init = () => {
-    initNavigation();
+class DecimalInputView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initDigitsLimit();
+        initInteger();
+        initChangeProps();
+        initOnlyPositive();
+        initLeadingZeros();
+        initCreate();
+    }
+}
 
-    initDefault();
-    initDigitsLimit();
-    initInteger();
-    initChangeProps();
-    initOnlyPositive();
-    initLeadingZeros();
-    initCreate();
-};
-
-onReady(init);
+DecimalInputView.create();

@@ -3,11 +3,11 @@ import 'jezvejs/style/Button';
 import {
     createElement,
     ge,
-    onReady,
     setEvents,
 } from 'jezvejs';
 import { TabList } from 'jezvejs/TabList';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './TabListView.scss';
 
 const addEventLog = (value) => {
@@ -104,13 +104,16 @@ const initDisabled = () => {
     });
 };
 
-const init = () => {
-    initNavigation();
+class TabListView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initStyled();
+        initDisabledItem();
+        initDisabled();
+    }
+}
 
-    initDefault();
-    initStyled();
-    initDisabledItem();
-    initDisabled();
-};
-
-onReady(init);
+TabListView.create();

@@ -5,13 +5,13 @@ import 'jezvejs/style/InputGroup';
 import {
     ge,
     setEvents,
-    onReady,
     formatDate,
     insertAfter,
     parseDateString,
 } from 'jezvejs';
 import { DatePicker } from 'jezvejs/DatePicker';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './DatePickerView.scss';
 
 const formatDateToInput = (date, inputId) => {
@@ -253,20 +253,23 @@ const initLocales = () => {
     ge('dpRuLocale').append(ruDatePicker.elem);
 };
 
-const init = () => {
-    initNavigation();
+class DatePickerView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initStatic();
+        initFillWidth();
+        initPopup();
+        initPosition();
+        initRangeSelect();
+        initCallbacks();
+        initSetSelection();
+        initDisabledDate();
+        initRangePart();
+        initFirstDay();
+        initLocales();
+    }
+}
 
-    initStatic();
-    initFillWidth();
-    initPopup();
-    initPosition();
-    initRangeSelect();
-    initCallbacks();
-    initSetSelection();
-    initDisabledDate();
-    initRangePart();
-    initFirstDay();
-    initLocales();
-};
-
-onReady(init);
+DatePickerView.create();

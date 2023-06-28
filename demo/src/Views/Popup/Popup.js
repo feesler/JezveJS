@@ -3,15 +3,15 @@ import {
     ge,
     createElement,
     selectedValue,
-    onReady,
     setEvents,
     show,
 } from 'jezvejs';
 import { Popup } from 'jezvejs/Popup';
 import { Notification } from 'jezvejs/Notification';
+
+import { DemoView } from '../../Application/DemoView.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
-import { initNavigation } from '../../app.js';
 import './PopupView.scss';
 
 const logTo = (target, value) => {
@@ -508,21 +508,24 @@ const initContentUpdatePopup = () => {
     setEvents(ge('showContentUpdBtn'), { click: showContentUpdatePopup });
 };
 
-const init = () => {
-    initNavigation();
+class PopupView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initFullWidthPopup();
+        initCloseBtnPopup();
+        initMessageScrollPopup();
+        initCenterOnlyPopup();
+        initNoDimPopup();
+        initDraggablePopup();
+        initNotifyPopup();
+        initTemplatePopup();
+        initNestedPopup();
+        initControlsUpdatePopup();
+        initTitleUpdatePopup();
+        initContentUpdatePopup();
+    }
+}
 
-    initFullWidthPopup();
-    initCloseBtnPopup();
-    initMessageScrollPopup();
-    initCenterOnlyPopup();
-    initNoDimPopup();
-    initDraggablePopup();
-    initNotifyPopup();
-    initTemplatePopup();
-    initNestedPopup();
-    initControlsUpdatePopup();
-    initTitleUpdatePopup();
-    initContentUpdatePopup();
-};
-
-onReady(init);
+PopupView.create();

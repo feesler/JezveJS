@@ -3,11 +3,11 @@ import 'jezvejs/style/Button';
 import {
     createElement,
     ge,
-    onReady,
     setEvents,
 } from 'jezvejs';
 import { Slider } from 'jezvejs/Slider';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './SliderView.scss';
 
 const createSlideContent = (text) => createElement('div', {
@@ -122,14 +122,17 @@ const initNoWheelSlider = () => {
     container.append(slider.elem);
 };
 
-const init = () => {
-    initNavigation();
+class SliderView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefaultSlider();
+        initVerticalSlider();
+        initMouseSlider();
+        initNoTouchSlider();
+        initNoWheelSlider();
+    }
+}
 
-    initDefaultSlider();
-    initVerticalSlider();
-    initMouseSlider();
-    initNoTouchSlider();
-    initNoWheelSlider();
-};
-
-onReady(init);
+SliderView.create();

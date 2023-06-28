@@ -1,8 +1,9 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Button';
-import { ge, onReady, setEvents } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import { Offcanvas } from 'jezvejs/Offcanvas';
-import { initNavigation } from '../../app.js';
+
+import { DemoView } from '../../Application/DemoView.js';
 import './OffcanvasView.scss';
 
 const logTo = (target, value) => {
@@ -61,14 +62,17 @@ const initResponsive = () => {
     setEvents(ge('showResponsiveBtn'), { click: () => offcanvas.open() });
 };
 
-const init = () => {
-    initNavigation();
+class OffcanvasView extends DemoView {
+    /**
+     * View initialization
+     */
+    onStart() {
+        initDefault();
+        initRight();
+        initTop();
+        initBottom();
+        initResponsive();
+    }
+}
 
-    initDefault();
-    initRight();
-    initTop();
-    initBottom();
-    initResponsive();
-};
-
-onReady(init);
+OffcanvasView.create();
