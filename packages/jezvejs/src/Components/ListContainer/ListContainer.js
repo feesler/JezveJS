@@ -18,11 +18,12 @@ const defaultProps = {
     isListChanged: null, // optional callback to verify list content was changed
     isEmptyList: null, // optional callback to verify list is empty
     items: [],
-    noItemsMessageClass: 'nodata-message',
-    noItemsMessage: null, // string, function returns string or null for no message
+    PlaceholderComponent: null,
+    getPlaceholderProps: null,
     listMode: 'list',
     selectModeClass: null,
     onItemClick: null,
+    onPlaceholderClick: null,
 };
 
 /**
@@ -48,7 +49,7 @@ export class ListContainer extends Component {
         };
 
         this.listItems = [];
-        this.noDataMsg = null;
+        this.placeholder = null;
 
         this.init();
     }
@@ -116,11 +117,23 @@ export class ListContainer extends Component {
     }
 
     /**
-     * Returns item fom specified list element
+     * Returns item for specified list element
      * @param {Element} elem - target list item element
      */
     itemFromElem(elem) {
+        if (this.isPlaceholderElem(elem)) {
+            return { type: 'placeholder' };
+        }
+
         return this.getItemById(this.itemIdFromElem(elem));
+    }
+
+    /**
+     * Returns true if specified element belong to placeholder
+     * @param {Element} elem - target element
+     */
+    isPlaceholderElem(elem) {
+        return this.placeholder?.elem?.contains(elem) ?? false;
     }
 
     /**
@@ -128,13 +141,24 @@ export class ListContainer extends Component {
      * @param {Event} e - click event object
      */
     onItemClick(e) {
-        const itemId = this.itemIdFromElem(e?.target);
-        if (!itemId) {
+        const item = this.itemFromElem(e?.target);
+        if (!item) {
+            return;
+        }
+
+        if (item.type === 'placeholder') {
+            if (isFunction(this.props.onPlaceholderClick)) {
+                this.props.onPlaceholderClick(e);
+            }
+            return;
+        }
+
+        if (!item.id) {
             return;
         }
 
         if (isFunction(this.props.onItemClick)) {
-            this.props.onItemClick(itemId, e);
+            this.props.onItemClick(item.id, e);
         }
     }
 
@@ -197,28 +221,28 @@ export class ListContainer extends Component {
     renderNoDataMessage(state, prevState) {
         if (
             state.items === prevState.items
-            && state.noItemsMessage === prevState.noItemsMessage
+            && state.PlaceholderComponent === prevState.PlaceholderComponent
         ) {
             return;
         }
 
-        if (this.noDataMsg) {
-            re(this.noDataMsg);
-            this.noDataMsg = null;
+        if (this.placeholder) {
+            re(this.placeholder.elem);
+            this.placeholder = null;
         }
 
-        if (!state.noItemsMessage) {
+        const PlaceholderComponent = this.getPlaceholderComponent(state);
+        if (!PlaceholderComponent) {
             return;
         }
 
-        this.noDataMsg = (isFunction(state.noItemsMessage))
-            ? state.noItemsMessage()
-            : this.defaultNoDataMessage({
-                message: state.noItemsMessage,
-                className: state.noItemsMessageClass,
-            });
+        const props = this.getPlaceholderProps(state);
+        this.placeholder = PlaceholderComponent.create(props);
+        if (!this.placeholder) {
+            return;
+        }
 
-        this.elem.append(this.noDataMsg);
+        this.elem.append(this.placeholder.elem);
     }
 
     /**
@@ -264,6 +288,29 @@ export class ListContainer extends Component {
     }
 
     /**
+     * Returns render properties for empty list placeholder
+     * @param {object} state current list state object
+     */
+    getPlaceholderProps(state) {
+        return isFunction(state.getPlaceholderProps)
+            ? state.getPlaceholderProps(state)
+            : {};
+    }
+
+    /**
+     * Returns component class for empty list placeholder
+     * @param {object} state current state of list
+     */
+    getPlaceholderComponent(state) {
+        if (state.PlaceholderComponent?.prototype instanceof Component) {
+            return state.PlaceholderComponent;
+        }
+
+        const res = isFunction(state.PlaceholderComponent) && state.PlaceholderComponent(state);
+        return (res instanceof Component) ? res : null;
+    }
+
+    /**
      * Performs common preparations for element of list item before to insert to DOM
      * @param {Component} listItem instance of list item component
      */
@@ -285,7 +332,8 @@ export class ListContainer extends Component {
         return (
             state.items !== prevState.items
             || state.listMode !== prevState.listMode
-            || state.noItemsMessage !== prevState.noItemsMessage
+            || state.PlaceholderComponent !== prevState.PlaceholderComponent
+            || state.getPlaceholderProps !== prevState.getPlaceholderProps
         );
     }
 
@@ -323,7 +371,7 @@ export class ListContainer extends Component {
         const emptyBefore = this.isEmptyList(prevState);
         if ((emptyList || emptyBefore) && emptyList !== emptyBefore) {
             removeChilds(this.elem);
-            this.noDataMsg = null;
+            this.placeholder = null;
             this.listItems = [];
         }
 

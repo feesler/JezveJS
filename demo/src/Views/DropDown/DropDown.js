@@ -391,6 +391,20 @@ const showMultipleSelection = () => {
     ge('showMultipleContainer').append(tags.elem, dropDown.elem);
 };
 
+// 'allowCreate' option
+const allowCreate = () => {
+    const dropDown = DropDown.create({
+        enableFilter: true,
+        allowCreate: true,
+        addItemMessage: (title) => `Add item: '${title}'`,
+        multi: true,
+        placeholder: 'Type to filter',
+        data: initItems('Item', 20),
+    });
+
+    ge('allowCreateContainer').append(dropDown.elem);
+};
+
 // Built-in items filter with single select
 const attachedFilter = () => {
     const btn = CloseButton.create();
@@ -653,6 +667,7 @@ class DropDownView extends DemoView {
         multiSelectFilter();
         groupsSelectFilter();
         showMultipleSelection();
+        allowCreate();
         attachedFilter();
         attachedFilterMulti();
 

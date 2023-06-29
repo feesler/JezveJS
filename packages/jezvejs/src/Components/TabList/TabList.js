@@ -67,7 +67,6 @@ export class TabList extends Component {
             ),
             className: CONTENT_CLASS,
             itemSelector: TabContentItem.selector,
-            noItemsMessage: null,
         });
 
         this.elem = createElement('div', {

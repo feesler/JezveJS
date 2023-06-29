@@ -1,0 +1,15 @@
+/* List placeholder */
+.dd__list-placeholder {
+  padding: var(--dd-list-item-padding);
+  font-size: var(--dd-list-item-font-size);
+  line-height: var(--dd-list-item-line-height);
+  text-align: left;
+  border-width: 0;
+  border-style: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: auto;
+  color: var(--dd-list-item-text);
+  background-color: var(--dd-list-item-bg);
+}
