@@ -5,6 +5,7 @@ import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
 import { DropDownInput } from '../Input/Input.js';
 import { DropDownListItem } from '../ListItem/ListItem.js';
 import { DropDownMenuList } from '../MenuList/MenuList.js';
+import { DropDownListPlaceholder } from '../ListPlaceholder/ListPlaceholder.js';
 import './Menu.scss';
 
 /* CSS classes */
@@ -22,13 +23,19 @@ const defaultProps = {
     onInput: null,
     onItemActivate: null,
     onItemClick: null,
+    onPlaceholderClick: null,
+    onPlaceholderActivate: null,
     multi: false,
     filtered: false,
+    allowCreate: false,
+    placeholderActive: false,
     noItemsMessage: null,
+    addItemMessage: null,
     components: {
         Input: DropDownInput,
         MenuList: DropDownMenuList,
         ListItem: DropDownListItem,
+        ListPlaceholder: DropDownListPlaceholder,
         GroupItem: DropDownGroupItem,
     },
 };
@@ -61,6 +68,7 @@ export class DropDownMenu extends Component {
             MenuList,
             ListItem,
             GroupItem,
+            ListPlaceholder,
         } = this.props.components;
         const children = [];
 
@@ -77,10 +85,12 @@ export class DropDownMenu extends Component {
             multi: this.props.multi,
             noItemsMessage: this.props.noItemsMessage,
             onItemClick: (id, e) => this.onItemClick(id, e),
+            onPlaceholderClick: (e) => this.onPlaceholderClick(e),
             isEmptyList: (state) => (getVisibleItems(state).length === 0),
             components: {
                 ListItem,
                 GroupItem,
+                ListPlaceholder,
             },
         });
         children.push(this.list.elem);
@@ -108,6 +118,15 @@ export class DropDownMenu extends Component {
 
         if (isFunction(this.props.onItemClick)) {
             this.props.onItemClick(itemId);
+        }
+    }
+
+    /** List placeholder 'click' event handler */
+    onPlaceholderClick(e) {
+        e.stopPropagation();
+
+        if (isFunction(this.props.onPlaceholderClick)) {
+            this.props.onPlaceholderClick();
         }
     }
 
@@ -139,8 +158,13 @@ export class DropDownMenu extends Component {
             return;
         }
 
-        const itemId = this.list.itemIdFromElem(e.target);
-        this.setActive(itemId);
+        const item = this.list.itemFromElem(e?.target);
+        if (item?.type === 'placeholder' && this.state.allowCreate) {
+            this.activatePlaceholder();
+            return;
+        }
+
+        this.setActive(item?.id ?? null);
     }
 
     onInput(e) {
@@ -152,6 +176,12 @@ export class DropDownMenu extends Component {
     setActive(itemId) {
         if (isFunction(this.props.onItemActivate)) {
             this.props.onItemActivate(itemId);
+        }
+    }
+
+    activatePlaceholder() {
+        if (isFunction(this.props.onPlaceholderActivate)) {
+            this.props.onPlaceholderActivate();
         }
     }
 
@@ -235,6 +265,9 @@ export class DropDownMenu extends Component {
             ...listState,
             items: state.items,
             filtered: state.filtered,
+            inputString: state.inputString,
+            allowCreate: state.allowCreate,
+            placeholderActive: state.placeholderActive,
             noItemsMessage: state.noItemsMessage,
         }));
 

@@ -27,6 +27,7 @@ import { DropDownMenu } from './components/Menu/Menu.js';
 import { DropDownMenuList } from './components/MenuList/MenuList.js';
 import { DropDownListItem } from './components/ListItem/ListItem.js';
 import { DropDownGroupItem } from './components/GroupItem/GroupItem.js';
+import { DropDownListPlaceholder } from './components/ListPlaceholder/ListPlaceholder.js';
 import { DropDownMultipleSelection } from './components/MultipleSelection/MultipleSelection.js';
 import { DropDownMultiSelectionItem } from './components/MultiSelectionItem/MultiSelectionItem.js';
 import { DropDownClearButton } from './components/ClearButton/ClearButton.js';
@@ -73,6 +74,8 @@ const defaultProps = {
     enableFilter: false,
     openOnFocus: false,
     noResultsMessage: 'No items',
+    allowCreate: false,
+    addItemMessage: (title) => `Add item: '${title}'`,
     editable: false,
     disabled: false,
     useNativeSelect: false,
@@ -93,6 +96,7 @@ const defaultProps = {
         MenuList: DropDownMenuList,
         ListItem: DropDownListItem,
         GroupItem: DropDownGroupItem,
+        ListPlaceholder: DropDownListPlaceholder,
         MultipleSelection: DropDownMultipleSelection,
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
@@ -150,11 +154,13 @@ export class DropDown extends Component {
             filtered: false,
             filteredCount: 0,
             openOnFocus: this.props.openOnFocus,
+            allowCreate: this.props.allowCreate,
             editable: this.props.editable,
             disabled: this.props.disabled,
             items: [],
             groups: [],
             actSelItemIndex: -1,
+            placeholderActive: false,
         };
         this.state.editable = !this.state.disabled && this.props.enableFilter;
 
@@ -353,6 +359,7 @@ export class DropDown extends Component {
             MenuList,
             ListItem,
             GroupItem,
+            ListPlaceholder,
         } = this.props.components;
 
         this.menu = Menu.create({
@@ -362,15 +369,19 @@ export class DropDown extends Component {
             inputElem: this.inputElem,
             inputPlaceholder: this.props.placeholder,
             useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
-            noItemsMessage: () => this.renderNotFound(),
+            allowCreate: this.props.allowCreate,
+            noItemsMessage: (state) => this.renderNotFound(state),
             onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
+            onPlaceholderActivate: () => this.activatePlaceholder(),
+            onPlaceholderClick: () => this.handlePlaceholderSelect(),
             components: {
                 Input,
                 MenuList,
                 ListItem,
                 GroupItem,
+                ListPlaceholder,
             },
         });
 
@@ -626,13 +637,30 @@ export class DropDown extends Component {
             } else if (this.state.visible) {
                 if (activeItem) {
                     newItem = this.getNextAvailableItem(activeItem.id);
-                } else {
+                } else if (availItems.length > 0) {
                     [newItem] = availItems;
+                } else if (
+                    this.state.allowCreate
+                    && availItems.length === 0
+                    && !this.state.placeholderActive
+                ) {
+                    e.preventDefault();
+                    this.activatePlaceholder();
+                    return;
                 }
             }
         } else if (e.code === 'ArrowUp') {
-            if (this.state.visible && activeItem) {
-                newItem = this.getPrevAvailableItem(activeItem.id);
+            if (this.state.visible) {
+                if (activeItem) {
+                    newItem = this.getPrevAvailableItem(activeItem.id);
+                } else if (
+                    this.state.allowCreate
+                    && this.state.placeholderActive
+                ) {
+                    e.preventDefault();
+                    this.setActive(null);
+                    return;
+                }
             }
         } else if (e.code === 'Home') {
             const availItems = this.getAvailableItems(this.state);
@@ -645,7 +673,15 @@ export class DropDown extends Component {
                 newItem = availItems[availItems.length - 1];
             }
         } else if (e.key === 'Enter') {
-            this.handleItemSelect(activeItem);
+            if (activeItem) {
+                this.handleItemSelect(activeItem);
+            } else if (
+                this.state.allowCreate
+                && this.state.placeholderActive
+            ) {
+                this.handlePlaceholderSelect();
+            }
+
             e.preventDefault();
         } else if (e.code === 'Escape') {
             this.showList(false);
@@ -771,6 +807,29 @@ export class DropDown extends Component {
             setTimeout(() => this.elem.focus());
         } else if (this.props.enableFilter) {
             setTimeout(() => this.focusInputIfNeeded());
+        }
+    }
+
+    handlePlaceholderSelect() {
+        const { allowCreate, inputString } = this.state;
+
+        if (
+            !allowCreate
+            || !(inputString?.length > 0)
+        ) {
+            return;
+        }
+
+        this.addItem({ id: inputString, title: inputString, selected: true });
+
+        this.activateSelectedItem(-1);
+        this.sendItemSelectEvent();
+        this.state.changed = true;
+
+        this.state.inputString = null;
+        this.showList(false);
+        if (this.props.enableFilter && this.state.filtered) {
+            this.showAllItems();
         }
     }
 
@@ -985,6 +1044,7 @@ export class DropDown extends Component {
             filtered: false,
             filteredCount: 0,
             inputString: null,
+            placeholderActive: false,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
@@ -1000,6 +1060,7 @@ export class DropDown extends Component {
         const newState = {
             ...this.state,
             actSelItemIndex: -1,
+            placeholderActive: false,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
@@ -1587,9 +1648,10 @@ export class DropDown extends Component {
     setActive(itemId) {
         const itemToActivate = this.getItem(itemId);
         const activeItem = this.getActiveItem();
+        const { placeholderActive } = this.state;
         if (
-            (activeItem === itemToActivate)
-            || (!activeItem && !itemToActivate)
+            (activeItem === itemToActivate && (activeItem || itemToActivate))
+            || (!activeItem && !itemToActivate && !placeholderActive)
         ) {
             return;
         }
@@ -1597,9 +1659,29 @@ export class DropDown extends Component {
         this.setState({
             ...this.state,
             actSelItemIndex: -1,
+            placeholderActive: false,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: item === itemToActivate,
+            })),
+        });
+    }
+
+    activatePlaceholder() {
+        if (
+            !this.state.allowCreate
+            || this.state.placeholderActive
+        ) {
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            actSelItemIndex: -1,
+            placeholderActive: true,
+            items: this.state.items.map((item) => ({
+                ...item,
+                active: false,
             })),
         });
     }
@@ -1676,14 +1758,35 @@ export class DropDown extends Component {
         this.selectElem.append(...options);
     }
 
-    renderNotFound() {
-        const contentElem = createElement('div', {
-            props: {
-                className: NOT_FOUND_CLASS,
-                textContent: this.props.noResultsMessage,
-            },
-        });
-        return createElement('li', { children: contentElem });
+    renderNotFound(state) {
+        if (
+            state.allowCreate
+            && this.props.addItemMessage
+            && state.inputString?.length > 0
+        ) {
+            return this.renderAddMessage(state);
+        }
+
+        return {
+            className: NOT_FOUND_CLASS,
+            content: this.props.noResultsMessage,
+        };
+    }
+
+    renderAddMessage(state) {
+        const title = state?.inputString;
+        const message = (isFunction(this.props.addItemMessage))
+            ? this.props.addItemMessage(title)
+            : this.props.addItemMessage;
+
+        if (typeof message !== 'string') {
+            throw new Error('Invalid message');
+        }
+
+        return {
+            content: message,
+            active: state.placeholderActive,
+        };
     }
 
     renderListContent(state, prevState) {
@@ -1692,6 +1795,8 @@ export class DropDown extends Component {
             && state.visible === prevState.visible
             && state.filtered === prevState.filtered
             && state.filteredCount === prevState.filteredCount
+            && state.allowCreate === prevState.allowCreate
+            && state.placeholderActive === prevState.placeholderActive
         ) {
             return;
         }
@@ -1725,6 +1830,8 @@ export class DropDown extends Component {
             filtered: state.filtered,
             items,
             listScroll: (prevState.visible) ? menuState.listScroll : 0,
+            allowCreate: state.allowCreate,
+            placeholderActive: state.placeholderActive,
         }));
     }
 

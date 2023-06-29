@@ -1,15 +1,19 @@
-import { deepMeet } from '../../../../js/common.js';
+import { deepMeet, isFunction } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
 import { DropDownListItem } from '../ListItem/ListItem.js';
+import { DropDownListPlaceholder } from '../ListPlaceholder/ListPlaceholder.js';
 
 const defaultProps = {
     items: [],
     multi: false,
     filtered: false,
+    inputString: false,
+    allowCreate: false,
     noItemsMessage: null,
     components: {
         ListItem: DropDownListItem,
+        ListPlaceholder: DropDownListPlaceholder,
         GroupItem: DropDownGroupItem,
     },
 };
@@ -29,8 +33,14 @@ export class DropDownMenuList extends ListContainer {
                 ...defaultProps.components,
                 ...(props?.components ?? {}),
             },
+            getPlaceholderProps: (state) => (
+                isFunction(state.noItemsMessage)
+                    ? state.noItemsMessage(state)
+                    : state.noItemsMessage
+            ),
         };
         listProps.itemSelector = listProps.components.ListItem.selector;
+        listProps.PlaceholderComponent = listProps.components.ListPlaceholder;
 
         super(listProps);
     }
@@ -54,7 +64,10 @@ export class DropDownMenuList extends ListContainer {
             !deepMeet(state.items, prevState?.items)
             || state.multi !== prevState?.multi
             || state.filtered !== prevState?.filtered
-            || state.noItemsMessage !== prevState?.noItemsMessage
+            || state.inputString !== prevState?.inputString
+            || state.allowCreate !== prevState?.allowCreate
+            || state.placeholderActive !== prevState?.placeholderActive
+            || state.PlaceholderComponent !== prevState?.PlaceholderComponent
         );
     }
 }
