@@ -162,13 +162,23 @@ export class DropDownView extends AppView {
             item.text.toLowerCase().includes(lValue)
         ));
 
+        const expected = {
+            [name]: {
+                visible: true,
+                noItemsMessage: {
+                    visible: expVisible.length === 0,
+                },
+            },
+        };
+
         await this.performAction(() => dropdown.filter(value));
 
         dropdown = this.getComponentByName(name);
 
         const visible = dropdown.getVisibleItems();
         assert.exactMeet(visible, expVisible);
-        return true;
+
+        return this.checkState(expected);
     }
 
     async addItem() {

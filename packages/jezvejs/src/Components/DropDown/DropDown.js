@@ -18,7 +18,7 @@ import {
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { getSelectedItems, getVisibleItems } from './utils.js';
+import { getGroupItems, getSelectedItems, getVisibleItems } from './utils.js';
 import { DropDownInput } from './components/Input/Input.js';
 import { DropDownSingleSelection } from './components/SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from './components/Placeholder/Placeholder.js';
@@ -1728,7 +1728,7 @@ export class DropDown extends Component {
     }
 
     getGroupItems(group, state = this.state) {
-        return state.items.filter((item) => item && item.group === group);
+        return getGroupItems(group, state);
     }
 
     renderSelect(state) {
@@ -1802,34 +1802,12 @@ export class DropDown extends Component {
             return;
         }
 
-        const items = [];
-        const groups = [];
-
-        state.items.forEach((item) => {
-            if (!item.group) {
-                items.push(item);
-                return;
-            }
-
-            if (groups.includes(item.group.id)) {
-                return;
-            }
-
-            const groupItem = {
-                ...item.group,
-                isGroup: true,
-                items: this.getGroupItems(item.group, state),
-            };
-            groups.push(item.group.id);
-            items.push(groupItem);
-        });
-
         this.menu.setState((menuState) => ({
             ...menuState,
             inputPlaceholder: this.props.placeholder,
             inputString: state.inputString,
             filtered: state.filtered,
-            items,
+            items: state.items,
             listScroll: (prevState.visible) ? menuState.listScroll : 0,
             allowCreate: state.allowCreate,
             placeholderActive: state.placeholderActive,
