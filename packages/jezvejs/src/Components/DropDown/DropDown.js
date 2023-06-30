@@ -370,6 +370,7 @@ export class DropDown extends Component {
             inputPlaceholder: this.props.placeholder,
             useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
             allowCreate: this.props.allowCreate,
+            getItemById: (id) => this.getItem(id),
             noItemsMessage: (state) => this.renderNotFound(state),
             onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),

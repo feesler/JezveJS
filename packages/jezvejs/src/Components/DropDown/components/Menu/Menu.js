@@ -84,6 +84,7 @@ export class DropDownMenu extends Component {
         this.list = MenuList.create({
             multi: this.props.multi,
             noItemsMessage: this.props.noItemsMessage,
+            getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
             isEmptyList: (state) => (getVisibleItems(state).length === 0),
@@ -110,6 +111,12 @@ export class DropDownMenu extends Component {
 
         this.setClassNames();
         this.render(this.state);
+    }
+
+    getItemById(id) {
+        return isFunction(this.state.getItemById)
+            ? this.state.getItemById(id)
+            : null;
     }
 
     /** List item 'click' event handler */
