@@ -3,13 +3,20 @@
   padding: var(--dd-list-item-padding);
   font-size: var(--dd-list-item-font-size);
   line-height: var(--dd-list-item-line-height);
-  text-align: left;
+  text-align: center;
   border-width: 0;
   border-style: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: auto;
+  color: var(--dd-not-found-text);
+  background-color: var(--dd-list-item-bg);
+}
+
+.dd__list-placeholder_selectable {
+  text-align: left;
   color: var(--dd-list-item-text);
   background-color: var(--dd-list-item-bg);
+  cursor: pointer;
 }

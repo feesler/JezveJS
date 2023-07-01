@@ -30,8 +30,7 @@ const defaultProps = {
     filtered: false,
     allowCreate: false,
     placeholderActive: false,
-    noItemsMessage: null,
-    addItemMessage: null,
+    getPlaceholderProps: null,
     components: {
         Input: DropDownInput,
         MenuList: DropDownMenuList,
@@ -84,10 +83,10 @@ export class DropDownMenu extends Component {
 
         this.list = MenuList.create({
             multi: this.props.multi,
-            noItemsMessage: this.props.noItemsMessage,
             getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
+            getPlaceholderProps: this.props.getPlaceholderProps,
             components: {
                 ListItem,
                 GroupItem,
@@ -284,7 +283,7 @@ export class DropDownMenu extends Component {
             inputString: state.inputString,
             allowCreate: state.allowCreate,
             placeholderActive: state.placeholderActive,
-            noItemsMessage: state.noItemsMessage,
+            getPlaceholderProps: state.getPlaceholderProps,
             isEmptyList: () => (getVisibleItems(state).length === 0),
         }));
 

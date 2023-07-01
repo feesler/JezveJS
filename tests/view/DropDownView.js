@@ -165,7 +165,7 @@ export class DropDownView extends AppView {
         const expected = {
             [name]: {
                 visible: true,
-                noItemsMessage: {
+                listPlaceholder: {
                     visible: expVisible.length === 0,
                 },
             },

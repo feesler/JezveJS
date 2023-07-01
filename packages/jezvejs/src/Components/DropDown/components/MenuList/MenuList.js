@@ -10,7 +10,7 @@ const defaultProps = {
     filtered: false,
     inputString: false,
     allowCreate: false,
-    noItemsMessage: null,
+    getPlaceholderProps: null,
     components: {
         ListItem: DropDownListItem,
         ListPlaceholder: DropDownListPlaceholder,
@@ -34,9 +34,9 @@ export class DropDownMenuList extends ListContainer {
                 ...(props?.components ?? {}),
             },
             getPlaceholderProps: (state) => (
-                isFunction(state.noItemsMessage)
-                    ? state.noItemsMessage(state)
-                    : state.noItemsMessage
+                isFunction(props.getPlaceholderProps)
+                    ? props.getPlaceholderProps(state)
+                    : props.getPlaceholderProps
             ),
         };
         listProps.itemSelector = listProps.components.ListItem.selector;

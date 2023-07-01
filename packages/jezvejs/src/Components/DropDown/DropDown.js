@@ -51,7 +51,6 @@ const EDITABLE_CLASS = 'dd__editable';
 const FIXED_LIST_CLASS = 'dd__list_fixed';
 const LIST_OPEN_CLASS = 'dd__open';
 const MENU_OPEN_CLASS = 'dd__list_open';
-const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 
@@ -371,7 +370,7 @@ export class DropDown extends Component {
             useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
             allowCreate: this.props.allowCreate,
             getItemById: (id) => this.getItem(id),
-            noItemsMessage: (state) => this.renderNotFound(state),
+            getPlaceholderProps: (state) => this.renderNotFound(state),
             onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
@@ -1769,7 +1768,7 @@ export class DropDown extends Component {
         }
 
         return {
-            className: NOT_FOUND_CLASS,
+            selectable: false,
             content: this.props.noResultsMessage,
         };
     }
@@ -1786,6 +1785,7 @@ export class DropDown extends Component {
 
         return {
             content: message,
+            selectable: true,
             active: state.placeholderActive,
         };
     }

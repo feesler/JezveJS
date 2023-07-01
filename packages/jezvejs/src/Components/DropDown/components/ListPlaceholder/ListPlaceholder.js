@@ -1,14 +1,17 @@
-import { asArray, createElement } from '../../../../js/common.js';
+import { asArray, createElement, getClassName } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import './ListPlaceholder.scss';
 
 /* CSS classes */
 const LIST_PLACEHODLER_CLASS = 'dd__list-item dd__list-placeholder';
+const SELECTABLE_CLASS = 'dd__list-placeholder_selectable';
 const LIST_ITEM_ACTIVE_CLASS = 'dd__list-item_active';
 
 const defaultProps = {
     content: null,
-    className: LIST_PLACEHODLER_CLASS,
+    active: false,
+    selectable: false,
+    className: null,
 };
 
 export class DropDownListPlaceholder extends Component {
@@ -25,7 +28,11 @@ export class DropDownListPlaceholder extends Component {
     }
 
     init() {
-        this.contentElem = createElement('div');
+        this.contentElem = createElement('div', {
+            props: {
+                className: getClassName(LIST_PLACEHODLER_CLASS, this.props.className),
+            },
+        });
 
         this.elem = createElement('li', {
             children: this.contentElem,
@@ -37,8 +44,8 @@ export class DropDownListPlaceholder extends Component {
             throw new Error('Invalid state');
         }
 
-        this.contentElem.className = state.className ?? '';
         this.contentElem.classList.toggle(LIST_ITEM_ACTIVE_CLASS, !!state.active);
+        this.contentElem.classList.toggle(SELECTABLE_CLASS, !!state.selectable);
 
         this.contentElem.textContent = '';
         if (typeof state.content === 'string') {
