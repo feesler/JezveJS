@@ -226,9 +226,10 @@ export class ListContainer extends Component {
             return;
         }
 
+        const props = this.getPlaceholderProps(state);
         if (this.placeholder) {
-            re(this.placeholder.elem);
-            this.placeholder = null;
+            this.placeholder.setState(props);
+            return;
         }
 
         const PlaceholderComponent = this.getPlaceholderComponent(state);
@@ -236,7 +237,6 @@ export class ListContainer extends Component {
             return;
         }
 
-        const props = this.getPlaceholderProps(state);
         this.placeholder = PlaceholderComponent.create(props);
         if (!this.placeholder) {
             return;
