@@ -18,7 +18,7 @@ import {
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { getSelectedItems, getVisibleItems } from './utils.js';
+import { getGroupItems, getSelectedItems, getVisibleItems } from './utils.js';
 import { DropDownInput } from './components/Input/Input.js';
 import { DropDownSingleSelection } from './components/SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from './components/Placeholder/Placeholder.js';
@@ -51,7 +51,6 @@ const EDITABLE_CLASS = 'dd__editable';
 const FIXED_LIST_CLASS = 'dd__list_fixed';
 const LIST_OPEN_CLASS = 'dd__open';
 const MENU_OPEN_CLASS = 'dd__list_open';
-const NOT_FOUND_CLASS = 'dd__not-found-message';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
 
@@ -370,7 +369,8 @@ export class DropDown extends Component {
             inputPlaceholder: this.props.placeholder,
             useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
             allowCreate: this.props.allowCreate,
-            noItemsMessage: (state) => this.renderNotFound(state),
+            getItemById: (id) => this.getItem(id),
+            getPlaceholderProps: (state) => this.renderNotFound(state),
             onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
@@ -1727,7 +1727,7 @@ export class DropDown extends Component {
     }
 
     getGroupItems(group, state = this.state) {
-        return state.items.filter((item) => item && item.group === group);
+        return getGroupItems(group, state);
     }
 
     renderSelect(state) {
@@ -1768,7 +1768,7 @@ export class DropDown extends Component {
         }
 
         return {
-            className: NOT_FOUND_CLASS,
+            selectable: false,
             content: this.props.noResultsMessage,
         };
     }
@@ -1785,6 +1785,7 @@ export class DropDown extends Component {
 
         return {
             content: message,
+            selectable: true,
             active: state.placeholderActive,
         };
     }
@@ -1801,34 +1802,12 @@ export class DropDown extends Component {
             return;
         }
 
-        const items = [];
-        const groups = [];
-
-        state.items.forEach((item) => {
-            if (!item.group) {
-                items.push(item);
-                return;
-            }
-
-            if (groups.includes(item.group.id)) {
-                return;
-            }
-
-            const groupItem = {
-                ...item.group,
-                isGroup: true,
-                items: this.getGroupItems(item.group, state),
-            };
-            groups.push(item.group.id);
-            items.push(groupItem);
-        });
-
         this.menu.setState((menuState) => ({
             ...menuState,
             inputPlaceholder: this.props.placeholder,
             inputString: state.inputString,
             filtered: state.filtered,
-            items,
+            items: state.items,
             listScroll: (prevState.visible) ? menuState.listScroll : 0,
             allowCreate: state.allowCreate,
             placeholderActive: state.placeholderActive,

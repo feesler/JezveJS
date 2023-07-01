@@ -71,7 +71,6 @@ export class DropDownGroupItem extends Component {
 
         this.list = MenuList.create({
             multi: this.props.multi,
-            noItemsMessage: null,
             components: {
                 ListItem,
                 GroupItem: null,

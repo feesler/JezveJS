@@ -14,8 +14,8 @@
 
   /* Selected item */
   --tab-selected-font-weight: 400;
-  --tab-selected-color: var(--tab-color);
-  --tab-selected-bg: var(--tab-bg);
+  --tab-selected-color: #000000;
+  --tab-selected-bg: var(--tab-item-bg);
   --tab-selected-border-color: var(--tab-border-color);
 
   /* Disabled state */
@@ -30,7 +30,7 @@
 
   /* Active state */
   --tab-active-color: #000000;
-  --tab-active-bg: var(--tab-bg);
+  --tab-active-bg: var(--tab-item-bg);
   --tab-active-border-color: var(--tab-border-color);
 
   /* Focused state */

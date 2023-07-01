@@ -131,8 +131,8 @@ export class DropDown extends TestComponent {
         }), item));
 
         res.listContainer = await query(this.elem, '.dd__list');
-        res.noItemsMessage = { elem: await query(this.elem, '.dd__not-found-message') };
-        if (!res.listContainer || res.noItemsMessage.elem) {
+        res.listPlaceholder = { elem: await query(this.elem, '.dd__list-placeholder') };
+        if (!res.listContainer || res.listPlaceholder.elem) {
             return res;
         }
 

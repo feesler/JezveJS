@@ -44,6 +44,9 @@ export const dropDownTests = async () => {
         )));
     await Actions.selectTest('attachedToInlineDropDown', '3');
 
+    setBlock('Groups items select', 2);
+    await Actions.selectTest('groupsFilterDropDown', '2');
+
     setBlock('Multiple items select', 2);
 
     const expectedSelectedItems = [

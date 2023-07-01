@@ -1,6 +1,6 @@
 import { createElement, isFunction } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
-import { getSelectedItems, getVisibleItems } from '../../utils.js';
+import { getGroupItems, getSelectedItems, getVisibleItems } from '../../utils.js';
 import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
 import { DropDownInput } from '../Input/Input.js';
 import { DropDownListItem } from '../ListItem/ListItem.js';
@@ -21,6 +21,7 @@ const defaultProps = {
     inputPlaceholder: '',
     useSingleSelectionAsPlaceholder: false,
     onInput: null,
+    getItemById: null,
     onItemActivate: null,
     onItemClick: null,
     onPlaceholderClick: null,
@@ -29,8 +30,7 @@ const defaultProps = {
     filtered: false,
     allowCreate: false,
     placeholderActive: false,
-    noItemsMessage: null,
-    addItemMessage: null,
+    getPlaceholderProps: null,
     components: {
         Input: DropDownInput,
         MenuList: DropDownMenuList,
@@ -83,10 +83,10 @@ export class DropDownMenu extends Component {
 
         this.list = MenuList.create({
             multi: this.props.multi,
-            noItemsMessage: this.props.noItemsMessage,
+            getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
-            isEmptyList: (state) => (getVisibleItems(state).length === 0),
+            getPlaceholderProps: this.props.getPlaceholderProps,
             components: {
                 ListItem,
                 GroupItem,
@@ -110,6 +110,12 @@ export class DropDownMenu extends Component {
 
         this.setClassNames();
         this.render(this.state);
+    }
+
+    getItemById(id) {
+        return isFunction(this.state.getItemById)
+            ? this.state.getItemById(id)
+            : null;
     }
 
     /** List item 'click' event handler */
@@ -237,7 +243,54 @@ export class DropDownMenu extends Component {
         }, SCROLL_TO_ITEM_TIMEOUT);
     }
 
-    render(state) {
+    renderList(state, prevState) {
+        if (
+            state.items === prevState.items
+            && state.filtered === prevState.filtered
+            && state.filteredCount === prevState.filteredCount
+            && state.allowCreate === prevState.allowCreate
+            && state.placeholderActive === prevState.placeholderActive
+        ) {
+            return;
+        }
+
+        const items = [];
+        const groups = [];
+
+        state.items.forEach((item) => {
+            if (!item.group) {
+                items.push(item);
+                return;
+            }
+
+            if (groups.includes(item.group.id)) {
+                return;
+            }
+
+            const groupItem = {
+                ...item.group,
+                isGroup: true,
+                items: getGroupItems(item.group, state),
+            };
+            groups.push(item.group.id);
+            items.push(groupItem);
+        });
+
+        this.list.setState((listState) => ({
+            ...listState,
+            items,
+            filtered: state.filtered,
+            inputString: state.inputString,
+            allowCreate: state.allowCreate,
+            placeholderActive: state.placeholderActive,
+            getPlaceholderProps: state.getPlaceholderProps,
+            isEmptyList: () => (getVisibleItems(state).length === 0),
+        }));
+
+        this.list.elem.scrollTop = state.listScroll;
+    }
+
+    render(state, prevState = {}) {
         if (!state) {
             throw new Error('Invalid state');
         }
@@ -261,16 +314,6 @@ export class DropDownMenu extends Component {
             }));
         }
 
-        this.list.setState((listState) => ({
-            ...listState,
-            items: state.items,
-            filtered: state.filtered,
-            inputString: state.inputString,
-            allowCreate: state.allowCreate,
-            placeholderActive: state.placeholderActive,
-            noItemsMessage: state.noItemsMessage,
-        }));
-
-        this.list.elem.scrollTop = state.listScroll;
+        this.renderList(state, prevState);
     }
 }

@@ -148,21 +148,6 @@
   display: none;
 }
 
-/* Not found message */
-.dd__not-found-message {
-  padding: 10px;
-  font-size: 1rem;
-  text-align: center;
-  border-width: 0;
-  border-style: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-  color: var(--dd-not-found-text);
-  background-color: var(--dd-list-item-bg);
-}
-
 /* useNative container */
 .dd__container_native.dd__container_attached,
 .dd__container_native.dd__container {
