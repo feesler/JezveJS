@@ -16,6 +16,9 @@ export const tabListTests = async () => {
     await Actions.selectTabById('styled', '2');
     await Actions.selectTabById('styled', '1');
 
+    await Actions.toggleShowItem();
+    await Actions.toggleShowItem();
+
     await Actions.toggleEnableItem();
     await Actions.toggleEnableItem();
 

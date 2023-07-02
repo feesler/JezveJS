@@ -10,11 +10,13 @@ import { AppView } from './AppView.js';
 const componentsList = [
     'default',
     'styled',
+    'hiddenItem',
     'disabledItem',
     'disabled',
 ];
 
 const controlIds = [
+    'toggleShowItemBtn',
     'toggleEnableItemBtn',
     'toggleEnableBtn',
 ];
@@ -45,6 +47,7 @@ export class TabListView extends AppView {
                 selectedId: cont[id].selectedId,
                 items: cont[id].tabs.items.map((item) => ({
                     id: item.value,
+                    hidden: item.hidden,
                     disabled: item.disabled,
                     title: item.title,
                     active: item.selected,
@@ -57,17 +60,27 @@ export class TabListView extends AppView {
 
     getExpectedState(model = this.model) {
         const res = {
+            toggleShowItemBtn: { visible: true },
             toggleEnableItemBtn: { visible: true },
             toggleEnableBtn: { visible: true },
         };
 
         componentsList.forEach((id) => {
-            const { selectedId, disabled } = model[id];
+            const { selectedId, disabled, items } = model[id];
 
             res[id] = {
                 selectedId,
                 disabled,
                 visible: true,
+                tabs: {
+                    items: items.map((item) => ({
+                        value: item.id,
+                        hidden: item.hidden,
+                        disabled: item.disabled,
+                        title: item.title,
+                        selected: item.active,
+                    })),
+                },
             };
         });
 
@@ -81,11 +94,32 @@ export class TabListView extends AppView {
 
     async selectTabById(name, id) {
         const component = this.getComponent(name);
+        const selectedId = id.toString();
 
-        this.model[name].selectedId = id.toString();
+        this.model[name].selectedId = selectedId;
+        this.model[name].items = this.model[name].items.map((item) => ({
+            ...item,
+            active: (item.id === selectedId),
+        }));
+
         const expected = this.getExpectedState();
 
         await this.performAction(() => component.selectTabById(id));
+
+        return this.checkState(expected);
+    }
+
+    async toggleShowItem() {
+        const { items } = this.model.hiddenItem;
+
+        this.model.hiddenItem.items = items.map((item) => (
+            (item.id === '2')
+                ? { ...item, hidden: !item.hidden }
+                : item
+        ));
+        const expected = this.getExpectedState();
+
+        await this.performAction(() => click(this.content.toggleShowItemBtn.elem));
 
         return this.checkState(expected);
     }
@@ -106,9 +140,13 @@ export class TabListView extends AppView {
     }
 
     async toggleEnable() {
-        const { disabled } = this.model.disabled;
+        const { disabled, items } = this.model.disabled;
 
         this.model.disabled.disabled = !disabled;
+        this.model.disabled.items = items.map((item) => ({
+            ...item,
+            disabled: !disabled,
+        }));
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.toggleEnableBtn.elem));

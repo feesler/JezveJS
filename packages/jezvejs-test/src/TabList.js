@@ -58,10 +58,12 @@ export class TabList extends TestComponent {
         [
             res.id,
             res.active,
+            res.hidden,
             res.disabled,
         ] = await evaluate((el) => ([
             el.dataset.id,
             !el.hasAttribute('hidden'),
+            el.hasAttribute('hidden'),
             el.hasAttribute('disabled'),
         ]), elem);
 

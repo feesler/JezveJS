@@ -4,7 +4,6 @@ import {
     asyncMap,
     query,
     queryAll,
-    prop,
     isVisible,
     click,
     closest,
@@ -18,12 +17,7 @@ export class DropDown extends TestComponent {
     static async getParentContainer(elem) {
         assert(elem, 'Invalid element');
 
-        let container = await closest(elem, '.dd__container');
-        if (!container) {
-            container = await closest(elem, '.dd__container_attached');
-        }
-
-        return container;
+        return closest(elem, '.dd__container,.dd__container_attached');
     }
 
     /** Create new instance of DropDown component using any child element of container */
@@ -36,36 +30,47 @@ export class DropDown extends TestComponent {
         return super.create(parent, container);
     }
 
-    static async isValidContainer(elem) {
-        return evaluate((el) => (
-            el.classList.contains('dd__container')
-            || el.classList.contains('dd__container_attached')
-        ), elem);
-    }
-
     async parseContent() {
-        const validContainer = await DropDown.isValidContainer(this.elem);
-        assert(validContainer, 'Invalid drop down element');
+        const res = await evaluate((elem) => {
+            const isContainer = elem.classList.contains('dd__container');
+            const isAttached = elem.classList.contains('dd__container_attached');
+            if (!isContainer && !isAttached) {
+                return null;
+            }
 
-        const res = {
-            selectElem: await query(this.elem, 'select'),
-            items: [],
-            selectedItems: [],
-        };
+            const select = elem.querySelector('select');
+            const inputElem = elem.querySelector('input[type="text"]');
 
-        [
-            res.isAttached,
-            res.disabled,
-            res.isMulti,
-            res.editable,
-            res.value,
-        ] = await evaluate((elem, select) => ([
-            elem.classList.contains('dd__container_attached'),
-            elem.hasAttribute('disabled'),
-            select.hasAttribute('multiple'),
-            elem.classList.contains('dd__editable'),
-            select.value,
-        ]), this.elem, res.selectElem);
+            const content = {
+                isAttached,
+                disabled: elem.hasAttribute('disabled'),
+                isMulti: select.hasAttribute('multiple'),
+                editable: elem.classList.contains('dd__editable'),
+                value: select.value,
+                items: [],
+                selectedItems: [],
+                options: Array.from(select.querySelectorAll('option')).map((option) => ({
+                    id: option.value,
+                    title: option.textContent,
+                    selected: option.selected,
+                    disabled: option.disabled,
+                })),
+            };
+
+            if (content.editable && inputElem) {
+                const value = inputElem?.value;
+                const placeholder = inputElem?.placeholder;
+
+                content.textValue = (value?.length > 0) ? value : placeholder;
+            } else if (!content.isAttached) {
+                const statSel = elem.querySelector('.dd__single-selection');
+                content.textValue = statSel?.textContent;
+            }
+
+            return content;
+        }, this.elem);
+
+        assert(res, 'Invalid drop down element');
 
         if (res.isAttached) {
             res.toggleBtn = await query(this.elem, ':scope > *');
@@ -75,22 +80,8 @@ export class DropDown extends TestComponent {
         assert(res.toggleBtn, 'Select button not found');
 
         res.inputElem = await query(this.elem, 'input[type="text"]');
-
         if (!res.isAttached) {
-            res.statSel = await query(this.elem, '.dd__single-selection');
-            assert(res.statSel, 'Static select element not found');
             assert(res.inputElem, 'Input element not found');
-        }
-
-        if (res.editable) {
-            const [value, placeholder] = await evaluate((el) => ([
-                el?.value,
-                el?.placeholder,
-            ]), res.inputElem);
-
-            res.textValue = (value?.length > 0) ? value : placeholder;
-        } else if (res.statSel) {
-            res.textValue = await prop(res.statSel, 'textContent');
         }
 
         if (res.isMulti) {
@@ -122,14 +113,6 @@ export class DropDown extends TestComponent {
             res.value = res.selectedItems;
         }
 
-        const selectOptions = await queryAll(res.selectElem, 'option');
-        const optionsData = await asyncMap(selectOptions, (item) => evaluate((elem) => ({
-            id: elem.value,
-            title: elem.textContent,
-            selected: elem.selected,
-            disabled: elem.disabled,
-        }), item));
-
         res.listContainer = await query(this.elem, '.dd__list');
         res.listPlaceholder = { elem: await query(this.elem, '.dd__list-placeholder') };
         if (!res.listContainer || res.listPlaceholder.elem) {
@@ -145,7 +128,7 @@ export class DropDown extends TestComponent {
             }), elem);
             item.elem = elem;
 
-            const option = optionsData.find((opt) => opt.id === item.id);
+            const option = res.options.find((opt) => opt.id === item.id);
             if (option) {
                 item.id = option.id;
                 item.selected = option.selected;
