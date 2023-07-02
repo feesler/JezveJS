@@ -65,6 +65,28 @@ const initStyled = () => {
     container.append(tabList.elem);
 };
 
+const initHiddenItem = () => {
+    const items = getItems(true);
+    items[1].hidden = true;
+
+    const tabList = TabList.create({
+        className: 'styled',
+        items,
+    });
+
+    const container = ge('hiddenItemContainer');
+    container.append(tabList.elem);
+
+    const btn = ge('toggleShowItemBtn');
+    setEvents(btn, {
+        click: () => {
+            const item = tabList.getItem(2);
+            btn.textContent = (item.hidden) ? 'Hide item' : 'Show item';
+            tabList.showItem(2, item.hidden);
+        },
+    });
+};
+
 const initDisabledItem = () => {
     const tabList = TabList.create({
         className: 'styled',
@@ -111,6 +133,7 @@ class TabListView extends DemoView {
     onStart() {
         initDefault();
         initStyled();
+        initHiddenItem();
         initDisabledItem();
         initDisabled();
     }

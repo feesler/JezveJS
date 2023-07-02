@@ -136,6 +136,21 @@ export class TabList extends Component {
         this.enableItem(id, false);
     }
 
+    showItem(id, value = true) {
+        this.setState({
+            ...this.state,
+            items: this.state.items.map((item) => (
+                (item.value !== id)
+                    ? item
+                    : { ...item, hidden: !value }
+            )),
+        });
+    }
+
+    hideItem(id) {
+        this.showItem(id, false);
+    }
+
     setItems(items) {
         if (this.state.items === items) {
             return;
@@ -172,6 +187,7 @@ export class TabList extends Component {
                 value: item.value,
                 selected: item.id.toString() === state.selectedId,
                 disabled: item.disabled,
+                hidden: item.hidden,
             })),
         }));
 
