@@ -193,7 +193,7 @@ export class LinkMenu extends Component {
         }
 
         const selectedItems = this.state.items
-            .filter((item) => item.value && item.selected)
+            .filter((item) => !this.isNullValue(item) && item.selected)
             .map((item) => item.value);
 
         const data = (this.state.multiple) ? selectedItems : selectedItems[0];
