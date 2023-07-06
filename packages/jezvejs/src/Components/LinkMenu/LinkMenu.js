@@ -205,7 +205,7 @@ export class LinkMenu extends Component {
             ...this.state,
             items: this.state.items.map((item) => {
                 let selected = false;
-                if (item.value) {
+                if (!this.isNullValue(item)) {
                     selected = (item.value === value) ? !item.selected : item.selected;
                 }
 
@@ -269,16 +269,20 @@ export class LinkMenu extends Component {
         });
     }
 
+    isNullValue(item) {
+        return (item?.value ?? null) === null;
+    }
+
     setSelection(selectedItems) {
         const items = asArray(selectedItems).map((value) => value.toString());
-        const showAll = (items.length === 0 || items.includes('0'));
+        const showAll = (items.length === 0);
 
         this.setState({
             ...this.state,
             items: this.state.items.map((item) => ({
                 ...item,
                 selected: (
-                    (showAll && !item.value)
+                    (showAll && this.isNullValue(item))
                     || items.includes(item.value?.toString())
                 ),
             })),
@@ -303,7 +307,7 @@ export class LinkMenu extends Component {
         const param = (state.multiple) ? `${itemParam}[]` : itemParam;
 
         const url = new URL(state.url);
-        if (item.value) {
+        if (!this.isNullValue(item)) {
             url.searchParams.set(param, item.value);
         } else {
             url.searchParams.delete(param);
@@ -401,7 +405,9 @@ export class LinkMenu extends Component {
     }
 
     renderItem(item, state) {
-        if (state.multiple && item.value) {
+        const isNull = this.isNullValue(item);
+
+        if (state.multiple && !isNull) {
             return this.renderCheckboxItem(item, state);
         }
 
@@ -410,7 +416,7 @@ export class LinkMenu extends Component {
         if (item.selected) {
             elem.classList.add(SELECTED_ITEM_CLASS);
         }
-        if (item.value) {
+        if (!isNull) {
             elem.setAttribute('data-value', item.value);
         }
         show(elem, !item.hidden);

@@ -41,6 +41,7 @@ const initDynamicMultiple = () => {
         multiple: true,
         items: [
             { title: 'Clear' },
+            { title: 'Zero', value: 0 },
             { title: 'Create', value: 'create' },
             { title: 'Update', value: 'update' },
             { title: 'Delete', value: 'delete' },
