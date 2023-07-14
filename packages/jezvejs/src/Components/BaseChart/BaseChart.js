@@ -246,7 +246,6 @@ export class BaseChart extends Component {
         };
 
         state.dataSets = this.getDataSets(state);
-        state.seriesMap = this.getSeriesMap(state);
         state.groupsCount = this.getGroupsCount(state);
         state.columnsInGroup = this.getColumnsInGroupCount(state);
         state.grid = this.calculateGrid(data.values, state);
@@ -333,17 +332,6 @@ export class BaseChart extends Component {
         }
 
         return values;
-    }
-
-    /** Return array to map group index to series index */
-    getSeriesMap(state = this.state) {
-        if (!Array.isArray(state?.data?.series)) {
-            return [];
-        }
-
-        return state.data.series.flatMap(([, count], index) => (
-            Array(count).fill(index)
-        ));
     }
 
     /** Returns longest data set */
@@ -583,9 +571,15 @@ export class BaseChart extends Component {
         this.xAxisLabelsGroup?.remove();
         this.xAxisLabelsGroup = createSVGElement('g');
 
+        let prevValue = null;
         const labels = [];
         for (let i = 0; i < state.data.series.length; i += 1) {
-            const [itemValue, itemsCount] = state.data.series[i];
+            const itemValue = state.data.series[i];
+            if (itemValue === prevValue) {
+                labelShift += groupOuterWidth;
+                continue;
+            }
+
             const txtEl = createSVGElement('text', {
                 attrs: {
                     class: 'chart__text chart-xaxis__label',
@@ -598,7 +592,8 @@ export class BaseChart extends Component {
             this.xAxisLabelsGroup.append(txtEl);
             labels.push(txtEl);
 
-            labelShift += itemsCount * groupOuterWidth;
+            labelShift += groupOuterWidth;
+            prevValue = itemValue;
         }
         this.content.append(this.xAxisLabelsGroup);
 
@@ -634,15 +629,10 @@ export class BaseChart extends Component {
         if (index === -1) {
             return null;
         }
-        const { seriesMap } = state;
-        if (!seriesMap || seriesMap.length === 0) {
-            return null;
-        }
 
-        const ind = minmax(0, state.seriesMap.length - 1, index);
-        const seriesIndex = state.seriesMap[ind];
-        const [value] = state.data.series[seriesIndex];
-        return value;
+        const { series } = state.data;
+        const ind = minmax(0, series.length - 1, index);
+        return series[ind];
     }
 
     /** Find item by event object */
