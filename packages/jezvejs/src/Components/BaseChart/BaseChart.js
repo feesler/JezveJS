@@ -139,6 +139,7 @@ export class BaseChart extends Component {
             chartContentWidth: 0,
             hLabelsHeight: 25,
             scrollerWidth: 0,
+            containerWidth: 0,
             chartWidth: 0,
             chartHeight: 0,
             scrollLeft: 0,
@@ -465,6 +466,7 @@ export class BaseChart extends Component {
             chartContentWidth: contentWidth,
         };
 
+        newState.containerWidth = this.elem.offsetWidth;
         newState.scrollerWidth = this.chartScroller.offsetWidth;
         newState.chartWidth = Math.max(newState.scrollerWidth, contentWidth);
 
@@ -498,7 +500,7 @@ export class BaseChart extends Component {
         const res = [];
         const offs = state.visibilityOffset;
 
-        let itemsOnWidth = Math.round(state.scrollerWidth / groupWidth);
+        let itemsOnWidth = Math.round(state.containerWidth / groupWidth);
         itemsOnWidth = Math.min(this.items.length, itemsOnWidth + 2 * offs);
 
         let firstItem = Math.round(state.scrollLeft / groupWidth);
