@@ -82,6 +82,8 @@ const defaultProps = {
     placeholder: null,
     useSingleSelectionAsPlaceholder: true,
     showMultipleSelection: true,
+    showClearButton: true,
+    showToggleButton: true,
     onItemSelect: null,
     onChange: null,
     onInput: null,
@@ -233,6 +235,8 @@ export class DropDown extends Component {
                 placeholder: this.props.placeholder,
                 useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
                 showMultipleSelection: this.props.showMultipleSelection,
+                showClearButton: this.props.showClearButton,
+                showToggleButton: this.props.showToggleButton,
                 editable: this.state.editable,
                 enableFilter: this.props.enableFilter,
                 disabled: this.state.disabled,
@@ -1869,7 +1873,8 @@ export class DropDown extends Component {
         }
 
         const borderWidth = this.combo.elem.offsetHeight - this.combo.elem.clientHeight;
-        return this.combo.toggleBtn.elem.offsetHeight + borderWidth;
+        const ref = this.combo.toggleBtn ?? this.combo.input ?? this.combo;
+        return ref.elem.offsetHeight + borderWidth;
     }
 
     renderList(state, prevState) {

@@ -22,6 +22,9 @@ const defaultProps = {
     enableFilter: false,
     disabled: false,
     placeholder: null,
+    showMultipleSelection: true,
+    showClearButton: true,
+    showToggleButton: true,
     items: [],
     actSelItemIndex: -1,
     onInput: null,
@@ -93,7 +96,7 @@ export class DropDownComboBox extends Component {
 
         const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
 
-        if (this.props.multi) {
+        if (this.props.multi && this.props.showClearButton) {
             const { ClearButton } = this.props.components;
             this.clearBtn = ClearButton.create({
                 onClick: (e) => this.onClearSelection(e),
@@ -101,9 +104,11 @@ export class DropDownComboBox extends Component {
             controls.append(this.clearBtn.elem);
         }
 
-        const { ToggleButton } = this.props.components;
-        this.toggleBtn = ToggleButton.create();
-        controls.append(this.toggleBtn.elem);
+        if (this.props.showToggleButton) {
+            const { ToggleButton } = this.props.components;
+            this.toggleBtn = ToggleButton.create();
+            controls.append(this.toggleBtn.elem);
+        }
 
         this.elem = createElement('div', {
             props: { className: COMBO_CLASS },
