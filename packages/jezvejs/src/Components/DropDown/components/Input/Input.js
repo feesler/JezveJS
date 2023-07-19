@@ -11,6 +11,14 @@ import './Input.scss';
 /* CSS classes */
 const INPUT_CLASS = 'dd__input';
 
+const inputProps = {
+    className: INPUT_CLASS,
+    autocomplete: 'off',
+    autocapitalize: 'none',
+    autocorrect: 'off',
+    spellcheck: false,
+};
+
 const defaultProps = {
     id: undefined,
     value: '',
@@ -75,10 +83,7 @@ export class DropDownInput extends Component {
     }
 
     postInit() {
-        setProps(this.elem, {
-            className: INPUT_CLASS,
-            autocomplete: 'off',
-        });
+        setProps(this.elem, inputProps);
         setEvents(this.elem, {
             input: (e) => this.onInput(e),
         });

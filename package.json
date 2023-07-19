@@ -81,7 +81,7 @@
         "stylelint": "^14.16.1",
         "stylelint-config-prettier-scss": "^0.0.1",
         "stylelint-config-standard-scss": "^6.1.0",
-        "webpack": "^5.88.1",
+        "webpack": "^5.88.2",
         "webpack-cli": "^4.10.0",
         "webpack-dev-server": "^4.15.1",
         "webpack-merge": "^5.9.0"
@@ -89,7 +89,7 @@
     "dependencies": {
         "@babel/runtime": "^7.22.6",
         "core-js": "^3.31.1",
-        "whatwg-fetch": "^3.6.2"
+        "whatwg-fetch": "^3.6.16"
     },
     "workspaces": [
         "packages/*",
