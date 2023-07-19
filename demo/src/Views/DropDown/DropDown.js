@@ -391,6 +391,34 @@ const showMultipleSelection = () => {
     ge('showMultipleContainer').append(tags.elem, dropDown.elem);
 };
 
+// 'showClearButton' option
+const showClearButton = () => {
+    const dropDown = DropDown.create({
+        enableFilter: true,
+        showClearButton: false,
+        noResultsMessage: 'Nothing found',
+        multi: true,
+        placeholder: 'Type to filter',
+        data: initItems('Item', 20),
+    });
+
+    ge('showClearContainer').append(dropDown.elem);
+};
+
+// 'showToggleButton' option
+const showToggleButton = () => {
+    const dropDown = DropDown.create({
+        enableFilter: true,
+        showToggleButton: false,
+        noResultsMessage: 'Nothing found',
+        multi: true,
+        placeholder: 'Type to filter',
+        data: initItems('Item', 20),
+    });
+
+    ge('showToggleContainer').append(dropDown.elem);
+};
+
 // 'allowCreate' option
 const allowCreate = () => {
     const dropDown = DropDown.create({
@@ -667,6 +695,8 @@ class DropDownView extends DemoView {
         multiSelectFilter();
         groupsSelectFilter();
         showMultipleSelection();
+        showClearButton();
+        showToggleButton();
         allowCreate();
         attachedFilter();
         attachedFilterMulti();
