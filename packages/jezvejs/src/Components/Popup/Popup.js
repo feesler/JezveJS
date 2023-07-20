@@ -29,6 +29,7 @@ const defaultProps = {
     title: null,
     content: null,
     footer: null,
+    visible: false,
     closeButton: false,
     nodim: false,
     scrollMessage: false,
@@ -103,8 +104,13 @@ export class Popup extends Component {
             return;
         }
 
+        if (!this.elem || this.state.visible) {
+            return;
+        }
+
         if (this.state.nodim !== true) {
-            this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollElem = document.scrollingElement || document.body;
+            this.scrollTop = scrollElem.scrollTop;
 
             document.body.style.top = `-${this.scrollTop}px`;
             document.body.style.overflow = 'hidden';
@@ -119,10 +125,12 @@ export class Popup extends Component {
                 setEmptyClick(this.emptyClickHandler, [this.container]);
             });
         }
+
+        this.setState({ ...this.state, visible: true });
     }
 
     hide() {
-        if (!this.elem) {
+        if (!this.elem || !this.state.visible) {
             return;
         }
 
@@ -148,6 +156,8 @@ export class Popup extends Component {
         if (this.state.closeOnEmptyClick === true) {
             removeEmptyClick(this.emptyClickHandler);
         }
+
+        this.setState({ ...this.state, visible: false });
     }
 
     close() {

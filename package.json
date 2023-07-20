@@ -74,7 +74,7 @@
         "npm-run-all": "^4.1.5",
         "postcss-cli": "^8.3.1",
         "postcss-loader": "^5.3.0",
-        "sass": "^1.63.6",
+        "sass": "^1.64.0",
         "sass-loader": "^13.3.2",
         "ssh2-sftp-client": "^9.1.0",
         "style-loader": "^2.0.0",
