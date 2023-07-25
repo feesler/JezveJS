@@ -62,6 +62,15 @@ const initResponsive = () => {
     setEvents(ge('showResponsiveBtn'), { click: () => offcanvas.open() });
 };
 
+const initUseScrollLock = () => {
+    const offcanvas = Offcanvas.create({
+        useScrollLock: false,
+        content: ge('useScrollLockContent'),
+    });
+
+    setEvents(ge('showScrollLockBtn'), { click: () => offcanvas.open() });
+};
+
 class OffcanvasView extends DemoView {
     /**
      * View initialization
@@ -72,6 +81,7 @@ class OffcanvasView extends DemoView {
         initTop();
         initBottom();
         initResponsive();
+        initUseScrollLock();
     }
 }
 

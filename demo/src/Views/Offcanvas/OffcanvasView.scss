@@ -1,8 +1,13 @@
+.offcanvas__content {
+  padding: 1rem;
+}
+
 .offcanvas-nav {
   display: flex;
   flex-flow: column nowrap;
   height: 100%;
-  padding: 24px;
+  min-width: 200px;
+  padding: 24px 0;
 }
 
 .offcanvas-nav li {
@@ -15,7 +20,7 @@
   display: flex;
   flex-flow: row nowrap;
   height: 100%;
-  padding: 24px;
+  padding: 24px 0;
 }
 
 .offcanvas-horizontal-nav li {
@@ -26,9 +31,7 @@
 
 .offcanvas.offcanvas-responsive {
   box-sizing: border-box;
-  width: 200px;
-  top: 66px;
-  padding: 10px;
+  top: 50px;
   background-color: #efefef;
 }
 
@@ -39,7 +42,7 @@
   }
 
   .offcanvas.offcanvas-responsive {
-    --offcanvas-z: 1500;
+    --offcanvas-z: auto;
   }
 
   .offcanvas-responsive.offcanvas_closed {
