@@ -3,6 +3,7 @@
  */
 export class ScrollLock {
     static locked = false;
+
     static scrollTop = null;
 
     static lock() {
