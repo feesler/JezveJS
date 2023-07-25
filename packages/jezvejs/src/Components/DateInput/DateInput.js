@@ -7,6 +7,7 @@ import {
     removeEvents,
     createElement,
     setProps,
+    setAttributes,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
@@ -17,8 +18,11 @@ const inputProps = {
     inputMode: 'decimal',
     autocomplete: 'off',
     autocapitalize: 'none',
-    autocorrect: 'off',
     spellcheck: false,
+};
+
+const inputAttrs = {
+    autocorrect: 'off',
 };
 
 const defaultProps = {
@@ -74,6 +78,7 @@ export class DateInput extends Component {
         };
 
         setProps(this.elem, inputProps);
+        setAttributes(this.elem, inputAttrs);
         this.props.placeholder = this.props.placeholder ?? this.formatMask;
         this.setUserProps();
 

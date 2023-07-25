@@ -102,18 +102,18 @@ export class Collapsible extends Component {
     }
 
     /** Collapse content */
-    collapse() {
-        this.setState({ expanded: false });
+    collapse(value = true) {
+        this.setState({ ...this.state, expanded: !value });
     }
 
     /** Expand content */
-    expand() {
-        this.setState({ expanded: true });
+    expand(value = true) {
+        this.setState({ ...this.state, expanded: !!value });
     }
 
     /** Toggle expand/collapse content */
     toggle() {
-        this.setState({ expanded: !this.state.expanded });
+        this.setState({ ...this.state, expanded: !this.state.expanded });
     }
 
     /** Render component state */

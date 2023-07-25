@@ -5,6 +5,7 @@ import {
     show,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
+import { ScrollLock } from '../ScrollLock/ScrollLock.js';
 import '../../css/common.scss';
 import './Offcanvas.scss';
 
@@ -20,28 +21,30 @@ const BACKGROUND_CLASS = 'offcanvas__bg';
 const defaultProps = {
     placement: 'left',
     closed: true,
+    useScrollLock: true,
     onOpened: null,
     onClosed: null,
     onToggle: null,
 };
 
 export class Offcanvas extends Component {
-    constructor(props) {
-        super(props);
-
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
+            ...props,
+        });
+
+        this.scrollLocked = false;
+        this.scrollTop = null;
+
+        this.state = {
+            closed: this.props.closed,
         };
 
         this.init();
     }
 
     init() {
-        this.state = {
-            closed: this.props.closed,
-        };
-
         this.contentElem = createElement('div', { props: { className: CONTENT_CLASS } });
         if (this.props.content) {
             this.setContent(this.props.content);
@@ -68,8 +71,7 @@ export class Offcanvas extends Component {
 
         this.setClassNames();
 
-        document.body.append(this.elem);
-        document.body.append(this.backgroundElem);
+        document.body.append(this.elem, this.backgroundElem);
 
         this.render(this.state);
     }
@@ -123,10 +125,22 @@ export class Offcanvas extends Component {
         super.setState(newState);
     }
 
+    renderScrollLock(state, prevState) {
+        if (state.closed === prevState?.closed) {
+            return;
+        }
+
+        ScrollLock.toggle();
+    }
+
     /** Render component state */
-    render(state) {
+    render(state, prevState = {}) {
         if (!state) {
             throw new Error('Invalid state');
+        }
+
+        if (this.props.useScrollLock) {
+            this.renderScrollLock(state, prevState);
         }
 
         this.elem.classList.toggle(CLOSED_CLASS, !!state.closed);
