@@ -1,7 +1,4 @@
-import { ge, setEvents } from 'jezvejs';
 import packageConfig from 'jezvejs/package.json';
-import { Offcanvas } from 'jezvejs/Offcanvas';
-import { NavigationMenu } from '../Components/NavigationMenu/NavigationMenu.js';
 import './app.scss';
 
 export const navigationMenuSections = [{
@@ -68,23 +65,8 @@ export const getBaseURL = () => {
     return `${res}jezvejs/`;
 };
 
-export const renderVersion = () => {
-    const version = ge('version');
-    version.textContent = packageConfig.version;
-};
-
-export const initNavigation = () => {
-    const navMenu = NavigationMenu.create({
-        sections: navigationMenuSections,
-        baseURL: getBaseURL(),
-    });
-
-    const offcanvas = Offcanvas.create({
-        content: navMenu.elem,
-    });
-
-    const navToggleBtn = document.querySelector('.nav-header .nav-toggle-btn');
-    setEvents(navToggleBtn, { click: () => offcanvas.toggle() });
-
-    renderVersion();
-};
+/**
+ * Returns version of jezvejs library from package data
+ * @returns string
+ */
+export const getVersion = () => (packageConfig.version);

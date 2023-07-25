@@ -1,24 +1,17 @@
 import 'jezvejs/style';
-import { View } from 'jezvejs/View';
 
-import { renderVersion, navigationMenuSections, getBaseURL } from '../../Application/app.js';
-import { NavigationMenu } from '../../Components/NavigationMenu/NavigationMenu.js';
+import { DemoView } from '../../Application/DemoView.js';
 import './MainView.scss';
 
-class MainView extends View {
+class MainView extends DemoView {
     /**
-     * View initialization
+     * Initializes navigation menu
      */
-    onStart() {
-        const navMenu = NavigationMenu.create({
-            sections: navigationMenuSections,
-            baseURL: getBaseURL(),
-        });
+    initNavigation() {
+        const navMenu = this.createNavigationMenu();
 
         const menuContainer = document.querySelector('.menu-container');
         menuContainer.append(navMenu.elem);
-
-        renderVersion();
     }
 }
 
