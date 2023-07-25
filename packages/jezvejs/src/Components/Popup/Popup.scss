@@ -2,7 +2,11 @@
   --popup-bg: #ffffff;
   --popup-text: #000000;
   --popup-close-btn: #888888;
+  --popup-close-btn-bg: none;
   --popup-close-btn-hover: #000000;
+  --popup-close-btn-hover-bg: #dbdbdb;
+  --popup-close-btn-active: #ffffff;
+  --popup-close-btn-active-bg: #dbdbdb;
   --popup-dim-bg: rgba(0, 0, 0, 0.5);
   --popup-padding: 1rem;
   --popup-header-padding: var(--popup-padding);
@@ -56,7 +60,7 @@
 .popup__header {
   display: flex;
   flex-flow: row nowrap;
-  align-items: baseline;
+  align-items: normal;
   box-sizing: border-box;
   padding: var(--popup-header-padding);
 }
@@ -69,12 +73,20 @@
 
 /* Close button */
 .popup__header .close-btn {
-  --btn-size: 18px;
+  --btn-size: 32px;
+  --btn-icon-size: 24px;
+  --btn-border-radius: 100vh;
   --btn-icon-color: var(--popup-close-btn);
+  --btn-background: var(--popup-close-btn-bg);
   --btn-hover-icon-color: var(--popup-close-btn-hover);
+  --btn-hover-background: var(--popup-close-btn-hover-bg);
+  --btn-active-icon-color: var(--popup-close-btn-active);
+  --btn-active-background: var(--popup-close-btn-active-bg);
+  --btn-padding: 4px;
 
   flex-shrink: 0;
   margin-left: auto;
+  margin-right: -4px;
 }
 
 .popup__message {

@@ -9,9 +9,10 @@ import {
     addChilds,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
-import '../../css/common.scss';
 import { Component } from '../../js/Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';
+
+import '../../css/common.scss';
 import './Popup.scss';
 
 /* CSS classes */
@@ -228,6 +229,7 @@ export class Popup extends Component {
         }
 
         this.closeBtn = CloseButton.create({
+            small: false,
             onClick: () => this.close(),
         });
         this.headerElem.append(this.closeBtn.elem);
