@@ -5,6 +5,7 @@ import {
     show,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
+import { ScrollLock } from '../ScrollLock/ScrollLock.js';
 import '../../css/common.scss';
 import './Offcanvas.scss';
 
@@ -124,61 +125,12 @@ export class Offcanvas extends Component {
         super.setState(newState);
     }
 
-    addScrollLock() {
-        if (this.scrollLocked) {
-            return;
-        }
-
-        this.scrollLocked = true;
-
-        const scrollElem = document.scrollingElement || document.body;
-        this.scrollTop = scrollElem.scrollTop;
-
-        const { style } = document.body;
-        style.top = `-${this.scrollTop}px`;
-        style.overflow = 'hidden';
-        style.width = '100%';
-        style.height = 'auto';
-        style.position = 'fixed';
-    }
-
-    removeScrollLock() {
-        if (!this.scrollLocked) {
-            return;
-        }
-
-        this.scrollLocked = false;
-
-        const { style } = document.body;
-        style.top = '';
-        style.overflow = '';
-        style.width = '';
-        style.height = '';
-        style.position = '';
-
-        const scrollOptionsAvailable = 'scrollBehavior' in document.documentElement.style;
-        if (scrollOptionsAvailable) {
-            window.scrollTo({
-                top: this.scrollTop,
-                behavior: 'instant',
-            });
-        } else {
-            window.scrollTo(0, this.scrollTop);
-        }
-
-        delete this.scrollTop;
-    }
-
     renderScrollLock(state, prevState) {
         if (state.closed === prevState?.closed) {
             return;
         }
 
-        if (state.closed) {
-            this.removeScrollLock();
-        } else {
-            this.addScrollLock();
-        }
+        ScrollLock.toggle();
     }
 
     /** Render component state */
