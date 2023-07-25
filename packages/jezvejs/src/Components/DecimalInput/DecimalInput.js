@@ -6,6 +6,7 @@ import {
     removeEvents,
     createElement,
     setProps,
+    setAttributes,
 } from '../../js/common.js';
 import {
     fixFloat,
@@ -22,8 +23,11 @@ const inputProps = {
     inputMode: 'decimal',
     autocomplete: 'off',
     autocapitalize: 'none',
-    autocorrect: 'off',
     spellcheck: false,
+};
+
+const inputAttrs = {
+    autocorrect: 'off',
 };
 
 const defaultProps = {
@@ -74,6 +78,7 @@ export class DecimalInput extends Component {
         }
 
         setProps(this.elem, inputProps);
+        setAttributes(this.elem, inputAttrs);
         this.setUserProps();
 
         this.beforeInputHandler = (e) => this.validateInput(e);

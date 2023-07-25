@@ -2,6 +2,7 @@ import {
     createElement,
     enable,
     isFunction,
+    setAttributes,
     setEvents,
     setProps,
 } from '../../../../js/common.js';
@@ -15,8 +16,11 @@ const inputProps = {
     className: INPUT_CLASS,
     autocomplete: 'off',
     autocapitalize: 'none',
-    autocorrect: 'off',
     spellcheck: false,
+};
+
+const inputAttrs = {
+    autocorrect: 'off',
 };
 
 const defaultProps = {
@@ -84,6 +88,7 @@ export class DropDownInput extends Component {
 
     postInit() {
         setProps(this.elem, inputProps);
+        setAttributes(this.elem, inputAttrs);
         setEvents(this.elem, {
             input: (e) => this.onInput(e),
         });
