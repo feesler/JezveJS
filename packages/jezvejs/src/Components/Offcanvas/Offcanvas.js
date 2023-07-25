@@ -20,28 +20,30 @@ const BACKGROUND_CLASS = 'offcanvas__bg';
 const defaultProps = {
     placement: 'left',
     closed: true,
+    useScrollLock: true,
     onOpened: null,
     onClosed: null,
     onToggle: null,
 };
 
 export class Offcanvas extends Component {
-    constructor(props) {
-        super(props);
-
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
+            ...props,
+        });
+
+        this.scrollLocked = false;
+        this.scrollTop = null;
+
+        this.state = {
+            closed: this.props.closed,
         };
 
         this.init();
     }
 
     init() {
-        this.state = {
-            closed: this.props.closed,
-        };
-
         this.contentElem = createElement('div', { props: { className: CONTENT_CLASS } });
         if (this.props.content) {
             this.setContent(this.props.content);
@@ -68,8 +70,7 @@ export class Offcanvas extends Component {
 
         this.setClassNames();
 
-        document.body.append(this.elem);
-        document.body.append(this.backgroundElem);
+        document.body.append(this.elem, this.backgroundElem);
 
         this.render(this.state);
     }
@@ -123,10 +124,71 @@ export class Offcanvas extends Component {
         super.setState(newState);
     }
 
+    addScrollLock() {
+        if (this.scrollLocked) {
+            return;
+        }
+
+        this.scrollLocked = true;
+
+        const scrollElem = document.scrollingElement || document.body;
+        this.scrollTop = scrollElem.scrollTop;
+
+        const { style } = document.body;
+        style.top = `-${this.scrollTop}px`;
+        style.overflow = 'hidden';
+        style.width = '100%';
+        style.height = 'auto';
+        style.position = 'fixed';
+    }
+
+    removeScrollLock() {
+        if (!this.scrollLocked) {
+            return;
+        }
+
+        this.scrollLocked = false;
+
+        const { style } = document.body;
+        style.top = '';
+        style.overflow = '';
+        style.width = '';
+        style.height = '';
+        style.position = '';
+
+        const scrollOptionsAvailable = 'scrollBehavior' in document.documentElement.style;
+        if (scrollOptionsAvailable) {
+            window.scrollTo({
+                top: this.scrollTop,
+                behavior: 'instant',
+            });
+        } else {
+            window.scrollTo(0, this.scrollTop);
+        }
+
+        delete this.scrollTop;
+    }
+
+    renderScrollLock(state, prevState) {
+        if (state.closed === prevState?.closed) {
+            return;
+        }
+
+        if (state.closed) {
+            this.removeScrollLock();
+        } else {
+            this.addScrollLock();
+        }
+    }
+
     /** Render component state */
-    render(state) {
+    render(state, prevState = {}) {
         if (!state) {
             throw new Error('Invalid state');
+        }
+
+        if (this.props.useScrollLock) {
+            this.renderScrollLock(state, prevState);
         }
 
         this.elem.classList.toggle(CLOSED_CLASS, !!state.closed);
