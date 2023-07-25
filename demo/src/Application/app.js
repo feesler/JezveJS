@@ -1,9 +1,10 @@
-import { ge, createElement, setEvents } from 'jezvejs';
+import { ge, setEvents } from 'jezvejs';
 import packageConfig from 'jezvejs/package.json';
 import { Offcanvas } from 'jezvejs/Offcanvas';
+import { NavigationMenu } from '../Components/NavigationMenu/NavigationMenu.js';
 import './app.scss';
 
-const navigationMenu = [{
+export const navigationMenuSections = [{
     title: 'jezveJS tests',
     items: [{
         title: 'Tests', url: 'tests/index.html',
@@ -53,7 +54,7 @@ const navigationMenu = [{
     ],
 }];
 
-const getBaseURL = () => {
+export const getBaseURL = () => {
     const { origin } = window.location;
     const res = `${origin}/`;
 
@@ -67,50 +68,19 @@ const getBaseURL = () => {
     return `${res}jezvejs/`;
 };
 
-const renderMenuItem = ({ title, url }, baseURL) => (
-    createElement('li', {
-        children: createElement('a', {
-            props: {
-                href: `${baseURL}${url}`,
-                className: 'nav-menu-link',
-                textContent: title,
-            },
-        }),
-    })
-);
-
-const renderNavSection = ({ title, items }, baseURL) => {
-    const header = createElement('h2', { props: { textContent: title } });
-    const menu = createElement('ul', {
-        props: { className: 'nav-menu' },
-        children: items.map((item) => renderMenuItem(item, baseURL)),
-    });
-
-    return createElement('div', {
-        props: { className: 'nav-menu-section' },
-        children: [header, menu],
-    });
-};
-
-export const renderNavigationMenu = () => {
-    const baseURL = getBaseURL();
-    const sections = navigationMenu.map((item) => renderNavSection(item, baseURL));
-    return createElement('div', {
-        props: { className: 'nav-menu-container' },
-        children: sections,
-    });
-};
-
 export const renderVersion = () => {
     const version = ge('version');
     version.textContent = packageConfig.version;
 };
 
 export const initNavigation = () => {
-    const navMenu = renderNavigationMenu();
+    const navMenu = NavigationMenu.create({
+        sections: navigationMenuSections,
+        baseURL: getBaseURL(),
+    });
 
     const offcanvas = Offcanvas.create({
-        content: navMenu,
+        content: navMenu.elem,
     });
 
     const navToggleBtn = document.querySelector('.nav-header .nav-toggle-btn');
