@@ -116,21 +116,16 @@ export class Offcanvas extends Component {
         this.setState({ ...this.state, closed: !this.state.closed });
     }
 
-    setState(state) {
-        const newState = isFunction(state) ? state(this.state) : state;
-        if (newState.closed === this.state.closed) {
-            return;
-        }
-
-        super.setState(newState);
-    }
-
     renderScrollLock(state, prevState) {
         if (state.closed === prevState?.closed) {
             return;
         }
 
-        ScrollLock.toggle();
+        if (state.closed) {
+            ScrollLock.unlock();
+        } else {
+            ScrollLock.lock();
+        }
     }
 
     /** Render component state */
