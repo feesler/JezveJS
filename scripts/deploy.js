@@ -1,7 +1,7 @@
-import * as dotenv from 'dotenv';
-import Client from 'ssh2-sftp-client';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import * as dotenv from 'dotenv';
+import Client from 'ssh2-sftp-client';
 
 /* eslint-disable no-console */
 

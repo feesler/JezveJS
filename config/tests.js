@@ -1,6 +1,6 @@
-import webpack from 'webpack';
-import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { resolve, dirname } from 'path';
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const filename = fileURLToPath(import.meta.url);
