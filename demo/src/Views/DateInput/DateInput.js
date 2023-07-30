@@ -49,6 +49,12 @@ class DateInputView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
+        this.addTableOfContentsItem({ title: 'Placeholder', url: 'placeholder' });
+        this.addTableOfContentsItem({ title: 'Create input element', url: 'create' });
+        this.addTableOfContentsItem({ title: 'Locales', url: 'locale' });
+
         initDefault();
         initPlaceholder();
         initCreate();

@@ -64,6 +64,12 @@ class InputView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
+        this.addTableOfContentsItem({ title: 'Placeholder', url: 'placeholder' });
+        this.addTableOfContentsItem({ title: 'Full width', url: 'fullwidth' });
+        this.addTableOfContentsItem({ title: 'Disabled component', url: 'disabled' });
+
         initDefault();
         initPlaceholder();
         initFullWidth();

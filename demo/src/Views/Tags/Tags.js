@@ -145,6 +145,15 @@ class TagsView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
+        this.addTableOfContentsItem({ title: 'Styled', url: 'styled' });
+        this.addTableOfContentsItem({ title: 'Active items', url: 'active' });
+        this.addTableOfContentsItem({ title: '\'closeable\' option', url: 'closeable' });
+        this.addTableOfContentsItem({ title: 'Sortable component', url: 'sortable' });
+        this.addTableOfContentsItem({ title: 'Disabled item', url: 'disabledItem' });
+        this.addTableOfContentsItem({ title: 'Disabled component', url: 'disabled' });
+
         initDefault();
         initStyled();
         initActive();

@@ -168,6 +168,13 @@ class PieChartView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
+        this.addTableOfContentsItem({ title: 'Title and offset sector', url: 'offset' });
+        this.addTableOfContentsItem({ title: '\'innerRadius\' option', url: 'innerRadius' });
+        this.addTableOfContentsItem({ title: 'Single value', url: 'single' });
+        this.addTableOfContentsItem({ title: 'Set data', url: 'setData' });
+
         initSmall();
         initOffset();
         initInnerRadius();

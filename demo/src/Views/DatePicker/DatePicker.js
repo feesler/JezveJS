@@ -258,6 +258,19 @@ class DatePickerView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Animated static component', url: 'static' });
+        this.addTableOfContentsItem({ title: 'Fill parent width', url: 'fullwidth' });
+        this.addTableOfContentsItem({ title: 'Popup component', url: 'popup' });
+        this.addTableOfContentsItem({ title: 'Position', url: 'position' });
+        this.addTableOfContentsItem({ title: 'Range select', url: 'range' });
+        this.addTableOfContentsItem({ title: 'Callbacks', url: 'callbacks' });
+        this.addTableOfContentsItem({ title: 'setSelection() method', url: 'setSelection' });
+        this.addTableOfContentsItem({ title: 'disabledDate option', url: 'disabledDate' });
+        this.addTableOfContentsItem({ title: 'rangePart option', url: 'rangePart' });
+        this.addTableOfContentsItem({ title: 'firstDay option', url: 'firstDay' });
+        this.addTableOfContentsItem({ title: 'Locale', url: 'locale' });
+
         initStatic();
         initFillWidth();
         initPopup();

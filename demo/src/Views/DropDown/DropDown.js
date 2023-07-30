@@ -668,6 +668,41 @@ class DropDownView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Inline', url: 'inline' });
+        this.addTableOfContentsItem({ title: 'Stretch', url: 'stretch' });
+        this.addTableOfContentsItem({ title: 'Fixed menu', url: 'fixed' });
+        this.addTableOfContentsItem({ title: 'Callbacks', url: 'callbacks' });
+        this.addTableOfContentsItem({ title: 'Parse select without selection', url: 'parse' });
+        this.addTableOfContentsItem({ title: 'Parse select with selected option', url: 'selected' });
+        this.addTableOfContentsItem({ title: 'Disabled option', url: 'disabledOption' });
+        this.addTableOfContentsItem({ title: 'Option groups', url: 'groups' });
+        this.addTableOfContentsItem({ title: 'Create groups', url: 'createGroups' });
+        this.addTableOfContentsItem({ title: 'Create without host element', url: 'noHost' });
+        this.addTableOfContentsItem({ title: 'Attach to block element', url: 'attach' });
+        this.addTableOfContentsItem({ title: 'Attach to inline element', url: 'attachInline' });
+        this.addTableOfContentsItem({ title: 'Clipping test', url: 'clipping' });
+        this.addTableOfContentsItem({ title: 'Parse multiple select', url: 'parseMultiple' });
+        this.addTableOfContentsItem({ title: 'Create multiple select', url: 'createMultiple' });
+        this.addTableOfContentsItem({ title: 'Disabled single select', url: 'disabled' });
+        this.addTableOfContentsItem({ title: 'Disabled multiple select', url: 'disabledMultiple' });
+        this.addTableOfContentsItem({ title: 'Filter with single select', url: 'filter' });
+        this.addTableOfContentsItem({ title: 'Filter with multiple select', url: 'filterMultiple' });
+        this.addTableOfContentsItem({ title: 'Filter with groups', url: 'filterGroups' });
+        this.addTableOfContentsItem({ title: '\'showMultipleSelection\' option', url: 'showMultipleSelection' });
+        this.addTableOfContentsItem({ title: '\'showClearButton\' option', url: 'showClearButton' });
+        this.addTableOfContentsItem({ title: '\'showToggleButton\' option', url: 'showToggleButton' });
+        this.addTableOfContentsItem({ title: '\'allowCreate\' option', url: 'allowCreate' });
+        this.addTableOfContentsItem({ title: 'Filter attached to block element', url: 'filterAttached' });
+        this.addTableOfContentsItem({ title: 'Filter with multiple select attached', url: 'filterAttachedMulti' });
+        this.addTableOfContentsItem({ title: 'Custom render', url: 'custom' });
+        this.addTableOfContentsItem({ title: 'Parse with useNativeSelect option', url: 'useNativeSelect' });
+        this.addTableOfContentsItem({ title: 'Create with useNativeSelect option', url: 'createUseNative' });
+        this.addTableOfContentsItem({ title: 'useNativeSelect option with multiple select', url: 'useNativeMultiple' });
+        this.addTableOfContentsItem({ title: 'fullScreen option', url: 'fullScreen' });
+        this.addTableOfContentsItem({ title: 'Methods', url: 'methods' });
+        this.addTableOfContentsItem({ title: 'DropDown inside popup', url: 'popup' });
+
         initStandardInline();
         initStandardStretch();
         initFixed();

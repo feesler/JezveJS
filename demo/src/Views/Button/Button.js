@@ -171,6 +171,20 @@ class ButtonView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Parse component from DOM', url: 'parse' });
+        this.addTableOfContentsItem({ title: 'Button component', url: 'button' });
+        this.addTableOfContentsItem({ title: 'Link component', url: 'link' });
+        this.addTableOfContentsItem({ title: 'Static component', url: 'static' });
+        this.addTableOfContentsItem({ title: 'Styled border', url: 'border' });
+        this.addTableOfContentsItem({ title: 'Custom content', url: 'custom' });
+        this.addTableOfContentsItem({ title: 'Styled background', url: 'background' });
+        this.addTableOfContentsItem({ title: 'Full width', url: 'fullwidth' });
+        this.addTableOfContentsItem({ title: 'Close button', url: 'close' });
+        this.addTableOfContentsItem({ title: 'No title', url: 'notitle' });
+        this.addTableOfContentsItem({ title: 'No icon', url: 'noicon' });
+        this.addTableOfContentsItem({ title: 'Disabled component', url: 'disabled' });
+
         initParsed();
         initDynamicButton();
         initDynamicLink();

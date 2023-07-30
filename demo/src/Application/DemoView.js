@@ -4,6 +4,7 @@ import { Offcanvas } from 'jezvejs/Offcanvas';
 
 import * as App from './app.js';
 import { NavigationMenu } from '../Components/NavigationMenu/NavigationMenu.js';
+import { TableOfContents } from '../Components/TableOfContents/TableOfContents.js';
 
 /**
  * Demo view base class
@@ -39,6 +40,53 @@ export class DemoView extends View {
 
         const navToggleBtn = document.querySelector('.nav-header .nav-toggle-btn');
         setEvents(navToggleBtn, { click: () => offcanvas.toggle() });
+    }
+
+    /**
+     * Initializes table of contents menu
+     */
+    initTableOfContents() {
+        this.tocMenu = TableOfContents.create();
+
+        const mainHeader = document.querySelector('.page-content-wrap h1');
+        mainHeader.after(this.tocMenu.elem);
+    }
+
+    addTableOfContentsSection(options = {}) {
+        const {
+            title = null,
+            items = [],
+        } = options;
+
+        this.tocMenu.setState((menuState) => ({
+            ...menuState,
+            sections: [...menuState.sections, { title, items }],
+        }));
+    }
+
+    addTableOfContentsItem(options = {}) {
+        const {
+            title = null,
+            url = null,
+        } = options;
+
+        if (!title || !url) {
+            throw new Error('Invalid section data');
+        }
+
+        this.tocMenu.setState((menuState) => {
+            const newState = {
+                ...menuState,
+            };
+
+            if (newState.sections.length === 0) {
+                newState.sections.push({ items: [] });
+            }
+            const lastSection = newState.sections[newState.sections.length - 1];
+            lastSection.items.push({ title, url });
+
+            return newState;
+        });
     }
 
     /**

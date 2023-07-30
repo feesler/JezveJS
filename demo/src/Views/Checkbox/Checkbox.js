@@ -121,6 +121,17 @@ class CheckboxView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsSection({ title: 'Checkbox' });
+        this.addTableOfContentsItem({ title: 'Parse component from DOM', url: 'checkboxParse' });
+        this.addTableOfContentsItem({ title: 'Custom icon', url: 'checkboxIcon' });
+        this.addTableOfContentsItem({ title: 'Methods', url: 'checkboxMethods' });
+        this.addTableOfContentsItem({ title: 'Large', url: 'checkboxLarge' });
+
+        this.addTableOfContentsSection({ title: 'Radio' });
+        this.addTableOfContentsItem({ title: 'Parse component from DOM', url: 'radioParse' });
+        this.addTableOfContentsItem({ title: 'Methods', url: 'radioMethods' });
+
         initParsed();
         initIcon();
         initDynamic();

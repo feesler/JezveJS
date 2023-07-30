@@ -39,6 +39,15 @@ class InputGroupView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Input group with text', url: 'text' });
+        this.addTableOfContentsItem({ title: 'Input group with button', url: 'button' });
+        this.addTableOfContentsItem({ title: 'Multiple inputs', url: 'multipleInputs' });
+        this.addTableOfContentsItem({ title: 'Inner buttons', url: 'innerButton' });
+        this.addTableOfContentsItem({ title: 'Input outer container', url: 'outerContainer' });
+        this.addTableOfContentsItem({ title: 'Disabled', url: 'disabled' });
+        this.addTableOfContentsItem({ title: 'Create', url: 'create' });
+
         initParsed();
         initDynamic();
     }

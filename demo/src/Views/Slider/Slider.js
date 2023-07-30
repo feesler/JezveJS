@@ -127,6 +127,13 @@ class SliderView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
+        this.addTableOfContentsItem({ title: 'Vertical', url: 'placeholder' });
+        this.addTableOfContentsItem({ title: 'Enabled \'allowMouse\' option', url: 'allowMouse' });
+        this.addTableOfContentsItem({ title: 'Disabled \'allowTouch\' option', url: 'allowTouch' });
+        this.addTableOfContentsItem({ title: 'Disabled \'allowWheel\' option', url: 'allowWheel' });
+
         initDefaultSlider();
         initVerticalSlider();
         initMouseSlider();

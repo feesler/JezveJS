@@ -143,6 +143,15 @@ class LinkMenuView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Default settings', url: 'parse' });
+        this.addTableOfContentsItem({ title: 'Single select with icons', url: 'single' });
+        this.addTableOfContentsItem({ title: '\'allowActiveLink\' option', url: 'allowActiveLink' });
+        this.addTableOfContentsItem({ title: 'Buttons', url: 'buttonType' });
+        this.addTableOfContentsItem({ title: 'Disabled item', url: 'disabledItem' });
+        this.addTableOfContentsItem({ title: 'Hidden item', url: 'hiddenItem' });
+        this.addTableOfContentsItem({ title: 'Disabled component', url: 'disabled' });
+
         initParsed();
         initDynamicSingle();
         initDynamicMultiple();

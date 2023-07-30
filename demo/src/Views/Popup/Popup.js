@@ -513,6 +513,19 @@ class PopupView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.initTableOfContents();
+        this.addTableOfContentsItem({ title: 'Full width', url: 'fullwidth' });
+        this.addTableOfContentsItem({ title: 'Close button', url: 'close' });
+        this.addTableOfContentsItem({ title: 'Center', url: 'center' });
+        this.addTableOfContentsItem({ title: 'No dimming', url: 'noDim' });
+        this.addTableOfContentsItem({ title: 'Draggable', url: 'draggable' });
+        this.addTableOfContentsItem({ title: 'Notification', url: 'notification' });
+        this.addTableOfContentsItem({ title: 'Use template', url: 'template' });
+        this.addTableOfContentsItem({ title: 'Nested popups', url: 'nested' });
+        this.addTableOfContentsItem({ title: 'Update controls', url: 'controls' });
+        this.addTableOfContentsItem({ title: 'Update title', url: 'title' });
+        this.addTableOfContentsItem({ title: 'Update content', url: 'content' });
+
         initFullWidthPopup();
         initCloseBtnPopup();
         initMessageScrollPopup();
