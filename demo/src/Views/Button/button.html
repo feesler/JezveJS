@@ -30,106 +30,35 @@
                         <h1>Button</h1>
 
                         <div class="content-container">
-                            <h2 id="parse">Parse component from DOM</h2>
-                            <section>
-                                <div class="buttons-list">
-                                    <input id="inputBtn" class="btn" type="button" value="Input">
-
-                                    <button id="createBtn" class="btn" type="button">
-                                        <svg class="btn__icon" viewBox="0 0 24 24">
-                                            <path d="m11 4v7h-7v2l7 1e-4v7h2v-7l7-1e-4v-2h-7v-7l-2-1e-5z" />
-                                        </svg>
-                                        <span class="btn__content">Create</span>
-                                    </button>
-
-                                    <button id="updateBtn" class="btn" type="button">
-                                        <svg class="btn__icon" viewBox="0 0 24 24">
-                                            <use href="#update" />
-                                        </svg>
-                                        <span class="btn__content">Update</span>
-                                    </button>
-
-                                    <div id="deleteBtn" class="btn">
-                                        <svg class="btn__icon" version="1.1" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <use href="#del" />
-                                        </svg>
-                                        <span class="btn__content">Delete</span>
-                                    </div>
-                                </div>
-                            </section>
-
-                            <h2 id="button">Button component</h2>
-                            <section>
-                                <div id="dynamicButton" class="buttons-list"></div>
-                                <div class="logs-container">
-                                    <label>Events log</label>
-                                    <textarea id="eventsLog"></textarea>
-                                </div>
-                            </section>
-
-                            <h2 id="link">Link component</h2>
-                            <section>
-                                <div id="dynamicLink"></div>
-                            </section>
-
-                            <h2 id="static">Static component</h2>
-                            <section>
-                                <div id="staticBtn"></div>
-                            </section>
-
-                            <h2 id="border">Styled border</h2>
-                            <section>
-                                <div id="borderBtn"></div>
-                            </section>
-
-                            <h2 id="custom">Custom content</h2>
-                            <section>
-                                <div id="customBtn"></div>
-                            </section>
-
-                            <h2 id="background">Styled background</h2>
-                            <section>
-                                <div id="backgroundBtn"></div>
-                            </section>
-
-                            <h2 id="fullwidth">Full width</h2>
-                            <section>
-                                <div id="fullwidthContainer" class="fullwidth-container"></div>
-                            </section>
-
-                            <h2 id="close">Close button</h2>
-                            <section>
-                                <div id="closeBtn"></div>
-                            </section>
-
-                            <h2 id="notitle">No title</h2>
-                            <section>
-                                <div id="noTitleBtn"></div>
-                            </section>
-
-                            <h2 id="noicon">No icon</h2>
-                            <section>
-                                <div id="noIconBtn"></div>
-                            </section>
-
-                            <h2 id="disabled">Disabled component</h2>
-                            <section>
-                                <div id="disabledContainer" class="buttons-list"></div>
-                                <div class="section-controls">
-                                    <button id="toggleEnableButtonBtn" class="btn action-btn" type="button">Enable
-                                        button</button>
-                                    <button id="toggleEnableLinkBtn" class="btn action-btn" type="button">Enable
-                                        link</button>
-                                    <button id="toggleIconBtn" class="btn action-btn" type="button">Remove icon</button>
-                                    <button id="toggleTitleBtn" class="btn action-btn" type="button">Remove
-                                        title</button>
-                                </div>
-                            </section>
                         </div>
                     </main>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div hidden>
+        <input id="inputBtn" class="btn" type="button" value="Input">
+
+        <button id="createBtn" class="btn" type="button">
+            <svg class="btn__icon" viewBox="0 0 24 24">
+                <path d="m11 4v7h-7v2l7 1e-4v7h2v-7l7-1e-4v-2h-7v-7l-2-1e-5z" />
+            </svg>
+            <span class="btn__content">Create</span>
+        </button>
+
+        <button id="updateBtn" class="btn" type="button">
+            <svg class="btn__icon" viewBox="0 0 24 24">
+                <use href="#update" />
+            </svg>
+            <span class="btn__content">Update</span>
+        </button>
+
+        <div id="deleteBtn" class="btn">
+            <svg class="btn__icon" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <use href="#del" />
+            </svg>
+            <span class="btn__content">Delete</span>
         </div>
     </div>
 
