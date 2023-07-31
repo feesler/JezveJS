@@ -5,6 +5,7 @@ import { Offcanvas } from 'jezvejs/Offcanvas';
 import * as App from './app.js';
 import { NavigationMenu } from '../Components/NavigationMenu/NavigationMenu.js';
 import { TableOfContents } from '../Components/TableOfContents/TableOfContents.js';
+import { DemoSection } from '../Components/DemoSection/DemoSection.js';
 
 /**
  * Demo view base class
@@ -86,6 +87,30 @@ export class DemoView extends View {
             lastSection.items.push({ title, url });
 
             return newState;
+        });
+    }
+
+    addSection(options = {}) {
+        const {
+            id,
+            title,
+            description,
+            content,
+        } = options;
+
+        const container = document.querySelector('.content-container');
+
+        const section = DemoSection.create({
+            id,
+            title,
+            description,
+            content,
+        });
+        container.append(section.elem);
+
+        this.addTableOfContentsItem({
+            title,
+            url: id,
         });
     }
 
