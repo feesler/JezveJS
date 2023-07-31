@@ -376,19 +376,18 @@ class LineChartView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Change \'columnWidth\' and \'groupsGap\'', url: 'columnWidth' });
-        this.addTableOfContentsItem({ title: '\'fitToWidth\' option', url: 'fitToWidth' });
-        this.addTableOfContentsItem({ title: '\'autoScale\' and \'drawNodeCircles\' options', url: 'autoScale' });
-        this.addTableOfContentsItem({ title: 'Callbacks + \'animate\' option', url: 'callbacks' });
-        this.addTableOfContentsItem({ title: 'Multiple series', url: 'multipleSeries' });
-        this.addTableOfContentsItem({ title: 'Stacked + Custom legend', url: 'stacked' });
-        this.addTableOfContentsItem({ title: 'Stacked with negative values', url: 'stackedNegative' });
-        this.addTableOfContentsItem({ title: 'No data', url: 'noData' });
-        this.addTableOfContentsItem({ title: 'Single negative value', url: 'singleNegative' });
-        this.addTableOfContentsItem({ title: 'Only positive values', url: 'onlyPositive' });
-        this.addTableOfContentsItem({ title: 'Negative and positive values', url: 'negativePositive' });
-        this.addTableOfContentsItem({ title: 'Set data', url: 'setData' });
+        this.addContentsMenuItem({ title: 'Change \'columnWidth\' and \'groupsGap\'', url: 'columnWidth' });
+        this.addContentsMenuItem({ title: '\'fitToWidth\' option', url: 'fitToWidth' });
+        this.addContentsMenuItem({ title: '\'autoScale\' and \'drawNodeCircles\' options', url: 'autoScale' });
+        this.addContentsMenuItem({ title: 'Callbacks + \'animate\' option', url: 'callbacks' });
+        this.addContentsMenuItem({ title: 'Multiple series', url: 'multipleSeries' });
+        this.addContentsMenuItem({ title: 'Stacked + Custom legend', url: 'stacked' });
+        this.addContentsMenuItem({ title: 'Stacked with negative values', url: 'stackedNegative' });
+        this.addContentsMenuItem({ title: 'No data', url: 'noData' });
+        this.addContentsMenuItem({ title: 'Single negative value', url: 'singleNegative' });
+        this.addContentsMenuItem({ title: 'Only positive values', url: 'onlyPositive' });
+        this.addContentsMenuItem({ title: 'Negative and positive values', url: 'negativePositive' });
+        this.addContentsMenuItem({ title: 'Set data', url: 'setData' });
 
         columnWidthAndGap();
         fitToWidth();

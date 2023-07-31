@@ -117,17 +117,16 @@ class PaginatorView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
-        this.addTableOfContentsItem({ title: 'Styled', url: 'styled' });
-        this.addTableOfContentsItem({ title: 'Arrows', url: 'arrows' });
-        this.addTableOfContentsItem({ title: 'Allow active link', url: 'activeLink' });
-        this.addTableOfContentsItem({ title: 'Custom URL and page parameter', url: 'customUrl' });
-        this.addTableOfContentsItem({ title: 'No URL', url: 'noUrl' });
-        this.addTableOfContentsItem({ title: 'Callbacks', url: 'callbacks' });
-        this.addTableOfContentsItem({ title: 'Parse component', url: 'parse' });
-        this.addTableOfContentsItem({ title: 'showSingleItem: true', url: 'showSingleItem' });
-        this.addTableOfContentsItem({ title: 'showSingleItem: false', url: 'hideSingleItem' });
+        this.addContentsMenuItem({ title: 'Default settings', url: 'default' });
+        this.addContentsMenuItem({ title: 'Styled', url: 'styled' });
+        this.addContentsMenuItem({ title: 'Arrows', url: 'arrows' });
+        this.addContentsMenuItem({ title: 'Allow active link', url: 'activeLink' });
+        this.addContentsMenuItem({ title: 'Custom URL and page parameter', url: 'customUrl' });
+        this.addContentsMenuItem({ title: 'No URL', url: 'noUrl' });
+        this.addContentsMenuItem({ title: 'Callbacks', url: 'callbacks' });
+        this.addContentsMenuItem({ title: 'Parse component', url: 'parse' });
+        this.addContentsMenuItem({ title: 'showSingleItem: true', url: 'showSingleItem' });
+        this.addContentsMenuItem({ title: 'showSingleItem: false', url: 'hideSingleItem' });
 
         initSimple();
         initStyled();

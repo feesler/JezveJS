@@ -85,18 +85,17 @@ class ProgressView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsSection({ title: 'Progress' });
-        this.addTableOfContentsItem({ title: 'Default settings', url: 'progressDefault' });
-        this.addTableOfContentsItem({ title: 'Styled', url: 'progressStyled' });
+        this.addSectionsGroup({ title: 'Progress' });
+        this.addContentsMenuItem({ title: 'Default settings', url: 'progressDefault' });
+        this.addContentsMenuItem({ title: 'Styled', url: 'progressStyled' });
 
-        this.addTableOfContentsSection({ title: 'IndetermProgress' });
-        this.addTableOfContentsItem({ title: '300px width, 3 sec', url: 'indeterm300' });
-        this.addTableOfContentsItem({ title: '600px width, 5 sec', url: 'indeterm600' });
-        this.addTableOfContentsItem({ title: 'Styled', url: 'indetermStyled' });
+        this.addSectionsGroup({ title: 'IndetermProgress' });
+        this.addContentsMenuItem({ title: '300px width, 3 sec', url: 'indeterm300' });
+        this.addContentsMenuItem({ title: '600px width, 5 sec', url: 'indeterm600' });
+        this.addContentsMenuItem({ title: 'Styled', url: 'indetermStyled' });
 
-        this.addTableOfContentsSection({ title: 'Spinner' });
-        this.addTableOfContentsItem({ title: 'Default settings', url: 'spinnerDefault' });
+        this.addSectionsGroup({ title: 'Spinner' });
+        this.addContentsMenuItem({ title: 'Default settings', url: 'spinnerDefault' });
 
         initDefaultProgress();
         initStyledProgress();

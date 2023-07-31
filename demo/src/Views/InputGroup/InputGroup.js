@@ -39,14 +39,13 @@ class InputGroupView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Input group with text', url: 'text' });
-        this.addTableOfContentsItem({ title: 'Input group with button', url: 'button' });
-        this.addTableOfContentsItem({ title: 'Multiple inputs', url: 'multipleInputs' });
-        this.addTableOfContentsItem({ title: 'Inner buttons', url: 'innerButton' });
-        this.addTableOfContentsItem({ title: 'Input outer container', url: 'outerContainer' });
-        this.addTableOfContentsItem({ title: 'Disabled', url: 'disabled' });
-        this.addTableOfContentsItem({ title: 'Create', url: 'create' });
+        this.addContentsMenuItem({ title: 'Input group with text', url: 'text' });
+        this.addContentsMenuItem({ title: 'Input group with button', url: 'button' });
+        this.addContentsMenuItem({ title: 'Multiple inputs', url: 'multipleInputs' });
+        this.addContentsMenuItem({ title: 'Inner buttons', url: 'innerButton' });
+        this.addContentsMenuItem({ title: 'Input outer container', url: 'outerContainer' });
+        this.addContentsMenuItem({ title: 'Disabled', url: 'disabled' });
+        this.addContentsMenuItem({ title: 'Create', url: 'create' });
 
         initParsed();
         initDynamic();

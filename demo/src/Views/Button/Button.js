@@ -17,8 +17,6 @@ class ButtonView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-
         this.initParsed();
         this.initDynamicButton();
         this.initDynamicLink();

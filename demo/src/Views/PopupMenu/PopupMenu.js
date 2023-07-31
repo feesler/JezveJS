@@ -151,10 +151,9 @@ class PopupMenuView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Attach to button', url: 'attach' });
-        this.addTableOfContentsItem({ title: 'Absolute position', url: 'absolute' });
-        this.addTableOfContentsItem({ title: 'Attach to list item', url: 'list' });
+        this.addContentsMenuItem({ title: 'Attach to button', url: 'attach' });
+        this.addContentsMenuItem({ title: 'Absolute position', url: 'absolute' });
+        this.addContentsMenuItem({ title: 'Attach to list item', url: 'list' });
 
         initDefault();
         initAttached();

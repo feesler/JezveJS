@@ -51,10 +51,9 @@ class SwitchView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Parse component', url: 'parse' });
-        this.addTableOfContentsItem({ title: 'Create component', url: 'create' });
-        this.addTableOfContentsItem({ title: 'Large', url: 'large' });
+        this.addContentsMenuItem({ title: 'Parse component', url: 'parse' });
+        this.addContentsMenuItem({ title: 'Create component', url: 'create' });
+        this.addContentsMenuItem({ title: 'Large', url: 'large' });
 
         initParsed();
         initDynamic();

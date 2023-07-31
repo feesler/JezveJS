@@ -105,12 +105,11 @@ class CollapsibleView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
-        this.addTableOfContentsItem({ title: 'Styled container', url: 'styled' });
-        this.addTableOfContentsItem({ title: 'Custom header', url: 'customHeader' });
-        this.addTableOfContentsItem({ title: 'toggleOnClick option', url: 'toggleOnClick' });
-        this.addTableOfContentsItem({ title: 'Methods', url: 'methods' });
+        this.addContentsMenuItem({ title: 'Default settings', url: 'default' });
+        this.addContentsMenuItem({ title: 'Styled container', url: 'styled' });
+        this.addContentsMenuItem({ title: 'Custom header', url: 'customHeader' });
+        this.addContentsMenuItem({ title: 'toggleOnClick option', url: 'toggleOnClick' });
+        this.addContentsMenuItem({ title: 'Methods', url: 'methods' });
 
         initSimple();
         initStyled();

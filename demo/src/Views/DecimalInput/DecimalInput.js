@@ -77,14 +77,13 @@ class DecimalInputView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
-        this.addTableOfContentsItem({ title: 'Limit digits', url: 'limit' });
-        this.addTableOfContentsItem({ title: 'Integer', url: 'integer' });
-        this.addTableOfContentsItem({ title: 'Change digits after decimal point value', url: 'changeProps' });
-        this.addTableOfContentsItem({ title: 'Disable negative values', url: 'positive' });
-        this.addTableOfContentsItem({ title: 'Multiple leading zeros', url: 'leadzero' });
-        this.addTableOfContentsItem({ title: 'Create input element', url: 'create' });
+        this.addContentsMenuItem({ title: 'Default settings', url: 'default' });
+        this.addContentsMenuItem({ title: 'Limit digits', url: 'limit' });
+        this.addContentsMenuItem({ title: 'Integer', url: 'integer' });
+        this.addContentsMenuItem({ title: 'Change digits after decimal point value', url: 'changeProps' });
+        this.addContentsMenuItem({ title: 'Disable negative values', url: 'positive' });
+        this.addContentsMenuItem({ title: 'Multiple leading zeros', url: 'leadzero' });
+        this.addContentsMenuItem({ title: 'Create input element', url: 'create' });
 
         initDefault();
         initDigitsLimit();

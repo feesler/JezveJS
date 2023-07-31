@@ -525,22 +525,21 @@ class HistogramView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Change \'columnWidth\' and \'groupsGap\'', url: 'columnWidth' });
-        this.addTableOfContentsItem({ title: '\'fitToWidth\' option', url: 'fitToWidth' });
-        this.addTableOfContentsItem({ title: '\'autoScale\' option', url: 'autoScale' });
-        this.addTableOfContentsItem({ title: 'Callbacks', url: 'callbacks' });
-        this.addTableOfContentsItem({ title: 'Multi column + Legend', url: 'multiColumn' });
-        this.addTableOfContentsItem({ title: 'Stacked + Custom legend', url: 'stacked' });
-        this.addTableOfContentsItem({ title: 'Stacked + Custom legend', url: 'stacked' });
-        this.addTableOfContentsItem({ title: 'Stacked with negative values', url: 'stackedNegative' });
-        this.addTableOfContentsItem({ title: 'Stacked and grouped', url: 'grouped' });
-        this.addTableOfContentsItem({ title: 'Stacked and grouped with custom categories', url: 'customCategories' });
-        this.addTableOfContentsItem({ title: 'No data', url: 'noData' });
-        this.addTableOfContentsItem({ title: 'Single negative value', url: 'singleNagative' });
-        this.addTableOfContentsItem({ title: 'Only positive values', url: 'onlyPositive' });
-        this.addTableOfContentsItem({ title: 'Negative and positive values', url: 'negativePositive' });
-        this.addTableOfContentsItem({ title: 'Set data', url: 'setData' });
+        this.addContentsMenuItem({ title: 'Change \'columnWidth\' and \'groupsGap\'', url: 'columnWidth' });
+        this.addContentsMenuItem({ title: '\'fitToWidth\' option', url: 'fitToWidth' });
+        this.addContentsMenuItem({ title: '\'autoScale\' option', url: 'autoScale' });
+        this.addContentsMenuItem({ title: 'Callbacks', url: 'callbacks' });
+        this.addContentsMenuItem({ title: 'Multi column + Legend', url: 'multiColumn' });
+        this.addContentsMenuItem({ title: 'Stacked + Custom legend', url: 'stacked' });
+        this.addContentsMenuItem({ title: 'Stacked + Custom legend', url: 'stacked' });
+        this.addContentsMenuItem({ title: 'Stacked with negative values', url: 'stackedNegative' });
+        this.addContentsMenuItem({ title: 'Stacked and grouped', url: 'grouped' });
+        this.addContentsMenuItem({ title: 'Stacked and grouped with custom categories', url: 'customCategories' });
+        this.addContentsMenuItem({ title: 'No data', url: 'noData' });
+        this.addContentsMenuItem({ title: 'Single negative value', url: 'singleNagative' });
+        this.addContentsMenuItem({ title: 'Only positive values', url: 'onlyPositive' });
+        this.addContentsMenuItem({ title: 'Negative and positive values', url: 'negativePositive' });
+        this.addContentsMenuItem({ title: 'Set data', url: 'setData' });
 
         columnWidthAndGap();
         fitToWidth();

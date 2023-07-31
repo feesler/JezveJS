@@ -58,8 +58,6 @@ class ChartGridView extends DemoView {
     onStart() {
         runTests();
 
-        this.initTableOfContents();
-
         this.initHistogram();
         this.initLineChart();
     }

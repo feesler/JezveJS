@@ -47,17 +47,23 @@ export class DemoView extends View {
      * Initializes table of contents menu
      */
     initTableOfContents() {
+        if (this.tocMenu) {
+            return;
+        }
+
         this.tocMenu = TableOfContents.create();
 
         const mainHeader = document.querySelector('.page-content-wrap h1');
         mainHeader.after(this.tocMenu.elem);
     }
 
-    addTableOfContentsSection(options = {}) {
+    addSectionsGroup(options = {}) {
         const {
             title = null,
             items = [],
         } = options;
+
+        this.initTableOfContents();
 
         this.tocMenu.setState((menuState) => ({
             ...menuState,
@@ -65,7 +71,7 @@ export class DemoView extends View {
         }));
     }
 
-    addTableOfContentsItem(options = {}) {
+    addContentsMenuItem(options = {}) {
         const {
             title = null,
             url = null,
@@ -74,6 +80,8 @@ export class DemoView extends View {
         if (!title || !url) {
             throw new Error('Invalid section data');
         }
+
+        this.initTableOfContents();
 
         this.tocMenu.setState((menuState) => {
             const newState = {
@@ -108,7 +116,7 @@ export class DemoView extends View {
         });
         container.append(section.elem);
 
-        this.addTableOfContentsItem({
+        this.addContentsMenuItem({
             title,
             url: id,
         });

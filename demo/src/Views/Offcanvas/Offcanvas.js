@@ -76,13 +76,12 @@ class OffcanvasView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
-        this.addTableOfContentsItem({ title: 'Right placement', url: 'right' });
-        this.addTableOfContentsItem({ title: 'Top placement', url: 'top' });
-        this.addTableOfContentsItem({ title: 'Bottom placement', url: 'bottom' });
-        this.addTableOfContentsItem({ title: 'Responsive', url: 'responsive' });
-        this.addTableOfContentsItem({ title: '\'useScrollLock\' option', url: 'useScrollLock' });
+        this.addContentsMenuItem({ title: 'Default settings', url: 'default' });
+        this.addContentsMenuItem({ title: 'Right placement', url: 'right' });
+        this.addContentsMenuItem({ title: 'Top placement', url: 'top' });
+        this.addContentsMenuItem({ title: 'Bottom placement', url: 'bottom' });
+        this.addContentsMenuItem({ title: 'Responsive', url: 'responsive' });
+        this.addContentsMenuItem({ title: '\'useScrollLock\' option', url: 'useScrollLock' });
 
         initDefault();
         initRight();

@@ -566,24 +566,23 @@ class DragAndDropView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Drag original object', url: 'original' });
-        this.addTableOfContentsItem({ title: 'Drag copy object', url: 'copy' });
-        this.addTableOfContentsItem({ title: 'Drag only by X axis', url: 'xAxis' });
-        this.addTableOfContentsItem({ title: 'Sortable implementation', url: 'sortable' });
-        this.addTableOfContentsItem({ title: 'Sortable list', url: 'sortableList' });
-        this.addTableOfContentsItem({ title: 'Exchangable list', url: 'exchange' });
-        this.addTableOfContentsItem({ title: 'Custom groups', url: 'customGroup' });
-        this.addTableOfContentsItem({ title: 'Tree sort', url: 'tree' });
-        this.addTableOfContentsItem({ title: 'Tree exchange', url: 'treeExchange' });
-        this.addTableOfContentsItem({ title: 'Sortable table with TBODY rows', url: 'table1' });
-        this.addTableOfContentsItem({ title: 'Sortable table with single TBODY', url: 'table2' });
-        this.addTableOfContentsItem({ title: 'Sortable table without TBODY', url: 'table3' });
-        this.addTableOfContentsItem({ title: 'Drag handle option', url: 'handle' });
-        this.addTableOfContentsItem({ title: 'onlyRootHandle option', url: 'onlyRootHandle' });
-        this.addTableOfContentsItem({ title: 'Sortable list with drag handle option', url: 'listHandle' });
-        this.addTableOfContentsItem({ title: 'Sortable with single item', url: 'single' });
-        this.addTableOfContentsItem({ title: 'allowSingleItemSort option', url: 'allowSingleItemSort' });
+        this.addContentsMenuItem({ title: 'Drag original object', url: 'original' });
+        this.addContentsMenuItem({ title: 'Drag copy object', url: 'copy' });
+        this.addContentsMenuItem({ title: 'Drag only by X axis', url: 'xAxis' });
+        this.addContentsMenuItem({ title: 'Sortable implementation', url: 'sortable' });
+        this.addContentsMenuItem({ title: 'Sortable list', url: 'sortableList' });
+        this.addContentsMenuItem({ title: 'Exchangable list', url: 'exchange' });
+        this.addContentsMenuItem({ title: 'Custom groups', url: 'customGroup' });
+        this.addContentsMenuItem({ title: 'Tree sort', url: 'tree' });
+        this.addContentsMenuItem({ title: 'Tree exchange', url: 'treeExchange' });
+        this.addContentsMenuItem({ title: 'Sortable table with TBODY rows', url: 'table1' });
+        this.addContentsMenuItem({ title: 'Sortable table with single TBODY', url: 'table2' });
+        this.addContentsMenuItem({ title: 'Sortable table without TBODY', url: 'table3' });
+        this.addContentsMenuItem({ title: 'Drag handle option', url: 'handle' });
+        this.addContentsMenuItem({ title: 'onlyRootHandle option', url: 'onlyRootHandle' });
+        this.addContentsMenuItem({ title: 'Sortable list with drag handle option', url: 'listHandle' });
+        this.addContentsMenuItem({ title: 'Sortable with single item', url: 'single' });
+        this.addContentsMenuItem({ title: 'allowSingleItemSort option', url: 'allowSingleItemSort' });
 
         initOriginalAvatar();
         initClonedAvatar();

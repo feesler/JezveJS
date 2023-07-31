@@ -131,12 +131,11 @@ class TabListView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsItem({ title: 'Default settings', url: 'default' });
-        this.addTableOfContentsItem({ title: 'Styled', url: 'styled' });
-        this.addTableOfContentsItem({ title: 'Hidden item', url: 'hiddenItem' });
-        this.addTableOfContentsItem({ title: 'Disabled item', url: 'disabledItem' });
-        this.addTableOfContentsItem({ title: 'Disabled component', url: 'disabled' });
+        this.addContentsMenuItem({ title: 'Default settings', url: 'default' });
+        this.addContentsMenuItem({ title: 'Styled', url: 'styled' });
+        this.addContentsMenuItem({ title: 'Hidden item', url: 'hiddenItem' });
+        this.addContentsMenuItem({ title: 'Disabled item', url: 'disabledItem' });
+        this.addContentsMenuItem({ title: 'Disabled component', url: 'disabled' });
 
         initDefault();
         initStyled();

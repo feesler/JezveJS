@@ -121,16 +121,15 @@ class CheckboxView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initTableOfContents();
-        this.addTableOfContentsSection({ title: 'Checkbox' });
-        this.addTableOfContentsItem({ title: 'Parse component from DOM', url: 'checkboxParse' });
-        this.addTableOfContentsItem({ title: 'Custom icon', url: 'checkboxIcon' });
-        this.addTableOfContentsItem({ title: 'Methods', url: 'checkboxMethods' });
-        this.addTableOfContentsItem({ title: 'Large', url: 'checkboxLarge' });
+        this.addSectionsGroup({ title: 'Checkbox' });
+        this.addContentsMenuItem({ title: 'Parse component from DOM', url: 'checkboxParse' });
+        this.addContentsMenuItem({ title: 'Custom icon', url: 'checkboxIcon' });
+        this.addContentsMenuItem({ title: 'Methods', url: 'checkboxMethods' });
+        this.addContentsMenuItem({ title: 'Large', url: 'checkboxLarge' });
 
-        this.addTableOfContentsSection({ title: 'Radio' });
-        this.addTableOfContentsItem({ title: 'Parse component from DOM', url: 'radioParse' });
-        this.addTableOfContentsItem({ title: 'Methods', url: 'radioMethods' });
+        this.addSectionsGroup({ title: 'Radio' });
+        this.addContentsMenuItem({ title: 'Parse component from DOM', url: 'radioParse' });
+        this.addContentsMenuItem({ title: 'Methods', url: 'radioMethods' });
 
         initParsed();
         initIcon();
