@@ -46,7 +46,7 @@ export class DecimalInputView extends AppView {
         const inputNames = Object.keys(inputSelectors);
 
         const values = await evaluate((...elems) => (
-            elems.map((el) => el.value)
+            elems.map((el) => el?.value)
         ), ...inputNames.map((name) => res[name].elem));
 
         values.forEach((value, index) => {

@@ -1,63 +1,139 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Input';
-import { ge, setEvents } from 'jezvejs';
+import { createElement } from 'jezvejs';
 import { DateInput } from 'jezvejs/DateInput';
 
 import { DemoView } from '../../Application/DemoView.js';
 
-const onInput = (e) => {
-    ge('inputStatus').textContent = e.target.value;
-};
-
-const onSubmitForm = (e) => {
-    e.preventDefault();
-
-    ge('formStatus').textContent = 'Form submit event fired';
-};
-
-const initDefault = () => {
-    setEvents(ge('dateForm'), { submit: (e) => onSubmitForm(e) });
-
-    DateInput.create({
-        elem: ge('dateinput'),
-        onInput: (e) => onInput(e),
-    });
-};
-
-const initPlaceholder = () => {
-    DateInput.create({ elem: ge('dateInputPh'), placeholder: 'Input date' });
-};
-
-const initCreate = () => {
-    const dateInput = DateInput.create({
-        className: 'input',
-        placeholder: 'Created input element',
-    });
-    const container = ge('createContainer');
-    container.append(dateInput.elem);
-};
-
-const initLocales = () => {
-    DateInput.create({ elem: ge('usDateInput'), locales: ['en-US'] });
-    DateInput.create({ elem: ge('koDateInput'), locales: ['ko-KR'] });
-    DateInput.create({ elem: ge('ruDateInput'), locales: ['ru-RU'] });
-    DateInput.create({ elem: ge('esDateInput'), locales: ['es'] });
-};
-
+/**
+ * DateInput component demo view
+ */
 class DateInputView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        this.addContentsMenuItem({ title: 'Default settings', url: 'default' });
-        this.addContentsMenuItem({ title: 'Placeholder', url: 'placeholder' });
-        this.addContentsMenuItem({ title: 'Create input element', url: 'create' });
-        this.addContentsMenuItem({ title: 'Locales', url: 'locale' });
+        this.initDefault();
+        this.initPlaceholder();
+        this.initCreate();
+        this.initLocales();
+    }
 
-        initDefault();
-        initPlaceholder();
-        initCreate();
-        initLocales();
+    initDefault() {
+        const input = createElement('input', {
+            props: {
+                id: 'dateinput',
+                className: 'input',
+                value: '01.02.3456',
+            },
+        });
+        const inputStatusElem = createElement('div', { props: { id: 'inputStatus' } });
+        const formStatusElem = createElement('div', { props: { id: 'formStatus' } });
+
+        const form = createElement('form', {
+            children: [
+                input,
+                createElement('input', { attrs: { type: 'submit', hidden: '' } }),
+            ],
+            events: {
+                submit: (e) => {
+                    e.preventDefault();
+                    formStatusElem.textContent = 'Form submit event fired';
+                },
+            },
+        });
+
+        DateInput.create({
+            elem: input,
+            onInput: (e) => {
+                inputStatusElem.textContent = e.target.value;
+            },
+        });
+
+        this.addSection({
+            id: 'default',
+            title: 'Default settings',
+            content: [
+                form,
+                inputStatusElem,
+                formStatusElem,
+            ],
+        });
+    }
+
+    initPlaceholder() {
+        const input = createElement('input', {
+            props: {
+                id: 'dateInputPh',
+                className: 'input',
+            },
+        });
+
+        DateInput.create({ elem: input, placeholder: 'Input date' });
+
+        this.addSection({
+            id: 'placeholder',
+            title: 'Placeholder',
+            content: input,
+        });
+    }
+
+    initCreate() {
+        this.addSection({
+            id: 'create',
+            title: 'Create input element',
+            content: createElement('div', {
+                props: {
+                    id: 'createContainer',
+                    className: 'section-content',
+                },
+                children: DateInput.create({
+                    className: 'input',
+                    placeholder: 'Created input element',
+                }).elem,
+            }),
+        });
+    }
+
+    initLocales() {
+        const localeInputs = [
+            { id: 'usDateInput', title: 'en-US', locales: ['en-US'] },
+            { id: 'koDateInput', title: 'ko-KR', locales: ['ko-KR'] },
+            { id: 'ruDateInput', title: 'ru-RU', locales: ['ru-RU'] },
+            { id: 'esDateInput', title: 'es', locales: ['es'] },
+        ];
+
+        this.addSection({
+            id: 'locale',
+            title: 'Locales',
+            content: [
+                createElement('div', {
+                    props: { className: 'locales-container' },
+                    children: localeInputs.map((item) => (
+                        createElement('div', {
+                            props: { className: 'locales-item' },
+                            children: [
+                                createElement('h3', { props: { textContent: item.title } }),
+                                DateInput.create({
+                                    id: item.id,
+                                    locales: item.locales,
+                                    className: 'input',
+                                }).elem,
+                            ],
+                        })
+                    )),
+                }),
+                createElement('div', {
+                    props: { className: 'section-controls' },
+                    children: createElement('input', {
+                        props: {
+                            id: 'testValueInput',
+                            className: 'input',
+                        },
+                    }),
+                }),
+            ],
+        });
     }
 }
 
