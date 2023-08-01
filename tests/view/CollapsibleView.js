@@ -8,17 +8,17 @@ import { Collapsible } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
 const componentsList = [
-    'defaultContainer',
-    'styledContainer',
-    'custom',
-    'disabledToggle',
-    'methodsContainer',
+    'default',
+    'styled',
+    'customHeader',
+    'toggleOnClick',
+    'methods',
 ];
 
 const toggleableList = [
-    'defaultContainer',
-    'styledContainer',
-    'custom',
+    'default',
+    'styled',
+    'customHeader',
 ];
 
 export class CollapsibleView extends AppView {
@@ -26,11 +26,11 @@ export class CollapsibleView extends AppView {
         const res = {};
 
         await asyncMap(componentsList, async (id) => {
-            res[id] = await Collapsible.create(this, await query(`#${id} .collapsible`));
+            res[id] = await Collapsible.create(this, await query(`#${id} + .demo-section__content .collapsible`));
             assert(res[id], `Failed to initialize component '${id}'`);
         });
 
-        res.toggleDisabledBtn = { elem: await query(res.disabledToggle.elem, '.custom-header-btn') };
+        res.toggleDisabledBtn = { elem: await query(res.toggleOnClick.elem, '.custom-header-btn') };
         res.expandBtn = { elem: await query('#expandBtn') };
         res.collapseBtn = { elem: await query('#collapseBtn') };
         res.toggleBtn = { elem: await query('#toggleBtn') };
@@ -94,7 +94,7 @@ export class CollapsibleView extends AppView {
     }
 
     async toggleDisabled() {
-        this.model.disabledToggle.collapsed = !this.model.disabledToggle.collapsed;
+        this.model.toggleOnClick.collapsed = !this.model.toggleOnClick.collapsed;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.toggleDisabledBtn.elem));
@@ -103,7 +103,7 @@ export class CollapsibleView extends AppView {
     }
 
     async expand() {
-        this.model.methodsContainer.collapsed = false;
+        this.model.methods.collapsed = false;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.expandBtn.elem));
@@ -112,7 +112,7 @@ export class CollapsibleView extends AppView {
     }
 
     async collapse() {
-        this.model.methodsContainer.collapsed = true;
+        this.model.methods.collapsed = true;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.collapseBtn.elem));
@@ -121,7 +121,7 @@ export class CollapsibleView extends AppView {
     }
 
     async toggle() {
-        this.model.methodsContainer.collapsed = !this.model.methodsContainer.collapsed;
+        this.model.methods.collapsed = !this.model.methods.collapsed;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.toggleBtn.elem));
