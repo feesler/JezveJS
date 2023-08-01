@@ -17,6 +17,7 @@ export class DemoView extends View {
     preStart() {
         this.initNavigation();
         this.renderVersion();
+        this.initContainer();
     }
 
     /**
@@ -41,6 +42,13 @@ export class DemoView extends View {
 
         const navToggleBtn = document.querySelector('.nav-header .nav-toggle-btn');
         setEvents(navToggleBtn, { click: () => offcanvas.toggle() });
+    }
+
+    /**
+     * Initializes content container
+     */
+    initContainer() {
+        this.container = document.querySelector('.content-container');
     }
 
     /**
@@ -106,15 +114,13 @@ export class DemoView extends View {
             content,
         } = options;
 
-        const container = document.querySelector('.content-container');
-
         const section = DemoSection.create({
             id,
             title,
             description,
             content,
         });
-        container.append(section.elem);
+        this.container.append(section.elem);
 
         this.addContentsMenuItem({
             title,

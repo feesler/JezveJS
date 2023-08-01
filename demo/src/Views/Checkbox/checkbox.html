@@ -30,109 +30,55 @@
                         <h1>Checkbox</h1>
 
                         <div class="content-container">
-                            <h2 id="checkboxParse">Parse component from DOM</h2>
-                            <section class="row-section">
-                                <label id="defaultCheckboxNoLabel" class="checkbox">
-                                    <input type="checkbox" checked>
-                                    <span class="checkbox__check">
-                                        <svg class="checkbox__icon">
-                                            <use xlink:href="#check-icon"></use>
-                                        </svg>
-                                    </span>
-                                </label>
-
-                                <label id="circleCheckboxLabel" class="checkbox checkbox-circle">
-                                    <input type="checkbox" checked>
-                                    <span class="checkbox__check">
-                                        <svg class="checkbox__icon">
-                                            <use xlink:href="#check-icon"></use>
-                                        </svg>
-                                    </span>
-                                    <span class="checkbox__label">
-                                        <a href="#">Custom label content</a>
-                                    </span>
-                                </label>
-                            </section>
-
-                            <h2 id="checkboxMethods">Checkbox methods</h2>
-                            <section>
-                                <form id="dynamicContainer"></form>
-                                <div class="section-controls">
-                                    <button id="checkBtn" class="btn action-btn" type="button">Check</button>
-                                    <button id="uncheckBtn" class="btn action-btn" type="button">Uncheck</button>
-                                    <button id="toggleBtn" class="btn action-btn" type="button">Toggle</button>
-                                    <button id="enableBtn" class="btn action-btn" type="button">Enable</button>
-                                    <button id="disableBtn" class="btn action-btn" type="button">Disable</button>
-                                </div>
-                                <div class="section-controls">
-                                    <button id="changePropBtn" class="btn action-btn" type="button">Change
-                                        property</button>
-                                    <button id="resetBtn" class="btn action-btn" type="button">Reset form</button>
-                                </div>
-                            </section>
-
-                            <h2 id="checkboxIcon">Custom icon</h2>
-                            <section>
-                                <div id="iconContainer"></div>
-                            </section>
-
-                            <h2 id="checkboxLarge">Large + styled background</h2>
-                            <section>
-                                <div id="largeContainer"></div>
-                            </section>
-
-                            <h1>Radio</h1>
-
-                            <h2 id="radioParse">Parse component from DOM</h2>
-                            <section>
-                                <label id="defaultRadio1" class="radio">
-                                    <input name="radio1" type="radio" value="1" checked>
-                                    <span class="radio__check"></span>
-                                    <span class="radio__label">Value 1</span>
-                                </label>
-                                <label id="defaultRadio2" class="radio">
-                                    <input name="radio1" type="radio" value="2">
-                                    <span class="radio__check"></span>
-                                    <span class="radio__label">Value 2</span>
-                                </label>
-                                <label id="defaultRadio3" class="radio">
-                                    <input name="radio1" type="radio" value="3">
-                                    <span class="radio__check"></span>
-                                    <span class="radio__label">Value 3</span>
-                                </label>
-                                <label id="defaultRadio4" class="radio">
-                                    <input name="radio1" type="radio" value="4" disabled>
-                                    <span class="radio__check"></span>
-                                    <span class="radio__label">Value 4</span>
-                                </label>
-                            </section>
-
-                            <h2 id="radioMethods">Radio methods</h2>
-                            <section>
-                                <form id="dynamicRadioContainer"></form>
-                                <div class="section-controls">
-                                    <button id="checkRadioBtn" class="btn action-btn" type="button">Check</button>
-                                    <button id="uncheckRadioBtn" class="btn action-btn" type="button">Uncheck</button>
-                                    <button id="toggleRadioBtn" class="btn action-btn" type="button">Toggle</button>
-                                    <button id="enableRadioBtn" class="btn action-btn" type="button">Enable</button>
-                                    <button id="disableRadioBtn" class="btn action-btn" type="button">Disable</button>
-                                </div>
-                                <div class="section-controls">
-                                    <button id="changeRadioPropBtn" class="btn action-btn" type="button">Change
-                                        property</button>
-                                    <button id="resetRadioBtn" class="btn action-btn" type="button">Reset form</button>
-                                </div>
-                            </section>
-
-                            <div class="logs-container">
-                                <label>Events log</label>
-                                <textarea id="eventsLog"></textarea>
-                            </div>
                         </div>
                     </main>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div hidden>
+        <label id="defaultCheckboxNoLabel" class="checkbox">
+            <input type="checkbox" checked>
+            <span class="checkbox__check">
+                <svg class="checkbox__icon">
+                    <use xlink:href="#check-icon"></use>
+                </svg>
+            </span>
+        </label>
+
+        <label id="circleCheckboxLabel" class="checkbox checkbox-circle">
+            <input type="checkbox" checked>
+            <span class="checkbox__check">
+                <svg class="checkbox__icon">
+                    <use xlink:href="#check-icon"></use>
+                </svg>
+            </span>
+            <span class="checkbox__label">
+                <a href="#">Custom label content</a>
+            </span>
+        </label>
+
+        <label id="defaultRadio1" class="radio">
+            <input name="radio1" type="radio" value="1" checked>
+            <span class="radio__check"></span>
+            <span class="radio__label">Value 1</span>
+        </label>
+        <label id="defaultRadio2" class="radio">
+            <input name="radio1" type="radio" value="2">
+            <span class="radio__check"></span>
+            <span class="radio__label">Value 2</span>
+        </label>
+        <label id="defaultRadio3" class="radio">
+            <input name="radio1" type="radio" value="3">
+            <span class="radio__check"></span>
+            <span class="radio__label">Value 3</span>
+        </label>
+        <label id="defaultRadio4" class="radio">
+            <input name="radio1" type="radio" value="4" disabled>
+            <span class="radio__check"></span>
+            <span class="radio__label">Value 4</span>
+        </label>
     </div>
 
     <svg width="0" height="0" display="none" xmlns="http://www.w3.org/2000/svg">
