@@ -5,12 +5,8 @@ import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './ButtonView.scss';
-
-const addEventLog = (value) => {
-    const logElem = ge('eventsLog');
-    logElem.value += `${value}\r\n`;
-};
 
 class ButtonView extends DemoView {
     /**
@@ -58,18 +54,20 @@ class ButtonView extends DemoView {
     }
 
     initDynamicButton() {
+        const logsField = LogsField.create();
+
         const dynamicBtn = Button.create({
             title: 'Icon button',
             icon: 'update',
             className: 'circle-icon',
-            onClick: () => addEventLog('Update button clicked'),
+            onClick: () => logsField?.write('Update button clicked'),
         });
 
         const noTitleBtn = Button.create({
             type: 'submit',
             icon: 'del',
             className: 'circle-icon',
-            onClick: () => addEventLog('Del button clicked'),
+            onClick: () => logsField?.write('Del button clicked'),
         });
 
         const container = createElement('div', {
@@ -77,18 +75,10 @@ class ButtonView extends DemoView {
             children: [dynamicBtn.elem, noTitleBtn.elem],
         });
 
-        const logsContainer = createElement('div', {
-            props: { className: 'logs-container' },
-            children: [
-                createElement('label', { props: { textContent: 'Events log' } }),
-                createElement('textarea', { props: { id: 'eventsLog' } }),
-            ],
-        });
-
         this.addSection({
             id: 'button',
             title: 'Button component',
-            content: [container, logsContainer],
+            content: [container, logsField.elem],
         });
     }
 

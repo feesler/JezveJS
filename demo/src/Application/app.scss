@@ -194,23 +194,6 @@ section {
   }
 }
 
-/* Logs container */
-.logs-container {
-  display: flex;
-  flex-flow: column nowrap;
-  margin-top: 1rem;
-
-  textarea {
-    padding: 4px;
-    margin-top: 6px;
-    min-height: 1rem;
-    min-width: 300px;
-    line-height: 1.5;
-    overflow-y: auto;
-    border: 1px solid #b4b4b4;
-  }
-}
-
 /* Locales container */
 .locales-container {
   display: flex;

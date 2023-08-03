@@ -1,5 +1,4 @@
 import 'jezvejs/style';
-import 'jezvejs/style/Button';
 import { createElement, ge } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Checkbox } from 'jezvejs/Checkbox';
@@ -7,6 +6,7 @@ import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './CheckboxView.scss';
 
 class CheckboxView extends DemoView {
@@ -28,26 +28,12 @@ class CheckboxView extends DemoView {
     }
 
     initLogs() {
-        if (this.logsTextarea) {
-            return;
-        }
-
-        this.logsTextarea = createElement('textarea');
-        const logs = createElement('div', {
-            props: { className: 'logs-container' },
-            children: [
-                createElement('label', { props: { textContent: 'Events log' } }),
-                this.logsTextarea,
-            ],
-        });
-
-        this.container.append(logs);
+        this.logsField = LogsField.create();
+        this.container.append(this.logsField.elem);
     }
 
     addEventLog(value) {
-        if (this.logsTextarea) {
-            this.logsTextarea.value += `${value}\r\n`;
-        }
+        this.logsField?.write(value);
     }
 
     initParsed() {
