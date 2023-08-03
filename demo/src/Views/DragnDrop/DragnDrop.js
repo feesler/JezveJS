@@ -4,9 +4,10 @@ import {
     createElement,
     asArray,
 } from 'jezvejs';
+import { Button } from 'jezvejs/Button';
+import { Icon } from 'jezvejs/Icon';
 import { Sortable } from 'jezvejs/Sortable';
 import { SortableListContainer } from 'jezvejs/SortableListContainer';
-import { Icon } from 'jezvejs/Icon';
 
 import { DemoView } from '../../Application/DemoView.js';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
@@ -15,6 +16,7 @@ import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import { ListItem } from './impl/ListItem.js';
 import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
 import { XAxisDragZone } from './impl/XAxisDragZone.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './DragnDropView.scss';
 
 const logTo = (target, value) => {
@@ -24,23 +26,6 @@ const logTo = (target, value) => {
     }
 
     elem.value += `${value}\r\n`;
-};
-
-const initOriginalAvatar = () => {
-    DefaultDragZone.create({ elem: ge('sq1'), dragOriginal: true });
-    OriginalDropTarget.create({ elem: ge('drop_area1') });
-};
-
-const initClonedAvatar = () => {
-    DefaultDragZone.create({ elem: ge('sq2') });
-    DefaultDragZone.create({ elem: ge('sq3') });
-    DefaultDropTarget.create({ elem: ge('inner_drop1') });
-    DefaultDropTarget.create({ elem: ge('inner_drop2') });
-};
-
-const initXAxisAvatar = () => {
-    XAxisDragZone.create({ elem: ge('xAxisSlider') });
-    XAxisDropTarget.create({ elem: ge('xAxisArea') });
 };
 
 const renderTileIcon = () => createElement('span', {
@@ -67,24 +52,6 @@ const renderTilePlaceholder = () => createElement('div', {
     props: { className: 'sortable-tile sortable-tile_placeholder' },
 });
 
-const initSortable = () => {
-    const sortableContainer = ge('sortableContainer');
-
-    for (let i = 1; i <= 6; i += 1) {
-        const item = (i === 2)
-            ? renderTilePlaceholder()
-            : renderTile(`Item ${i}`, i === 3);
-        sortableContainer.append(item);
-    }
-
-    Sortable.create({
-        elem: sortableContainer,
-        selector: '.sortable-tile',
-        placeholderClass: 'sortable-tile_placeholder',
-        group: 'tiles',
-    });
-};
-
 const getItemIdByElem = (elem) => {
     if (!elem) {
         return null;
@@ -94,61 +61,10 @@ const getItemIdByElem = (elem) => {
     return parseInt(text.substr(5), 10);
 };
 
-// Sortable list
-const onItemClick = (id) => {
-    const listSortLog = ge('listSortLog');
-
-    logTo(listSortLog, `onItemClick() id: ${id}`);
-};
-
-// Sortable list
-const onListSort = (info) => {
-    const listSortLog = ge('listSortLog');
-
-    if (!info.elem) {
-        logTo(listSortLog, 'Missing source item');
-        return;
-    }
-    if (!info.targetElem) {
-        logTo(listSortLog, 'Missing destination item');
-        return;
-    }
-
-    const srcId = getItemIdByElem(info.elem);
-    const destId = getItemIdByElem(info.targetElem);
-
-    logTo(listSortLog, `srcId: ${srcId}; destId: ${destId}`);
-};
-
 const renderListItem = (title = 'Item') => createElement('div', {
     props: { className: 'list_item' },
     children: createElement('span', { props: { textContent: title } }),
 });
-
-const initSortableList = () => {
-    const items = [];
-    for (let i = 1; i <= 10; i += 1) {
-        items.push({ id: i, title: `Item ${i}` });
-    }
-
-    const sortableList = SortableListContainer.create({
-        ItemComponent: ListItem,
-        items,
-        getItemProps: (item) => ({ ...item }),
-        className: 'list-area',
-        itemSelector: ListItem.selector,
-        itemSortSelector: ListItem.sortSelector,
-        sortModeClass: 'list-area_sort',
-        placeholderClass: 'list_item_placeholder',
-        listMode: 'sort',
-        sortGroup: 'list',
-        onItemClick: (id, e) => onItemClick(id, e),
-        onSort: (id, pos) => onListSort(id, pos),
-    });
-
-    const listContainer = ge('list_sortable');
-    listContainer.prepend(sortableList.elem);
-};
 
 // Exchangable lists
 const onExchange = (info) => {
@@ -176,69 +92,6 @@ const renderDestListItem = (title = 'Item', isPlaceholder = false) => createElem
     props: { className: `list_item ${isPlaceholder ? 'list_item_placeholder' : 'list_item_2'}` },
     children: createElement('span', { props: { textContent: title } }),
 });
-
-const initExchangable = () => {
-    const listExch1 = ge('list_exch_1');
-    const listExch2 = ge('list_exch_2');
-    for (let i = 1; i <= 10; i += 1) {
-        const srcItem = renderListItem(`Item ${i}`);
-        listExch1.append(srcItem);
-
-        const destItem = renderDestListItem(`Item ${i}`, i === 5);
-        listExch2.append(destItem);
-    }
-
-    Sortable.create({
-        elem: 'list_exch_1',
-        onSort: onExchange,
-        selector: '.list_item',
-        placeholderClass: 'list_item_placeholder',
-        dragClass: true,
-        group: 'exch',
-        copyWidth: true,
-        allowSingleItemSort: true,
-    });
-    Sortable.create({
-        elem: 'list_exch_2',
-        onSort: onExchange,
-        selector: '.list_item',
-        placeholderClass: 'list_item_placeholder',
-        dragClass: 'list_item_drag',
-        group: 'exch',
-        copyWidth: true,
-        allowSingleItemSort: true,
-    });
-};
-
-const initCustomGroups = () => {
-    const items = [];
-    for (let i = 1; i <= 10; i += 1) {
-        items.push({
-            id: i,
-            title: `Item ${i}`,
-            className: (i <= 5) ? null : 'list_item_2',
-            group: (i <= 5) ? 'group1' : 'group2',
-        });
-    }
-
-    const sortableList = SortableListContainer.create({
-        ItemComponent: ListItem,
-        items,
-        getItemProps: (item) => ({ ...item }),
-        className: 'list-area',
-        itemSelector: ListItem.selector,
-        itemSortSelector: ListItem.sortSelector,
-        sortModeClass: 'list-area_sort',
-        placeholderClass: 'list_item_placeholder',
-        listMode: 'sort',
-        sortGroup: (elem) => elem?.dataset.group,
-        onItemClick: (id, e) => onItemClick(id, e),
-        onSort: (id, pos) => onListSort(id, pos),
-    });
-
-    const listContainer = ge('customGroupsList');
-    listContainer.prepend(sortableList.elem);
-};
 
 const renderTreeItem = (title, content = [], className = []) => createElement('div', {
     props: { className: ['tree-item', ...asArray(className)].join(' ') },
@@ -278,92 +131,6 @@ const getTreeItemParentId = (elem) => {
     return tree?.id ?? null;
 };
 
-const onTreeSort = (info) => {
-    const srdId = getTreeItemIdByElem(info.elem);
-    const parentId = getTreeItemParentId(info.elem);
-    const prevId = getTreeItemIdByElem(info.targetPos.prev);
-    const nextId = getTreeItemIdByElem(info.targetPos.next);
-
-    logTo(ge('treeLog'), `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
-};
-
-const initTree = () => {
-    const treeRoot = ge('treeRoot');
-    for (let i = 1; i <= 4; i += 1) {
-        const childItems = (i < 3) ? [1, 2, 3] : [];
-        const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
-        const item = renderTreeItem(`Item ${i}`, content);
-        treeRoot.append(item);
-    }
-
-    Sortable.create({
-        elem: treeRoot,
-        onSort: onTreeSort,
-        selector: '.tree-item',
-        containerSelector: '.tree-item__content',
-        placeholderClass: 'tree-item__placeholder',
-        dragClass: true,
-        group: 'tree',
-        copyWidth: true,
-        tree: true,
-    });
-};
-
-const onTreeExchange = (info) => {
-    const srdId = getTreeItemIdByElem(info.elem);
-    const parentId = getTreeItemParentId(info.elem);
-    const prevId = getTreeItemIdByElem(info.targetPos.prev);
-    const nextId = getTreeItemIdByElem(info.targetPos.next);
-
-    logTo('treeExchLog', `srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
-};
-
-const initTreeExchange = () => {
-    const treeExch1 = ge('treeExch1');
-    for (let i = 1; i <= 4; i += 1) {
-        const childItems = (i < 3) ? [1, 2, 3] : [];
-        const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
-        const item = renderTreeItem(`Item ${i}`, content);
-        treeExch1.append(item);
-    }
-
-    const treeExch2 = ge('treeExch2');
-    for (let i = 1; i <= 4; i += 1) {
-        const childItems = (i > 3) ? [1, 2] : [];
-        const content = childItems.map((childId) => (
-            renderTreeItem(`Item ${i}.${childId}`, [], 'tree-item-2')
-        ));
-        const item = renderTreeItem(`Item ${i}`, content, 'tree-item-2');
-        treeExch2.append(item);
-    }
-
-    Sortable.create({
-        elem: treeExch1,
-        onSort: onTreeExchange,
-        selector: '.tree-item',
-        containerSelector: '.tree-item__content',
-        placeholderClass: 'tree-item__placeholder',
-        dragClass: true,
-        group: 'treeExch',
-        copyWidth: true,
-        tree: true,
-        allowSingleItemSort: true,
-    });
-
-    Sortable.create({
-        elem: treeExch2,
-        onSort: onTreeExchange,
-        selector: '.tree-item',
-        containerSelector: '.tree-item__content',
-        placeholderClass: 'tree-item__placeholder',
-        dragClass: true,
-        group: 'treeExch',
-        copyWidth: true,
-        tree: true,
-        allowSingleItemSort: true,
-    });
-};
-
 const getTableRowIdByElem = (elem) => {
     if (!elem) {
         return null;
@@ -371,25 +138,6 @@ const getTableRowIdByElem = (elem) => {
 
     const firstCell = elem.querySelector('tr > td');
     return parseInt(firstCell.textContent, 10);
-};
-
-// Sortable list
-const onTableSort = (srcElem, destElem) => {
-    const tableLog = ge('tableLog');
-
-    if (!srcElem) {
-        logTo(tableLog, 'Missing source item');
-        return;
-    }
-    if (!destElem) {
-        logTo(tableLog, 'Missing destination item');
-        return;
-    }
-
-    const srcId = getTableRowIdByElem(srcElem);
-    const destId = getTableRowIdByElem(destElem);
-
-    logTo(tableLog, `srcId: ${srcId}; destId: ${destId}`);
 };
 
 const renderTableRow = (columns) => createElement('tr', {
@@ -415,80 +163,6 @@ const tableData = [
     [7, 200, 'some text'],
 ];
 
-/** Sortable table with TBODY per each row */
-const initTableEachBody = () => {
-    const table = ge('table_sortable');
-    const rows = tableData.map((row) => renderTBody(renderTableRow(row)));
-    table.append(...rows);
-
-    Sortable.create({
-        elem: 'table_sortable',
-        onSort: onTableSort,
-        selector: 'tbody',
-        placeholderClass: 'list_item_placeholder',
-        group: 'tbl',
-        table: true,
-        copyWidth: true,
-    });
-};
-
-/** Sortable table with single TBODY for all rows */
-const initTableSingleBody = () => {
-    const table = ge('table_sortable_2');
-    const rows = tableData.map((row) => renderTableRow(row));
-    table.append(renderTBody(rows));
-
-    Sortable.create({
-        elem: 'table_sortable_2',
-        onSort: () => { },
-        selector: 'tr',
-        placeholderClass: 'list_item_placeholder',
-        group: 'tbl2',
-        table: true,
-        copyWidth: true,
-    });
-};
-
-/** Sortable table without TBODY */
-const initTableNoBody = () => {
-    const table = ge('table_sortable_3');
-    const rows = tableData.map((row) => renderTableRow(row));
-    table.append(...rows);
-
-    Sortable.create({
-        elem: 'table_sortable_3',
-        onSort: () => { },
-        selector: 'tr',
-        placeholderClass: 'list_item_placeholder',
-        group: 'tbl3',
-        table: true,
-        copyWidth: true,
-    });
-};
-
-/** handles option */
-const initHandles = () => {
-    DefaultDragZone.create({
-        elem: ge('di1'),
-        dragOriginal: true,
-        handles: 'di1',
-    });
-    DefaultDragZone.create({
-        elem: ge('di2'),
-        dragOriginal: true,
-        handles: 'dh2_1',
-    });
-    DefaultDragZone.create({
-        elem: ge('di3'),
-        dragOriginal: true,
-        handles: [
-            { elem: 'dh3_1', includeChilds: true },
-            { elem: 'dh3_2', includeChilds: false },
-        ],
-    });
-    OriginalDropTarget.create({ elem: ge('drop_area2') });
-};
-
 const renderListItemWithInput = (title = 'Item') => createElement('div', {
     props: { className: 'list_item' },
     children: [
@@ -496,23 +170,6 @@ const renderListItemWithInput = (title = 'Item') => createElement('div', {
         createElement('input', { props: { type: 'text' } }),
     ],
 });
-
-/** Sortable with rootOnlyHandle option */
-const initRootOnlyHandle = () => {
-    const listSortable = ge('sortable_roothnd');
-    for (let i = 1; i <= 10; i += 1) {
-        const item = renderListItemWithInput(`Item ${i}`);
-        listSortable.append(item);
-    }
-
-    Sortable.create({
-        elem: 'sortable_roothnd',
-        selector: '.list_item',
-        placeholderClass: 'list_item_placeholder',
-        group: 'list_root',
-        onlyRootHandle: true,
-    });
-};
 
 const renderListItemWithHandle = (title = 'Item') => createElement('div', {
     props: { className: 'list_item' },
@@ -523,89 +180,626 @@ const renderListItemWithHandle = (title = 'Item') => createElement('div', {
     ],
 });
 
-/** Sortable with query handles */
-const initQueryHandles = () => {
-    const listSortable = ge('sortable_hnd');
-    for (let i = 1; i <= 10; i += 1) {
-        const item = renderListItemWithHandle(`Item ${i}`);
-        listSortable.append(item);
-    }
-
-    Sortable.create({
-        elem: 'sortable_hnd',
-        selector: '.list_item',
-        placeholderClass: 'list_item_placeholder',
-        group: 'list_hnd',
-        handles: [{ query: '.drag-handle', includeChilds: true }],
-    });
-};
-
-/** Sortable with single item */
-const initSingleItem = () => {
-    Sortable.create({
-        elem: 'singleItemSortable',
-        selector: '.list_item',
-        placeholderClass: 'list_item_placeholder',
-        group: 'single',
-        dragClass: true,
-        copyWidth: true,
-    });
-    Sortable.create({
-        elem: 'singleItemSortableAllow',
-        selector: '.list_item',
-        placeholderClass: 'list_item_placeholder',
-        group: 'singleAllow',
-        dragClass: true,
-        copyWidth: true,
-        allowSingleItemSort: true,
-    });
-};
-
+/**
+ * Drag'n'Drop and Sortable utilities demo view
+ */
 class DragAndDropView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        this.addContentsMenuItem({ title: 'Drag original object', url: 'original' });
-        this.addContentsMenuItem({ title: 'Drag copy object', url: 'copy' });
-        this.addContentsMenuItem({ title: 'Drag only by X axis', url: 'xAxis' });
-        this.addContentsMenuItem({ title: 'Sortable implementation', url: 'sortable' });
-        this.addContentsMenuItem({ title: 'Sortable list', url: 'sortableList' });
-        this.addContentsMenuItem({ title: 'Exchangable list', url: 'exchange' });
-        this.addContentsMenuItem({ title: 'Custom groups', url: 'customGroup' });
-        this.addContentsMenuItem({ title: 'Tree sort', url: 'tree' });
-        this.addContentsMenuItem({ title: 'Tree exchange', url: 'treeExchange' });
-        this.addContentsMenuItem({ title: 'Sortable table with TBODY rows', url: 'table1' });
-        this.addContentsMenuItem({ title: 'Sortable table with single TBODY', url: 'table2' });
-        this.addContentsMenuItem({ title: 'Sortable table without TBODY', url: 'table3' });
-        this.addContentsMenuItem({ title: 'Drag handle option', url: 'handle' });
-        this.addContentsMenuItem({ title: 'onlyRootHandle option', url: 'onlyRootHandle' });
-        this.addContentsMenuItem({ title: 'Sortable list with drag handle option', url: 'listHandle' });
-        this.addContentsMenuItem({ title: 'Sortable with single item', url: 'single' });
-        this.addContentsMenuItem({ title: 'allowSingleItemSort option', url: 'allowSingleItemSort' });
+        this.initOriginalAvatar();
+        this.initClonedAvatar();
 
-        initOriginalAvatar();
-        initClonedAvatar();
+        this.initXAxisAvatar();
 
-        initXAxisAvatar();
+        this.initSortable();
+        this.initSortableList();
+        this.initExchangable();
+        this.initCustomGroups();
 
-        initSortable();
-        initSortableList();
-        initExchangable();
-        initCustomGroups();
+        this.initTree();
+        this.initTreeExchange();
 
-        initTree();
-        initTreeExchange();
+        this.initTableEachBody();
+        this.initTableSingleBody();
+        this.initTableNoBody();
 
-        initTableEachBody();
-        initTableSingleBody();
-        initTableNoBody();
+        this.initHandles();
+        this.initRootOnlyHandle();
+        this.initQueryHandles();
 
-        initHandles();
-        initRootOnlyHandle();
-        initQueryHandles();
+        this.initSingleItem();
+    }
 
-        initSingleItem();
+    initOriginalAvatar() {
+        const square = createElement('div', {
+            props: { className: 'square abs_pos_square' },
+        });
+        const dropArea = createElement('div', {
+            props: { className: 'section-h200' },
+            children: square,
+        });
+
+        DefaultDragZone.create({ elem: square, dragOriginal: true });
+        OriginalDropTarget.create({ elem: dropArea });
+
+        this.addSection({
+            id: 'original',
+            title: 'Drag original object',
+            description: 'Drop target accept only OriginalDragAvatar',
+            content: dropArea,
+        });
+    }
+
+    initClonedAvatar() {
+        const square1 = createElement('div', {
+            props: { className: 'square', textContent: '1' },
+        });
+        const square2 = createElement('div', {
+            props: { className: 'square', textContent: '2' },
+        });
+
+        const innerDrop1 = createElement('div', {
+            props: { className: 'inner-drop' },
+            children: [square1, square2],
+        });
+        const innerDrop2 = createElement('div', {
+            props: { className: 'inner-drop' },
+        });
+
+        DefaultDragZone.create({ elem: square1 });
+        DefaultDragZone.create({ elem: square2 });
+        DefaultDropTarget.create({ elem: innerDrop1 });
+        DefaultDropTarget.create({ elem: innerDrop2 });
+
+        this.addSection({
+            id: 'copy',
+            title: 'Drag copy object',
+            description: 'Drag two objects with semitransparent avatars. Drop targets accept only DefaultDragAvatar',
+            className: 'row-section',
+            content: [innerDrop1, innerDrop2],
+        });
+    }
+
+    initXAxisAvatar() {
+        const slider = createElement('div', {
+            props: { className: 'x-axis-slider' },
+        });
+        const dropArea = createElement('div', {
+            props: { className: 'x-axis-area' },
+            children: slider,
+        });
+
+        XAxisDragZone.create({ elem: slider });
+        XAxisDropTarget.create({ elem: dropArea });
+
+        this.addSection({
+            id: 'xAxis',
+            title: 'Drag only by X axis',
+            content: createElement('div', {
+                props: { className: 'section-h200' },
+                children: dropArea,
+            }),
+        });
+    }
+
+    initSortable() {
+        const sortableContainer = createElement('div', {
+            props: { className: 'sortable-tiles' },
+        });
+
+        for (let i = 1; i <= 6; i += 1) {
+            const item = (i === 2)
+                ? renderTilePlaceholder()
+                : renderTile(`Item ${i}`, i === 3);
+            sortableContainer.append(item);
+        }
+
+        Sortable.create({
+            elem: sortableContainer,
+            selector: '.sortable-tile',
+            placeholderClass: 'sortable-tile_placeholder',
+            group: 'tiles',
+        });
+
+        this.addSection({
+            id: 'sortable',
+            title: 'Sortable implementation',
+            content: sortableContainer,
+        });
+    }
+
+    /**
+     * Sortable list 'sort' event handler
+     * @param {*} info
+     */
+    onListSort(info, logsField) {
+        if (!info.elem) {
+            logsField.write('Missing source item');
+            return;
+        }
+        if (!info.targetElem) {
+            logsField.write('Missing destination item');
+            return;
+        }
+
+        const srcId = getItemIdByElem(info.elem);
+        const destId = getItemIdByElem(info.targetElem);
+
+        logsField.write(`srcId: ${srcId}; destId: ${destId}`);
+    }
+
+    initSortableList() {
+        const logsField = LogsField.create();
+
+        const items = [];
+        for (let i = 1; i <= 10; i += 1) {
+            items.push({ id: i, title: `Item ${i}` });
+        }
+
+        const sortableList = SortableListContainer.create({
+            ItemComponent: ListItem,
+            items,
+            getItemProps: (item) => ({ ...item }),
+            className: 'list-area',
+            itemSelector: ListItem.selector,
+            itemSortSelector: ListItem.sortSelector,
+            sortModeClass: 'list-area_sort',
+            placeholderClass: 'list_item_placeholder',
+            listMode: 'sort',
+            sortGroup: 'list',
+            onItemClick: (id) => logsField?.write(`onItemClick() id: ${id}`),
+            onSort: (info) => this.onListSort(info, logsField),
+        });
+
+        this.addSection({
+            id: 'sortableList',
+            title: 'Sortable list',
+            content: [sortableList.elem, logsField.elem],
+        });
+    }
+
+    initExchangable() {
+        const listExch1 = createElement('div', { props: { className: 'list-area' } });
+        const listExch2 = createElement('div', { props: { className: 'list-area' } });
+
+        for (let i = 1; i <= 10; i += 1) {
+            const srcItem = renderListItem(`Item ${i}`);
+            listExch1.append(srcItem);
+
+            const destItem = renderDestListItem(`Item ${i}`, i === 5);
+            listExch2.append(destItem);
+        }
+
+        Sortable.create({
+            elem: listExch1,
+            onSort: onExchange,
+            selector: '.list_item',
+            placeholderClass: 'list_item_placeholder',
+            dragClass: true,
+            group: 'exch',
+            copyWidth: true,
+            allowSingleItemSort: true,
+        });
+        Sortable.create({
+            elem: listExch2,
+            onSort: onExchange,
+            selector: '.list_item',
+            placeholderClass: 'list_item_placeholder',
+            dragClass: 'list_item_drag',
+            group: 'exch',
+            copyWidth: true,
+            allowSingleItemSort: true,
+        });
+
+        this.addSection({
+            id: 'exchange',
+            title: 'Exchangable list',
+            description: `Example of usage of same group identifier.
+                        Left list uses default dragClass option (.drag). Right list use own dragClass.`,
+            content: createElement('div', {
+                props: { className: 'exch-lists-container' },
+                children: [listExch1, listExch2],
+            }),
+        });
+    }
+
+    initCustomGroups() {
+        const logsField = LogsField.create();
+
+        const items = [];
+        for (let i = 1; i <= 10; i += 1) {
+            items.push({
+                id: i,
+                title: `Item ${i}`,
+                className: (i <= 5) ? null : 'list_item_2',
+                group: (i <= 5) ? 'group1' : 'group2',
+            });
+        }
+
+        const sortableList = SortableListContainer.create({
+            ItemComponent: ListItem,
+            items,
+            getItemProps: (item) => ({ ...item }),
+            className: 'list-area',
+            itemSelector: ListItem.selector,
+            itemSortSelector: ListItem.sortSelector,
+            sortModeClass: 'list-area_sort',
+            placeholderClass: 'list_item_placeholder',
+            listMode: 'sort',
+            sortGroup: (elem) => elem?.dataset.group,
+            onItemClick: (id) => logsField?.write(`onItemClick() id: ${id}`),
+            onSort: (info) => this.onListSort(info, logsField),
+        });
+
+        this.addSection({
+            id: 'customGroup',
+            title: 'Custom groups',
+            content: [sortableList.elem, logsField.elem],
+        });
+    }
+
+    initTree() {
+        const logsField = LogsField.create();
+
+        const treeRoot = createElement('div', { props: { className: 'tree' } });
+        for (let i = 1; i <= 4; i += 1) {
+            const childItems = (i < 3) ? [1, 2, 3] : [];
+            const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
+            const item = renderTreeItem(`Item ${i}`, content);
+            treeRoot.append(item);
+        }
+
+        Sortable.create({
+            elem: treeRoot,
+            onSort: (info) => {
+                const srdId = getTreeItemIdByElem(info.elem);
+                const parentId = getTreeItemParentId(info.elem);
+                const prevId = getTreeItemIdByElem(info.targetPos.prev);
+                const nextId = getTreeItemIdByElem(info.targetPos.next);
+
+                logsField.write(`srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
+            },
+            selector: '.tree-item',
+            containerSelector: '.tree-item__content',
+            placeholderClass: 'tree-item__placeholder',
+            dragClass: true,
+            group: 'tree',
+            copyWidth: true,
+            tree: true,
+        });
+
+        this.addSection({
+            id: 'tree',
+            title: 'Tree sort',
+            content: [treeRoot, logsField.elem],
+        });
+    }
+
+    onTreeExchange(info, logField) {
+        const srdId = getTreeItemIdByElem(info.elem);
+        const parentId = getTreeItemParentId(info.elem);
+        const prevId = getTreeItemIdByElem(info.targetPos.prev);
+        const nextId = getTreeItemIdByElem(info.targetPos.next);
+
+        logField.write(`srcId: ${srdId}; prev: ${prevId}; next: ${nextId}; parent: ${parentId}`);
+    }
+
+    initTreeExchange() {
+        const logsField = LogsField.create();
+
+        const treeExch1 = createElement('div', { props: { className: 'tree' } });
+        for (let i = 1; i <= 4; i += 1) {
+            const childItems = (i < 3) ? [1, 2, 3] : [];
+            const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
+            const item = renderTreeItem(`Item ${i}`, content);
+            treeExch1.append(item);
+        }
+
+        const treeExch2 = createElement('div', { props: { className: 'tree' } });
+        for (let i = 1; i <= 4; i += 1) {
+            const childItems = (i > 3) ? [1, 2] : [];
+            const content = childItems.map((childId) => (
+                renderTreeItem(`Item ${i}.${childId}`, [], 'tree-item-2')
+            ));
+            const item = renderTreeItem(`Item ${i}`, content, 'tree-item-2');
+            treeExch2.append(item);
+        }
+
+        Sortable.create({
+            elem: treeExch1,
+            onSort: (info) => this.onTreeExchange(info, logsField),
+            selector: '.tree-item',
+            containerSelector: '.tree-item__content',
+            placeholderClass: 'tree-item__placeholder',
+            dragClass: true,
+            group: 'treeExch',
+            copyWidth: true,
+            tree: true,
+            allowSingleItemSort: true,
+        });
+
+        Sortable.create({
+            elem: treeExch2,
+            onSort: (info) => this.onTreeExchange(info, logsField),
+            selector: '.tree-item',
+            containerSelector: '.tree-item__content',
+            placeholderClass: 'tree-item__placeholder',
+            dragClass: true,
+            group: 'treeExch',
+            copyWidth: true,
+            tree: true,
+            allowSingleItemSort: true,
+        });
+
+        this.addSection({
+            id: 'treeExchange',
+            title: 'Tree exchange',
+            content: [
+                createElement('div', {
+                    props: { className: 'exch-lists-container' },
+                    children: [treeExch1, treeExch2],
+                }),
+                logsField.elem,
+            ],
+        });
+    }
+
+    onTableSort(info, logField) {
+        const source = info.elem;
+        if (!source) {
+            logField.write('Missing source item');
+            return;
+        }
+
+        const destination = info.targetPos.prev ?? info.targetPos.next;
+        if (!destination) {
+            logField.write('Missing destination item');
+            return;
+        }
+
+        const srcId = getTableRowIdByElem(source);
+        const destId = getTableRowIdByElem(destination);
+
+        logField.write(`srcId: ${srcId}; destId: ${destId}`);
+    }
+
+    /** Sortable table with TBODY per each row */
+    initTableEachBody() {
+        const logsField = LogsField.create();
+
+        const table = createElement('table', {
+            props: { className: 'sortable_tbl' },
+            children: tableData.map((row) => renderTBody(renderTableRow(row))),
+        });
+
+        Sortable.create({
+            elem: table,
+            onSort: (info) => this.onTableSort(info, logsField),
+            selector: 'tbody',
+            placeholderClass: 'list_item_placeholder',
+            group: 'tbl',
+            table: true,
+            copyWidth: true,
+        });
+
+        this.addSection({
+            id: 'table1',
+            title: 'Sortable table with TBODY rows',
+            content: [table, logsField.elem],
+        });
+    }
+
+    /** Sortable table with single TBODY for all rows */
+    initTableSingleBody() {
+        const logsField = LogsField.create();
+
+        const table = createElement('table', {
+            props: { className: 'sortable_tbl' },
+            children: renderTBody(tableData.map((row) => renderTableRow(row))),
+        });
+
+        Sortable.create({
+            elem: table,
+            onSort: (info) => this.onTableSort(info, logsField),
+            selector: 'tr',
+            placeholderClass: 'list_item_placeholder',
+            group: 'tbl2',
+            table: true,
+            copyWidth: true,
+        });
+
+        this.addSection({
+            id: 'table2',
+            title: 'Sortable table with single TBODY',
+            content: [table, logsField.elem],
+        });
+    }
+
+    /** Sortable table without TBODY */
+    initTableNoBody() {
+        const logsField = LogsField.create();
+
+        const table = createElement('table', {
+            props: { className: 'sortable_tbl' },
+            children: tableData.map((row) => renderTableRow(row)),
+        });
+
+        Sortable.create({
+            elem: table,
+            onSort: (info) => this.onTableSort(info, logsField),
+            selector: 'tr',
+            placeholderClass: 'list_item_placeholder',
+            group: 'tbl3',
+            table: true,
+            copyWidth: true,
+        });
+
+        this.addSection({
+            id: 'table3',
+            title: 'Sortable table without TBODY',
+            content: [table, logsField.elem],
+        });
+    }
+
+    /** handles option */
+    initHandles() {
+        const dragItem1 = createElement('div', {
+            props: { className: 'drag_item' },
+            children: createElement('input', { props: { type: 'text' } }),
+        });
+
+        DefaultDragZone.create({
+            elem: dragItem1,
+            dragOriginal: true,
+            handles: dragItem1,
+        });
+
+        const dragHandle2 = createElement('div', { props: { className: 'drag-handle' } });
+        const dragItem2 = createElement('div', {
+            props: { className: 'drag_item', style: { top: '50px' } },
+            children: [
+                createElement('input', { props: { type: 'text' } }),
+                dragHandle2,
+            ],
+        });
+
+        DefaultDragZone.create({
+            elem: dragItem2,
+            dragOriginal: true,
+            handles: dragHandle2,
+        });
+
+        const dragIcon1 = Button.create({
+            type: 'static',
+            icon: 'dragHandle',
+            className: 'drag-handle-btn',
+        });
+        const dragIcon2 = Button.create({
+            type: 'static',
+            icon: 'dragHandle',
+            className: 'drag-handle-btn red',
+        });
+
+        const dragItem3 = createElement('div', {
+            props: { className: 'drag_item', style: { top: '100px' } },
+            children: [
+                createElement('input', { props: { type: 'text' } }),
+                dragIcon1.elem,
+                dragIcon2.elem,
+            ],
+        });
+
+        DefaultDragZone.create({
+            elem: dragItem3,
+            dragOriginal: true,
+            handles: [
+                { elem: dragIcon1.elem, includeChilds: true },
+                { elem: dragIcon2.elem, includeChilds: false },
+            ],
+        });
+
+        const dropArea = createElement('div', {
+            props: { className: 'section-h200' },
+            children: [dragItem1, dragItem2, dragItem3],
+        });
+
+        OriginalDropTarget.create({ elem: dropArea });
+
+        this.addSection({
+            id: 'handle',
+            title: 'Drag handle option',
+            content: dropArea,
+        });
+    }
+
+    /** Sortable with rootOnlyHandle option */
+    initRootOnlyHandle() {
+        const listArea = createElement('div', { props: { className: 'list-area' } });
+        for (let i = 1; i <= 10; i += 1) {
+            const item = renderListItemWithInput(`Item ${i}`);
+            listArea.append(item);
+        }
+
+        Sortable.create({
+            elem: listArea,
+            selector: '.list_item',
+            placeholderClass: 'list_item_placeholder',
+            group: 'list_root',
+            onlyRootHandle: true,
+        });
+
+        this.addSection({
+            id: 'onlyRootHandle',
+            title: 'onlyRootHandle option',
+            content: listArea,
+        });
+    }
+
+    /** Sortable with query handles */
+    initQueryHandles() {
+        const listArea = createElement('div', { props: { className: 'list-area' } });
+        for (let i = 1; i <= 10; i += 1) {
+            const item = renderListItemWithHandle(`Item ${i}`);
+            listArea.append(item);
+        }
+
+        Sortable.create({
+            elem: listArea,
+            selector: '.list_item',
+            placeholderClass: 'list_item_placeholder',
+            group: 'list_hnd',
+            handles: [{ query: '.drag-handle', includeChilds: true }],
+        });
+
+        this.addSection({
+            id: 'listHandle',
+            title: 'Sortable list with drag handle option',
+            content: listArea,
+        });
+    }
+
+    /** Sortable with single item */
+    initSingleItem() {
+        const list1 = createElement('div', {
+            props: { className: 'list-area' },
+            children: renderListItem('Item 1'),
+        });
+
+        Sortable.create({
+            elem: list1,
+            selector: '.list_item',
+            placeholderClass: 'list_item_placeholder',
+            group: 'single',
+            dragClass: true,
+            copyWidth: true,
+        });
+        this.addSection({
+            id: 'single',
+            title: 'Sortable with single item',
+            content: list1,
+        });
+
+        const list2 = createElement('div', {
+            props: { className: 'list-area' },
+            children: renderListItem('Item 1'),
+        });
+        Sortable.create({
+            elem: list2,
+            selector: '.list_item',
+            placeholderClass: 'list_item_placeholder',
+            group: 'singleAllow',
+            dragClass: true,
+            copyWidth: true,
+            allowSingleItemSort: true,
+        });
+
+        this.addSection({
+            id: 'allowSingleItemSort',
+            title: 'allowSingleItemSort option',
+            content: list2,
+        });
     }
 }
 

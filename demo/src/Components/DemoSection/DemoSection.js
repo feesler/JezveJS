@@ -71,5 +71,7 @@ export class DemoSection extends Component {
             props: { className: SECTION_CLASS },
             children,
         });
+
+        this.setClassNames();
     }
 }

@@ -112,6 +112,7 @@ export class DemoView extends View {
             title,
             description,
             content,
+            className = null,
         } = options;
 
         const section = DemoSection.create({
@@ -119,6 +120,7 @@ export class DemoView extends View {
             title,
             description,
             content,
+            className,
         });
         this.container.append(section.elem);
 
