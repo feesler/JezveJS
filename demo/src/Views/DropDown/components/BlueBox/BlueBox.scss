@@ -1,0 +1,28 @@
+.bluebox {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background-color: #20a0ff;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 5px;
+  box-sizing: border-box;
+
+  .box__title {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+  }
+
+  .btn.close-btn {
+    --btn-size: 24px;
+    --btn-icon-size: 14px;
+    --btn-padding: 5px;
+    --btn-icon-color: #ffffffa0;
+    --btn-hover-icon-color: #ffffff;
+
+    position: absolute;
+    right: 3px;
+    top: 5px;
+  }
+}

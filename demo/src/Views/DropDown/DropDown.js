@@ -7,15 +7,19 @@ import {
     enable,
     isVisible,
     asArray,
+    createElement,
 } from 'jezvejs';
-import { CloseButton } from 'jezvejs/CloseButton';
+import { Button } from 'jezvejs/Button';
 import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
 import { Tags } from 'jezvejs/Tags';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import { CustomListItem } from './impl/CustomListItem.js';
 import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
+import { BlueBox } from './components/BlueBox/BlueBox.js';
 import './DropDownView.scss';
 
 const initItems = (title, count, startFrom = 1) => {
@@ -54,694 +58,958 @@ const formatObject = (value) => {
     return value.toString();
 };
 
-const logTo = (target, value) => {
-    const elem = (typeof target === 'string') ? ge(target) : target;
-    if (!elem) {
-        return;
-    }
-
-    elem.value += `${value}\r\n`;
-};
-
-// Standard inline drop down
-const initStandardInline = () => {
-    DropDown.create({
-        elem: 'selinp',
-        className: 'dd__container_no-shrink',
-        placeholder: 'Select item',
-        data: initItems('Item', 10),
-    });
-
-    DropDown.create({
-        elem: 'selinp2',
-        className: 'dd__container_ellipsis',
-        placeholder: 'Select item 2',
-        data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
-    });
-};
-
-// Stretch drop downs
-const initStandardStretch = () => {
-    // Stretch drop down 100% width
-    DropDown.create({
-        elem: 'selinp3',
-        className: 'dd_stretch',
-        placeholder: 'Select item 3',
-        data: initItems('Item', 10),
-    });
-
-    // Stretch drop down 50% width
-    DropDown.create({
-        elem: 'selinp4',
-        className: 'dd_stretch',
-        placeholder: 'Select item 4',
-        data: initItems('Item', 10),
-        onItemSelect(selection) {
-            logTo('log-single', `itemselect: ${formatObject(selection)}`);
-        },
-        onChange(selection) {
-            logTo('log-single', `change: ${formatObject(selection)}`);
-        },
-    });
-};
-
-// Fixed menu
-const initFixed = () => {
-    const dropDown = DropDown.create({
-        fixedMenu: true,
-        data: initItems('Item', 50),
-    });
-    const container = ge('fixedContainer');
-    container.append(dropDown.elem);
-};
-
-// Parse select element (with no default selection)
-const initParseSingleNoSelection = () => {
-    DropDown.create({
-        elem: 'sel0',
-        placeholder: 'Select item 5',
-    });
-};
-
-// Parse select element (with selected option support)
-const initParseSingleWithSelection = () => {
-    DropDown.create({
-        elem: 'sel',
-        placeholder: 'Select item 5',
-    });
-};
-
-// Disabled options support
-const initParseDisabledOptions = () => {
-    DropDown.create({
-        elem: 'disabledopt',
-    });
-};
-
-// Option groups support
-const initParseOptGroups = () => {
-    DropDown.create({
-        elem: 'optgroupssel',
-    });
-};
-
-// Dynamic groups create
-const dynamicOptGroups = () => {
-    const dropDown = DropDown.create({
-        elem: 'optgroupsdyn',
-        className: 'dd__styled-group',
-    });
-    const visibleGroup = dropDown.addGroup({ id: 'grVisible', title: 'Visible' });
-    const visibleGroupItems = initItems('Visible item', 3);
-    visibleGroupItems.forEach(
-        (item) => dropDown.addItem({ ...item, group: visibleGroup }),
-    );
-
-    const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
-    const hiddenGroupItems = initItems('Hidden item', 3);
-    hiddenGroupItems.forEach(
-        (item) => dropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
-    );
-
-    const group1 = dropDown.getGroupById('grVisible');
-    dropDown.addItem({ id: 3, title: 'Visible item 3', group: group1 });
-
-    const group2 = dropDown.getGroupById(hiddenGroup.id);
-    dropDown.addItem({ id: 6, title: 'Hidden item 3', group: group2 });
-};
-
-// Create drop down without host element in DOM
-const createUnattached = () => {
-    const dropDown = DropDown.create({
-        data: initItems('Item', 10),
-    });
-
-    const unattachedSection = ge('unattachedSection');
-    unattachedSection.append(dropDown.elem);
-};
-
-// Attach drop down to block element
-const attachToBlockElement = () => {
-    const btn = CloseButton.create();
-    const box = ge('box');
-    box.append(btn.elem);
-
-    DropDown.create({
-        elem: box,
-        listAttach: true,
-        isValidToggleTarget: (elem) => !elem.closest('.close-btn'),
-        data: initItems('Long Item Lorem Lorem', 10),
-    });
-};
-
-// Attach drop down to inline element
-const attachToInlineElement = () => {
-    DropDown.create({
-        elem: 'inlineTarget',
-        className: 'dd_inline',
-        listAttach: true,
-        data: initItems('Long Item Lorem Lorem ', 10),
-    });
-};
-
-// Clipping test
-const clippingTest = () => {
-    DropDown.create({ elem: 'clipped' });
-};
-
-// Multiple select drop down
-const parseMultipleSelect = () => {
-    DropDown.create({
-        elem: 'selinp5',
-        className: 'dd_stretch',
-        placeholder: 'Multi select control',
-        onItemSelect(selection) {
-            logTo('log-multi', `itemselect: ${formatObject(selection)}`);
-        },
-        onChange(selection) {
-            logTo('log-multi', `change: ${formatObject(selection)}`);
-        },
-    });
-};
-
-// Generated multiple select drop down
-const dynamicMultipleSelect = () => {
-    const genDropDown = DropDown.create({
-        elem: 'selinp6',
-        className: 'dd_stretch',
-        placeholder: 'Multi select control',
-        onItemSelect(selection) {
-            logTo('log-genmulti', `itemselect: ${formatObject(selection)}`);
-        },
-        multi: true,
-        onChange(selection) {
-            logTo('log-genmulti', `change: ${formatObject(selection)}`);
-        },
-    });
-    const genData = initItems('Multi select', 10);
-    genData.forEach((item) => {
-        const props = { ...item };
-
-        if (item.id === 3) {
-            props.disabled = true;
-        }
-
-        genDropDown.addItem(props);
-    });
-
-    setEvents(ge('enableOptionBtn'), {
-        click: () => {
-            const item = genDropDown.getItem('3');
-            genDropDown.enableItem('3', item.disabled);
-        },
-    });
-};
-
-// Disabled single select drop down
-const parseDisabledSingleSelect = () => {
-    const dropDown = DropDown.create({
-        elem: 'selinp7single',
-        className: 'dd_stretch',
-        disabled: true,
-        placeholder: 'Multi select control',
-    });
-
-    setEvents(ge('enableSingleBtn'), { click: (e) => toggleEnable(e, dropDown) });
-};
-
-// Disabled multiple select drop down
-const parseDisabledMultiSelect = () => {
-    const dropDown = DropDown.create({
-        elem: 'selinp7',
-        className: 'dd_stretch',
-        disabled: true,
-        placeholder: 'Multi select control',
-    });
-
-    setEvents(ge('enableBtn'), { click: (e) => toggleEnable(e, dropDown) });
-};
-
-// Built-in items filter with single select
-const singleSelectFilter = () => {
-    const dropDown = DropDown.create({
-        elem: 'selinp8',
-        enableFilter: true,
-        placeholder: 'Type to filter',
-        data: initItems('Filter item', 100),
-    });
-
-    setEvents(ge('enableFilterBtn'), { click: (e) => toggleEnable(e, dropDown) });
-
-    setEvents(ge('setSelectionSingleBtn'), {
-        click: () => {
-            const selected = dropDown.getSelectionData();
-            const newItem = dropDown.items.find((item) => item.id !== selected.id);
-            dropDown.setSelection(newItem.id);
-        },
-    });
-
-    setEvents(ge('setInvalidSingleSelectionBtn'), {
-        click: () => dropDown.setSelection([]),
-    });
-};
-
-// Built-in items filter with multiple select
-const multiSelectFilter = () => {
-    const dropDown = DropDown.create({
-        elem: 'multiSelFilterInp',
-        enableFilter: true,
-        noResultsMessage: 'Nothing found',
-        multi: true,
-        placeholder: 'Type to filter',
-        data: initItems('Filter item', 100),
-    });
-
-    setEvents(ge('enableMultiFilterBtn'), { click: (e) => toggleEnable(e, dropDown) });
-
-    setEvents(ge('setSelectionMultiBtn'), {
-        click: () => {
-            const [first, second] = dropDown.items;
-
-            const selection = dropDown.items.filter((_, ind) => (
-                (first.selected && ((ind % 2) === 1))
-                || (!first.selected && !second.selected && ((ind % 2) === 0))
-            )).map((item) => item.id);
-
-            dropDown.setSelection(selection);
-        },
-    });
-};
-
-// Built-in items filter with multiple select
-const groupsSelectFilter = () => {
-    const dropDown = DropDown.create({
-        elem: 'groupFilterInp',
-        enableFilter: true,
-        openOnFocus: true,
-        noResultsMessage: 'Nothing found',
-        multi: true,
-        placeholder: 'Type to filter',
-    });
-
-    const group10 = dropDown.addGroup({ title: '1 - 9' });
-    initItems('Item', 9).forEach(
-        (item) => dropDown.addItem({ ...item, group: group10 }),
-    );
-    const group20 = dropDown.addGroup({ title: '10 - 19' });
-    initItems('Item', 10, 10).forEach(
-        (item) => dropDown.addItem({ ...item, group: group20 }),
-    );
-    const group30 = dropDown.addGroup({ title: '20 - 29' });
-    initItems('Item', 10, 20).forEach(
-        (item) => dropDown.addItem({ ...item, group: group30 }),
-    );
-};
-
-// 'showMultipleSelection' option
-const showMultipleSelection = () => {
-    let dropDown = null;
-    let tags = null;
-
-    const renderTags = (selection) => (
-        tags.setState((tagsState) => ({
-            ...tagsState,
-            items: asArray(selection).map((selItem) => ({
-                id: selItem.id,
-                title: selItem.value,
-            })),
-        }))
-    );
-
-    tags = Tags.create({
-        closeable: true,
-        onCloseItem: (itemId) => dropDown.deselectItem(itemId),
-    });
-
-    dropDown = DropDown.create({
-        enableFilter: true,
-        showMultipleSelection: false,
-        noResultsMessage: 'Nothing found',
-        multi: true,
-        placeholder: 'Type to filter',
-        data: initItems('Filter item', 20),
-        onItemSelect: renderTags,
-        onChange: renderTags,
-    });
-
-    ge('showMultipleContainer').append(tags.elem, dropDown.elem);
-};
-
-// 'showClearButton' option
-const showClearButton = () => {
-    const dropDown = DropDown.create({
-        enableFilter: true,
-        showClearButton: false,
-        noResultsMessage: 'Nothing found',
-        multi: true,
-        placeholder: 'Type to filter',
-        data: initItems('Item', 20),
-    });
-
-    ge('showClearContainer').append(dropDown.elem);
-};
-
-// 'showToggleButton' option
-const showToggleButton = () => {
-    const dropDown = DropDown.create({
-        enableFilter: true,
-        showToggleButton: false,
-        noResultsMessage: 'Nothing found',
-        multi: true,
-        placeholder: 'Type to filter',
-        data: initItems('Item', 20),
-    });
-
-    ge('showToggleContainer').append(dropDown.elem);
-};
-
-// 'allowCreate' option
-const allowCreate = () => {
-    const dropDown = DropDown.create({
-        enableFilter: true,
-        allowCreate: true,
-        addItemMessage: (title) => `Add item: '${title}'`,
-        multi: true,
-        placeholder: 'Type to filter',
-        data: initItems('Item', 20),
-    });
-
-    ge('allowCreateContainer').append(dropDown.elem);
-};
-
-// Built-in items filter with single select
-const attachedFilter = () => {
-    const btn = CloseButton.create();
-    const box = ge('boxFilter');
-    box.append(btn.elem);
-
-    DropDown.create({
-        elem: box,
-        listAttach: true,
-        enableFilter: true,
-        noResultsMessage: 'Nothing found',
-        placeholder: 'Type to filter',
-        useSingleSelectionAsPlaceholder: false,
-        data: initItems('Filter item', 100),
-    });
-};
-
-// Built-in items filter with multiple select
-const attachedFilterMulti = () => {
-    const btn = CloseButton.create();
-    const box = ge('boxFilterMulti');
-    box.append(btn.elem);
-
-    DropDown.create({
-        elem: box,
-        listAttach: true,
-        enableFilter: true,
-        noResultsMessage: 'Nothing found',
-        multi: true,
-        placeholder: 'Type to filter',
-        data: initItems('Filter item', 100),
-    });
-};
-
-// Custom render drop down
-const customRender = () => {
-    const dropDown = DropDown.create({
-        elem: 'selinp10',
-        className: 'dd__custom dd_stretch',
-        placeholder: 'Multi select control',
-        onItemSelect(selection) {
-            logTo('log-custom', `itemselect: ${formatObject(selection)}`);
-        },
-        onChange(selection) {
-            logTo('log-custom', `change: ${formatObject(selection)}`);
-        },
-        components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
-    });
-
-    setEvents(ge('enableCustomBtn'), { click: (e) => toggleEnable(e, dropDown) });
-};
-
-// useNativeSelect drop down
-const useNativeSelect = () => {
-    // Single select
-    DropDown.create({
-        elem: 'selinp11single',
-        placeholder: 'Use native select',
-        useNativeSelect: true,
-    });
-    // Dynamic single select
-    DropDown.create({
-        elem: 'nativeGenerated',
-        placeholder: 'Use native select',
-        useNativeSelect: true,
-        data: initItems('Item', 5),
-    });
-    // Multiple select
-    DropDown.create({
-        elem: 'selinp11',
-        placeholder: 'Use native select',
-        useNativeSelect: true,
-    });
-};
-
-// Full screen drop down
-const fullScreen = () => {
-    DropDown.create({
-        elem: 'selinp12',
-        placeholder: 'Full screen',
-        fullScreen: true,
-    });
-};
-
-// Dynamic add/remove items
-const dynamicAddRemoveItems = () => {
-    const dropDown = DropDown.create({
-        elem: 'dynamicSel',
-        placeholder: 'Dynamic Drop Down',
-        multi: true,
-    });
-
-    setEvents(ge('addBtn'), {
-        click: () => {
-            const itemId = dropDown.items.length + 1;
-            dropDown.addItem({
-                id: itemId,
-                title: `Item ${itemId}`,
-            });
-        },
-    });
-
-    setEvents(ge('addDisBtn'), {
-        click: () => {
-            const itemId = dropDown.items.length + 1;
-            dropDown.addItem({
-                id: itemId,
-                title: `Item ${itemId}`,
-                disabled: true,
-            });
-        },
-    });
-
-    setEvents(ge('addHiddenBtn'), {
-        click: () => {
-            const itemId = dropDown.items.length + 1;
-            dropDown.addItem({
-                id: itemId,
-                title: `Item ${itemId}`,
-                disabled: true,
-                hidden: true,
-            });
-        },
-    });
-
-    setEvents(ge('delBtn'), {
-        click: () => {
-            const itemsCount = dropDown.items.length;
-            if (!itemsCount) {
-                return;
-            }
-
-            const item = dropDown.items[itemsCount - 1];
-            dropDown.removeItem(item.id);
-        },
-    });
-
-    setEvents(ge('delAllBtn'), { click: () => dropDown.removeAll() });
-};
-
-let popup = null;
-
-const onPopupAction = (action) => {
-    if (!popup || !action) {
-        return;
-    }
-
-    const alignActions = ['top', 'center', 'bottom'];
-
-    if (alignActions.includes(action)) {
-        popup.elem.classList.toggle('top-popup', action === 'top');
-        popup.elem.classList.toggle('bottom-popup', action === 'bottom');
-    }
-
-    if (action === 'scroll') {
-        popup.elem.classList.toggle('popup_scroll-message');
-    }
-
-    if (action === 'size') {
-        popup.elem.classList.toggle('scroll-inside');
-    }
-
-    if (action === 'relparent') {
-        popup.elem.classList.toggle('relative-wrapper');
-    }
-
-    if (action === 'placeholder') {
-        const bottomPlaceholder = ge('bottomPlaceholder');
-        const visible = isVisible(bottomPlaceholder);
-        show(bottomPlaceholder, !visible);
-
-        const togglePlaceholderBtn = ge('togglePlaceholderBtn');
-        togglePlaceholderBtn.textContent = (visible)
-            ? 'Show bottom placeholder'
-            : 'Hide bottom placeholder';
-    }
-
-    const scrollMessage = popup.elem.classList.contains('popup_scroll-message');
-    const scrollInside = popup.elem.classList.contains('scroll-inside');
-
-    const scrollPopupMessageBtn = ge('scrollPopupMessageBtn');
-    enable(scrollPopupMessageBtn, !scrollInside);
-    scrollPopupMessageBtn.textContent = (scrollMessage)
-        ? 'Scroll whole popup'
-        : 'Scroll only content';
-
-    const popupSizeBtn = ge('popupSizeBtn');
-    popupSizeBtn.textContent = (scrollInside)
-        ? 'Scroll popup'
-        : 'Scroll inside content';
-};
-
-const createPopup = () => {
-    if (popup) {
-        return;
-    }
-
-    const dropDown = DropDown.create({
-        enableFilter: true,
-        placeholder: 'Select item',
-        data: initItems('Popup item', 50),
-    });
-    ge('popupDropDownContainer').append(dropDown.elem);
-
-    const popupContent = ge('popupContent');
-    popup = Popup.create({
-        id: 'dropDownPopup',
-        title: 'Popup',
-        content: popupContent,
-        closeButton: true,
-    });
-    show(popupContent, true);
-
-    setEvents(ge('popupControls'), {
-        click: (e) => onPopupAction(e?.target?.dataset?.action),
-    });
-};
-
-const showPopup = () => {
-    createPopup();
-
-    popup.show();
-};
-
-// DropDown inside Popup
-const popupOverflow = () => {
-    const popupBtn = ge('popupBtn');
-    setEvents(popupBtn, { click: () => showPopup() });
-};
-
+/**
+ * DropDown component demo view
+ */
 class DropDownView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        this.addContentsMenuItem({ title: 'Inline', url: 'inline' });
-        this.addContentsMenuItem({ title: 'Stretch', url: 'stretch' });
-        this.addContentsMenuItem({ title: 'Fixed menu', url: 'fixed' });
-        this.addContentsMenuItem({ title: 'Callbacks', url: 'callbacks' });
-        this.addContentsMenuItem({ title: 'Parse select without selection', url: 'parse' });
-        this.addContentsMenuItem({ title: 'Parse select with selected option', url: 'selected' });
-        this.addContentsMenuItem({ title: 'Disabled option', url: 'disabledOption' });
-        this.addContentsMenuItem({ title: 'Option groups', url: 'groups' });
-        this.addContentsMenuItem({ title: 'Create groups', url: 'createGroups' });
-        this.addContentsMenuItem({ title: 'Create without host element', url: 'noHost' });
-        this.addContentsMenuItem({ title: 'Attach to block element', url: 'attach' });
-        this.addContentsMenuItem({ title: 'Attach to inline element', url: 'attachInline' });
-        this.addContentsMenuItem({ title: 'Clipping test', url: 'clipping' });
-        this.addContentsMenuItem({ title: 'Parse multiple select', url: 'parseMultiple' });
-        this.addContentsMenuItem({ title: 'Create multiple select', url: 'createMultiple' });
-        this.addContentsMenuItem({ title: 'Disabled single select', url: 'disabled' });
-        this.addContentsMenuItem({ title: 'Disabled multiple select', url: 'disabledMultiple' });
-        this.addContentsMenuItem({ title: 'Filter with single select', url: 'filter' });
-        this.addContentsMenuItem({ title: 'Filter with multiple select', url: 'filterMultiple' });
-        this.addContentsMenuItem({ title: 'Filter with groups', url: 'filterGroups' });
-        this.addContentsMenuItem({ title: '\'showMultipleSelection\' option', url: 'showMultipleSelection' });
-        this.addContentsMenuItem({ title: '\'showClearButton\' option', url: 'showClearButton' });
-        this.addContentsMenuItem({ title: '\'showToggleButton\' option', url: 'showToggleButton' });
-        this.addContentsMenuItem({ title: '\'allowCreate\' option', url: 'allowCreate' });
-        this.addContentsMenuItem({ title: 'Filter attached to block element', url: 'filterAttached' });
-        this.addContentsMenuItem({ title: 'Filter with multiple select attached', url: 'filterAttachedMulti' });
-        this.addContentsMenuItem({ title: 'Custom render', url: 'custom' });
-        this.addContentsMenuItem({ title: 'Parse with useNativeSelect option', url: 'useNativeSelect' });
-        this.addContentsMenuItem({ title: 'Create with useNativeSelect option', url: 'createUseNative' });
-        this.addContentsMenuItem({ title: 'useNativeSelect option with multiple select', url: 'useNativeMultiple' });
-        this.addContentsMenuItem({ title: 'fullScreen option', url: 'fullScreen' });
-        this.addContentsMenuItem({ title: 'Methods', url: 'methods' });
-        this.addContentsMenuItem({ title: 'DropDown inside popup', url: 'popup' });
+        this.inline();
+        this.fullWidth();
+        this.callbacks();
+        this.fixedMenu();
 
-        initStandardInline();
-        initStandardStretch();
-        initFixed();
+        this.parseSingleNoSelection();
+        this.parseSingleWithSelection();
 
-        initParseSingleNoSelection();
-        initParseSingleWithSelection();
+        this.parseDisabledOptions();
+        this.parseOptGroups();
+        this.dynamicOptGroups();
 
-        initParseDisabledOptions();
-        initParseOptGroups();
-        dynamicOptGroups();
+        this.createUnattached();
+        this.attachToBlockElement();
+        this.attachToInlineElement();
 
-        createUnattached();
-        attachToBlockElement();
-        attachToInlineElement();
+        this.clippingTest();
 
-        clippingTest();
+        this.parseMultipleSelect();
+        this.dynamicMultipleSelect();
 
-        parseMultipleSelect();
-        dynamicMultipleSelect();
+        this.parseDisabledSingleSelect();
+        this.parseDisabledMultiSelect();
 
-        parseDisabledSingleSelect();
-        parseDisabledMultiSelect();
+        this.singleSelectFilter();
+        this.multiSelectFilter();
+        this.groupsSelectFilter();
+        this.showMultipleSelection();
+        this.showClearButton();
+        this.showToggleButton();
+        this.allowCreate();
+        this.attachedFilter();
+        this.attachedFilterMulti();
 
-        singleSelectFilter();
-        multiSelectFilter();
-        groupsSelectFilter();
-        showMultipleSelection();
-        showClearButton();
-        showToggleButton();
-        allowCreate();
-        attachedFilter();
-        attachedFilterMulti();
+        this.customRender();
 
-        customRender();
-        useNativeSelect();
-        fullScreen();
+        this.parseNativeSelect();
+        this.createNativeSelect();
+        this.multiNativeSelect();
 
-        dynamicAddRemoveItems();
+        this.fullScreen();
 
-        popupOverflow();
+        this.dynamicAddRemoveItems();
+
+        this.popupOverflow();
+    }
+
+    inline() {
+        const input1 = createElement('input', { props: { id: 'selinp', type: 'text' } });
+        const input2 = createElement('input', { props: { id: 'selinp2', type: 'text' } });
+        const container = createElement('div', {
+            props: { className: 'inline-container' },
+            children: [input1, input2],
+        });
+
+        DropDown.create({
+            elem: input1,
+            className: 'dd__container_no-shrink',
+            placeholder: 'Select item',
+            data: initItems('Item', 10),
+        });
+
+        DropDown.create({
+            elem: input2,
+            className: 'dd__container_ellipsis',
+            placeholder: 'Select item 2',
+            data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
+        });
+
+        this.addSection({
+            id: 'inline',
+            title: 'Inline',
+            content: container,
+        });
+    }
+
+    fullWidth() {
+        const input = createElement('input', { props: { id: 'selinp3', type: 'text' } });
+        const container = createElement('div', {
+            props: { className: 'allwidth' },
+            children: input,
+        });
+
+        DropDown.create({
+            elem: input,
+            className: 'dd_stretch',
+            placeholder: 'Select item 3',
+            data: initItems('Item', 10),
+        });
+
+        this.addSection({
+            id: 'stretch',
+            title: 'Stretch',
+            content: container,
+        });
+    }
+
+    callbacks() {
+        const logsField = LogsField.create();
+
+        const input = createElement('input', { props: { id: 'selinp4', type: 'text' } });
+        const container = createElement('div', {
+            props: { className: 'allwidth halfwidth' },
+            children: [input, logsField.elem],
+        });
+
+        DropDown.create({
+            elem: input,
+            className: 'dd_stretch',
+            placeholder: 'Select item 4',
+            data: initItems('Item', 10),
+            onItemSelect(selection) {
+                logsField.write(`itemselect: ${formatObject(selection)}`);
+            },
+            onChange(selection) {
+                logsField.write(`change: ${formatObject(selection)}`);
+            },
+        });
+
+        this.addSection({
+            id: 'callbacks',
+            title: 'Callbacks',
+            content: container,
+        });
+    }
+
+    fixedMenu() {
+        this.addSection({
+            id: 'fixed',
+            title: 'Fixed menu',
+            content: DropDown.create({
+                fixedMenu: true,
+                data: initItems('Item', 50),
+            }).elem,
+        });
+    }
+
+    parseSingleNoSelection() {
+        this.addSection({
+            id: 'parse',
+            title: 'Parse select without selection',
+            content: DropDown.create({
+                elem: 'sel0',
+                placeholder: 'Select item 5',
+            }).elem,
+        });
+    }
+
+    parseSingleWithSelection() {
+        this.addSection({
+            id: 'selected',
+            title: 'Parse select with selected option',
+            content: DropDown.create({
+                elem: 'sel',
+                placeholder: 'Select item 5',
+            }).elem,
+        });
+    }
+
+    // Disabled options support
+    parseDisabledOptions() {
+        this.addSection({
+            id: 'disabledOption',
+            title: 'Disabled option',
+            content: DropDown.create({
+                elem: 'disabledopt',
+            }).elem,
+        });
+    }
+
+    // Option groups support
+    parseOptGroups() {
+        this.addSection({
+            id: 'groups',
+            title: 'Option groups',
+            content: DropDown.create({
+                elem: 'optgroupssel',
+            }).elem,
+        });
+    }
+
+    // Dynamic groups create
+    dynamicOptGroups() {
+        const input = createElement('input', { props: { id: 'optgroupsdyn', type: 'text' } });
+        const dropDown = DropDown.create({
+            elem: input,
+            className: 'dd__styled-group',
+        });
+        const visibleGroup = dropDown.addGroup({ id: 'grVisible', title: 'Visible' });
+        const visibleGroupItems = initItems('Visible item', 3);
+        visibleGroupItems.forEach(
+            (item) => dropDown.addItem({ ...item, group: visibleGroup }),
+        );
+
+        const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
+        const hiddenGroupItems = initItems('Hidden item', 3);
+        hiddenGroupItems.forEach(
+            (item) => dropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
+        );
+
+        const group1 = dropDown.getGroupById('grVisible');
+        dropDown.addItem({ id: 3, title: 'Visible item 3', group: group1 });
+
+        const group2 = dropDown.getGroupById(hiddenGroup.id);
+        dropDown.addItem({ id: 6, title: 'Hidden item 3', group: group2 });
+
+        this.addSection({
+            id: 'createGroups',
+            title: 'Create groups',
+            content: dropDown.elem,
+        });
+    }
+
+    // Create drop down without host element in DOM
+    createUnattached() {
+        this.addSection({
+            id: 'noHost',
+            title: 'Create without host element',
+            content: DropDown.create({
+                data: initItems('Item', 10),
+            }).elem,
+        });
+    }
+
+    // Attach drop down to block element
+    attachToBlockElement() {
+        const box = BlueBox.create({ id: 'box' });
+
+        this.addSection({
+            id: 'attach',
+            title: 'Attach to block element',
+            content: box.elem,
+        });
+
+        DropDown.create({
+            elem: box.elem,
+            listAttach: true,
+            isValidToggleTarget: (elem) => !elem.closest('.close-btn'),
+            data: initItems('Long Item Lorem Lorem', 10),
+        });
+    }
+
+    // Attach drop down to inline element
+    attachToInlineElement() {
+        const inlineTarget = createElement('span', {
+            props: {
+                id: 'inlineTarget',
+                className: 'link-inline',
+                textContent: 'click',
+            },
+        });
+        const text = createElement('div', {
+            children: [
+                document.createTextNode('Lorem ipsum dolor sit, amet consectetur '),
+                inlineTarget,
+                document.createTextNode(' adipisicing elit. Aut consequatur iure repellat'),
+            ],
+        });
+
+        DropDown.create({
+            elem: inlineTarget,
+            className: 'dd_inline',
+            listAttach: true,
+            data: initItems('Long Item Lorem Lorem ', 10),
+        });
+
+        this.addSection({
+            id: 'attachInline',
+            title: 'Attach to inline element',
+            content: text,
+        });
+    }
+
+    // Clipping test
+    clippingTest() {
+        const dropDown = DropDown.create({ elem: 'clipped' });
+
+        this.addSection({
+            id: 'clipping',
+            title: 'Clipping test',
+            content: createElement('div', {
+                props: { className: 'offset-parent' },
+                children: createElement('div', {
+                    props: { className: 'clipper' },
+                    children: dropDown.elem,
+                }),
+            }),
+        });
+    }
+
+    // Multiple select drop down
+    parseMultipleSelect() {
+        const logsField = LogsField.create();
+
+        const dropDown = DropDown.create({
+            elem: 'selinp5',
+            className: 'dd_stretch',
+            placeholder: 'Multi select control',
+            onItemSelect(selection) {
+                logsField.write(`itemselect: ${formatObject(selection)}`);
+            },
+            onChange(selection) {
+                logsField.write(`change: ${formatObject(selection)}`);
+            },
+        });
+
+        this.addSection({
+            id: 'parseMultiple',
+            title: 'Parse multiple select',
+            content: [dropDown.elem, logsField.elem],
+        });
+    }
+
+    // Generated multiple select drop down
+    dynamicMultipleSelect() {
+        const logsField = LogsField.create();
+
+        const input = createElement('input', { props: { id: 'selinp6', type: 'text' } });
+        const genDropDown = DropDown.create({
+            elem: input,
+            className: 'dd_stretch',
+            placeholder: 'Multi select control',
+            multi: true,
+            data: initItems('Multi select', 10).map((item) => ({
+                ...item,
+                disabled: (item.id === 3),
+            })),
+            onItemSelect(selection) {
+                logsField.write(`itemselect: ${formatObject(selection)}`);
+            },
+            onChange(selection) {
+                logsField.write(`change: ${formatObject(selection)}`);
+            },
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: Button.create({
+                title: 'Toggle enable item 3',
+                className: 'action-btn',
+                onClick: () => {
+                    const item = genDropDown.getItem('3');
+                    genDropDown.enableItem('3', item.disabled);
+                },
+            }).elem,
+        });
+
+        this.addSection({
+            id: 'createMultiple',
+            title: 'Create multiple select',
+            content: [genDropDown.elem, controls, logsField.elem],
+        });
+    }
+
+    // Disabled single select drop down
+    parseDisabledSingleSelect() {
+        const dropDown = DropDown.create({
+            elem: 'selinp7single',
+            className: 'dd_stretch',
+            disabled: true,
+            placeholder: 'Multi select control',
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: Button.create({
+                title: 'Enable',
+                className: 'action-btn',
+                onClick: (e) => toggleEnable(e, dropDown),
+            }).elem,
+        });
+
+        this.addSection({
+            id: 'disabled',
+            title: 'Disabled single select',
+            content: [dropDown.elem, controls],
+        });
+    }
+
+    // Disabled multiple select drop down
+    parseDisabledMultiSelect() {
+        const dropDown = DropDown.create({
+            elem: 'selinp7',
+            className: 'dd_stretch',
+            disabled: true,
+            placeholder: 'Multi select control',
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: Button.create({
+                id: 'enableBtn',
+                title: 'Enable',
+                className: 'action-btn',
+                onClick: (e) => toggleEnable(e, dropDown),
+            }).elem,
+        });
+
+        this.addSection({
+            id: 'disabledMultiple',
+            title: 'Disabled multiple select',
+            content: [dropDown.elem, controls],
+        });
+    }
+
+    // Built-in items filter with single select
+    singleSelectFilter() {
+        const input = createElement('input', {
+            attrs: {
+                id: 'selinp8',
+                type: 'text',
+                disabled: '',
+            },
+        });
+
+        const dropDown = DropDown.create({
+            elem: input,
+            enableFilter: true,
+            placeholder: 'Type to filter',
+            data: initItems('Filter item', 100),
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: [
+                Button.create({
+                    id: 'enableFilterBtn',
+                    title: 'Enable',
+                    className: 'action-btn',
+                    onClick: (e) => toggleEnable(e, dropDown),
+                }).elem,
+                Button.create({
+                    id: 'setInvalidSingleSelectionBtn',
+                    title: 'Change selection',
+                    className: 'action-btn',
+                    onClick: () => {
+                        const selected = dropDown.getSelectionData();
+                        const newItem = dropDown.items.find((item) => item.id !== selected.id);
+                        dropDown.setSelection(newItem.id);
+                    },
+                }).elem,
+                Button.create({
+                    id: 'setSelectionSingleBtn',
+                    title: 'Set invalid selection',
+                    className: 'action-btn',
+                    onClick: () => dropDown.setSelection([]),
+                }).elem,
+            ],
+        });
+
+        this.addSection({
+            id: 'filter',
+            title: 'Filter with single select',
+            content: [dropDown.elem, controls],
+        });
+    }
+
+    // Built-in items filter with multiple select
+    multiSelectFilter() {
+        const input = createElement('input', {
+            attrs: {
+                id: 'multiSelFilterInp',
+                type: 'text',
+                disabled: '',
+            },
+        });
+        const dropDown = DropDown.create({
+            elem: input,
+            enableFilter: true,
+            noResultsMessage: 'Nothing found',
+            multi: true,
+            placeholder: 'Type to filter',
+            data: initItems('Filter item', 100),
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: [
+                Button.create({
+                    id: 'enableMultiFilterBtn',
+                    title: 'Enable',
+                    className: 'action-btn',
+                    onClick: (e) => toggleEnable(e, dropDown),
+                }).elem,
+                Button.create({
+                    id: 'setSelectionMultiBtn',
+                    title: 'Change selection',
+                    className: 'action-btn',
+                    onClick: () => {
+                        const [first, second] = dropDown.items;
+
+                        const selection = dropDown.items.filter((_, ind) => (
+                            (first.selected && ((ind % 2) === 1))
+                            || (!first.selected && !second.selected && ((ind % 2) === 0))
+                        )).map((item) => item.id);
+
+                        dropDown.setSelection(selection);
+                    },
+                }).elem,
+            ],
+        });
+
+        this.addSection({
+            id: 'filterMultiple',
+            title: 'Filter with multiple select',
+            content: [dropDown.elem, controls],
+        });
+    }
+
+    // Built-in items filter with multiple select
+    groupsSelectFilter() {
+        const input = createElement('input', { props: { id: 'groupFilterInp', type: 'text' } });
+        const dropDown = DropDown.create({
+            elem: input,
+            enableFilter: true,
+            openOnFocus: true,
+            noResultsMessage: 'Nothing found',
+            multi: true,
+            placeholder: 'Type to filter',
+        });
+
+        const group10 = dropDown.addGroup({ title: '1 - 9' });
+        initItems('Item', 9).forEach(
+            (item) => dropDown.addItem({ ...item, group: group10 }),
+        );
+        const group20 = dropDown.addGroup({ title: '10 - 19' });
+        initItems('Item', 10, 10).forEach(
+            (item) => dropDown.addItem({ ...item, group: group20 }),
+        );
+        const group30 = dropDown.addGroup({ title: '20 - 29' });
+        initItems('Item', 10, 20).forEach(
+            (item) => dropDown.addItem({ ...item, group: group30 }),
+        );
+
+        this.addSection({
+            id: 'filterGroups',
+            title: 'Filter with groups',
+            description: '+ \'openOnFocus\' option',
+            content: dropDown.elem,
+        });
+    }
+
+    // 'showMultipleSelection' option
+    showMultipleSelection() {
+        let dropDown = null;
+        let tags = null;
+
+        const renderTags = (selection) => (
+            tags.setState((tagsState) => ({
+                ...tagsState,
+                items: asArray(selection).map((selItem) => ({
+                    id: selItem.id,
+                    title: selItem.value,
+                })),
+            }))
+        );
+
+        tags = Tags.create({
+            closeable: true,
+            onCloseItem: (itemId) => dropDown.deselectItem(itemId),
+        });
+
+        dropDown = DropDown.create({
+            enableFilter: true,
+            showMultipleSelection: false,
+            noResultsMessage: 'Nothing found',
+            multi: true,
+            placeholder: 'Type to filter',
+            data: initItems('Filter item', 20),
+            onItemSelect: renderTags,
+            onChange: renderTags,
+        });
+
+        this.addSection({
+            id: 'showMultipleSelection',
+            title: '\'showMultipleSelection\' option',
+            className: 'multi-line-section',
+            content: [tags.elem, dropDown.elem],
+        });
+    }
+
+    // 'showClearButton' option
+    showClearButton() {
+        const dropDown = DropDown.create({
+            enableFilter: true,
+            showClearButton: false,
+            noResultsMessage: 'Nothing found',
+            multi: true,
+            placeholder: 'Type to filter',
+            data: initItems('Item', 20),
+        });
+
+        this.addSection({
+            id: 'showClearButton',
+            title: '\'showClearButton\' option',
+            content: dropDown.elem,
+        });
+    }
+
+    // 'showToggleButton' option
+    showToggleButton() {
+        const dropDown = DropDown.create({
+            enableFilter: true,
+            showToggleButton: false,
+            noResultsMessage: 'Nothing found',
+            multi: true,
+            placeholder: 'Type to filter',
+            data: initItems('Item', 20),
+        });
+
+        this.addSection({
+            id: 'showToggleButton',
+            title: '\'showToggleButton\' option',
+            content: dropDown.elem,
+        });
+    }
+
+    // 'allowCreate' option
+    allowCreate() {
+        const dropDown = DropDown.create({
+            enableFilter: true,
+            allowCreate: true,
+            addItemMessage: (title) => `Add item: '${title}'`,
+            multi: true,
+            placeholder: 'Type to filter',
+            data: initItems('Item', 20),
+        });
+
+        this.addSection({
+            id: 'allowCreate',
+            title: '\'allowCreate\' option',
+            content: dropDown.elem,
+        });
+    }
+
+    // Built-in items filter with single select
+    attachedFilter() {
+        const box = BlueBox.create({ id: 'boxFilter' });
+
+        this.addSection({
+            id: 'filterAttached',
+            title: 'Filter attached to block element',
+            description: '+ \'useSingleSelectionAsPlaceholder\' option',
+            content: box.elem,
+        });
+
+        DropDown.create({
+            elem: box.elem,
+            listAttach: true,
+            enableFilter: true,
+            noResultsMessage: 'Nothing found',
+            placeholder: 'Type to filter',
+            useSingleSelectionAsPlaceholder: false,
+            data: initItems('Filter item', 100),
+        });
+    }
+
+    // Built-in items filter with multiple select
+    attachedFilterMulti() {
+        const box = BlueBox.create({ id: 'boxFilterMulti' });
+
+        this.addSection({
+            id: 'filterAttachedMulti',
+            title: 'Filter with multiple select attached',
+            content: box.elem,
+        });
+
+        DropDown.create({
+            elem: box.elem,
+            listAttach: true,
+            enableFilter: true,
+            noResultsMessage: 'Nothing found',
+            multi: true,
+            placeholder: 'Type to filter',
+            data: initItems('Filter item', 100),
+        });
+    }
+
+    // Custom render drop down
+    customRender() {
+        const logsField = LogsField.create();
+
+        const dropDown = DropDown.create({
+            elem: 'selinp10',
+            className: 'dd__custom dd_stretch',
+            placeholder: 'Multi select control',
+            onItemSelect(selection) {
+                logsField.write(`itemselect: ${formatObject(selection)}`);
+            },
+            onChange(selection) {
+                logsField.write(`change: ${formatObject(selection)}`);
+            },
+            components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: [
+                Button.create({
+                    id: 'enableCustomBtn',
+                    title: 'Disable',
+                    className: 'action-btn',
+                    onClick: (e) => toggleEnable(e, dropDown),
+                }).elem,
+            ],
+        });
+
+        this.addSection({
+            id: 'custom',
+            title: 'Custom render',
+            content: [dropDown.elem, controls, logsField.elem],
+        });
+    }
+
+    parseNativeSelect() {
+        this.addSection({
+            id: 'useNativeSelect',
+            title: 'Parse with useNativeSelect option',
+            content: DropDown.create({
+                elem: 'selinp11single',
+                placeholder: 'Use native select',
+                useNativeSelect: true,
+            }).elem,
+        });
+    }
+
+    createNativeSelect() {
+        this.addSection({
+            id: 'createUseNative',
+            title: 'Create with useNativeSelect option',
+            content: DropDown.create({
+                elem: createElement('input', { props: { id: 'nativeGenerated', type: 'text' } }),
+                placeholder: 'Use native select',
+                useNativeSelect: true,
+                data: initItems('Item', 5),
+            }).elem,
+        });
+    }
+
+    multiNativeSelect() {
+        this.addSection({
+            id: 'useNativeMultiple',
+            title: 'useNativeSelect option with multiple select',
+            content: DropDown.create({
+                elem: 'selinp11',
+                placeholder: 'Use native select',
+                useNativeSelect: true,
+            }).elem,
+        });
+    }
+
+    fullScreen() {
+        this.addSection({
+            id: 'fullScreen',
+            title: 'fullScreen option',
+            content: DropDown.create({
+                elem: 'selinp12',
+                placeholder: 'Full screen',
+                fullScreen: true,
+            }).elem,
+        });
+    }
+
+    // Dynamic add/remove items
+    dynamicAddRemoveItems() {
+        const select = createElement('select', { props: { id: 'dynamicSel' } });
+        const dropDown = DropDown.create({
+            elem: select,
+            placeholder: 'Dynamic Drop Down',
+            multi: true,
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: [
+                Button.create({
+                    id: 'addBtn',
+                    title: 'Add item',
+                    className: 'action-btn',
+                    onClick: () => {
+                        const itemId = dropDown.items.length + 1;
+                        dropDown.addItem({
+                            id: itemId,
+                            title: `Item ${itemId}`,
+                        });
+                    },
+                }).elem,
+                Button.create({
+                    id: 'addDisBtn',
+                    title: 'Add disabled item',
+                    className: 'action-btn',
+                    onClick: () => {
+                        const itemId = dropDown.items.length + 1;
+                        dropDown.addItem({
+                            id: itemId,
+                            title: `Item ${itemId}`,
+                            disabled: true,
+                        });
+                    },
+                }).elem,
+                Button.create({
+                    id: 'addHiddenBtn',
+                    title: 'Add hidden item',
+                    className: 'action-btn',
+                    onClick: () => {
+                        const itemId = dropDown.items.length + 1;
+                        dropDown.addItem({
+                            id: itemId,
+                            title: `Item ${itemId}`,
+                            disabled: true,
+                            hidden: true,
+                        });
+                    },
+                }).elem,
+                Button.create({
+                    id: 'delBtn',
+                    title: 'Remove last item',
+                    className: 'action-btn',
+                    onClick: () => {
+                        const itemsCount = dropDown.items.length;
+                        if (!itemsCount) {
+                            return;
+                        }
+
+                        const item = dropDown.items[itemsCount - 1];
+                        dropDown.removeItem(item.id);
+                    },
+                }).elem,
+                Button.create({
+                    id: 'delAllBtn',
+                    title: 'Remove all items',
+                    className: 'action-btn',
+                    onClick: () => dropDown.removeAll(),
+                }).elem,
+            ],
+        });
+
+        this.addSection({
+            id: 'methods',
+            title: 'Methods',
+            content: [dropDown.elem, controls],
+        });
+    }
+
+    onPopupAction(action) {
+        if (!this.popup || !action) {
+            return;
+        }
+
+        const { classList } = this.popup.elem;
+        const alignActions = ['top', 'center', 'bottom'];
+
+        if (alignActions.includes(action)) {
+            classList.toggle('top-popup', action === 'top');
+            classList.toggle('bottom-popup', action === 'bottom');
+        }
+
+        if (action === 'scroll') {
+            classList.toggle('popup_scroll-message');
+        }
+
+        if (action === 'size') {
+            classList.toggle('scroll-inside');
+        }
+
+        if (action === 'relparent') {
+            classList.toggle('relative-wrapper');
+        }
+
+        if (action === 'placeholder') {
+            const bottomPlaceholder = ge('bottomPlaceholder');
+            const visible = isVisible(bottomPlaceholder);
+            show(bottomPlaceholder, !visible);
+
+            const togglePlaceholderBtn = ge('togglePlaceholderBtn');
+            togglePlaceholderBtn.textContent = (visible)
+                ? 'Show bottom placeholder'
+                : 'Hide bottom placeholder';
+        }
+
+        const scrollMessage = classList.contains('popup_scroll-message');
+        const scrollInside = classList.contains('scroll-inside');
+
+        const scrollPopupMessageBtn = ge('scrollPopupMessageBtn');
+        enable(scrollPopupMessageBtn, !scrollInside);
+        scrollPopupMessageBtn.textContent = (scrollMessage)
+            ? 'Scroll whole popup'
+            : 'Scroll only content';
+
+        const popupSizeBtn = ge('popupSizeBtn');
+        popupSizeBtn.textContent = (scrollInside)
+            ? 'Scroll popup'
+            : 'Scroll inside content';
+    }
+
+    createPopup() {
+        if (this.popup) {
+            return;
+        }
+
+        const dropDown = DropDown.create({
+            enableFilter: true,
+            placeholder: 'Select item',
+            data: initItems('Popup item', 50),
+        });
+        ge('popupDropDownContainer').append(dropDown.elem);
+
+        const popupContent = ge('popupContent');
+        this.popup = Popup.create({
+            id: 'dropDownPopup',
+            title: 'Popup',
+            content: popupContent,
+            closeButton: true,
+        });
+        show(popupContent, true);
+
+        setEvents(ge('popupControls'), {
+            click: (e) => this.onPopupAction(e?.target?.dataset?.action),
+        });
+    }
+
+    showPopup() {
+        this.createPopup();
+
+        this.popup.show();
+    }
+
+    // DropDown inside Popup
+    popupOverflow() {
+        this.addSection({
+            id: 'popup',
+            title: 'DropDown inside popup',
+            content: createElement('div', {
+                props: { className: 'section-controls' },
+                children: [
+                    Button.create({
+                        id: 'popupBtn',
+                        title: 'Show popup',
+                        className: 'action-btn',
+                        onClick: () => this.showPopup(),
+                    }).elem,
+                ],
+            }),
+        });
     }
 }
 
