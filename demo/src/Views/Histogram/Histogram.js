@@ -1,13 +1,11 @@
 import 'jezvejs/style';
-import 'jezvejs/style/Button';
-import {
-    ge,
-    setEvents,
-    createElement,
-} from 'jezvejs';
+import { createElement } from 'jezvejs';
+import { Button } from 'jezvejs/Button';
 import { Histogram } from 'jezvejs/Histogram';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
+import { RangeInputField } from './components/RangeInputField/RangeInputField.js';
 import largeData from './largeData.json';
 import './HistogramView.scss';
 
@@ -198,25 +196,13 @@ const negPosData = {
     series: ['x1', 'x1', 'x1', 'x1', 'x1'],
 };
 
-const setHistogramEvent = (str) => {
-    ge('histogram_events').textContent = str;
-};
+const chartContainer = (id, chart) => createElement('div', {
+    props: { id, className: 'std_chart_wrap' },
+    children: chart.elem,
+});
 
-const onChartsScroll = () => {
-    setHistogramEvent('Histogram scroll');
-};
-
-const onBarClick = ({ item }) => {
-    setHistogramEvent(`Clicked bar, value=${item.value}`);
-};
-
-const onBarOver = ({ item }) => {
-    setHistogramEvent(`Mouse over bar, value=${item.value}`);
-};
-
-const onBarOut = ({ item }) => {
-    setHistogramEvent(`Mouse out bar, value=${item.value}`);
-};
+const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
 const renderMultiColumnPopup = (target) => {
     if (!target.group) {
@@ -300,264 +286,359 @@ const renderCategoriesPopup = (target) => {
     });
 };
 
-const onChangeColumnWidth = (chart, value) => {
-    const columnWidthValue = ge('columnWidthValue');
-    columnWidthValue.textContent = value;
-
-    chart.setColumnWidth(value);
-};
-
-const onChangeGroupsGap = (chart, value) => {
-    const groupsGapValue = ge('groupsGapValue');
-    groupsGapValue.textContent = value;
-
-    chart.setGroupsGap(value);
-};
-
-const columnWidthAndGap = () => {
-    const histogram = Histogram.create({
-        data: chartData,
-    });
-    ge('chart').append(histogram.elem);
-
-    setEvents(ge('columnWidthRange'), {
-        input: (e) => onChangeColumnWidth(histogram, e.target.value),
-    });
-    setEvents(ge('groupsGapRange'), {
-        input: (e) => onChangeGroupsGap(histogram, e.target.value),
-    });
-};
-
-const fitToWidth = () => {
-    const histogram = Histogram.create({
-        data: chartData,
-        fitToWidth: true,
-    });
-    ge('chart_fittowidth').append(histogram.elem);
-};
-
-const autoScale = () => {
-    const histogram = Histogram.create({
-        data: chartData2,
-        autoScale: true,
-        className: 'histogram_autoscale',
-    });
-    ge('chart_autoscale').append(histogram.elem);
-};
-
-const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
-const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
-
-const callbacks = () => {
-    const histogram = Histogram.create({
-        data: chartData2,
-        height: 320,
-        marginTop: 35,
-        scrollToEnd: true,
-        autoScale: true,
-        animate: true,
-        showPopupOnClick: true,
-        activateOnClick: true,
-        renderPopup: (target) => formatAsUSD(target.item.value),
-        renderXAxisLabel: formatDecimalValue,
-        renderYAxisLabel: formatDecimalValue,
-        onItemClick: onBarClick,
-        onScroll: onChartsScroll,
-        onItemOver: onBarOver,
-        onItemOut: onBarOut,
-    });
-    ge('chart_callbacks').append(histogram.elem);
-};
-
-const multiColumn = () => {
-    const histogram = Histogram.create({
-        data: chartMultiData,
-        elem: 'chart_multicolumn',
-        height: 320,
-        marginTop: 35,
-        autoScale: true,
-        showPopupOnHover: true,
-        activateOnHover: true,
-        renderPopup: renderMultiColumnPopup,
-        showLegend: true,
-    });
-    ge('chart_multicolumn').append(histogram.elem);
-};
-
-const stacked = () => {
-    const histogram = Histogram.create({
-        data: chartStackedData,
-        height: 320,
-        marginTop: 35,
-        autoScale: true,
-        showPopupOnClick: true,
-        activateOnClick: true,
-        activateOnHover: true,
-        renderPopup: renderMultiColumnPopup,
-        showLegend: true,
-        renderLegend: renderCustomLegend,
-    });
-    ge('stacked-histogram').append(histogram.elem);
-};
-
-const stackedNegative = () => {
-    const histogram = Histogram.create({
-        data: chartNegMultiData,
-        height: 320,
-        marginTop: 35,
-        autoScale: true,
-        showPopupOnClick: true,
-        activateOnClick: true,
-        activateOnHover: true,
-        renderPopup: renderMultiColumnPopup,
-        showLegend: true,
-        renderLegend: renderCustomLegend,
-    });
-    ge('stacked-neg-histogram').append(histogram.elem);
-};
-
-const stackedGrouped = () => {
-    const histogram = Histogram.create({
-        data: chartGroupedData,
-        height: 320,
-        marginTop: 35,
-        columnWidth: 25,
-        groupsGap: 15,
-        columnGap: 2,
-        autoScale: true,
-        showPopupOnClick: true,
-        activateOnClick: true,
-        activateOnHover: true,
-        animatePopup: true,
-        pinPopupOnClick: true,
-        renderPopup: renderMultiColumnPopup,
-        showLegend: true,
-        renderLegend: renderCustomLegend,
-    });
-    ge('stacked-grouped-histogram').append(histogram.elem);
-};
-
-const stackedCategories = () => {
-    const histogram = Histogram.create({
-        data: chartGroupedCategoriesData,
-        height: 320,
-        marginTop: 35,
-        columnWidth: 25,
-        groupsGap: 15,
-        columnGap: 2,
-        autoScale: true,
-        showPopupOnClick: true,
-        showPopupOnHover: true,
-        animatePopup: true,
-        pinPopupOnClick: true,
-        renderPopup: renderCategoriesPopup,
-        activateOnClick: true,
-        activateOnHover: true,
-        showLegend: true,
-        renderLegend: renderCustomLegend,
-    });
-    ge('stacked-categories-histogram').append(histogram.elem);
-};
-
-const noData = () => {
-    const histogram = Histogram.create({
-        data: emptyData,
-        autoScale: true,
-    });
-    ge('chart_no_data').append(histogram.elem);
-};
-
-const singleNegative = () => {
-    const histogram = Histogram.create({
-        data: singleNegData,
-        autoScale: true,
-        onItemOver: onBarOver,
-        onItemOut: onBarOut,
-    });
-    ge('chart_single_neg').append(histogram.elem);
-};
-
-const onlyPositive = () => {
-    const histogram = Histogram.create({
-        data: posData,
-        autoScale: true,
-    });
-    ge('chart_pos').append(histogram.elem);
-};
-
-const onlyNegative = () => {
-    const histogram = Histogram.create({
-        data: negData,
-        autoScale: true,
-    });
-    ge('chart_neg').append(histogram.elem);
-};
-
-const negativeAndPositive = () => {
-    const histogram = Histogram.create({
-        data: negPosData,
-        elem: 'chart_negpos',
-        autoScale: true,
-    });
-    ge('chart_negpos').append(histogram.elem);
-};
-
-const setData = () => {
-    const histogram = Histogram.create({
-        data: negPosData,
-        elem: 'chart_setdata',
-        autoScale: true,
-        showLegend: true,
-        scrollToEnd: true,
-        renderLegend: renderCustomLegend,
-    });
-    ge('chart_setdata').append(histogram.elem);
-
-    setEvents(ge('setNoDataBtn'), { click: () => histogram.setData(emptyData) });
-    setEvents(ge('setData1Btn'), { click: () => histogram.setData(negPosData) });
-    setEvents(ge('setData2Btn'), { click: () => histogram.setData(chartData3) });
-    setEvents(ge('setData3Btn'), { click: () => histogram.setData(chartGroupedCategoriesData) });
-    setEvents(ge('largeDataBtn'), { click: () => histogram.setData(largeData) });
-};
-
+/**
+ * Histogram component demo view
+ */
 class HistogramView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        this.addContentsMenuItem({ title: 'Change \'columnWidth\' and \'groupsGap\'', url: 'columnWidth' });
-        this.addContentsMenuItem({ title: '\'fitToWidth\' option', url: 'fitToWidth' });
-        this.addContentsMenuItem({ title: '\'autoScale\' option', url: 'autoScale' });
-        this.addContentsMenuItem({ title: 'Callbacks', url: 'callbacks' });
-        this.addContentsMenuItem({ title: 'Multi column + Legend', url: 'multiColumn' });
-        this.addContentsMenuItem({ title: 'Stacked + Custom legend', url: 'stacked' });
-        this.addContentsMenuItem({ title: 'Stacked + Custom legend', url: 'stacked' });
-        this.addContentsMenuItem({ title: 'Stacked with negative values', url: 'stackedNegative' });
-        this.addContentsMenuItem({ title: 'Stacked and grouped', url: 'grouped' });
-        this.addContentsMenuItem({ title: 'Stacked and grouped with custom categories', url: 'customCategories' });
-        this.addContentsMenuItem({ title: 'No data', url: 'noData' });
-        this.addContentsMenuItem({ title: 'Single negative value', url: 'singleNagative' });
-        this.addContentsMenuItem({ title: 'Only positive values', url: 'onlyPositive' });
-        this.addContentsMenuItem({ title: 'Negative and positive values', url: 'negativePositive' });
-        this.addContentsMenuItem({ title: 'Set data', url: 'setData' });
+        this.columnWidthAndGap();
+        this.fitToWidth();
 
-        columnWidthAndGap();
-        fitToWidth();
-
-        autoScale();
-        callbacks();
-        multiColumn();
-        stacked();
-        stackedNegative();
-        stackedGrouped();
-        stackedCategories();
+        this.autoScale();
+        this.callbacks();
+        this.multiColumn();
+        this.stacked();
+        this.stackedNegative();
+        this.stackedGrouped();
+        this.stackedCategories();
         // Different data tests
-        noData();
-        singleNegative();
-        onlyPositive();
-        onlyNegative();
-        negativeAndPositive();
-        setData();
+        this.noData();
+        this.singleNegative();
+        this.onlyPositive();
+        this.onlyNegative();
+        this.negativeAndPositive();
+        this.setData();
+    }
+
+    columnWidthAndGap() {
+        const histogram = Histogram.create({
+            data: chartData,
+        });
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: [
+                RangeInputField.create({
+                    title: 'columnWidth:',
+                    min: 1,
+                    max: 50,
+                    value: 38,
+                    onInput: (value) => histogram.setColumnWidth(value),
+                }).elem,
+                RangeInputField.create({
+                    title: 'groupsGap:',
+                    min: 1,
+                    max: 50,
+                    value: 10,
+                    onInput: (value) => histogram.setGroupsGap(value),
+                }).elem,
+            ],
+        });
+
+        this.addSection({
+            id: 'columnWidth',
+            title: 'Change \'columnWidth\' and \'groupsGap\'',
+            content: [
+                chartContainer('chart', histogram),
+                controls,
+            ],
+        });
+    }
+
+    fitToWidth() {
+        const histogram = Histogram.create({
+            data: chartData,
+            fitToWidth: true,
+        });
+
+        this.addSection({
+            id: 'fitToWidth',
+            title: '\'fitToWidth\' option',
+            content: chartContainer('chart_fittowidth', histogram),
+        });
+    }
+
+    autoScale() {
+        const histogram = Histogram.create({
+            data: chartData2,
+            autoScale: true,
+            className: 'histogram_autoscale',
+        });
+
+        this.addSection({
+            id: 'autoScale',
+            title: '\'autoScale\' option',
+            content: chartContainer('chart_autoscale', histogram),
+        });
+    }
+
+    callbacks() {
+        const logsField = LogsField.create();
+
+        const histogram = Histogram.create({
+            data: chartData2,
+            height: 320,
+            marginTop: 35,
+            scrollToEnd: true,
+            autoScale: true,
+            animate: true,
+            showPopupOnClick: true,
+            activateOnClick: true,
+            renderPopup: (target) => formatAsUSD(target.item.value),
+            renderXAxisLabel: formatDecimalValue,
+            renderYAxisLabel: formatDecimalValue,
+            onItemClick: ({ item }) => logsField.write(`Clicked bar, value=${item.value}`),
+            onScroll: () => logsField.write('Histogram scroll'),
+            onItemOver: ({ item }) => logsField.write(`Mouse over bar, value=${item.value}`),
+            onItemOut: ({ item }) => logsField.write(`Mouse out bar, value=${item.value}`),
+        });
+
+        this.addSection({
+            id: 'callbacks',
+            title: 'Callbacks',
+            description: ' + \'animate\', \'showPopupOnClick\' and \'activateOnClick\' options',
+            content: [
+                chartContainer('chart_callbacks', histogram),
+                logsField.elem,
+            ],
+        });
+    }
+
+    multiColumn() {
+        const histogram = Histogram.create({
+            data: chartMultiData,
+            elem: 'chart_multicolumn',
+            height: 320,
+            marginTop: 35,
+            autoScale: true,
+            showPopupOnHover: true,
+            activateOnHover: true,
+            renderPopup: renderMultiColumnPopup,
+            showLegend: true,
+        });
+
+        this.addSection({
+            id: 'multiColumn',
+            title: 'Multi column + Legend',
+            description: ' + \'showPopupOnHover\' and \'activateOnHover\' options',
+            content: chartContainer('chart_multicolumn', histogram),
+        });
+    }
+
+    stacked() {
+        const histogram = Histogram.create({
+            data: chartStackedData,
+            height: 320,
+            marginTop: 35,
+            autoScale: true,
+            showPopupOnClick: true,
+            activateOnClick: true,
+            activateOnHover: true,
+            renderPopup: renderMultiColumnPopup,
+            showLegend: true,
+            renderLegend: renderCustomLegend,
+        });
+
+        this.addSection({
+            id: 'stacked',
+            title: 'Stacked + Custom legend',
+            content: chartContainer('stacked-histogram', histogram),
+        });
+    }
+
+    stackedNegative() {
+        const histogram = Histogram.create({
+            data: chartNegMultiData,
+            height: 320,
+            marginTop: 35,
+            autoScale: true,
+            showPopupOnClick: true,
+            activateOnClick: true,
+            activateOnHover: true,
+            renderPopup: renderMultiColumnPopup,
+            showLegend: true,
+            renderLegend: renderCustomLegend,
+        });
+
+        this.addSection({
+            id: 'stackedNegative',
+            title: 'Stacked with negative values',
+            content: chartContainer('stacked-neg-histogram', histogram),
+        });
+    }
+
+    stackedGrouped() {
+        const histogram = Histogram.create({
+            data: chartGroupedData,
+            height: 320,
+            marginTop: 35,
+            columnWidth: 25,
+            groupsGap: 15,
+            columnGap: 2,
+            autoScale: true,
+            showPopupOnClick: true,
+            activateOnClick: true,
+            activateOnHover: true,
+            animatePopup: true,
+            pinPopupOnClick: true,
+            renderPopup: renderMultiColumnPopup,
+            showLegend: true,
+            renderLegend: renderCustomLegend,
+        });
+
+        this.addSection({
+            id: 'grouped',
+            title: 'Stacked and grouped',
+            description: ' + \'animatePopup\' and \'pinPopupOnClick\' options',
+            content: chartContainer('stacked-grouped-histogram', histogram),
+        });
+    }
+
+    stackedCategories() {
+        const histogram = Histogram.create({
+            data: chartGroupedCategoriesData,
+            height: 320,
+            marginTop: 35,
+            columnWidth: 25,
+            groupsGap: 15,
+            columnGap: 2,
+            autoScale: true,
+            showPopupOnClick: true,
+            showPopupOnHover: true,
+            animatePopup: true,
+            pinPopupOnClick: true,
+            renderPopup: renderCategoriesPopup,
+            activateOnClick: true,
+            activateOnHover: true,
+            showLegend: true,
+            renderLegend: renderCustomLegend,
+        });
+
+        this.addSection({
+            id: 'customCategories',
+            title: 'Stacked and grouped with custom categories',
+            description: ' + \'showPopupOnHover\', \'animatePopup\' and \'pinPopupOnClick\' options',
+            content: chartContainer('stacked-categories-histogram', histogram),
+        });
+    }
+
+    noData() {
+        const histogram = Histogram.create({
+            data: emptyData,
+            autoScale: true,
+        });
+
+        this.addSection({
+            id: 'noData',
+            title: 'No data',
+            content: chartContainer('chart_no_data', histogram),
+        });
+    }
+
+    singleNegative() {
+        const histogram = Histogram.create({
+            data: singleNegData,
+            autoScale: true,
+        });
+
+        this.addSection({
+            id: 'singleNagative',
+            title: 'Single negative value',
+            content: chartContainer('chart_single_neg', histogram),
+        });
+    }
+
+    onlyPositive() {
+        const histogram = Histogram.create({
+            data: posData,
+            autoScale: true,
+        });
+
+        this.addSection({
+            id: 'onlyPositive',
+            title: 'Only positive values',
+            content: chartContainer('chart_pos', histogram),
+        });
+    }
+
+    onlyNegative() {
+        const histogram = Histogram.create({
+            data: negData,
+            autoScale: true,
+        });
+
+        this.addSection({
+            id: 'onlyNegative',
+            title: 'Only negative values',
+            content: chartContainer('chart_neg', histogram),
+        });
+    }
+
+    negativeAndPositive() {
+        const histogram = Histogram.create({
+            data: negPosData,
+            elem: 'chart_negpos',
+            autoScale: true,
+        });
+
+        this.addSection({
+            id: 'negativePositive',
+            title: 'Negative and positive values',
+            content: chartContainer('chart_negpos', histogram),
+        });
+    }
+
+    setData() {
+        const histogram = Histogram.create({
+            data: negPosData,
+            elem: 'chart_setdata',
+            autoScale: true,
+            showLegend: true,
+            scrollToEnd: true,
+            renderLegend: renderCustomLegend,
+        });
+
+        const items = [{
+            id: 'setNoDataBtn',
+            title: 'No data',
+            onClick: () => histogram.setData(emptyData),
+        }, {
+            id: 'setData1Btn',
+            title: 'Data set 1',
+            onClick: () => histogram.setData(negPosData),
+        }, {
+            id: 'setData2Btn',
+            title: 'Data set 2',
+            onClick: () => histogram.setData(chartData3),
+        }, {
+            id: 'setData3Btn',
+            title: 'Data set 3',
+            onClick: () => histogram.setData(chartGroupedCategoriesData),
+        }, {
+            id: 'largeDataBtn',
+            title: 'Large data set',
+            onClick: () => histogram.setData(largeData),
+        }];
+
+        const controls = createElement('div', {
+            props: { className: 'section-controls' },
+            children: items.map((item) => Button.create({
+                ...item,
+                className: 'action-btn',
+            }).elem),
+        });
+
+        this.addSection({
+            id: 'setData',
+            title: 'Set data',
+            content: [
+                chartContainer('chart_setdata', histogram),
+                controls,
+            ],
+        });
     }
 }
 
