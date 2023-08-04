@@ -17,9 +17,9 @@ import { Tags } from 'jezvejs/Tags';
 import { DemoView } from '../../Application/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
-import { CustomListItem } from './impl/CustomListItem.js';
-import { CustomSelectionItem } from './impl/CustomSelectionItem.js';
 import { BlueBox } from './components/BlueBox/BlueBox.js';
+import { CustomListItem } from './components/CustomListItem/CustomListItem.js';
+import { CustomSelectionItem } from './components/CustomSelectionItem/CustomSelectionItem.js';
 import './DropDownView.scss';
 
 const initItems = (title, count, startFrom = 1) => {
