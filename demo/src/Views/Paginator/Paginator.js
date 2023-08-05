@@ -3,8 +3,8 @@ import { ge } from 'jezvejs';
 import { Paginator } from 'jezvejs/Paginator';
 
 import { DemoView } from '../../Application/DemoView.js';
-import './PaginatorView.scss';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+import './PaginatorView.scss';
 
 /**
  * Paginator component demo view
