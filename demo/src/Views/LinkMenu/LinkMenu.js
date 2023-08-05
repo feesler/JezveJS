@@ -2,162 +2,217 @@ import 'jezvejs/style';
 import 'jezvejs/style/Button';
 import {
     asArray,
+    createElement,
     ge,
-    setEvents,
 } from 'jezvejs';
+import { Button } from 'jezvejs/Button';
 import { LinkMenu } from 'jezvejs/LinkMenu';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
 
-const addEventLog = (value) => {
-    const logElem = ge('eventsLog');
-    logElem.value += `${value}\r\n`;
-};
+const createContainer = (id, children) => createElement('div', {
+    props: { id },
+    children,
+});
 
-const initParsed = () => {
-    LinkMenu.fromElement(ge('parsed'), {
-        itemParam: 'type',
-        onChange: (sel) => addEventLog(`Selected: [${asArray(sel).join()}]`),
-    });
-};
-
-const initDynamicSingle = () => {
-    const menu = LinkMenu.create({
-        itemParam: 'action',
-        items: [
-            { icon: 'plus', title: 'Create', value: 'create' },
-            { icon: 'update', title: 'Update', value: 'update' },
-            { icon: 'del', title: 'Delete', value: 'delete' },
-        ],
-    });
-
-    ge('dynamic').append(menu.elem);
-};
-
-const initDynamicMultiple = () => {
-    const menu = LinkMenu.create({
-        itemParam: 'action',
-        allowActiveLink: true,
-        multiple: true,
-        items: [
-            { title: 'Clear' },
-            { title: 'Zero', value: 0 },
-            { title: 'Create', value: 'create' },
-            { title: 'Update', value: 'update' },
-            { title: 'Delete', value: 'delete' },
-        ],
-    });
-
-    ge('dynamicMulti').append(menu.elem);
-};
-
-const initButtonsType = () => {
-    const menu = LinkMenu.create({
-        type: 'buttons',
-        multiple: true,
-        items: [
-            { title: 'Create', value: 'create' },
-            { title: 'Update', value: 'update' },
-            { title: 'Delete', value: 'delete' },
-        ],
-    });
-
-    ge('buttonTypeContainer').append(menu.elem);
-};
-
-const initDisabledItem = () => {
-    const menu = LinkMenu.create({
-        itemParam: 'action',
-        multiple: true,
-        items: [
-            { title: 'Clear' },
-            { title: 'Create', value: 'create' },
-            { title: 'Update', value: 'update' },
-            { title: 'Delete', value: 'delete', disabled: true },
-        ],
-    });
-
-    ge('disabledItemContainer').append(menu.elem);
-
-    const btn = ge('toggleEnableItemBtn');
-    setEvents(btn, {
-        click: () => {
-            const item = menu.getItemByValue('delete');
-            btn.textContent = (item.disabled) ? 'Disable item' : 'Enable item';
-            menu.enableItem('delete', item.disabled);
-        },
-    });
-};
-
-const initHiddenItem = () => {
-    const menu = LinkMenu.create({
-        itemParam: 'action',
-        multiple: true,
-        items: [
-            { title: 'Clear' },
-            { title: 'Create', value: 'create' },
-            { title: 'Update', value: 'update' },
-            { title: 'Delete', value: 'delete' },
-        ],
-    });
-
-    ge('hiddenItemContainer').append(menu.elem);
-
-    const btn = ge('toggleShowItemBtn');
-    setEvents(btn, {
-        click: () => {
-            const item = menu.getItemByValue('delete');
-            btn.textContent = (item.hidden) ? 'Hide item' : 'Show item';
-            menu.showItem('delete', !!item.hidden);
-        },
-    });
-};
-
-const initDisabledComponent = () => {
-    const menu = LinkMenu.create({
-        itemParam: 'action',
-        multiple: true,
-        disabled: true,
-        items: [
-            { title: 'Clear' },
-            { title: 'Create', value: 'create' },
-            { title: 'Update', value: 'update' },
-            { title: 'Delete', value: 'delete', disabled: true },
-        ],
-    });
-
-    ge('disabledContainer').append(menu.elem);
-
-    const btn = ge('toggleEnableBtn');
-    setEvents(btn, {
-        click: () => {
-            const { enabled } = menu;
-            btn.textContent = (enabled) ? 'Enable' : 'Disable';
-            menu.enable(!enabled);
-        },
-    });
-};
-
+/**
+ * LinkMenu component demo view
+ */
 class LinkMenuView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        this.addContentsMenuItem({ title: 'Default settings', url: 'parse' });
-        this.addContentsMenuItem({ title: 'Single select with icons', url: 'single' });
-        this.addContentsMenuItem({ title: '\'allowActiveLink\' option', url: 'allowActiveLink' });
-        this.addContentsMenuItem({ title: 'Buttons', url: 'buttonType' });
-        this.addContentsMenuItem({ title: 'Disabled item', url: 'disabledItem' });
-        this.addContentsMenuItem({ title: 'Hidden item', url: 'hiddenItem' });
-        this.addContentsMenuItem({ title: 'Disabled component', url: 'disabled' });
+        this.initParsed();
+        this.initDynamicSingle();
+        this.initDynamicMultiple();
+        this.initButtonsType();
+        this.initDisabledItem();
+        this.initHiddenItem();
+        this.initDisabledComponent();
+    }
 
-        initParsed();
-        initDynamicSingle();
-        initDynamicMultiple();
-        initButtonsType();
-        initDisabledItem();
-        initHiddenItem();
-        initDisabledComponent();
+    initParsed() {
+        const logsField = LogsField.create();
+
+        this.addSection({
+            id: 'parse',
+            title: 'Parse multiple select component',
+            content: [
+                LinkMenu.fromElement(ge('parsed'), {
+                    itemParam: 'type',
+                    onChange: (sel) => logsField.write(`Selected: [${asArray(sel).join()}]`),
+                }).elem,
+                logsField.elem,
+            ],
+        });
+    }
+
+    initDynamicSingle() {
+        this.addSection({
+            id: 'single',
+            title: 'Single select with icons',
+            content: createContainer(
+                'dynamic',
+                LinkMenu.create({
+                    itemParam: 'action',
+                    items: [
+                        { icon: 'plus', title: 'Create', value: 'create' },
+                        { icon: 'update', title: 'Update', value: 'update' },
+                        { icon: 'del', title: 'Delete', value: 'delete' },
+                    ],
+                }).elem,
+            ),
+        });
+    }
+
+    initDynamicMultiple() {
+        const menu = LinkMenu.create({
+            itemParam: 'action',
+            allowActiveLink: true,
+            multiple: true,
+            items: [
+                { title: 'Clear' },
+                { title: 'Zero', value: 0 },
+                { title: 'Create', value: 'create' },
+                { title: 'Update', value: 'update' },
+                { title: 'Delete', value: 'delete' },
+            ],
+        });
+
+        this.addSection({
+            id: 'allowActiveLink',
+            title: '\'allowActiveLink\' option',
+            content: createContainer('dynamicMulti', menu.elem),
+        });
+    }
+
+    initButtonsType() {
+        const menu = LinkMenu.create({
+            type: 'buttons',
+            multiple: true,
+            items: [
+                { title: 'Create', value: 'create' },
+                { title: 'Update', value: 'update' },
+                { title: 'Delete', value: 'delete' },
+            ],
+        });
+
+        this.addSection({
+            id: 'buttonType',
+            title: 'Buttons',
+            content: createContainer('buttonTypeContainer', menu.elem),
+        });
+    }
+
+    initDisabledItem() {
+        const menu = LinkMenu.create({
+            itemParam: 'action',
+            multiple: true,
+            items: [
+                { title: 'Clear' },
+                { title: 'Create', value: 'create' },
+                { title: 'Update', value: 'update' },
+                { title: 'Delete', value: 'delete', disabled: true },
+            ],
+        });
+
+        const btn = Button.create({
+            id: 'toggleEnableItemBtn',
+            title: 'Enable item',
+            className: 'action-btn',
+            onClick: () => {
+                const item = menu.getItemByValue('delete');
+                btn.setTitle((item.disabled) ? 'Disable item' : 'Enable item');
+                menu.enableItem('delete', item.disabled);
+            },
+        });
+
+        this.addSection({
+            id: 'disabledItem',
+            title: 'Disabled item',
+            content: [
+                createContainer('disabledItemContainer', menu.elem),
+                createElement('div', {
+                    props: { className: 'section-controls' },
+                    children: btn.elem,
+                }),
+            ],
+        });
+    }
+
+    initHiddenItem() {
+        const menu = LinkMenu.create({
+            itemParam: 'action',
+            multiple: true,
+            items: [
+                { title: 'Clear' },
+                { title: 'Create', value: 'create' },
+                { title: 'Update', value: 'update' },
+                { title: 'Delete', value: 'delete' },
+            ],
+        });
+
+        const btn = Button.create({
+            id: 'toggleShowItemBtn',
+            title: 'Hide item',
+            className: 'action-btn',
+            onClick: () => {
+                const item = menu.getItemByValue('delete');
+                btn.setTitle((item.hidden) ? 'Hide item' : 'Show item');
+                menu.showItem('delete', !!item.hidden);
+            },
+        });
+
+        this.addSection({
+            id: 'hiddenItem',
+            title: 'Hidden item',
+            content: [
+                createContainer('hiddenItemContainer', menu.elem),
+                createElement('div', {
+                    props: { className: 'section-controls' },
+                    children: btn.elem,
+                }),
+            ],
+        });
+    }
+
+    initDisabledComponent() {
+        const menu = LinkMenu.create({
+            itemParam: 'action',
+            multiple: true,
+            disabled: true,
+            items: [
+                { title: 'Clear' },
+                { title: 'Create', value: 'create' },
+                { title: 'Update', value: 'update' },
+                { title: 'Delete', value: 'delete', disabled: true },
+            ],
+        });
+
+        const btn = Button.create({
+            id: 'toggleEnableBtn',
+            title: 'Enable',
+            className: 'action-btn',
+            onClick: () => {
+                const { enabled } = menu;
+                btn.setTitle((enabled) ? 'Enable' : 'Disable');
+                menu.enable(!enabled);
+            },
+        });
+
+        this.addSection({
+            id: 'disabled',
+            title: 'Disabled component',
+            content: [
+                createContainer('disabledContainer', menu.elem),
+                createElement('div', {
+                    props: { className: 'section-controls' },
+                    children: btn.elem,
+                }),
+            ],
+        });
     }
 }
 
