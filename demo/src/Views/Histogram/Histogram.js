@@ -5,7 +5,7 @@ import { Histogram } from 'jezvejs/Histogram';
 
 import { DemoView } from '../../Application/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
-import { RangeInputField } from './components/RangeInputField/RangeInputField.js';
+import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 import largeData from './largeData.json';
 import './HistogramView.scss';
 
