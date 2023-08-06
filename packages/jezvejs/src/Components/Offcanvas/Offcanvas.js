@@ -106,6 +106,10 @@ export class Offcanvas extends Component {
     }
 
     open() {
+        if (!this.state.closed) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             transitionInProgress: true,
@@ -114,6 +118,10 @@ export class Offcanvas extends Component {
     }
 
     close() {
+        if (this.state.closed) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             transitionInProgress: true,
