@@ -5,6 +5,7 @@ import {
     removeChilds,
     show,
     reflow,
+    isVisible,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
@@ -133,10 +134,13 @@ export class Offcanvas extends Component {
             return;
         }
 
-        if (state.closed) {
-            ScrollLock.unlock();
-        } else {
+        const backdropVisible = isVisible(this.backgroundElem, true);
+        const opened = !state.closed && backdropVisible;
+
+        if (opened) {
             ScrollLock.lock();
+        } else {
+            ScrollLock.unlock();
         }
     }
 
@@ -167,11 +171,11 @@ export class Offcanvas extends Component {
             throw new Error('Invalid state');
         }
 
+        this.renderBackground(state, prevState);
+
         if (this.props.useScrollLock) {
             this.renderScrollLock(state, prevState);
         }
-
-        this.renderBackground(state, prevState);
 
         this.elem.classList.toggle(CLOSED_CLASS, !!state.closed);
     }
