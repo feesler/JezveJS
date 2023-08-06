@@ -2,6 +2,13 @@
   height: 200px;
 }
 
+.drag-area {
+  position: relative;
+  border-width: 2px;
+  border-style: dashed;
+  border-color: #306da3db;
+}
+
 .inner-drop {
   position: relative;
   width: 180px;

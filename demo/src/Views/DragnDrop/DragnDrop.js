@@ -217,7 +217,7 @@ class DragAndDropView extends DemoView {
             props: { className: 'square abs_pos_square' },
         });
         const dropArea = createElement('div', {
-            props: { className: 'section-h200' },
+            props: { className: 'section-h200 drag-area' },
             children: square,
         });
 
@@ -701,7 +701,7 @@ class DragAndDropView extends DemoView {
         });
 
         const dropArea = createElement('div', {
-            props: { className: 'section-h200' },
+            props: { className: 'section-h200 drag-area' },
             children: [dragItem1, dragItem2, dragItem3],
         });
 
