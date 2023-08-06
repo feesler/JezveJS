@@ -2,6 +2,7 @@
 .offcanvas__bg {
   --offcanvas-bg: #ffffff;
   --offcanvas-z: 2000;
+  --offcanvas-transition-duration: 0.25s;
 }
 
 .offcanvas {
@@ -14,7 +15,7 @@
   box-sizing: border-box;
   overflow-y: auto;
   z-index: var(--offcanvas-z);
-  transition: transform 0.1s ease;
+  transition: transform var(--offcanvas-transition-duration) ease;
   background-color: var(--offcanvas-bg);
 }
 
@@ -61,6 +62,12 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: #000000;
+  opacity: 0.5;
   z-index: calc(var(--offcanvas-z) - 1);
+  transition: opacity var(--offcanvas-transition-duration) ease;
+}
+
+.offcanvas__bg.closed {
+  opacity: 0;
 }

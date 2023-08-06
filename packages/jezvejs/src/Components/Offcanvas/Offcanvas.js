@@ -1,8 +1,10 @@
 import {
     isFunction,
     createElement,
+    re,
     removeChilds,
     show,
+    reflow,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
@@ -39,6 +41,7 @@ export class Offcanvas extends Component {
 
         this.state = {
             closed: this.props.closed,
+            transitionInProgress: false,
         };
 
         this.init();
@@ -64,14 +67,9 @@ export class Offcanvas extends Component {
             this.elem.classList.add(BOTTOM_CONTAINER_CLASS);
         }
 
-        this.backgroundElem = createElement('div', {
-            props: { className: BACKGROUND_CLASS },
-            events: { click: () => this.close() },
-        });
-
         this.setClassNames();
 
-        document.body.append(this.elem, this.backgroundElem);
+        document.body.append(this.elem);
 
         this.render(this.state);
     }
@@ -91,6 +89,8 @@ export class Offcanvas extends Component {
             return;
         }
 
+        this.setState({ ...this.state, transitionInProgress: false });
+
         if (this.state.closed) {
             if (isFunction(this.props.onClosed)) {
                 this.props.onClosed();
@@ -105,15 +105,27 @@ export class Offcanvas extends Component {
     }
 
     open() {
-        this.setState({ ...this.state, closed: false });
+        this.setState({
+            ...this.state,
+            transitionInProgress: true,
+            closed: false,
+        });
     }
 
     close() {
-        this.setState({ ...this.state, closed: true });
+        this.setState({
+            ...this.state,
+            transitionInProgress: true,
+            closed: true,
+        });
     }
 
     toggle() {
-        this.setState({ ...this.state, closed: !this.state.closed });
+        this.setState({
+            ...this.state,
+            transitionInProgress: true,
+            closed: !this.state.closed,
+        });
     }
 
     renderScrollLock(state, prevState) {
@@ -128,6 +140,27 @@ export class Offcanvas extends Component {
         }
     }
 
+    renderBackground(state, prevState) {
+        const showBackground = state.transitionInProgress || state.closed === false;
+        const showBefore = prevState.transitionInProgress || prevState.closed === false;
+
+        if (showBackground && !showBefore) {
+            if (!this.backgroundElem) {
+                this.backgroundElem = createElement('div', {
+                    props: { className: BACKGROUND_CLASS },
+                    events: { click: () => this.close() },
+                });
+            }
+
+            this.elem.after(this.backgroundElem);
+            reflow(this.backgroundElem);
+        } else if (!showBackground && showBefore) {
+            re(this.backgroundElem);
+        }
+
+        this.backgroundElem?.classList.toggle('closed', state.closed);
+    }
+
     /** Render component state */
     render(state, prevState = {}) {
         if (!state) {
@@ -138,7 +171,8 @@ export class Offcanvas extends Component {
             this.renderScrollLock(state, prevState);
         }
 
+        this.renderBackground(state, prevState);
+
         this.elem.classList.toggle(CLOSED_CLASS, !!state.closed);
-        show(this.backgroundElem, !state.closed);
     }
 }
