@@ -11,10 +11,13 @@
   justify-content: flex-end;
   width: 100%;
   overflow: hidden;
+  margin-right: 9px;
 }
 
 .nav-header__content .menu-btn {
   --btn-icon-color: #ffffff;
+
+  width: var(--btn-size);
 }
 
 /* List element */

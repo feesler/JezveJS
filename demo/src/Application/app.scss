@@ -110,12 +110,11 @@ a:visited {
 .nav-header {
   display: flex;
   flex-flow: row nowrap;
-  align-items: baseline;
+  align-items: center;
   position: fixed;
   left: 0;
   right: 0;
   top: 0;
-  padding: 12px;
   height: 50px;
   z-index: 2000;
   box-sizing: border-box;
@@ -123,14 +122,15 @@ a:visited {
   color: #dddddd;
 }
 
-.nav-header__logo {
+.nav-header__logo,
+.nav-header__logo:visited {
   display: flex;
-  padding: 0;
-
-  > a {
-    font-size: 1.1rem;
-    color: #dddddd;
-  }
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  line-height: 50px;
+  font-size: 1.1rem;
+  color: #dddddd;
 }
 
 .nav-header__version {
@@ -140,20 +140,17 @@ a:visited {
 
 /* Navigation toggle button */
 .nav-toggle-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-  margin-right: 1rem;
-  cursor: pointer;
   background: none;
-  border: 0 none;
+  border: 0;
   border-radius: 100vh;
+  cursor: pointer;
+  display: block;
+  padding: 13px;
 }
 
 .nav-toggle-icon {
-  width: 20px;
-  height: 12px;
+  width: 24px;
+  height: 24px;
   fill: #dddddd;
 }
 
