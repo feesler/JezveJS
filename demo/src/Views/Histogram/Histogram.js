@@ -299,6 +299,8 @@ class HistogramView extends DemoView {
 
         this.leftYAxis();
         this.noYAxis();
+        this.topXAxis();
+        this.noXAxis();
 
         this.autoScale();
         this.callbacks();
@@ -386,6 +388,34 @@ class HistogramView extends DemoView {
             id: 'noYAxis',
             title: '\'yAxis\' option: none',
             content: chartContainer('chart_no_yaxis', histogram),
+        });
+    }
+
+    topXAxis() {
+        const histogram = Histogram.create({
+            data: chartData2,
+            xAxis: 'top',
+            className: 'histogram_top_xaxis',
+        });
+
+        this.addSection({
+            id: 'topXAxis',
+            title: '\'xAxis\' option: top',
+            content: chartContainer('chart_top_xaxis', histogram),
+        });
+    }
+
+    noXAxis() {
+        const histogram = Histogram.create({
+            data: chartData2,
+            xAxis: 'none',
+            className: 'histogram_no_xaxis',
+        });
+
+        this.addSection({
+            id: 'noXAxis',
+            title: '\'xAxis\' option: none',
+            content: chartContainer('chart_no_xaxis', histogram),
         });
     }
 

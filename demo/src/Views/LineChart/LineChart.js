@@ -198,6 +198,8 @@ class LineChartView extends DemoView {
 
         this.leftYAxis();
         this.noYAxis();
+        this.topXAxis();
+        this.noXAxis();
 
         this.autoScale();
         this.callbacks();
@@ -283,6 +285,34 @@ class LineChartView extends DemoView {
             id: 'noYAxis',
             title: '\'yAxis\' option: none',
             content: chartContainer('linechart_no_yaxis', chart),
+        });
+    }
+
+    topXAxis() {
+        const chart = LineChart.create({
+            data: chartData2,
+            xAxis: 'top',
+            className: 'linechart_top_xaxis',
+        });
+
+        this.addSection({
+            id: 'topXAxis',
+            title: '\'xAxis\' option: top',
+            content: chartContainer('linechart_top_xaxis', chart),
+        });
+    }
+
+    noXAxis() {
+        const chart = LineChart.create({
+            data: chartData2,
+            xAxis: 'none',
+            className: 'linechart_no_xaxis',
+        });
+
+        this.addSection({
+            id: 'noXAxis',
+            title: '\'xAxis\' option: none',
+            content: chartContainer('linechart_no_xaxis', chart),
         });
     }
 

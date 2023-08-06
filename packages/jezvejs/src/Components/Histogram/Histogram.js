@@ -134,7 +134,7 @@ export class Histogram extends BaseChart {
         valueOffset = 0,
         groupName = null,
     }, state) {
-        const { grid } = state;
+        const { grid, xAxis } = state;
         const fixedValue = value ?? 0;
         if (fixedValue === 0) {
             return null;
@@ -159,6 +159,11 @@ export class Histogram extends BaseChart {
             categoryIndex,
             groupName,
         };
+
+        if (xAxis === 'top') {
+            item.y += state.hLabelsHeight;
+        }
+
         item.x = this.getX(item, groupWidth, columnWidth);
 
         if (
