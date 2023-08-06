@@ -87,8 +87,8 @@ a:visited {
   color: #0072c6;
 }
 
-.action-btn,
-.action-btn:visited {
+.btn.action-btn,
+.btn.action-btn:visited {
   --btn-title-color: #ffffff;
   --btn-background: var(--action-btn-bg);
   --btn-hover-title-color: #ffffff;
@@ -101,7 +101,7 @@ a:visited {
   margin-right: 15px;
 }
 
-.action-btn:focus {
+.btn.action-btn:focus {
   outline: 2px #aee5ff solid;
   outline-offset: 0.1rem;
 }
