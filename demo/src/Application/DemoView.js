@@ -1,4 +1,4 @@
-import { ge, setEvents } from 'jezvejs';
+import { createElement, ge, setEvents } from 'jezvejs';
 import { View } from 'jezvejs/View';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
@@ -71,8 +71,10 @@ export class DemoView extends View {
             items = [],
         } = options;
 
-        this.initTableOfContents();
+        const header = createElement('h1', { props: { textContent: title } });
+        this.container.append(header);
 
+        this.initTableOfContents();
         this.tocMenu.setState((menuState) => ({
             ...menuState,
             sections: [...menuState.sections, { title, items }],
@@ -92,14 +94,13 @@ export class DemoView extends View {
         this.initTableOfContents();
 
         this.tocMenu.setState((menuState) => {
-            const newState = {
-                ...menuState,
-            };
+            const newState = { ...menuState };
+            const { sections } = newState;
 
-            if (newState.sections.length === 0) {
-                newState.sections.push({ items: [] });
+            if (sections.length === 0) {
+                sections.push({ items: [] });
             }
-            const lastSection = newState.sections[newState.sections.length - 1];
+            const lastSection = sections[sections.length - 1];
             lastSection.items.push({ title, url });
 
             return newState;
