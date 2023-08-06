@@ -5,6 +5,7 @@ import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './ButtonView.scss';
 
@@ -285,15 +286,12 @@ class ButtonView extends DemoView {
             },
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                toggleEnableButtonBtn.elem,
-                toggleEnableLinkBtn.elem,
-                toggleIconBtn.elem,
-                toggleTitleBtn.elem,
-            ],
-        });
+        const controls = createControls([
+            toggleEnableButtonBtn.elem,
+            toggleEnableLinkBtn.elem,
+            toggleIconBtn.elem,
+            toggleTitleBtn.elem,
+        ]);
 
         this.addSection({
             id: 'disabled',

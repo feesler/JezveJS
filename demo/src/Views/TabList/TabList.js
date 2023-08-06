@@ -4,20 +4,9 @@ import { Button } from 'jezvejs/Button';
 import { TabList } from 'jezvejs/TabList';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createContainer, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './TabListView.scss';
-
-const createContainer = (id, children) => createElement('div', {
-    props: { id },
-    children,
-});
-
-const createControls = (children) => (
-    createElement('div', {
-        props: { className: 'section-controls' },
-        children,
-    })
-);
 
 const renderContent = (value) => createElement('div', {
     props: {

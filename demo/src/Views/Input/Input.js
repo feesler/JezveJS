@@ -4,6 +4,7 @@ import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './InputView.scss';
 
@@ -104,17 +105,12 @@ class InputView extends DemoView {
             },
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: toggleEnableBtn.elem,
-        });
-
         this.addSection({
             id: 'disabled',
             title: 'Disabled component',
             content: [
                 createElement('div', { children: disabledInp.elem }),
-                controls,
+                createControls(toggleEnableBtn.elem),
             ],
         });
     }

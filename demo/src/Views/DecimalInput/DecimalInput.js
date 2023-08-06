@@ -5,6 +5,7 @@ import { Button } from 'jezvejs/Button';
 import { DecimalInput } from 'jezvejs/DecimalInput';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createControls } from '../../Application/utils.js';
 
 /**
  * DatePicker component demo view
@@ -47,15 +48,14 @@ class DecimalInputView extends DemoView {
             },
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: createElement('input', {
+        const controls = createControls(
+            createElement('input', {
                 props: {
                     id: 'testValueInput',
                     className: 'input',
                 },
             }),
-        });
+        );
 
         this.addSection({
             id: 'default',
@@ -119,9 +119,8 @@ class DecimalInputView extends DemoView {
             digits: 2,
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: Button.create({
+        const controls = createControls(
+            Button.create({
                 id: 'changeDigitsBtn',
                 className: 'action-btn',
                 title: 'Change',
@@ -132,7 +131,7 @@ class DecimalInputView extends DemoView {
                     }));
                 },
             }).elem,
-        });
+        );
 
         this.addSection({
             id: 'changeProps',

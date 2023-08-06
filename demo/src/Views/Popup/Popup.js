@@ -6,11 +6,11 @@ import {
     setEvents,
     show,
 } from 'jezvejs';
-import { Button } from 'jezvejs/Button';
 import { Popup } from 'jezvejs/Popup';
 import { Notification } from 'jezvejs/Notification';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
@@ -103,14 +103,11 @@ class PopupView extends DemoView {
             id: 'fullwidth',
             title: 'Full width',
             content: [
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: Button.create({
-                        id: 'showFullWidthBtn',
-                        className: 'action-btn',
-                        title: 'Show',
-                        onClick: () => this.showFullWidthPopup(),
-                    }).elem,
+                createButtons({
+                    id: 'showFullWidthBtn',
+                    className: 'action-btn',
+                    title: 'Show',
+                    onClick: () => this.showFullWidthPopup(),
                 }),
                 this.logsField.elem,
             ],
@@ -143,14 +140,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'close',
             title: 'Close button',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showCloseBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showCloseBtnPopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showCloseBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showCloseBtnPopup(),
             }),
         });
     }
@@ -182,14 +176,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'msgScroll',
             title: 'Scroll message',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showMsgScrollBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showMessageScrollPopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showMsgScrollBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showMessageScrollPopup(),
             }),
         });
     }
@@ -212,14 +203,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'center',
             title: 'Center',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showCenterOnlyBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showCenterOnlyPopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showCenterOnlyBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showCenterOnlyPopup(),
             }),
         });
     }
@@ -243,14 +231,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'noDim',
             title: 'No dimming',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showNoDimBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showNoDimPopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showNoDimBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showNoDimPopup(),
             }),
         });
     }
@@ -278,14 +263,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'draggable',
             title: 'Draggable',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showDraggableBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showDraggablePopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showDraggableBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showDraggablePopup(),
             }),
         });
     }
@@ -330,29 +312,22 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'notification',
             title: 'Notification',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: [
-                    Button.create({
-                        id: 'showNotifyBtn',
-                        className: 'action-btn',
-                        title: 'Show',
-                        onClick: () => this.showNotifyPopup(),
-                    }).elem,
-                    Button.create({
-                        id: 'showSuccessNotifyBtn',
-                        className: 'action-btn',
-                        title: 'Show success',
-                        onClick: () => this.showSuccessNotifyPopup(),
-                    }).elem,
-                    Button.create({
-                        id: 'showErrorNotifyBtn',
-                        className: 'action-btn',
-                        title: 'Show error',
-                        onClick: () => this.showErrorNotifyPopup(),
-                    }).elem,
-                ],
-            }),
+            content: createButtons([{
+                id: 'showNotifyBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showNotifyPopup(),
+            }, {
+                id: 'showSuccessNotifyBtn',
+                className: 'action-btn',
+                title: 'Show success',
+                onClick: () => this.showSuccessNotifyPopup(),
+            }, {
+                id: 'showErrorNotifyBtn',
+                className: 'action-btn',
+                title: 'Show error',
+                onClick: () => this.showErrorNotifyPopup(),
+            }]),
         });
     }
 
@@ -377,19 +352,14 @@ class PopupView extends DemoView {
     }
 
     initTemplatePopup() {
-        setEvents(ge('showTplBtn'), { click: this.showTemplatePopup });
-
         this.addSection({
             id: 'template',
             title: 'Use template',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showTplBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showTemplatePopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showTplBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showTemplatePopup(),
             }),
         });
     }
@@ -447,14 +417,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'nested',
             title: 'Nested popups',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showNestedBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showNestedPopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showNestedBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showNestedPopup(),
             }),
         });
     }
@@ -512,14 +479,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'controls',
             title: 'Update controls',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showControlsUpdBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showControlsUpdatePopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showControlsUpdBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showControlsUpdatePopup(),
             }),
         });
     }
@@ -592,14 +556,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'title',
             title: 'Update title',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showTitleUpdBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showTitleUpdatePopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showTitleUpdBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showTitleUpdatePopup(),
             }),
         });
     }
@@ -661,14 +622,11 @@ class PopupView extends DemoView {
         this.addSection({
             id: 'content',
             title: 'Update content',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showContentUpdBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => this.showContentUpdatePopup(),
-                }).elem,
+            content: createButtons({
+                id: 'showContentUpdBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => this.showContentUpdatePopup(),
             }),
         });
     }

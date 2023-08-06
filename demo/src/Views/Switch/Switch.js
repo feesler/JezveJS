@@ -1,38 +1,11 @@
 import 'jezvejs/style';
-import {
-    asArray,
-    createElement,
-    ge,
-    getClassName,
-} from 'jezvejs';
-import { Button } from 'jezvejs/Button';
+import { ge } from 'jezvejs';
 import { Switch } from 'jezvejs/Switch';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createContainer, createForm, createButtons } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './SwitchView.scss';
-
-const createContainer = (id, children) => createElement('div', {
-    props: { id },
-    children,
-});
-
-const createForm = (id, children) => createElement('form', {
-    props: { id },
-    children,
-});
-
-const createButtons = (items) => (
-    createElement('div', {
-        props: { className: 'section-controls' },
-        children: asArray(items).map((item) => (
-            Button.create({
-                ...item,
-                className: getClassName('action-btn', item.className),
-            }).elem
-        )),
-    })
-);
 
 /**
  * Switch component demo view
@@ -94,6 +67,7 @@ class SwitchView extends DemoView {
             title: 'Disable',
             onClick: () => dynamicSwitch.enable(false),
         }]);
+
         const controlsBottomRow = createButtons([{
             id: 'changePropBtn',
             title: 'Change property',

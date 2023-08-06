@@ -4,6 +4,7 @@ import { createElement } from 'jezvejs';
 import { DateInput } from 'jezvejs/DateInput';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createControls } from '../../Application/utils.js';
 import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
 
 /**
@@ -117,15 +118,14 @@ class DateInputView extends DemoView {
                         }).elem
                     ),
                 }).elem,
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: createElement('input', {
+                createControls(
+                    createElement('input', {
                         props: {
                             id: 'testValueInput',
                             className: 'input',
                         },
                     }),
-                }),
+                ),
             ],
         });
     }

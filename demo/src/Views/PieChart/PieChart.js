@@ -1,9 +1,9 @@
 import 'jezvejs/style';
 import { asArray, createElement } from 'jezvejs';
-import { Button } from 'jezvejs/Button';
 import { PieChart } from 'jezvejs/PieChart';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
 import './PieChartView.scss';
 
 const chartContainer = (id, elem) => createElement('div', {
@@ -198,23 +198,17 @@ class PieChartView extends DemoView {
             data: null,
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                Button.create({
-                    id: 'setNoDataBtn',
-                    title: 'Set no data',
-                    className: 'action-btn',
-                    onClick: () => chart.setData(null),
-                }).elem,
-                Button.create({
-                    id: 'setDataBtn',
-                    title: 'Set data',
-                    className: 'action-btn',
-                    onClick: () => chart.setData(initialData),
-                }).elem,
-            ],
-        });
+        const controls = createButtons([{
+            id: 'setNoDataBtn',
+            title: 'Set no data',
+            className: 'action-btn',
+            onClick: () => chart.setData(null),
+        }, {
+            id: 'setDataBtn',
+            title: 'Set data',
+            className: 'action-btn',
+            onClick: () => chart.setData(initialData),
+        }]);
 
         this.addSection({
             id: 'setData',

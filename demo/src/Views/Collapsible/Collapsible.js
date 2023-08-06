@@ -4,11 +4,11 @@ import {
     setEvents,
     createElement,
 } from 'jezvejs';
-import { Button } from 'jezvejs/Button';
 import { Collapsible } from 'jezvejs/Collapsible';
 import { Icon } from 'jezvejs/Icon';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
 import './CollapsibleView.scss';
 
 const CUSTOM_BTN_CLASS = 'custom-header-btn';
@@ -144,13 +144,7 @@ class CollapsibleView extends DemoView {
             title: 'Methods',
             content: [
                 createElement('div', { children: collapse.elem }),
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: buttons.map((item) => Button.create({
-                        ...item,
-                        className: 'action-btn',
-                    }).elem),
-                }),
+                createButtons(buttons),
             ],
         });
     }

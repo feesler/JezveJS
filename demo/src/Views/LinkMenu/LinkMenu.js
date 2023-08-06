@@ -1,20 +1,11 @@
 import 'jezvejs/style';
-import 'jezvejs/style/Button';
-import {
-    asArray,
-    createElement,
-    ge,
-} from 'jezvejs';
+import { asArray, ge } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { LinkMenu } from 'jezvejs/LinkMenu';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createContainer, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
-
-const createContainer = (id, children) => createElement('div', {
-    props: { id },
-    children,
-});
 
 /**
  * LinkMenu component demo view
@@ -134,10 +125,7 @@ class LinkMenuView extends DemoView {
             title: 'Disabled item',
             content: [
                 createContainer('disabledItemContainer', menu.elem),
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: btn.elem,
-                }),
+                createControls(btn.elem),
             ],
         });
     }
@@ -170,10 +158,7 @@ class LinkMenuView extends DemoView {
             title: 'Hidden item',
             content: [
                 createContainer('hiddenItemContainer', menu.elem),
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: btn.elem,
-                }),
+                createControls(btn.elem),
             ],
         });
     }
@@ -207,10 +192,7 @@ class LinkMenuView extends DemoView {
             title: 'Disabled component',
             content: [
                 createContainer('disabledContainer', menu.elem),
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: btn.elem,
-                }),
+                createControls(btn.elem),
             ],
         });
     }

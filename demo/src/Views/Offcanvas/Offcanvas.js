@@ -1,9 +1,9 @@
 import 'jezvejs/style';
-import { createElement, ge, setEvents } from 'jezvejs';
-import { Button } from 'jezvejs/Button';
+import { ge, setEvents } from 'jezvejs';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './OffcanvasView.scss';
 
@@ -38,14 +38,11 @@ class OffcanvasView extends DemoView {
             id: 'default',
             title: 'Default settings',
             content: [
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: Button.create({
-                        id: 'showDefaultBtn',
-                        className: 'action-btn',
-                        title: 'Show',
-                        onClick: () => offcanvas.open(),
-                    }).elem,
+                createButtons({
+                    id: 'showDefaultBtn',
+                    className: 'action-btn',
+                    title: 'Show',
+                    onClick: () => offcanvas.open(),
                 }),
                 logsField.elem,
             ],
@@ -61,14 +58,11 @@ class OffcanvasView extends DemoView {
         this.addSection({
             id: 'right',
             title: 'Right placement',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showRightBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => offcanvas.open(),
-                }).elem,
+            content: createButtons({
+                id: 'showRightBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => offcanvas.open(),
             }),
         });
     }
@@ -82,14 +76,11 @@ class OffcanvasView extends DemoView {
         this.addSection({
             id: 'top',
             title: 'Top placement',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showTopBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => offcanvas.open(),
-                }).elem,
+            content: createButtons({
+                id: 'showTopBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => offcanvas.open(),
             }),
         });
     }
@@ -103,14 +94,11 @@ class OffcanvasView extends DemoView {
         this.addSection({
             id: 'bottom',
             title: 'Bottom placement',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showBottomBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => offcanvas.open(),
-                }).elem,
+            content: createButtons({
+                id: 'showBottomBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => offcanvas.open(),
             }),
         });
     }
@@ -124,14 +112,11 @@ class OffcanvasView extends DemoView {
         this.addSection({
             id: 'responsive',
             title: 'Responsive',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showResponsiveBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => offcanvas.open(),
-                }).elem,
+            content: createButtons({
+                id: 'showResponsiveBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => offcanvas.open(),
             }),
         });
     }
@@ -146,14 +131,11 @@ class OffcanvasView extends DemoView {
             id: 'useScrollLock',
             title: '\'useScrollLock\' option',
             description: 'In this example scroll lock is disabled, so body scroll should be available under backdrop of active component.',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: Button.create({
-                    id: 'showScrollLockBtn',
-                    className: 'action-btn',
-                    title: 'Show',
-                    onClick: () => offcanvas.open(),
-                }).elem,
+            content: createButtons({
+                id: 'showScrollLockBtn',
+                className: 'action-btn',
+                title: 'Show',
+                onClick: () => offcanvas.open(),
             }),
         });
     }

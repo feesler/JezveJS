@@ -1,9 +1,9 @@
 import 'jezvejs/style';
 import { createElement } from 'jezvejs';
-import { Button } from 'jezvejs/Button';
 import { Histogram } from 'jezvejs/Histogram';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 import largeData from './largeData.json';
@@ -318,25 +318,22 @@ class HistogramView extends DemoView {
             data: chartData,
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                RangeInputField.create({
-                    title: 'columnWidth:',
-                    min: 1,
-                    max: 50,
-                    value: 38,
-                    onInput: (value) => histogram.setColumnWidth(value),
-                }).elem,
-                RangeInputField.create({
-                    title: 'groupsGap:',
-                    min: 1,
-                    max: 50,
-                    value: 10,
-                    onInput: (value) => histogram.setGroupsGap(value),
-                }).elem,
-            ],
-        });
+        const controls = createControls([
+            RangeInputField.create({
+                title: 'columnWidth:',
+                min: 1,
+                max: 50,
+                value: 38,
+                onInput: (value) => histogram.setColumnWidth(value),
+            }).elem,
+            RangeInputField.create({
+                title: 'groupsGap:',
+                min: 1,
+                max: 50,
+                value: 10,
+                onInput: (value) => histogram.setGroupsGap(value),
+            }).elem,
+        ]);
 
         this.addSection({
             id: 'columnWidth',
@@ -623,20 +620,12 @@ class HistogramView extends DemoView {
             onClick: () => histogram.setData(largeData),
         }];
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: items.map((item) => Button.create({
-                ...item,
-                className: 'action-btn',
-            }).elem),
-        });
-
         this.addSection({
             id: 'setData',
             title: 'Set data',
             content: [
                 chartContainer('chart_setdata', histogram),
-                controls,
+                createButtons(items),
             ],
         });
     }

@@ -10,6 +10,7 @@ import { DatePicker } from 'jezvejs/DatePicker';
 import { Input } from 'jezvejs/Input';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
 import { DateInputGroup } from './components/DateInputGroup/DateInputGroup.js';
 import { DateRangeInputGroup } from './components/DateRangeInputGroup/DateRangeInputGroup.js';
 import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
@@ -262,13 +263,7 @@ class DatePickerView extends DemoView {
             content: [
                 inpGroup.elem,
                 datePicker.elem,
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: controls.map((item) => Button.create({
-                        ...item,
-                        className: 'action-btn',
-                    }).elem),
-                }),
+                createButtons(controls),
             ],
         });
     }
@@ -309,13 +304,7 @@ class DatePickerView extends DemoView {
             content: [
                 inpGroup.elem,
                 datePicker.elem,
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: controls.map((item) => Button.create({
-                        ...item,
-                        className: 'action-btn',
-                    }).elem),
-                }),
+                createButtons(controls),
             ],
         });
     }

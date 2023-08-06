@@ -4,43 +4,36 @@ import { Button } from 'jezvejs/Button';
 import { Slider } from 'jezvejs/Slider';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createContainer, createControls } from '../../Application/utils.js';
 import './SliderView.scss';
-
-const createContainer = (id, children) => createElement('div', {
-    props: { id },
-    children,
-});
 
 const createSlideContent = (text) => createElement('div', {
     props: { className: 'slide-content', textContent: text },
 });
 
 const createSliderControls = (slider) => (
-    createElement('div', {
-        props: { className: 'section-controls' },
-        children: [
-            Button.create({
-                className: 'action-btn slide-to-start-btn',
-                title: 'Slide to start',
-                onClick: () => slider.slideTo(0),
-            }).elem,
-            Button.create({
-                className: 'action-btn slide-to-prev-btn',
-                title: 'Prev',
-                onClick: () => slider.slideToPrev(),
-            }).elem,
-            Button.create({
-                className: 'action-btn slide-to-next-btn',
-                title: 'Next',
-                onClick: () => slider.slideToNext(),
-            }).elem,
-            Button.create({
-                className: 'action-btn switch-to-start-btn',
-                title: 'Switch to start',
-                onClick: () => slider.switchTo(0),
-            }).elem,
-        ],
-    })
+    createControls([
+        Button.create({
+            className: 'action-btn slide-to-start-btn',
+            title: 'Slide to start',
+            onClick: () => slider.slideTo(0),
+        }).elem,
+        Button.create({
+            className: 'action-btn slide-to-prev-btn',
+            title: 'Prev',
+            onClick: () => slider.slideToPrev(),
+        }).elem,
+        Button.create({
+            className: 'action-btn slide-to-next-btn',
+            title: 'Next',
+            onClick: () => slider.slideToNext(),
+        }).elem,
+        Button.create({
+            className: 'action-btn switch-to-start-btn',
+            title: 'Switch to start',
+            onClick: () => slider.switchTo(0),
+        }).elem,
+    ])
 );
 
 /**

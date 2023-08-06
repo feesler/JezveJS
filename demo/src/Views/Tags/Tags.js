@@ -1,23 +1,11 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Tags } from 'jezvejs/Tags';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createContainer, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './TagsView.scss';
-
-const createContainer = (id, children) => createElement('div', {
-    props: { id },
-    children,
-});
-
-const createControls = (children) => (
-    createElement('div', {
-        props: { className: 'section-controls' },
-        children,
-    })
-);
 
 const createItems = (options = {}) => {
     const {

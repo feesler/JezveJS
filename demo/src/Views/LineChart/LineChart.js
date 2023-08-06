@@ -1,9 +1,9 @@
 import 'jezvejs/style';
 import { createElement } from 'jezvejs';
-import { Button } from 'jezvejs/Button';
 import { LineChart } from 'jezvejs/LineChart';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 import largeData from '../Histogram/largeData.json';
@@ -214,25 +214,22 @@ class LineChartView extends DemoView {
             data: chartData,
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                RangeInputField.create({
-                    title: 'columnWidth:',
-                    min: 1,
-                    max: 50,
-                    value: 38,
-                    onInput: (value) => chart.setColumnWidth(value),
-                }).elem,
-                RangeInputField.create({
-                    title: 'groupsGap:',
-                    min: 1,
-                    max: 50,
-                    value: 10,
-                    onInput: (value) => chart.setGroupsGap(value),
-                }).elem,
-            ],
-        });
+        const controls = createControls([
+            RangeInputField.create({
+                title: 'columnWidth:',
+                min: 1,
+                max: 50,
+                value: 38,
+                onInput: (value) => chart.setColumnWidth(value),
+            }).elem,
+            RangeInputField.create({
+                title: 'groupsGap:',
+                min: 1,
+                max: 50,
+                value: 10,
+                onInput: (value) => chart.setGroupsGap(value),
+            }).elem,
+        ]);
 
         this.addSection({
             id: 'columnWidth',
@@ -459,20 +456,12 @@ class LineChartView extends DemoView {
             onClick: () => chart.setData(largeData),
         }];
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: items.map((item) => Button.create({
-                ...item,
-                className: 'action-btn',
-            }).elem),
-        });
-
         this.addSection({
             id: 'setData',
             title: 'Set data',
             content: [
                 chartContainer('linechart_setdata', chart),
-                controls,
+                createButtons(items),
             ],
         });
     }

@@ -1,17 +1,12 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Progress } from 'jezvejs/Progress';
 import { IndetermProgress } from 'jezvejs/IndetermProgress';
 import { Spinner } from 'jezvejs/Spinner';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons, createContainer, createControls } from '../../Application/utils.js';
 import './ProgressView.scss';
-
-const createContainer = (id, children) => createElement('div', {
-    props: { id },
-    children,
-});
 
 /**
  * Progress, IndetermProgress and Spinner components demo view
@@ -47,29 +42,22 @@ class ProgressView extends DemoView {
                     defProgress50.elem,
                     defProgress100.elem,
                 ]),
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: [
-                        Button.create({
-                            id: 'set0Btn',
-                            className: 'action-btn',
-                            title: '0%',
-                            onClick: () => defProgress.setProgress(0),
-                        }).elem,
-                        Button.create({
-                            id: 'set50Btn',
-                            className: 'action-btn',
-                            title: '50%',
-                            onClick: () => defProgress.setProgress(50),
-                        }).elem,
-                        Button.create({
-                            id: 'set100Btn',
-                            className: 'action-btn',
-                            title: '100%',
-                            onClick: () => defProgress.setProgress(100),
-                        }).elem,
-                    ],
-                }),
+                createButtons([{
+                    id: 'set0Btn',
+                    className: 'action-btn',
+                    title: '0%',
+                    onClick: () => defProgress.setProgress(0),
+                }, {
+                    id: 'set50Btn',
+                    className: 'action-btn',
+                    title: '50%',
+                    onClick: () => defProgress.setProgress(50),
+                }, {
+                    id: 'set100Btn',
+                    className: 'action-btn',
+                    title: '100%',
+                    onClick: () => defProgress.setProgress(100),
+                }]),
             ],
         });
     }
@@ -117,10 +105,7 @@ class ProgressView extends DemoView {
             title: '300px width, 3 sec',
             content: [
                 pr.elem,
-                createElement('div', {
-                    props: { className: 'section-controls' },
-                    children: toggleBtn.elem,
-                }),
+                createControls(toggleBtn.elem),
             ],
         });
 

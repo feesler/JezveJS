@@ -15,6 +15,7 @@ import { Popup } from 'jezvejs/Popup';
 import { Tags } from 'jezvejs/Tags';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 import { BlueBox } from './components/BlueBox/BlueBox.js';
@@ -401,9 +402,8 @@ class DropDownView extends DemoView {
             },
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: Button.create({
+        const controls = createControls(
+            Button.create({
                 title: 'Toggle enable item 3',
                 className: 'action-btn',
                 onClick: () => {
@@ -411,7 +411,7 @@ class DropDownView extends DemoView {
                     genDropDown.enableItem('3', item.disabled);
                 },
             }).elem,
-        });
+        );
 
         this.addSection({
             id: 'createMultiple',
@@ -429,14 +429,13 @@ class DropDownView extends DemoView {
             placeholder: 'Multi select control',
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: Button.create({
+        const controls = createControls(
+            Button.create({
                 title: 'Enable',
                 className: 'action-btn',
                 onClick: (e) => toggleEnable(e, dropDown),
             }).elem,
-        });
+        );
 
         this.addSection({
             id: 'disabled',
@@ -454,15 +453,14 @@ class DropDownView extends DemoView {
             placeholder: 'Multi select control',
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: Button.create({
+        const controls = createControls(
+            Button.create({
                 id: 'enableBtn',
                 title: 'Enable',
                 className: 'action-btn',
                 onClick: (e) => toggleEnable(e, dropDown),
             }).elem,
-        });
+        );
 
         this.addSection({
             id: 'disabledMultiple',
@@ -488,33 +486,26 @@ class DropDownView extends DemoView {
             data: initItems('Filter item', 100),
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                Button.create({
-                    id: 'enableFilterBtn',
-                    title: 'Enable',
-                    className: 'action-btn',
-                    onClick: (e) => toggleEnable(e, dropDown),
-                }).elem,
-                Button.create({
-                    id: 'setInvalidSingleSelectionBtn',
-                    title: 'Change selection',
-                    className: 'action-btn',
-                    onClick: () => {
-                        const selected = dropDown.getSelectionData();
-                        const newItem = dropDown.items.find((item) => item.id !== selected.id);
-                        dropDown.setSelection(newItem.id);
-                    },
-                }).elem,
-                Button.create({
-                    id: 'setSelectionSingleBtn',
-                    title: 'Set invalid selection',
-                    className: 'action-btn',
-                    onClick: () => dropDown.setSelection([]),
-                }).elem,
-            ],
-        });
+        const controls = createButtons([{
+            id: 'enableFilterBtn',
+            title: 'Enable',
+            className: 'action-btn',
+            onClick: (e) => toggleEnable(e, dropDown),
+        }, {
+            id: 'setInvalidSingleSelectionBtn',
+            title: 'Change selection',
+            className: 'action-btn',
+            onClick: () => {
+                const selected = dropDown.getSelectionData();
+                const newItem = dropDown.items.find((item) => item.id !== selected.id);
+                dropDown.setSelection(newItem.id);
+            },
+        }, {
+            id: 'setSelectionSingleBtn',
+            title: 'Set invalid selection',
+            className: 'action-btn',
+            onClick: () => dropDown.setSelection([]),
+        }]);
 
         this.addSection({
             id: 'filter',
@@ -541,32 +532,26 @@ class DropDownView extends DemoView {
             data: initItems('Filter item', 100),
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                Button.create({
-                    id: 'enableMultiFilterBtn',
-                    title: 'Enable',
-                    className: 'action-btn',
-                    onClick: (e) => toggleEnable(e, dropDown),
-                }).elem,
-                Button.create({
-                    id: 'setSelectionMultiBtn',
-                    title: 'Change selection',
-                    className: 'action-btn',
-                    onClick: () => {
-                        const [first, second] = dropDown.items;
+        const controls = createButtons([{
+            id: 'enableMultiFilterBtn',
+            title: 'Enable',
+            className: 'action-btn',
+            onClick: (e) => toggleEnable(e, dropDown),
+        }, {
+            id: 'setSelectionMultiBtn',
+            title: 'Change selection',
+            className: 'action-btn',
+            onClick: () => {
+                const [first, second] = dropDown.items;
 
-                        const selection = dropDown.items.filter((_, ind) => (
-                            (first.selected && ((ind % 2) === 1))
-                            || (!first.selected && !second.selected && ((ind % 2) === 0))
-                        )).map((item) => item.id);
+                const selection = dropDown.items.filter((_, ind) => (
+                    (first.selected && ((ind % 2) === 1))
+                    || (!first.selected && !second.selected && ((ind % 2) === 0))
+                )).map((item) => item.id);
 
-                        dropDown.setSelection(selection);
-                    },
-                }).elem,
-            ],
-        });
+                dropDown.setSelection(selection);
+            },
+        }]);
 
         this.addSection({
             id: 'filterMultiple',
@@ -761,17 +746,12 @@ class DropDownView extends DemoView {
             components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                Button.create({
-                    id: 'enableCustomBtn',
-                    title: 'Disable',
-                    className: 'action-btn',
-                    onClick: (e) => toggleEnable(e, dropDown),
-                }).elem,
-            ],
-        });
+        const controls = createButtons([{
+            id: 'enableCustomBtn',
+            title: 'Disable',
+            className: 'action-btn',
+            onClick: (e) => toggleEnable(e, dropDown),
+        }]);
 
         this.addSection({
             id: 'custom',
@@ -838,70 +818,61 @@ class DropDownView extends DemoView {
             multi: true,
         });
 
-        const controls = createElement('div', {
-            props: { className: 'section-controls' },
-            children: [
-                Button.create({
-                    id: 'addBtn',
-                    title: 'Add item',
-                    className: 'action-btn',
-                    onClick: () => {
-                        const itemId = dropDown.items.length + 1;
-                        dropDown.addItem({
-                            id: itemId,
-                            title: `Item ${itemId}`,
-                        });
-                    },
-                }).elem,
-                Button.create({
-                    id: 'addDisBtn',
-                    title: 'Add disabled item',
-                    className: 'action-btn',
-                    onClick: () => {
-                        const itemId = dropDown.items.length + 1;
-                        dropDown.addItem({
-                            id: itemId,
-                            title: `Item ${itemId}`,
-                            disabled: true,
-                        });
-                    },
-                }).elem,
-                Button.create({
-                    id: 'addHiddenBtn',
-                    title: 'Add hidden item',
-                    className: 'action-btn',
-                    onClick: () => {
-                        const itemId = dropDown.items.length + 1;
-                        dropDown.addItem({
-                            id: itemId,
-                            title: `Item ${itemId}`,
-                            disabled: true,
-                            hidden: true,
-                        });
-                    },
-                }).elem,
-                Button.create({
-                    id: 'delBtn',
-                    title: 'Remove last item',
-                    className: 'action-btn',
-                    onClick: () => {
-                        const itemsCount = dropDown.items.length;
-                        if (!itemsCount) {
-                            return;
-                        }
+        const controls = createButtons([{
+            id: 'addBtn',
+            title: 'Add item',
+            className: 'action-btn',
+            onClick: () => {
+                const itemId = dropDown.items.length + 1;
+                dropDown.addItem({
+                    id: itemId,
+                    title: `Item ${itemId}`,
+                });
+            },
+        }, {
+            id: 'addDisBtn',
+            title: 'Add disabled item',
+            className: 'action-btn',
+            onClick: () => {
+                const itemId = dropDown.items.length + 1;
+                dropDown.addItem({
+                    id: itemId,
+                    title: `Item ${itemId}`,
+                    disabled: true,
+                });
+            },
+        }, {
+            id: 'addHiddenBtn',
+            title: 'Add hidden item',
+            className: 'action-btn',
+            onClick: () => {
+                const itemId = dropDown.items.length + 1;
+                dropDown.addItem({
+                    id: itemId,
+                    title: `Item ${itemId}`,
+                    disabled: true,
+                    hidden: true,
+                });
+            },
+        }, {
+            id: 'delBtn',
+            title: 'Remove last item',
+            className: 'action-btn',
+            onClick: () => {
+                const itemsCount = dropDown.items.length;
+                if (!itemsCount) {
+                    return;
+                }
 
-                        const item = dropDown.items[itemsCount - 1];
-                        dropDown.removeItem(item.id);
-                    },
-                }).elem,
-                Button.create({
-                    id: 'delAllBtn',
-                    title: 'Remove all items',
-                    className: 'action-btn',
-                    onClick: () => dropDown.removeAll(),
-                }).elem,
-            ],
-        });
+                const item = dropDown.items[itemsCount - 1];
+                dropDown.removeItem(item.id);
+            },
+        }, {
+            id: 'delAllBtn',
+            title: 'Remove all items',
+            className: 'action-btn',
+            onClick: () => dropDown.removeAll(),
+        }]);
 
         this.addSection({
             id: 'methods',
@@ -998,16 +969,11 @@ class DropDownView extends DemoView {
         this.addSection({
             id: 'popup',
             title: 'DropDown inside popup',
-            content: createElement('div', {
-                props: { className: 'section-controls' },
-                children: [
-                    Button.create({
-                        id: 'popupBtn',
-                        title: 'Show popup',
-                        className: 'action-btn',
-                        onClick: () => this.showPopup(),
-                    }).elem,
-                ],
+            content: createButtons({
+                id: 'popupBtn',
+                title: 'Show popup',
+                className: 'action-btn',
+                onClick: () => this.showPopup(),
             }),
         });
     }

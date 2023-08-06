@@ -1,14 +1,17 @@
 import 'jezvejs/style';
 import { createElement, ge } from 'jezvejs';
-import { Button } from 'jezvejs/Button';
 import { Checkbox } from 'jezvejs/Checkbox';
 import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './CheckboxView.scss';
 
+/**
+ * Checkbox and Radio components demo view
+ */
 class CheckboxView extends DemoView {
     /**
      * View initialization
@@ -116,13 +119,7 @@ class CheckboxView extends DemoView {
             content: [
                 form,
                 ...rows.map((items) => (
-                    createElement('div', {
-                        props: { className: 'section-controls' },
-                        children: items.map((item) => Button.create({
-                            ...item,
-                            className: 'action-btn',
-                        }).elem),
-                    })
+                    createButtons(items)
                 )),
             ],
         });
@@ -211,15 +208,7 @@ class CheckboxView extends DemoView {
             title: 'Methods',
             content: [
                 form,
-                ...rows.map((items) => (
-                    createElement('div', {
-                        props: { className: 'section-controls' },
-                        children: items.map((item) => Button.create({
-                            ...item,
-                            className: 'action-btn',
-                        }).elem),
-                    })
-                )),
+                ...rows.map((items) => createButtons(items)),
             ],
         });
     }

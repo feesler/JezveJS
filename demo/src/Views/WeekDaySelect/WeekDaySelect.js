@@ -1,24 +1,12 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { WeekDaySelect } from 'jezvejs/WeekDaySelect';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createContainer, createControls } from '../../Application/utils.js';
 import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './WeekDaySelectView.scss';
-
-const createContainer = (id, children) => createElement('div', {
-    props: { id },
-    children,
-});
-
-const createControls = (children) => (
-    createElement('div', {
-        props: { className: 'section-controls' },
-        children,
-    })
-);
 
 /**
  * WeekDaySelect component demo view
