@@ -52,7 +52,7 @@ export class PopupPosition {
             return clientHeight;
         }
 
-        return Math.min(clientHeight, window.visualViewport.height);
+        return window.innerHeight;
     }
 
     static getWindowScrollTop() {
