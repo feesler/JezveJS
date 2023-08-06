@@ -746,6 +746,12 @@ export const afterTransition = (elem, options, callback) => {
     timeout = setTimeout(handler, duration);
 };
 
+/**
+ * Restarts animation of element
+ * @param {Element} elem
+ */
+export const reflow = (elem) => (elem.offsetHeight);
+
 /** Return fixed DPI value */
 export const getRealDPI = () => {
     if (window.devicePixelRatio) {
