@@ -26,7 +26,7 @@ export class TabListView extends AppView {
         const res = {};
 
         await asyncMap(componentsList, async (id) => {
-            res[id] = await TabList.create(this, await query(`#${id} + section .tab-list`));
+            res[id] = await TabList.create(this, await query(`#${id} + .demo-section__content .tab-list`));
             assert(res[id], `Failed to initialize component '${id}'`);
         });
 
