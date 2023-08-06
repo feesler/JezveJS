@@ -6,6 +6,7 @@ import {
     show,
     reflow,
     isVisible,
+    afterTransition,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
@@ -20,6 +21,8 @@ const BOTTOM_CONTAINER_CLASS = 'offcanvas_bottom';
 const CONTENT_CLASS = 'offcanvas__content';
 const CLOSED_CLASS = 'offcanvas_closed';
 const BACKGROUND_CLASS = 'offcanvas__bg';
+
+const TRANSITION_END_TIMEOUT = 500;
 
 const defaultProps = {
     placement: 'left',
@@ -57,7 +60,6 @@ export class Offcanvas extends Component {
         this.elem = createElement('div', {
             props: { className: CONTAINER_CLASS },
             children: [this.contentElem],
-            events: { transitionend: (e) => this.onTransitionEnd(e) },
         });
 
         if (this.props.placement === 'right') {
@@ -85,11 +87,7 @@ export class Offcanvas extends Component {
         }
     }
 
-    onTransitionEnd(e) {
-        if (e?.target !== this.elem) {
-            return;
-        }
-
+    onAnimationDone() {
         this.setState({ ...this.state, transitionInProgress: false });
 
         if (this.state.closed) {
@@ -105,20 +103,38 @@ export class Offcanvas extends Component {
         }
     }
 
+    waitForAnimation() {
+        afterTransition(this.elem, {
+            property: 'transform',
+            duration: TRANSITION_END_TIMEOUT,
+            target: this.elem,
+        }, () => this.onAnimationDone());
+    }
+
     open() {
+        if (!this.state.closed) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             transitionInProgress: true,
             closed: false,
         });
+        this.waitForAnimation();
     }
 
     close() {
+        if (this.state.closed) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             transitionInProgress: true,
             closed: true,
         });
+        this.waitForAnimation();
     }
 
     toggle() {
@@ -127,6 +143,7 @@ export class Offcanvas extends Component {
             transitionInProgress: true,
             closed: !this.state.closed,
         });
+        this.waitForAnimation();
     }
 
     renderScrollLock(state, prevState) {
