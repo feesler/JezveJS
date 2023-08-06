@@ -145,6 +145,7 @@ class OffcanvasView extends DemoView {
         this.addSection({
             id: 'useScrollLock',
             title: '\'useScrollLock\' option',
+            description: 'In this example scroll lock is disabled, so body scroll should be available under backdrop of active component.',
             content: createElement('div', {
                 props: { className: 'section-controls' },
                 children: Button.create({
