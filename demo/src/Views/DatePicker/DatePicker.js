@@ -12,6 +12,7 @@ import { Input } from 'jezvejs/Input';
 import { DemoView } from '../../Application/DemoView.js';
 import { DateInputGroup } from './components/DateInputGroup/DateInputGroup.js';
 import { DateRangeInputGroup } from './components/DateRangeInputGroup/DateRangeInputGroup.js';
+import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
 import './DatePickerView.scss';
 
 const formatDateToInput = (date, inputId) => {
@@ -375,41 +376,34 @@ class DatePickerView extends DemoView {
     }
 
     initFirstDay() {
-        const components = [{
+        const items = [{
             id: 'dpMondayWeek',
+            title: 'Monday',
             firstDay: 1,
         }, {
             id: 'dpSundayWeek',
+            title: 'Sunday',
             firstDay: 7,
         }];
 
         this.addSection({
             id: 'firstDay',
             title: '\'firstDay\' option',
-            content: createElement('div', {
-                props: { className: 'locales-container' },
-                children: components.map((item) => (
-                    createElement('div', {
-                        props: { className: 'locales-item' },
-                        children: [
-                            createElement('h3', { props: { textContent: item.title } }),
-                            createElement('div', {
-                                props: { id: item.id },
-                                children: DatePicker.create({
-                                    static: true,
-                                    locales: ['en-US'],
-                                    firstDay: item.firstDay,
-                                }).elem,
-                            }),
-                        ],
-                    })
-                )),
-            }),
+            content: LocalesContainer.create({
+                items,
+                renderItem: ({ firstDay }) => (
+                    DatePicker.create({
+                        static: true,
+                        locales: ['en-US'],
+                        firstDay,
+                    }).elem
+                ),
+            }).elem,
         });
     }
 
     initLocales() {
-        const components = [{
+        const items = [{
             id: 'dpEnLocale',
             title: 'en-US',
             locales: ['en-US'],
@@ -426,24 +420,15 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'locale',
             title: 'Locale',
-            content: createElement('div', {
-                props: { className: 'locales-container' },
-                children: components.map((item) => (
-                    createElement('div', {
-                        props: { className: 'locales-item' },
-                        children: [
-                            createElement('h3', { props: { textContent: item.title } }),
-                            createElement('div', {
-                                props: { id: item.id },
-                                children: DatePicker.create({
-                                    static: true,
-                                    locales: item.locales,
-                                }).elem,
-                            }),
-                        ],
-                    })
-                )),
-            }),
+            content: LocalesContainer.create({
+                items,
+                renderItem: ({ locales }) => (
+                    DatePicker.create({
+                        static: true,
+                        locales,
+                    }).elem
+                ),
+            }).elem,
         });
     }
 }

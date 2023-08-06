@@ -4,6 +4,7 @@ import { createElement } from 'jezvejs';
 import { DateInput } from 'jezvejs/DateInput';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
 
 /**
  * DateInput component demo view
@@ -96,7 +97,7 @@ class DateInputView extends DemoView {
     }
 
     initLocales() {
-        const localeInputs = [
+        const items = [
             { id: 'usDateInput', title: 'en-US', locales: ['en-US'] },
             { id: 'koDateInput', title: 'ko-KR', locales: ['ko-KR'] },
             { id: 'ruDateInput', title: 'ru-RU', locales: ['ru-RU'] },
@@ -107,22 +108,15 @@ class DateInputView extends DemoView {
             id: 'locale',
             title: 'Locales',
             content: [
-                createElement('div', {
-                    props: { className: 'locales-container' },
-                    children: localeInputs.map((item) => (
-                        createElement('div', {
-                            props: { className: 'locales-item' },
-                            children: [
-                                createElement('h3', { props: { textContent: item.title } }),
-                                DateInput.create({
-                                    id: item.id,
-                                    locales: item.locales,
-                                    className: 'input',
-                                }).elem,
-                            ],
-                        })
-                    )),
-                }),
+                LocalesContainer.create({
+                    items,
+                    renderItem: ({ locales }) => (
+                        DateInput.create({
+                            className: 'input',
+                            locales,
+                        }).elem
+                    ),
+                }).elem,
                 createElement('div', {
                     props: { className: 'section-controls' },
                     children: createElement('input', {

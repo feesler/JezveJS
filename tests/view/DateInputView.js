@@ -18,10 +18,10 @@ const inputSelectors = {
     defaultInput: '#dateinput',
     placeholderInput: '#dateInputPh',
     createdInput: '#createContainer input',
-    usLocaleInput: '#usDateInput',
-    koLocaleInput: '#koDateInput',
-    ruLocaleInput: '#ruDateInput',
-    esLocaleInput: '#esDateInput',
+    usLocaleInput: '#usDateInput input',
+    koLocaleInput: '#koDateInput input',
+    ruLocaleInput: '#ruDateInput input',
+    esLocaleInput: '#esDateInput input',
     testValueInput: '#testValueInput',
 };
 

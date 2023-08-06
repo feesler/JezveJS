@@ -4,6 +4,7 @@ import { Button } from 'jezvejs/Button';
 import { WeekDaySelect } from 'jezvejs/WeekDaySelect';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './WeekDaySelectView.scss';
 
@@ -81,40 +82,25 @@ class WeekDaySelectView extends DemoView {
     }
 
     initLocale() {
-        const components = [{
-            id: 'enLocale',
-            title: 'en-US',
-            locales: ['en-US'],
-        }, {
-            id: 'frLocale',
-            title: 'fr',
-            locales: ['fr'],
-        }, {
-            id: 'ruLocale',
-            title: 'ru',
-            locales: ['ru'],
-        }];
-
         this.addSection({
             id: 'locales',
             title: 'Locales',
-            content: createElement('div', {
-                props: { className: 'locales-container' },
-                children: components.map((item) => (
-                    createElement('div', {
-                        props: { className: 'locales-item' },
-                        children: [
-                            createElement('h3', { props: { textContent: item.title } }),
-                            createElement('div', {
-                                props: { id: item.id },
-                                children: WeekDaySelect.create({
-                                    locales: item.locales,
-                                }).elem,
-                            }),
-                        ],
-                    })
-                )),
-            }),
+            content: LocalesContainer.create({
+                items: [{
+                    id: 'enLocale',
+                    title: 'en-US',
+                    locales: ['en-US'],
+                }, {
+                    id: 'frLocale',
+                    title: 'fr',
+                    locales: ['fr'],
+                }, {
+                    id: 'ruLocale',
+                    title: 'ru',
+                    locales: ['ru'],
+                }],
+                renderItem: ({ locales }) => WeekDaySelect.create({ locales }).elem,
+            }).elem,
         });
     }
 
