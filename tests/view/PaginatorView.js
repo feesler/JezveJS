@@ -29,9 +29,9 @@ export class PaginatorView extends AppView {
             assert(res[id], `Failed to initialize component '${id}'`);
         });
 
-        res.handlerStatus = { elem: await query('#handlerStatus') };
+        res.handlerStatus = { elem: await query('#callbacksPaginator + .logs-container textarea') };
         assert(res.handlerStatus.elem, 'Failed to parse view');
-        res.handlerStatus.value = await prop(res.handlerStatus.elem, 'textContent');
+        res.handlerStatus.value = await prop(res.handlerStatus.elem, 'value');
 
         return res;
     }

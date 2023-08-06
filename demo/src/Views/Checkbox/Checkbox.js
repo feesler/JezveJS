@@ -1,133 +1,216 @@
 import 'jezvejs/style';
-import 'jezvejs/style/Button';
-import { ge, setEvents } from 'jezvejs';
+import { createElement, ge } from 'jezvejs';
 import { Checkbox } from 'jezvejs/Checkbox';
 import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './CheckboxView.scss';
 
-const addEventLog = (value) => {
-    const logElem = ge('eventsLog');
-    logElem.value += `${value}\r\n`;
-};
-
-const initParsed = () => {
-    Checkbox.fromElement(ge('defaultCheckboxNoLabel'), {
-        onChange: (checked) => addEventLog(`Parsed Checkbox change. checked: ${checked}`),
-    });
-    Checkbox.fromElement(ge('circleCheckboxLabel'), {
-        onChange: (checked) => addEventLog(`Parsed Checkbox with custom label change. checked: ${checked}`),
-    });
-};
-
-const initIcon = () => {
-    const icon = Icon.create({
-        icon: 'close-icon',
-        className: 'checkbox__icon',
-    });
-    const checkbox = Checkbox.create({
-        checkIcon: icon.elem,
-    });
-    ge('iconContainer').appendChild(checkbox.elem);
-};
-
-const initDynamic = () => {
-    const dynamicCheckbox = Checkbox.create({
-        id: 'dynCheckbox',
-        name: 'check1',
-        label: 'Checkbox methods',
-        onChange: (checked) => addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
-    });
-    const form = ge('dynamicContainer');
-    form.append(dynamicCheckbox.elem);
-
-    setEvents(ge('checkBtn'), { click: () => dynamicCheckbox.check(true) });
-    setEvents(ge('uncheckBtn'), { click: () => dynamicCheckbox.check(false) });
-    setEvents(ge('toggleBtn'), { click: () => dynamicCheckbox.toggle() });
-    setEvents(ge('enableBtn'), { click: () => dynamicCheckbox.enable(true) });
-    setEvents(ge('disableBtn'), { click: () => dynamicCheckbox.enable(false) });
-    setEvents(ge('changePropBtn'), {
-        click: () => {
-            dynamicCheckbox.input.checked = false;
-        },
-    });
-    setEvents(ge('resetBtn'), { click: () => form.reset() });
-};
-
-const initLarge = () => {
-    const largeCheckbox = Checkbox.create({
-        className: 'checkbox-large',
-        onChange: (checked) => addEventLog(`Large Checkbox change. checked: ${checked}`),
-    });
-    ge('largeContainer').appendChild(largeCheckbox.elem);
-};
-
-const initParsedRadio = () => {
-    Radio.fromElement(ge('defaultRadio1'), {
-        onChange: (checked) => addEventLog(`Parsed Radio 1 change. checked: ${checked}`),
-    });
-    Radio.fromElement(ge('defaultRadio2'), {
-        onChange: (checked) => addEventLog(`Parsed Radio 2 change. checked: ${checked}`),
-    });
-    Radio.fromElement(ge('defaultRadio3'), {
-        onChange: (checked) => addEventLog(`Parsed Radio 3 change. checked: ${checked}`),
-    });
-    Radio.fromElement(ge('defaultRadio4'), {
-        onChange: (checked) => addEventLog(`Parsed Radio 4 change. checked: ${checked}`),
-    });
-};
-
-const initDynamicRadio = () => {
-    const form = ge('dynamicRadioContainer');
-
-    const dynamicRadio1 = Radio.create({
-        id: 'dynRadio',
-        name: 'radio2',
-        value: '1',
-        label: 'Value 1',
-        onChange: (checked) => addEventLog(`Dynamic Radio 1 change. checked: ${checked}`),
-    });
-    const dynamicRadio2 = Radio.create({
-        name: 'radio2',
-        value: '2',
-        label: 'Value 2',
-        onChange: (checked) => addEventLog(`Dynamic Radio 2 change. checked: ${checked}`),
-    });
-    const dynamicRadio3 = Radio.create({
-        name: 'radio2',
-        value: '2',
-        label: 'Value 3',
-        onChange: (checked) => addEventLog(`Dynamic Radio 3 change. checked: ${checked}`),
-    });
-    form.append(dynamicRadio1.elem, dynamicRadio2.elem, dynamicRadio3.elem);
-
-    setEvents(ge('checkRadioBtn'), { click: () => dynamicRadio3.check(true) });
-    setEvents(ge('uncheckRadioBtn'), { click: () => dynamicRadio3.check(false) });
-    setEvents(ge('toggleRadioBtn'), { click: () => dynamicRadio3.toggle() });
-    setEvents(ge('enableRadioBtn'), { click: () => dynamicRadio3.enable(true) });
-    setEvents(ge('disableRadioBtn'), { click: () => dynamicRadio3.enable(false) });
-    setEvents(ge('changeRadioPropBtn'), {
-        click: () => {
-            dynamicRadio3.input.checked = false;
-        },
-    });
-    setEvents(ge('resetRadioBtn'), { click: () => form.reset() });
-};
-
+/**
+ * Checkbox and Radio components demo view
+ */
 class CheckboxView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        initParsed();
-        initIcon();
-        initDynamic();
-        initLarge();
+        this.addSectionsGroup({ title: 'Checkbox' });
+        this.initParsed();
+        this.initIcon();
+        this.initDynamic();
+        this.initLarge();
 
-        initParsedRadio();
-        initDynamicRadio();
+        this.addSectionsGroup({ title: 'Radio' });
+        this.initParsedRadio();
+        this.initDynamicRadio();
+
+        this.initLogs();
+    }
+
+    initLogs() {
+        this.logsField = LogsField.create();
+        this.container.append(this.logsField.elem);
+    }
+
+    addEventLog(value) {
+        this.logsField?.write(value);
+    }
+
+    initParsed() {
+        const checkboxes = ['defaultCheckboxNoLabel', 'circleCheckboxLabel'];
+
+        this.addSection({
+            id: 'checkboxParse',
+            title: 'Parse component from DOM',
+            content: createElement('div', {
+                children: checkboxes.map((item) => (
+                    Checkbox.fromElement(ge(item), {
+                        onChange: (checked) => this.addEventLog(`Checkbox '${item}' changed. checked: ${checked}`),
+                    }).elem
+                )),
+            }),
+        });
+    }
+
+    initIcon() {
+        this.addSection({
+            id: 'checkboxIcon',
+            title: 'Custom icon',
+            content: Checkbox.create({
+                checkIcon: Icon.create({ icon: 'close-icon', className: 'checkbox__icon' }).elem,
+            }).elem,
+        });
+    }
+
+    initDynamic() {
+        const checkbox = Checkbox.create({
+            id: 'dynCheckbox',
+            name: 'check1',
+            label: 'Checkbox methods',
+            onChange: (checked) => this.addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
+        });
+
+        const form = createElement('form', {
+            props: { id: 'dynamicContainer' },
+            children: checkbox.elem,
+        });
+
+        const rows = [
+            [{
+                id: 'checkBtn',
+                title: 'Check',
+                onClick: () => checkbox.check(true),
+            }, {
+                id: 'uncheckBtn',
+                title: 'Uncheck',
+                onClick: () => checkbox.check(false),
+            }, {
+                id: 'toggleBtn',
+                title: 'Toggle',
+                onClick: () => checkbox.toggle(),
+            }, {
+                id: 'enableBtn',
+                title: 'Enable',
+                onClick: () => checkbox.enable(true),
+            }, {
+                id: 'disableBtn',
+                title: 'Disable',
+                onClick: () => checkbox.enable(false),
+            }],
+            [{
+                id: 'changePropBtn',
+                title: 'Change property',
+                onClick: () => {
+                    checkbox.input.checked = false;
+                },
+            }, {
+                id: 'resetBtn',
+                title: 'Reset form',
+                onClick: () => form.reset(),
+            }],
+        ];
+
+        this.addSection({
+            id: 'checkboxIcon',
+            title: 'Methods',
+            content: [
+                form,
+                ...rows.map((items) => (
+                    createButtons(items)
+                )),
+            ],
+        });
+    }
+
+    initLarge() {
+        this.addSection({
+            id: 'checkboxLarge',
+            title: 'Large + styled background',
+            content: Checkbox.create({
+                className: 'checkbox-large',
+                onChange: (checked) => this.addEventLog(`Large Checkbox change. checked: ${checked}`),
+            }).elem,
+        });
+    }
+
+    initParsedRadio() {
+        const ids = [1, 2, 3, 4];
+
+        this.addSection({
+            id: 'radioParse',
+            title: 'Parse component from DOM',
+            content: ids.map((item) => (
+                Radio.fromElement(ge(`defaultRadio${item}`), {
+                    onChange: (checked) => this.addEventLog(`Parsed Radio ${item} change. checked: ${checked}`),
+                }).elem
+            )),
+        });
+    }
+
+    initDynamicRadio() {
+        const ids = [1, 2, 3];
+        const radios = ids.map((item) => (
+            Radio.create({
+                id: `dynRadio${item}`,
+                value: item.toString(),
+                name: 'radio2',
+                label: `Value ${item}`,
+                onChange: (checked) => this.addEventLog(`Dynamic Radio ${item} change. checked: ${checked}`),
+            })
+        ));
+        const radio3 = radios[2];
+
+        const form = createElement('form', {
+            props: { id: 'dynamicRadioContainer' },
+            children: radios.map((item) => item.elem),
+        });
+
+        const rows = [
+            [{
+                id: 'checkRadioBtn',
+                title: 'Check',
+                onClick: () => radio3.check(true),
+            }, {
+                id: 'uncheckRadioBtn',
+                title: 'Uncheck',
+                onClick: () => radio3.check(false),
+            }, {
+                id: 'toggleRadioBtn',
+                title: 'Toggle',
+                onClick: () => radio3.toggle(),
+            }, {
+                id: 'enableRadioBtn',
+                title: 'Enable',
+                onClick: () => radio3.enable(true),
+            }, {
+                id: 'disableRadioBtn',
+                title: 'Disable',
+                onClick: () => radio3.enable(false),
+            }],
+            [{
+                id: 'changeRadioPropBtn',
+                title: 'Change property',
+                onClick: () => {
+                    radio3.input.checked = false;
+                },
+            }, {
+                id: 'resetRadioBtn',
+                title: 'Reset form',
+                onClick: () => form.reset(),
+            }],
+        ];
+
+        this.addSection({
+            id: 'radioMethods',
+            title: 'Methods',
+            content: [
+                form,
+                ...rows.map((items) => createButtons(items)),
+            ],
+        });
     }
 }
 

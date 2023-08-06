@@ -18,10 +18,10 @@ const inputSelectors = {
     defaultInput: '#dateinput',
     placeholderInput: '#dateInputPh',
     createdInput: '#createContainer input',
-    usLocaleInput: '#usDateInput',
-    koLocaleInput: '#koDateInput',
-    ruLocaleInput: '#ruDateInput',
-    esLocaleInput: '#esDateInput',
+    usLocaleInput: '#usDateInput input',
+    koLocaleInput: '#koDateInput input',
+    ruLocaleInput: '#ruDateInput input',
+    esLocaleInput: '#esDateInput input',
     testValueInput: '#testValueInput',
 };
 
@@ -45,7 +45,7 @@ export class DateInputView extends AppView {
         const inputNames = Object.keys(inputSelectors);
 
         const values = await evaluate((...elems) => (
-            elems.map((el) => el.value)
+            elems.map((el) => el?.value)
         ), ...inputNames.map((name) => res[name].elem));
 
         values.forEach((value, index) => {

@@ -115,7 +115,6 @@ export class DatePicker extends Component {
         this.nextView = null;
         this.newView = null;
 
-        this.transitionEvents = { transitionend: (e) => this.onTransitionEnd(e) };
         this.emptyClickHandler = () => this.showView(false);
 
         this.init();

@@ -83,8 +83,7 @@ export class DragZone {
             return true;
         }
 
-        const hnds = this.props.handles;
-        const handles = asArray(hnds);
+        const handles = asArray(this.props.handles);
 
         return handles.some((hnd) => {
             let elem;
@@ -92,11 +91,15 @@ export class DragZone {
                 if (hnd.query) {
                     const qres = this.elem.querySelectorAll(hnd.query);
                     elem = Array.from(qres);
-                } else {
+                } else if (typeof hnd === 'string') {
                     elem = ge(hnd.elem);
+                } else {
+                    elem = hnd.elem;
                 }
-            } else {
+            } else if (typeof hnd === 'string') {
                 elem = ge(hnd);
+            } else {
+                elem = hnd;
             }
 
             elem = asArray(elem);

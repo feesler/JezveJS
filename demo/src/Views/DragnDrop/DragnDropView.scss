@@ -2,6 +2,13 @@
   height: 200px;
 }
 
+.drag-area {
+  position: relative;
+  border-width: 2px;
+  border-style: dashed;
+  border-color: #306da3db;
+}
+
 .inner-drop {
   position: relative;
   width: 180px;
@@ -227,21 +234,15 @@
 }
 
 .drag-handle-btn {
-  display: inline-flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
-  width: 25px;
-  height: 25px;
+  --btn-size: 30px;
+  --btn-icon-size: 20px;
+  --btn-background: #006d38;
+  --btn-icon-color: #383838;
+  --btn-padding: 5px;
+
   margin: 0 0.5rem;
 }
 
-.drag-handle-btn__icon {
-  width: 20px;
-  height: 20px;
-  fill: #383838;
-}
-
-.red {
-  fill: #ff2222;
+.drag-handle-btn.red {
+  --btn-icon-color: #ff2222;
 }

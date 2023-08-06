@@ -5,13 +5,13 @@ export const collapsibleTests = async () => {
     setBlock('Collapsible component', 1);
 
     setBlock('Toggle by click', 2);
-    await Actions.toggle('defaultContainer');
-    await Actions.toggle('defaultContainer');
-    await Actions.toggle('styledContainer');
-    await Actions.toggle('custom');
-    await Actions.toggle('custom');
-    await Actions.toggle('disabledToggle');
-    await Actions.toggle('disabledToggle');
+    await Actions.toggle('default');
+    await Actions.toggle('default');
+    await Actions.toggle('styled');
+    await Actions.toggle('customHeader');
+    await Actions.toggle('customHeader');
+    await Actions.toggle('toggleOnClick');
+    await Actions.toggle('toggleOnClick');
 
     setBlock('Disabled \'toggleOnClick\'', 2);
     await Actions.toggleDisabled();

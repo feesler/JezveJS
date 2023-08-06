@@ -1,5 +1,4 @@
 import 'jezvejs/style';
-import 'jezvejs/style/Button';
 import {
     ge,
     setEvents,
@@ -9,6 +8,7 @@ import { Collapsible } from 'jezvejs/Collapsible';
 import { Icon } from 'jezvejs/Icon';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createButtons } from '../../Application/utils.js';
 import './CollapsibleView.scss';
 
 const CUSTOM_BTN_CLASS = 'custom-header-btn';
@@ -21,95 +21,132 @@ const createButton = (icon) => createElement('button', {
     events: { click: (e) => e.stopPropagation() },
 });
 
-const initSimple = () => {
-    const collapse = Collapsible.create({
-        content: 'Content',
-        className: 'simple',
-        onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
-    });
-
-    ge('defaultContainer').append(collapse.elem);
-};
-
-const initStyled = () => {
-    const collapse = Collapsible.create({
-        content: ge('styledContent'),
-        className: 'styled',
-        onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
-    });
-
-    ge('styledContainer').append(collapse.elem);
-};
-
-const initCustomHeader = () => {
-    const titleContainer = createElement('div', {
-        props: {
-            className: 'custom-title',
-            textContent: 'Hover/focus to see controls',
-        },
-    });
-    const updateBtn = createButton('update');
-    const delBtn = createButton('del');
-
-    const collapse = Collapsible.create({
-        header: [titleContainer, updateBtn, delBtn],
-        content: 'Custom header',
-        className: 'custom',
-        onStateChange: (expanded) => {
-            titleContainer.textContent = (expanded) ? 'Hide' : 'Show';
-        },
-    });
-    collapse.headerContainer.tabIndex = 0;
-
-    ge('custom').append(collapse.elem);
-};
-
-const initDisabledToggle = () => {
-    const titleContainer = createElement('div', {
-        props: {
-            className: 'custom-title',
-            textContent: 'Toggle only by click button',
-        },
-    });
-    const toggleBtn = createElement('button', {
-        props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
-        children: Icon.create({ icon: 'toggle-ext', className: CUSTOM_ICON_CLASS }).elem,
-    });
-
-    const collapse = Collapsible.create({
-        toggleOnClick: false,
-        header: [titleContainer, toggleBtn],
-        content: 'Content',
-        className: 'disabled-toggle',
-    });
-    setEvents(toggleBtn, { click: () => collapse?.toggle() });
-
-    ge('disabledToggle').append(collapse.elem);
-};
-
-const initMethods = () => {
-    const collapse = Collapsible.create({
-        className: 'methods',
-        header: null,
-        content: 'Content',
-    });
-    ge('methodsContainer').append(collapse.elem);
-
-    setEvents(ge('expandBtn'), { click: () => collapse.expand() });
-    setEvents(ge('collapseBtn'), { click: () => collapse.collapse() });
-    setEvents(ge('toggleBtn'), { click: () => collapse.toggle() });
-};
-
+/**
+ * Collapsible component demo view
+ */
 class CollapsibleView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        initSimple();
-        initStyled();
-        initCustomHeader();
-        initDisabledToggle();
-        initMethods();
+        this.initSimple();
+        this.initStyled();
+        this.initCustomHeader();
+        this.initDisabledToggle();
+        this.initMethods();
+    }
+
+    initSimple() {
+        const collapse = Collapsible.create({
+            content: 'Content',
+            className: 'simple',
+            onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
+        });
+
+        this.addSection({
+            id: 'default',
+            title: 'Default settings',
+            content: createElement('div', { children: collapse.elem }),
+        });
+    }
+
+    initStyled() {
+        const collapse = Collapsible.create({
+            content: ge('styledContent'),
+            className: 'styled',
+            onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
+        });
+
+        this.addSection({
+            id: 'styled',
+            title: 'Styled container',
+            content: createElement('div', { children: collapse.elem }),
+        });
+    }
+
+    initCustomHeader() {
+        const titleContainer = createElement('div', {
+            props: {
+                className: 'custom-title',
+                textContent: 'Hover/focus to see controls',
+            },
+        });
+        const updateBtn = createButton('update');
+        const delBtn = createButton('del');
+
+        const collapse = Collapsible.create({
+            header: [titleContainer, updateBtn, delBtn],
+            content: 'Custom header',
+            className: 'custom',
+            onStateChange: (expanded) => {
+                titleContainer.textContent = (expanded) ? 'Hide' : 'Show';
+            },
+        });
+        collapse.headerContainer.tabIndex = 0;
+
+        this.addSection({
+            id: 'customHeader',
+            title: 'Custom header',
+            content: createElement('div', { children: collapse.elem }),
+        });
+    }
+
+    initDisabledToggle() {
+        const titleContainer = createElement('div', {
+            props: {
+                className: 'custom-title',
+                textContent: 'Toggle only by click button',
+            },
+        });
+        const toggleBtn = createElement('button', {
+            props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
+            children: Icon.create({ icon: 'toggle-ext', className: CUSTOM_ICON_CLASS }).elem,
+        });
+
+        const collapse = Collapsible.create({
+            toggleOnClick: false,
+            header: [titleContainer, toggleBtn],
+            content: 'Content',
+            className: 'disabled-toggle',
+        });
+        setEvents(toggleBtn, { click: () => collapse?.toggle() });
+
+        this.addSection({
+            id: 'toggleOnClick',
+            title: '\'toggleOnClick\' option',
+            content: createElement('div', { children: collapse.elem }),
+        });
+    }
+
+    initMethods() {
+        const collapse = Collapsible.create({
+            className: 'methods',
+            header: null,
+            content: 'Content',
+        });
+
+        const buttons = [{
+            id: 'expandBtn',
+            title: 'Expand',
+            onClick: () => collapse.expand(),
+        }, {
+            id: 'collapseBtn',
+            title: 'Collapse',
+            onClick: () => collapse.collapse(),
+        }, {
+            id: 'toggleBtn',
+            title: 'Toggle',
+            onClick: () => collapse.toggle(),
+        }];
+
+        this.addSection({
+            id: 'methods',
+            title: 'Methods',
+            content: [
+                createElement('div', { children: collapse.elem }),
+                createButtons(buttons),
+            ],
+        });
     }
 }
 

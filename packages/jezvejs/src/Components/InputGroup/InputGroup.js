@@ -8,6 +8,10 @@ const CONTAINER_CLASS = 'input-group';
 
 /** Input group component */
 export class InputGroup extends Component {
+    static userProps = {
+        elem: ['id'],
+    };
+
     constructor(props) {
         super(props);
 
@@ -36,5 +40,6 @@ export class InputGroup extends Component {
 
     postInit() {
         this.setClassNames();
+        this.setUserProps();
     }
 }

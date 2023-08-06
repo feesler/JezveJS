@@ -1,74 +1,118 @@
 import 'jezvejs/style';
-import { ge } from 'jezvejs';
+import { createElement } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createControls } from '../../Application/utils.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './InputView.scss';
 
-const addEventLog = (value) => {
-    const logElem = ge('eventsLog');
-    logElem.value += `${value}\r\n`;
-};
-
-const initDefault = () => {
-    Input.fromElement(ge('defaultInput'), {
-        onFocus: () => addEventLog('onFocus'),
-        onBlur: () => addEventLog('onBlur'),
-        onInput: () => addEventLog('onInput'),
-        onChange: () => addEventLog('onChange'),
-    });
-};
-
-const initPlaceholder = () => {
-    const input = Input.create({
-        placeholder: 'Input value',
-    });
-    ge('placeholderContainer').append(input.elem);
-};
-
-const initFullWidth = () => {
-    const input = Input.create({
-        className: 'full-width',
-    });
-    ge('fullwidthContainer').append(input.elem);
-};
-
-const initStyled = () => {
-    const input = Input.create({
-        className: 'styled',
-        placeholder: 'Input correct value',
-    });
-    ge('styledContainer').append(input.elem);
-};
-
-const initDisabled = () => {
-    const disabledInp = Input.create({
-        value: 'Disabled input',
-        disabled: true,
-    });
-
-    ge('disabledContainer').append(disabledInp.elem);
-
-    const toggleEnableBtn = Button.fromElement(ge('toggleEnableBtn'), {
-        onClick: () => {
-            const { disabled } = disabledInp;
-            toggleEnableBtn.setTitle((disabled) ? 'Disable' : 'Enable');
-            disabledInp.enable(disabled);
-        },
-    });
-};
-
+/**
+ * Input component demo view
+ */
 class InputView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        initDefault();
-        initPlaceholder();
-        initFullWidth();
-        initStyled();
-        initDisabled();
+        this.initDefault();
+        this.initPlaceholder();
+        this.initFullWidth();
+        this.initStyled();
+        this.initDisabled();
+    }
+
+    initDefault() {
+        const logsField = LogsField.create();
+
+        const input = createElement('input', {
+            props: {
+                id: 'defaultInput',
+                className: 'input',
+                type: 'text',
+            },
+        });
+        const container = createElement('div', {
+            children: input,
+        });
+
+        Input.fromElement(input, {
+            onFocus: () => logsField.write('onFocus'),
+            onBlur: () => logsField.write('onBlur'),
+            onInput: () => logsField.write('onInput'),
+            onChange: () => logsField.write('onChange'),
+        });
+
+        this.addSection({
+            id: 'default',
+            title: 'Default settings',
+            content: [container, logsField.elem],
+        });
+    }
+
+    initPlaceholder() {
+        this.addSection({
+            id: 'placeholder',
+            title: 'Placeholder',
+            content: createElement('div', {
+                children: Input.create({
+                    placeholder: 'Input value',
+                }).elem,
+            }),
+        });
+    }
+
+    initFullWidth() {
+        this.addSection({
+            id: 'fullwidth',
+            title: 'Full width',
+            content: createElement('div', {
+                children: Input.create({
+                    className: 'full-width',
+                }).elem,
+            }),
+        });
+    }
+
+    initStyled() {
+        this.addSection({
+            id: 'styled',
+            title: 'Styled component',
+            content: createElement('div', {
+                children: Input.create({
+                    className: 'styled',
+                    placeholder: 'Input correct value',
+                }).elem,
+            }),
+        });
+    }
+
+    initDisabled() {
+        const disabledInp = Input.create({
+            value: 'Disabled input',
+            disabled: true,
+        });
+
+        const toggleEnableBtn = Button.create({
+            id: 'toggleEnableBtn',
+            className: 'action-btn',
+            title: 'Enable',
+            onClick: () => {
+                const { disabled } = disabledInp;
+                toggleEnableBtn.setTitle((disabled) ? 'Disable' : 'Enable');
+                disabledInp.enable(disabled);
+            },
+        });
+
+        this.addSection({
+            id: 'disabled',
+            title: 'Disabled component',
+            content: [
+                createElement('div', { children: disabledInp.elem }),
+                createControls(toggleEnableBtn.elem),
+            ],
+        });
     }
 }
 

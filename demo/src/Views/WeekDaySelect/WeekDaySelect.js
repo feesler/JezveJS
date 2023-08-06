@@ -1,111 +1,149 @@
 import 'jezvejs/style';
-import 'jezvejs/style/Button';
-import { ge, setEvents } from 'jezvejs';
+import { Button } from 'jezvejs/Button';
 import { WeekDaySelect } from 'jezvejs/WeekDaySelect';
 
 import { DemoView } from '../../Application/DemoView.js';
+import { createContainer, createControls } from '../../Application/utils.js';
+import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './WeekDaySelectView.scss';
 
-const addEventLog = (value) => {
-    const logElem = ge('eventsLog');
-    logElem.value += `${value}\r\n`;
-};
-
-const initDefault = () => {
-    const select = WeekDaySelect.create({
-        onChange: (sel) => addEventLog(`Selected: [${sel}]`),
-    });
-
-    const container = ge('defaultContainer');
-    container.append(select.elem);
-};
-
-const initStyled = () => {
-    const select = WeekDaySelect.create({
-        className: 'styled bold',
-    });
-
-    const container = ge('styledContainer');
-    container.append(select.elem);
-};
-
-const initMultiSelect = () => {
-    const select = WeekDaySelect.create({
-        className: 'styled bold',
-        multiple: true,
-        type: 'buttons',
-    });
-    select.setSelection(['1', '2']);
-
-    const container = ge('multiSelectContainer');
-    container.append(select.elem);
-};
-
-const initLocale = () => {
-    const enSelect = WeekDaySelect.create({
-        locales: 'en-US',
-    });
-    ge('enLocale').append(enSelect.elem);
-
-    const frSelect = WeekDaySelect.create({
-        locales: 'fr',
-    });
-    ge('frLocale').append(frSelect.elem);
-
-    const ruSelect = WeekDaySelect.create({
-        locales: 'ru',
-    });
-    ge('ruLocale').append(ruSelect.elem);
-};
-
-const initDisabledItem = () => {
-    const select = WeekDaySelect.create({
-        className: 'styled',
-    });
-    select.enableItem('2', false);
-
-    const container = ge('disabledItemContainer');
-    container.append(select.elem);
-
-    const btn = ge('toggleEnableItemBtn');
-    setEvents(btn, {
-        click: () => {
-            const item = select.getItemByValue('2');
-            select.enableItem('2', item?.disabled);
-        },
-    });
-};
-
-const initDisabled = () => {
-    const select = WeekDaySelect.create({
-        disabled: true,
-        className: 'styled',
-    });
-
-    const container = ge('disabledContainer');
-    container.append(select.elem);
-
-    const btn = ge('toggleEnableBtn');
-    setEvents(btn, {
-        click: () => {
-            const { disabled } = select;
-            btn.textContent = (disabled) ? 'Disable' : 'Enable';
-            select.enable(disabled);
-        },
-    });
-};
-
+/**
+ * WeekDaySelect component demo view
+ */
 class WeekDaySelectView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        initDefault();
-        initStyled();
-        initMultiSelect();
-        initLocale();
-        initDisabledItem();
-        initDisabled();
+        this.initDefault();
+        this.initStyled();
+        this.initMultiSelect();
+        this.initLocale();
+        this.initDisabledItem();
+        this.initDisabled();
+    }
+
+    initDefault() {
+        const logsField = LogsField.create();
+
+        const select = WeekDaySelect.create({
+            onChange: (sel) => logsField.write(`Selected: [${sel}]`),
+        });
+
+        this.addSection({
+            id: 'default',
+            title: 'Default settings',
+            content: [
+                createContainer('defaultContainer', select.elem),
+                logsField.elem,
+            ],
+        });
+    }
+
+    initStyled() {
+        this.addSection({
+            id: 'styled',
+            title: 'Styled',
+            content: createContainer(
+                'styledContainer',
+                WeekDaySelect.create({
+                    className: 'styled bold',
+                }).elem,
+            ),
+        });
+    }
+
+    initMultiSelect() {
+        const select = WeekDaySelect.create({
+            className: 'styled bold',
+            multiple: true,
+            type: 'buttons',
+        });
+        select.setSelection(['1', '2']);
+
+        this.addSection({
+            id: 'multiSelect',
+            title: 'Multiple select',
+            content: createContainer('multiSelectContainer', select.elem),
+        });
+    }
+
+    initLocale() {
+        this.addSection({
+            id: 'locales',
+            title: 'Locales',
+            content: LocalesContainer.create({
+                items: [{
+                    id: 'enLocale',
+                    title: 'en-US',
+                    locales: ['en-US'],
+                }, {
+                    id: 'frLocale',
+                    title: 'fr',
+                    locales: ['fr'],
+                }, {
+                    id: 'ruLocale',
+                    title: 'ru',
+                    locales: ['ru'],
+                }],
+                renderItem: ({ locales }) => WeekDaySelect.create({ locales }).elem,
+            }).elem,
+        });
+    }
+
+    initDisabledItem() {
+        const select = WeekDaySelect.create({
+            className: 'styled',
+        });
+        select.enableItem('2', false);
+
+        const btn = Button.create({
+            id: 'toggleEnableItemBtn',
+            title: 'Enable item',
+            className: 'action-btn',
+            onClick: () => {
+                const item = select.getItemByValue('2');
+                select.enableItem('2', item?.disabled);
+                btn.setTitle((item.disabled) ? 'Disable item' : 'Enable item');
+            },
+        });
+
+        this.addSection({
+            id: 'disabledItem',
+            title: 'Disabled item',
+            content: [
+                createContainer('disabledItemContainer', select.elem),
+                createControls(btn.elem),
+            ],
+        });
+    }
+
+    initDisabled() {
+        const select = WeekDaySelect.create({
+            disabled: true,
+            className: 'styled',
+        });
+
+        const btn = Button.create({
+            id: 'toggleEnableBtn',
+            title: 'Enable',
+            className: 'action-btn',
+            onClick: () => {
+                const { disabled } = select;
+                btn.setTitle((disabled) ? 'Disable' : 'Enable');
+                select.enable(disabled);
+            },
+        });
+
+        this.addSection({
+            id: 'disabled',
+            title: 'Disabled component',
+            content: [
+                createContainer('disabledContainer', select.elem),
+                createControls(btn.elem),
+            ],
+        });
     }
 }
 

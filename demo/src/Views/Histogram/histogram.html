@@ -20,7 +20,7 @@
                     </svg>
                 </button>
 
-                <h1 class="nav-header__logo"><a href="./index.html">JezveJS</a></h1>
+                <a class="nav-header__logo" href="./index.html">JezveJS</a>
                 <div id="version" class="nav-header__version"></div>
             </div>
 
@@ -29,129 +29,7 @@
                     <main class="page-content-wrap">
                         <h1>Histogram</h1>
 
-                        <div class="toc-menu">
-                            <label for="showTocCheck">Table of contents</label>
-                            <input id="showTocCheck" class="toc-menu-check" type="checkbox">
-                            <ul>
-                                <li><a href="#columnWidth" class="toc-menu-link">Change 'columnWidth' and 'groupsGap'</a></li>
-                                <li><a href="#fitToWidth" class="toc-menu-link">'fitToWidth' option</a></li>
-                                <li><a href="#autoScale" class="toc-menu-link">'autoScale' option</a></li>
-                                <li><a href="#callbacks" class="toc-menu-link">Callbacks</a></li>
-                                <li><a href="#multiColumn" class="toc-menu-link">Multi column + Legend</a></li>
-                                <li><a href="#stacked" class="toc-menu-link">Stacked + Custom legend</a></li>
-                                <li><a href="#stacked" class="toc-menu-link">Stacked + Custom legend</a></li>
-                                <li><a href="#stackedNegative" class="toc-menu-link">Stacked with negative values</a></li>
-                                <li><a href="#grouped" class="toc-menu-link">Stacked and grouped</a></li>
-                                <li><a href="#customCategories" class="toc-menu-link">Stacked and grouped with custom categories</a></li>
-                                <li><a href="#noData" class="toc-menu-link">No data</a></li>
-                                <li><a href="#singleNagative" class="toc-menu-link">Single negative value</a></li>
-                                <li><a href="#onlyPositive" class="toc-menu-link">Only positive values</a></li>
-                                <li><a href="#negativePositive" class="toc-menu-link">Negative and positive values</a></li>
-                                <li><a href="#setData" class="toc-menu-link">Set data</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="content-container">
-                            <h2 id="columnWidth">Change 'columnWidth' and 'groupsGap'</h2>
-                            <section>
-                                <div id="chart" class="std_chart_wrap"></div>
-                                <div class="section-controls">
-                                    <span>columnWidth:</span>
-                                    <div>
-                                        <input id="columnWidthRange" type="range" min="1" max="50" value="38">
-                                        <span id="columnWidthValue">38</span>
-                                    </div>
-                                    <span>groupsGap:</span>
-                                    <div>
-                                        <input id="groupsGapRange" type="range" min="1" max="50" value="10">
-                                        <span id="groupsGapValue">10</span>
-                                    </div>
-                                </div>
-                            </section>
-
-                            <h2 id="fitToWidth">'fitToWidth' option</h2>
-                            <section>
-                                <div id="chart_fittowidth" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="autoScale">'autoScale' option + custom labels color</h2>
-                            <section>
-                                <div id="chart_autoscale" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="callbacks">Callbacks + 'animate', 'showPopupOnClick' and 'activateOnClick' options
-                            </h2>
-                            <section>
-                                <div id="chart_callbacks" class="std_chart_wrap"></div>
-                                <div id="histogram_events"></div>
-                            </section>
-
-                            <h2 id="multiColumn">Multi column + Legend + 'showPopupOnHover' and 'activateOnHover'
-                                options</h2>
-                            <section>
-                                <div id="chart_multicolumn" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="stacked">Stacked + Custom legend</h2>
-                            <section>
-                                <div id="stacked-histogram" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="stackedNegative">Stacked with negative values</h2>
-                            <section>
-                                <div id="stacked-neg-histogram" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="grouped">Stacked and grouped + 'animatePopup' and 'pinPopupOnClick' options</h2>
-                            <section>
-                                <div id="stacked-grouped-histogram" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="customCategories">Stacked and grouped with custom categories + 'showPopupOnHover',
-                                'animatePopup' and
-                                'pinPopupOnClick' options</h2>
-                            <section>
-                                <div id="stacked-categories-histogram" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="noData">No data</h2>
-                            <section>
-                                <div id="chart_no_data" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="singleNagative">Single negative value</h2>
-                            <section>
-                                <div id="chart_single_neg" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="onlyPositive">Only positive values</h2>
-                            <section>
-                                <div id="chart_pos" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="onlyNegative">Only negative values</h2>
-                            <section>
-                                <div id="chart_neg" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="negativePositive">Negative and positive values</h2>
-                            <section>
-                                <div id="chart_negpos" class="std_chart_wrap"></div>
-                            </section>
-
-                            <h2 id="setData">Set data</h2>
-                            <section>
-                                <div id="chart_setdata" class="std_chart_wrap"></div>
-                                <div class="section-controls">
-                                    <button id="setNoDataBtn" class="btn action-btn" type="button">No data</button>
-                                    <button id="setData1Btn" class="btn action-btn" type="button">Data set 1</button>
-                                    <button id="setData2Btn" class="btn action-btn" type="button">Data set 2</button>
-                                    <button id="setData3Btn" class="btn action-btn" type="button">Data set 3</button>
-                                    <button id="largeDataBtn" class="btn action-btn" type="button">Large data
-                                        set</button>
-                                </div>
-                            </section>
-                        </div>
+                        <div class="content-container"></div>
                     </main>
                 </div>
             </div>

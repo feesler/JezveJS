@@ -52,7 +52,9 @@ export class DropDownView extends AppView {
             Object.keys(dropDownSelectors),
             async (name) => {
                 const selector = dropDownSelectors[name];
-                res[name] = await DropDown.createFromChild(this, await query(selector));
+                const elem = await query(selector);
+                assert(elem, `Element '${name}' not found`);
+                res[name] = await DropDown.createFromChild(this, elem);
                 assert(res[name], `Failed to initialize component '${name}'`);
             },
         );
