@@ -195,6 +195,10 @@ class LineChartView extends DemoView {
     onStart() {
         this.columnWidthAndGap();
         this.fitToWidth();
+
+        this.leftYAxis();
+        this.noYAxis();
+
         this.autoScale();
         this.callbacks();
         this.multiple();
@@ -251,6 +255,34 @@ class LineChartView extends DemoView {
             id: 'fitToWidth',
             title: '\'fitToWidth\' option',
             content: chartContainer('linechart_fittowidth', chart),
+        });
+    }
+
+    leftYAxis() {
+        const chart = LineChart.create({
+            data: chartData2,
+            yAxis: 'left',
+            className: 'linechart_left_yaxis',
+        });
+
+        this.addSection({
+            id: 'leftYAxis',
+            title: '\'yAxis\' option: left',
+            content: chartContainer('linechart_left_yaxis', chart),
+        });
+    }
+
+    noYAxis() {
+        const chart = LineChart.create({
+            data: chartData2,
+            yAxis: 'none',
+            className: 'linechart_no_yaxis',
+        });
+
+        this.addSection({
+            id: 'noYAxis',
+            title: '\'yAxis\' option: none',
+            content: chartContainer('linechart_no_yaxis', chart),
         });
     }
 

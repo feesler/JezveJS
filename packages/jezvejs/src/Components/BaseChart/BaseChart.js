@@ -26,6 +26,7 @@ const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
 const VLABELS_CLASS = 'chart__vert-labels';
 const VLABELS_CONTAINER_CLASS = 'vertical-legend';
+const VLABELS_LEFT_CLASS = 'vertical-legend_left';
 const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
 /* Popup */
@@ -59,6 +60,7 @@ const defaultProps = {
     resizeTimeout: 200,
     activateOnClick: false,
     activateOnHover: false,
+    yAxis: 'right', // available values: 'right', 'left' and 'none'
     renderXAxisLabel: null,
     renderYAxisLabel: null,
     showLegend: false,
@@ -173,12 +175,22 @@ export class BaseChart extends Component {
                     props: { className: CONTAINER_CLASS },
                     children: this.chartScroller,
                 }),
-                createElement('div', {
-                    props: { className: VLABELS_CONTAINER_CLASS },
-                    children: this.verticalLabels,
-                }),
             ],
         });
+
+        const yAxis = this.state.yAxis.toLowerCase();
+        if (yAxis === 'left' || yAxis === 'right') {
+            const yAxisLabelsContainer = createElement('div', {
+                props: { className: VLABELS_CONTAINER_CLASS },
+                children: this.verticalLabels,
+            });
+
+            yAxisLabelsContainer.classList.toggle(VLABELS_LEFT_CLASS, yAxis === 'left');
+
+            this.chartContainer.append(yAxisLabelsContainer);
+        } else if (yAxis !== 'none') {
+            throw new Error('Invalid value of \'yAxis\' property');
+        }
 
         this.elem = createElement('div', {
             props: { className: CHART_CLASS },
@@ -507,7 +519,11 @@ export class BaseChart extends Component {
 
     /** Draw vertical labels */
     drawVLabels(state) {
-        const { grid } = state;
+        const { grid, yAxis } = state;
+        if (yAxis.toLowerCase() === 'none') {
+            return;
+        }
+
         this.vertLabelsGroup?.remove();
         this.vertLabelsGroup = null;
         if (!grid?.steps) {
