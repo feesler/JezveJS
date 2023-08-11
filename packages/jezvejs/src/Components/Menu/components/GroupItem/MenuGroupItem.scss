@@ -1,0 +1,15 @@
+/* Menu group */
+.menu-group {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+}
+
+/* Menu group header */
+.menu-group__header {
+  color: var(--menu-group-header-text-color);
+  background: var(--menu-group-header-background);
+  font-size: var(--menu-group-header-font-size);
+  font-weight: var(--menu-group-header-font-weight);
+  padding: var(--menu-group-header-padding);
+}

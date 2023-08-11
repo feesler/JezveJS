@@ -1,0 +1,8 @@
+/* Menu list separator */
+.menu-separator {
+  width: 100%;
+  border: 0;
+  border-top-width: var(--menu-separator-size, 1px);
+  border-top-style: solid;
+  border-top-color: var(--menu-separator-color);
+}

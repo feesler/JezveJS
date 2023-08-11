@@ -1,0 +1,42 @@
+/* Menu container */
+.menu {
+  /* Items */
+  --menu-item-padding: 0.5rem;
+  --menu-item-text-color: #000000;
+  --menu-item-font-size: 1rem;
+  --menu-item-font-weight: 400;
+  --menu-item-background: none;
+  --menu-item-size: 2rem;
+
+  /* Icons */
+  --menu-item-icon-size: 1.5rem;
+  --menu-item-icon-color: #000000;
+
+  /* Active item state */
+  --menu-item-active-text-color: #ffffff;
+  --menu-item-active-background: #3078e2;
+  --menu-item-active-icon-color: #ffffff;
+
+  /* Disabled item state */
+  --menu-item-disabled-text-color: #808080;
+  --menu-item-disabled-background: none;
+  --menu-item-disabled-icon-color: #808080;
+
+  /* Groups */
+  --menu-group-header-text-color: #000000;
+  --menu-group-header-background: none;
+  --menu-group-header-font-size: 0.8rem;
+  --menu-group-header-font-weight: 500;
+  --menu-group-header-padding: 0.25rem;
+
+  /* Separator */
+  --menu-separator-size: 1px;
+  --menu-separator-color: #808080;
+
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: fit-content;
+}

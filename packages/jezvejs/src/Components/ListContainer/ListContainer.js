@@ -36,9 +36,6 @@ export class ListContainer extends Component {
             ...props,
         });
 
-        if (!this.props.ItemComponent) {
-            throw new Error('Item component not specified');
-        }
         if (!this.props.itemSelector) {
             throw new Error('Item selector not specified');
         }

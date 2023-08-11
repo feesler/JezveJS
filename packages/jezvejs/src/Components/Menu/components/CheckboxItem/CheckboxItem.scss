@@ -1,0 +1,15 @@
+/* Checkbox menu item */
+.checkbox-menu-item {
+  --menu-item-icon-size: 22px;
+
+  .menu-item__check .menu-item__icon {
+    display: none;
+  }
+}
+
+/* Selected state */
+.menu-item_selected {
+  .menu-item__check .menu-item__icon {
+    display: block;
+  }
+}

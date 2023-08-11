@@ -1,0 +1,62 @@
+/* Menu list item */
+.menu-item,
+.menu-item:visited {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: var(--menu-item-padding);
+  column-gap: var(--menu-item-padding);
+  font-size: var(--menu-item-font-size);
+  font-weight: var(--menu-item-font-weight);
+  color: var(--menu-item-text-color);
+  background: var(--menu-item-background);
+  cursor: pointer;
+}
+
+.menu-item__before,
+.menu-item__after {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  width: var(--menu-item-size);
+  height: var(--menu-item-size);
+  flex-shrink: 0;
+}
+
+/* Menu item icon */
+.menu-item__icon {
+  fill: var(--menu-item-icon-color);
+  width: var(--menu-item-icon-size);
+  height: var(--menu-item-icon-size);
+}
+
+/* Menu item content */
+.menu-item__content {
+  height: var(--menu-item-size);
+  line-height: var(--menu-item-size);
+  flex-grow: 1;
+  text-align: left;
+}
+
+/* Active state */
+.menu-item.menu-item_active,
+.menu-item:active {
+  color: var(--menu-item-active-text-color);
+  background: var(--menu-item-active-background);
+
+  .menu-item__icon {
+    fill: var(--menu-item-active-icon-color);
+  }
+}
+
+/* Disabled state */
+.menu-item[disabled] {
+  pointer-events: none;
+  cursor: auto;
+  color: var(--menu-item-disabled-text-color);
+  background: var(--menu-item-disabled-background);
+
+  .menu-item__icon {
+    fill: var(--menu-item-disabled-icon-color);
+  }
+}

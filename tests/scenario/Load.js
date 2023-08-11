@@ -18,6 +18,7 @@ const views = {
     inputgroup: 'InputGroup',
     linechart: 'LineChart',
     linkmenu: 'LinkMenu',
+    menu: 'Menu',
     offcanvas: 'Offcanvas',
     piechart: 'PieChart',
     popup: 'Popup',

@@ -28,6 +28,7 @@ const routeMap = {
     inputgroup: AppView,
     linechart: AppView,
     linkmenu: AppView,
+    menu: AppView,
     offcanvas: AppView,
     piechart: AppView,
     popup: AppView,
