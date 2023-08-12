@@ -3,6 +3,7 @@ import { Component } from '../../js/Component.js';
 
 import { MenuList } from './components/List/MenuList.js';
 import { MenuItem } from './components/ListItem/MenuItem.js';
+import { MenuGroupHeader } from './components/GroupHeader/MenuGroupHeader.js';
 import { MenuGroupItem } from './components/GroupItem/MenuGroupItem.js';
 import { MenuSeparator } from './components/Separator/MenuSeparator.js';
 import {
@@ -19,6 +20,7 @@ import './Menu.scss';
 export {
     MenuList,
     MenuItem,
+    MenuGroupHeader,
     MenuGroupItem,
     MenuSeparator,
 };
@@ -37,6 +39,7 @@ const defaultProps = {
         Header: null,
         List: MenuList,
         ListItem: MenuItem,
+        GroupHeader: MenuGroupHeader,
         GroupItem: MenuGroupItem,
         Separator: MenuSeparator,
         Footer: null,
@@ -73,6 +76,7 @@ export class Menu extends Component {
             Footer,
             List,
             ListItem,
+            GroupHeader,
             GroupItem,
             Separator,
         } = this.props.components;
@@ -92,6 +96,7 @@ export class Menu extends Component {
             getPlaceholderProps: this.props.getPlaceholderProps,
             components: {
                 ListItem,
+                GroupHeader,
                 GroupItem,
                 Separator,
             },

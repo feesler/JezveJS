@@ -6,13 +6,3 @@
   padding: var(--menu-group-padding);
   margin: var(--menu-group-margin);
 }
-
-/* Menu group header */
-.menu-group__header {
-  color: var(--menu-group-header-text-color);
-  background: var(--menu-group-header-background);
-  font-size: var(--menu-group-header-font-size);
-  font-weight: var(--menu-group-header-font-weight);
-  padding: var(--menu-group-header-padding);
-  text-transform: var(--menu-group-header-text-transform, uppercase);
-}

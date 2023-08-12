@@ -5,13 +5,13 @@ import './MenuGroupItem.scss';
 
 /* CSS classes */
 const GROUP_CLASS = 'menu-group';
-const HEADER_CLASS = 'menu-group__header';
 
 const defaultProps = {
     id: null,
     title: null,
     items: [],
     components: {
+        GroupHeader: null,
         MenuList: null,
         ListItem: null,
     },
@@ -49,6 +49,7 @@ export class MenuGroupItem extends Component {
         };
 
         this.init();
+        this.render(this.state);
     }
 
     get id() {
@@ -56,17 +57,20 @@ export class MenuGroupItem extends Component {
     }
 
     init() {
-        this.titleElem = createElement('div', {
-            props: { className: HEADER_CLASS },
-        });
-
-        const { MenuList, ListItem } = this.props.components;
+        const { GroupHeader, MenuList, ListItem } = this.props.components;
+        if (!GroupHeader) {
+            throw new Error('Invalid group header component');
+        }
         if (!MenuList) {
             throw new Error('Invalid menu list component');
         }
         if (!ListItem) {
             throw new Error('Invalid list item component');
         }
+
+        this.header = GroupHeader.create({
+            title: this.props.title,
+        });
 
         this.list = MenuList.create({
             beforeContent: this.props.beforeContent,
@@ -80,12 +84,10 @@ export class MenuGroupItem extends Component {
         this.elem = createElement('div', {
             props: { className: GROUP_CLASS },
             children: [
-                this.titleElem,
+                this.header.elem,
                 this.list.elem,
             ],
         });
-
-        this.render(this.state);
     }
 
     render(state) {
@@ -93,7 +95,10 @@ export class MenuGroupItem extends Component {
             throw new Error('Invalid state');
         }
 
-        this.titleElem.textContent = state.title;
+        this.header.setState((headerState) => ({
+            ...headerState,
+            title: state.title,
+        }));
 
         this.list.setState((listState) => ({
             ...listState,

@@ -1,7 +1,7 @@
 import { getClassName } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
-import { CheckboxItem } from '../CheckboxItem/CheckboxItem.js';
 
+import { CheckboxItem } from '../CheckboxItem/CheckboxItem.js';
 import { MenuItem } from '../ListItem/MenuItem.js';
 import './MenuList.scss';
 
@@ -13,6 +13,7 @@ const defaultProps = {
     defaultItemType: 'button',
     components: {
         ListItem: MenuItem,
+        GroupHeader: null,
         GroupItem: null,
         Checkbox: CheckboxItem,
         Separator: null,
