@@ -23,11 +23,16 @@
   --menu-item-disabled-icon-color: #808080;
 
   /* Groups */
+  --menu-group-padding: 0.5rem 0;
+  --menu-group-margin: 0;
+
+  /* Group header */
   --menu-group-header-text-color: #000000;
   --menu-group-header-background: none;
   --menu-group-header-font-size: 0.8rem;
   --menu-group-header-font-weight: 500;
-  --menu-group-header-padding: 0.25rem;
+  --menu-group-header-padding: 0.5rem;
+  --menu-group-header-text-transform: uppercase;
 
   /* Separator */
   --menu-separator-size: 1px;

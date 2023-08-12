@@ -66,9 +66,10 @@ class MenuView extends DemoView {
         const menu = Menu.create({
             id: 'horizontalMenu',
             className: 'horizontal-menu',
+            beforeContent: false,
+            afterContent: false,
             items: [{
                 id: 'selectBtnItem',
-                icon: 'select',
                 title: 'Button item',
             }, {
                 id: 'separator1',
@@ -77,11 +78,10 @@ class MenuView extends DemoView {
                 id: 'linkItem',
                 type: 'link',
                 title: 'Link item',
-                icon: 'search',
                 url: '#123',
             }, {
                 id: 'noIconItem',
-                title: 'No icon item',
+                title: 'Item 3',
             }],
         });
 
@@ -118,13 +118,10 @@ class MenuView extends DemoView {
             }, {
                 id: 'noIconItem',
                 title: 'No icon item',
-                /*
-                }, {
-                    id: 'checkboxItem',
-                    type: 'checkbox',
-                    title: 'Checkbox item',
-                    onChange: (checked) => logsField.write(`Checkbox item toggled: ${checked}`),
-                */
+            }, {
+                id: 'checkboxItem',
+                type: 'checkbox',
+                title: 'Checkbox item',
             }],
         });
 
@@ -143,6 +140,7 @@ class MenuView extends DemoView {
 
         const menu = Menu.create({
             id: 'groupsMenu',
+            beforeContent: false,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'noGroupItem1',
@@ -173,9 +171,8 @@ class MenuView extends DemoView {
                     title: 'Group 2 item 1',
                 }],
             }, {
-
-                id: 'noIconItem',
-                title: 'No icon item',
+                id: 'noGroupItem3',
+                title: 'No group item 3',
             }],
         });
 

@@ -22,6 +22,8 @@
 
 /* Horizontal menu */
 .menu.horizontal-menu {
+  --menu-item-padding: 0.5rem 1rem;
+
   flex-flow: row wrap;
 
   .menu-list {
