@@ -4,6 +4,8 @@ import { Menu } from 'jezvejs/Menu';
 import { DemoView } from '../../Application/DemoView.js';
 import { createContainer } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
+import { CheckboxGroupsMenu } from './components/CheckboxGroupsMenu/CheckboxGroupsMenu.js';
 import { CollapsibleGroupsMenu } from './components/CollapsibleGroupsMenu/CollapsibleGroupsMenu.js';
 import './MenuView.scss';
 
@@ -19,6 +21,7 @@ class MenuView extends DemoView {
         this.initHorizontal();
         this.initIcons();
         this.initGroups();
+        this.initCheckboxGroups();
         this.initCollapsibleGroups();
         this.initDisabledItem();
     }
@@ -184,6 +187,65 @@ class MenuView extends DemoView {
             title: 'Groups',
             content: [
                 createContainer('groupsContainer', menu.elem),
+                logsField.elem,
+            ],
+        });
+    }
+
+    initCheckboxGroups() {
+        const logsField = LogsField.create();
+
+        const menu = CheckboxGroupsMenu.create({
+            id: 'checkboxGroupsMenu',
+            beforeContent: false,
+            checkboxSide: 'right',
+            onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
+            items: [{
+                id: 'noGroupItem1',
+                type: 'checkbox',
+                title: 'No group item 1',
+            }, {
+                id: 'group1',
+                type: 'group',
+                title: 'Group 1',
+                items: [{
+                    id: 'groupItem11',
+                    type: 'checkbox',
+                    title: 'Group 1 item 1',
+                }, {
+                    id: 'groupItem12',
+                    type: 'checkbox',
+                    title: 'Group 1 item 2',
+                }, {
+                    id: 'groupItem13',
+                    type: 'checkbox',
+                    title: 'Group 1 item 3',
+                }],
+            }, {
+                id: 'noGroupItem2',
+                type: 'checkbox',
+                title: 'No group item 2',
+            }, {
+                id: 'group2',
+                type: 'group',
+                title: 'Group 2',
+                items: [{
+                    id: 'groupItem21',
+                    type: 'checkbox',
+                    title: 'Group 2 item 1',
+                }],
+            }, {
+                id: 'noGroupItem3',
+                type: 'checkbox',
+                title: 'No group item 3',
+            }],
+        });
+
+        this.addSection({
+            id: 'checkboxGroups',
+            title: 'Checkbox groups',
+            content: [
+                createContainer('checkboxGroupsContainer', menu.elem),
                 logsField.elem,
             ],
         });

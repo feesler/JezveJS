@@ -1,0 +1,13 @@
+/* Checkbox menu group */
+.checkbox-menu-group {
+  .menu-group__header .menu-checkbox__icon {
+    display: none;
+  }
+}
+
+/* Selected state */
+.checkbox-menu-group.selected {
+  .menu-group__header .menu-checkbox__icon {
+    display: block;
+  }
+}
