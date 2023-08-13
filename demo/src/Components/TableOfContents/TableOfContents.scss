@@ -1,5 +1,12 @@
 /* Table of contents */
 .toc-menu {
+  --menu-item-active-background: none;
+  --menu-item-text-color: #0072c6;
+  --menu-item-active-text-color: #0072c6;
+  --menu-item-size: 1.5rem;
+  --menu-item-padding: 0.375rem 0;
+  --menu-group-header-padding: 4px 0;
+
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-end;
@@ -7,6 +14,7 @@
   margin-top: -1.75rem;
   position: relative;
   z-index: 1;
+  width: 100%;
 
   label {
     height: 1.5rem;
@@ -16,37 +24,25 @@
     color: #0072c6;
   }
 
-  .toc-list-section {
+  > .menu-list {
     display: none;
     padding: 0 1rem;
+  }
 
-    header {
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 4px 0;
-    }
-
-    ul {
-      list-style: none;
-    }
+  .menu-list {
+    width: auto;
   }
 
   .toc-menu-check {
     display: none;
   }
 
-  .toc-menu-check:checked ~ .toc-list-section {
+  .toc-menu-check:checked ~ .menu-list {
     display: block;
   }
 
   li {
     display: flex;
-  }
-
-  .toc-menu-link,
-  .toc-menu-link:visited {
-    line-height: 1.5rem;
-    padding: 0.375rem 0;
   }
 }
 
@@ -64,14 +60,14 @@
       color: #000000;
     }
 
-    .toc-list-section {
+    > .menu-list {
       display: block;
     }
   }
 }
 
 @media (hover: hover) {
-  .toc-menu-link:hover {
+  .link-menu-item:hover {
     text-decoration: underline;
     color: #0093ff;
   }
