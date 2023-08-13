@@ -50,7 +50,8 @@
 }
 
 /* Disabled state */
-.menu-item[disabled] {
+.menu-item[disabled],
+[disabled] .menu-item {
   pointer-events: none;
   cursor: auto;
   color: var(--menu-item-disabled-text-color);

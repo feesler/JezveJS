@@ -89,15 +89,18 @@ export const mapItems = (items, callback) => {
  * @param {Array} items source multilevel array of menu items
  * @returns Array
  */
-export const toFlatList = (items) => {
+export const toFlatList = (items, options = {}) => {
     const res = [];
     for (let index = 0; index < items.length; index += 1) {
         const item = items[index];
 
         if (item.type === 'group') {
-            res.push(...toFlatList(item.items));
+            res.push(...toFlatList(item.items, item));
         } else {
-            res.push(item);
+            res.push({
+                ...item,
+                disabled: options?.disabled ?? item.disabled,
+            });
         }
     }
 

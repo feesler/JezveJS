@@ -7,3 +7,9 @@
   padding: var(--menu-group-header-padding);
   text-transform: var(--menu-group-header-text-transform, uppercase);
 }
+
+/* Disabled state */
+[disabled] .menu-group__header {
+  color: var(--menu-disabled-group-header-text-color);
+  background: var(--menu-disabled-group-header-background);
+}

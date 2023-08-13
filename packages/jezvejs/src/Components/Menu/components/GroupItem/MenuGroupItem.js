@@ -1,4 +1,4 @@
-import { createElement } from '../../../../js/common.js';
+import { createElement, enable } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 // import { isVisibleItem } from '../../utils.js';
 import './MenuGroupItem.scss';
@@ -141,6 +141,8 @@ export class MenuGroupItem extends Component {
         if (!state) {
             throw new Error('Invalid state');
         }
+
+        enable(this.elem, !state.disabled);
 
         this.renderHeader(state, prevState);
         this.renderList(state, prevState);

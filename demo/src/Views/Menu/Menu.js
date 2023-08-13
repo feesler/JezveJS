@@ -215,6 +215,7 @@ class MenuView extends DemoView {
                 }, {
                     id: 'groupItem12',
                     title: 'Group 1 item 2',
+                    disabled: true,
                 }, {
                     id: 'groupItem13',
                     title: 'Group 1 item 3',
@@ -226,6 +227,7 @@ class MenuView extends DemoView {
                 id: 'group2',
                 type: 'group',
                 title: 'Group 2',
+                disabled: true,
                 items: [{
                     id: 'groupItem21',
                     title: 'Group 2 item 1',

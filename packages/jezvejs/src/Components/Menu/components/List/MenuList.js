@@ -116,7 +116,13 @@ export class MenuList extends ListContainer {
             return;
         }
 
+        const { GroupHeader } = this.state.components;
+
         if (item.type === 'group') {
+            if (!e?.target.closest(GroupHeader?.selector)) {
+                return;
+            }
+
             if (isFunction(this.props.onGroupHeaderClick)) {
                 this.props.onGroupHeaderClick(item.id, e);
             }
