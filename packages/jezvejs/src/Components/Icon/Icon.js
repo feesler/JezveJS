@@ -2,7 +2,7 @@ import { createSVGElement, re, insertAfter } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {
-    icon: undefined,
+    icon: null,
     id: undefined,
 };
 
@@ -36,7 +36,8 @@ export class Icon extends Component {
     }
 
     renderUseIcon(state) {
-        if (typeof state.icon !== 'string') {
+        const icon = state?.icon ?? '';
+        if (typeof icon !== 'string') {
             return;
         }
 
@@ -46,7 +47,7 @@ export class Icon extends Component {
             this.setElement(elem);
         }
 
-        this.useElem.href.baseVal = `#${state.icon}`;
+        this.useElem.href.baseVal = `#${icon}`;
     }
 
     renderElementIcon(state) {
@@ -88,9 +89,10 @@ export class Icon extends Component {
             return;
         }
 
-        if (typeof state.icon === 'string') {
+        const icon = state.icon ?? '';
+        if (typeof icon === 'string') {
             this.renderUseIcon(state);
-        } else if (state.icon instanceof Element) {
+        } else if (icon instanceof Element) {
             this.renderElementIcon(state);
         }
 
