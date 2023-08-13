@@ -1,11 +1,18 @@
 import { Component } from '../../../../js/Component.js';
-import { createElement, enable, re } from '../../../../js/common.js';
+import {
+    createElement,
+    enable,
+    getClassName,
+    re,
+} from '../../../../js/common.js';
 import { Icon } from '../../../Icon/Icon.js';
 
 import './MenuItem.scss';
 
 /* CSS classes */
 const ITEM_CLASS = 'menu-item';
+const BUTTON_ITEM_CLASS = 'button-menu-item';
+const LINK_ITEM_CLASS = 'link-menu-item';
 const ACTIVE_ITEM_CLASS = 'menu-item_active';
 const ICON_CLASS = 'menu-item__icon';
 const CONTENT_CLASS = 'menu-item__content';
@@ -60,9 +67,11 @@ export class MenuItem extends Component {
 
         if (isButton) {
             props.type = 'button';
+            props.className = getClassName(props.className, BUTTON_ITEM_CLASS);
         } else if (isLink) {
             const { url } = this.props;
             props.href = url.toString();
+            props.className = getClassName(props.className, LINK_ITEM_CLASS);
         }
 
         this.contentElem = createElement('div', {
