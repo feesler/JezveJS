@@ -102,6 +102,7 @@ class MenuView extends DemoView {
         const menu = Menu.create({
             id: 'iconsMenu',
             beforeContent: false,
+            checkboxSide: 'right',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'selectBtnItem',

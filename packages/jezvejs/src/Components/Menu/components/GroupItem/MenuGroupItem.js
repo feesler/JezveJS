@@ -97,6 +97,7 @@ export class MenuGroupItem extends Component {
         this.list = MenuList.create({
             beforeContent: this.props.beforeContent,
             afterContent: this.props.afterContent,
+            checkboxSide: this.props.checkboxSide,
             components: {
                 ListItem,
                 GroupItem: null,
@@ -120,6 +121,7 @@ export class MenuGroupItem extends Component {
             state.items === prevState?.items
             && state.beforeContent === prevState?.beforeContent
             && state.afterContent === prevState?.afterContent
+            && state.checkboxSide === prevState?.checkboxSide
         ) {
             return;
         }
@@ -129,6 +131,7 @@ export class MenuGroupItem extends Component {
             items: state.items,
             beforeContent: state.beforeContent,
             afterContent: state.afterContent,
+            checkboxSide: state.checkboxSide,
         }));
     }
 

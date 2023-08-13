@@ -1,5 +1,5 @@
 import { Component } from '../../../../js/Component.js';
-import { createElement, enable } from '../../../../js/common.js';
+import { createElement, enable, re } from '../../../../js/common.js';
 import { Icon } from '../../../Icon/Icon.js';
 
 import './MenuItem.scss';
@@ -54,7 +54,6 @@ export class MenuItem extends Component {
         const tagName = (isLink) ? 'a' : 'button';
 
         const props = { className: ITEM_CLASS };
-        const children = [];
 
         if (isButton) {
             props.type = 'button';
@@ -63,33 +62,96 @@ export class MenuItem extends Component {
             props.href = url.toString();
         }
 
-        if (this.props.beforeContent) {
-            this.beforeElem = createElement('div', {
-                props: { className: BEFORE_CLASS },
-            });
-            children.push(this.beforeElem);
-        }
-
         this.contentElem = createElement('div', {
             props: { className: CONTENT_CLASS },
         });
-        children.push(this.contentElem);
-
-        if (this.props.afterContent) {
-            this.afterElem = createElement('div', {
-                props: { className: AFTER_CLASS, tabIndex: -1 },
-            });
-            children.push(this.afterElem);
-        }
 
         this.elem = createElement(tagName, {
             props,
-            children,
+            children: this.contentElem,
         });
     }
 
     postInit() {
         this.setClassNames();
+    }
+
+    createBeforeElement() {
+        return createElement('div', { props: { className: BEFORE_CLASS } });
+    }
+
+    createAfterElement() {
+        return createElement('div', { props: { className: AFTER_CLASS } });
+    }
+
+    renderBeforeContainer(state, prevState) {
+        if (state.beforeContent === prevState?.beforeContent) {
+            return;
+        }
+
+        if (!state.beforeContent) {
+            re(this.beforeElem);
+            this.beforeElem = null;
+            return;
+        }
+
+        if (!this.beforeElem) {
+            this.beforeElem = this.createBeforeElement();
+            this.elem.prepend(this.beforeElem);
+        }
+    }
+
+    renderBeforeContent(state, prevState) {
+        if (
+            state.icon === prevState?.icon
+            || !state.beforeContent
+        ) {
+            return;
+        }
+
+        this.beforeElem.textContent = '';
+        if (state.icon) {
+            const icon = Icon.create({
+                icon: state.icon,
+                className: ICON_CLASS,
+            });
+            this.beforeElem.append(icon.elem);
+        }
+    }
+
+    renderAfterContainer(state, prevState) {
+        if (state.afterContent === prevState?.afterContent) {
+            return;
+        }
+
+        if (!state.afterContent) {
+            re(this.afterElem);
+            this.afterElem = null;
+            return;
+        }
+
+        if (!this.afterElem) {
+            this.afterElem = this.createAfterElement();
+            this.elem.append(this.afterElem);
+        }
+    }
+
+    renderAfterContent(state, prevState) {
+        if (
+            state.iconAfter === prevState?.iconAfter
+            || !state.afterContent
+        ) {
+            return;
+        }
+
+        this.afterElem.textContent = '';
+        if (state.iconAfter) {
+            const icon = Icon.create({
+                icon: state.iconAfter,
+                className: ICON_CLASS,
+            });
+            this.afterElem.append(icon.elem);
+        }
     }
 
     render(state, prevState = {}) {
@@ -103,26 +165,10 @@ export class MenuItem extends Component {
 
         this.elem.classList.toggle(ACTIVE_ITEM_CLASS, !!state.active);
 
-        if (state.beforeContent && state.icon !== prevState?.icon) {
-            this.beforeElem.textContent = '';
-            if (state.icon) {
-                const icon = Icon.create({
-                    icon: state.icon,
-                    className: ICON_CLASS,
-                });
-                this.beforeElem.append(icon.elem);
-            }
-        }
+        this.renderBeforeContainer(state, prevState);
+        this.renderBeforeContent(state, prevState);
 
-        if (state.afterContent && state.iconAfter !== prevState?.iconAfter) {
-            this.afterElem.textContent = '';
-            if (state.iconAfter) {
-                const icon = Icon.create({
-                    icon: state.iconAfter,
-                    className: ICON_CLASS,
-                });
-                this.afterElem.append(icon.elem);
-            }
-        }
+        this.renderAfterContainer(state, prevState);
+        this.renderAfterContent(state, prevState);
     }
 }

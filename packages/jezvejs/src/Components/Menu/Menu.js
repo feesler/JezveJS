@@ -44,6 +44,7 @@ const defaultProps = {
     onGroupHeaderClick: null,
     beforeContent: true,
     afterContent: true,
+    checkboxSide: 'left', // available value: 'left', 'right'
     components: {
         Header: null,
         List: MenuList,
@@ -103,6 +104,7 @@ export class Menu extends Component {
         this.list = List.create({
             beforeContent: this.props.beforeContent,
             afterContent: this.props.afterContent,
+            checkboxSide: this.props.checkboxSide,
             getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
@@ -309,6 +311,9 @@ export class Menu extends Component {
     renderList(state, prevState) {
         if (
             state.items === prevState?.items
+            && state.beforeContent === prevState?.beforeContent
+            && state.afterContent === prevState?.afterContent
+            && state.checkboxSide === prevState?.checkboxSide
         ) {
             return;
         }
@@ -318,6 +323,7 @@ export class Menu extends Component {
             items: state.items,
             beforeContent: state.beforeContent,
             afterContent: state.afterContent,
+            checkboxSide: state.checkboxSide,
         }));
     }
 

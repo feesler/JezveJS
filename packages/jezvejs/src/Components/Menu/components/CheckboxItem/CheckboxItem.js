@@ -15,6 +15,7 @@ const ICON_VIEWBOX = '0 0 24 24';
 
 const defaultProps = {
     selected: false,
+    checkboxSide: 'left', // available value: 'left', 'right'
 };
 
 /**
@@ -36,10 +37,6 @@ export class CheckboxItem extends MenuItem {
             throw new Error('Invalid type of menu item');
         }
 
-        if (!this.props.beforeContent) {
-            return;
-        }
-
         this.checkboxElem = createElement('div', {
             props: { className: CHECKBOX_CLASS },
             children: Icon.create({
@@ -56,13 +53,43 @@ export class CheckboxItem extends MenuItem {
         });
     }
 
+    renderBeforeContent(state, prevState) {
+        if (
+            state.checkboxSide === prevState?.checkboxSide
+            || !state.beforeContent
+        ) {
+            return;
+        }
+
+        if (state.checkboxSide !== 'left') {
+            super.renderBeforeContent(state, prevState);
+            return;
+        }
+
+        this.beforeElem.textContent = '';
+        this.beforeElem.append(this.checkboxElem);
+    }
+
+    renderAfterContent(state, prevState) {
+        if (
+            state.checkboxSide === prevState?.checkboxSide
+            || !state.afterContent
+        ) {
+            return;
+        }
+
+        if (state.checkboxSide !== 'right') {
+            super.renderAfterContent(state, prevState);
+            return;
+        }
+
+        this.afterElem.textContent = '';
+        this.afterElem.append(this.checkboxElem);
+    }
+
     render(state, prevState = {}) {
         super.render(state, prevState);
 
         this.elem.classList.toggle(SELECTED_ITEM_CLASS, !!state.selected);
-
-        if (state.beforeContent && state.icon !== prevState?.icon) {
-            this.beforeElem.append(this.checkboxElem);
-        }
     }
 }

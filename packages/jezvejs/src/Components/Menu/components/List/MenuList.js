@@ -79,6 +79,7 @@ export class MenuList extends ListContainer {
             ...item,
             beforeContent: state.beforeContent,
             afterContent: state.afterContent,
+            checkboxSide: state.checkboxSide,
             components: {
                 ...state.components,
                 MenuList,
