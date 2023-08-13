@@ -199,10 +199,10 @@ class MenuView extends DemoView {
             id: 'checkboxGroupsMenu',
             beforeContent: false,
             checkboxSide: 'right',
+            defaultItemType: 'checkbox',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'noGroupItem1',
-                type: 'checkbox',
                 title: 'No group item 1',
             }, {
                 id: 'group1',
@@ -210,20 +210,16 @@ class MenuView extends DemoView {
                 title: 'Group 1',
                 items: [{
                     id: 'groupItem11',
-                    type: 'checkbox',
                     title: 'Group 1 item 1',
                 }, {
                     id: 'groupItem12',
-                    type: 'checkbox',
                     title: 'Group 1 item 2',
                 }, {
                     id: 'groupItem13',
-                    type: 'checkbox',
                     title: 'Group 1 item 3',
                 }],
             }, {
                 id: 'noGroupItem2',
-                type: 'checkbox',
                 title: 'No group item 2',
             }, {
                 id: 'group2',
@@ -231,12 +227,10 @@ class MenuView extends DemoView {
                 title: 'Group 2',
                 items: [{
                     id: 'groupItem21',
-                    type: 'checkbox',
                     title: 'Group 2 item 1',
                 }],
             }, {
                 id: 'noGroupItem3',
-                type: 'checkbox',
                 title: 'No group item 3',
             }],
         });

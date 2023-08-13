@@ -49,6 +49,7 @@ const defaultProps = {
     beforeContent: true,
     afterContent: true,
     checkboxSide: 'left', // available value: 'left', 'right'
+    defaultItemType: 'button',
     components: {
         Header: null,
         List: MenuList,
@@ -79,9 +80,7 @@ export class Menu extends Component {
         });
 
         this.ignoreTouch = false;
-        this.state = {
-            ...this.props,
-        };
+        this.state = this.onStateChange(this.props);
 
         this.init();
         this.postInit();
@@ -283,6 +282,21 @@ export class Menu extends Component {
                 active: item.id?.toString() === strId,
             })),
         });
+    }
+
+    onStateChange(state, prevState = {}) {
+        if (state.items === prevState?.items) {
+            return state;
+        }
+
+        return {
+            ...state,
+            items: mapItems(state.items, (item) => (
+                (typeof item.type !== 'string' || item.type.length === 0)
+                    ? { ...item, type: this.props.defaultItemType }
+                    : item
+            )),
+        };
     }
 
     toggleSelectItem(id) {

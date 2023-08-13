@@ -10,6 +10,7 @@ const defaultProps = {
     id: null,
     title: null,
     items: [],
+    defaultItemType: 'button',
     components: {
         GroupHeader: null,
         MenuList: null,
@@ -98,6 +99,7 @@ export class MenuGroupItem extends Component {
             beforeContent: this.props.beforeContent,
             afterContent: this.props.afterContent,
             checkboxSide: this.props.checkboxSide,
+            defaultItemType: this.props.defaultItemType,
             components: {
                 ListItem,
                 GroupItem: null,
