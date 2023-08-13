@@ -150,6 +150,16 @@ export class Menu extends Component {
         this.setUserProps();
     }
 
+    generateGroupId(state = this.state) {
+        while (true) {
+            const id = `group${Date.now()}${Math.random() * 10000}`;
+            const found = getItemById(id, state.items);
+            if (!found) {
+                return id;
+            }
+        }
+    }
+
     getItemById(id) {
         return getItemById(id, this.state.items);
     }
