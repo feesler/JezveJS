@@ -200,6 +200,7 @@ class MenuView extends DemoView {
             beforeContent: false,
             checkboxSide: 'right',
             defaultItemType: 'checkbox',
+            className: 'checkbox-groups-menu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'noGroupItem1',

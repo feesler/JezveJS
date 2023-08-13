@@ -6,6 +6,11 @@
   justify-content: center;
   width: var(--menu-checkbox-size);
   height: var(--menu-checkbox-size);
+  border-radius: var(--menu-checkbox-border-radius);
+  border-width: var(--menu-checkbox-border-width);
+  border-style: var(--menu-checkbox-border-style);
+  border-color: var(--menu-checkbox-border-color);
+  background: var(--menu-checkbox-background);
 
   .menu-checkbox__icon {
     fill: var(--menu-checkbox-icon-color);

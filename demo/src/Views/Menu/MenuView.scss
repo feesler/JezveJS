@@ -39,6 +39,21 @@
   }
 }
 
+.checkbox-groups-menu {
+  --menu-checkbox-size: 1.5rem;
+  --menu-checkbox-icon-size: 1rem;
+  --menu-checkbox-border-radius: 100vh;
+  --menu-checkbox-background: #ffffff;
+  --menu-item-active-checkbox-icon-color: #0072c6;
+  --menu-checkbox-border-width: 1px;
+  --menu-checkbox-border-color: #dbdbdb;
+  --menu-checkbox-icon-color: #0072c6;
+
+  .menu-checkbox {
+    margin: 4px;
+  }
+}
+
 /* List element */
 .list {
   display: flex;
