@@ -14,7 +14,7 @@ export class PopupMenu extends TestComponent {
 
         const res = {};
 
-        const itemElems = await queryAll(this.elem, '.popup-menu-item');
+        const itemElems = await queryAll(this.elem, '.menu-item');
         res.items = await asyncMap(itemElems, async (elem) => {
             const item = await PopupMenuItem.create(this, elem);
             if (item?.id) {

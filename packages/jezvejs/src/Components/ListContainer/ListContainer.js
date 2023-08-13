@@ -384,9 +384,10 @@ export class ListContainer extends Component {
         let lastItem = null;
         for (let index = 0; index < state.items.length; index += 1) {
             const item = state.items[index];
+            const strId = item.id?.toString();
             const itemProps = this.getItemProps(item, state);
             const indexBefore = prevItems.findIndex((prev) => (
-                prev.id.toString() === item.id.toString()
+                prev.id?.toString() === strId
             ));
 
             let listItem = this.getListItemById(item.id);

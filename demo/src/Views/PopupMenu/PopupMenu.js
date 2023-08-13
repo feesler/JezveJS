@@ -37,6 +37,10 @@ class PopupMenuView extends DemoView {
     initDefault() {
         const logsField = LogsField.create();
         const btn = MenuButton.create();
+        const container = createElement('div', {
+            props: { id: 'defaultContainer' },
+            children: btn.elem,
+        });
 
         PopupMenu.create({
             id: 'defaultMenu',
@@ -57,12 +61,13 @@ class PopupMenuView extends DemoView {
                 id: 'noIconItem',
                 title: 'No icon item',
             }, {
+                id: 'separator1',
                 type: 'separator',
             }, {
                 id: 'checkboxItem',
                 type: 'checkbox',
                 title: 'Checkbox item',
-                onChange: (checked) => logsField.write(`Checkbox item toggled: ${checked}`),
+                onClick: (checked) => logsField.write(`Checkbox item toggled: ${checked}`),
             }],
         });
 
@@ -70,10 +75,7 @@ class PopupMenuView extends DemoView {
             id: 'attach',
             title: 'Attach to button',
             content: [
-                createElement('div', {
-                    props: { id: 'defaultContainer' },
-                    children: btn.elem,
-                }),
+                container,
                 logsField.elem,
             ],
         });
@@ -119,16 +121,21 @@ class PopupMenuView extends DemoView {
             id: 'clippingMenu',
             attachTo: btn.elem,
             items: [{
+                id: 'item1',
                 icon: 'select',
                 title: 'Item 1',
             }, {
+                id: 'item2',
                 icon: 'search',
                 title: 'Item 2',
             }, {
+                id: 'item3',
                 title: 'Item 3',
             }, {
+                id: 'separator1',
                 type: 'separator',
             }, {
+                id: 'item4',
                 title: 'Item 4',
             }],
         });

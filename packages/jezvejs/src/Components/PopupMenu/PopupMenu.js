@@ -1,3 +1,4 @@
+import '../../css/common.scss';
 import {
     isFunction,
     createElement,
@@ -9,12 +10,11 @@ import {
     removeChilds,
     insertAfter,
     insertBefore,
+    getClassName,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
-import '../../css/common.scss';
-import { Component } from '../../js/Component.js';
-import { Checkbox } from '../Checkbox/Checkbox.js';
-import { Button } from '../Button/Button.js';
+
+import { Menu } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import './PopupMenu.scss';
 
@@ -23,15 +23,12 @@ const MENU_CLASS = 'popup-menu';
 const LIST_CLASS = 'popup-menu-list';
 const LIST_SELECTOR = `.${LIST_CLASS}`;
 const FIXED_LIST_CLASS = 'popup-menu-list_fixed';
-const SEPARATOR_CLASS = 'popup-menu-list__separator';
-const MENU_ITEM_CLASS = 'popup-menu-item';
 
 /* List position constants */
 const SCREEN_PADDING = 5;
 const LIST_MARGIN = 5;
 
 const defaultProps = {
-    icon: 'ellipsis',
     attachTo: null,
     hideOnScroll: true,
     ignoreScrollTimeout: 500,
@@ -43,11 +40,7 @@ const defaultProps = {
     onItemClick: null,
 };
 
-export class PopupMenu extends Component {
-    static userProps = {
-        elem: ['id'],
-    };
-
+export class PopupMenu extends Menu {
     static activeInstance = null;
 
     static hideActive() {
@@ -56,14 +49,15 @@ export class PopupMenu extends Component {
         }
     }
 
-    constructor(props) {
-        super(props);
-
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+            className: getClassName(LIST_CLASS, props.className),
+        });
+    }
 
+    init() {
         this.hostElem = null;
         this.containerElem = null;
         this.ignoreScroll = false;
@@ -79,24 +73,16 @@ export class PopupMenu extends Component {
 
         this.togglerEvents = { click: (e) => this.toggleMenu(e) };
 
-        this.init();
-    }
+        super.init();
 
-    init() {
-        this.elem = createElement('div', { props: { className: LIST_CLASS } });
         show(this.elem, false);
-
         if (this.props.fixed) {
             this.elem.classList.add(FIXED_LIST_CLASS);
         }
+    }
 
-        if (this.props.items) {
-            this.append(this.props.items);
-        } else {
-            this.setContent(this.props.content);
-        }
-        this.setClassNames();
-        this.setUserProps();
+    postInit() {
+        super.postInit();
 
         if (this.props.attachTo) {
             this.attachTo(this.props.attachTo);
@@ -202,94 +188,6 @@ export class PopupMenu extends Component {
             return;
         }
         this.elem.append(...asArray(content));
-    }
-
-    append(items) {
-        if (!items) {
-            return;
-        }
-
-        asArray(items).forEach((item) => this.addItem(item));
-    }
-
-    addItem(item) {
-        if (!item) {
-            return null;
-        }
-
-        const { type = 'button', ...rest } = item;
-        const props = item.props ?? rest;
-
-        let res = null;
-        if (type === 'button' || type === 'link') {
-            res = this.addIconItem({ type, ...props });
-        } else if (type === 'checkbox') {
-            res = this.addCheckboxItem(props);
-        } else if (type === 'separator') {
-            res = this.addSeparator();
-        }
-
-        if (res && typeof props.id === 'string' && props.id.length > 0) {
-            this.items[props.id] = res;
-        }
-
-        return res;
-    }
-
-    onItemClick(item, itemHandler, ...args) {
-        const itemArg = item.id ?? item;
-        if (!itemArg) {
-            return;
-        }
-
-        if (isFunction(this.props.onItemClick)) {
-            this.props.onItemClick(itemArg);
-        }
-        if (isFunction(itemHandler)) {
-            itemHandler(...args);
-        }
-    }
-
-    addIconItem(item) {
-        if (!item) {
-            return null;
-        }
-
-        const { className = [], onClick = null, ...rest } = item;
-        const button = Button.create({
-            className: [MENU_ITEM_CLASS, ...asArray(className)],
-            ...rest,
-            onClick: (...args) => this.onItemClick(button, onClick, ...args),
-        });
-        this.elem.append(button.elem);
-
-        return button;
-    }
-
-    addCheckboxItem(item) {
-        if (!item) {
-            return null;
-        }
-
-        const { className = [], onChange = null, ...rest } = item;
-        // Checkbox accept 'label' prop instead of 'title' as Button
-        if (rest.title && typeof rest.label === 'undefined') {
-            rest.label = rest.title;
-        }
-        const button = Checkbox.create({
-            className: [MENU_ITEM_CLASS, ...asArray(className)],
-            ...rest,
-            onChange: (...args) => this.onItemClick(button, onChange, ...args),
-        });
-        this.elem.append(button.elem);
-
-        return button;
-    }
-
-    addSeparator() {
-        const separator = createElement('div', { props: { className: SEPARATOR_CLASS } });
-        this.elem.append(separator);
-        return separator;
     }
 
     showMenu() {

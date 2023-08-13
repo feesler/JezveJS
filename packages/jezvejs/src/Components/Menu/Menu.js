@@ -178,6 +178,10 @@ export class Menu extends Component {
         if (isFunction(this.props.onItemClick)) {
             this.props.onItemClick(strId, e);
         }
+
+        if (isFunction(item.onClick)) {
+            item.onClick(id, e);
+        }
     }
 
     onPlaceholderClick() {

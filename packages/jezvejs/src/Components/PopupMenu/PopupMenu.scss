@@ -29,6 +29,15 @@
 }
 
 .popup-menu-list {
+  --menu-item-text-color: var(--popupmenu-title-color);
+  --menu-separator-size: var(--popupmenu-separator-size);
+  --menu-separator-color: var(--popupmenu-separator-color);
+
+  /* Active item state */
+  --menu-item-active-text-color: var(--popupmenu-hover-title-color);
+  --menu-item-active-background: var(--popupmenu-hover-background);
+  --menu-item-active-icon-color: var(--popupmenu-hover-icon-color);
+
   display: flex;
   flex-flow: column nowrap;
   position: absolute;
@@ -44,72 +53,8 @@
     position: fixed;
   }
 
-  .popup-menu-list__separator {
-    border: 0;
-    border-bottom-width: var(--popupmenu-separator-size);
-    border-bottom-style: solid;
-    border-color: var(--popupmenu-separator-color);
-    height: 0;
-    padding: 0;
-  }
-
-  /* Menu item with icon */
-  .btn.popup-menu-item {
-    --btn-background: none;
-    --btn-title-color: var(--popupmenu-title-color);
-    --btn-hover-background: var(--popupmenu-hover-background);
-    --btn-hover-icon-color: var(--popupmenu-hover-icon-color);
-    --btn-hover-title-color: var(--popupmenu-hover-title-color);
-    --btn-content-padding: 0;
-
-    height: auto;
-    flex-shrink: 0;
-    justify-content: flex-start;
-    padding-top: var(--popupmenu-padding);
-    padding-bottom: var(--popupmenu-padding);
-    padding-left: calc(
-      var(--popupmenu-padding) + var(--btn-size) + var(--popupmenu-icon-gap)
-    );
-    padding-right: calc(var(--popupmenu-padding) + var(--popupmenu-icon-gap));
-    width: 100%;
-    position: relative;
+  .menu-item__content {
     white-space: nowrap;
-
-    .btn__icon {
-      position: absolute;
-      left: var(--popupmenu-padding);
-      margin: var(--popupmenu-icon-margin);
-    }
-  }
-
-  /* Menu item with checkbox */
-  .checkbox.popup-menu-item {
-    --checkbox-text: var(--popupmenu-title-color);
-
-    display: flex;
-    padding: var(--popupmenu-padding);
-    margin: 0;
     flex-shrink: 0;
-    cursor: pointer;
-
-    .checkbox__check {
-      margin: var(--popupmenu-icon-margin);
-    }
-
-    .checkbox__label {
-      padding: 0 10px;
-      height: 32px;
-      line-height: 32px;
-    }
-  }
-}
-
-@media (hover: hover) {
-  .popup-menu-list {
-    .popup-menu-item:hover {
-      --checkbox-text: var(--popupmenu-hover-title-color);
-
-      background-color: var(--popupmenu-hover-background);
-    }
   }
 }
