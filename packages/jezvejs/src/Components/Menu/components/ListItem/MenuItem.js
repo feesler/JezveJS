@@ -53,7 +53,10 @@ export class MenuItem extends Component {
         const isLink = this.props.type === 'link';
         const tagName = (isLink) ? 'a' : 'button';
 
-        const props = { className: ITEM_CLASS };
+        const props = {
+            className: ITEM_CLASS,
+            tabIndex: -1,
+        };
 
         if (isButton) {
             props.type = 'button';
