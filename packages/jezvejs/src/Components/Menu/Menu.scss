@@ -12,10 +12,16 @@
   --menu-item-icon-size: calc(1.275rem + 0.3vw);
   --menu-item-icon-color: #000000;
 
+  /* Checkbox */
+  --menu-checkbox-size: 2rem;
+  --menu-checkbox-icon-size: 1.5rem;
+  --menu-checkbox-icon-color: #000000;
+
   /* Active item state */
   --menu-item-active-text-color: #ffffff;
   --menu-item-active-background: #3078e2;
   --menu-item-active-icon-color: #ffffff;
+  --menu-item-active-checkbox-icon-color: #ffffff;
 
   /* Disabled item state */
   --menu-item-disabled-text-color: #808080;

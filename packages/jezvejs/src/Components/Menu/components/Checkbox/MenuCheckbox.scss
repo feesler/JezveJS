@@ -1,0 +1,15 @@
+/* Menu checkbox */
+.menu-checkbox {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  width: var(--menu-checkbox-size);
+  height: var(--menu-checkbox-size);
+
+  .menu-checkbox__icon {
+    fill: var(--menu-checkbox-icon-color);
+    width: var(--menu-checkbox-icon-size);
+    height: var(--menu-checkbox-icon-size);
+  }
+}

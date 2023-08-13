@@ -1,15 +1,24 @@
 /* Checkbox menu item */
 .checkbox-menu-item {
-  --menu-item-icon-size: 22px;
-
-  .menu-item__check .menu-item__icon {
+  .menu-checkbox__icon {
     display: none;
   }
 }
 
 /* Selected state */
 .menu-item_selected {
-  .menu-item__check .menu-item__icon {
+  .menu-checkbox__icon {
     display: block;
+  }
+}
+
+/* Active state */
+.menu-item.menu-item_active,
+.menu-item:active {
+  > .menu-item__before,
+  > .menu-item__after {
+    > .menu-checkbox .menu-checkbox__icon {
+      fill: var(--menu-item-active-checkbox-icon-color);
+    }
   }
 }

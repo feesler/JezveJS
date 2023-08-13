@@ -1,6 +1,7 @@
 import { getClassName, isFunction } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 
+import { MenuCheckbox } from '../Checkbox/MenuCheckbox.js';
 import { CheckboxItem } from '../CheckboxItem/CheckboxItem.js';
 import { MenuItem } from '../ListItem/MenuItem.js';
 import './MenuList.scss';
@@ -16,6 +17,7 @@ const defaultProps = {
         ListItem: MenuItem,
         GroupHeader: null,
         GroupItem: null,
+        Check: MenuCheckbox,
         Checkbox: CheckboxItem,
         Separator: null,
     },

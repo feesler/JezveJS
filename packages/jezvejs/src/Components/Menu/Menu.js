@@ -5,6 +5,8 @@ import { MenuList } from './components/List/MenuList.js';
 import { MenuItem } from './components/ListItem/MenuItem.js';
 import { MenuGroupHeader } from './components/GroupHeader/MenuGroupHeader.js';
 import { MenuGroupItem } from './components/GroupItem/MenuGroupItem.js';
+import { CheckboxItem } from './components/CheckboxItem/CheckboxItem.js';
+import { MenuCheckbox } from './components/Checkbox/MenuCheckbox.js';
 import { MenuSeparator } from './components/Separator/MenuSeparator.js';
 import {
     findMenuItem,
@@ -24,6 +26,8 @@ export {
     MenuGroupHeader,
     MenuGroupItem,
     MenuSeparator,
+    MenuCheckbox,
+    CheckboxItem,
     /* helper functions */
     findMenuItem,
     getActiveItem,
