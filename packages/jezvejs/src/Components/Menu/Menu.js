@@ -18,11 +18,19 @@ import {
 import './Menu.scss';
 
 export {
+    /* Child components */
     MenuList,
     MenuItem,
     MenuGroupHeader,
     MenuGroupItem,
     MenuSeparator,
+    /* helper functions */
+    findMenuItem,
+    getActiveItem,
+    getItemById,
+    getNextItem,
+    getPreviousItem,
+    mapItems,
 };
 
 /* CSS classes */
@@ -33,6 +41,7 @@ const defaultProps = {
     header: {},
     footer: {},
     onItemClick: null,
+    onGroupHeaderClick: null,
     beforeContent: true,
     afterContent: true,
     components: {
@@ -58,6 +67,10 @@ export class Menu extends Component {
         super({
             ...defaultProps,
             ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
         });
 
         this.ignoreTouch = false;
@@ -94,6 +107,7 @@ export class Menu extends Component {
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
             getPlaceholderProps: this.props.getPlaceholderProps,
+            onGroupHeaderClick: (id, e) => this.onGroupHeaderClick(id, e),
             components: {
                 ListItem,
                 GroupHeader,
@@ -151,6 +165,17 @@ export class Menu extends Component {
     }
 
     onPlaceholderClick() {
+    }
+
+    onGroupHeaderClick(id, e) {
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return;
+        }
+
+        if (isFunction(this.props.onGroupHeaderClick)) {
+            this.props.onGroupHeaderClick(id, e);
+        }
     }
 
     onScroll() {

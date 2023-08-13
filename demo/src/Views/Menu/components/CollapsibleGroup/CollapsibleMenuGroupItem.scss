@@ -1,0 +1,12 @@
+/* Collapsible menu group */
+.menu-group_collapsible {
+  .menu-list {
+    display: none;
+  }
+}
+
+.menu-group_collapsible.expanded {
+  .menu-list {
+    display: flex;
+  }
+}

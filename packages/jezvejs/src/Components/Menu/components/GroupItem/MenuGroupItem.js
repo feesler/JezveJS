@@ -4,7 +4,7 @@ import { Component } from '../../../../js/Component.js';
 import './MenuGroupItem.scss';
 
 /* CSS classes */
-const GROUP_CLASS = 'menu-group';
+const GROUP_CLASS = 'menu-item menu-group';
 
 const defaultProps = {
     id: null,
@@ -49,6 +49,7 @@ export class MenuGroupItem extends Component {
         };
 
         this.init();
+        this.postInit();
         this.render(this.state);
     }
 
@@ -57,29 +58,8 @@ export class MenuGroupItem extends Component {
     }
 
     init() {
-        const { GroupHeader, MenuList, ListItem } = this.props.components;
-        if (!GroupHeader) {
-            throw new Error('Invalid group header component');
-        }
-        if (!MenuList) {
-            throw new Error('Invalid menu list component');
-        }
-        if (!ListItem) {
-            throw new Error('Invalid list item component');
-        }
-
-        this.header = GroupHeader.create({
-            title: this.props.title,
-        });
-
-        this.list = MenuList.create({
-            beforeContent: this.props.beforeContent,
-            afterContent: this.props.afterContent,
-            components: {
-                ListItem,
-                GroupItem: null,
-            },
-        });
+        this.createHeader();
+        this.createList();
 
         this.elem = createElement('div', {
             props: { className: GROUP_CLASS },
@@ -90,15 +70,59 @@ export class MenuGroupItem extends Component {
         });
     }
 
-    render(state) {
-        if (!state) {
-            throw new Error('Invalid state');
+    postInit() {
+        this.setClassNames();
+    }
+
+    createHeader() {
+        const { GroupHeader } = this.props.components;
+        if (!GroupHeader) {
+            throw new Error('Invalid group header component');
+        }
+
+        this.header = GroupHeader.create({
+            title: this.props.title,
+        });
+    }
+
+    createList() {
+        const { MenuList, ListItem } = this.props.components;
+        if (!MenuList) {
+            throw new Error('Invalid menu list component');
+        }
+        if (!ListItem) {
+            throw new Error('Invalid list item component');
+        }
+
+        this.list = MenuList.create({
+            beforeContent: this.props.beforeContent,
+            afterContent: this.props.afterContent,
+            components: {
+                ListItem,
+                GroupItem: null,
+            },
+        });
+    }
+
+    renderHeader(state, prevState) {
+        if (state.title === prevState?.title) {
+            return;
         }
 
         this.header.setState((headerState) => ({
             ...headerState,
             title: state.title,
         }));
+    }
+
+    renderList(state, prevState) {
+        if (
+            state.items === prevState?.items
+            && state.beforeContent === prevState?.beforeContent
+            && state.afterContent === prevState?.afterContent
+        ) {
+            return;
+        }
 
         this.list.setState((listState) => ({
             ...listState,
@@ -106,9 +130,19 @@ export class MenuGroupItem extends Component {
             beforeContent: state.beforeContent,
             afterContent: state.afterContent,
         }));
+    }
+
+    render(state, prevState = {}) {
+        if (!state) {
+            throw new Error('Invalid state');
+        }
+
+        this.renderHeader(state, prevState);
+        this.renderList(state, prevState);
+
         /*
-                const showGroup = state.items.some((item) => isVisibleItem(item, state));
-                this.show(showGroup);
-                */
+        const showGroup = state.items.some((item) => isVisibleItem(item, state));
+        this.show(showGroup);
+        */
     }
 }

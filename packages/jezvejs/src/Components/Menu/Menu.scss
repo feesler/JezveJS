@@ -9,7 +9,7 @@
   --menu-item-size: 2rem;
 
   /* Icons */
-  --menu-item-icon-size: 1.5rem;
+  --menu-item-icon-size: calc(1.275rem + 0.3vw);
   --menu-item-icon-color: #000000;
 
   /* Active item state */
@@ -29,9 +29,9 @@
   /* Group header */
   --menu-group-header-text-color: #000000;
   --menu-group-header-background: none;
-  --menu-group-header-font-size: 0.8rem;
-  --menu-group-header-font-weight: 500;
-  --menu-group-header-padding: 0.5rem;
+  --menu-group-header-font-size: 0.6875rem;
+  --menu-group-header-font-weight: 700;
+  --menu-group-header-padding: 0.5rem 0.5rem 0.25rem 0.5rem;
   --menu-group-header-text-transform: uppercase;
 
   /* Separator */
@@ -44,4 +44,10 @@
   justify-content: center;
   position: relative;
   width: fit-content;
+}
+
+@media (min-width: 768px) {
+  .menu {
+    --menu-item-icon-size: 1.5rem;
+  }
 }

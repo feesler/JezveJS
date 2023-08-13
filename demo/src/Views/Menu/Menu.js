@@ -4,6 +4,7 @@ import { Menu } from 'jezvejs/Menu';
 import { DemoView } from '../../Application/DemoView.js';
 import { createContainer } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+import { CollapsibleGroupsMenu } from './components/CollapsibleGroupsMenu/CollapsibleGroupsMenu.js';
 import './MenuView.scss';
 
 /**
@@ -18,6 +19,7 @@ class MenuView extends DemoView {
         this.initHorizontal();
         this.initIcons();
         this.initGroups();
+        this.initCollapsibleGroups();
         this.initDisabledItem();
     }
 
@@ -181,6 +183,60 @@ class MenuView extends DemoView {
             title: 'Groups',
             content: [
                 createContainer('groupsContainer', menu.elem),
+                logsField.elem,
+            ],
+        });
+    }
+
+    initCollapsibleGroups() {
+        const logsField = LogsField.create();
+
+        const menu = CollapsibleGroupsMenu.create({
+            id: 'collapsibleGroupsMenu',
+            beforeContent: false,
+            onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
+            onGroupHeaderClick: (id) => logsField.write(`Group '${id}' clicked`),
+            items: [{
+                id: 'noGroupItem1',
+                title: 'No group item 1',
+            }, {
+                id: 'group1',
+                type: 'group',
+                title: 'Group 1',
+                expanded: false,
+                items: [{
+                    id: 'groupItem11',
+                    title: 'Group 1 item 1',
+                }, {
+                    id: 'groupItem12',
+                    title: 'Group 1 item 2',
+                }, {
+                    id: 'groupItem13',
+                    title: 'Group 1 item 3',
+                }],
+            }, {
+                id: 'noGroupItem2',
+                title: 'No group item 2',
+            }, {
+                id: 'group2',
+                type: 'group',
+                title: 'Group 2',
+                expanded: true,
+                items: [{
+                    id: 'groupItem21',
+                    title: 'Group 2 item 1',
+                }],
+            }, {
+                id: 'noGroupItem3',
+                title: 'No group item 3',
+            }],
+        });
+
+        this.addSection({
+            id: 'collapsibleGroups',
+            title: 'Collapsible groups',
+            content: [
+                createContainer('collapsibleGroupsContainer', menu.elem),
                 logsField.elem,
             ],
         });

@@ -1,4 +1,4 @@
-import { getClassName } from '../../../../js/common.js';
+import { getClassName, isFunction } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 
 import { CheckboxItem } from '../CheckboxItem/CheckboxItem.js';
@@ -11,6 +11,7 @@ const MENU_LIST_CLASS = 'menu-list';
 const defaultProps = {
     items: [],
     defaultItemType: 'button',
+    onGroupHeaderClick: null,
     components: {
         ListItem: MenuItem,
         GroupHeader: null,
@@ -89,5 +90,38 @@ export class MenuList extends ListContainer {
         return (
             state.items !== prevState?.items
         );
+    }
+
+    /**
+     * Item click event handler
+     * @param {Event} e - click event object
+     */
+    onItemClick(e) {
+        const item = this.itemFromElem(e?.target);
+        if (!item) {
+            return;
+        }
+
+        if (item.type === 'placeholder') {
+            if (isFunction(this.props.onPlaceholderClick)) {
+                this.props.onPlaceholderClick(e);
+            }
+            return;
+        }
+
+        if (!item.id) {
+            return;
+        }
+
+        if (item.type === 'group') {
+            if (isFunction(this.props.onGroupHeaderClick)) {
+                this.props.onGroupHeaderClick(item.id, e);
+            }
+            return;
+        }
+
+        if (isFunction(this.props.onItemClick)) {
+            this.props.onItemClick(item.id, e);
+        }
     }
 }

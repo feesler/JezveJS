@@ -6,3 +6,8 @@
   padding: var(--menu-group-padding);
   margin: var(--menu-group-margin);
 }
+
+/* Active state */
+.menu-group:active {
+  background: none;
+}
