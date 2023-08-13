@@ -32,7 +32,7 @@
 
 /* Menu item content */
 .menu-item__content {
-  height: var(--menu-item-size);
+  min-height: var(--menu-item-size);
   line-height: var(--menu-item-size);
   flex-grow: 1;
   text-align: left;
