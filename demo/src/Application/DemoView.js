@@ -1,4 +1,5 @@
 import { createElement, ge, setEvents } from 'jezvejs';
+import { mapItems } from 'jezvejs/Menu';
 import { View } from 'jezvejs/View';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
@@ -25,9 +26,12 @@ export class DemoView extends View {
      * @returns NavigationMenu
      */
     createNavigationMenu() {
+        const baseURL = App.getBaseURL();
         return NavigationMenu.create({
-            sections: App.navigationMenuSections,
-            baseURL: App.getBaseURL(),
+            items: mapItems(App.navigationMenuSections, (item) => ({
+                ...item,
+                url: `${baseURL}${item.url}`,
+            })),
         });
     }
 

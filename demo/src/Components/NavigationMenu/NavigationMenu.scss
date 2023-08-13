@@ -1,31 +1,23 @@
 /* Navigation menu container */
 .nav-menu-container {
-  display: flex;
-  flex-flow: column nowrap;
-  gap: 24px;
-}
+  --menu-item-active-background: none;
+  --menu-item-text-color: #0072c6;
+  --menu-item-active-text-color: #0072c6;
+  --menu-item-size: 1.5rem;
+  --menu-item-padding: 0.375rem 0;
+  --menu-group-header-padding: 4px 0;
+  --menu-group-header-text-color: #404040;
 
-.nav-menu-section h2 {
-  font-size: 16px;
-  font-weight: 500;
-  padding: 4px 0;
-  color: #404040;
-}
-
-.nav-menu li {
-  display: flex;
-  list-style-type: none;
-
-  .nav-menu-link,
-  .nav-menu-link:visited {
-    line-height: 1.5rem;
-    padding: 0.375rem 0;
+  > .menu-list {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 24px;
   }
 }
 
 /* Desktop */
 @media (min-width: 576px) {
-  .nav-menu-container {
+  .nav-menu-container > .menu-list {
     flex-flow: row wrap;
   }
 }
