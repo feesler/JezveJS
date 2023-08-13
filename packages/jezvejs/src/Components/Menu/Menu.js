@@ -141,6 +141,7 @@ export class Menu extends Component {
                 keydown: (e) => this.onKeyDown(e),
                 touchstart: (e) => this.onTouchStart(e),
                 mousemove: (e) => this.onMouseMove(e),
+                mouseleave: (e) => this.onMouseLeave(e),
             },
         });
     }
@@ -257,6 +258,10 @@ export class Menu extends Component {
 
         const itemToActivate = (this.isAvailableItem(item) && item.id) ?? null;
         this.setActive(itemToActivate);
+    }
+
+    onMouseLeave() {
+        this.setActive(null);
     }
 
     setActive(id) {
