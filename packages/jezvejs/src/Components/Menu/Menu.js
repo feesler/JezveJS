@@ -235,6 +235,15 @@ export class Menu extends Component {
                 e.preventDefault();
             }
         }
+
+        if (e.key === 'Enter') {
+            const activeItem = getActiveItem(this.state.items);
+            if (activeItem) {
+                this.toggleSelectItem(activeItem.id);
+            }
+
+            e.preventDefault();
+        }
     }
 
     /**
