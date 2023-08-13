@@ -133,13 +133,20 @@ export class Component {
 
     /** Update state of component and render changes */
     setState(state) {
-        const newState = isFunction(state) ? state(this.state) : state;
+        let newState = isFunction(state) ? state(this.state) : state;
         if (this.state === newState) {
             return;
         }
 
+        newState = this.onStateChange(newState, this.state);
+
         this.render(newState, this.state);
         this.state = newState;
+    }
+
+    /** Process state */
+    onStateChange(state) {
+        return state;
     }
 
     /** Render component state */
