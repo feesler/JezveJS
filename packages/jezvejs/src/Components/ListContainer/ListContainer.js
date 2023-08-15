@@ -313,7 +313,9 @@ export class ListContainer extends Component {
      */
     prepareListItemElement(listItem, item) {
         const { elem } = listItem;
-        elem.dataset.id = item.id;
+        if (typeof elem.dataset.id === 'undefined') {
+            elem.dataset.id = item.id;
+        }
     }
 
     /**
@@ -398,8 +400,9 @@ export class ListContainer extends Component {
             } else {
                 const ItemComponent = this.getItemComponent(item, state);
                 listItem = ItemComponent.create(itemProps);
-                this.prepareListItemElement(listItem, item);
             }
+
+            this.prepareListItemElement(listItem, item);
 
             if (insertNode) {
                 if (lastItem) {
