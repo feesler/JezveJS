@@ -438,15 +438,24 @@ export class Menu extends Component {
     }
 
     toggleSelectItem(id) {
+        if (this.state.disabled) {
+            return;
+        }
+
         const strId = id?.toString() ?? null;
 
         this.setState({
             ...this.state,
             items: mapItems(this.state.items, (item) => {
                 if (item.id?.toString() === strId) {
-                    return (item.selectable)
-                        ? { ...item, selected: !item.selected }
-                        : item;
+                    if (!item.selectable || item.disabled) {
+                        return item;
+                    }
+
+                    return {
+                        ...item,
+                        selected: (this.state.multiple) ? !item.selected : true,
+                    };
                 }
 
                 return (this.state.multiple)
