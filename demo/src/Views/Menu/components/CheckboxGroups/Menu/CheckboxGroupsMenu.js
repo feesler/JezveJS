@@ -1,7 +1,7 @@
 import { Menu, mapItems } from 'jezvejs/Menu';
 
-import { CheckboxMenuGroupItem } from '../CheckboxGroup/CheckboxMenuGroupItem.js';
-import { CheckboxMenuGroupHeader } from '../CheckboxGroupHeader/CheckboxMenuGroupHeader.js';
+import { CheckboxMenuGroupItem } from '../GroupItem/CheckboxMenuGroupItem.js';
+import { CheckboxMenuGroupHeader } from '../GroupHeader/CheckboxMenuGroupHeader.js';
 
 /**
  * Checkbox groups menu component

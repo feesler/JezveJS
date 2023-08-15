@@ -1,29 +1,29 @@
 import { getClassName } from 'jezvejs';
 import { MenuGroupItem } from 'jezvejs/Menu';
 
-import { CollapsibleMenuGroupHeader } from '../CollapsibleGroupHeader/CollapsibleMenuGroupHeader.js';
-import './CollapsibleMenuGroupItem.scss';
+import { CheckboxMenuGroupHeader } from '../GroupHeader/CheckboxMenuGroupHeader.js';
+import './CheckboxMenuGroupItem.scss';
 
 /* CSS classes */
-const COLLAPSIBLE_GROUP_CLASS = 'menu-group_collapsible';
-const EXPANDED_CLASS = 'expanded';
+const CHECKBOX_GROUP_CLASS = 'checkbox-menu-group';
+const SELECTED_CLASS = 'selected';
 
 const defaultProps = {
-    expanded: true,
+    selected: false,
     components: {
-        GroupHeader: CollapsibleMenuGroupHeader,
+        GroupHeader: CheckboxMenuGroupHeader,
     },
 };
 
 /**
  * Collapsible menu group component
  */
-export class CollapsibleMenuGroupItem extends MenuGroupItem {
+export class CheckboxMenuGroupItem extends MenuGroupItem {
     constructor(props = {}) {
         super({
             ...defaultProps,
             ...props,
-            className: getClassName(COLLAPSIBLE_GROUP_CLASS, props.className),
+            className: getClassName(CHECKBOX_GROUP_CLASS, props.className),
             components: {
                 ...defaultProps.components,
                 ...(props?.components ?? {}),
@@ -39,14 +39,14 @@ export class CollapsibleMenuGroupItem extends MenuGroupItem {
 
         this.header = GroupHeader.create({
             title: this.props.title,
-            expanded: this.props.expanded,
+            selected: this.props.selected,
         });
     }
 
     renderHeader(state, prevState) {
         if (
             state.title === prevState?.title
-            && state.expanded === prevState?.expanded
+            && state.selected === prevState?.selected
         ) {
             return;
         }
@@ -54,13 +54,13 @@ export class CollapsibleMenuGroupItem extends MenuGroupItem {
         this.header.setState((headerState) => ({
             ...headerState,
             title: state.title,
-            expanded: state.expanded,
+            selected: state.selected,
         }));
     }
 
     render(state, prevState = {}) {
         super.render(state, prevState);
 
-        this.elem.classList.toggle(EXPANDED_CLASS, state.expanded);
+        this.elem.classList.toggle(SELECTED_CLASS, !!state.selected);
     }
 }
