@@ -14,7 +14,7 @@ export class LinkMenu extends TestComponent {
         const validClass = await hasClass(this.elem, 'link-menu');
         assert(validClass, 'Unexpected stucture of link menu');
 
-        const itemElems = await queryAll(this.elem, '.link-menu-item');
+        const itemElems = await queryAll(this.elem, '.menu-item');
         const res = {
             multiple: await hasAttr(this.elem, 'multiple'),
             items: await asyncMap(itemElems, (elem) => LinkMenuItem.create(this, elem)),

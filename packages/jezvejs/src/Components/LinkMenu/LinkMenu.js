@@ -3,7 +3,7 @@ import {
     enable,
     getClassName,
 } from '../../js/common.js';
-import { Menu } from '../Menu/Menu.js';
+import { Menu, mapItems } from '../Menu/Menu.js';
 import './LinkMenu.scss';
 
 const CONTAINER_CLASS = 'link-menu';
@@ -93,6 +93,30 @@ export class LinkMenu extends Menu {
             && !state.disabled
             && (!item.selected || state.allowActiveLink)
         );
+    }
+
+    onStateChange(state, prevState = {}) {
+        if (state.items === prevState?.items) {
+            return state;
+        }
+
+        const newState = super.onStateChange(state, prevState);
+
+        return {
+            ...state,
+            items: mapItems(newState.items, (item) => (
+                (
+                    item.selected
+                    && !state.allowActiveLink
+                    && (item.type === 'link' || item.type === 'checkbox-link')
+                )
+                    ? {
+                        ...item,
+                        type: (item.type === 'link') ? 'button' : 'checkbox',
+                    }
+                    : item
+            )),
+        };
     }
 
     render(state, prevState = {}) {
