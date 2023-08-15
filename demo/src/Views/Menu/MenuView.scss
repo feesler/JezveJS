@@ -39,6 +39,17 @@
   }
 }
 
+/* Scrolling menu */
+.scroll-menu {
+  max-height: 400px;
+  max-width: 300px;
+  width: 100%;
+
+  > .menu-list {
+    overflow: auto;
+  }
+}
+
 /* Selectable groups */
 .checkbox-groups-menu {
   --menu-checkbox-size: 1.5rem;

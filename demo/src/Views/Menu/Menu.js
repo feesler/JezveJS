@@ -9,6 +9,16 @@ import { CheckboxGroupsMenu } from './components/CheckboxGroupsMenu/CheckboxGrou
 import { CollapsibleGroupsMenu } from './components/CollapsibleGroupsMenu/CollapsibleGroupsMenu.js';
 import './MenuView.scss';
 
+const initItems = (title, count, startFrom = 1) => {
+    const res = [];
+
+    for (let ind = startFrom; ind < startFrom + count - 1; ind += 1) {
+        res.push({ id: ind, title: `${title} ${ind}` });
+    }
+
+    return res;
+};
+
 /**
  * Menu component demio view
  */
@@ -20,6 +30,7 @@ class MenuView extends DemoView {
         this.initDefault();
         this.initHorizontal();
         this.initIcons();
+        this.initScroll();
         this.initGroups();
         this.initCheckboxGroups();
         this.initCollapsibleGroups();
@@ -137,6 +148,27 @@ class MenuView extends DemoView {
             title: 'Icons',
             content: [
                 createContainer('defaultContainer', menu.elem),
+                logsField.elem,
+            ],
+        });
+    }
+
+    initScroll() {
+        const logsField = LogsField.create();
+
+        const menu = Menu.create({
+            id: 'scrollMenu',
+            className: 'scroll-menu',
+            onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
+            items: initItems('Menu item', 30),
+        });
+
+        this.addSection({
+            id: 'scroll',
+            title: 'Scroll',
+            description: 'With keyboard support',
+            content: [
+                createContainer('scrollContainer', menu.elem),
                 logsField.elem,
             ],
         });
