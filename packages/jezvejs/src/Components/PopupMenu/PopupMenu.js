@@ -124,6 +124,11 @@ export class PopupMenu extends Menu {
         this.hideMenu();
     }
 
+    onScrollDone() {
+        this.setScrollHandlers();
+        this.elem.focus();
+    }
+
     isMenuVisible() {
         return !this.elem.hasAttribute('hidden');
     }
@@ -204,7 +209,7 @@ export class PopupMenu extends Menu {
             margin: LIST_MARGIN,
             screenPadding: SCREEN_PADDING,
             allowResize: this.props.hideOnScroll,
-            onScrollDone: () => this.setScrollHandlers(),
+            onScrollDone: () => this.onScrollDone(),
         });
 
         if (PopupMenu.activeInstance && PopupMenu.activeInstance !== this) {
