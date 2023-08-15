@@ -45,6 +45,8 @@ class PopupMenuView extends DemoView {
         PopupMenu.create({
             id: 'defaultMenu',
             attachTo: btn.elem,
+            beforeContent: true,
+            multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'selectBtnItem',
@@ -85,6 +87,7 @@ class PopupMenuView extends DemoView {
         const menu = PopupMenu.create({
             id: 'absPosMenu',
             hideOnScroll: false,
+            beforeContent: true,
             fixed: false,
             items: [{
                 id: 'selectModeBtn',
@@ -120,6 +123,7 @@ class PopupMenuView extends DemoView {
         PopupMenu.create({
             id: 'clippingMenu',
             attachTo: btn.elem,
+            beforeContent: true,
             items: [{
                 id: 'item1',
                 icon: 'select',
@@ -157,6 +161,7 @@ class PopupMenuView extends DemoView {
     initList() {
         const menu = PopupMenu.create({
             id: 'listMenu',
+            beforeContent: true,
             items: [{
                 id: 'selectModeBtn',
                 icon: 'select',
