@@ -54,8 +54,6 @@ export class MenuItem extends Component {
 
         this.state = { ...this.props };
 
-        this.init();
-        this.postInit();
         this.render(this.state);
     }
 
@@ -63,8 +61,12 @@ export class MenuItem extends Component {
         return this.state.id;
     }
 
-    init() {
-        const { type } = this.props;
+    postInit() {
+        this.setClassNames();
+    }
+
+    createContainer(state) {
+        const { type } = state;
         const isButton = type === 'button' || type === 'checkbox';
         const isLink = type === 'link' || type === 'checkbox-link';
         const tagName = (isLink) ? 'a' : 'button';
@@ -85,14 +87,17 @@ export class MenuItem extends Component {
             props: { className: CONTENT_CLASS },
         });
 
-        this.elem = createElement(tagName, {
+        const elem = createElement(tagName, {
             props,
             children: this.contentElem,
         });
-    }
 
-    postInit() {
-        this.setClassNames();
+        this.setElement(elem);
+
+        this.beforeElem = null;
+        this.afterElem = null;
+
+        this.postInit();
     }
 
     createBeforeElement() {
@@ -104,7 +109,10 @@ export class MenuItem extends Component {
     }
 
     renderBeforeContainer(state, prevState) {
-        if (state.beforeContent === prevState?.beforeContent) {
+        if (
+            state.beforeContent === prevState?.beforeContent
+            && state.type === prevState?.type
+        ) {
             return;
         }
 
@@ -122,7 +130,10 @@ export class MenuItem extends Component {
 
     renderBeforeContent(state, prevState) {
         if (
-            state.icon === prevState?.icon
+            (
+                state.icon === prevState?.icon
+                && state.type === prevState?.type
+            )
             || !state.beforeContent
         ) {
             return;
@@ -139,7 +150,10 @@ export class MenuItem extends Component {
     }
 
     renderAfterContainer(state, prevState) {
-        if (state.afterContent === prevState?.afterContent) {
+        if (
+            state.afterContent === prevState?.afterContent
+            && state.type === prevState?.type
+        ) {
             return;
         }
 
@@ -157,7 +171,10 @@ export class MenuItem extends Component {
 
     renderAfterContent(state, prevState) {
         if (
-            state.iconAfter === prevState?.iconAfter
+            (
+                state.iconAfter === prevState?.iconAfter
+                && state.type === prevState?.type
+            )
             || !state.afterContent
         ) {
             return;
@@ -181,7 +198,17 @@ export class MenuItem extends Component {
         return state.url ?? '';
     }
 
+    renderContainer(state, prevState) {
+        if (state.type === prevState?.type) {
+            return;
+        }
+
+        this.createContainer(state);
+    }
+
     render(state, prevState = {}) {
+        this.renderContainer(state, prevState);
+
         this.contentElem.textContent = state.title ?? '';
 
         if (state.type === 'link' || state.type === 'checkbox-link') {

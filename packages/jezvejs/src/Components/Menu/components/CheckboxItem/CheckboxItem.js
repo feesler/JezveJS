@@ -31,17 +31,17 @@ export class CheckboxItem extends MenuItem {
         });
     }
 
-    init() {
-        super.init();
+    createContainer(state) {
+        super.createContainer(state);
 
         if (
-            this.props.type !== 'checkbox'
-            && this.props.type !== 'checkbox-link'
+            state.type !== 'checkbox'
+            && state.type !== 'checkbox-link'
         ) {
             throw new Error('Invalid type of menu item');
         }
 
-        const { Check } = this.props.components;
+        const { Check } = state.components;
         if (!Check) {
             throw new Error('Invalid check component');
         }
