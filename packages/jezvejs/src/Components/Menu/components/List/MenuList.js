@@ -11,8 +11,11 @@ const MENU_LIST_CLASS = 'menu-list';
 
 const defaultProps = {
     items: [],
+    disabled: false,
     defaultItemType: 'button',
     onGroupHeaderClick: null,
+    useURLParam: false,
+    itemParam: 'value',
     components: {
         ListItem: MenuItem,
         GroupHeader: null,
@@ -56,7 +59,10 @@ export class MenuList extends ListContainer {
             return state.components.ListItem;
         }
 
-        if (type === 'checkbox') {
+        if (
+            item.selectable
+            && (type === 'checkbox' || type === 'checkbox-link')
+        ) {
             return state.components.Checkbox;
         }
 
@@ -77,11 +83,18 @@ export class MenuList extends ListContainer {
      * @param {object} state current list state object
      */
     getItemProps(item, state) {
+        const { ListItem } = this.props.components;
+
         return {
+            ...ListItem.defaultProps,
             ...item,
-            beforeContent: state.beforeContent,
-            afterContent: state.afterContent,
-            checkboxSide: state.checkboxSide,
+            beforeContent: item.beforeContent ?? state.beforeContent,
+            afterContent: item.afterContent ?? state.afterContent,
+            checkboxSide: item.checkboxSide ?? state.checkboxSide,
+            useURLParam: item.useURLParam ?? state.useURLParam,
+            itemParam: item.itemParam ?? state.itemParam,
+            disabled: item.disabled || state.disabled,
+            getItemURL: (itemState) => this.getItemURL(itemState, state),
             components: {
                 ...state.components,
                 MenuList,
@@ -89,9 +102,38 @@ export class MenuList extends ListContainer {
         };
     }
 
+    isNullValue(item) {
+        return (item?.id ?? null) === null;
+    }
+
+    getItemURL(item, state) {
+        const baseURL = item.url ?? window.location;
+        const { itemParam } = state;
+        const arrayParam = `${itemParam}[]`;
+        const param = (state.multiple) ? arrayParam : itemParam;
+
+        const url = new URL(baseURL);
+        if (!this.isNullValue(item)) {
+            url.searchParams.set(param, item.id);
+
+            const delParam = (state.multiple) ? itemParam : arrayParam;
+            url.searchParams.delete(delParam);
+        } else {
+            url.searchParams.delete(param);
+        }
+
+        return url;
+    }
+
     isChanged(state, prevState) {
         return (
             state.items !== prevState?.items
+            || state.disabled !== prevState?.disabled
+            || state.itemParam !== prevState?.itemParam
+            || state.useURLParam !== prevState?.useURLParam
+            || state.beforeContent !== prevState?.beforeContent
+            || state.afterContent !== prevState?.afterContent
+            || state.checkboxSide !== prevState?.checkboxSide
         );
     }
 

@@ -1,16 +1,26 @@
 /* Menu container */
 .menu {
+  /* Container */
+  --menu-column-gap: 12px;
+  --menu-row-gap: 6px;
+
   /* Items */
   --menu-item-padding: 0.5rem;
   --menu-item-text-color: #000000;
   --menu-item-font-size: 1rem;
   --menu-item-font-weight: 400;
   --menu-item-background: none;
+  --menu-item-border-color: #000000;
+  --menu-item-border-width: 0;
+  --menu-item-border-style: solid;
+  --menu-item-border-radius: 0;
   --menu-item-size: 2rem;
+  --menu-item-gap: 0.5rem;
+  --menu-item-text-transform: none;
 
   /* Icons */
   --menu-item-icon-size: calc(1.275rem + 0.3vw);
-  --menu-item-icon-color: #000000;
+  --menu-item-icon-color: var(--menu-item-text-color);
 
   /* Checkbox */
   --menu-checkbox-size: 2rem;
@@ -22,19 +32,58 @@
   --menu-checkbox-border-color: #000000;
   --menu-checkbox-background: none;
 
-  /* Active item state */
+  /* Active item */
   --menu-item-active-text-color: #ffffff;
   --menu-item-active-background: #3078e2;
+  --menu-item-active-border-color: var(--menu-item-border-color);
   --menu-item-active-icon-color: #ffffff;
   --menu-item-active-checkbox-icon-color: #ffffff;
+  --menu-item-active-checkbox-background: var(--menu-checkbox-background);
 
-  /* Disabled item state */
+  /* Hover item */
+  --menu-item-hover-text-color: var(--menu-item-active-text-color);
+  --menu-item-hover-background: var(--menu-item-active-background);
+  --menu-item-hover-border-color: var(--menu-item-active-border-color);
+  --menu-item-hover-icon-color: var(--menu-item-active-icon-color);
+  --menu-item-hover-checkbox-icon-color: var(
+    --menu-item-active-checkbox-icon-color
+  );
+  --menu-item-hover-checkbox-background: var(--menu-checkbox-background);
+
+  /* Selected item */
+  --menu-item-selected-font-weight: var(--menu-item-font-weight);
+  --menu-item-selected-text-color: var(--menu-item-text-color);
+  --menu-item-selected-background: var(--menu-item-background);
+  --menu-item-selected-border-color: var(--menu-item-border-color);
+  --menu-item-selected-icon-color: var(--menu-item-selected-text-color);
+  --menu-item-selected-checkbox-background: var(--menu-checkbox-background);
+  --menu-item-selected-checkbox-icon-color: var(--menu-checkbox-icon-color);
+
+  /* Disabled item */
   --menu-item-disabled-text-color: #808080;
-  --menu-item-disabled-background: none;
-  --menu-item-disabled-icon-color: #808080;
-  --menu-item-disabled-checkbox-icon-color: #808080;
+  --menu-item-disabled-background: var(--menu-item-background);
+  --menu-item-disabled-icon-color: var(--menu-item-disabled-text-color);
+  --menu-item-disabled-checkbox-icon-color: var(
+    --menu-item-disabled-text-color
+  );
   --menu-item-disabled-checkbox-border-color: #808080;
   --menu-item-disabled-checkbox-background: none;
+  --menu-item-disabled-border-color: var(--menu-item-border-color);
+
+  /* Disabled selected state */
+  --menu-item-disabled-selected-font-weight: var(
+    --menu-item-selected-font-weight
+  );
+  --menu-item-disabled-selected-color: var(--menu-item-disabled-text-color);
+  --menu-item-disabled-selected-bg: var(--menu-item-disabled-background);
+  --menu-item-disabled-selected-icon-color: var(
+    --menu-item-disabled-icon-color
+  );
+  --menu-item-disabled-selected-border-color: var(
+    --menu-item-disabled-border-color
+  );
+
+  /* Disabled group header */
   --menu-disabled-group-header-text-color: #808080;
   --menu-disabled-group-header-background: none;
 
@@ -60,6 +109,10 @@
   justify-content: center;
   position: relative;
   width: fit-content;
+  column-gap: var(--menu-column-gap);
+  row-gap: var(--menu-row-gap);
+  font-size: var(--menu-item-font-size);
+  font-weight: var(--menu-item-font-size);
 }
 
 @media (min-width: 768px) {

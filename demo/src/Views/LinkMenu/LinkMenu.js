@@ -15,7 +15,7 @@ class LinkMenuView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initParsed();
+        // this.initParsed();
         this.initDynamicSingle();
         this.initDynamicMultiple();
         this.initButtonsType();
@@ -48,6 +48,9 @@ class LinkMenuView extends DemoView {
                 'dynamic',
                 LinkMenu.create({
                     itemParam: 'action',
+                    beforeContent: true,
+                    useURLParam: true,
+                    preventNavigation: true,
                     items: [
                         { icon: 'plus', title: 'Create', value: 'create' },
                         { icon: 'update', title: 'Update', value: 'update' },
@@ -61,10 +64,18 @@ class LinkMenuView extends DemoView {
     initDynamicMultiple() {
         const menu = LinkMenu.create({
             itemParam: 'action',
+            beforeContent: true,
             allowActiveLink: true,
             multiple: true,
+            useURLParam: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Zero', value: 0 },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
@@ -81,8 +92,9 @@ class LinkMenuView extends DemoView {
 
     initButtonsType() {
         const menu = LinkMenu.create({
-            type: 'buttons',
+            beforeContent: true,
             multiple: true,
+            defaultItemType: 'checkbox',
             items: [
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
@@ -100,9 +112,16 @@ class LinkMenuView extends DemoView {
     initDisabledItem() {
         const menu = LinkMenu.create({
             itemParam: 'action',
+            beforeContent: true,
             multiple: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
                 { title: 'Delete', value: 'delete', disabled: true },
@@ -133,9 +152,16 @@ class LinkMenuView extends DemoView {
     initHiddenItem() {
         const menu = LinkMenu.create({
             itemParam: 'action',
+            beforeContent: true,
             multiple: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
                 { title: 'Delete', value: 'delete' },
@@ -167,9 +193,16 @@ class LinkMenuView extends DemoView {
         const menu = LinkMenu.create({
             itemParam: 'action',
             multiple: true,
+            beforeContent: true,
             disabled: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
                 { title: 'Delete', value: 'delete', disabled: true },

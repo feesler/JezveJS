@@ -8,6 +8,26 @@
   text-transform: var(--menu-group-header-text-transform, uppercase);
 }
 
+/* Active state */
+.menu-group__header:active {
+  color: var(--menu-item-active-text-color);
+  background: var(--menu-item-active-background);
+  border-color: var(--menu-item-active-border-color);
+
+  .menu-item__icon {
+    fill: var(--menu-item-active-icon-color);
+  }
+
+  > .menu-checkbox {
+    background: var(--menu-item-active-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-active-checkbox-icon-color);
+    }
+  }
+}
+
 /* Disabled state */
 [disabled] .menu-group__header {
   color: var(--menu-disabled-group-header-text-color);

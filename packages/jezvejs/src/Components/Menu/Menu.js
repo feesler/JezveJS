@@ -1,4 +1,9 @@
-import { createElement, isFunction } from '../../js/common.js';
+import {
+    asArray,
+    createElement,
+    enable,
+    isFunction,
+} from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
 import { MenuList } from './components/List/MenuList.js';
@@ -10,6 +15,7 @@ import { MenuCheckbox } from './components/Checkbox/MenuCheckbox.js';
 import { MenuSeparator } from './components/Separator/MenuSeparator.js';
 import {
     findMenuItem,
+    generateItemId,
     getActiveItem,
     getItemById,
     getNextItem,
@@ -40,16 +46,23 @@ export {
 /* CSS classes */
 const MENU_CLASS = 'menu';
 
+const SCROLL_TO_ITEM_TIMEOUT = 200;
+
 const defaultProps = {
     items: [],
     header: {},
     footer: {},
+    disabled: false,
     onItemClick: null,
     onGroupHeaderClick: null,
-    beforeContent: true,
-    afterContent: true,
+    multiple: false,
+    beforeContent: false,
+    afterContent: false,
     checkboxSide: 'left', // available value: 'left', 'right'
     defaultItemType: 'button',
+    useURLParam: false,
+    itemParam: 'value',
+    preventNavigation: false,
     components: {
         Header: null,
         List: MenuList,
@@ -80,6 +93,7 @@ export class Menu extends Component {
         });
 
         this.ignoreTouch = false;
+        this.scrollTimeout = 0;
         this.state = this.onStateChange(this.props);
 
         this.init();
@@ -105,9 +119,13 @@ export class Menu extends Component {
         }
 
         this.list = List.create({
+            multiple: this.props.multiple,
             beforeContent: this.props.beforeContent,
             afterContent: this.props.afterContent,
             checkboxSide: this.props.checkboxSide,
+            useURLParam: this.props.useURLParam,
+            itemParam: this.props.itemParam,
+            disabled: this.props.disabled,
             getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
@@ -150,14 +168,55 @@ export class Menu extends Component {
         this.setUserProps();
     }
 
-    generateGroupId(state = this.state) {
-        while (true) {
-            const id = `group${Date.now()}${Math.random() * 10000}`;
-            const found = getItemById(id, state.items);
-            if (!found) {
-                return id;
-            }
+    /**
+     * Enable/disable component
+     * @param {boolean} val - if true component will be enabled, disabled otherwise. Default is true
+     */
+    enable(value = true) {
+        const disabled = !value;
+        if (this.state.disabled === disabled) {
+            return;
         }
+
+        this.setState({ ...this.state, disabled });
+    }
+
+    showItem(id, value = true) {
+        this.setState({
+            ...this.state,
+            items: mapItems(this.state.items, (item) => (
+                (item.value !== id)
+                    ? item
+                    : { ...item, hidden: !value }
+            )),
+        });
+    }
+
+    hideItem(id) {
+        this.showItem(id, false);
+    }
+
+    enableItem(id, value = true) {
+        this.setState({
+            ...this.state,
+            items: mapItems(this.state.items, (item) => (
+                (item.value !== id)
+                    ? item
+                    : { ...item, disabled: !value }
+            )),
+        });
+    }
+
+    disableItem(id) {
+        this.enableItem(id, false);
+    }
+
+    generateItemId(state = this.state) {
+        return generateItemId(state.items, 'item');
+    }
+
+    generateGroupId(state = this.state) {
+        return generateItemId(state.items, 'group');
     }
 
     getItemById(id) {
@@ -171,9 +230,16 @@ export class Menu extends Component {
         }
 
         const item = this.getItemById(id);
-        if (item.type === 'checkbox') {
-            this.toggleSelectItem(id);
+        const { type } = item;
+
+        if (
+            this.state.preventNavigation
+            && (type === 'link' || type === 'checkbox-link')
+        ) {
+            e?.preventDefault();
         }
+
+        this.toggleSelectItem(id);
 
         if (isFunction(this.props.onItemClick)) {
             this.props.onItemClick(strId, e);
@@ -198,7 +264,15 @@ export class Menu extends Component {
         }
     }
 
+    /** 'scroll' event handler */
     onScroll() {
+        this.state.listScroll = this.list.elem.scrollTop;
+        if (!this.state.blockScroll) {
+            this.setActive(null);
+        }
+
+        this.state.blockScroll = false;
+        this.resetScrollTimeout();
     }
 
     onFocus() {
@@ -233,6 +307,7 @@ export class Menu extends Component {
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.setActive(nextItem.id);
+                this.scrollToItem(nextItem);
                 e.preventDefault();
             }
         }
@@ -245,6 +320,7 @@ export class Menu extends Component {
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.setActive(nextItem.id);
+                this.scrollToItem(nextItem);
                 e.preventDefault();
             }
         }
@@ -291,11 +367,42 @@ export class Menu extends Component {
 
         this.setState({
             ...this.state,
-            items: mapItems(this.state.items, (item) => ({
-                ...item,
-                active: item.id?.toString() === strId,
-            })),
+            items: mapItems(this.state.items, (item) => (
+                (item.active === (item.id?.toString() === strId))
+                    ? item
+                    : { ...item, active: !item.active }
+            )),
         });
+    }
+
+    setSelection(selectedItems) {
+        const items = asArray(selectedItems).map((value) => value.toString());
+
+        this.setState({
+            ...this.state,
+            items: mapItems(this.state.items, (item) => (
+                (item.selected === items.includes(item.id?.toString()) || !item.selectable)
+                    ? item
+                    : { ...item, selected: !item.selected }
+            )),
+        });
+    }
+
+    selectAll(value = true) {
+        const selected = !!value;
+
+        this.setState({
+            ...this.state,
+            items: mapItems(this.state.items, (item) => (
+                (item.selected === selected || !item.selectable)
+                    ? item
+                    : { ...item, selected }
+            )),
+        });
+    }
+
+    clearSelection() {
+        this.selectAll(false);
     }
 
     onStateChange(state, prevState = {}) {
@@ -303,13 +410,30 @@ export class Menu extends Component {
             return state;
         }
 
+        const { ListItem } = this.props.components;
+
         return {
             ...state,
-            items: mapItems(state.items, (item) => (
-                (typeof item.type !== 'string' || item.type.length === 0)
-                    ? { ...item, type: this.props.defaultItemType }
-                    : item
-            )),
+            items: mapItems(state.items, (item) => {
+                const newState = {
+                    ...ListItem.defaultProps,
+                    ...item,
+                    active: item.active ?? false,
+                    id: item.id ?? item.value?.toString() ?? this.generateItemId(state),
+                    type: item.type ?? this.props.defaultItemType,
+                };
+
+                const { type } = newState;
+                const checkboxAvail = newState.selectable && state.multiple;
+                if (
+                    !checkboxAvail
+                    && (type === 'checkbox' || type === 'checkbox-link')
+                ) {
+                    newState.type = (type === 'checkbox') ? 'button' : 'link';
+                }
+
+                return newState;
+            }),
         };
     }
 
@@ -318,12 +442,67 @@ export class Menu extends Component {
 
         this.setState({
             ...this.state,
-            items: mapItems(this.state.items, (item) => (
-                (item.id?.toString() === strId)
-                    ? { ...item, selected: !item.selected }
-                    : item
-            )),
+            items: mapItems(this.state.items, (item) => {
+                if (item.id?.toString() === strId) {
+                    return (item.selectable)
+                        ? { ...item, selected: !item.selected }
+                        : item;
+                }
+
+                return (this.state.multiple)
+                    ? item
+                    : { ...item, selected: false };
+            }),
         });
+    }
+
+    /** Scroll list element until specified list item be fully visible */
+    scrollToItem(item) {
+        if (!item || item.hidden) {
+            return;
+        }
+
+        const listItem = this.list.getListItemById(item.id);
+        const elem = listItem?.elem;
+        if (!elem) {
+            return;
+        }
+
+        const itemTop = elem.offsetTop;
+        const itemBottom = itemTop + elem.offsetHeight;
+        const listTop = this.list.elem.scrollTop;
+        const listHeight = this.list.elem.clientHeight;
+        const listBottom = listTop + listHeight;
+
+        if (itemTop >= listTop && itemBottom <= listBottom) {
+            return;
+        }
+
+        if (itemTop < listTop) {
+            /* scroll up : decrease scroll top */
+            this.state.listScroll = Math.min(this.list.elem.scrollHeight, itemTop);
+        } else if (itemBottom > listBottom) {
+            /* scroll down : increase scroll top */
+            this.state.listScroll = Math.min(
+                this.list.elem.scrollHeight,
+                listTop + itemBottom - listBottom,
+            );
+        }
+        this.state.blockScroll = true;
+        this.list.elem.scrollTop = this.state.listScroll;
+
+        this.resetScrollTimeout();
+        this.scrollTimeout = setTimeout(() => {
+            this.state.blockScroll = false;
+            this.scrollTimeout = 0;
+        }, SCROLL_TO_ITEM_TIMEOUT);
+    }
+
+    resetScrollTimeout() {
+        if (this.scrollTimeout) {
+            clearTimeout(this.scrollTimeout);
+            this.scrollTimeout = 0;
+        }
     }
 
     renderHeader(state, prevState) {
@@ -360,6 +539,9 @@ export class Menu extends Component {
             && state.beforeContent === prevState?.beforeContent
             && state.afterContent === prevState?.afterContent
             && state.checkboxSide === prevState?.checkboxSide
+            && state.useURLParam === prevState?.useURLParam
+            && state.itemParam === prevState?.itemParam
+            && state.disabled === prevState?.disabled
         ) {
             return;
         }
@@ -370,6 +552,9 @@ export class Menu extends Component {
             beforeContent: state.beforeContent,
             afterContent: state.afterContent,
             checkboxSide: state.checkboxSide,
+            useURLParam: state.useURLParam,
+            itemParam: state.itemParam,
+            disabled: state.disabled,
         }));
     }
 
@@ -377,6 +562,8 @@ export class Menu extends Component {
         if (!state) {
             throw new Error('Invalid state');
         }
+
+        enable(this.elem, !state.disabled);
 
         this.renderHeader(state, prevState);
         this.renderList(state, prevState);

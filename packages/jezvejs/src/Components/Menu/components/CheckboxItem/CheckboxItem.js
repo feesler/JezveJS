@@ -6,7 +6,6 @@ import './CheckboxItem.scss';
 
 /* CSS classes */
 const CHECKBOX_ITEM_CLASS = 'checkbox-menu-item';
-const SELECTED_ITEM_CLASS = 'menu-item_selected';
 
 const defaultProps = {
     selected: false,
@@ -35,7 +34,10 @@ export class CheckboxItem extends MenuItem {
     init() {
         super.init();
 
-        if (this.props.type !== 'checkbox') {
+        if (
+            this.props.type !== 'checkbox'
+            && this.props.type !== 'checkbox-link'
+        ) {
             throw new Error('Invalid type of menu item');
         }
 
@@ -79,11 +81,5 @@ export class CheckboxItem extends MenuItem {
 
         this.afterElem.textContent = '';
         this.afterElem.append(this.checkbox.elem);
-    }
-
-    render(state, prevState = {}) {
-        super.render(state, prevState);
-
-        this.elem.classList.toggle(SELECTED_ITEM_CLASS, !!state.selected);
     }
 }

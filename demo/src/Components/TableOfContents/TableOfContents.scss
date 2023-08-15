@@ -67,8 +67,9 @@
 }
 
 @media (hover: hover) {
-  .link-menu-item:hover {
-    text-decoration: underline;
-    color: #0093ff;
+  .toc-menu {
+    .link-menu-item:hover {
+      text-decoration: underline;
+    }
   }
 }

@@ -39,15 +39,27 @@
   }
 }
 
+/* Selectable groups */
 .checkbox-groups-menu {
   --menu-checkbox-size: 1.5rem;
   --menu-checkbox-icon-size: 1rem;
   --menu-checkbox-border-radius: 100vh;
   --menu-checkbox-background: #ffffff;
-  --menu-item-active-checkbox-icon-color: #0072c6;
   --menu-checkbox-border-width: 1px;
   --menu-checkbox-border-color: #dbdbdb;
   --menu-checkbox-icon-color: #0072c6;
+
+  /* Active item */
+  --menu-item-active-checkbox-icon-color: #ffffff;
+  --menu-item-active-checkbox-background: #1e82cc;
+
+  /* Hover item */
+  --menu-item-hover-checkbox-background: #cccccc;
+
+  /* Selected item */
+  --menu-item-selected-checkbox-icon-color: #5082aa;
+
+  /* Disabled item */
   --menu-item-disabled-checkbox-icon-color: #808080;
   --menu-item-disabled-checkbox-border-color: #e2e2e2;
   --menu-item-disabled-checkbox-background: none;
@@ -58,26 +70,58 @@
   .menu-checkbox {
     margin: 4px;
   }
+
+  /* Hover state */
+  .menu-item_active
+    > .menu-item__side-content
+    > .menu-checkbox
+    .menu-checkbox__icon {
+    display: block;
+  }
+
+  /* Active state */
+  .menu-item:active,
+  .menu-item_active:active,
+  .menu-item_selected:active {
+    > .menu-item__side-content > .menu-checkbox .menu-checkbox__icon {
+      display: block;
+    }
+  }
+
+  /* Hover and selected state */
+  .menu-item_active.menu-item_selected
+    > .menu-item__side-content
+    > .menu-checkbox {
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-selected-checkbox-icon-color);
+    }
+  }
 }
 
-/* List element */
-.list {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
+/* Hover state */
+@media (hover: hover) {
+  .checkbox-groups-menu {
+    .link-menu-item:hover,
+    .checkbox-menu-item:hover,
+    .button-menu-item:hover {
+      > .menu-item__side-content > .menu-checkbox .menu-checkbox__icon {
+        display: block;
+      }
+    }
+
+    .menu-item_active.menu-item_selected:active:hover
+      > .menu-item__side-content
+      > .menu-checkbox {
+      .menu-checkbox__icon {
+        fill: var(--menu-item-active-checkbox-icon-color);
+      }
+    }
+  }
+}
+
+/* Collapbile groups */
+.collapsible-groups-menu {
+  max-width: 300px;
   width: 100%;
-  max-width: 400px;
-  max-height: 300px;
-  overflow-y: auto;
-  row-gap: 2px;
-}
-
-.list-item {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1rem;
-  padding: 0.5rem;
-  background-color: #dddddd;
 }

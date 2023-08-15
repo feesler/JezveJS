@@ -47,6 +47,22 @@ export const getItemById = (id, items) => {
 };
 
 /**
+ * Returns new identifier not existing in the specified list of items
+ *
+ * @param {Array} items array of items to search in
+ * @param {String} prefix optional string to prepend id with
+ */
+export const generateItemId = (items, prefix = '') => {
+    while (true) {
+        const id = `${prefix}${Date.now()}${Math.random() * 10000}`;
+        const found = getItemById(id, items);
+        if (!found) {
+            return id;
+        }
+    }
+};
+
+/**
  * Returns active menu item
  *
  * @param {Array} items array of items to search in

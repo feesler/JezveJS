@@ -252,7 +252,7 @@ export class ListContainer extends Component {
             return null;
         }
 
-        return this.listItems.find((item) => item.id.toString() === strId);
+        return this.listItems.find((item) => item.id?.toString() === strId);
     }
 
     /**

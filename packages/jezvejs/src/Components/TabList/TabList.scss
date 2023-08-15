@@ -39,29 +39,29 @@
   display: flex;
   flex-flow: column nowrap;
 
-  .link-menu {
-    --link-menu-font-size: var(--tab-font-size);
-    --link-menu-font-weight: var(--tab-font-weight);
-    --link-menu-column-gap: var(--tab-gap);
-    --link-menu-item-padding: var(--tab-padding);
-    --link-menu-color: var(--tab-item-color);
-    --link-menu-bg: var(--tab-item-bg);
-    --link-menu-border-width: var(--tab-border-width);
-    --link-menu-border-color: var(--tab-border-color);
-    --link-menu-selected-font-weight: var(--tab-selected-font-weight);
-    --link-menu-selected-color: var(--tab-selected-color);
-    --link-menu-selected-bg: var(--tab-selected-bg);
-    --link-menu-selected-border-color: var(--tab-selected-border-color);
-    --link-menu-disabled-color: var(--tab-disabled-color);
-    --link-menu-disabled-bg: var(--tab-disabled-bg);
-    --link-menu-disabled-border-color: var(--tab-disabled-border-color);
-    --link-menu-hover-color: var(--tab-hover-color);
-    --link-menu-hover-bg: var(--tab-hover-bg);
-    --link-menu-hover-border-color: var(--tab-hover-border-color);
-    --link-menu-active-color: var(--tab-active-color);
-    --link-menu-active-bg: var(--tab-active-bg);
-    --link-menu-active-border-color: var(--tab-active-border-color);
-    --link-menu-focus-shadow: var(--tab-focus-shadow);
+  .tab-list_header {
+    --menu-column-gap: var(--tab-gap);
+    --menu-item-font-size: var(--tab-font-size);
+    --menu-item-font-weight: var(--tab-font-weight);
+    --menu-item-padding: var(--tab-padding);
+    --menu-item-text-color: var(--tab-item-color);
+    --menu-item-background: var(--tab-item-bg);
+    --menu-item-border-width: var(--tab-border-width);
+    --menu-item-border-color: var(--tab-border-color);
+    --menu-item-selected-font-weight: var(--tab-selected-font-weight);
+    --menu-item-selected-text-color: var(--tab-selected-color);
+    --menu-item-selected-background: var(--tab-selected-bg);
+    --menu-item-selected-border-color: var(--tab-selected-border-color);
+    --menu-item-disabled-text-color: var(--tab-disabled-color);
+    --menu-item-disabled-background: var(--tab-disabled-bg);
+    --menu-item-disabled-border-color: var(--tab-disabled-border-color);
+    --menu-item-hover-text-color: var(--tab-hover-color);
+    --menu-item-hover-background: var(--tab-hover-bg);
+    --menu-item-hover-border-color: var(--tab-hover-border-color);
+    --menu-item-active-text-color: var(--tab-active-color);
+    --menu-item-active-background: var(--tab-active-bg);
+    --menu-item-active-border-color: var(--tab-active-border-color);
+    --menu-item-focus-shadow: var(--tab-focus-shadow);
   }
 
   .link-menu-item {

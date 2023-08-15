@@ -3,6 +3,7 @@ import {
     createElement,
     enable,
     getClassName,
+    isFunction,
     re,
 } from '../../../../js/common.js';
 import { Icon } from '../../../Icon/Icon.js';
@@ -13,34 +14,41 @@ import './MenuItem.scss';
 const ITEM_CLASS = 'menu-item';
 const BUTTON_ITEM_CLASS = 'button-menu-item';
 const LINK_ITEM_CLASS = 'link-menu-item';
-const ACTIVE_ITEM_CLASS = 'menu-item_active';
 const ICON_CLASS = 'menu-item__icon';
 const CONTENT_CLASS = 'menu-item__content';
-const BEFORE_CLASS = 'menu-item__before';
-const AFTER_CLASS = 'menu-item__after';
-
-const defaultProps = {
-    id: null,
-    title: null,
-    icon: null,
-    beforeContent: true,
-    afterContent: true,
-    selected: false,
-    disabled: false,
-    url: window.location,
-};
+const BEFORE_CLASS = 'menu-item__side-content menu-item__before';
+const AFTER_CLASS = 'menu-item__side-content menu-item__after';
+/* State classes */
+const ACTIVE_ITEM_CLASS = 'menu-item_active';
+const SELECTED_ITEM_CLASS = 'menu-item_selected';
 
 /**
  * Menu list item component
  */
 export class MenuItem extends Component {
+    static defaultProps = {
+        id: null,
+        title: null,
+        icon: null,
+        beforeContent: undefined,
+        afterContent: undefined,
+        selectable: true,
+        selected: false,
+        disabled: false,
+        hidden: false,
+        url: window.location,
+        useURLParam: undefined,
+        itemParam: undefined,
+        getItemURL: null,
+    };
+
     static get selector() {
         return `.${ITEM_CLASS}`;
     }
 
     constructor(props = {}) {
         super({
-            ...defaultProps,
+            ...MenuItem.defaultProps,
             ...props,
         });
 
@@ -56,8 +64,9 @@ export class MenuItem extends Component {
     }
 
     init() {
-        const isButton = this.props.type === 'button';
-        const isLink = this.props.type === 'link';
+        const { type } = this.props;
+        const isButton = type === 'button' || type === 'checkbox';
+        const isLink = type === 'link' || type === 'checkbox-link';
         const tagName = (isLink) ? 'a' : 'button';
 
         const props = {
@@ -69,8 +78,6 @@ export class MenuItem extends Component {
             props.type = 'button';
             props.className = getClassName(props.className, BUTTON_ITEM_CLASS);
         } else if (isLink) {
-            const { url } = this.props;
-            props.href = url.toString();
             props.className = getClassName(props.className, LINK_ITEM_CLASS);
         }
 
@@ -166,16 +173,26 @@ export class MenuItem extends Component {
         }
     }
 
+    getItemURL(state) {
+        if (state.useURLParam && isFunction(this.props.getItemURL)) {
+            return this.props.getItemURL(state);
+        }
+
+        return state.url ?? '';
+    }
+
     render(state, prevState = {}) {
         this.contentElem.textContent = state.title ?? '';
 
-        if (state.type === 'link') {
-            this.elem.href = state.url ?? '';
+        if (state.type === 'link' || state.type === 'checkbox-link') {
+            this.elem.href = this.getItemURL(state);
         }
 
+        this.show(!state.hidden);
         enable(this.elem, !state.disabled);
 
         this.elem.classList.toggle(ACTIVE_ITEM_CLASS, !!state.active);
+        this.elem.classList.toggle(SELECTED_ITEM_CLASS, !!state.selected);
 
         this.renderBeforeContainer(state, prevState);
         this.renderBeforeContent(state, prevState);

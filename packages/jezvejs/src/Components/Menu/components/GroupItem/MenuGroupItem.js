@@ -11,6 +11,8 @@ const defaultProps = {
     title: null,
     items: [],
     defaultItemType: 'button',
+    useURLParam: false,
+    itemParam: 'value',
     components: {
         GroupHeader: null,
         MenuList: null,
@@ -99,6 +101,8 @@ export class MenuGroupItem extends Component {
             beforeContent: this.props.beforeContent,
             afterContent: this.props.afterContent,
             checkboxSide: this.props.checkboxSide,
+            useURLParam: this.props.useURLParam,
+            itemParam: this.props.itemParam,
             defaultItemType: this.props.defaultItemType,
             components: {
                 ListItem,
@@ -124,6 +128,8 @@ export class MenuGroupItem extends Component {
             && state.beforeContent === prevState?.beforeContent
             && state.afterContent === prevState?.afterContent
             && state.checkboxSide === prevState?.checkboxSide
+            && state.useURLParam === prevState?.useURLParam
+            && state.itemParam === prevState?.itemParam
         ) {
             return;
         }
@@ -134,6 +140,8 @@ export class MenuGroupItem extends Component {
             beforeContent: state.beforeContent,
             afterContent: state.afterContent,
             checkboxSide: state.checkboxSide,
+            useURLParam: state.useURLParam,
+            itemParam: state.itemParam,
         }));
     }
 

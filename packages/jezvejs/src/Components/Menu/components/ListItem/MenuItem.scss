@@ -3,17 +3,21 @@
 .menu-item:visited {
   display: flex;
   flex-flow: row nowrap;
+  align-items: center;
   padding: var(--menu-item-padding);
-  column-gap: var(--menu-item-padding);
+  gap: var(--menu-item-gap);
   font-size: var(--menu-item-font-size);
   font-weight: var(--menu-item-font-weight);
   color: var(--menu-item-text-color);
   background: var(--menu-item-background);
+  border-color: var(--menu-item-border-color);
+  border-width: var(--menu-item-border-width);
+  border-style: var(--menu-item-border-style);
+  border-radius: var(--menu-item-border-radius);
   cursor: pointer;
 }
 
-.menu-item__before,
-.menu-item__after {
+.menu-item__side-content {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -32,20 +36,79 @@
 
 /* Menu item content */
 .menu-item__content {
-  min-height: var(--menu-item-size);
-  line-height: var(--menu-item-size);
   flex-grow: 1;
   text-align: left;
+  text-transform: var(--menu-item-text-transform);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: var(--menu-item-size);
+}
+
+/* Selected state */
+.menu-item_selected {
+  font-weight: var(--menu-item-selected-font-weight);
+  color: var(--menu-item-selected-text-color);
+  background: var(--menu-item-selected-background);
+  border-color: var(--menu-item-selected-border-color);
+
+  .menu-item__content {
+    color: var(--menu-item-selected-text-color);
+  }
+
+  .menu-item__icon {
+    fill: var(--menu-item-selected-icon-color);
+  }
+}
+
+/* Hover state */
+.menu-item_active {
+  color: var(--menu-item-hover-text-color);
+  background: var(--menu-item-hover-background);
+  border-color: var(--menu-item-hover-border-color);
+
+  .menu-item__content {
+    color: var(--menu-item-hover-text-color);
+  }
+
+  .menu-item__icon {
+    fill: var(--menu-item-hover-icon-color);
+  }
 }
 
 /* Active state */
-.menu-item.menu-item_active,
-.menu-item:active {
+.menu-item:active,
+.menu-item_active:active {
   color: var(--menu-item-active-text-color);
   background: var(--menu-item-active-background);
+  border-color: var(--menu-item-active-border-color);
+
+  > .menu-item__content {
+    color: var(--menu-item-active-text-color);
+  }
 
   .menu-item__icon {
     fill: var(--menu-item-active-icon-color);
+  }
+}
+
+/* Focused state */
+.menu:focus-visible .menu-item_active {
+  box-shadow: var(--menu-item-focus-shadow);
+}
+
+/* Hover and selected state */
+.menu-item_active.menu-item_selected {
+  color: var(--menu-item-hover-text-color);
+  background: var(--menu-item-hover-background);
+  border-color: var(--menu-item-hover-border-color);
+
+  .menu-item__content {
+    color: var(--menu-item-hover-text-color);
+  }
+
+  .menu-item__icon {
+    fill: var(--menu-item-hover-icon-color);
   }
 }
 
@@ -56,8 +119,65 @@
   cursor: auto;
   color: var(--menu-item-disabled-text-color);
   background: var(--menu-item-disabled-background);
+  border-color: var(--menu-item-disabled-border-color);
+
+  .menu-item__content {
+    color: var(--menu-item-disabled-text-color);
+  }
 
   .menu-item__icon {
     fill: var(--menu-item-disabled-icon-color);
+  }
+}
+
+/* Disabled and selected state */
+.menu[disabled] .menu-item_selected,
+.menu .menu-item_selected[disabled] {
+  font-weight: var(--menu-item-disabled-selected-font-weight);
+  border-color: var(--menu-item-disabled-selected-border-color);
+  background: var(--menu-item-disabled-selected-bg);
+
+  .menu-item__content {
+    color: var(--menu-item-disabled-selected-color);
+  }
+
+  .menu-item__icon {
+    fill: var(--menu-item-disabled-selected-icon-color);
+  }
+}
+
+@media (hover: hover) {
+  /* Hover state */
+  .link-menu-item:hover,
+  .checkbox-menu-item:hover,
+  .button-menu-item:hover {
+    color: var(--menu-item-hover-text-color);
+    background: var(--menu-item-hover-background);
+    border-color: var(--menu-item-hover-border-color);
+
+    .menu-item__content {
+      color: var(--menu-item-hover-text-color);
+    }
+
+    .menu-item__icon {
+      fill: var(--menu-item-hover-icon-color);
+    }
+  }
+
+  /* Hover and active state */
+  .link-menu-item:active:hover,
+  .checkbox-menu-item:active:hover,
+  .button-menu-item:active:hover {
+    color: var(--menu-item-active-text-color);
+    background: var(--menu-item-active-background);
+    border-color: var(--menu-item-active-border-color);
+
+    .menu-item__content {
+      color: var(--menu-item-active-text-color);
+    }
+
+    .menu-item__icon {
+      fill: var(--menu-item-active-icon-color);
+    }
   }
 }

@@ -31,6 +31,8 @@ class MenuView extends DemoView {
 
         const menu = Menu.create({
             id: 'defaultMenu',
+            beforeContent: true,
+            multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'selectBtnItem',
@@ -71,8 +73,6 @@ class MenuView extends DemoView {
         const menu = Menu.create({
             id: 'horizontalMenu',
             className: 'horizontal-menu',
-            beforeContent: false,
-            afterContent: false,
             items: [{
                 id: 'selectBtnItem',
                 title: 'Button item',
@@ -104,8 +104,9 @@ class MenuView extends DemoView {
 
         const menu = Menu.create({
             id: 'iconsMenu',
-            beforeContent: false,
+            afterContent: true,
             checkboxSide: 'right',
+            multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'selectBtnItem',
@@ -146,7 +147,6 @@ class MenuView extends DemoView {
 
         const menu = Menu.create({
             id: 'groupsMenu',
-            beforeContent: false,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'noGroupItem1',
@@ -197,7 +197,8 @@ class MenuView extends DemoView {
 
         const menu = CheckboxGroupsMenu.create({
             id: 'checkboxGroupsMenu',
-            beforeContent: false,
+            multiple: true,
+            afterContent: true,
             checkboxSide: 'right',
             defaultItemType: 'checkbox',
             className: 'checkbox-groups-menu',
@@ -253,7 +254,8 @@ class MenuView extends DemoView {
 
         const menu = CollapsibleGroupsMenu.create({
             id: 'collapsibleGroupsMenu',
-            beforeContent: false,
+            afterContent: true,
+            className: 'collapsible-groups-menu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             onGroupHeaderClick: (id) => logsField.write(`Group '${id}' clicked`),
             items: [{
@@ -307,6 +309,7 @@ class MenuView extends DemoView {
 
         const menu = Menu.create({
             id: 'defaultMenu',
+            beforeContent: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'selectBtnItem',
