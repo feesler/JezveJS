@@ -72,6 +72,17 @@ export class Component {
         this.enable(false);
     }
 
+    /**
+     * Replaces root element of component
+     * @param {Element} elem
+     */
+    setElement(elem) {
+        if (elem && this.elem?.parentNode) {
+            this.elem.replaceWith(elem);
+        }
+        this.elem = elem;
+    }
+
     /** Applies 'className' property to the root element of component */
     setClassNames() {
         const classNames = getClassNames(this.props.className);

@@ -1,4 +1,4 @@
-import { createSVGElement, re, insertAfter } from '../../js/common.js';
+import { createSVGElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {
@@ -25,14 +25,6 @@ export class Icon extends Component {
         };
 
         this.render(this.state);
-    }
-
-    setElement(elem) {
-        if (elem && this.elem?.parentNode) {
-            insertAfter(elem, this.elem);
-            re(this.elem);
-        }
-        this.elem = elem;
     }
 
     renderUseIcon(state) {
