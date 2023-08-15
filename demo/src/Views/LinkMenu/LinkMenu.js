@@ -15,29 +15,12 @@ class LinkMenuView extends DemoView {
      * View initialization
      */
     onStart() {
-        // this.initParsed();
         this.initDynamicSingle();
         this.initDynamicMultiple();
         this.initButtonsType();
         this.initDisabledItem();
         this.initHiddenItem();
         this.initDisabledComponent();
-    }
-
-    initParsed() {
-        const logsField = LogsField.create();
-
-        this.addSection({
-            id: 'parse',
-            title: 'Parse multiple select component',
-            content: [
-                LinkMenu.fromElement(ge('parsed'), {
-                    itemParam: 'type',
-                    onChange: (sel) => logsField.write(`Selected: [${asArray(sel).join()}]`),
-                }).elem,
-                logsField.elem,
-            ],
-        });
     }
 
     initDynamicSingle() {
