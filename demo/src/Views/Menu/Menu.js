@@ -8,6 +8,8 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { CheckboxGroupsMenu } from './components/CheckboxGroups/Menu/CheckboxGroupsMenu.js';
 import { CollapsibleGroupsMenu } from './components/CollapsibleGroups/Menu/CollapsibleGroupsMenu.js';
 import './MenuView.scss';
+import { CustomMenuHeader } from './components/CustomHeader/CustomMenuHeader.js';
+import { CustomMenuFooter } from './components/CustomFooter/CustomMenuFooter.js';
 
 const initItems = (title, count, startFrom = 1) => {
     const res = [];
@@ -30,6 +32,7 @@ class MenuView extends DemoView {
         this.initDefault();
         this.initHorizontal();
         this.initIcons();
+        this.initHeaderFooter();
         this.initScroll();
         this.initGroups();
         this.initCheckboxGroups();
@@ -149,6 +152,32 @@ class MenuView extends DemoView {
             content: [
                 createContainer('defaultContainer', menu.elem),
                 logsField.elem,
+            ],
+        });
+    }
+
+    initHeaderFooter() {
+        const menu = Menu.create({
+            id: 'headerFooterMenu',
+            className: 'scroll-menu',
+            items: initItems('Menu item', 10),
+            header: {
+                title: 'Custom header',
+            },
+            footer: {
+                title: 'Custom footer',
+            },
+            components: {
+                Header: CustomMenuHeader,
+                Footer: CustomMenuFooter,
+            },
+        });
+
+        this.addSection({
+            id: 'headerFooter',
+            title: 'Header and Footer',
+            content: [
+                createContainer('headerFooterContainer', menu.elem),
             ],
         });
     }
