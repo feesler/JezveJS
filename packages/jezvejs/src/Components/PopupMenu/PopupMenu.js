@@ -111,6 +111,19 @@ export class PopupMenu extends Menu {
         }
     }
 
+    /**
+     * 'keydown' event on handler
+     * @param {KeyboardEvent} e - event object
+     */
+    onKeyDown(e) {
+        super.onKeyDown(e);
+
+        if (e.code === 'Escape') {
+            this.hideMenu();
+            this.elem.blur();
+        }
+    }
+
     onScroll(e) {
         if (this.ignoreScroll) {
             return;
