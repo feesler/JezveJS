@@ -1,11 +1,9 @@
 import 'jezvejs/style';
-import { asArray, ge } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { LinkMenu } from 'jezvejs/LinkMenu';
 
 import { DemoView } from '../../Application/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
-import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 /**
  * LinkMenu component demo view
