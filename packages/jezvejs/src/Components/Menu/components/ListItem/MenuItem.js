@@ -32,6 +32,7 @@ export class MenuItem extends Component {
         icon: null,
         beforeContent: undefined,
         afterContent: undefined,
+        iconAlign: undefined,
         selectable: true,
         selected: false,
         disabled: false,
@@ -132,6 +133,7 @@ export class MenuItem extends Component {
         if (
             (
                 state.icon === prevState?.icon
+                && state.iconAlign === prevState?.iconAlign
                 && state.type === prevState?.type
             )
             || !state.beforeContent
@@ -140,7 +142,7 @@ export class MenuItem extends Component {
         }
 
         this.beforeElem.textContent = '';
-        if (state.icon) {
+        if (state.icon && state.iconAlign === 'left') {
             const icon = Icon.create({
                 icon: state.icon,
                 className: ICON_CLASS,
@@ -172,7 +174,8 @@ export class MenuItem extends Component {
     renderAfterContent(state, prevState) {
         if (
             (
-                state.iconAfter === prevState?.iconAfter
+                state.icon === prevState?.icon
+                && state.iconAlign === prevState?.iconAlign
                 && state.type === prevState?.type
             )
             || !state.afterContent
@@ -181,9 +184,9 @@ export class MenuItem extends Component {
         }
 
         this.afterElem.textContent = '';
-        if (state.iconAfter) {
+        if (state.icon && state.iconAlign === 'right') {
             const icon = Icon.create({
-                icon: state.iconAfter,
+                icon: state.icon,
                 className: ICON_CLASS,
             });
             this.afterElem.append(icon.elem);

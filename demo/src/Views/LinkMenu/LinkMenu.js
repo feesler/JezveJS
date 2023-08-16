@@ -29,7 +29,6 @@ class LinkMenuView extends DemoView {
                 'dynamic',
                 LinkMenu.create({
                     itemParam: 'action',
-                    beforeContent: true,
                     useURLParam: true,
                     preventNavigation: true,
                     items: [
@@ -45,7 +44,6 @@ class LinkMenuView extends DemoView {
     initDynamicMultiple() {
         const menu = LinkMenu.create({
             itemParam: 'action',
-            beforeContent: true,
             allowActiveLink: true,
             multiple: true,
             useURLParam: true,
@@ -73,7 +71,6 @@ class LinkMenuView extends DemoView {
 
     initButtonsType() {
         const menu = LinkMenu.create({
-            beforeContent: true,
             multiple: true,
             defaultItemType: 'checkbox',
             items: [
@@ -93,7 +90,6 @@ class LinkMenuView extends DemoView {
     initDisabledItem() {
         const menu = LinkMenu.create({
             itemParam: 'action',
-            beforeContent: true,
             multiple: true,
             defaultItemType: 'checkbox-link',
             items: [
@@ -133,7 +129,6 @@ class LinkMenuView extends DemoView {
     initHiddenItem() {
         const menu = LinkMenu.create({
             itemParam: 'action',
-            beforeContent: true,
             multiple: true,
             defaultItemType: 'checkbox-link',
             items: [
@@ -174,7 +169,6 @@ class LinkMenuView extends DemoView {
         const menu = LinkMenu.create({
             itemParam: 'action',
             multiple: true,
-            beforeContent: true,
             disabled: true,
             defaultItemType: 'checkbox-link',
             items: [

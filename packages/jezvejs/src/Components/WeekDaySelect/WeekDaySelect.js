@@ -9,8 +9,6 @@ const SELECT_CLASS = 'weekday-select';
 const defaultProps = {
     locales: [],
     firstDay: undefined,
-    beforeContent: false,
-    afterContent: false,
 };
 
 export class WeekDaySelect extends LinkMenu {

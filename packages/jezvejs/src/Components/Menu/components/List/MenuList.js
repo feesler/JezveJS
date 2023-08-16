@@ -90,6 +90,7 @@ export class MenuList extends ListContainer {
             ...item,
             beforeContent: item.beforeContent ?? state.beforeContent,
             afterContent: item.afterContent ?? state.afterContent,
+            iconAlign: item.iconAlign ?? state.iconAlign,
             checkboxSide: item.checkboxSide ?? state.checkboxSide,
             useURLParam: item.useURLParam ?? state.useURLParam,
             itemParam: item.itemParam ?? state.itemParam,
@@ -133,6 +134,7 @@ export class MenuList extends ListContainer {
             || state.useURLParam !== prevState?.useURLParam
             || state.beforeContent !== prevState?.beforeContent
             || state.afterContent !== prevState?.afterContent
+            || state.iconAlign !== prevState?.iconAlign
             || state.checkboxSide !== prevState?.checkboxSide
         );
     }

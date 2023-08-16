@@ -51,7 +51,10 @@ export class CheckboxItem extends MenuItem {
 
     renderBeforeContent(state, prevState) {
         if (
-            state.checkboxSide === prevState?.checkboxSide
+            (
+                state.checkboxSide === prevState?.checkboxSide
+                && state.type === prevState?.type
+            )
             || !state.beforeContent
         ) {
             return;
@@ -68,7 +71,10 @@ export class CheckboxItem extends MenuItem {
 
     renderAfterContent(state, prevState) {
         if (
-            state.checkboxSide === prevState?.checkboxSide
+            (
+                state.checkboxSide === prevState?.checkboxSide
+                && state.type === prevState?.type
+            )
             || !state.afterContent
         ) {
             return;

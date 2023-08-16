@@ -7,9 +7,9 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 import { CheckboxGroupsMenu } from './components/CheckboxGroups/Menu/CheckboxGroupsMenu.js';
 import { CollapsibleGroupsMenu } from './components/CollapsibleGroups/Menu/CollapsibleGroupsMenu.js';
-import './MenuView.scss';
 import { CustomMenuHeader } from './components/CustomHeader/CustomMenuHeader.js';
 import { CustomMenuFooter } from './components/CustomFooter/CustomMenuFooter.js';
+import './MenuView.scss';
 
 const initItems = (title, count, startFrom = 1) => {
     const res = [];
@@ -31,7 +31,8 @@ class MenuView extends DemoView {
     onStart() {
         this.initDefault();
         this.initHorizontal();
-        this.initIcons();
+        this.initIconsAlign();
+        this.initCheckboxAlign();
         this.initHeaderFooter();
         this.initScroll();
         this.initGroups();
@@ -45,7 +46,6 @@ class MenuView extends DemoView {
 
         const menu = Menu.create({
             id: 'defaultMenu',
-            beforeContent: true,
             multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
@@ -113,18 +113,17 @@ class MenuView extends DemoView {
         });
     }
 
-    initIcons() {
+    initIconsAlign() {
         const logsField = LogsField.create();
 
         const menu = Menu.create({
-            id: 'iconsMenu',
-            afterContent: true,
-            checkboxSide: 'right',
+            id: 'iconsAlignMenu',
+            iconAlign: 'right',
             multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'selectBtnItem',
-                iconAfter: 'select',
+                icon: 'select',
                 title: 'Button item',
                 onClick: () => logsField.write('Button item clicked'),
             }, {
@@ -134,7 +133,7 @@ class MenuView extends DemoView {
                 id: 'linkItem',
                 type: 'link',
                 title: 'Link item',
-                iconAfter: 'search',
+                icon: 'search',
                 url: '#',
             }, {
                 id: 'noIconItem',
@@ -147,12 +146,47 @@ class MenuView extends DemoView {
         });
 
         this.addSection({
-            id: 'icons',
-            title: 'Icons',
+            id: 'iconsAlign',
+            title: 'Icons alignment',
             content: [
-                createContainer('defaultContainer', menu.elem),
+                createContainer('iconsAlignContainer', menu.elem),
                 logsField.elem,
             ],
+        });
+    }
+
+    initCheckboxAlign() {
+        const menu = Menu.create({
+            id: 'checkboxAlignMenu',
+            checkboxSide: 'right',
+            multiple: true,
+            items: [{
+                id: 'selectBtnItem',
+                icon: 'select',
+                title: 'Button item',
+            }, {
+                id: 'separator1',
+                type: 'separator',
+            }, {
+                id: 'linkItem',
+                type: 'link',
+                title: 'Link item',
+                icon: 'search',
+                url: '#',
+            }, {
+                id: 'noIconItem',
+                title: 'No icon item',
+            }, {
+                id: 'checkboxItem',
+                type: 'checkbox',
+                title: 'Checkbox item',
+            }],
+        });
+
+        this.addSection({
+            id: 'checkboxAlign',
+            title: 'Checkbox alignment',
+            content: createContainer('checkboxAlignContainer', menu.elem),
         });
     }
 
@@ -259,7 +293,6 @@ class MenuView extends DemoView {
         const menu = CheckboxGroupsMenu.create({
             id: 'checkboxGroupsMenu',
             multiple: true,
-            afterContent: true,
             checkboxSide: 'right',
             defaultItemType: 'checkbox',
             className: 'checkbox-groups-menu',
@@ -315,7 +348,6 @@ class MenuView extends DemoView {
 
         const menu = CollapsibleGroupsMenu.create({
             id: 'collapsibleGroupsMenu',
-            afterContent: true,
             className: 'collapsible-groups-menu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             onGroupHeaderClick: (id) => logsField.write(`Group '${id}' clicked`),
@@ -370,7 +402,6 @@ class MenuView extends DemoView {
 
         const menu = Menu.create({
             id: 'defaultMenu',
-            beforeContent: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: [{
                 id: 'selectBtnItem',

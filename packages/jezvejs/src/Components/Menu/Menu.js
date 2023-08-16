@@ -15,6 +15,7 @@ import { MenuCheckbox } from './components/Checkbox/MenuCheckbox.js';
 import { MenuSeparator } from './components/Separator/MenuSeparator.js';
 import {
     findMenuItem,
+    forItems,
     generateItemId,
     getActiveItem,
     getItemById,
@@ -56,8 +57,7 @@ const defaultProps = {
     onItemClick: null,
     onGroupHeaderClick: null,
     multiple: false,
-    beforeContent: false,
-    afterContent: false,
+    iconAlign: 'left', // available value: 'left', 'right'
     checkboxSide: 'left', // available value: 'left', 'right'
     defaultItemType: 'button',
     useURLParam: false,
@@ -120,8 +120,7 @@ export class Menu extends Component {
 
         this.list = List.create({
             multiple: this.props.multiple,
-            beforeContent: this.props.beforeContent,
-            afterContent: this.props.afterContent,
+            iconAlign: this.props.iconAlign,
             checkboxSide: this.props.checkboxSide,
             useURLParam: this.props.useURLParam,
             itemParam: this.props.itemParam,
@@ -545,8 +544,7 @@ export class Menu extends Component {
     renderList(state, prevState) {
         if (
             state.items === prevState?.items
-            && state.beforeContent === prevState?.beforeContent
-            && state.afterContent === prevState?.afterContent
+            && state.iconAlign === prevState?.iconAlign
             && state.checkboxSide === prevState?.checkboxSide
             && state.useURLParam === prevState?.useURLParam
             && state.itemParam === prevState?.itemParam
@@ -555,11 +553,33 @@ export class Menu extends Component {
             return;
         }
 
+        let beforeContent = false;
+        let afterContent = false;
+
+        forItems(state.items, (item) => {
+            const { type } = item;
+            const isCheckbox = (type === 'checkbox' || type === 'checkbox-link');
+
+            if (!item.icon && !isCheckbox) {
+                return;
+            }
+
+            if (
+                (isCheckbox && state.checkboxSide === 'left')
+                || (item.icon && state.iconAlign === 'left')
+            ) {
+                beforeContent = true;
+            } else {
+                afterContent = true;
+            }
+        });
+
         this.list.setState((listState) => ({
             ...listState,
             items: state.items,
-            beforeContent: state.beforeContent,
-            afterContent: state.afterContent,
+            beforeContent,
+            afterContent,
+            iconAlign: state.iconAlign,
             checkboxSide: state.checkboxSide,
             useURLParam: state.useURLParam,
             itemParam: state.itemParam,

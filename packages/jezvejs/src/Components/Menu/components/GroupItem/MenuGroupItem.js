@@ -100,6 +100,7 @@ export class MenuGroupItem extends Component {
         this.list = MenuList.create({
             beforeContent: this.props.beforeContent,
             afterContent: this.props.afterContent,
+            iconAlign: this.props.iconAlign,
             checkboxSide: this.props.checkboxSide,
             useURLParam: this.props.useURLParam,
             itemParam: this.props.itemParam,
@@ -127,6 +128,7 @@ export class MenuGroupItem extends Component {
             state.items === prevState?.items
             && state.beforeContent === prevState?.beforeContent
             && state.afterContent === prevState?.afterContent
+            && state.iconAlign === prevState?.iconAlign
             && state.checkboxSide === prevState?.checkboxSide
             && state.useURLParam === prevState?.useURLParam
             && state.itemParam === prevState?.itemParam
@@ -139,6 +141,7 @@ export class MenuGroupItem extends Component {
             items: state.items,
             beforeContent: state.beforeContent,
             afterContent: state.afterContent,
+            iconAlign: state.iconAlign,
             checkboxSide: state.checkboxSide,
             useURLParam: state.useURLParam,
             itemParam: state.itemParam,

@@ -19,8 +19,6 @@ export class NavigationMenu extends Menu {
             ...props,
             className: getClassName(CONTAINER_CLASS, props.className),
             defaultItemType: 'link',
-            beforeContent: false,
-            afterContent: false,
         });
     }
 }

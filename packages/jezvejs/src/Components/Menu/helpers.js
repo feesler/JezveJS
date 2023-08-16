@@ -72,10 +72,34 @@ export const getActiveItem = (items) => (
 );
 
 /**
+ * Iterates list of menu items with callback function
+ * @param {Array} items menu items array
+ * @param {Function} callback
+ */
+export const forItems = (items, callback) => {
+    if (!isFunction(callback)) {
+        throw new Error('Invalid callback parameter');
+    }
+
+    const res = [];
+    for (let index = 0; index < items.length; index += 1) {
+        const item = items[index];
+
+        if (item.type === 'group') {
+            forItems(item.items, callback);
+        } else {
+            callback(item, index, items);
+        }
+    }
+
+    return res;
+};
+
+/**
  * Returns list of menu items transformed with callback function
  * @param {Array} items menu items array
  * @param {Function} callback
- * @returns Array
+ * @returns {Array}
  */
 export const mapItems = (items, callback) => {
     if (!isFunction(callback)) {
