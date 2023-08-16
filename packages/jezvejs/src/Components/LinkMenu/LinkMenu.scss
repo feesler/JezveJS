@@ -27,6 +27,9 @@
   /* Hover item */
   --menu-item-hover-checkbox-background: #cccccc;
 
+  /* Focused item */
+  --menu-item-focus-shadow: 0 0 0 0.25rem #0d6efd40;
+
   /* Selected item */
   --menu-item-selected-font-weight: 600;
   --menu-item-selected-text-color: #0072c6;
@@ -36,9 +39,6 @@
   --menu-item-disabled-checkbox-icon-color: #808080;
   --menu-item-disabled-checkbox-border-color: #e2e2e2;
   --menu-item-disabled-checkbox-background: none;
-
-  /* Focused state */
-  --menu-item-focus-shadow: 0 0 0 0.25rem #0d6efd40;
 
   flex-flow: row wrap;
 

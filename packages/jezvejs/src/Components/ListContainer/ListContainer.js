@@ -114,6 +114,14 @@ export class ListContainer extends Component {
     }
 
     /**
+     * Returns item element for specified id
+     * @param {number} id - identifier of item
+     */
+    itemElemById(id) {
+        return this.elem.querySelector(`${this.props.itemSelector}[data-id="${id}"]`);
+    }
+
+    /**
      * Returns item for specified list element
      * @param {Element} elem - target list item element
      */

@@ -92,11 +92,6 @@
   }
 }
 
-/* Focused state */
-.menu:focus-visible .menu-item_active {
-  box-shadow: var(--menu-item-focus-shadow);
-}
-
 /* Hover and selected state */
 .menu-item_active.menu-item_selected {
   color: var(--menu-item-hover-text-color);
@@ -146,38 +141,19 @@
   }
 }
 
-@media (hover: hover) {
-  /* Hover state */
-  .link-menu-item:hover,
-  .checkbox-menu-item:hover,
-  .button-menu-item:hover {
-    color: var(--menu-item-hover-text-color);
-    background: var(--menu-item-hover-background);
-    border-color: var(--menu-item-hover-border-color);
+/* Focused state */
+.menu:focus-visible .menu-item_active,
+.menu .menu-item:focus-visible {
+  color: var(--menu-item-focus-text-color);
+  background: var(--menu-item-focus-background);
+  border-color: var(--menu-item-focus-border-color);
+  box-shadow: var(--menu-item-focus-shadow);
 
-    .menu-item__content {
-      color: var(--menu-item-hover-text-color);
-    }
-
-    .menu-item__icon {
-      fill: var(--menu-item-hover-icon-color);
-    }
+  .menu-item__content {
+    color: var(--menu-item-focus-text-color);
   }
 
-  /* Hover and active state */
-  .link-menu-item:active:hover,
-  .checkbox-menu-item:active:hover,
-  .button-menu-item:active:hover {
-    color: var(--menu-item-active-text-color);
-    background: var(--menu-item-active-background);
-    border-color: var(--menu-item-active-border-color);
-
-    .menu-item__content {
-      color: var(--menu-item-active-text-color);
-    }
-
-    .menu-item__icon {
-      fill: var(--menu-item-active-icon-color);
-    }
+  .menu-item__icon {
+    fill: var(--menu-item-focus-icon-color);
   }
 }

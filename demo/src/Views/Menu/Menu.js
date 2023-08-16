@@ -212,6 +212,7 @@ class MenuView extends DemoView {
         const menu = Menu.create({
             id: 'scrollMenu',
             className: 'scroll-menu',
+            tabThrough: false,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items: initItems('Menu item', 30),
         });
@@ -219,7 +220,7 @@ class MenuView extends DemoView {
         this.addSection({
             id: 'scroll',
             title: 'Scroll',
-            description: 'With keyboard support',
+            description: 'With disabled \'tabThrough\' option',
             content: [
                 createContainer('scrollContainer', menu.elem),
                 logsField.elem,

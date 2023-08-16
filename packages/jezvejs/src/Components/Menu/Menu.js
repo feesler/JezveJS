@@ -3,6 +3,7 @@ import {
     createElement,
     enable,
     isFunction,
+    setEvents,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 
@@ -56,6 +57,7 @@ const defaultProps = {
     disabled: false,
     onItemClick: null,
     onGroupHeaderClick: null,
+    tabThrough: true,
     multiple: false,
     iconAlign: 'left', // available value: 'left', 'right'
     checkboxSide: 'left', // available value: 'left', 'right'
@@ -124,6 +126,7 @@ export class Menu extends Component {
             checkboxSide: this.props.checkboxSide,
             useURLParam: this.props.useURLParam,
             itemParam: this.props.itemParam,
+            tabThrough: this.props.tabThrough,
             disabled: this.props.disabled,
             getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
@@ -144,6 +147,13 @@ export class Menu extends Component {
             children.push(this.footer.elem);
         }
 
+        this.capturedEvents = {
+            focus: (e) => this.onFocus(e),
+            blur: (e) => this.onBlur(e),
+            keydown: (e) => this.onKeyDown(e),
+            touchstart: (e) => this.onTouchStart(e),
+        };
+
         this.elem = createElement('div', {
             props: { className: MENU_CLASS, tabIndex: 0 },
             children,
@@ -152,14 +162,12 @@ export class Menu extends Component {
                     listener: (e) => this.onScroll(e),
                     options: { capture: true, passive: true },
                 },
-                focus: (e) => this.onFocus(e),
-                blur: (e) => this.onBlur(e),
-                keydown: (e) => this.onKeyDown(e),
-                touchstart: (e) => this.onTouchStart(e),
                 mousemove: (e) => this.onMouseMove(e),
                 mouseleave: (e) => this.onMouseLeave(e),
             },
         });
+
+        setEvents(this.elem, this.capturedEvents, { capture: true });
     }
 
     postInit() {
@@ -274,7 +282,14 @@ export class Menu extends Component {
         this.resetScrollTimeout();
     }
 
-    onFocus() {
+    onFocus(e) {
+        const item = this.list.itemFromElem(e?.target);
+        if (!item) {
+            return;
+        }
+
+        this.setActive(item.id);
+        this.scrollToItem(item);
     }
 
     onBlur() {
@@ -305,10 +320,12 @@ export class Menu extends Component {
                 : findMenuItem(this.state.items, availCallback);
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
-                this.setActive(nextItem.id);
-                this.scrollToItem(nextItem);
+                this.activateItem(nextItem.id);
+
                 e.preventDefault();
             }
+
+            return;
         }
 
         if (e.code === 'ArrowUp') {
@@ -318,8 +335,8 @@ export class Menu extends Component {
                 : findMenuItem(this.state.items, availCallback);
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
-                this.setActive(nextItem.id);
-                this.scrollToItem(nextItem);
+                this.activateItem(nextItem.id);
+
                 e.preventDefault();
             }
         }
@@ -331,6 +348,26 @@ export class Menu extends Component {
             }
 
             e.preventDefault();
+        }
+    }
+
+    activateItem(id) {
+        const item = getItemById(id, this.state.items);
+        if (!this.isAvailableItem(item)) {
+            return;
+        }
+
+        const activeItem = getActiveItem(this.state.items);
+        if (item.id === activeItem?.id) {
+            return;
+        }
+
+        if (this.state.tabThrough) {
+            const elem = this.list.itemElemById(id);
+            elem?.focus();
+        } else {
+            this.setActive(id);
+            this.scrollToItem(item);
         }
     }
 
@@ -352,13 +389,19 @@ export class Menu extends Component {
         }
 
         const item = this.list.itemFromElem(e?.target);
-
-        const itemToActivate = (this.isAvailableItem(item) && item.id) ?? null;
-        this.setActive(itemToActivate);
+        if (item) {
+            e.preventDefault();
+            this.activateItem(item.id);
+        }
     }
 
     onMouseLeave() {
         this.setActive(null);
+
+        const focused = document.activeElement;
+        if (this.elem.contains(focused)) {
+            focused.blur();
+        }
     }
 
     setActive(id) {
@@ -593,6 +636,7 @@ export class Menu extends Component {
         }
 
         enable(this.elem, !state.disabled);
+        this.elem.tabIndex = (state.tabThrough) ? -1 : 0;
 
         this.renderHeader(state, prevState);
         this.renderList(state, prevState);

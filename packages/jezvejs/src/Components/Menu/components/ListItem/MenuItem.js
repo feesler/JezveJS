@@ -37,6 +37,7 @@ export class MenuItem extends Component {
         selected: false,
         disabled: false,
         hidden: false,
+        tabThrough: undefined,
         url: window.location,
         useURLParam: undefined,
         itemParam: undefined,
@@ -74,8 +75,11 @@ export class MenuItem extends Component {
 
         const props = {
             className: ITEM_CLASS,
-            tabIndex: -1,
         };
+
+        if (!state.tabThrough) {
+            props.tabIndex = -1;
+        }
 
         if (isButton) {
             props.type = 'button';

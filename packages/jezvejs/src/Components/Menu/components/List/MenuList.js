@@ -91,6 +91,7 @@ export class MenuList extends ListContainer {
             beforeContent: item.beforeContent ?? state.beforeContent,
             afterContent: item.afterContent ?? state.afterContent,
             iconAlign: item.iconAlign ?? state.iconAlign,
+            tabThrough: item.tabThrough ?? state.tabThrough,
             checkboxSide: item.checkboxSide ?? state.checkboxSide,
             useURLParam: item.useURLParam ?? state.useURLParam,
             itemParam: item.itemParam ?? state.itemParam,

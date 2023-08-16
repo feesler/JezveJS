@@ -50,6 +50,17 @@
   );
   --menu-item-hover-checkbox-background: var(--menu-checkbox-background);
 
+  /* Focused item */
+  --menu-item-focus-shadow: none;
+  --menu-item-focus-text-color: var(--menu-item-active-text-color);
+  --menu-item-focus-background: var(--menu-item-active-background);
+  --menu-item-focus-border-color: var(--menu-item-active-border-color);
+  --menu-item-focus-icon-color: var(--menu-item-active-icon-color);
+  --menu-item-focus-checkbox-icon-color: var(
+    --menu-item-active-checkbox-icon-color
+  );
+  --menu-item-focus-checkbox-background: var(--menu-checkbox-background);
+
   /* Selected item */
   --menu-item-selected-font-weight: var(--menu-item-font-weight);
   --menu-item-selected-text-color: var(--menu-item-text-color);

@@ -62,30 +62,14 @@
   }
 }
 
-@media (hover: hover) {
-  /* Hover state */
-  .link-menu-item:hover,
-  .checkbox-menu-item:hover,
-  .button-menu-item:hover {
-    > .menu-item__side-content > .menu-checkbox {
-      background: var(--menu-item-hover-checkbox-background);
+/* Focused state */
+.menu:focus-visible .menu-item_active,
+.menu .menu-item:focus-visible {
+  > .menu-item__side-content > .menu-checkbox {
+    background: var(--menu-item-focus-checkbox-background);
 
-      .menu-checkbox__icon {
-        fill: var(--menu-item-hover-checkbox-icon-color);
-      }
-    }
-  }
-
-  /* Hover and active state */
-  .link-menu-item:active:hover,
-  .checkbox-menu-item:active:hover,
-  .button-menu-item:active:hover {
-    > .menu-item__side-content > .menu-checkbox {
-      background: var(--menu-item-active-checkbox-background);
-
-      .menu-checkbox__icon {
-        fill: var(--menu-item-active-checkbox-icon-color);
-      }
+    .menu-checkbox__icon {
+      fill: var(--menu-item-focus-checkbox-icon-color);
     }
   }
 }

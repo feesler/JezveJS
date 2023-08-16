@@ -104,6 +104,7 @@ export class MenuGroupItem extends Component {
             checkboxSide: this.props.checkboxSide,
             useURLParam: this.props.useURLParam,
             itemParam: this.props.itemParam,
+            tabThrough: this.props.tabThrough,
             defaultItemType: this.props.defaultItemType,
             components: {
                 ListItem,
