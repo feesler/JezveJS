@@ -11,10 +11,65 @@ import { CustomMenuHeader } from './components/CustomHeader/CustomMenuHeader.js'
 import { CustomMenuFooter } from './components/CustomFooter/CustomMenuFooter.js';
 import './MenuView.scss';
 
+const defaultItems = [{
+    id: 'selectBtnItem',
+    icon: 'select',
+    title: 'Button item',
+}, {
+    id: 'separator1',
+    type: 'separator',
+}, {
+    id: 'linkItem',
+    type: 'link',
+    title: 'Link item',
+    icon: 'search',
+    url: '#123',
+}, {
+    id: 'noIconItem',
+    title: 'No icon item',
+}, {
+    id: 'checkboxItem',
+    type: 'checkbox',
+    title: 'Checkbox item',
+}];
+
+const groupItems = [{
+    id: 'noGroupItem1',
+    title: 'No group item 1',
+}, {
+    id: 'group1',
+    type: 'group',
+    title: 'Group 1',
+    items: [{
+        id: 'groupItem11',
+        title: 'Group 1 item 1',
+    }, {
+        id: 'groupItem12',
+        title: 'Group 1 item 2',
+    }, {
+        id: 'groupItem13',
+        title: 'Group 1 item 3',
+    }],
+}, {
+    id: 'noGroupItem2',
+    title: 'No group item 2',
+}, {
+    id: 'group2',
+    type: 'group',
+    title: 'Group 2',
+    items: [{
+        id: 'groupItem21',
+        title: 'Group 2 item 1',
+    }],
+}, {
+    id: 'noGroupItem3',
+    title: 'No group item 3',
+}];
+
 const initItems = (title, count, startFrom = 1) => {
     const res = [];
 
-    for (let ind = startFrom; ind < startFrom + count - 1; ind += 1) {
+    for (let ind = startFrom; ind < startFrom + count; ind += 1) {
         res.push({ id: ind, title: `${title} ${ind}` });
     }
 
@@ -44,33 +99,14 @@ class MenuView extends DemoView {
     initDefault() {
         const logsField = LogsField.create();
 
+        const items = structuredClone(defaultItems);
+        items[0].onClick = () => logsField.write('Button item clicked');
+
         const menu = Menu.create({
             id: 'defaultMenu',
             multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
-            items: [{
-                id: 'selectBtnItem',
-                icon: 'select',
-                title: 'Button item',
-                onClick: () => logsField.write('Button item clicked'),
-            }, {
-                id: 'separator1',
-                type: 'separator',
-            }, {
-                id: 'linkItem',
-                type: 'link',
-                title: 'Link item',
-                icon: 'search',
-                url: '#123',
-            }, {
-                id: 'noIconItem',
-                title: 'No icon item',
-            }, {
-                id: 'checkboxItem',
-                type: 'checkbox',
-                title: 'Checkbox item',
-                onChange: (checked) => logsField.write(`Checkbox item toggled: ${checked}`),
-            }],
+            items,
         });
 
         this.addSection({
@@ -84,109 +120,63 @@ class MenuView extends DemoView {
     }
 
     initHorizontal() {
-        const menu = Menu.create({
-            id: 'horizontalMenu',
-            className: 'horizontal-menu',
-            items: [{
-                id: 'selectBtnItem',
-                title: 'Button item',
-            }, {
-                id: 'separator1',
-                type: 'separator',
-            }, {
-                id: 'linkItem',
-                type: 'link',
-                title: 'Link item',
-                url: '#123',
-            }, {
-                id: 'noIconItem',
-                title: 'Item 3',
-            }],
-        });
-
         this.addSection({
             id: 'horizontal',
             title: 'Horizontal menu',
-            content: [
-                createContainer('horizontalContainer', menu.elem),
-            ],
+            content: createContainer(
+                'horizontalContainer',
+                Menu.create({
+                    id: 'horizontalMenu',
+                    className: 'horizontal-menu',
+                    items: [{
+                        id: 'selectBtnItem',
+                        title: 'Button item',
+                    }, {
+                        id: 'separator1',
+                        type: 'separator',
+                    }, {
+                        id: 'linkItem',
+                        type: 'link',
+                        title: 'Link item',
+                        url: '#123',
+                    }, {
+                        id: 'noIconItem',
+                        title: 'Item 3',
+                    }],
+                }).elem,
+            ),
         });
     }
 
     initIconsAlign() {
-        const logsField = LogsField.create();
-
-        const menu = Menu.create({
-            id: 'iconsAlignMenu',
-            iconAlign: 'right',
-            multiple: true,
-            onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
-            items: [{
-                id: 'selectBtnItem',
-                icon: 'select',
-                title: 'Button item',
-                onClick: () => logsField.write('Button item clicked'),
-            }, {
-                id: 'separator1',
-                type: 'separator',
-            }, {
-                id: 'linkItem',
-                type: 'link',
-                title: 'Link item',
-                icon: 'search',
-                url: '#',
-            }, {
-                id: 'noIconItem',
-                title: 'No icon item',
-            }, {
-                id: 'checkboxItem',
-                type: 'checkbox',
-                title: 'Checkbox item',
-            }],
-        });
-
         this.addSection({
             id: 'iconsAlign',
             title: 'Icons alignment',
-            content: [
-                createContainer('iconsAlignContainer', menu.elem),
-                logsField.elem,
-            ],
+            content: createContainer(
+                'iconsAlignContainer',
+                Menu.create({
+                    id: 'iconsAlignMenu',
+                    iconAlign: 'right',
+                    multiple: true,
+                    items: structuredClone(defaultItems),
+                }).elem,
+            ),
         });
     }
 
     initCheckboxAlign() {
-        const menu = Menu.create({
-            id: 'checkboxAlignMenu',
-            checkboxSide: 'right',
-            multiple: true,
-            items: [{
-                id: 'selectBtnItem',
-                icon: 'select',
-                title: 'Button item',
-            }, {
-                id: 'separator1',
-                type: 'separator',
-            }, {
-                id: 'linkItem',
-                type: 'link',
-                title: 'Link item',
-                icon: 'search',
-                url: '#',
-            }, {
-                id: 'noIconItem',
-                title: 'No icon item',
-            }, {
-                id: 'checkboxItem',
-                type: 'checkbox',
-                title: 'Checkbox item',
-            }],
-        });
-
         this.addSection({
             id: 'checkboxAlign',
             title: 'Checkbox alignment',
-            content: createContainer('checkboxAlignContainer', menu.elem),
+            content: createContainer(
+                'checkboxAlignContainer',
+                Menu.create({
+                    id: 'checkboxAlignMenu',
+                    checkboxSide: 'right',
+                    multiple: true,
+                    items: structuredClone(defaultItems),
+                }).elem,
+            ),
         });
     }
 
@@ -194,7 +184,7 @@ class MenuView extends DemoView {
         const menu = Menu.create({
             id: 'headerFooterMenu',
             className: 'scroll-menu',
-            items: initItems('Menu item', 10),
+            items: initItems('Menu item', 5),
             header: {
                 title: 'Custom header',
             },
@@ -243,38 +233,7 @@ class MenuView extends DemoView {
         const menu = Menu.create({
             id: 'groupsMenu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
-            items: [{
-                id: 'noGroupItem1',
-                title: 'No group item 1',
-            }, {
-                id: 'group1',
-                type: 'group',
-                title: 'Group 1',
-                items: [{
-                    id: 'groupItem11',
-                    title: 'Group 1 item 1',
-                }, {
-                    id: 'groupItem12',
-                    title: 'Group 1 item 2',
-                }, {
-                    id: 'groupItem13',
-                    title: 'Group 1 item 3',
-                }],
-            }, {
-                id: 'noGroupItem2',
-                title: 'No group item 2',
-            }, {
-                id: 'group2',
-                type: 'group',
-                title: 'Group 2',
-                items: [{
-                    id: 'groupItem21',
-                    title: 'Group 2 item 1',
-                }],
-            }, {
-                id: 'noGroupItem3',
-                title: 'No group item 3',
-            }],
+            items: structuredClone(groupItems),
         });
 
         this.addSection({
@@ -290,6 +249,10 @@ class MenuView extends DemoView {
     initCheckboxGroups() {
         const logsField = LogsField.create();
 
+        const items = structuredClone(groupItems);
+        items[1].items[1].disabled = true;
+        items[3].disabled = true;
+
         const menu = CheckboxGroupsMenu.create({
             id: 'checkboxGroupsMenu',
             multiple: true,
@@ -297,40 +260,7 @@ class MenuView extends DemoView {
             defaultItemType: 'checkbox',
             className: 'checkbox-groups-menu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
-            items: [{
-                id: 'noGroupItem1',
-                title: 'No group item 1',
-            }, {
-                id: 'group1',
-                type: 'group',
-                title: 'Group 1',
-                items: [{
-                    id: 'groupItem11',
-                    title: 'Group 1 item 1',
-                }, {
-                    id: 'groupItem12',
-                    title: 'Group 1 item 2',
-                    disabled: true,
-                }, {
-                    id: 'groupItem13',
-                    title: 'Group 1 item 3',
-                }],
-            }, {
-                id: 'noGroupItem2',
-                title: 'No group item 2',
-            }, {
-                id: 'group2',
-                type: 'group',
-                title: 'Group 2',
-                disabled: true,
-                items: [{
-                    id: 'groupItem21',
-                    title: 'Group 2 item 1',
-                }],
-            }, {
-                id: 'noGroupItem3',
-                title: 'No group item 3',
-            }],
+            items,
         });
 
         this.addSection({
@@ -346,45 +276,16 @@ class MenuView extends DemoView {
     initCollapsibleGroups() {
         const logsField = LogsField.create();
 
+        const items = structuredClone(groupItems);
+        items[1].expanded = false;
+        items[3].expanded = true;
+
         const menu = CollapsibleGroupsMenu.create({
             id: 'collapsibleGroupsMenu',
             className: 'collapsible-groups-menu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             onGroupHeaderClick: (id) => logsField.write(`Group '${id}' clicked`),
-            items: [{
-                id: 'noGroupItem1',
-                title: 'No group item 1',
-            }, {
-                id: 'group1',
-                type: 'group',
-                title: 'Group 1',
-                expanded: false,
-                items: [{
-                    id: 'groupItem11',
-                    title: 'Group 1 item 1',
-                }, {
-                    id: 'groupItem12',
-                    title: 'Group 1 item 2',
-                }, {
-                    id: 'groupItem13',
-                    title: 'Group 1 item 3',
-                }],
-            }, {
-                id: 'noGroupItem2',
-                title: 'No group item 2',
-            }, {
-                id: 'group2',
-                type: 'group',
-                title: 'Group 2',
-                expanded: true,
-                items: [{
-                    id: 'groupItem21',
-                    title: 'Group 2 item 1',
-                }],
-            }, {
-                id: 'noGroupItem3',
-                title: 'No group item 3',
-            }],
+            items,
         });
 
         this.addSection({
@@ -400,28 +301,13 @@ class MenuView extends DemoView {
     initDisabledItem() {
         const logsField = LogsField.create();
 
+        const items = structuredClone(defaultItems);
+        items[2].disabled = true;
+
         const menu = Menu.create({
             id: 'defaultMenu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
-            items: [{
-                id: 'selectBtnItem',
-                icon: 'select',
-                title: 'Button item',
-                onClick: () => logsField.write('Button item clicked'),
-            }, {
-                id: 'separator1',
-                type: 'separator',
-            }, {
-                id: 'linkItem',
-                type: 'link',
-                title: 'Link item',
-                icon: 'search',
-                disabled: true,
-                url: '#',
-            }, {
-                id: 'noIconItem',
-                title: 'No icon item',
-            }],
+            items,
         });
 
         this.addSection({
