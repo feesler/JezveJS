@@ -1,6 +1,6 @@
 import { createElement, enable } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
-// import { isVisibleItem } from '../../utils.js';
+
 import './MenuGroupItem.scss';
 
 /* CSS classes */
@@ -158,10 +158,5 @@ export class MenuGroupItem extends Component {
 
         this.renderHeader(state, prevState);
         this.renderList(state, prevState);
-
-        /*
-        const showGroup = state.items.some((item) => isVisibleItem(item, state));
-        this.show(showGroup);
-        */
     }
 }

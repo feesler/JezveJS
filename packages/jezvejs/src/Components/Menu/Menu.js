@@ -513,8 +513,7 @@ export class Menu extends Component {
             return;
         }
 
-        const listItem = this.list.getListItemById(item.id);
-        const elem = listItem?.elem;
+        const elem = this.list.itemElemById(item.id);
         if (!elem) {
             return;
         }
