@@ -72,6 +72,7 @@ const defaultProps = {
         GroupHeader: MenuGroupHeader,
         GroupItem: MenuGroupItem,
         Separator: MenuSeparator,
+        ListPlaceholder: null,
         Footer: null,
     },
 };
@@ -109,6 +110,7 @@ export class Menu extends Component {
             Footer,
             List,
             ListItem,
+            ListPlaceholder,
             GroupHeader,
             GroupItem,
             Separator,
@@ -138,6 +140,7 @@ export class Menu extends Component {
                 GroupHeader,
                 GroupItem,
                 Separator,
+                ListPlaceholder,
             },
         });
         children.push(this.list.elem);

@@ -23,6 +23,7 @@ const defaultProps = {
         Check: MenuCheckbox,
         Checkbox: CheckboxItem,
         Separator: null,
+        ListPlaceholder: null,
     },
 };
 
@@ -41,6 +42,7 @@ export class MenuList extends ListContainer {
             className: getClassName(MENU_LIST_CLASS, props.className),
         };
         listProps.itemSelector = listProps.components.ListItem.selector;
+        listProps.PlaceholderComponent = listProps.components.ListPlaceholder;
 
         super(listProps);
     }

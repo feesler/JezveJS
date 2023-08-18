@@ -9,6 +9,7 @@ import { CheckboxGroupsMenu } from './components/CheckboxGroups/Menu/CheckboxGro
 import { CollapsibleGroupsMenu } from './components/CollapsibleGroups/Menu/CollapsibleGroupsMenu.js';
 import { CustomMenuHeader } from './components/CustomHeader/CustomMenuHeader.js';
 import { CustomMenuFooter } from './components/CustomFooter/CustomMenuFooter.js';
+import { LoadingPlaceholder } from './components/LoadingPlaceholder/LoadingPlaceholder.js';
 import './MenuView.scss';
 
 const defaultItems = [{
@@ -89,6 +90,7 @@ class MenuView extends DemoView {
         this.initIconsAlign();
         this.initCheckboxAlign();
         this.initHeaderFooter();
+        this.initListPlaceholder();
         this.initScroll();
         this.initGroups();
         this.initCheckboxGroups();
@@ -202,6 +204,26 @@ class MenuView extends DemoView {
             title: 'Header and Footer',
             content: [
                 createContainer('headerFooterContainer', menu.elem),
+            ],
+        });
+    }
+
+    initListPlaceholder() {
+        const menu = Menu.create({
+            id: 'listPlaceholderMenu',
+            items: [],
+            className: 'placeholder-menu',
+            getPlaceholderProps: () => ({ title: 'Loading...' }),
+            components: {
+                ListPlaceholder: LoadingPlaceholder,
+            },
+        });
+
+        this.addSection({
+            id: 'listPlaceholder',
+            title: 'List placeholder',
+            content: [
+                createContainer('listPlaceholderContainer', menu.elem),
             ],
         });
     }
