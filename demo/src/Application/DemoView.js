@@ -19,6 +19,8 @@ export class DemoView extends View {
         this.initNavigation();
         this.renderVersion();
         this.initContainer();
+
+        this.sections = {};
     }
 
     /**
@@ -142,6 +144,10 @@ export class DemoView extends View {
             className = null,
         } = options;
 
+        if (id in this.sections) {
+            throw new Error(`Section '${id}' already exists.`);
+        }
+
         const section = DemoSection.create({
             id,
             title,
@@ -150,6 +156,8 @@ export class DemoView extends View {
             className,
         });
         this.container.append(section.elem);
+
+        this.sections[id] = true;
 
         this.addContentsMenuItem({
             id,
