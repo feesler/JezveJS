@@ -177,6 +177,7 @@ export class DropDown extends Component {
             items: [],
             groups: [],
             actSelItemIndex: -1,
+            renderTime: Date.now(),
         };
         this.state.editable = !this.state.disabled && this.props.enableFilter;
 
@@ -392,15 +393,16 @@ export class DropDown extends Component {
             tabThrough: false,
             getItemById: (id) => this.getItem(id),
             getPlaceholderProps: (state) => this.renderNotFound(state),
-            onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
             onPlaceholderClick: () => this.handlePlaceholderSelect(),
+            renderTime: this.state.renderTime,
             header: {
                 inputElem: this.inputElem,
                 inputPlaceholder: this.props.placeholder,
                 useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
                 multiple,
+                onInput: (e) => this.onInput(e),
                 components: {
                     Input,
                 },
@@ -767,6 +769,10 @@ export class DropDown extends Component {
         }
     }
 
+    setRenderTime() {
+        this.setState({ ...this.state, renderTime: Date.now() });
+    }
+
     /** Handler for 'input' event of text field  */
     onInput(e) {
         if (this.props.enableFilter) {
@@ -776,6 +782,8 @@ export class DropDown extends Component {
         if (isFunction(this.props.onInput)) {
             this.props.onInput(e);
         }
+
+        this.setRenderTime();
     }
 
     /** Handler for 'clear selection' button click */
@@ -1109,7 +1117,7 @@ export class DropDown extends Component {
 
     getInput() {
         if (this.props.listAttach) {
-            return this.menu.input;
+            return this.menu.header?.input;
         }
 
         return this.combo.input;
@@ -1835,6 +1843,7 @@ export class DropDown extends Component {
             state.items === prevState.items
             && state.visible === prevState.visible
             && state.filtered === prevState.filtered
+            && state.renderTime === prevState.renderTime
         ) {
             return;
         }
@@ -1871,6 +1880,7 @@ export class DropDown extends Component {
         this.menu.setState((menuState) => ({
             ...menuState,
             items,
+            renderTime: state.renderTime,
             listScroll: (prevState.visible) ? menuState.listScroll : 0,
             header: {
                 ...menuState.header,

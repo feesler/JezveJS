@@ -38,6 +38,7 @@ export class DropDown extends TestComponent {
                 return null;
             }
 
+            const menuList = elem.querySelector('.dd__list > .menu-list');
             const select = elem.querySelector('select');
             const inputElem = elem.querySelector('input[type="text"]');
 
@@ -55,12 +56,14 @@ export class DropDown extends TestComponent {
                     selected: option.selected,
                     disabled: option.disabled,
                 })),
+                renderTime: menuList?.dataset.time,
             };
 
             if (content.editable && inputElem) {
-                const value = inputElem?.value;
-                const placeholder = inputElem?.placeholder;
+                const { value, placeholder } = inputElem;
 
+                content.inputValue = value;
+                content.inputPlaceholder = placeholder;
                 content.textValue = (value?.length > 0) ? value : placeholder;
             } else if (!content.isAttached) {
                 const statSel = elem.querySelector('.dd__single-selection');
@@ -86,7 +89,6 @@ export class DropDown extends TestComponent {
 
         if (res.isMulti) {
             res.clearBtn = await query(this.elem, '.dd__clear-btn');
-            assert(res.clearBtn, 'Clear button not found');
 
             const itemsSelector = '.dd__selection > .dd__selection-item';
             const selItemElems = await queryAll(this.elem, itemsSelector);
@@ -148,6 +150,7 @@ export class DropDown extends TestComponent {
             editable: cont.editable,
             textValue: cont.textValue,
             isMulti: cont.isMulti,
+            renderTime: cont.renderTime,
         };
 
         if (res.isMulti) {
@@ -180,6 +183,14 @@ export class DropDown extends TestComponent {
         return this.content.value;
     }
 
+    get inputValue() {
+        return this.content.inputValue;
+    }
+
+    get inputPlaceholder() {
+        return this.content.inputPlaceholder;
+    }
+
     get textValue() {
         return this.content.textValue;
     }
@@ -194,6 +205,10 @@ export class DropDown extends TestComponent {
 
     get items() {
         return this.content.items;
+    }
+
+    get renderTime() {
+        return this.content.renderTime;
     }
 
     getItem(itemId) {
@@ -266,6 +281,7 @@ export class DropDown extends TestComponent {
     async clearSelection() {
         assert(!this.content.disabled, 'Component is disabled');
         assert(this.content.isMulti, 'Clear selection not available for single select DropDown');
+        assert(this.content.clearBtn, 'Clear button not found');
 
         await click(this.content.clearBtn);
     }
@@ -335,6 +351,11 @@ export class DropDown extends TestComponent {
         assert(!this.content.disabled, 'Component is disabled');
         assert(this.content.editable, 'Component is not editable');
 
+        if (this.attached) {
+            await this.showList();
+        }
+
         await input(this.content.inputElem, value);
+        await this.parse();
     }
 }

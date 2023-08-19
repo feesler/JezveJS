@@ -3,6 +3,7 @@ import {
     click,
     assert,
     asyncMap,
+    waitForFunction,
 } from 'jezve-test';
 import { DropDown } from 'jezvejs-test';
 import { AppView } from './AppView.js';
@@ -22,6 +23,8 @@ const dropDownSelectors = {
     filterDropDown: '#selinp8',
     multiFilterDropDown: '#multiSelFilterInp',
     groupsFilterDropDown: '#groupFilterInp',
+    attachedFilter: '#boxFilter',
+    attachedFilterMultiple: '#boxFilterMulti',
     customDropDown: '#selinp10',
     nativeSelDropDown: '#selinp11',
     fullscreenDropDown: '#selinp12',
@@ -160,8 +163,32 @@ export class DropDownView extends AppView {
         return this.checkState(expected);
     }
 
+    async waitForList(name, action) {
+        await this.parse();
+        const dropdown = this.getComponentByName(name);
+
+        const prevTime = dropdown.renderTime;
+        await action();
+
+        await waitForFunction(async () => {
+            await this.parse();
+            const component = this.getComponentByName(name);
+            return (prevTime !== component.renderTime);
+        });
+
+        await this.parse();
+    }
+
     async filter(name, value) {
         let dropdown = this.getComponentByName(name);
+
+        if (
+            dropdown.inputValue !== ''
+            && dropdown.inputValue !== dropdown.inputPlaceholder
+        ) {
+            await this.waitForList(name, () => this.getComponentByName(name).filter(''));
+            dropdown = this.getComponentByName(name);
+        }
 
         const lValue = value.toLowerCase();
         const expVisible = dropdown.items.filter((item) => (
@@ -177,8 +204,7 @@ export class DropDownView extends AppView {
             },
         };
 
-        await this.performAction(() => dropdown.filter(value));
-
+        await this.waitForList(name, () => this.getComponentByName(name).filter(value));
         dropdown = this.getComponentByName(name);
 
         const visible = dropdown.getVisibleItems();

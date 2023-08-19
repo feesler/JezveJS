@@ -1,4 +1,5 @@
 import { Component } from '../../../../js/Component.js';
+import { isFunction } from '../../../../js/common.js';
 import { getSelectedItems } from '../../utils.js';
 
 import './MenuHeader.scss';
@@ -9,6 +10,7 @@ const defaultProps = {
     inputPlaceholder: null,
     useSingleSelectionAsPlaceholder: true,
     multiple: false,
+    onInput: null,
     components: {
         Input: null,
     },
@@ -50,6 +52,16 @@ export class DropDownMenuHeader extends Component {
         });
 
         this.elem = this.input.elem;
+    }
+
+    /**
+     * Input element 'input' event handler
+     * @param {KeyboardEvent} e event object
+     */
+    onInput(e) {
+        if (isFunction(this.props.onInput)) {
+            this.props.onInput(e);
+        }
     }
 
     render(state) {

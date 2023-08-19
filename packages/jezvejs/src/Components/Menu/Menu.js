@@ -610,6 +610,7 @@ export class Menu extends Component {
             && state.useURLParam === prevState?.useURLParam
             && state.itemParam === prevState?.itemParam
             && state.disabled === prevState?.disabled
+            && state.renderTime === prevState?.renderTime
         ) {
             return;
         }
@@ -645,6 +646,7 @@ export class Menu extends Component {
             useURLParam: state.useURLParam,
             itemParam: state.itemParam,
             disabled: state.disabled,
+            renderTime: state.renderTime,
         }));
 
         this.list.elem.scrollTop = state.listScroll;

@@ -42,6 +42,7 @@ export class DropDownMenu extends Menu {
             ...defaultProps,
             ...props,
             className: getClassName(LIST_CLASS, props.className),
+            renderTime: props.renderTime,
             header: {
                 ...defaultProps.header,
                 ...(props?.header ?? {}),

@@ -84,6 +84,14 @@ export const dropDownTests = async () => {
     await Actions.filterTest('multiFilterDropDown', '10');
     await Actions.filterTest('multiFilterDropDown', '100');
 
+    await Actions.filterTest('attachedFilter', '5');
+    await Actions.filterTest('attachedFilter', '55');
+    await Actions.filterTest('attachedFilter', '555');
+
+    await Actions.filterTest('attachedFilterMultiple', '1');
+    await Actions.filterTest('attachedFilterMultiple', '10');
+    await Actions.filterTest('attachedFilterMultiple', '55');
+
     await Actions.filterTest('groupsFilterDropDown', '1');
     await Actions.filterTest('groupsFilterDropDown', '10');
     await Actions.filterTest('groupsFilterDropDown', '100');

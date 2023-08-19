@@ -16,6 +16,7 @@ const defaultProps = {
     onGroupHeaderClick: null,
     useURLParam: false,
     itemParam: 'value',
+    renderTime: null,
     components: {
         ListItem: MenuItem,
         GroupHeader: null,
@@ -138,6 +139,7 @@ export class MenuList extends ListContainer {
             || state.afterContent !== prevState?.afterContent
             || state.iconAlign !== prevState?.iconAlign
             || state.checkboxSide !== prevState?.checkboxSide
+            || state.renderTime !== prevState?.renderTime
         );
     }
 
