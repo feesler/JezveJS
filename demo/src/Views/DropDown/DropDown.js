@@ -26,7 +26,7 @@ import './DropDownView.scss';
 const initItems = (title, count, startFrom = 1) => {
     const res = [];
 
-    for (let ind = startFrom; ind < startFrom + count - 1; ind += 1) {
+    for (let ind = startFrom; ind < startFrom + count; ind += 1) {
         res.push({ id: ind, title: `${title} ${ind}` });
     }
 
@@ -256,15 +256,15 @@ class DropDownView extends DemoView {
             className: 'dd__styled-group',
         });
         const visibleGroup = dropDown.addGroup({ id: 'grVisible', title: 'Visible' });
-        const visibleGroupItems = initItems('Visible item', 3);
+        const visibleGroupItems = initItems('Visible item', 2);
         visibleGroupItems.forEach(
             (item) => dropDown.addItem({ ...item, group: visibleGroup }),
         );
 
         const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
-        const hiddenGroupItems = initItems('Hidden item', 3);
+        const hiddenGroupItems = initItems('Hidden item', 2, 4);
         hiddenGroupItems.forEach(
-            (item) => dropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
+            (item) => dropDown.addItem({ ...item, group: hiddenGroup }),
         );
 
         const group1 = dropDown.getGroupById('grVisible');
