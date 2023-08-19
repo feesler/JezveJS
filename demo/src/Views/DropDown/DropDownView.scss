@@ -100,7 +100,6 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  margin-right: 1rem;
 }
 
 .dd__custom-list-item_title {
@@ -115,7 +114,7 @@
   font-size: 30px;
 }
 
-.dd__list-item_selected .dd__custom-list-item_check {
+.menu-item_selected .dd__custom-list-item_check {
   display: block;
 }
 
@@ -138,47 +137,47 @@
   border-color: #c5c5c5;
 }
 
-.dd__custom-list-item_blue {
+.dd__custom-list-item_color[data-color="blue"] {
   background-color: #0081d6;
 }
 
-.dd__custom-list-item_red {
+.dd__custom-list-item_color[data-color="red"] {
   background-color: #bd0000;
 }
 
-.dd__custom-list-item_green {
+.dd__custom-list-item_color[data-color="green"] {
   background-color: #1dac00;
 }
 
-.dd__custom-list-item_yellow {
+.dd__custom-list-item_color[data-color="yellow"] {
   background-color: #d6c100;
 }
 
-.dd__custom-list-item_pink {
+.dd__custom-list-item_color[data-color="pink"] {
   background-color: #ff006a;
 }
 
-.dd__custom-list-item_purple {
+.dd__custom-list-item_color[data-color="purple"] {
   background-color: #800080;
 }
 
-.dd__custom-list-item_orange {
+.dd__custom-list-item_color[data-color="orange"] {
   background-color: #ff7b00;
 }
 
-.dd__custom-list-item_grey {
+.dd__custom-list-item_color[data-color="grey"] {
   background-color: #9b9b9b;
 }
 
-.dd__custom-list-item_brown {
+.dd__custom-list-item_color[data-color="brown"] {
   background-color: #752f00;
 }
 
-.dd__custom-list-item_cyan {
+.dd__custom-list-item_color[data-color="cyan"] {
   background-color: #00e0e0;
 }
 
-.dd__custom-list-item_magenta {
+.dd__custom-list-item_color[data-color="magenta"] {
   background-color: #ff00ff;
 }
 

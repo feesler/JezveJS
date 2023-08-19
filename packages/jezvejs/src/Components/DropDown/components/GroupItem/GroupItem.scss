@@ -1,29 +1,12 @@
 /* List group */
-.dd__list-group {
-  display: flex;
-  flex-flow: column nowrap;
-  padding: 0;
+.menu-group.dd__list-group {
+  --menu-group-padding: 0;
+
   border-width: 0;
   border-style: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   cursor: pointer;
 
-  .dd__list-group__label {
-    box-sizing: border-box;
-    width: 100%;
-    padding: var(--dd-list-group-header-padding);
-    margin: 0;
-    text-align: left;
-    line-height: var(--dd-list-group-header-line-height);
-    font-size: var(--dd-list-group-header-font-size);
-    font-weight: var(--dd-list-group-header-font-weight);
-    color: var(--dd-list-group-text);
-    background-color: var(--dd-list-group-bg);
-  }
-
-  ul {
+  .menu-list {
     padding: 0 0 0 var(--dd-list-group-padding);
   }
 }

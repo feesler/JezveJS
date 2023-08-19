@@ -101,7 +101,6 @@ export class MenuList extends ListContainer {
             getItemURL: (itemState) => this.getItemURL(itemState, state),
             components: {
                 ...state.components,
-                MenuList,
             },
         };
     }

@@ -17,7 +17,7 @@ const CONTROLS_CLASS = 'dd__combo-controls';
 
 const defaultProps = {
     inputElem: null,
-    multi: false,
+    multiple: false,
     editable: false,
     enableFilter: false,
     disabled: false,
@@ -76,7 +76,7 @@ export class DropDownComboBox extends Component {
         this.input.show(this.state.editable);
 
         const valueContainer = createElement('div', { props: { className: VALUE_CLASS } });
-        if (this.props.multi && this.props.showMultipleSelection) {
+        if (this.props.multiple && this.props.showMultipleSelection) {
             const { MultipleSelection, MultiSelectionItem } = this.props.components;
             this.multipleSelection = MultipleSelection.create({
                 ItemComponent: MultiSelectionItem,
@@ -96,7 +96,7 @@ export class DropDownComboBox extends Component {
 
         const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
 
-        if (this.props.multi && this.props.showClearButton) {
+        if (this.props.multiple && this.props.showClearButton) {
             const { ClearButton } = this.props.components;
             this.clearBtn = ClearButton.create({
                 onClick: (e) => this.onClearSelection(e),
@@ -180,7 +180,7 @@ export class DropDownComboBox extends Component {
 
     /** Render selection elements */
     renderSelection(state) {
-        if (!this.props.multi) {
+        if (!this.props.multiple) {
             this.renderSingleSelection(state);
             return;
         }

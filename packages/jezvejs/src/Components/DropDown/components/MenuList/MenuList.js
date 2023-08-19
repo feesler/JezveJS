@@ -1,15 +1,14 @@
 import { deepMeet, isFunction } from '../../../../js/common.js';
-import { ListContainer } from '../../../ListContainer/ListContainer.js';
+import { MenuList } from '../../../Menu/Menu.js';
 import { DropDownGroupItem } from '../GroupItem/GroupItem.js';
 import { DropDownListItem } from '../ListItem/ListItem.js';
 import { DropDownListPlaceholder } from '../ListPlaceholder/ListPlaceholder.js';
 
 const defaultProps = {
     items: [],
-    multi: false,
+    multiple: false,
     filtered: false,
     inputString: false,
-    allowCreate: false,
     getPlaceholderProps: null,
     components: {
         ListItem: DropDownListItem,
@@ -18,17 +17,11 @@ const defaultProps = {
     },
 };
 
-export class DropDownMenuList extends ListContainer {
+export class DropDownMenuList extends MenuList {
     constructor(props = {}) {
         const listProps = {
             ...defaultProps,
             ...props,
-            tagName: 'ul',
-            ItemComponent: (item, state) => (
-                (item.isGroup)
-                    ? state.components.GroupItem
-                    : state.components.ListItem
-            ),
             components: {
                 ...defaultProps.components,
                 ...(props?.components ?? {}),
@@ -39,34 +32,32 @@ export class DropDownMenuList extends ListContainer {
                     : props.getPlaceholderProps
             ),
         };
-        listProps.itemSelector = listProps.components.ListItem.selector;
-        listProps.PlaceholderComponent = listProps.components.ListPlaceholder;
 
         super(listProps);
     }
 
     getItemProps(item, state) {
+        const props = super.getItemProps(item, state);
+
         return {
-            ...item,
-            multi: state.multi,
+            ...props,
+            multiple: state.multiple,
             filtered: state.filtered,
             hidden: item.hidden || (state.filtered && !item.matchFilter),
             components: {
+                ...props.components,
                 MenuList: DropDownMenuList,
-                ListItem: DropDownListItem,
-                GroupItem: DropDownGroupItem,
             },
         };
     }
 
     isChanged(state, prevState) {
         return (
-            !deepMeet(state.items, prevState?.items)
-            || state.multi !== prevState?.multi
+            super.isChanged(state, prevState)
+            || !deepMeet(state.items, prevState?.items)
+            || state.multiple !== prevState?.multiple
             || state.filtered !== prevState?.filtered
             || state.inputString !== prevState?.inputString
-            || state.allowCreate !== prevState?.allowCreate
-            || state.placeholderActive !== prevState?.placeholderActive
             || state.PlaceholderComponent !== prevState?.PlaceholderComponent
         );
     }

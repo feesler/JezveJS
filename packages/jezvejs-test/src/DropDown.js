@@ -119,7 +119,7 @@ export class DropDown extends TestComponent {
             return res;
         }
 
-        const listItems = await queryAll(this.elem, '.dd__list li');
+        const listItems = await queryAll(this.elem, '.dd__list .button-menu-item');
         res.items = await asyncMap(listItems, async (elem) => {
             const item = await evaluate((el) => ({
                 id: el.dataset.id,

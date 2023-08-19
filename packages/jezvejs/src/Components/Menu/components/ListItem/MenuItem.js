@@ -54,7 +54,15 @@ export class MenuItem extends Component {
             ...props,
         });
 
-        this.state = { ...this.props };
+        const id = this.props.id?.toString() ?? null;
+        if (id === null) {
+            throw new Error('Invalid id');
+        }
+
+        this.state = {
+            ...this.props,
+            id,
+        };
 
         this.render(this.state);
     }
@@ -213,10 +221,21 @@ export class MenuItem extends Component {
         this.createContainer(state);
     }
 
-    render(state, prevState = {}) {
-        this.renderContainer(state, prevState);
+    renderContent(state, prevState) {
+        if (
+            state.title === prevState?.title
+            && state.type === prevState?.type
+        ) {
+            return;
+        }
 
         this.contentElem.textContent = state.title ?? '';
+        this.contentElem.title = state.title ?? '';
+    }
+
+    render(state, prevState = {}) {
+        this.renderContainer(state, prevState);
+        this.renderContent(state, prevState);
 
         if (state.type === 'link' || state.type === 'checkbox-link') {
             this.elem.href = this.getItemURL(state);

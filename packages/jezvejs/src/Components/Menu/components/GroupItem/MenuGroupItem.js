@@ -42,13 +42,14 @@ export class MenuGroupItem extends Component {
             },
         });
 
-        if (typeof this.props.id === 'undefined' || this.props.id === null) {
+        const id = this.props.id?.toString() ?? null;
+        if (id === null) {
             throw new Error('Invalid id');
         }
 
         this.state = {
             ...this.props,
-            id: this.props.id.toString(),
+            id,
         };
 
         this.init();

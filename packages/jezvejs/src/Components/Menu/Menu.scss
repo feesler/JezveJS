@@ -3,6 +3,11 @@
   /* Container */
   --menu-column-gap: 0;
   --menu-row-gap: 0;
+  --menu-border-color: #000000;
+  --menu-border-width: 0;
+  --menu-border-style: none;
+  --menu-border-radius: 0;
+  --menu-background: none;
 
   /* Items */
   --menu-item-padding: 0.5rem;
@@ -15,6 +20,7 @@
   --menu-item-border-style: solid;
   --menu-item-border-radius: 0;
   --menu-item-size: 2rem;
+  --menu-item-line-height: var(--menu-item-size);
   --menu-item-gap: 0.5rem;
   --menu-item-text-transform: none;
 
@@ -107,6 +113,7 @@
   --menu-group-header-background: none;
   --menu-group-header-font-size: 0.6875rem;
   --menu-group-header-font-weight: 700;
+  --menu-group-header-line-height: 1rem;
   --menu-group-header-padding: 0.5rem 0.5rem 0.25rem 0.5rem;
   --menu-group-header-text-transform: uppercase;
 
@@ -124,6 +131,11 @@
   row-gap: var(--menu-row-gap);
   font-size: var(--menu-item-font-size);
   font-weight: var(--menu-item-font-size);
+  border-width: var(--menu-border-width);
+  border-style: var(--menu-border-style);
+  border-color: var(--menu-border-color);
+  border-radius: var(--menu-border-radius);
+  background: var(--menu-background);
 }
 
 @media (min-width: 768px) {

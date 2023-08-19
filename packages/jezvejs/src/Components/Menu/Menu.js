@@ -67,8 +67,9 @@ const defaultProps = {
     preventNavigation: false,
     components: {
         Header: null,
-        List: MenuList,
+        MenuList,
         ListItem: MenuItem,
+        Checkbox: CheckboxItem,
         GroupHeader: MenuGroupHeader,
         GroupItem: MenuGroupItem,
         Separator: MenuSeparator,
@@ -108,13 +109,14 @@ export class Menu extends Component {
         const {
             Header,
             Footer,
-            List,
             ListItem,
+            Checkbox,
             ListPlaceholder,
             GroupHeader,
             GroupItem,
             Separator,
         } = this.props.components;
+        const List = this.props.components.MenuList;
         const children = [];
 
         if (Header) {
@@ -136,7 +138,9 @@ export class Menu extends Component {
             getPlaceholderProps: this.props.getPlaceholderProps,
             onGroupHeaderClick: (id, e) => this.onGroupHeaderClick(id, e),
             components: {
+                MenuList: List,
                 ListItem,
+                Checkbox,
                 GroupHeader,
                 GroupItem,
                 Separator,
@@ -230,10 +234,15 @@ export class Menu extends Component {
     }
 
     getItemById(id) {
-        return getItemById(id, this.state.items);
+        return isFunction(this.state.getItemById)
+            ? this.state.getItemById(id)
+            : getItemById(id, this.state.items);
     }
 
+    /** List item 'click' event handler */
     onItemClick(id, e) {
+        e?.stopPropagation();
+
         const strId = id?.toString() ?? null;
         if (strId === null) {
             return;
@@ -260,9 +269,16 @@ export class Menu extends Component {
         }
     }
 
-    onPlaceholderClick() {
+    /** List placeholder 'click' event handler */
+    onPlaceholderClick(e) {
+        e.stopPropagation();
+
+        if (isFunction(this.props.onPlaceholderClick)) {
+            this.props.onPlaceholderClick();
+        }
     }
 
+    /** Group header 'click' event handler */
     onGroupHeaderClick(id, e) {
         const strId = id?.toString() ?? null;
         if (strId === null) {
@@ -630,6 +646,8 @@ export class Menu extends Component {
             itemParam: state.itemParam,
             disabled: state.disabled,
         }));
+
+        this.list.elem.scrollTop = state.listScroll;
     }
 
     render(state, prevState = {}) {

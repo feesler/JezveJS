@@ -389,7 +389,7 @@ class DropDownView extends DemoView {
             elem: input,
             className: 'dd_stretch',
             placeholder: 'Multi select control',
-            multi: true,
+            multiple: true,
             data: initItems('Multi select', 10).map((item) => ({
                 ...item,
                 disabled: (item.id === 3),
@@ -527,7 +527,7 @@ class DropDownView extends DemoView {
             elem: input,
             enableFilter: true,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Filter item', 100),
         });
@@ -568,7 +568,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             openOnFocus: true,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
         });
 
@@ -617,7 +617,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             showMultipleSelection: false,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Filter item', 20),
             onItemSelect: renderTags,
@@ -638,7 +638,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             showClearButton: false,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Item', 20),
         });
@@ -656,7 +656,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             showToggleButton: false,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Item', 20),
         });
@@ -674,7 +674,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             allowCreate: true,
             addItemMessage: (title) => `Add item: '${title}'`,
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Item', 20),
         });
@@ -723,7 +723,7 @@ class DropDownView extends DemoView {
             listAttach: true,
             enableFilter: true,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Filter item', 100),
         });
@@ -737,13 +737,18 @@ class DropDownView extends DemoView {
             elem: 'selinp10',
             className: 'dd__custom dd_stretch',
             placeholder: 'Multi select control',
+            multiple: true,
             onItemSelect(selection) {
                 logsField.write(`itemselect: ${formatObject(selection)}`);
             },
             onChange(selection) {
                 logsField.write(`change: ${formatObject(selection)}`);
             },
-            components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
+            components: {
+                ListItem: CustomListItem,
+                Checkbox: CustomListItem,
+                MultiSelectionItem: CustomSelectionItem,
+            },
         });
 
         const controls = createButtons([{
@@ -815,7 +820,7 @@ class DropDownView extends DemoView {
         const dropDown = DropDown.create({
             elem: select,
             placeholder: 'Dynamic Drop Down',
-            multi: true,
+            multiple: true,
         });
 
         const controls = createButtons([{
