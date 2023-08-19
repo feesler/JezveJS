@@ -38,7 +38,7 @@ const toggleEnable = (e, dropDown) => {
     const button = e.target;
 
     dropDown.enable(dropDown.disabled);
-    button.value = (dropDown.disabled) ? 'Enable' : 'Disable';
+    button.textContent = (dropDown.disabled) ? 'Enable' : 'Disable';
 };
 
 const formatObject = (value) => {
