@@ -99,6 +99,7 @@ const defaultProps = {
     placeholder: null,
     blurInputOnSingleSelect: true,
     useSingleSelectionAsPlaceholder: true,
+    clearFilterOnMultiSelect: false,
     showMultipleSelection: true,
     showClearButton: true,
     showToggleButton: true,
@@ -858,6 +859,16 @@ export class DropDown extends Component {
 
             this.elem.focus();
         } else if (this.props.enableFilter) {
+            if (this.state.filtered) {
+                const visibleItems = this.getVisibleItems();
+                if (
+                    this.props.clearFilterOnMultiSelect
+                    || visibleItems.length === 1
+                ) {
+                    this.showAllItems();
+                }
+            }
+
             setTimeout(() => this.focusInputIfNeeded());
         }
     }
@@ -1375,6 +1386,22 @@ export class DropDown extends Component {
 
     /** Show all list items */
     showAllItems() {
+        this.setState({
+            ...this.state,
+            filtered: false,
+            inputString: null,
+            createFromInputItemId: null,
+            items: this.state.items
+                .filter((item) => item.id !== this.state.createFromInputItemId)
+                .map((item) => ({
+                    ...item,
+                    active: false,
+                })),
+        });
+    }
+
+    /** Show all list items */
+    clearFilter() {
         this.setState({
             ...this.state,
             filtered: false,

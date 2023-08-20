@@ -95,6 +95,7 @@ class DropDownView extends DemoView {
         this.multiSelectFilter();
         this.groupsSelectFilter();
         this.blurInputOnSelect();
+        this.clearFilterOnSelect();
         this.showMultipleSelection();
         this.showClearButton();
         this.showToggleButton();
@@ -612,6 +613,21 @@ class DropDownView extends DemoView {
             content: DropDown.create({
                 enableFilter: true,
                 blurInputOnSingleSelect: false,
+                placeholder: 'Type to filter',
+                data: initItems('Item', 10),
+            }).elem,
+        });
+    }
+
+    clearFilterOnSelect() {
+        this.addSection({
+            id: 'clearFilterOnSelect',
+            title: '\'clearFilterOnMultiSelect\' option',
+            description: 'By default filter is not cleared after item selected if multiple items was found. In case only one item is found filter is cleared regardless of option value.',
+            content: DropDown.create({
+                enableFilter: true,
+                clearFilterOnMultiSelect: true,
+                multiple: true,
                 placeholder: 'Type to filter',
                 data: initItems('Item', 10),
             }).elem,
