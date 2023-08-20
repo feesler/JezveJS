@@ -38,12 +38,17 @@ export class DropDown extends TestComponent {
                 return null;
             }
 
-            const menuList = elem.querySelector('.dd__list > .menu-list');
+            const menuId = elem.dataset.target;
+            const menu = document.querySelector(`.dd__list[data-parent="${menuId}"]`);
+            const isFixedMenu = menu?.classList.contains('dd__list_fixed');
+            const menuList = menu?.querySelector(':scope > .menu-list');
             const select = elem.querySelector('select');
             const inputElem = elem.querySelector('input[type="text"]');
 
             const content = {
+                menuId,
                 isAttached,
+                isFixedMenu,
                 disabled: elem.hasAttribute('disabled'),
                 isMulti: select.hasAttribute('multiple'),
                 editable: elem.classList.contains('dd__editable'),
@@ -115,13 +120,13 @@ export class DropDown extends TestComponent {
             res.value = res.selectedItems;
         }
 
-        res.listContainer = await query(this.elem, '.dd__list');
-        res.listPlaceholder = { elem: await query(this.elem, '.dd__list-placeholder') };
+        res.listContainer = await query(`.dd__list[data-parent="${res.menuId}"]`);
+        res.listPlaceholder = { elem: await query(res.listContainer, '.dd__list-placeholder') };
         if (!res.listContainer || res.listPlaceholder.elem) {
             return res;
         }
 
-        const listItems = await queryAll(this.elem, '.dd__list .button-menu-item');
+        const listItems = await queryAll(res.listContainer, '.button-menu-item');
         res.items = await asyncMap(listItems, async (elem) => {
             const item = await evaluate((el) => ({
                 id: el.dataset.id,
@@ -249,7 +254,12 @@ export class DropDown extends TestComponent {
     async toggleItem(itemId) {
         assert(!this.content.disabled, 'Component is disabled');
 
-        const li = this.getItem(itemId);
+        let li = this.getItem(itemId);
+        if (!li) {
+            await this.showList();
+            await this.parse();
+        }
+        li = this.getItem(itemId);
         assert(li, `List item ${itemId} not found`);
 
         if (li.selected) {

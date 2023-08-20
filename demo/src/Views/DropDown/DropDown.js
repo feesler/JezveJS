@@ -194,10 +194,13 @@ class DropDownView extends DemoView {
     }
 
     fixedMenu() {
+        const input = createElement('input', { props: { id: 'fixedInp', type: 'text' } });
+
         this.addSection({
             id: 'fixed',
             title: 'Fixed menu',
             content: DropDown.create({
+                elem: input,
                 fixedMenu: true,
                 data: initItems('Item', 50),
             }).elem,

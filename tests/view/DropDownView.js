@@ -13,6 +13,7 @@ const dropDownSelectors = {
     editableInlineDropDown: '#selinp2',
     fullWidthDropDown: '#selinp3',
     halfWidthDropDown: '#selinp4',
+    fixedMenuDropDown: '#fixedInp',
     parsedSelDropDown: '#sel0',
     parsedSelSelectedDropDown: '#sel',
     attachedToBlockDropDown: '#box',

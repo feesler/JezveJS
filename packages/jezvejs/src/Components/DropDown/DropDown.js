@@ -146,6 +146,8 @@ export class DropDown extends Component {
         selectElem: ['name', 'form'],
     };
 
+    static menuIds = [];
+
     constructor(props = {}) {
         super({
             ...defaultProps,
@@ -177,6 +179,7 @@ export class DropDown extends Component {
             items: [],
             groups: [],
             actSelItemIndex: -1,
+            menuId: this.generateMenuId(),
             renderTime: Date.now(),
         };
         this.state.editable = !this.state.disabled && this.props.enableFilter;
@@ -229,6 +232,8 @@ export class DropDown extends Component {
             });
             this.elem.append(this.backgroundElem);
         }
+
+        this.elem.dataset.target = this.state.menuId;
 
         this.createList();
         setEvents(this.selectElem, { change: (e) => this.onChange(e) });
@@ -387,6 +392,7 @@ export class DropDown extends Component {
         const showInput = this.props.listAttach && this.props.enableFilter;
 
         this.menu = Menu.create({
+            parentId: this.state.menuId,
             className: (this.props.fixedMenu) ? FIXED_LIST_CLASS : null,
             multiple,
             defaultItemType: (multiple) ? 'checkbox' : 'button',
@@ -541,7 +547,10 @@ export class DropDown extends Component {
 
     /** 'blur' event handler */
     onBlur(e) {
-        const lostFocus = !this.isChildTarget(e.relatedTarget);
+        const lostFocus = (
+            !this.isChildTarget(e.relatedTarget)
+            && !this.isMenuTarget(e.relatedTarget)
+        );
         if (lostFocus) {
             this.waitForScroll = false;
             this.focusedElem = null;
@@ -1666,6 +1675,17 @@ export class DropDown extends Component {
         this.state.groups.push(group);
 
         return group;
+    }
+
+    generateMenuId() {
+        while (true) {
+            const id = `${Date.now()}${Math.random() * 10000}`;
+            const found = DropDown.menuIds.includes(id);
+            if (!found) {
+                DropDown.menuIds.push(id);
+                return id;
+            }
+        }
     }
 
     generateGroupId(groups) {

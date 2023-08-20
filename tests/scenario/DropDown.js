@@ -22,6 +22,10 @@ export const dropDownTests = async () => {
     await Actions.selectTest('fullWidthDropDown', '1');
     await Actions.selectTest('halfWidthDropDown', '2');
 
+    setBlock('Fixed menu', 2);
+
+    await Actions.selectTest('fixedMenuDropDown', '4');
+
     await test('Parse select',
         () => App.view.content.parsedSelDropDown.textValue === 'Item 1');
 

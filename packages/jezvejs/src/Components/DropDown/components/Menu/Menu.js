@@ -7,6 +7,7 @@ import './Menu.scss';
 const LIST_CLASS = 'dd__list';
 
 const defaultProps = {
+    parentId: null,
     items: [],
     showInput: false,
     getItemById: null,
@@ -52,6 +53,8 @@ export class DropDownMenu extends Menu {
                 ...(props?.components ?? {}),
             },
         });
+
+        this.elem.dataset.parent = this.props.parentId;
     }
 
     onInput(e) {
