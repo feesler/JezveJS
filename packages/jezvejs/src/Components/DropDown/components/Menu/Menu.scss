@@ -7,7 +7,25 @@
   --menu-background: var(--dd-bg-color);
 
   /* Menu item */
+  --menu-item-font-size: var(--dd-list-item-font-size);
+  --menu-item-padding: var(--dd-list-item-padding);
+  --menu-item-text-color: var(--dd-list-item-text);
   --menu-item-background: var(--dd-list-item-bg);
+  --menu-checkbox-icon-color: var(--dd-list-item-check);
+  --menu-item-border-width: 0;
+  --menu-item-line-height: var(--dd-list-item-line-height);
+
+  /* Active menu item */
+  --menu-item-active-text-color: var(--dd-active-list-item-text);
+  --menu-item-active-background: var(--dd-active-list-item-bg);
+  --menu-item-active-checkbox-icon-color: var(--dd-active-list-item-check);
+
+  /* Selected item */
+  --menu-item-selected-checkbox-icon-color: var(--dd-list-item-check);
+
+  /* Disabled item */
+  --menu-item-disabled-text-color: var(--dd-disabled-list-item-text);
+  --menu-item-disabled-background: var(--dd-disabled-list-item-bg);
 
   position: absolute;
   flex-flow: column nowrap;
