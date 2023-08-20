@@ -53,6 +53,7 @@ export {
 /* CSS classes */
 /* Container */
 const CONTAINER_CLASS = 'dd__container';
+const STATIC_CLASS = 'dd__container_static';
 const MULTIPLE_CLASS = 'dd__container_multiple';
 const ACTIVE_CLASS = 'dd__container_active';
 const MENU_ACTIVE_CLASS = 'dd__list_active';
@@ -83,6 +84,7 @@ const defaultProps = {
     form: undefined,
     multiple: false,
     listAttach: false,
+    static: false,
     isValidToggleTarget: null,
     fixedMenu: false,
     enableFilter: false,
@@ -352,6 +354,8 @@ export class DropDown extends Component {
             this.selectElem.multiple = true;
             this.elem.classList.add(MULTIPLE_CLASS);
         }
+
+        this.elem.classList.toggle(STATIC_CLASS, this.props.static);
     }
 
     /** Attach DropDown to specified element */

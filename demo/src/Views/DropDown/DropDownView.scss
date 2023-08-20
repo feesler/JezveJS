@@ -9,8 +9,6 @@
 }
 
 .dd__container_ellipsis {
-  overflow: hidden;
-
   .dd__single-selection {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -54,6 +52,10 @@
   position: relative;
 }
 
+.dd__container.dd_static {
+  position: static;
+}
+
 .clipper {
   height: 100px;
   overflow: auto;
@@ -65,7 +67,7 @@
   padding: 5px;
 }
 
-.multi-line-section {
+.multi-line-section .demo-section__content {
   row-gap: 0.5rem;
 }
 

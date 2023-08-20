@@ -133,6 +133,7 @@ class DropDownView extends DemoView {
             elem: input2,
             className: 'dd__container_ellipsis',
             placeholder: 'Select item 2',
+            static: true,
             data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
         });
 
@@ -345,16 +346,23 @@ class DropDownView extends DemoView {
 
     // Clipping test
     clippingTest() {
-        const dropDown = DropDown.create({ elem: 'clipped' });
-
         this.addSection({
             id: 'clipping',
             title: 'Clipping test',
+            description: 'Use \'static: true\' to prevent menu clipping.',
             content: createElement('div', {
                 props: { className: 'offset-parent' },
                 children: createElement('div', {
                     props: { className: 'clipper' },
-                    children: dropDown.elem,
+                    children: [
+                        DropDown.create({
+                            elem: 'clipped',
+                            static: true,
+                        }).elem,
+                        DropDown.create({
+                            data: initItems('Item', 10),
+                        }).elem,
+                    ],
                 }),
             }),
         });

@@ -141,6 +141,12 @@
 .dd__container {
   display: inline-flex;
   align-self: baseline;
+  position: relative;
+}
+
+/* Static container */
+.dd__container.dd__container_static,
+.dd__container_attached.dd__container_static {
   position: static;
 }
 
