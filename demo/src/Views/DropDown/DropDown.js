@@ -94,6 +94,7 @@ class DropDownView extends DemoView {
         this.singleSelectFilter();
         this.multiSelectFilter();
         this.groupsSelectFilter();
+        this.blurInputOnSelect();
         this.showMultipleSelection();
         this.showClearButton();
         this.showToggleButton();
@@ -601,6 +602,19 @@ class DropDownView extends DemoView {
             title: 'Filter with groups',
             description: '+ \'openOnFocus\' option',
             content: dropDown.elem,
+        });
+    }
+
+    blurInputOnSelect() {
+        this.addSection({
+            id: 'blurInputOnSelect',
+            title: '\'blurInputOnSingleSelect\' option',
+            content: DropDown.create({
+                enableFilter: true,
+                blurInputOnSingleSelect: false,
+                placeholder: 'Type to filter',
+                data: initItems('Item', 10),
+            }).elem,
         });
     }
 

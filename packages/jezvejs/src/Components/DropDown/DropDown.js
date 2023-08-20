@@ -97,6 +97,7 @@ const defaultProps = {
     useNativeSelect: false,
     fullScreen: false,
     placeholder: null,
+    blurInputOnSingleSelect: true,
     useSingleSelectionAsPlaceholder: true,
     showMultipleSelection: true,
     showClearButton: true,
@@ -536,6 +537,17 @@ export class DropDown extends Component {
         const focusedBefore = !!this.focusedElem;
         this.focusedElem = e.target;
 
+        const blurOnSelect = (
+            !this.props.multiple
+            && this.props.blurInputOnSingleSelect
+        );
+        if (
+            blurOnSelect
+            && this.isMenuTarget(e.target)
+        ) {
+            return;
+        }
+
         this.listenWindowEvents();
         if (this.state.openOnFocus && !this.state.visible && !focusedBefore) {
             this.showList(true);
@@ -544,7 +556,11 @@ export class DropDown extends Component {
             this.showListHandler();
         }
 
-        if (index === -1 && !this.isClearButtonTarget(e.target)) {
+        if (
+            index === -1
+            && !this.isClearButtonTarget(e.target)
+            && (!blurOnSelect || !focusedBefore)
+        ) {
             this.focusInputIfNeeded();
         }
     }
@@ -839,10 +855,8 @@ export class DropDown extends Component {
             if (this.props.enableFilter && this.state.filtered) {
                 this.showAllItems();
             }
-        }
 
-        if (!this.props.multiple) {
-            setTimeout(() => this.elem.focus());
+            this.elem.focus();
         } else if (this.props.enableFilter) {
             setTimeout(() => this.focusInputIfNeeded());
         }
@@ -1364,7 +1378,7 @@ export class DropDown extends Component {
         this.setState({
             ...this.state,
             filtered: false,
-            inputString: '',
+            inputString: null,
             createFromInputItemId: null,
             items: this.state.items
                 .filter((item) => item.id !== this.state.createFromInputItemId)
