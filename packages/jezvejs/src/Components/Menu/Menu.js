@@ -419,7 +419,7 @@ export class Menu extends Component {
 
         const focused = document.activeElement;
         if (this.elem.contains(focused)) {
-            focused.blur();
+            this.elem.focus();
         }
     }
 
