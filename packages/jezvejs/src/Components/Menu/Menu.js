@@ -97,9 +97,12 @@ export class Menu extends Component {
             },
         });
 
-        this.ignoreTouch = false;
-        this.scrollTimeout = 0;
-        this.state = this.onStateChange(this.props);
+        this.state = this.onStateChange({
+            ...this.props,
+            blockScroll: false,
+            scrollTimeout: 0,
+            ignoreTouch: false,
+        });
 
         this.init();
         this.postInit();
@@ -294,13 +297,12 @@ export class Menu extends Component {
 
     /** 'scroll' event handler */
     onScroll() {
-        this.state.listScroll = this.list.elem.scrollTop;
+        this.setListScroll(this.list.elem.scrollTop);
         if (!this.state.blockScroll) {
             this.setActive(null);
         }
 
-        this.state.blockScroll = false;
-        this.resetScrollTimeout();
+        this.unblockScroll();
     }
 
     onFocus(e) {
@@ -399,13 +401,13 @@ export class Menu extends Component {
      */
     onTouchStart(e) {
         if (e.touches) {
-            this.ignoreTouch = true;
+            this.setState({ ...this.state, ignoreTouch: true });
         }
     }
 
     /** 'mousemove' event handler */
     onMouseMove(e) {
-        if (this.state.blockScroll || this.ignoreTouch) {
+        if (this.state.blockScroll || this.state.ignoreTouch) {
             return;
         }
 
@@ -416,6 +418,7 @@ export class Menu extends Component {
         }
     }
 
+    /** 'mouseleave' event handler */
     onMouseLeave() {
         this.setActive(null);
 
@@ -549,31 +552,57 @@ export class Menu extends Component {
             return;
         }
 
-        if (itemTop < listTop) {
-            /* scroll up : decrease scroll top */
-            this.state.listScroll = Math.min(this.list.elem.scrollHeight, itemTop);
-        } else if (itemBottom > listBottom) {
-            /* scroll down : increase scroll top */
-            this.state.listScroll = Math.min(
-                this.list.elem.scrollHeight,
-                listTop + itemBottom - listBottom,
-            );
-        }
-        this.state.blockScroll = true;
-        this.list.elem.scrollTop = this.state.listScroll;
+        const { scrollHeight } = this.list.elem;
+        const scrollTop = (itemTop < listTop)
+            ? itemTop /* scroll up : decrease scroll top */
+            : listTop + itemBottom - listBottom; /* scroll down : increase scroll top */
 
-        this.resetScrollTimeout();
-        this.scrollTimeout = setTimeout(() => {
-            this.state.blockScroll = false;
-            this.scrollTimeout = 0;
-        }, SCROLL_TO_ITEM_TIMEOUT);
+        this.requestListScroll(Math.min(scrollHeight, scrollTop));
     }
 
-    resetScrollTimeout() {
-        if (this.scrollTimeout) {
-            clearTimeout(this.scrollTimeout);
-            this.scrollTimeout = 0;
+    setListScroll(listScroll) {
+        if (this.state.listScroll !== listScroll) {
+            this.setState({ ...this.state, listScroll });
         }
+    }
+
+    requestListScroll(listScroll) {
+        if (this.state.listScroll === listScroll) {
+            return;
+        }
+
+        if (this.state.scrollTimeout) {
+            clearTimeout(this.state.scrollTimeout);
+        }
+
+        this.setState({
+            ...this.state,
+            listScroll,
+            blockScroll: true,
+            scrollTimeout: setTimeout(() => {
+                this.setState({
+                    ...this.state,
+                    blockScroll: false,
+                    scrollTimeout: 0,
+                });
+            }, SCROLL_TO_ITEM_TIMEOUT),
+        });
+    }
+
+    unblockScroll() {
+        if (!this.state.blockScroll && !this.state.scrollTimeout) {
+            return;
+        }
+
+        if (this.state.scrollTimeout) {
+            clearTimeout(this.state.scrollTimeout);
+        }
+
+        this.setState({
+            ...this.state,
+            blockScroll: false,
+            scrollTimeout: 0,
+        });
     }
 
     renderHeader(state, prevState) {
@@ -607,6 +636,7 @@ export class Menu extends Component {
     renderList(state, prevState) {
         if (
             state.items === prevState?.items
+            && state.listScroll === prevState?.listScroll
             && state.iconAlign === prevState?.iconAlign
             && state.checkboxSide === prevState?.checkboxSide
             && state.renderNotSelected === prevState?.renderNotSelected
