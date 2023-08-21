@@ -164,17 +164,23 @@ export class DropDownView extends AppView {
         return this.checkState(expected);
     }
 
-    async waitForList(name, action) {
+    async waitForFilter(name, value) {
         await this.parse();
         const dropdown = this.getComponentByName(name);
 
         const prevTime = dropdown.renderTime;
-        await action();
+        await dropdown.filter(value);
 
         await waitForFunction(async () => {
             await this.parse();
             const component = this.getComponentByName(name);
-            return (prevTime !== component.renderTime);
+            return (
+                prevTime !== component.renderTime
+                && (
+                    (value === '' && component.inputValue === component.inputPlaceholder)
+                    || component.inputValue === value
+                )
+            );
         });
 
         await this.parse();
@@ -183,11 +189,17 @@ export class DropDownView extends AppView {
     async filter(name, value) {
         let dropdown = this.getComponentByName(name);
 
+        if (dropdown.attached) {
+            await dropdown.showList();
+            await this.parse();
+            dropdown = this.getComponentByName(name);
+        }
+
         if (
             dropdown.inputValue !== ''
             && dropdown.inputValue !== dropdown.inputPlaceholder
         ) {
-            await this.waitForList(name, () => this.getComponentByName(name).filter(''));
+            await this.waitForFilter(name, '');
             dropdown = this.getComponentByName(name);
         }
 
@@ -205,7 +217,7 @@ export class DropDownView extends AppView {
             },
         };
 
-        await this.waitForList(name, () => this.getComponentByName(name).filter(value));
+        await this.waitForFilter(name, value);
         dropdown = this.getComponentByName(name);
 
         const visible = dropdown.getVisibleItems();

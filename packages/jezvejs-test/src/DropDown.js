@@ -96,10 +96,14 @@ export class DropDown extends TestComponent {
             res.clearBtn = await query(this.elem, '.dd__clear-btn');
 
             const itemsSelector = '.dd__selection > .dd__selection-item';
-            const selItemElems = await queryAll(this.elem, itemsSelector);
-
             const buttonsSelector = `${itemsSelector} .close-btn`;
-            const deselectButtons = await queryAll(this.elem, buttonsSelector);
+            let selItemElems;
+            let deselectButtons;
+
+            do {
+                selItemElems = await queryAll(this.elem, itemsSelector);
+                deselectButtons = await queryAll(this.elem, buttonsSelector);
+            } while (selItemElems.length !== deselectButtons.length);
 
             assert(selItemElems.length === deselectButtons.length, 'Invalid selection element');
 

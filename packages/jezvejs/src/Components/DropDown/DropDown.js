@@ -96,7 +96,6 @@ const defaultProps = {
     noResultsMessage: 'No items',
     allowCreate: false,
     addItemMessage: (title) => `Add item: '${title}'`,
-    editable: false,
     disabled: false,
     useNativeSelect: false,
     fullScreen: false,
@@ -131,10 +130,9 @@ const defaultProps = {
 };
 
 /**
- * Drop Down List constructor
+ * Drop Down comoponent
  * @param {Object} props
  * @param {string|Element} props.elem - identifier or element to attach DropDown component to
- * @param {boolean} props.editable - if set true user will be able to type text in the combo box
  * @param {boolean} props.disabled - if set true any interactions with component will be disabled
  * @param {boolean} props.useNativeSelect - if set true component will use native select element on
  *     small devices(less 768px width) to view list and edit selection
@@ -174,6 +172,11 @@ export class DropDown extends Component {
 
         this.focusedElem = null;
 
+        const disabled = (
+            this.props.disabled
+            || (!this.props.listAttach && !!this.hostElem?.disabled)
+        );
+
         this.state = {
             active: false,
             changed: false,
@@ -182,15 +185,17 @@ export class DropDown extends Component {
             filtered: false,
             openOnFocus: this.props.openOnFocus,
             allowCreate: this.props.allowCreate,
-            editable: this.props.editable,
-            disabled: this.props.disabled,
+            disabled,
             items: [],
             groups: [],
             actSelItemIndex: -1,
             menuId: this.generateMenuId(),
+            isTouch: false,
+            ignoreScroll: false,
+            listeningWindow: false,
+            waitForScroll: false,
             renderTime: Date.now(),
         };
-        this.state.editable = !this.state.disabled && this.props.enableFilter;
 
         this.emptyClickHandler = () => this.showList(false);
         const clickHandler = (e) => this.onClick(e);
@@ -210,14 +215,11 @@ export class DropDown extends Component {
             },
         };
 
-        this.listeningWindow = false;
-        this.ignoreScroll = false;
-        this.waitForScroll = false;
-        this.showListHandler = debounce(() => {
-            this.waitForScroll = false;
-        }, SHOW_LIST_SCROLL_TIMEOUT);
+        this.showListHandler = debounce(
+            () => this.stopScrollWaiting(),
+            SHOW_LIST_SCROLL_TIMEOUT,
+        );
 
-        this.isTouch = false;
         this.inputElem = null;
 
         if (this.props.listAttach) {
@@ -261,7 +263,7 @@ export class DropDown extends Component {
                 showMultipleSelection: this.props.showMultipleSelection,
                 showClearButton: this.props.showClearButton,
                 showToggleButton: this.props.showToggleButton,
-                editable: this.state.editable,
+                editable: this.isEditable(),
                 enableFilter: this.props.enableFilter,
                 disabled: this.state.disabled,
                 items: this.state.items,
@@ -307,6 +309,15 @@ export class DropDown extends Component {
         return this.state.disabled;
     }
 
+    /** Returns true if filter input is available and enabled */
+    isEditable(state = this.state) {
+        return (
+            this.props.enableFilter
+            && !state.disabled
+            && (!this.props.fullScreen || state.visible)
+        );
+    }
+
     /** Check specified element is in input elements group */
     isInputElement(elem) {
         const inputTags = ['INPUT', 'SELECT', 'TEXTAREA'];
@@ -325,10 +336,6 @@ export class DropDown extends Component {
 
         // Create container
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-
-        if (this.hostElem.disabled) {
-            this.state.disabled = true;
-        }
 
         if (this.hostElem.tagName === 'SELECT') {
             this.selectElem = this.hostElem;
@@ -437,31 +444,56 @@ export class DropDown extends Component {
         }
     }
 
-    /* Event handlers */
-    listenWindowEvents() {
+    startScrollIgnore(state = this.state) {
+        if (!state.ignoreScroll) {
+            this.setState({ ...state, ignoreScroll: true });
+        }
+    }
+
+    stopScrollIgnore(state = this.state) {
+        if (state.ignoreScroll) {
+            this.setState({ ...state, ignoreScroll: false });
+        }
+    }
+
+    startScrollWaiting(state = this.state) {
+        if (!state.waitForScroll) {
+            this.setState({ ...state, waitForScroll: true });
+        }
+    }
+
+    stopScrollWaiting(state = this.state) {
+        if (state.waitForScroll) {
+            this.setState({ ...state, waitForScroll: false });
+        }
+    }
+
+    /* Assignes window and viewport event handlers */
+    listenWindowEvents(state = this.state) {
         setTimeout(() => {
-            this.ignoreScroll = false;
+            this.stopScrollIgnore();
         }, IGNORE_SCROLL_TIMEOUT);
 
-        if (this.listeningWindow) {
+        if (state.listeningWindow) {
             return;
         }
 
         setEvents(window.visualViewport, this.viewportEvents);
         setEvents(window, this.windowEvents);
 
-        this.listeningWindow = true;
+        this.setState({ ...state, listeningWindow: true });
     }
 
-    stopWindowEvents() {
-        if (!this.listeningWindow) {
+    /* Removes window and viewport event handlers */
+    stopWindowEvents(state = this.state) {
+        if (!state.listeningWindow) {
             return;
         }
 
         removeEvents(window.visualViewport, this.viewportEvents);
         removeEvents(window, this.windowEvents);
 
-        this.listeningWindow = false;
+        this.setState({ ...state, listeningWindow: false });
     }
 
     /** Add focus/blur event handlers to root element of component */
@@ -476,12 +508,12 @@ export class DropDown extends Component {
 
     /** viewPort 'resize' event handler */
     onWindowScroll() {
-        if (this.waitForScroll) {
+        if (this.state.waitForScroll) {
             this.showListHandler();
             return;
         }
 
-        if (this.ignoreScroll) {
+        if (this.state.ignoreScroll) {
             return;
         }
 
@@ -490,7 +522,7 @@ export class DropDown extends Component {
 
     /** viewPort 'resize' event handler */
     onViewportResize() {
-        if (this.waitForScroll) {
+        if (this.state.waitForScroll) {
             this.showListHandler();
             return;
         }
@@ -515,7 +547,7 @@ export class DropDown extends Component {
         this.setSelection(selValues);
 
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
     }
 
     /** 'focus' event handler */
@@ -551,8 +583,7 @@ export class DropDown extends Component {
         this.listenWindowEvents();
         if (this.state.openOnFocus && !this.state.visible && !focusedBefore) {
             this.showList(true);
-
-            this.waitForScroll = true;
+            this.startScrollWaiting();
             this.showListHandler();
         }
 
@@ -572,8 +603,8 @@ export class DropDown extends Component {
             && !this.isMenuTarget(e.relatedTarget)
         );
         if (lostFocus) {
-            this.waitForScroll = false;
             this.focusedElem = null;
+            this.stopScrollWaiting();
             this.activate(false);
         }
 
@@ -631,7 +662,7 @@ export class DropDown extends Component {
 
         this.deselectItem(item.id);
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
         this.sendChangeEvent();
     }
 
@@ -639,7 +670,7 @@ export class DropDown extends Component {
     onKey(e) {
         e.stopPropagation();
 
-        const { editable } = this.state;
+        const editable = this.isEditable();
         const { multiple } = this.props;
         const input = this.getInput();
         let newItem = null;
@@ -777,12 +808,12 @@ export class DropDown extends Component {
     /** 'click' event handler */
     onClick(e) {
         if (e.type === 'touchstart') {
-            this.isTouch = true;
+            this.setState({ ...this.state, isTouch: true });
             return;
         }
 
         if (
-            this.waitForScroll
+            this.state.waitForScroll
             || this.isMenuTarget(e.target)
             || this.isClearButtonTarget(e.target)
             || this.isSelectionItemDeleteButtonTarget(e.target)
@@ -847,10 +878,9 @@ export class DropDown extends Component {
         this.activateSelectedItem(-1);
         this.toggleItem(item.id);
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
 
         if (!this.props.multiple) {
-            this.state.inputString = null;
             this.showList(false);
             if (this.props.enableFilter && this.state.filtered) {
                 this.showAllItems();
@@ -891,9 +921,8 @@ export class DropDown extends Component {
 
         this.activateSelectedItem(-1);
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
 
-        this.state.inputString = null;
         this.showList(false);
         if (this.props.enableFilter && this.state.filtered) {
             this.showAllItems();
@@ -1047,6 +1076,7 @@ export class DropDown extends Component {
         this.setState({
             ...this.state,
             visible: val,
+            inputString: (val) ? this.state.inputString : null,
             active: (val) ? true : this.state.active,
             items: newItems,
         });
@@ -1075,9 +1105,10 @@ export class DropDown extends Component {
         }
 
         const nativeSelectVisible = isVisible(this.selectElem, true);
+        const editable = this.isEditable(state);
 
         this.selectElem.setAttribute('tabindex', (nativeSelectVisible) ? 0 : -1);
-        this.elem.setAttribute('tabindex', (nativeSelectVisible || state.editable) ? -1 : 0);
+        this.elem.setAttribute('tabindex', (nativeSelectVisible || editable) ? -1 : 0);
     }
 
     /** Enable or disable component */
@@ -1131,7 +1162,7 @@ export class DropDown extends Component {
     }
 
     activateInput() {
-        if (!this.state.editable || !this.props.enableFilter || this.state.disabled) {
+        if (!this.isEditable()) {
             return;
         }
 
@@ -1246,7 +1277,7 @@ export class DropDown extends Component {
             this.props.onChange(data);
         }
 
-        this.state.changed = false;
+        this.setState({ ...this.state, changed: false });
     }
 
     /** Toggle item selected status */
@@ -1317,6 +1348,11 @@ export class DropDown extends Component {
                 selected: itemIds.includes(item.id),
             })),
         });
+    }
+
+    /** Sets changed flag */
+    setChanged() {
+        this.setState({ ...this.state, changed: true });
     }
 
     /** Return index of selected item contains specified element */
@@ -2034,15 +2070,16 @@ export class DropDown extends Component {
             }
 
             PopupPosition.reset(this.menu.elem);
-            this.stopWindowEvents();
+            this.stopWindowEvents(state);
             return;
         }
 
         if (this.isFullScreen()) {
             this.renderFullscreenList(state, prevState);
         } else {
-            this.ignoreScroll = true;
-            const allowScrollAndResize = !this.isTouch || !this.state.editable;
+            this.startScrollIgnore(state);
+            const editable = this.isEditable(state);
+            const allowScrollAndResize = !state.isTouch || !editable;
 
             PopupPosition.calculate({
                 elem: this.menu.elem,
@@ -2054,7 +2091,7 @@ export class DropDown extends Component {
                 scrollOnOverflow: allowScrollAndResize,
                 allowResize: allowScrollAndResize,
                 allowFlip: false,
-                onScrollDone: () => this.listenWindowEvents(),
+                onScrollDone: () => this.listenWindowEvents(state),
             });
         }
     }
@@ -2062,10 +2099,7 @@ export class DropDown extends Component {
     render(state, prevState = {}) {
         this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
 
-        const editable = (
-            !!state.editable
-            && (!this.props.fullScreen || state.visible)
-        );
+        const editable = this.isEditable(state);
         this.elem.classList.toggle(EDITABLE_CLASS, editable);
 
         if (this.props.fixedMenu) {
