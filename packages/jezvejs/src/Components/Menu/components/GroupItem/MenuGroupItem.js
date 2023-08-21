@@ -103,6 +103,7 @@ export class MenuGroupItem extends Component {
             afterContent: this.props.afterContent,
             iconAlign: this.props.iconAlign,
             checkboxSide: this.props.checkboxSide,
+            renderNotSelected: this.props.renderNotSelected,
             useURLParam: this.props.useURLParam,
             itemParam: this.props.itemParam,
             tabThrough: this.props.tabThrough,
@@ -132,6 +133,7 @@ export class MenuGroupItem extends Component {
             && state.afterContent === prevState?.afterContent
             && state.iconAlign === prevState?.iconAlign
             && state.checkboxSide === prevState?.checkboxSide
+            && state.renderNotSelected === prevState?.renderNotSelected
             && state.useURLParam === prevState?.useURLParam
             && state.itemParam === prevState?.itemParam
         ) {
@@ -145,6 +147,7 @@ export class MenuGroupItem extends Component {
             afterContent: state.afterContent,
             iconAlign: state.iconAlign,
             checkboxSide: state.checkboxSide,
+            renderNotSelected: state.renderNotSelected,
             useURLParam: state.useURLParam,
             itemParam: state.itemParam,
         }));

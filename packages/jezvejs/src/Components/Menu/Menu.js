@@ -61,6 +61,7 @@ const defaultProps = {
     multiple: false,
     iconAlign: 'left', // available value: 'left', 'right'
     checkboxSide: 'left', // available value: 'left', 'right'
+    renderNotSelected: false,
     defaultItemType: 'button',
     useURLParam: false,
     itemParam: 'value',
@@ -128,6 +129,7 @@ export class Menu extends Component {
             multiple: this.props.multiple,
             iconAlign: this.props.iconAlign,
             checkboxSide: this.props.checkboxSide,
+            renderNotSelected: this.props.renderNotSelected,
             useURLParam: this.props.useURLParam,
             itemParam: this.props.itemParam,
             tabThrough: this.props.tabThrough,
@@ -607,6 +609,7 @@ export class Menu extends Component {
             state.items === prevState?.items
             && state.iconAlign === prevState?.iconAlign
             && state.checkboxSide === prevState?.checkboxSide
+            && state.renderNotSelected === prevState?.renderNotSelected
             && state.useURLParam === prevState?.useURLParam
             && state.itemParam === prevState?.itemParam
             && state.disabled === prevState?.disabled
@@ -643,6 +646,7 @@ export class Menu extends Component {
             afterContent,
             iconAlign: state.iconAlign,
             checkboxSide: state.checkboxSide,
+            renderNotSelected: state.renderNotSelected,
             useURLParam: state.useURLParam,
             itemParam: state.itemParam,
             disabled: state.disabled,

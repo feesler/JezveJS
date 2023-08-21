@@ -10,6 +10,7 @@ export class CheckboxGroupsMenu extends Menu {
     constructor(props = {}) {
         super({
             ...props,
+            renderNotSelected: true,
             components: {
                 ...props.components,
                 GroupHeader: CheckboxMenuGroupHeader,

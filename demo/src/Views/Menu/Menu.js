@@ -328,7 +328,8 @@ class MenuView extends DemoView {
         items[2].disabled = true;
 
         const menu = Menu.create({
-            id: 'defaultMenu',
+            id: 'disabledItemMenu',
+            multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items,
         });

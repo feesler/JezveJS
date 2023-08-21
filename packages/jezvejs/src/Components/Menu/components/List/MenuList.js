@@ -8,6 +8,8 @@ import './MenuList.scss';
 
 /* CSS classes */
 const MENU_LIST_CLASS = 'menu-list';
+const LEFT_COLUMN_CLASS = 'menu-list_left';
+const RIGHT_COLUMN_CLASS = 'menu-list_right';
 
 const defaultProps = {
     items: [],
@@ -96,6 +98,7 @@ export class MenuList extends ListContainer {
             iconAlign: item.iconAlign ?? state.iconAlign,
             tabThrough: item.tabThrough ?? state.tabThrough,
             checkboxSide: item.checkboxSide ?? state.checkboxSide,
+            renderNotSelected: item.renderNotSelected ?? state.renderNotSelected,
             useURLParam: item.useURLParam ?? state.useURLParam,
             itemParam: item.itemParam ?? state.itemParam,
             disabled: item.disabled || state.disabled,
@@ -139,6 +142,7 @@ export class MenuList extends ListContainer {
             || state.afterContent !== prevState?.afterContent
             || state.iconAlign !== prevState?.iconAlign
             || state.checkboxSide !== prevState?.checkboxSide
+            || state.renderNotSelected !== prevState?.renderNotSelected
             || state.renderTime !== prevState?.renderTime
         );
     }
@@ -180,5 +184,12 @@ export class MenuList extends ListContainer {
         if (isFunction(this.props.onItemClick)) {
             this.props.onItemClick(item.id, e);
         }
+    }
+
+    render(state, prevState = {}) {
+        super.render(state, prevState);
+
+        this.elem.classList.toggle(LEFT_COLUMN_CLASS, !!state.beforeContent);
+        this.elem.classList.toggle(RIGHT_COLUMN_CLASS, !!state.afterContent);
     }
 }

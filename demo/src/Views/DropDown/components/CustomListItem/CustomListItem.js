@@ -48,37 +48,26 @@ export class CustomListItem extends CheckboxItem {
     }
 
     renderBeforeContent(state, prevState) {
-        if (
-            (
-                state.checkboxSide === prevState?.checkboxSide
-                && state.type === prevState?.type
-            )
-            || !state.beforeContent
-        ) {
-            return;
-        }
-
         if (state.checkboxSide !== 'left') {
-            super.renderBeforeContent(state, prevState);
-            return;
+            return super.renderBeforeContent(state, prevState);
         }
 
-        this.colorElem = createElement('span', {
-            props: {
-                className: 'dd__custom-list-item_color',
-                dataset: { color: customColorsMap[state.id] },
-            },
-        });
-
-        if (state.multiple) {
-            this.checkIcon = createElement('span', {
-                props: { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
+        if (!this.colorElem) {
+            this.colorElem = createElement('span', {
+                props: { className: 'dd__custom-list-item_color' },
             });
-            this.colorElem.append(this.checkIcon);
+
+            if (state.multiple) {
+                this.checkIcon = createElement('span', {
+                    props: { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
+                });
+                this.colorElem.append(this.checkIcon);
+            }
         }
 
-        this.beforeElem.textContent = '';
-        this.beforeElem.append(this.colorElem);
+        this.colorElem.dataset.color = customColorsMap[state.id];
+
+        return this.colorElem;
     }
 
     renderContent(state) {

@@ -4,7 +4,6 @@ import {
     enable,
     getClassName,
     isFunction,
-    re,
 } from '../../../../js/common.js';
 import { Icon } from '../../../Icon/Icon.js';
 
@@ -109,100 +108,100 @@ export class MenuItem extends Component {
 
         this.beforeElem = null;
         this.afterElem = null;
+        this.beforeContent = null;
+        this.afterContent = null;
 
         this.postInit();
     }
 
-    createBeforeElement() {
-        return createElement('div', { props: { className: BEFORE_CLASS } });
+    createBeforeElement(children) {
+        return createElement('div', { props: { className: BEFORE_CLASS }, children });
     }
 
-    createAfterElement() {
-        return createElement('div', { props: { className: AFTER_CLASS } });
+    createAfterElement(children) {
+        return createElement('div', { props: { className: AFTER_CLASS }, children });
     }
 
     renderBeforeContainer(state, prevState) {
-        if (
-            state.beforeContent === prevState?.beforeContent
-            && state.type === prevState?.type
-        ) {
+        const beforeContent = this.renderBeforeContent(state, prevState);
+        if (this.beforeContent === beforeContent) {
             return;
         }
 
-        if (!state.beforeContent) {
-            re(this.beforeElem);
+        this.beforeContent = beforeContent;
+        if (beforeContent === null) {
+            this.beforeElem?.remove();
             this.beforeElem = null;
             return;
         }
 
         if (!this.beforeElem) {
-            this.beforeElem = this.createBeforeElement();
+            this.beforeElem = this.createBeforeElement(beforeContent);
             this.elem.prepend(this.beforeElem);
+        } else {
+            this.beforeElem.textContent = '';
+            this.beforeElem.append(beforeContent);
         }
     }
 
     renderBeforeContent(state, prevState) {
         if (
-            (
-                state.icon === prevState?.icon
-                && state.iconAlign === prevState?.iconAlign
-                && state.type === prevState?.type
-            )
-            || !state.beforeContent
+            state.icon === prevState?.icon
+            && state.iconAlign === prevState?.iconAlign
+            && state.type === prevState?.type
         ) {
-            return;
+            return this.beforeContent;
         }
 
-        this.beforeElem.textContent = '';
         if (state.icon && state.iconAlign === 'left') {
-            const icon = Icon.create({
+            return Icon.create({
                 icon: state.icon,
                 className: ICON_CLASS,
-            });
-            this.beforeElem.append(icon.elem);
+            }).elem;
         }
+
+        return null;
     }
 
     renderAfterContainer(state, prevState) {
-        if (
-            state.afterContent === prevState?.afterContent
-            && state.type === prevState?.type
-        ) {
+        const afterContent = this.renderAfterContent(state, prevState);
+        if (this.afterContent === afterContent) {
             return;
         }
 
-        if (!state.afterContent) {
-            re(this.afterElem);
+        this.afterContent = afterContent;
+        if (afterContent === null) {
+            this.afterElem?.remove();
             this.afterElem = null;
             return;
         }
 
         if (!this.afterElem) {
-            this.afterElem = this.createAfterElement();
+            this.afterElem = this.createAfterElement(afterContent);
             this.elem.append(this.afterElem);
+        } else {
+            this.afterElem.textContent = '';
+            this.afterElem.append(afterContent);
         }
     }
 
     renderAfterContent(state, prevState) {
         if (
-            (
-                state.icon === prevState?.icon
-                && state.iconAlign === prevState?.iconAlign
-                && state.type === prevState?.type
-            )
-            || !state.afterContent
+            state.icon === prevState?.icon
+            && state.iconAlign === prevState?.iconAlign
+            && state.type === prevState?.type
         ) {
-            return;
+            return this.afterContent;
         }
 
-        this.afterElem.textContent = '';
         if (state.icon && state.iconAlign === 'right') {
-            const icon = Icon.create({
+            return Icon.create({
                 icon: state.icon,
                 className: ICON_CLASS,
-            });
-            this.afterElem.append(icon.elem);
+            }).elem;
         }
+
+        return null;
     }
 
     getItemURL(state) {
@@ -248,9 +247,6 @@ export class MenuItem extends Component {
         this.elem.classList.toggle(SELECTED_ITEM_CLASS, !!state.selected);
 
         this.renderBeforeContainer(state, prevState);
-        this.renderBeforeContent(state, prevState);
-
         this.renderAfterContainer(state, prevState);
-        this.renderAfterContent(state, prevState);
     }
 }
