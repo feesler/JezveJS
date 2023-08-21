@@ -152,6 +152,11 @@
   position: static;
 }
 
+/* Create new item from input value */
+.dd__create-item .menu-item__side-content {
+  display: none;
+}
+
 /* useNative container */
 .dd__container_native.dd__container_attached,
 .dd__container_native.dd__container {

@@ -72,6 +72,7 @@ const LIST_OPEN_CLASS = 'dd__open';
 const MENU_OPEN_CLASS = 'dd__list_open';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
+const CREATE_ITEM_CLASS = 'dd__create-item';
 
 /* List position constants */
 const SCREEN_PADDING = 5;
@@ -1898,6 +1899,8 @@ export class DropDown extends Component {
         return {
             title: message,
             selectable: true,
+            type: 'button',
+            className: CREATE_ITEM_CLASS,
         };
     }
 
