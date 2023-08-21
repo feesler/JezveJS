@@ -469,31 +469,31 @@ export class DropDown extends Component {
     }
 
     /* Assignes window and viewport event handlers */
-    listenWindowEvents(state = this.state) {
+    listenWindowEvents() {
         setTimeout(() => {
             this.stopScrollIgnore();
         }, IGNORE_SCROLL_TIMEOUT);
 
-        if (state.listeningWindow) {
+        if (this.state.listeningWindow) {
             return;
         }
 
         setEvents(window.visualViewport, this.viewportEvents);
         setEvents(window, this.windowEvents);
 
-        this.setState({ ...state, listeningWindow: true });
+        this.setState({ ...this.state, listeningWindow: true });
     }
 
     /* Removes window and viewport event handlers */
-    stopWindowEvents(state = this.state) {
-        if (!state.listeningWindow) {
+    stopWindowEvents() {
+        if (!this.state.listeningWindow) {
             return;
         }
 
         removeEvents(window.visualViewport, this.viewportEvents);
         removeEvents(window, this.windowEvents);
 
-        this.setState({ ...state, listeningWindow: false });
+        this.setState({ ...this.state, listeningWindow: false });
     }
 
     /** Add focus/blur event handlers to root element of component */
@@ -2063,6 +2063,14 @@ export class DropDown extends Component {
         }
         this.renderListContent(state, prevState);
 
+        if (
+            state.items === prevState.items
+            && state.visible === prevState.visible
+            && state.filtered === prevState.filtered
+        ) {
+            return;
+        }
+
         if (!state.visible) {
             if (this.props.fullScreen) {
                 ScrollLock.unlock();
@@ -2070,7 +2078,7 @@ export class DropDown extends Component {
             }
 
             PopupPosition.reset(this.menu.elem);
-            this.stopWindowEvents(state);
+            setTimeout(() => this.stopWindowEvents());
             return;
         }
 
@@ -2091,7 +2099,7 @@ export class DropDown extends Component {
                 scrollOnOverflow: allowScrollAndResize,
                 allowResize: allowScrollAndResize,
                 allowFlip: false,
-                onScrollDone: () => this.listenWindowEvents(state),
+                onScrollDone: () => this.listenWindowEvents(),
             });
         }
     }

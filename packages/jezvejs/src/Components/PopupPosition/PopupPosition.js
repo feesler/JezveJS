@@ -249,7 +249,9 @@ export class PopupPosition {
         }
 
         if (!waitForScroll) {
-            this.notifyScrollDone(onScrollDone);
+            setTimeout(() => {
+                this.notifyScrollDone(onScrollDone);
+            });
         }
 
         // Horizontal offset
