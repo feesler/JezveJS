@@ -161,25 +161,26 @@ export class DropDownComboBox extends Component {
                 placeholder,
                 value: state.inputString ?? str,
             }));
+        } else if (usePlaceholder) {
+            this.placeholder.setState((placeholderState) => ({
+                ...placeholderState,
+                placeholder,
+            }));
         } else {
-            if (usePlaceholder) {
-                this.placeholder.setState((placeholderState) => ({
-                    ...placeholderState,
-                    placeholder,
-                }));
-            } else {
-                this.singleSelection.setState((selectionState) => ({
-                    ...selectionState,
-                    item,
-                }));
-            }
-            this.placeholder.show(usePlaceholder);
-            this.singleSelection.show(!usePlaceholder);
+            this.singleSelection.setState((selectionState) => ({
+                ...selectionState,
+                item,
+            }));
         }
+
+        this.placeholder.show(!state.editable && usePlaceholder);
+        this.singleSelection.show(!state.editable && !usePlaceholder);
     }
 
     /** Render selection elements */
     renderSelection(state) {
+        this.input.show(state.editable);
+
         if (!this.props.multiple) {
             this.renderSingleSelection(state);
             return;
@@ -196,9 +197,9 @@ export class DropDownComboBox extends Component {
                 ...placeholderState,
                 placeholder: this.props.placeholder,
             }));
-            this.placeholder.show(true);
-            this.singleSelection.show(false);
         }
+        this.placeholder.show(!state.editable);
+        this.singleSelection.show(false);
 
         const selectedItems = getSelectedItems(state);
 

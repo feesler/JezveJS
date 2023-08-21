@@ -6,7 +6,6 @@ import {
     px,
     insertAfter,
     prependChild,
-    getOffset,
     isVisible,
     getCursorPos,
     setEvents,
@@ -17,13 +16,18 @@ import {
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
+
+import { CheckboxItem } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
+import { ScrollLock } from '../ScrollLock/ScrollLock.js';
+
 import {
     getGroupItems,
     getSelectedItems,
     getVisibleGroupItems,
     getVisibleItems,
 } from './utils.js';
+
 import { DropDownInput } from './components/Input/Input.js';
 import { DropDownSingleSelection } from './components/SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from './components/Placeholder/Placeholder.js';
@@ -39,9 +43,9 @@ import { DropDownMultipleSelection } from './components/MultipleSelection/Multip
 import { DropDownMultiSelectionItem } from './components/MultiSelectionItem/MultiSelectionItem.js';
 import { DropDownClearButton } from './components/ClearButton/ClearButton.js';
 import { DropDownToggleButton } from './components/ToggleButton/ToggleButton.js';
+
 import '../../css/common.scss';
 import './DropDown.scss';
-import { CheckboxItem } from '../Menu/Menu.js';
 
 export {
     getGroupItems,
@@ -60,7 +64,6 @@ const MENU_ACTIVE_CLASS = 'dd__list_active';
 const ATTACHED_CLASS = 'dd__container_attached';
 const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
-const FULLSCREEN_BG_CLASS = 'dd__background';
 const EDITABLE_CLASS = 'dd__editable';
 
 /* List */
@@ -230,11 +233,6 @@ export class DropDown extends Component {
         }
         if (this.props.fullScreen) {
             this.elem.classList.add(FULLSCREEN_CLASS);
-
-            this.backgroundElem = createElement('div', {
-                props: { className: FULLSCREEN_BG_CLASS },
-            });
-            this.elem.append(this.backgroundElem);
         }
 
         this.elem.dataset.target = this.state.menuId;
@@ -1956,37 +1954,35 @@ export class DropDown extends Component {
         }));
     }
 
+    isFullScreen() {
+        return (this.props.fullScreen && !this.elem.offsetParent);
+    }
+
+    setFullScreenContainerHeight() {
+        const screenHeight = window.visualViewport.height;
+        this.elem.style.height = px(screenHeight);
+    }
+
     renderFullscreenList(state) {
         if (!state.visible || this.props.listAttach) {
             return;
         }
 
-        const html = document.documentElement;
-        const combo = getOffset(this.combo.elem);
-        combo.width = this.combo.elem.offsetWidth;
-        combo.height = this.combo.elem.offsetHeight;
-        const offset = getOffset(this.menu.elem.offsetParent);
+        ScrollLock.lock();
 
-        document.body.style.overflow = 'hidden';
-
-        const { style } = this.menu.elem;
-
-        style.left = px(combo.left);
-        style.top = px(combo.top - offset.top + combo.height);
-
-        style.minWidth = px(combo.width);
-        style.width = '';
-
-        const fullScreenListHeight = html.clientHeight - combo.height;
-        style.height = px(fullScreenListHeight / 2);
+        this.setFullScreenContainerHeight();
     }
 
     updateListPosition() {
         if (
             !this.state.visible
             || isVisible(this.selectElem, true)
-            || (this.props.fullScreen && isVisible(this.backgroundElem))
         ) {
+            return;
+        }
+
+        if (this.isFullScreen()) {
+            this.setFullScreenContainerHeight();
             return;
         }
 
@@ -2030,7 +2026,8 @@ export class DropDown extends Component {
 
         if (!state.visible) {
             if (this.props.fullScreen) {
-                document.body.style.overflow = '';
+                ScrollLock.unlock();
+                this.elem.style.height = '';
             }
 
             PopupPosition.reset(this.menu.elem);
@@ -2038,7 +2035,7 @@ export class DropDown extends Component {
             return;
         }
 
-        if (this.props.fullScreen && isVisible(this.backgroundElem)) {
+        if (this.isFullScreen()) {
             this.renderFullscreenList(state, prevState);
         } else {
             this.ignoreScroll = true;
@@ -2061,7 +2058,12 @@ export class DropDown extends Component {
 
     render(state, prevState = {}) {
         this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
-        this.elem.classList.toggle(EDITABLE_CLASS, !!state.editable);
+
+        const editable = (
+            !!state.editable
+            && (!this.props.fullScreen || state.visible)
+        );
+        this.elem.classList.toggle(EDITABLE_CLASS, editable);
 
         if (this.props.fixedMenu) {
             this.menu.elem.classList.toggle(MENU_ACTIVE_CLASS, !!state.active);
@@ -2084,7 +2086,7 @@ export class DropDown extends Component {
         if (this.combo) {
             this.combo.setState((comboState) => ({
                 ...comboState,
-                editable: state.editable,
+                editable,
                 disabled: state.disabled,
                 items: state.items,
                 actSelItemIndex: state.actSelItemIndex,

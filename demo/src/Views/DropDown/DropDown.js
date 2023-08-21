@@ -110,6 +110,7 @@ class DropDownView extends DemoView {
         this.multiNativeSelect();
 
         this.fullScreen();
+        this.fullScreenFilter();
 
         this.dynamicAddRemoveItems();
 
@@ -851,6 +852,20 @@ class DropDownView extends DemoView {
                 elem: 'selinp12',
                 placeholder: 'Full screen',
                 fullScreen: true,
+            }).elem,
+        });
+    }
+
+    fullScreenFilter() {
+        this.addSection({
+            id: 'fullScreenFilter',
+            title: 'fullScreen option with filter',
+            content: DropDown.create({
+                placeholder: 'Type to filter',
+                fullScreen: true,
+                multiple: true,
+                enableFilter: true,
+                data: initItems('Item', 50),
             }).elem,
         });
     }
