@@ -31,7 +31,7 @@
   flex-flow: column nowrap;
   display: none;
   box-sizing: border-box;
-  max-width: 100%;
+  max-width: 100vw;
   max-height: var(--dd-max-list-height);
   z-index: var(--dd-list-z-index);
   overflow: hidden;
