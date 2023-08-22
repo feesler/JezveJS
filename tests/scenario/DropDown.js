@@ -4,7 +4,6 @@ import {
     baseUrl,
     goTo,
     setBlock,
-    isVisible,
 } from 'jezve-test';
 import * as Actions from '../actions/DropDown.js';
 import { App } from '../app.js';
@@ -42,10 +41,9 @@ export const dropDownTests = async () => {
     ));
     await Actions.selectTest('attachedToBlockDropDown', '2');
 
-    await test('Attached to inline element',
-        async () => !(await isVisible(
-            App.view.content.attachedToInlineDropDown.content.listContainer, true,
-        )));
+    await test('Attached to inline element', () => (
+        !App.view.content.attachedToInlineDropDown.listContainer?.visible
+    ));
     await Actions.selectTest('attachedToInlineDropDown', '3');
 
     setBlock('Groups items select', 2);
@@ -69,9 +67,9 @@ export const dropDownTests = async () => {
     await Actions.selectTest('multiSelDropDown', '5');
 
     await test('List of multi select Drop Down not closed after click by item',
-        () => (isVisible(
-            App.view.content.multiSelDropDown.content.listContainer, true,
-        )));
+        () => (
+            App.view.content.multiSelDropDown.listContainer?.visible
+        ));
 
     await Actions.deselectTest('multiSelDropDown', '5');
     await Actions.clearTest('multiSelDropDown');

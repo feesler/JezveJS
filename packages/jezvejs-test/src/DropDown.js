@@ -4,7 +4,6 @@ import {
     asyncMap,
     query,
     queryAll,
-    isVisible,
     click,
     closest,
     evaluate,
@@ -44,6 +43,7 @@ export class DropDown extends TestComponent {
             const menuList = menu?.querySelector(':scope > .menu-list');
             const select = elem.querySelector('select');
             const inputElem = elem.querySelector('input[type="text"]');
+            const menuItems = Array.from(menuList?.querySelectorAll('.button-menu-item') ?? []);
 
             const content = {
                 menuId,
@@ -53,7 +53,6 @@ export class DropDown extends TestComponent {
                 isMulti: select.hasAttribute('multiple'),
                 editable: elem.classList.contains('dd__editable'),
                 value: select.value,
-                items: [],
                 selectedItems: [],
                 options: Array.from(select.querySelectorAll('option')).map((option) => ({
                     id: option.value,
@@ -61,6 +60,14 @@ export class DropDown extends TestComponent {
                     selected: option.selected,
                     disabled: option.disabled,
                 })),
+                items: menuItems.map((el) => ({
+                    id: el.dataset.id,
+                    text: el.textContent,
+                    hidden: el.hidden,
+                    selected: el.classList.contains('menu-item_selected'),
+                    disabled: el.disabled,
+                })),
+                listContainer: { visible: menu && !menu.hidden },
                 renderTime: menuList?.dataset.time,
             };
 
@@ -77,17 +84,22 @@ export class DropDown extends TestComponent {
 
             return content;
         }, this.elem);
-
         assert(res, 'Invalid drop down element');
 
-        if (res.isAttached) {
-            res.toggleBtn = await query(this.elem, ':scope > *');
-        } else {
-            res.toggleBtn = await query(this.elem, '.dd__toggle-btn');
-        }
+        // Menu container
+        res.listContainer = {
+            elem: await query(`.dd__list[data-parent="${res.menuId}"]`),
+        };
+        res.listPlaceholder = {
+            elem: await query(res.listContainer.elem, '.dd__list-placeholder'),
+        };
+
+        const btnSelector = (res.isAttached) ? ':scope > *' : '.dd__toggle-btn';
+        res.toggleBtn = await query(this.elem, btnSelector);
         assert(res.toggleBtn, 'Select button not found');
 
-        res.inputElem = await query(this.elem, 'input[type="text"]');
+        const inputParent = (res.isAttached) ? res.listContainer.elem : this.elem;
+        res.inputElem = await query(inputParent, 'input[type="text"]');
         if (!res.isAttached) {
             assert(res.inputElem, 'Input element not found');
         }
@@ -124,31 +136,6 @@ export class DropDown extends TestComponent {
             res.value = res.selectedItems;
         }
 
-        res.listContainer = await query(`.dd__list[data-parent="${res.menuId}"]`);
-        res.listPlaceholder = { elem: await query(res.listContainer, '.dd__list-placeholder') };
-        if (!res.listContainer || res.listPlaceholder.elem) {
-            return res;
-        }
-
-        const listItems = await queryAll(res.listContainer, '.button-menu-item');
-        res.items = await asyncMap(listItems, async (elem) => {
-            const item = await evaluate((el) => ({
-                id: el.dataset.id,
-                text: el.textContent,
-                hidden: el.hidden,
-            }), elem);
-            item.elem = elem;
-
-            const option = res.options.find((opt) => opt.id === item.id);
-            if (option) {
-                item.id = option.id;
-                item.selected = option.selected;
-                item.disabled = option.disabled;
-            }
-
-            return item;
-        });
-
         return res;
     }
 
@@ -172,13 +159,7 @@ export class DropDown extends TestComponent {
         }
 
         if (cont.items) {
-            res.items = cont.items.map((item) => ({
-                id: item.id,
-                selected: item.selected,
-                disabled: item.disabled,
-                hidden: item.hidden,
-                text: item.text,
-            }));
+            res.items = structuredClone(cont.items);
         }
 
         return res;
@@ -216,8 +197,16 @@ export class DropDown extends TestComponent {
         return this.content.items;
     }
 
+    get listContainer() {
+        return this.content.listContainer;
+    }
+
     get renderTime() {
         return this.content.renderTime;
+    }
+
+    async getListItemElement(id) {
+        return query(this.listContainer.elem, `.button-menu-item[data-id="${id}"]`);
     }
 
     getItem(itemId) {
@@ -247,8 +236,7 @@ export class DropDown extends TestComponent {
     async showList(show = true) {
         assert(!this.content.disabled, 'Component is disabled');
 
-        const listVisible = await isVisible(this.content.listContainer);
-        if (show === listVisible) {
+        if (show === this.listContainer.visible) {
             return;
         }
 
@@ -289,7 +277,10 @@ export class DropDown extends TestComponent {
         }
 
         await this.showList();
-        await click(li.elem);
+
+        const elem = await this.getListItemElement(itemId);
+        assert(elem, 'Item element not found');
+        await click(elem);
     }
 
     async clearSelection() {
@@ -313,7 +304,10 @@ export class DropDown extends TestComponent {
         }
 
         await this.showList();
-        await click(li.elem);
+
+        const elem = await this.getListItemElement(itemId);
+        assert(elem, 'Item element not found');
+        await click(elem);
     }
 
     async deselectItemByTag(itemId) {

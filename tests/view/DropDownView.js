@@ -174,6 +174,7 @@ export class DropDownView extends AppView {
         await waitForFunction(async () => {
             await this.parse();
             const component = this.getComponentByName(name);
+
             return (
                 prevTime !== component.renderTime
                 && (
