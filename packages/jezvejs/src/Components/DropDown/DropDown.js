@@ -1429,27 +1429,11 @@ export class DropDown extends Component {
     }
 
     /** Show all list items */
-    showAllItems() {
+    showAllItems(resetInput = true) {
         this.setState({
             ...this.state,
             filtered: false,
-            inputString: null,
-            createFromInputItemId: null,
-            items: this.state.items
-                .filter((item) => item.id !== this.state.createFromInputItemId)
-                .map((item) => ({
-                    ...item,
-                    active: false,
-                })),
-        });
-    }
-
-    /** Show all list items */
-    clearFilter() {
-        this.setState({
-            ...this.state,
-            filtered: false,
-            inputString: null,
+            inputString: (resetInput) ? null : '',
             createFromInputItemId: null,
             items: this.state.items
                 .filter((item) => item.id !== this.state.createFromInputItemId)
@@ -1467,7 +1451,7 @@ export class DropDown extends Component {
         }
 
         if (inputString.length === 0) {
-            this.showAllItems();
+            this.showAllItems(false);
             return;
         }
 
