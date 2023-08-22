@@ -2084,6 +2084,7 @@ export class DropDown extends Component {
 
         if (this.isFullScreen()) {
             this.renderFullscreenList(state, prevState);
+            setTimeout(() => this.listenWindowEvents());
         } else {
             this.startScrollIgnore(state);
             const editable = this.isEditable(state);
