@@ -82,6 +82,8 @@ const ATTACH_REF_HEIGHT = 5;
 const IGNORE_SCROLL_TIMEOUT = 500;
 const SHOW_LIST_SCROLL_TIMEOUT = 100;
 
+const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group'];
+
 /** Default properties */
 const defaultProps = {
     name: undefined,
@@ -1880,7 +1882,27 @@ export class DropDown extends Component {
         return getGroupItems(group, state);
     }
 
-    renderSelect(state) {
+    isSelectChanged(state, prevState) {
+        if (state.items === prevState.items) {
+            return false;
+        }
+
+        return (
+            state.items.length !== prevState.items?.length
+            || state.items.some((item, index) => (
+                selectOptionProps.some((prop) => (
+                    !prevState.items[index]
+                    || item[prop] !== prevState.items[index][prop]
+                ))
+            ))
+        );
+    }
+
+    renderSelect(state, prevState) {
+        if (!this.isSelectChanged(state, prevState)) {
+            return;
+        }
+
         const optGroups = [];
         const options = [];
 
