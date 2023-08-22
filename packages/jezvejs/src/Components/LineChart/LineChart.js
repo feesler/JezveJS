@@ -86,7 +86,7 @@ export class LineChart extends BaseChart {
         categoryIndex = 0,
         valueOffset = 0,
     }, state) {
-        const { grid } = state;
+        const { grid, xAxis } = state;
         const fixedValue = value ?? 0;
         const fixedOffset = valueOffset ?? 0;
         const groupWidth = this.getGroupOuterWidth(state);
@@ -105,6 +105,10 @@ export class LineChart extends BaseChart {
 
         if (Number.isNaN(item.dot.x) || Number.isNaN(item.dot.y)) {
             throw new Error('Invalid values');
+        }
+
+        if (xAxis === 'top') {
+            item.dot.y += state.hLabelsHeight;
         }
 
         const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;

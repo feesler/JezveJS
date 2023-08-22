@@ -1,0 +1,145 @@
+/* Menu container */
+.menu {
+  /* Container */
+  --menu-column-gap: 0;
+  --menu-row-gap: 0;
+  --menu-border-color: #000000;
+  --menu-border-width: 0;
+  --menu-border-style: none;
+  --menu-border-radius: 0;
+  --menu-background: none;
+
+  /* Items */
+  --menu-item-padding: 0.5rem;
+  --menu-item-text-color: #000000;
+  --menu-item-font-size: 1rem;
+  --menu-item-font-weight: 400;
+  --menu-item-background: none;
+  --menu-item-border-color: #000000;
+  --menu-item-border-width: 0;
+  --menu-item-border-style: solid;
+  --menu-item-border-radius: 0;
+  --menu-item-size: 2rem;
+  --menu-item-line-height: var(--menu-item-size);
+  --menu-item-gap: 0.5rem;
+  --menu-item-text-transform: none;
+
+  /* Icons */
+  --menu-item-icon-size: calc(1.275rem + 0.3vw);
+  --menu-item-icon-color: var(--menu-item-text-color);
+
+  /* Checkbox */
+  --menu-checkbox-size: 2rem;
+  --menu-checkbox-icon-size: 1.5rem;
+  --menu-checkbox-icon-color: #000000;
+  --menu-checkbox-border-radius: 0;
+  --menu-checkbox-border-width: 0;
+  --menu-checkbox-border-style: solid;
+  --menu-checkbox-border-color: #000000;
+  --menu-checkbox-background: none;
+
+  /* Active item */
+  --menu-item-active-text-color: #ffffff;
+  --menu-item-active-background: #3078e2;
+  --menu-item-active-border-color: var(--menu-item-border-color);
+  --menu-item-active-icon-color: #ffffff;
+  --menu-item-active-checkbox-icon-color: #ffffff;
+  --menu-item-active-checkbox-background: var(--menu-checkbox-background);
+
+  /* Hover item */
+  --menu-item-hover-text-color: var(--menu-item-active-text-color);
+  --menu-item-hover-background: var(--menu-item-active-background);
+  --menu-item-hover-border-color: var(--menu-item-active-border-color);
+  --menu-item-hover-icon-color: var(--menu-item-active-icon-color);
+  --menu-item-hover-checkbox-icon-color: var(
+    --menu-item-active-checkbox-icon-color
+  );
+  --menu-item-hover-checkbox-background: var(--menu-checkbox-background);
+
+  /* Focused item */
+  --menu-item-focus-shadow: none;
+  --menu-item-focus-text-color: var(--menu-item-active-text-color);
+  --menu-item-focus-background: var(--menu-item-active-background);
+  --menu-item-focus-border-color: var(--menu-item-active-border-color);
+  --menu-item-focus-icon-color: var(--menu-item-active-icon-color);
+  --menu-item-focus-checkbox-icon-color: var(
+    --menu-item-active-checkbox-icon-color
+  );
+  --menu-item-focus-checkbox-background: var(--menu-checkbox-background);
+
+  /* Selected item */
+  --menu-item-selected-font-weight: var(--menu-item-font-weight);
+  --menu-item-selected-text-color: var(--menu-item-text-color);
+  --menu-item-selected-background: var(--menu-item-background);
+  --menu-item-selected-border-color: var(--menu-item-border-color);
+  --menu-item-selected-icon-color: var(--menu-item-selected-text-color);
+  --menu-item-selected-checkbox-background: var(--menu-checkbox-background);
+  --menu-item-selected-checkbox-icon-color: var(--menu-checkbox-icon-color);
+
+  /* Disabled item */
+  --menu-item-disabled-text-color: #808080;
+  --menu-item-disabled-background: var(--menu-item-background);
+  --menu-item-disabled-icon-color: var(--menu-item-disabled-text-color);
+  --menu-item-disabled-checkbox-icon-color: var(
+    --menu-item-disabled-text-color
+  );
+  --menu-item-disabled-checkbox-border-color: #808080;
+  --menu-item-disabled-checkbox-background: none;
+  --menu-item-disabled-border-color: var(--menu-item-border-color);
+
+  /* Disabled selected state */
+  --menu-item-disabled-selected-font-weight: var(
+    --menu-item-selected-font-weight
+  );
+  --menu-item-disabled-selected-color: var(--menu-item-disabled-text-color);
+  --menu-item-disabled-selected-bg: var(--menu-item-disabled-background);
+  --menu-item-disabled-selected-icon-color: var(
+    --menu-item-disabled-icon-color
+  );
+  --menu-item-disabled-selected-border-color: var(
+    --menu-item-disabled-border-color
+  );
+
+  /* Disabled group header */
+  --menu-disabled-group-header-text-color: #808080;
+  --menu-disabled-group-header-background: none;
+
+  /* Groups */
+  --menu-group-padding: 0.5rem 0;
+  --menu-group-margin: 0;
+
+  /* Group header */
+  --menu-group-header-text-color: #000000;
+  --menu-group-header-background: none;
+  --menu-group-header-font-size: 0.6875rem;
+  --menu-group-header-font-weight: 700;
+  --menu-group-header-line-height: 1rem;
+  --menu-group-header-padding: 0.5rem 0.5rem 0.25rem 0.5rem;
+  --menu-group-header-text-transform: uppercase;
+
+  /* Separator */
+  --menu-separator-size: 1px;
+  --menu-separator-color: #808080;
+
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: fit-content;
+  column-gap: var(--menu-column-gap);
+  row-gap: var(--menu-row-gap);
+  font-size: var(--menu-item-font-size);
+  font-weight: var(--menu-item-font-size);
+  border-width: var(--menu-border-width);
+  border-style: var(--menu-border-style);
+  border-color: var(--menu-border-color);
+  border-radius: var(--menu-border-radius);
+  background: var(--menu-background);
+}
+
+@media (min-width: 768px) {
+  .menu {
+    --menu-item-icon-size: 1.5rem;
+  }
+}

@@ -26,7 +26,7 @@ import './DropDownView.scss';
 const initItems = (title, count, startFrom = 1) => {
     const res = [];
 
-    for (let ind = startFrom; ind < startFrom + count - 1; ind += 1) {
+    for (let ind = startFrom; ind < startFrom + count; ind += 1) {
         res.push({ id: ind, title: `${title} ${ind}` });
     }
 
@@ -38,7 +38,7 @@ const toggleEnable = (e, dropDown) => {
     const button = e.target;
 
     dropDown.enable(dropDown.disabled);
-    button.value = (dropDown.disabled) ? 'Enable' : 'Disable';
+    button.textContent = (dropDown.disabled) ? 'Enable' : 'Disable';
 };
 
 const formatObject = (value) => {
@@ -94,6 +94,8 @@ class DropDownView extends DemoView {
         this.singleSelectFilter();
         this.multiSelectFilter();
         this.groupsSelectFilter();
+        this.blurInputOnSelect();
+        this.clearFilterOnSelect();
         this.showMultipleSelection();
         this.showClearButton();
         this.showToggleButton();
@@ -108,6 +110,7 @@ class DropDownView extends DemoView {
         this.multiNativeSelect();
 
         this.fullScreen();
+        this.fullScreenFilter();
 
         this.dynamicAddRemoveItems();
 
@@ -133,6 +136,7 @@ class DropDownView extends DemoView {
             elem: input2,
             className: 'dd__container_ellipsis',
             placeholder: 'Select item 2',
+            static: true,
             data: initItems('Long item test Lorem ipsum dolor sit amet', 10),
         });
 
@@ -194,10 +198,13 @@ class DropDownView extends DemoView {
     }
 
     fixedMenu() {
+        const input = createElement('input', { props: { id: 'fixedInp', type: 'text' } });
+
         this.addSection({
             id: 'fixed',
             title: 'Fixed menu',
             content: DropDown.create({
+                elem: input,
                 fixedMenu: true,
                 data: initItems('Item', 50),
             }).elem,
@@ -256,15 +263,15 @@ class DropDownView extends DemoView {
             className: 'dd__styled-group',
         });
         const visibleGroup = dropDown.addGroup({ id: 'grVisible', title: 'Visible' });
-        const visibleGroupItems = initItems('Visible item', 3);
+        const visibleGroupItems = initItems('Visible item', 2);
         visibleGroupItems.forEach(
             (item) => dropDown.addItem({ ...item, group: visibleGroup }),
         );
 
         const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
-        const hiddenGroupItems = initItems('Hidden item', 3);
+        const hiddenGroupItems = initItems('Hidden item', 2, 4);
         hiddenGroupItems.forEach(
-            (item) => dropDown.addItem({ ...item, id: item.id + 3, group: hiddenGroup }),
+            (item) => dropDown.addItem({ ...item, group: hiddenGroup }),
         );
 
         const group1 = dropDown.getGroupById('grVisible');
@@ -342,16 +349,23 @@ class DropDownView extends DemoView {
 
     // Clipping test
     clippingTest() {
-        const dropDown = DropDown.create({ elem: 'clipped' });
-
         this.addSection({
             id: 'clipping',
             title: 'Clipping test',
+            description: 'Use \'static: true\' to prevent menu clipping.',
             content: createElement('div', {
                 props: { className: 'offset-parent' },
                 children: createElement('div', {
                     props: { className: 'clipper' },
-                    children: dropDown.elem,
+                    children: [
+                        DropDown.create({
+                            elem: 'clipped',
+                            static: true,
+                        }).elem,
+                        DropDown.create({
+                            data: initItems('Item', 10),
+                        }).elem,
+                    ],
                 }),
             }),
         });
@@ -389,7 +403,7 @@ class DropDownView extends DemoView {
             elem: input,
             className: 'dd_stretch',
             placeholder: 'Multi select control',
-            multi: true,
+            multiple: true,
             data: initItems('Multi select', 10).map((item) => ({
                 ...item,
                 disabled: (item.id === 3),
@@ -527,7 +541,7 @@ class DropDownView extends DemoView {
             elem: input,
             enableFilter: true,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Filter item', 100),
         });
@@ -568,7 +582,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             openOnFocus: true,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
         });
 
@@ -590,6 +604,34 @@ class DropDownView extends DemoView {
             title: 'Filter with groups',
             description: '+ \'openOnFocus\' option',
             content: dropDown.elem,
+        });
+    }
+
+    blurInputOnSelect() {
+        this.addSection({
+            id: 'blurInputOnSelect',
+            title: '\'blurInputOnSingleSelect\' option',
+            content: DropDown.create({
+                enableFilter: true,
+                blurInputOnSingleSelect: false,
+                placeholder: 'Type to filter',
+                data: initItems('Item', 10),
+            }).elem,
+        });
+    }
+
+    clearFilterOnSelect() {
+        this.addSection({
+            id: 'clearFilterOnSelect',
+            title: '\'clearFilterOnMultiSelect\' option',
+            description: 'By default filter is not cleared after item selected if multiple items was found. In case only one item is found filter is cleared regardless of option value.',
+            content: DropDown.create({
+                enableFilter: true,
+                clearFilterOnMultiSelect: true,
+                multiple: true,
+                placeholder: 'Type to filter',
+                data: initItems('Item', 10),
+            }).elem,
         });
     }
 
@@ -617,7 +659,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             showMultipleSelection: false,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Filter item', 20),
             onItemSelect: renderTags,
@@ -638,7 +680,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             showClearButton: false,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Item', 20),
         });
@@ -656,7 +698,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             showToggleButton: false,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Item', 20),
         });
@@ -674,7 +716,7 @@ class DropDownView extends DemoView {
             enableFilter: true,
             allowCreate: true,
             addItemMessage: (title) => `Add item: '${title}'`,
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Item', 20),
         });
@@ -723,7 +765,7 @@ class DropDownView extends DemoView {
             listAttach: true,
             enableFilter: true,
             noResultsMessage: 'Nothing found',
-            multi: true,
+            multiple: true,
             placeholder: 'Type to filter',
             data: initItems('Filter item', 100),
         });
@@ -737,13 +779,18 @@ class DropDownView extends DemoView {
             elem: 'selinp10',
             className: 'dd__custom dd_stretch',
             placeholder: 'Multi select control',
+            multiple: true,
             onItemSelect(selection) {
                 logsField.write(`itemselect: ${formatObject(selection)}`);
             },
             onChange(selection) {
                 logsField.write(`change: ${formatObject(selection)}`);
             },
-            components: { ListItem: CustomListItem, MultiSelectionItem: CustomSelectionItem },
+            components: {
+                ListItem: CustomListItem,
+                Checkbox: CustomListItem,
+                MultiSelectionItem: CustomSelectionItem,
+            },
         });
 
         const controls = createButtons([{
@@ -809,13 +856,27 @@ class DropDownView extends DemoView {
         });
     }
 
+    fullScreenFilter() {
+        this.addSection({
+            id: 'fullScreenFilter',
+            title: 'fullScreen option with filter',
+            content: DropDown.create({
+                placeholder: 'Type to filter',
+                fullScreen: true,
+                multiple: true,
+                enableFilter: true,
+                data: initItems('Item', 50),
+            }).elem,
+        });
+    }
+
     // Dynamic add/remove items
     dynamicAddRemoveItems() {
         const select = createElement('select', { props: { id: 'dynamicSel' } });
         const dropDown = DropDown.create({
             elem: select,
             placeholder: 'Dynamic Drop Down',
-            multi: true,
+            multiple: true,
         });
 
         const controls = createButtons([{

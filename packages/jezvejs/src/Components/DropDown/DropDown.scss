@@ -64,7 +64,7 @@
 
   /* List item */
   --dd-list-item-font-size: 1rem;
-  --dd-list-item-line-height: 1.5rem;
+  --dd-list-item-line-height: 2rem;
   --dd-list-item-padding: 10px;
   --dd-list-item-text: #000000;
   --dd-list-item-bg: #ffffff;
@@ -94,8 +94,10 @@
   --dd-not-found-text: #505050;
 
   /* Fullscreen mode */
-  --dd-fullscreen-bg: #ffffff;
+  --dd-fullscreen-bg: #ffffffe0;
   --dd-fullscreen-z-index: 3000;
+  --dd-fullscreen-padding: 0.5rem;
+  --dd-fullscreen-row-gap: 0.5rem;
 
   /* Active component */
   --dd-active-border: #888888;
@@ -141,10 +143,17 @@
 .dd__container {
   display: inline-flex;
   align-self: baseline;
+  position: relative;
+}
+
+/* Static container */
+.dd__container.dd__container_static,
+.dd__container_attached.dd__container_static {
   position: static;
 }
 
-.dd__background {
+/* Create new item from input value */
+.dd__create-item .menu-item__side-content {
   display: none;
 }
 
@@ -172,36 +181,29 @@
 /* Full screen drop down */
 @media (max-width: 767px) {
   .dd__container.dd__fullscreen.dd__open {
+    display: flex;
+    flex-flow: column nowrap;
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
+    padding: var(--dd-fullscreen-padding);
+    row-gap: var(--dd-fullscreen-row-gap);
     z-index: var(--dd-fullscreen-z-index);
-
-    .dd__background {
-      z-index: calc(var(--dd-fullscreen-z-index) + 100);
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      opacity: 0.9;
-      background-color: var(--dd-fullscreen-bg);
-    }
+    background: var(--dd-fullscreen-bg);
 
     .dd__combo {
       z-index: calc(var(--dd-fullscreen-z-index) + 200);
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      right: 2px;
-      width: auto;
+      min-height: auto;
     }
 
     .dd__list {
       z-index: calc(var(--dd-fullscreen-z-index) + 201);
+      order: 1;
+      position: static;
+      width: 100%;
+      max-height: none;
     }
   }
 }

@@ -11,11 +11,11 @@ export class PopupMenuItem extends TestComponent {
 
         return evaluate((el) => {
             const content = {
-                id: el.id,
+                id: el.dataset.id,
                 tagName: el.tagName,
                 disabled: el.hasAttribute('disabled'),
                 hidden: el.hidden,
-                isCheckbox: el.classList.contains('checkbox'),
+                isCheckbox: el.classList.contains('checkbox-menu-item'),
             };
 
             const linkEl = (el.tagName === 'A') ? el : el.querySelector('a');
@@ -25,12 +25,10 @@ export class PopupMenuItem extends TestComponent {
             }
 
             if (content.isCheckbox) {
-                content.checked = el.querySelector('input[type="checkbox"]')?.checked;
-                content.title = el.querySelector('.checkbox__label')?.textContent;
-            } else {
-                content.title = el.querySelector('.btn__content')?.textContent ?? el.textContent;
+                content.checked = el.classList.contains('menu-item_selected');
             }
 
+            content.title = el.querySelector('.menu-item__content')?.textContent ?? el.textContent;
             content.title = content.title?.trim() ?? '';
 
             return content;

@@ -1,21 +1,32 @@
 .weekday-select.styled {
-  --wds-item-size: 2rem;
-  --link-menu-border-width: 1px;
-  --link-menu-border-color: #ff3c00;
-  --link-menu-color: #ff3c00;
-  --link-menu-selected-color: #ffffff;
-  --link-menu-selected-bg: #ff3c00;
-  --link-menu-hover-color: #ffffff;
-  --link-menu-hover-bg: #ff3c00;
-  --link-menu-disabled-border-color: var(--link-menu-disabled-color);
+  --menu-item-size: 2rem;
+  --menu-item-border-width: 1px;
+  --menu-item-border-color: #ff3c00;
+  --menu-item-text-color: #ff3c00;
 
-  .link-menu-item,
-  .link-menu-item:visited {
-    justify-content: center;
+  /* Selected item */
+  --menu-item-selected-text-color: #ffffff;
+  --menu-item-selected-background: #ff3c00;
+
+  /* Hover item */
+  --menu-item-hover-text-color: #ffffff;
+  --menu-item-hover-background: #ff3c00;
+
+  /* Disabled item */
+  --menu-item-disabled-border-color: var(--menu-item-disabled-text-color);
+
+  .menu-item,
+  .menu-item:visited {
     border-radius: 100vh;
-    width: var(--wds-item-size);
-    height: var(--wds-item-size);
-    line-height: var(--wds-item-size);
+    width: var(--menu-item-size);
+    height: var(--menu-item-size);
+    justify-content: center;
+    align-items: center;
+
+    .menu-item__content {
+      min-height: 0;
+      text-align: center;
+    }
   }
 
   .checkbox__check {

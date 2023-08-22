@@ -1,0 +1,15 @@
+/* Menu group */
+.menu-group {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  padding: var(--menu-group-padding);
+  margin: var(--menu-group-margin);
+  cursor: auto;
+  gap: 0;
+}
+
+/* Active state */
+.menu-group:active {
+  background: none;
+}

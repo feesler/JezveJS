@@ -1,0 +1,14 @@
+/* Collapsible menu group header */
+.menu-group_collapsible .menu-group__header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+
+  .menu-group-header__toggle-icon {
+    --menu-group-header-icon-size: 24px;
+
+    width: var(--menu-group-header-icon-size);
+    height: var(--menu-group-header-icon-size);
+  }
+}

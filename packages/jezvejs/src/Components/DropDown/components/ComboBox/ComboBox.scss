@@ -1,7 +1,7 @@
 /* Combo box */
 .dd__combo {
-  display: inline-flex;
-  flex-flow: row nowrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: stretch;
   box-sizing: border-box;
   position: relative;

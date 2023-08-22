@@ -1,0 +1,30 @@
+/* Menu checkbox */
+.menu-checkbox {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  width: var(--menu-checkbox-size);
+  height: var(--menu-checkbox-size);
+  border-radius: var(--menu-checkbox-border-radius);
+  border-width: var(--menu-checkbox-border-width);
+  border-style: var(--menu-checkbox-border-style);
+  border-color: var(--menu-checkbox-border-color);
+  background: var(--menu-checkbox-background);
+
+  .menu-checkbox__icon {
+    fill: var(--menu-checkbox-icon-color);
+    width: var(--menu-checkbox-icon-size);
+    height: var(--menu-checkbox-icon-size);
+  }
+}
+
+/* Disabled state */
+[disabled] .menu-checkbox {
+  border-color: var(--menu-item-disabled-checkbox-border-color);
+  background: var(--menu-item-disabled-checkbox-background);
+
+  .menu-checkbox__icon {
+    fill: var(--menu-item-disabled-checkbox-icon-color);
+  }
+}

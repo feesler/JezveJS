@@ -58,7 +58,7 @@ class WeekDaySelectView extends DemoView {
         const select = WeekDaySelect.create({
             className: 'styled bold',
             multiple: true,
-            type: 'buttons',
+            defaultItemType: 'button',
         });
         select.setSelection(['1', '2']);
 

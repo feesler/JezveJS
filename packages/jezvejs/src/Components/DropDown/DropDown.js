@@ -6,7 +6,6 @@ import {
     px,
     insertAfter,
     prependChild,
-    getOffset,
     isVisible,
     getCursorPos,
     setEvents,
@@ -17,34 +16,54 @@ import {
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
+
+import { CheckboxItem } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
-import { getGroupItems, getSelectedItems, getVisibleItems } from './utils.js';
+import { ScrollLock } from '../ScrollLock/ScrollLock.js';
+
+import {
+    getGroupItems,
+    getSelectedItems,
+    getVisibleGroupItems,
+    getVisibleItems,
+} from './utils.js';
+
 import { DropDownInput } from './components/Input/Input.js';
 import { DropDownSingleSelection } from './components/SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from './components/Placeholder/Placeholder.js';
 import { DropDownComboBox } from './components/ComboBox/ComboBox.js';
 import { DropDownMenu } from './components/Menu/Menu.js';
+import { DropDownMenuHeader } from './components/MenuHeader/MenuHeader.js';
 import { DropDownMenuList } from './components/MenuList/MenuList.js';
 import { DropDownListItem } from './components/ListItem/ListItem.js';
 import { DropDownGroupItem } from './components/GroupItem/GroupItem.js';
+import { DropDownGroupHeader } from './components/GroupHeader/GroupHeader.js';
 import { DropDownListPlaceholder } from './components/ListPlaceholder/ListPlaceholder.js';
 import { DropDownMultipleSelection } from './components/MultipleSelection/MultipleSelection.js';
 import { DropDownMultiSelectionItem } from './components/MultiSelectionItem/MultiSelectionItem.js';
 import { DropDownClearButton } from './components/ClearButton/ClearButton.js';
 import { DropDownToggleButton } from './components/ToggleButton/ToggleButton.js';
+
 import '../../css/common.scss';
 import './DropDown.scss';
+
+export {
+    getGroupItems,
+    getSelectedItems,
+    getVisibleGroupItems,
+    getVisibleItems,
+};
 
 /* CSS classes */
 /* Container */
 const CONTAINER_CLASS = 'dd__container';
+const STATIC_CLASS = 'dd__container_static';
 const MULTIPLE_CLASS = 'dd__container_multiple';
 const ACTIVE_CLASS = 'dd__container_active';
 const MENU_ACTIVE_CLASS = 'dd__list_active';
 const ATTACHED_CLASS = 'dd__container_attached';
 const NATIVE_CLASS = 'dd__container_native';
 const FULLSCREEN_CLASS = 'dd__fullscreen';
-const FULLSCREEN_BG_CLASS = 'dd__background';
 const EDITABLE_CLASS = 'dd__editable';
 
 /* List */
@@ -53,6 +72,7 @@ const LIST_OPEN_CLASS = 'dd__open';
 const MENU_OPEN_CLASS = 'dd__list_open';
 /* other */
 const OPTION_WRAPPER_CLASS = 'dd__opt-wrapper';
+const CREATE_ITEM_CLASS = 'dd__create-item';
 
 /* List position constants */
 const SCREEN_PADDING = 5;
@@ -62,12 +82,15 @@ const ATTACH_REF_HEIGHT = 5;
 const IGNORE_SCROLL_TIMEOUT = 500;
 const SHOW_LIST_SCROLL_TIMEOUT = 100;
 
+const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group'];
+
 /** Default properties */
 const defaultProps = {
     name: undefined,
     form: undefined,
-    multi: false,
+    multiple: false,
     listAttach: false,
+    static: false,
     isValidToggleTarget: null,
     fixedMenu: false,
     enableFilter: false,
@@ -75,12 +98,13 @@ const defaultProps = {
     noResultsMessage: 'No items',
     allowCreate: false,
     addItemMessage: (title) => `Add item: '${title}'`,
-    editable: false,
     disabled: false,
     useNativeSelect: false,
     fullScreen: false,
     placeholder: null,
+    blurInputOnSingleSelect: true,
     useSingleSelectionAsPlaceholder: true,
+    clearFilterOnMultiSelect: false,
     showMultipleSelection: true,
     showClearButton: true,
     showToggleButton: true,
@@ -96,7 +120,9 @@ const defaultProps = {
         Menu: DropDownMenu,
         MenuList: DropDownMenuList,
         ListItem: DropDownListItem,
+        Checkbox: CheckboxItem,
         GroupItem: DropDownGroupItem,
+        GroupHeader: DropDownGroupHeader,
         ListPlaceholder: DropDownListPlaceholder,
         MultipleSelection: DropDownMultipleSelection,
         MultiSelectionItem: DropDownMultiSelectionItem,
@@ -106,10 +132,9 @@ const defaultProps = {
 };
 
 /**
- * Drop Down List constructor
+ * Drop Down comoponent
  * @param {Object} props
  * @param {string|Element} props.elem - identifier or element to attach DropDown component to
- * @param {boolean} props.editable - if set true user will be able to type text in the combo box
  * @param {boolean} props.disabled - if set true any interactions with component will be disabled
  * @param {boolean} props.useNativeSelect - if set true component will use native select element on
  *     small devices(less 768px width) to view list and edit selection
@@ -129,6 +154,8 @@ export class DropDown extends Component {
         selectElem: ['name', 'form'],
     };
 
+    static menuIds = [];
+
     constructor(props = {}) {
         super({
             ...defaultProps,
@@ -147,23 +174,30 @@ export class DropDown extends Component {
 
         this.focusedElem = null;
 
+        const disabled = (
+            this.props.disabled
+            || (!this.props.listAttach && !!this.hostElem?.disabled)
+        );
+
         this.state = {
             active: false,
             changed: false,
             visible: false,
             inputString: null,
             filtered: false,
-            filteredCount: 0,
             openOnFocus: this.props.openOnFocus,
             allowCreate: this.props.allowCreate,
-            editable: this.props.editable,
-            disabled: this.props.disabled,
+            disabled,
             items: [],
             groups: [],
             actSelItemIndex: -1,
-            placeholderActive: false,
+            menuId: this.generateMenuId(),
+            isTouch: false,
+            ignoreScroll: false,
+            listeningWindow: false,
+            waitForScroll: false,
+            renderTime: Date.now(),
         };
-        this.state.editable = !this.state.disabled && this.props.enableFilter;
 
         this.emptyClickHandler = () => this.showList(false);
         const clickHandler = (e) => this.onClick(e);
@@ -183,14 +217,11 @@ export class DropDown extends Component {
             },
         };
 
-        this.listeningWindow = false;
-        this.ignoreScroll = false;
-        this.waitForScroll = false;
-        this.showListHandler = debounce(() => {
-            this.waitForScroll = false;
-        }, SHOW_LIST_SCROLL_TIMEOUT);
+        this.showListHandler = debounce(
+            () => this.stopScrollWaiting(),
+            SHOW_LIST_SCROLL_TIMEOUT,
+        );
 
-        this.isTouch = false;
         this.inputElem = null;
 
         if (this.props.listAttach) {
@@ -207,12 +238,9 @@ export class DropDown extends Component {
         }
         if (this.props.fullScreen) {
             this.elem.classList.add(FULLSCREEN_CLASS);
-
-            this.backgroundElem = createElement('div', {
-                props: { className: FULLSCREEN_BG_CLASS },
-            });
-            this.elem.append(this.backgroundElem);
         }
+
+        this.elem.dataset.target = this.state.menuId;
 
         this.createList();
         setEvents(this.selectElem, { change: (e) => this.onChange(e) });
@@ -231,13 +259,13 @@ export class DropDown extends Component {
 
             this.combo = ComboBox.create({
                 inputElem: this.inputElem,
-                multi: this.props.multi,
+                multiple: this.props.multiple,
                 placeholder: this.props.placeholder,
                 useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
                 showMultipleSelection: this.props.showMultipleSelection,
                 showClearButton: this.props.showClearButton,
                 showToggleButton: this.props.showToggleButton,
-                editable: this.state.editable,
+                editable: this.isEditable(),
                 enableFilter: this.props.enableFilter,
                 disabled: this.state.disabled,
                 items: this.state.items,
@@ -283,6 +311,15 @@ export class DropDown extends Component {
         return this.state.disabled;
     }
 
+    /** Returns true if filter input is available and enabled */
+    isEditable(state = this.state) {
+        return (
+            this.props.enableFilter
+            && !state.disabled
+            && (!this.props.fullScreen || state.visible)
+        );
+    }
+
     /** Check specified element is in input elements group */
     isInputElement(elem) {
         const inputTags = ['INPUT', 'SELECT', 'TEXTAREA'];
@@ -302,14 +339,10 @@ export class DropDown extends Component {
         // Create container
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
 
-        if (this.hostElem.disabled) {
-            this.state.disabled = true;
-        }
-
         if (this.hostElem.tagName === 'SELECT') {
             this.selectElem = this.hostElem;
             if (this.selectElem.multiple) {
-                this.props.multi = true;
+                this.props.multiple = true;
             }
 
             if (this.selectElem.parentNode) {
@@ -327,10 +360,12 @@ export class DropDown extends Component {
         }
         this.elem.append(this.selectElem);
 
-        if (this.props.multi) {
+        if (this.props.multiple) {
             this.selectElem.multiple = true;
             this.elem.classList.add(MULTIPLE_CLASS);
         }
+
+        this.elem.classList.toggle(STATIC_CLASS, this.props.static);
     }
 
     /** Attach DropDown to specified element */
@@ -340,7 +375,7 @@ export class DropDown extends Component {
         this.elem.append(this.hostElem);
 
         this.createSelect();
-        if (this.props.multi) {
+        if (this.props.multiple) {
             this.selectElem.multiple = true;
         }
 
@@ -361,31 +396,46 @@ export class DropDown extends Component {
             Menu,
             MenuList,
             ListItem,
+            Checkbox,
             GroupItem,
+            GroupHeader,
             ListPlaceholder,
         } = this.props.components;
 
+        const { multiple } = this.props;
+        const showInput = this.props.listAttach && this.props.enableFilter;
+
         this.menu = Menu.create({
+            parentId: this.state.menuId,
             className: (this.props.fixedMenu) ? FIXED_LIST_CLASS : null,
-            multi: this.props.multi,
-            showInput: this.props.listAttach && this.props.enableFilter,
-            inputElem: this.inputElem,
-            inputPlaceholder: this.props.placeholder,
-            useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
-            allowCreate: this.props.allowCreate,
+            multiple,
+            defaultItemType: (multiple) ? 'checkbox' : 'button',
+            tabThrough: false,
             getItemById: (id) => this.getItem(id),
             getPlaceholderProps: (state) => this.renderNotFound(state),
-            onInput: (e) => this.onInput(e),
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
-            onPlaceholderActivate: () => this.activatePlaceholder(),
             onPlaceholderClick: () => this.handlePlaceholderSelect(),
+            renderTime: this.state.renderTime,
+            header: {
+                inputElem: this.inputElem,
+                inputPlaceholder: this.props.placeholder,
+                useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
+                multiple,
+                onInput: (e) => this.onInput(e),
+                components: {
+                    Input,
+                },
+            },
             components: {
                 Input,
                 MenuList,
                 ListItem,
+                Checkbox,
                 GroupItem,
+                GroupHeader,
                 ListPlaceholder,
+                Header: (showInput) ? DropDownMenuHeader : null,
             },
         });
 
@@ -396,31 +446,58 @@ export class DropDown extends Component {
         }
     }
 
-    /* Event handlers */
+    startScrollIgnore(state = this.state) {
+        if (!state.ignoreScroll) {
+            this.setState({ ...state, ignoreScroll: true });
+        }
+    }
+
+    stopScrollIgnore(state = this.state) {
+        if (state.ignoreScroll) {
+            this.setState({ ...state, ignoreScroll: false });
+        }
+    }
+
+    startScrollWaiting(state = this.state) {
+        if (!state.waitForScroll) {
+            this.setState({ ...state, waitForScroll: true });
+        }
+    }
+
+    stopScrollWaiting(state = this.state) {
+        if (state.waitForScroll) {
+            this.setState({ ...state, waitForScroll: false });
+        }
+
+        this.updateListPosition();
+    }
+
+    /* Assignes window and viewport event handlers */
     listenWindowEvents() {
         setTimeout(() => {
-            this.ignoreScroll = false;
+            this.stopScrollIgnore();
         }, IGNORE_SCROLL_TIMEOUT);
 
-        if (this.listeningWindow) {
+        if (this.state.listeningWindow) {
             return;
         }
 
         setEvents(window.visualViewport, this.viewportEvents);
         setEvents(window, this.windowEvents);
 
-        this.listeningWindow = true;
+        this.setState({ ...this.state, listeningWindow: true });
     }
 
+    /* Removes window and viewport event handlers */
     stopWindowEvents() {
-        if (!this.listeningWindow) {
+        if (!this.state.listeningWindow) {
             return;
         }
 
         removeEvents(window.visualViewport, this.viewportEvents);
         removeEvents(window, this.windowEvents);
 
-        this.listeningWindow = false;
+        this.setState({ ...this.state, listeningWindow: false });
     }
 
     /** Add focus/blur event handlers to root element of component */
@@ -435,12 +512,12 @@ export class DropDown extends Component {
 
     /** viewPort 'resize' event handler */
     onWindowScroll() {
-        if (this.waitForScroll) {
+        if (this.state.waitForScroll) {
             this.showListHandler();
             return;
         }
 
-        if (this.ignoreScroll) {
+        if (this.state.ignoreScroll) {
             return;
         }
 
@@ -449,7 +526,7 @@ export class DropDown extends Component {
 
     /** viewPort 'resize' event handler */
     onViewportResize() {
-        if (this.waitForScroll) {
+        if (this.state.waitForScroll) {
             this.showListHandler();
             return;
         }
@@ -474,7 +551,7 @@ export class DropDown extends Component {
         this.setSelection(selValues);
 
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
     }
 
     /** 'focus' event handler */
@@ -496,25 +573,42 @@ export class DropDown extends Component {
         const focusedBefore = !!this.focusedElem;
         this.focusedElem = e.target;
 
+        const blurOnSelect = (
+            !this.props.multiple
+            && this.props.blurInputOnSingleSelect
+        );
+        if (
+            blurOnSelect
+            && this.isMenuTarget(e.target)
+        ) {
+            return;
+        }
+
         this.listenWindowEvents();
         if (this.state.openOnFocus && !this.state.visible && !focusedBefore) {
             this.showList(true);
-
-            this.waitForScroll = true;
+            this.startScrollWaiting();
             this.showListHandler();
         }
 
-        if (index === -1 && !this.isClearButtonTarget(e.target)) {
+        if (
+            index === -1
+            && !this.isClearButtonTarget(e.target)
+            && (!blurOnSelect || !focusedBefore)
+        ) {
             this.focusInputIfNeeded();
         }
     }
 
     /** 'blur' event handler */
     onBlur(e) {
-        const lostFocus = !this.isChildTarget(e.relatedTarget);
+        const lostFocus = (
+            !this.isChildTarget(e.relatedTarget)
+            && !this.isMenuTarget(e.relatedTarget)
+        );
         if (lostFocus) {
-            this.waitForScroll = false;
             this.focusedElem = null;
+            this.stopScrollWaiting();
             this.activate(false);
         }
 
@@ -525,7 +619,7 @@ export class DropDown extends Component {
 
     /** Click by delete button of selected item event handler */
     onDeleteSelectedItem(e) {
-        if (!this.props.multi || !e) {
+        if (!this.props.multiple || !e) {
             return;
         }
 
@@ -572,7 +666,7 @@ export class DropDown extends Component {
 
         this.deselectItem(item.id);
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
         this.sendChangeEvent();
     }
 
@@ -580,13 +674,13 @@ export class DropDown extends Component {
     onKey(e) {
         e.stopPropagation();
 
-        const { editable } = this.state;
-        const { multi } = this.props;
+        const editable = this.isEditable();
+        const { multiple } = this.props;
         const input = this.getInput();
         let newItem = null;
 
-        let allowSelectionNavigate = multi;
-        if (multi && editable && e.target === input.elem) {
+        let allowSelectionNavigate = multiple;
+        if (multiple && editable && e.target === input.elem) {
             // Check cursor is at start of input
             const cursorPos = getCursorPos(input.elem);
             if (cursorPos?.start !== 0 || cursorPos.start !== cursorPos.end) {
@@ -643,27 +737,12 @@ export class DropDown extends Component {
                     newItem = this.getNextAvailableItem(activeItem.id);
                 } else if (availItems.length > 0) {
                     [newItem] = availItems;
-                } else if (
-                    this.state.allowCreate
-                    && availItems.length === 0
-                    && !this.state.placeholderActive
-                ) {
-                    e.preventDefault();
-                    this.activatePlaceholder();
-                    return;
                 }
             }
         } else if (e.code === 'ArrowUp') {
             if (this.state.visible) {
                 if (activeItem) {
                     newItem = this.getPrevAvailableItem(activeItem.id);
-                } else if (
-                    this.state.allowCreate
-                    && this.state.placeholderActive
-                ) {
-                    e.preventDefault();
-                    this.setActive(null);
-                    return;
                 }
             }
         } else if (e.code === 'Home') {
@@ -679,19 +758,12 @@ export class DropDown extends Component {
         } else if (e.key === 'Enter') {
             if (activeItem) {
                 this.handleItemSelect(activeItem);
-            } else if (
-                this.state.allowCreate
-                && this.state.placeholderActive
-            ) {
-                this.handlePlaceholderSelect();
             }
 
             e.preventDefault();
         } else if (e.code === 'Escape') {
             this.showList(false);
-            if (this.focusedElem) {
-                this.focusedElem.blur();
-            }
+            this.elem.focus();
         } else {
             return;
         }
@@ -709,7 +781,7 @@ export class DropDown extends Component {
 
     /** Handler for left or right arrow keys */
     onSelectionNavigate(e) {
-        if (!this.props.multi) {
+        if (!this.props.multiple) {
             return;
         }
 
@@ -738,12 +810,12 @@ export class DropDown extends Component {
     /** 'click' event handler */
     onClick(e) {
         if (e.type === 'touchstart') {
-            this.isTouch = true;
+            this.setState({ ...this.state, isTouch: true });
             return;
         }
 
         if (
-            this.waitForScroll
+            this.state.waitForScroll
             || this.isMenuTarget(e.target)
             || this.isClearButtonTarget(e.target)
             || this.isSelectionItemDeleteButtonTarget(e.target)
@@ -759,6 +831,10 @@ export class DropDown extends Component {
         }
     }
 
+    setRenderTime() {
+        this.setState({ ...this.state, renderTime: Date.now() });
+    }
+
     /** Handler for 'input' event of text field  */
     onInput(e) {
         if (this.props.enableFilter) {
@@ -768,11 +844,13 @@ export class DropDown extends Component {
         if (isFunction(this.props.onInput)) {
             this.props.onInput(e);
         }
+
+        this.setRenderTime();
     }
 
     /** Handler for 'clear selection' button click */
     onClear() {
-        if (!this.props.multi) {
+        if (!this.props.multiple) {
             return;
         }
 
@@ -786,6 +864,12 @@ export class DropDown extends Component {
         });
 
         this.sendChangeEvent();
+
+        if (this.props.enableFilter) {
+            this.focusInputIfNeeded();
+        } else {
+            this.elem.focus();
+        }
     }
 
     /** Handles user item select event */
@@ -794,22 +878,34 @@ export class DropDown extends Component {
             return;
         }
 
+        if (item.id === this.state.createFromInputItemId) {
+            this.handlePlaceholderSelect();
+            return;
+        }
+
         this.activateSelectedItem(-1);
         this.toggleItem(item.id);
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
 
-        if (!this.props.multi) {
-            this.state.inputString = null;
+        if (!this.props.multiple) {
             this.showList(false);
             if (this.props.enableFilter && this.state.filtered) {
                 this.showAllItems();
             }
-        }
 
-        if (!this.props.multi) {
-            setTimeout(() => this.elem.focus());
+            this.elem.focus();
         } else if (this.props.enableFilter) {
+            if (this.state.filtered) {
+                const visibleItems = this.getVisibleItems();
+                if (
+                    this.props.clearFilterOnMultiSelect
+                    || visibleItems.length === 1
+                ) {
+                    this.showAllItems();
+                }
+            }
+
             setTimeout(() => this.focusInputIfNeeded());
         }
     }
@@ -824,17 +920,33 @@ export class DropDown extends Component {
             return;
         }
 
-        this.addItem({ id: inputString, title: inputString, selected: true });
+        this.removeCreatableMenuItem();
+        this.addItem({
+            id: this.menu.generateItemId(),
+            title: inputString,
+            selected: true,
+        });
 
         this.activateSelectedItem(-1);
         this.sendItemSelectEvent();
-        this.state.changed = true;
+        this.setChanged();
 
-        this.state.inputString = null;
         this.showList(false);
         if (this.props.enableFilter && this.state.filtered) {
             this.showAllItems();
         }
+    }
+
+    removeCreatableMenuItem() {
+        if (!this.state.createFromInputItemId) {
+            return;
+        }
+
+        this.setState({
+            ...this.state,
+            createFromInputItemId: null,
+            items: this.state.items.filter((item) => item.id !== this.state.createFromInputItemId),
+        });
     }
 
     /* List items methods */
@@ -972,6 +1084,7 @@ export class DropDown extends Component {
         this.setState({
             ...this.state,
             visible: val,
+            inputString: (val) ? this.state.inputString : null,
             active: (val) ? true : this.state.active,
             items: newItems,
         });
@@ -1000,9 +1113,10 @@ export class DropDown extends Component {
         }
 
         const nativeSelectVisible = isVisible(this.selectElem, true);
+        const editable = this.isEditable(state);
 
         this.selectElem.setAttribute('tabindex', (nativeSelectVisible) ? 0 : -1);
-        this.elem.setAttribute('tabindex', (nativeSelectVisible || state.editable) ? -1 : 0);
+        this.elem.setAttribute('tabindex', (nativeSelectVisible || editable) ? -1 : 0);
     }
 
     /** Enable or disable component */
@@ -1029,6 +1143,9 @@ export class DropDown extends Component {
         }
 
         this.showList(!this.state.visible);
+        if (!this.state.visible) {
+            this.elem.focus();
+        }
     }
 
     /** Activate or deactivate component */
@@ -1041,14 +1158,13 @@ export class DropDown extends Component {
             this.showList(false);
         }
 
+        this.removeCreatableMenuItem();
         this.setState({
             ...this.state,
             active: val,
             actSelItemIndex: -1,
             filtered: false,
-            filteredCount: 0,
             inputString: null,
-            placeholderActive: false,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
@@ -1057,14 +1173,13 @@ export class DropDown extends Component {
     }
 
     activateInput() {
-        if (!this.state.editable || !this.props.enableFilter || this.state.disabled) {
+        if (!this.isEditable()) {
             return;
         }
 
         const newState = {
             ...this.state,
             actSelItemIndex: -1,
-            placeholderActive: false,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: false,
@@ -1074,7 +1189,6 @@ export class DropDown extends Component {
         if (this.state.inputString === null) {
             newState.inputString = '';
             newState.filtered = false;
-            newState.filteredCount = 0;
         }
 
         this.setState(newState);
@@ -1082,7 +1196,7 @@ export class DropDown extends Component {
 
     getInput() {
         if (this.props.listAttach) {
-            return this.menu.input;
+            return this.menu.header?.input;
         }
 
         return this.combo.input;
@@ -1122,7 +1236,7 @@ export class DropDown extends Component {
 
     /** Returns true if element is clear button or its child */
     isClearButtonTarget(elem) {
-        const btn = this.clearBtn?.elem;
+        const btn = this.combo?.clearBtn?.elem;
         return elem && (elem === btn || btn?.contains(elem));
     }
 
@@ -1145,7 +1259,7 @@ export class DropDown extends Component {
         const selectedItems = this.getSelectedItems()
             .map((item) => ({ id: item.id, value: item.title }));
 
-        if (this.props.multi) {
+        if (this.props.multiple) {
             return selectedItems;
         }
 
@@ -1174,7 +1288,7 @@ export class DropDown extends Component {
             this.props.onChange(data);
         }
 
-        this.state.changed = false;
+        this.setState({ ...this.state, changed: false });
     }
 
     /** Toggle item selected status */
@@ -1184,7 +1298,7 @@ export class DropDown extends Component {
             return;
         }
 
-        if (item.selected && this.props.multi) {
+        if (item.selected && this.props.multiple) {
             this.deselectItem(itemId);
         } else {
             this.selectItem(itemId);
@@ -1203,7 +1317,7 @@ export class DropDown extends Component {
             ...this.state,
             items: this.state.items.map((item) => ({
                 ...item,
-                selected: (this.props.multi)
+                selected: (this.props.multiple)
                     ? (item.selected || item.id === strId)
                     : (item.id === strId),
             })),
@@ -1212,7 +1326,7 @@ export class DropDown extends Component {
 
     /** Deselect specified item */
     deselectItem(itemId) {
-        if (!this.props.multi) {
+        if (!this.props.multiple) {
             return;
         }
 
@@ -1234,7 +1348,7 @@ export class DropDown extends Component {
     /** Sets items selection */
     setSelection(ids) {
         const itemIds = asArray(ids).map((id) => id?.toString());
-        if (!this.props.multi && itemIds.length !== 1) {
+        if (!this.props.multiple && itemIds.length !== 1) {
             return;
         }
 
@@ -1245,6 +1359,11 @@ export class DropDown extends Component {
                 selected: itemIds.includes(item.id),
             })),
         });
+    }
+
+    /** Sets changed flag */
+    setChanged() {
+        this.setState({ ...this.state, changed: true });
     }
 
     /** Return index of selected item contains specified element */
@@ -1265,7 +1384,7 @@ export class DropDown extends Component {
 
     /** Activate specified selected item */
     activateSelectedItem(index) {
-        if (this.state.disabled || !this.props.multi) {
+        if (this.state.disabled || !this.props.multiple) {
             return;
         }
 
@@ -1312,49 +1431,86 @@ export class DropDown extends Component {
     }
 
     /** Show all list items */
-    showAllItems() {
+    showAllItems(resetInput = true) {
         this.setState({
             ...this.state,
             filtered: false,
-            filteredCount: 0,
-            items: this.state.items.map((item) => ({
-                ...item,
-                active: false,
-            })),
+            inputString: (resetInput) ? null : '',
+            createFromInputItemId: null,
+            items: this.state.items
+                .filter((item) => item.id !== this.state.createFromInputItemId)
+                .map((item) => ({
+                    ...item,
+                    active: false,
+                })),
         });
     }
 
     /** Show only items containing specified string */
-    filter(fstr) {
-        if (this.state.inputString === fstr) {
+    filter(inputString) {
+        if (this.state.inputString === inputString) {
             return;
         }
 
-        this.state.inputString = fstr;
-
-        if (fstr.length === 0) {
-            this.showAllItems();
+        if (inputString.length === 0) {
+            this.showAllItems(false);
             return;
         }
 
-        const lfstr = fstr.toLowerCase();
-        const filteredItems = this.state.items.filter(
-            (item) => item.title.toLowerCase().includes(lfstr),
-        );
-        const filteredIds = filteredItems.map((item) => item.id);
-        const items = this.state.items.map((item) => ({
-            ...item,
-            matchFilter: filteredIds.includes(item.id),
-            active: false,
-        }));
+        const lfstr = inputString.toLowerCase();
+        let exactMatch = false;
+        const items = [];
+        const { createFromInputItemId } = this.state;
+        let createFromInputItem = null;
 
-        this.setState({
+        for (let index = 0; index < this.state.items.length; index += 1) {
+            const item = this.state.items[index];
+            if (createFromInputItemId && item.id === createFromInputItemId) {
+                createFromInputItem = { ...item };
+                continue;
+            }
+
+            exactMatch = exactMatch || item.title.toLowerCase() === lfstr;
+
+            items.push({
+                ...item,
+                matchFilter: item.title.toLowerCase().includes(lfstr),
+                active: false,
+            });
+        }
+
+        const newState = {
             ...this.state,
+            inputString,
             filtered: true,
-            filteredCount: filteredItems.length,
             visible: true,
             items,
-        });
+        };
+
+        if (this.state.allowCreate) {
+            if (exactMatch && newState.createFromInputItemId) {
+                newState.createFromInputItemId = null;
+            } else if (!exactMatch && !newState.createFromInputItemId) {
+                newState.createFromInputItemId = this.menu.generateItemId();
+
+                const newItem = this.createItem({
+                    id: newState.createFromInputItemId,
+                    ...this.renderAddMessage(newState),
+                    matchFilter: true,
+                });
+
+                newState.items.push(newItem);
+            } else if (!exactMatch && newState.createFromInputItemId) {
+                const newItem = {
+                    ...createFromInputItem,
+                    ...this.renderAddMessage(newState),
+                };
+
+                newState.items.push(newItem);
+            }
+        }
+
+        this.setState(newState);
     }
 
     /**
@@ -1362,7 +1518,7 @@ export class DropDown extends Component {
      * @param {Element} elem - select element
      */
     fixIOS(elem) {
-        if (!elem || elem.tagName !== 'SELECT' || !this.props.multi) {
+        if (!elem || elem.tagName !== 'SELECT' || !this.props.multiple) {
             return;
         }
 
@@ -1441,7 +1597,7 @@ export class DropDown extends Component {
         this.state.groups = groups;
 
         // For single select check only one item is selected
-        if (!this.props.multi) {
+        if (!this.props.multiple) {
             this.state.items = this.state.items.map((item, ind) => ({
                 ...item,
                 selected: ind === elem.selectedIndex,
@@ -1596,6 +1752,17 @@ export class DropDown extends Component {
         return group;
     }
 
+    generateMenuId() {
+        while (true) {
+            const id = `${Date.now()}${Math.random() * 10000}`;
+            const found = DropDown.menuIds.includes(id);
+            if (!found) {
+                DropDown.menuIds.push(id);
+                return id;
+            }
+        }
+    }
+
     generateGroupId(groups) {
         while (true) {
             const id = `group${Date.now()}${Math.random() * 10000}`;
@@ -1615,6 +1782,7 @@ export class DropDown extends Component {
 
         const group = {
             id: options.id?.toString() ?? this.generateGroupId(groups),
+            type: 'group',
             title,
             disabled,
         };
@@ -1642,6 +1810,7 @@ export class DropDown extends Component {
 
     /** Remove all items */
     removeAll() {
+        this.removeCreatableMenuItem();
         this.setState({
             ...this.state,
             items: [],
@@ -1652,10 +1821,9 @@ export class DropDown extends Component {
     setActive(itemId) {
         const itemToActivate = this.getItem(itemId);
         const activeItem = this.getActiveItem();
-        const { placeholderActive } = this.state;
         if (
             (activeItem === itemToActivate && (activeItem || itemToActivate))
-            || (!activeItem && !itemToActivate && !placeholderActive)
+            || (!activeItem && !itemToActivate)
         ) {
             return;
         }
@@ -1663,29 +1831,9 @@ export class DropDown extends Component {
         this.setState({
             ...this.state,
             actSelItemIndex: -1,
-            placeholderActive: false,
             items: this.state.items.map((item) => ({
                 ...item,
                 active: item === itemToActivate,
-            })),
-        });
-    }
-
-    activatePlaceholder() {
-        if (
-            !this.state.allowCreate
-            || this.state.placeholderActive
-        ) {
-            return;
-        }
-
-        this.setState({
-            ...this.state,
-            actSelItemIndex: -1,
-            placeholderActive: true,
-            items: this.state.items.map((item) => ({
-                ...item,
-                active: false,
             })),
         });
     }
@@ -1716,7 +1864,7 @@ export class DropDown extends Component {
      * @returns
      */
     processSingleSelection(items) {
-        if (this.props.multi) {
+        if (this.props.multiple) {
             return items;
         }
 
@@ -1734,7 +1882,27 @@ export class DropDown extends Component {
         return getGroupItems(group, state);
     }
 
-    renderSelect(state) {
+    isSelectChanged(state, prevState) {
+        if (state.items === prevState.items) {
+            return false;
+        }
+
+        return (
+            state.items.length !== prevState.items?.length
+            || state.items.some((item, index) => (
+                selectOptionProps.some((prop) => (
+                    !prevState.items[index]
+                    || item[prop] !== prevState.items[index][prop]
+                ))
+            ))
+        );
+    }
+
+    renderSelect(state, prevState) {
+        if (!this.isSelectChanged(state, prevState)) {
+            return;
+        }
+
         const optGroups = [];
         const options = [];
 
@@ -1762,15 +1930,7 @@ export class DropDown extends Component {
         this.selectElem.append(...options);
     }
 
-    renderNotFound(state) {
-        if (
-            state.allowCreate
-            && this.props.addItemMessage
-            && state.inputString?.length > 0
-        ) {
-            return this.renderAddMessage(state);
-        }
-
+    renderNotFound() {
         return {
             selectable: false,
             content: this.props.noResultsMessage,
@@ -1788,9 +1948,10 @@ export class DropDown extends Component {
         }
 
         return {
-            content: message,
+            title: message,
             selectable: true,
-            active: state.placeholderActive,
+            type: 'button',
+            className: CREATE_ITEM_CLASS,
         };
     }
 
@@ -1799,23 +1960,61 @@ export class DropDown extends Component {
             state.items === prevState.items
             && state.visible === prevState.visible
             && state.filtered === prevState.filtered
-            && state.filteredCount === prevState.filteredCount
-            && state.allowCreate === prevState.allowCreate
-            && state.placeholderActive === prevState.placeholderActive
+            && state.renderTime === prevState.renderTime
         ) {
             return;
         }
 
+        const items = [];
+        const groups = [];
+
+        state.items.forEach((item) => {
+            if (
+                item.hidden
+                || (state.filtered && !item.matchFilter)
+            ) {
+                return;
+            }
+
+            if (!item.group) {
+                items.push(item);
+                return;
+            }
+
+            if (groups.includes(item.group.id)) {
+                return;
+            }
+
+            const groupItem = {
+                ...item.group,
+                type: 'group',
+                items: getVisibleGroupItems(item.group, state),
+            };
+            groups.push(item.group.id);
+            items.push(groupItem);
+        });
+
         this.menu.setState((menuState) => ({
             ...menuState,
-            inputPlaceholder: this.props.placeholder,
-            inputString: state.inputString,
-            filtered: state.filtered,
-            items: state.items,
+            items,
+            renderTime: state.renderTime,
             listScroll: (prevState.visible) ? menuState.listScroll : 0,
-            allowCreate: state.allowCreate,
-            placeholderActive: state.placeholderActive,
+            header: {
+                ...menuState.header,
+                items: state.items,
+                inputPlaceholder: this.props.placeholder,
+                inputString: state.inputString,
+            },
         }));
+    }
+
+    isFullScreen() {
+        return (this.props.fullScreen && !this.elem.offsetParent);
+    }
+
+    setFullScreenContainerHeight() {
+        const screenHeight = window.visualViewport.height;
+        this.elem.style.height = px(screenHeight);
     }
 
     renderFullscreenList(state) {
@@ -1823,48 +2022,35 @@ export class DropDown extends Component {
             return;
         }
 
-        const html = document.documentElement;
-        const combo = getOffset(this.combo.elem);
-        combo.width = this.combo.elem.offsetWidth;
-        combo.height = this.combo.elem.offsetHeight;
-        const offset = getOffset(this.menu.elem.offsetParent);
+        ScrollLock.lock();
 
-        document.body.style.overflow = 'hidden';
-
-        const { style } = this.menu.elem;
-
-        style.left = px(combo.left);
-        style.top = px(combo.top - offset.top + combo.height);
-
-        style.minWidth = px(combo.width);
-        style.width = '';
-
-        const fullScreenListHeight = html.clientHeight - combo.height;
-        style.height = px(fullScreenListHeight / 2);
+        this.setFullScreenContainerHeight();
     }
 
     updateListPosition() {
         if (
             !this.state.visible
             || isVisible(this.selectElem, true)
-            || (this.props.fullScreen && isVisible(this.backgroundElem))
         ) {
             return;
         }
 
-        setTimeout(() => {
-            PopupPosition.calculate({
-                elem: this.menu.elem,
-                refElem: this.elem,
-                margin: LIST_MARGIN,
-                screenPadding: SCREEN_PADDING,
-                useRefWidth: true,
-                minRefHeight: this.getMinRefHeight(),
-                scrollOnOverflow: false,
-                allowResize: false,
-                allowFlip: false,
-            });
-        }, 100);
+        if (this.isFullScreen()) {
+            this.setFullScreenContainerHeight();
+            return;
+        }
+
+        PopupPosition.calculate({
+            elem: this.menu.elem,
+            refElem: this.elem,
+            margin: LIST_MARGIN,
+            screenPadding: SCREEN_PADDING,
+            useRefWidth: true,
+            minRefHeight: this.getMinRefHeight(),
+            scrollOnOverflow: false,
+            allowResize: false,
+            allowFlip: false,
+        });
     }
 
     getMinRefHeight() {
@@ -1890,21 +2076,32 @@ export class DropDown extends Component {
         }
         this.renderListContent(state, prevState);
 
-        if (!state.visible) {
-            if (this.props.fullScreen) {
-                document.body.style.overflow = '';
-            }
-
-            PopupPosition.reset(this.menu.elem);
-            this.stopWindowEvents();
+        if (
+            state.items === prevState.items
+            && state.visible === prevState.visible
+            && state.filtered === prevState.filtered
+        ) {
             return;
         }
 
-        if (this.props.fullScreen && isVisible(this.backgroundElem)) {
+        if (!state.visible) {
+            if (this.props.fullScreen) {
+                ScrollLock.unlock();
+                this.elem.style.height = '';
+            }
+
+            PopupPosition.reset(this.menu.elem);
+            setTimeout(() => this.stopWindowEvents());
+            return;
+        }
+
+        if (this.isFullScreen()) {
             this.renderFullscreenList(state, prevState);
+            setTimeout(() => this.listenWindowEvents());
         } else {
-            this.ignoreScroll = true;
-            const allowScrollAndResize = !this.isTouch || !this.state.editable;
+            this.startScrollIgnore(state);
+            const editable = this.isEditable(state);
+            const allowScrollAndResize = !state.isTouch || !editable;
 
             PopupPosition.calculate({
                 elem: this.menu.elem,
@@ -1923,7 +2120,9 @@ export class DropDown extends Component {
 
     render(state, prevState = {}) {
         this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
-        this.elem.classList.toggle(EDITABLE_CLASS, !!state.editable);
+
+        const editable = this.isEditable(state);
+        this.elem.classList.toggle(EDITABLE_CLASS, editable);
 
         if (this.props.fixedMenu) {
             this.menu.elem.classList.toggle(MENU_ACTIVE_CLASS, !!state.active);
@@ -1946,7 +2145,7 @@ export class DropDown extends Component {
         if (this.combo) {
             this.combo.setState((comboState) => ({
                 ...comboState,
-                editable: state.editable,
+                editable,
                 disabled: state.disabled,
                 items: state.items,
                 actSelItemIndex: state.actSelItemIndex,

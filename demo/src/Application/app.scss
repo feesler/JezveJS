@@ -155,8 +155,11 @@ a:visited {
 }
 
 .offcanvas__content .nav-menu-container {
-  flex-flow: column nowrap;
   padding: 12px;
+
+  .menu-list {
+    flex-flow: column nowrap;
+  }
 }
 
 /* Section header */

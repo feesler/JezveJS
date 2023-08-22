@@ -72,6 +72,17 @@ export class Component {
         this.enable(false);
     }
 
+    /**
+     * Replaces root element of component
+     * @param {Element} elem
+     */
+    setElement(elem) {
+        if (elem && this.elem?.parentNode) {
+            this.elem.replaceWith(elem);
+        }
+        this.elem = elem;
+    }
+
     /** Applies 'className' property to the root element of component */
     setClassNames() {
         const classNames = getClassNames(this.props.className);
@@ -133,13 +144,20 @@ export class Component {
 
     /** Update state of component and render changes */
     setState(state) {
-        const newState = isFunction(state) ? state(this.state) : state;
+        let newState = isFunction(state) ? state(this.state) : state;
         if (this.state === newState) {
             return;
         }
 
+        newState = this.onStateChange(newState, this.state);
+
         this.render(newState, this.state);
         this.state = newState;
+    }
+
+    /** Process state */
+    onStateChange(state) {
+        return state;
     }
 
     /** Render component state */

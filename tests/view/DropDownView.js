@@ -3,6 +3,7 @@ import {
     click,
     assert,
     asyncMap,
+    waitForFunction,
 } from 'jezve-test';
 import { DropDown } from 'jezvejs-test';
 import { AppView } from './AppView.js';
@@ -12,6 +13,7 @@ const dropDownSelectors = {
     editableInlineDropDown: '#selinp2',
     fullWidthDropDown: '#selinp3',
     halfWidthDropDown: '#selinp4',
+    fixedMenuDropDown: '#fixedInp',
     parsedSelDropDown: '#sel0',
     parsedSelSelectedDropDown: '#sel',
     attachedToBlockDropDown: '#box',
@@ -22,6 +24,8 @@ const dropDownSelectors = {
     filterDropDown: '#selinp8',
     multiFilterDropDown: '#multiSelFilterInp',
     groupsFilterDropDown: '#groupFilterInp',
+    attachedFilter: '#boxFilter',
+    attachedFilterMultiple: '#boxFilterMulti',
     customDropDown: '#selinp10',
     nativeSelDropDown: '#selinp11',
     fullscreenDropDown: '#selinp12',
@@ -41,6 +45,10 @@ const elemSelectors = {
 };
 
 export class DropDownView extends AppView {
+    lastId = 0;
+
+    dynItems = [];
+
     get dynamicDropDown() {
         return this.content.dynamicDropDown;
     }
@@ -156,8 +164,45 @@ export class DropDownView extends AppView {
         return this.checkState(expected);
     }
 
+    async waitForFilter(name, value) {
+        await this.parse();
+        const dropdown = this.getComponentByName(name);
+
+        const prevTime = dropdown.renderTime;
+        await dropdown.filter(value);
+
+        await waitForFunction(async () => {
+            await this.parse();
+            const component = this.getComponentByName(name);
+
+            return (
+                prevTime !== component.renderTime
+                && (
+                    (value === '' && component.inputValue === component.inputPlaceholder)
+                    || component.inputValue === value
+                )
+            );
+        });
+
+        await this.parse();
+    }
+
     async filter(name, value) {
         let dropdown = this.getComponentByName(name);
+
+        if (dropdown.attached) {
+            await dropdown.showList();
+            await this.parse();
+            dropdown = this.getComponentByName(name);
+        }
+
+        if (
+            dropdown.inputValue !== ''
+            && dropdown.inputValue !== dropdown.inputPlaceholder
+        ) {
+            await this.waitForFilter(name, '');
+            dropdown = this.getComponentByName(name);
+        }
 
         const lValue = value.toLowerCase();
         const expVisible = dropdown.items.filter((item) => (
@@ -173,8 +218,7 @@ export class DropDownView extends AppView {
             },
         };
 
-        await this.performAction(() => dropdown.filter(value));
-
+        await this.waitForFilter(name, value);
         dropdown = this.getComponentByName(name);
 
         const visible = dropdown.getVisibleItems();
@@ -184,15 +228,15 @@ export class DropDownView extends AppView {
     }
 
     async addItem() {
-        const expected = this.dynamicDropDown.model.items;
-        const newId = expected.length + 1;
-        expected.push({
-            id: newId.toString(),
-            text: `Item ${newId}`,
+        this.lastId += 1;
+        this.dynItems.push({
+            id: this.lastId.toString(),
+            text: `Item ${this.lastId}`,
             selected: false,
             disabled: false,
             hidden: false,
         });
+        const expected = this.dynItems.filter((item) => !item.hidden);
 
         await this.performAction(() => click(this.content.addItemBtn));
         await this.performAction(() => this.dynamicDropDown.showList());
@@ -203,15 +247,15 @@ export class DropDownView extends AppView {
     }
 
     async addDisabledItem() {
-        const expected = this.dynamicDropDown.model.items;
-        const newId = expected.length + 1;
-        expected.push({
-            id: newId.toString(),
-            text: `Item ${newId}`,
+        this.lastId += 1;
+        this.dynItems.push({
+            id: this.lastId.toString(),
+            text: `Item ${this.lastId}`,
             selected: false,
             disabled: true,
             hidden: false,
         });
+        const expected = this.dynItems.filter((item) => !item.hidden);
 
         await this.performAction(() => click(this.content.addDisabledItemBtn));
         await this.performAction(() => this.dynamicDropDown.showList());
@@ -222,15 +266,15 @@ export class DropDownView extends AppView {
     }
 
     async addHiddenItem() {
-        const expected = this.dynamicDropDown.model.items;
-        const newId = expected.length + 1;
-        expected.push({
-            id: newId.toString(),
-            text: `Item ${newId}`,
+        this.lastId += 1;
+        this.dynItems.push({
+            id: this.lastId.toString(),
+            text: `Item ${this.lastId}`,
             selected: false,
             disabled: true,
             hidden: true,
         });
+        const expected = this.dynItems.filter((item) => !item.hidden);
 
         await this.performAction(() => click(this.content.addHiddenItemBtn));
         await this.performAction(() => this.dynamicDropDown.showList());
@@ -241,8 +285,9 @@ export class DropDownView extends AppView {
     }
 
     async removeLastItem() {
-        const expected = this.dynamicDropDown.model.items;
-        expected.splice(expected.length - 1);
+        this.lastId -= 1;
+        this.dynItems.splice(this.dynItems.length - 1);
+        const expected = this.dynItems.filter((item) => !item.hidden);
 
         await this.performAction(() => click(this.content.delLastItemBtn));
 
@@ -252,6 +297,8 @@ export class DropDownView extends AppView {
     }
 
     async removeAllItems() {
+        this.lastId = 0;
+        this.dynItems = [];
         const expected = [];
 
         await this.performAction(() => click(this.content.delAllItemsBtn));

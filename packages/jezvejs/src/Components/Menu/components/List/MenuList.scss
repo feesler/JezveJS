@@ -1,0 +1,9 @@
+/* Menu list container */
+.menu-list {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  width: 100%;
+  column-gap: var(--menu-column-gap);
+  row-gap: var(--menu-row-gap);
+}

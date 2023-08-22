@@ -16,8 +16,8 @@ export const isVisibleItem = (item, state) => (
 export const getVisibleItems = (state) => (
     Array.isArray(state?.items)
         ? state.items.filter((item) => (
-            (item.isGroup && getVisibleItems(item).length > 0)
-            || (!item.isGroup && isVisibleItem(item, state))
+            (item.type === 'group' && getVisibleItems(item).length > 0)
+            || (item.type !== 'group' && isVisibleItem(item, state))
         ))
         : []
 );
@@ -28,5 +28,17 @@ export const getVisibleItems = (state) => (
  * @param {Object} state - state object
  */
 export const getGroupItems = (group, state) => (
-    state?.items?.filter((item) => item && item.group === group)
+    state?.items?.filter((item) => (item?.group === group))
+);
+
+/**
+ * Returns visible list items of specified group
+ * @param {Object} group - group object
+ * @param {Object} state - state object
+ */
+export const getVisibleGroupItems = (group, state) => (
+    state?.items?.filter((item) => (
+        item?.group === group
+        && isVisibleItem(item, state)
+    ))
 );

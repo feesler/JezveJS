@@ -1,5 +1,6 @@
-import { Component, createElement } from 'jezvejs';
-import { TableOfContentsSection } from './TableOfContentsSection.js';
+import { createElement, getClassName } from 'jezvejs';
+import { Menu } from 'jezvejs/Menu';
+
 import './TableOfContents.scss';
 
 /* CSS classes */
@@ -9,26 +10,25 @@ const TOGGLER_CHECKBOX_CLASS = 'toc-menu-check';
 const defaultProps = {
     title: 'Table of contents',
     togglerId: 'showTocCheck',
-    sections: [],
+    items: [],
 };
 
 /**
  * Table of contents menu
  */
-export class TableOfContents extends Component {
+export class TableOfContents extends Menu {
     constructor(props = {}) {
         super({
             ...defaultProps,
             ...props,
+            className: getClassName(CONTAINER_CLASS, props.className),
+            defaultItemType: 'link',
         });
-
-        this.state = { ...this.props };
-
-        this.init();
-        this.render(this.state);
     }
 
     init() {
+        super.init();
+
         const {
             togglerId,
             title,
@@ -41,24 +41,12 @@ export class TableOfContents extends Component {
             props: { id: togglerId, type: 'checkbox', className: TOGGLER_CHECKBOX_CLASS },
         });
 
-        this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
-        });
+        this.elem.prepend(this.labelElem, this.togglerCheckbox);
     }
 
-    render(state) {
-        if (!state) {
-            throw new Error('Invalid state');
-        }
-
-        this.elem.textContent = '';
+    render(state, prevState = {}) {
+        super.render(state, prevState);
 
         this.labelElem.textContent = state.title;
-
-        const sectionElems = state.sections.map((item) => (
-            TableOfContentsSection.create({ ...item }).elem
-        ));
-
-        this.elem.append(this.labelElem, this.togglerCheckbox, ...sectionElems);
     }
 }

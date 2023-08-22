@@ -1,4 +1,5 @@
 import { createElement, ge, setEvents } from 'jezvejs';
+import { mapItems } from 'jezvejs/Menu';
 import { View } from 'jezvejs/View';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
@@ -18,6 +19,8 @@ export class DemoView extends View {
         this.initNavigation();
         this.renderVersion();
         this.initContainer();
+
+        this.sections = {};
     }
 
     /**
@@ -25,9 +28,12 @@ export class DemoView extends View {
      * @returns NavigationMenu
      */
     createNavigationMenu() {
+        const baseURL = App.getBaseURL();
         return NavigationMenu.create({
-            sections: App.navigationMenuSections,
-            baseURL: App.getBaseURL(),
+            items: mapItems(App.navigationMenuSections, (item) => ({
+                ...item,
+                url: `${baseURL}${item.url}`,
+            })),
         });
     }
 
@@ -75,33 +81,55 @@ export class DemoView extends View {
         this.container.append(header);
 
         this.initTableOfContents();
+
+        const groupId = this.tocMenu.generateGroupId();
         this.tocMenu.setState((menuState) => ({
             ...menuState,
-            sections: [...menuState.sections, { title, items }],
+            items: [
+                ...menuState.items,
+                {
+                    id: groupId,
+                    type: 'group',
+                    title,
+                    items,
+                },
+            ],
         }));
     }
 
     addContentsMenuItem(options = {}) {
         const {
+            id = null,
             title = null,
-            url = null,
         } = options;
 
-        if (!title || !url) {
+        if (!title || !id) {
             throw new Error('Invalid section data');
         }
 
         this.initTableOfContents();
 
+        const groupId = this.tocMenu.generateGroupId();
         this.tocMenu.setState((menuState) => {
-            const newState = { ...menuState };
-            const { sections } = newState;
+            const newState = {
+                ...menuState,
+                items: [...menuState.items],
+            };
+            const { items } = newState;
 
-            if (sections.length === 0) {
-                sections.push({ items: [] });
+            if (items.length === 0) {
+                items.push({
+                    id: groupId,
+                    type: 'group',
+                    items: [],
+                });
             }
-            const lastSection = sections[sections.length - 1];
-            lastSection.items.push({ title, url });
+            const lastSection = items[items.length - 1];
+            lastSection.items.push({
+                id,
+                title,
+                url: `#${id}`,
+            });
 
             return newState;
         });
@@ -116,6 +144,10 @@ export class DemoView extends View {
             className = null,
         } = options;
 
+        if (id in this.sections) {
+            throw new Error(`Section '${id}' already exists.`);
+        }
+
         const section = DemoSection.create({
             id,
             title,
@@ -125,9 +157,11 @@ export class DemoView extends View {
         });
         this.container.append(section.elem);
 
+        this.sections[id] = true;
+
         this.addContentsMenuItem({
+            id,
             title,
-            url: id,
         });
     }
 

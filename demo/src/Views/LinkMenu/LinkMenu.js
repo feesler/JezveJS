@@ -1,11 +1,9 @@
 import 'jezvejs/style';
-import { asArray, ge } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { LinkMenu } from 'jezvejs/LinkMenu';
 
 import { DemoView } from '../../Application/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
-import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 /**
  * LinkMenu component demo view
@@ -15,29 +13,12 @@ class LinkMenuView extends DemoView {
      * View initialization
      */
     onStart() {
-        this.initParsed();
         this.initDynamicSingle();
         this.initDynamicMultiple();
         this.initButtonsType();
         this.initDisabledItem();
         this.initHiddenItem();
         this.initDisabledComponent();
-    }
-
-    initParsed() {
-        const logsField = LogsField.create();
-
-        this.addSection({
-            id: 'parse',
-            title: 'Parse multiple select component',
-            content: [
-                LinkMenu.fromElement(ge('parsed'), {
-                    itemParam: 'type',
-                    onChange: (sel) => logsField.write(`Selected: [${asArray(sel).join()}]`),
-                }).elem,
-                logsField.elem,
-            ],
-        });
     }
 
     initDynamicSingle() {
@@ -48,6 +29,8 @@ class LinkMenuView extends DemoView {
                 'dynamic',
                 LinkMenu.create({
                     itemParam: 'action',
+                    useURLParam: true,
+                    preventNavigation: true,
                     items: [
                         { icon: 'plus', title: 'Create', value: 'create' },
                         { icon: 'update', title: 'Update', value: 'update' },
@@ -63,8 +46,15 @@ class LinkMenuView extends DemoView {
             itemParam: 'action',
             allowActiveLink: true,
             multiple: true,
+            useURLParam: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Zero', value: 0 },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
@@ -81,8 +71,8 @@ class LinkMenuView extends DemoView {
 
     initButtonsType() {
         const menu = LinkMenu.create({
-            type: 'buttons',
             multiple: true,
+            defaultItemType: 'checkbox',
             items: [
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
@@ -101,8 +91,14 @@ class LinkMenuView extends DemoView {
         const menu = LinkMenu.create({
             itemParam: 'action',
             multiple: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
                 { title: 'Delete', value: 'delete', disabled: true },
@@ -134,8 +130,14 @@ class LinkMenuView extends DemoView {
         const menu = LinkMenu.create({
             itemParam: 'action',
             multiple: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
                 { title: 'Delete', value: 'delete' },
@@ -168,8 +170,14 @@ class LinkMenuView extends DemoView {
             itemParam: 'action',
             multiple: true,
             disabled: true,
+            defaultItemType: 'checkbox-link',
             items: [
-                { title: 'Clear' },
+                {
+                    title: 'Clear',
+                    value: null,
+                    selectable: false,
+                    beforeContent: false,
+                },
                 { title: 'Create', value: 'create' },
                 { title: 'Update', value: 'update' },
                 { title: 'Delete', value: 'delete', disabled: true },

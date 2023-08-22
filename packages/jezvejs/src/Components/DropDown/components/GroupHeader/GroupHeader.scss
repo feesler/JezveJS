@@ -1,0 +1,14 @@
+/* Menu group header */
+.menu-group__header.dd__list-group__label {
+  --menu-group-header-text-color: var(--dd-list-group-text);
+  --menu-group-header-background: var(--dd-list-group-bg);
+  --menu-group-header-padding: var(--dd-list-group-header-padding);
+  --menu-group-header-font-size: var(--dd-list-group-header-font-size);
+  --menu-group-header-font-weight: var(--dd-list-group-header-font-weight);
+  --menu-group-header-line-height: var(--dd-list-group-header-line-height);
+
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}

@@ -36,9 +36,6 @@ export class ListContainer extends Component {
             ...props,
         });
 
-        if (!this.props.ItemComponent) {
-            throw new Error('Item component not specified');
-        }
         if (!this.props.itemSelector) {
             throw new Error('Item selector not specified');
         }
@@ -114,6 +111,14 @@ export class ListContainer extends Component {
     itemIdFromElem(elem) {
         const listItemElem = elem?.closest(this.props.itemSelector);
         return listItemElem?.dataset?.id ?? null;
+    }
+
+    /**
+     * Returns item element for specified id
+     * @param {number} id - identifier of item
+     */
+    itemElemById(id) {
+        return this.elem.querySelector(`${this.props.itemSelector}[data-id="${id}"]`);
     }
 
     /**
@@ -255,7 +260,7 @@ export class ListContainer extends Component {
             return null;
         }
 
-        return this.listItems.find((item) => item.id.toString() === strId);
+        return this.listItems.find((item) => item.id?.toString() === strId);
     }
 
     /**
@@ -316,7 +321,9 @@ export class ListContainer extends Component {
      */
     prepareListItemElement(listItem, item) {
         const { elem } = listItem;
-        elem.dataset.id = item.id;
+        if (typeof elem.dataset.id === 'undefined') {
+            elem.dataset.id = item.id;
+        }
     }
 
     /**
@@ -387,9 +394,10 @@ export class ListContainer extends Component {
         let lastItem = null;
         for (let index = 0; index < state.items.length; index += 1) {
             const item = state.items[index];
+            const strId = item.id?.toString();
             const itemProps = this.getItemProps(item, state);
             const indexBefore = prevItems.findIndex((prev) => (
-                prev.id.toString() === item.id.toString()
+                prev.id?.toString() === strId
             ));
 
             let listItem = this.getListItemById(item.id);
@@ -400,8 +408,9 @@ export class ListContainer extends Component {
             } else {
                 const ItemComponent = this.getItemComponent(item, state);
                 listItem = ItemComponent.create(itemProps);
-                this.prepareListItemElement(listItem, item);
             }
+
+            this.prepareListItemElement(listItem, item);
 
             if (insertNode) {
                 if (lastItem) {

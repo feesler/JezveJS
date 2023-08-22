@@ -30,6 +30,7 @@ export default {
         LineChart: './src/Components/LineChart/LineChart.js',
         LinkMenu: './src/Components/LinkMenu/LinkMenu.js',
         ListContainer: './src/Components/ListContainer/ListContainer.js',
+        Menu: './src/Components/Menu/Menu.js',
         MenuButton: './src/Components/MenuButton/MenuButton.js',
         Notification: './src/Components/Notification/Notification.js',
         Offcanvas: './src/Components/Offcanvas/Offcanvas.js',

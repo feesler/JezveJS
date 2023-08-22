@@ -114,7 +114,7 @@ class CheckboxView extends DemoView {
         ];
 
         this.addSection({
-            id: 'checkboxIcon',
+            id: 'checkboxMethods',
             title: 'Methods',
             content: [
                 form,

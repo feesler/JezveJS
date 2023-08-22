@@ -5,13 +5,12 @@ import {
     click,
     evaluate,
 } from 'jezve-test';
-import { Checkbox } from 'jezvejs-test';
 
 export class LinkMenuItem extends TestComponent {
     async parseContent() {
         assert(this.elem, 'Invalid element');
 
-        let titleElem = await query(this.elem, '.link-menu-item__title');
+        let titleElem = await query(this.elem, '.menu-item__content');
         if (!titleElem) {
             titleElem = this.elem;
         }
@@ -19,22 +18,14 @@ export class LinkMenuItem extends TestComponent {
         const res = await evaluate((elem, title) => ({
             tagName: elem.tagName,
             title: title.textContent.trim(),
-            value: elem.dataset.value,
+            id: elem.dataset.id,
+            value: elem.dataset.id,
             disabled: elem.hasAttribute('disabled'),
             hidden: elem.hidden,
-            isCheckbox: elem.classList.contains('checkbox'),
-            selected: elem.classList.contains('link-menu-item_selected'),
+            isCheckbox: elem.classList.contains('checkbox-menu-item'),
+            selected: elem.classList.contains('menu-item_selected'),
         }), this.elem, titleElem);
-        if (res.tagName === 'A' || res.tagName === 'BUTTON') {
-            res.linkElem = this.elem;
-        } else {
-            res.linkElem = await query(this.elem, 'a,button');
-        }
-
-        if (res.isCheckbox) {
-            res.checkbox = await Checkbox.create(this, this.elem);
-            res.selected = res.checkbox.checked;
-        }
+        res.linkElem = this.elem;
 
         return res;
     }
@@ -65,10 +56,7 @@ export class LinkMenuItem extends TestComponent {
     }
 
     async toggle() {
-        assert(this.content.checkbox, 'Toggle not available');
-        this.assertAvailable();
-
-        await this.content.checkbox.toggle();
+        return this.click();
     }
 
     async click() {
