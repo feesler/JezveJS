@@ -466,6 +466,8 @@ export class DropDown extends Component {
         if (state.waitForScroll) {
             this.setState({ ...state, waitForScroll: false });
         }
+
+        this.updateListPosition();
     }
 
     /* Assignes window and viewport event handlers */
@@ -759,9 +761,7 @@ export class DropDown extends Component {
             e.preventDefault();
         } else if (e.code === 'Escape') {
             this.showList(false);
-            if (this.focusedElem) {
-                this.focusedElem.blur();
-            }
+            this.elem.focus();
         } else {
             return;
         }
@@ -1135,6 +1135,9 @@ export class DropDown extends Component {
         }
 
         this.showList(!this.state.visible);
+        if (!this.state.visible) {
+            this.elem.focus();
+        }
     }
 
     /** Activate or deactivate component */
@@ -2025,19 +2028,17 @@ export class DropDown extends Component {
             return;
         }
 
-        setTimeout(() => {
-            PopupPosition.calculate({
-                elem: this.menu.elem,
-                refElem: this.elem,
-                margin: LIST_MARGIN,
-                screenPadding: SCREEN_PADDING,
-                useRefWidth: true,
-                minRefHeight: this.getMinRefHeight(),
-                scrollOnOverflow: false,
-                allowResize: false,
-                allowFlip: false,
-            });
-        }, 100);
+        PopupPosition.calculate({
+            elem: this.menu.elem,
+            refElem: this.elem,
+            margin: LIST_MARGIN,
+            screenPadding: SCREEN_PADDING,
+            useRefWidth: true,
+            minRefHeight: this.getMinRefHeight(),
+            scrollOnOverflow: false,
+            allowResize: false,
+            allowFlip: false,
+        });
     }
 
     getMinRefHeight() {
