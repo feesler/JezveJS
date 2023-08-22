@@ -862,6 +862,12 @@ export class DropDown extends Component {
         });
 
         this.sendChangeEvent();
+
+        if (this.props.enableFilter) {
+            this.focusInputIfNeeded();
+        } else {
+            this.elem.focus();
+        }
     }
 
     /** Handles user item select event */
@@ -1228,7 +1234,7 @@ export class DropDown extends Component {
 
     /** Returns true if element is clear button or its child */
     isClearButtonTarget(elem) {
-        const btn = this.clearBtn?.elem;
+        const btn = this.combo?.clearBtn?.elem;
         return elem && (elem === btn || btn?.contains(elem));
     }
 
