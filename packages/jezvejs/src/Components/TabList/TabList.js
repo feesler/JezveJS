@@ -125,7 +125,7 @@ export class TabList extends Component {
         this.setState({
             ...this.state,
             items: this.state.items.map((item) => (
-                (item.id.toString() !== strId)
+                (item.id?.toString() !== strId)
                     ? item
                     : { ...item, disabled: !value }
             )),
@@ -137,10 +137,15 @@ export class TabList extends Component {
     }
 
     showItem(id, value = true) {
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             items: this.state.items.map((item) => (
-                (item.value !== id)
+                (item.id?.toString() !== strId)
                     ? item
                     : { ...item, hidden: !value }
             )),
@@ -183,9 +188,9 @@ export class TabList extends Component {
             ...tabsState,
             disabled: state.disabled,
             items: state.items.map((item) => ({
+                id: item.id,
                 title: item.title,
-                value: item.value,
-                selected: item.id.toString() === state.selectedId,
+                selected: item.id?.toString() === state.selectedId,
                 disabled: item.disabled,
                 hidden: item.hidden,
             })),

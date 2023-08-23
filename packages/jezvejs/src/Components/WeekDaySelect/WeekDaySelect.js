@@ -29,8 +29,8 @@ export class WeekDaySelect extends LinkMenu {
 
         const weekDays = getWeekDays(new Date(), weekDayParams);
         menuProps.items = weekDays.map((weekday) => ({
+            id: weekday.getDay().toString(),
             title: getWeekdayShort(weekday, props.locales),
-            value: weekday.getDay().toString(),
         }));
 
         super(menuProps);

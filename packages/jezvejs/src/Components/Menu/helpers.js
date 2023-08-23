@@ -1,6 +1,16 @@
 import { isFunction } from '../../js/common.js';
 
 /**
+ * Returns true if item id is undefined or null
+ *
+ * @param {Object} item
+ * @returns {boolean}
+ */
+export const isNullId = (item) => (
+    (item?.id ?? null) === null
+);
+
+/**
  * Searches for first menu item for which callback function return true
  *
  * @param {Array} items array of items to search in
@@ -127,7 +137,7 @@ export const mapItems = (items, callback) => {
  * Converts multilevel menu list to flat array of items and returns result
  *
  * @param {Array} items source multilevel array of menu items
- * @returns Array
+ * @returns {Array}
  */
 export const toFlatList = (items, options = {}) => {
     const res = [];

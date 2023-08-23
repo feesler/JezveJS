@@ -103,7 +103,7 @@ class WeekDaySelectView extends DemoView {
             title: 'Enable item',
             className: 'action-btn',
             onClick: () => {
-                const item = select.getItemByValue('2');
+                const item = select.getItemById('2');
                 select.enableItem('2', item?.disabled);
                 btn.setTitle((item.disabled) ? 'Disable item' : 'Enable item');
             },

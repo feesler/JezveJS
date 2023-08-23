@@ -5,6 +5,8 @@ import { LinkMenu } from 'jezvejs/LinkMenu';
 import { DemoView } from '../../Application/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 
+import './LinkMenuView.scss';
+
 /**
  * LinkMenu component demo view
  */
@@ -32,9 +34,9 @@ class LinkMenuView extends DemoView {
                     useURLParam: true,
                     preventNavigation: true,
                     items: [
-                        { icon: 'plus', title: 'Create', value: 'create' },
-                        { icon: 'update', title: 'Update', value: 'update' },
-                        { icon: 'del', title: 'Delete', value: 'delete' },
+                        { icon: 'plus', title: 'Create', id: 'create' },
+                        { icon: 'update', title: 'Update', id: 'update' },
+                        { icon: 'del', title: 'Delete', id: 'delete' },
                     ],
                 }).elem,
             ),
@@ -51,14 +53,15 @@ class LinkMenuView extends DemoView {
             items: [
                 {
                     title: 'Clear',
-                    value: null,
+                    id: null,
                     selectable: false,
-                    beforeContent: false,
+                    className: 'clear-menu-item',
+                    onClick: () => menu.clearSelection(),
                 },
-                { title: 'Zero', value: 0 },
-                { title: 'Create', value: 'create' },
-                { title: 'Update', value: 'update' },
-                { title: 'Delete', value: 'delete' },
+                { title: 'Zero', id: 0 },
+                { title: 'Create', id: 'create' },
+                { title: 'Update', id: 'update' },
+                { title: 'Delete', id: 'delete' },
             ],
         });
 
@@ -74,9 +77,9 @@ class LinkMenuView extends DemoView {
             multiple: true,
             defaultItemType: 'checkbox',
             items: [
-                { title: 'Create', value: 'create' },
-                { title: 'Update', value: 'update' },
-                { title: 'Delete', value: 'delete' },
+                { title: 'Create', id: 'create' },
+                { title: 'Update', id: 'update' },
+                { title: 'Delete', id: 'delete' },
             ],
         });
 
@@ -94,14 +97,15 @@ class LinkMenuView extends DemoView {
             defaultItemType: 'checkbox-link',
             items: [
                 {
+                    id: null,
                     title: 'Clear',
-                    value: null,
                     selectable: false,
-                    beforeContent: false,
+                    className: 'clear-menu-item',
+                    onClick: () => menu.clearSelection(),
                 },
-                { title: 'Create', value: 'create' },
-                { title: 'Update', value: 'update' },
-                { title: 'Delete', value: 'delete', disabled: true },
+                { title: 'Create', id: 'create' },
+                { title: 'Update', id: 'update' },
+                { title: 'Delete', id: 'delete', disabled: true },
             ],
         });
 
@@ -110,7 +114,7 @@ class LinkMenuView extends DemoView {
             title: 'Enable item',
             className: 'action-btn',
             onClick: () => {
-                const item = menu.getItemByValue('delete');
+                const item = menu.getItemById('delete');
                 btn.setTitle((item.disabled) ? 'Disable item' : 'Enable item');
                 menu.enableItem('delete', item.disabled);
             },
@@ -134,13 +138,14 @@ class LinkMenuView extends DemoView {
             items: [
                 {
                     title: 'Clear',
-                    value: null,
+                    id: null,
                     selectable: false,
-                    beforeContent: false,
+                    className: 'clear-menu-item',
+                    onClick: () => menu.clearSelection(),
                 },
-                { title: 'Create', value: 'create' },
-                { title: 'Update', value: 'update' },
-                { title: 'Delete', value: 'delete' },
+                { title: 'Create', id: 'create' },
+                { title: 'Update', id: 'update' },
+                { title: 'Delete', id: 'delete' },
             ],
         });
 
@@ -149,7 +154,7 @@ class LinkMenuView extends DemoView {
             title: 'Hide item',
             className: 'action-btn',
             onClick: () => {
-                const item = menu.getItemByValue('delete');
+                const item = menu.getItemById('delete');
                 btn.setTitle((item.hidden) ? 'Hide item' : 'Show item');
                 menu.showItem('delete', !!item.hidden);
             },
@@ -174,13 +179,14 @@ class LinkMenuView extends DemoView {
             items: [
                 {
                     title: 'Clear',
-                    value: null,
+                    id: null,
                     selectable: false,
-                    beforeContent: false,
+                    className: 'clear-menu-item',
+                    onClick: () => menu.clearSelection(),
                 },
-                { title: 'Create', value: 'create' },
-                { title: 'Update', value: 'update' },
-                { title: 'Delete', value: 'delete', disabled: true },
+                { title: 'Create', id: 'create' },
+                { title: 'Update', id: 'update' },
+                { title: 'Delete', id: 'delete', disabled: true },
             ],
         });
 

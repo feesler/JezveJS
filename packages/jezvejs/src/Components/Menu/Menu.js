@@ -15,11 +15,13 @@ import { CheckboxItem } from './components/CheckboxItem/CheckboxItem.js';
 import { MenuCheckbox } from './components/Checkbox/MenuCheckbox.js';
 import { MenuSeparator } from './components/Separator/MenuSeparator.js';
 import {
+    isNullId,
     findMenuItem,
     forItems,
     generateItemId,
     getActiveItem,
     getItemById,
+    toFlatList,
     getNextItem,
     getPreviousItem,
     mapItems,
@@ -37,9 +39,11 @@ export {
     MenuCheckbox,
     CheckboxItem,
     /* helper functions */
+    isNullId,
     findMenuItem,
     getActiveItem,
     getItemById,
+    toFlatList,
     getNextItem,
     getPreviousItem,
     mapItems,
@@ -201,10 +205,15 @@ export class Menu extends Component {
     }
 
     showItem(id, value = true) {
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             items: mapItems(this.state.items, (item) => (
-                (item.value !== id)
+                (item.id?.toString() !== strId)
                     ? item
                     : { ...item, hidden: !value }
             )),
@@ -216,10 +225,15 @@ export class Menu extends Component {
     }
 
     enableItem(id, value = true) {
+        const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             items: mapItems(this.state.items, (item) => (
-                (item.value !== id)
+                (item.id?.toString() !== strId)
                     ? item
                     : { ...item, disabled: !value }
             )),

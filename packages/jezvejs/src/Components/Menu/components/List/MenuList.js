@@ -1,6 +1,7 @@
 import { getClassName, isFunction } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 
+import { isNullId } from '../../helpers.js';
 import { MenuCheckbox } from '../Checkbox/MenuCheckbox.js';
 import { CheckboxItem } from '../CheckboxItem/CheckboxItem.js';
 import { MenuItem } from '../ListItem/MenuItem.js';
@@ -109,10 +110,6 @@ export class MenuList extends ListContainer {
         };
     }
 
-    isNullValue(item) {
-        return (item?.id ?? null) === null;
-    }
-
     getItemURL(item, state) {
         const baseURL = item.url ?? window.location;
         const { itemParam } = state;
@@ -120,7 +117,7 @@ export class MenuList extends ListContainer {
         const param = (state.multiple) ? arrayParam : itemParam;
 
         const url = new URL(baseURL);
-        if (!this.isNullValue(item)) {
+        if (!isNullId(item)) {
             url.searchParams.set(param, item.id);
 
             const delParam = (state.multiple) ? itemParam : arrayParam;
@@ -164,7 +161,7 @@ export class MenuList extends ListContainer {
             return;
         }
 
-        if (!item.id) {
+        if (isNullId(item)) {
             return;
         }
 
