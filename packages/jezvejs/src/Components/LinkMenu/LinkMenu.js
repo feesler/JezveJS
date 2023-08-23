@@ -3,7 +3,13 @@ import {
     enable,
     getClassName,
 } from '../../js/common.js';
-import { Menu, mapItems } from '../Menu/Menu.js';
+
+import {
+    Menu,
+    isNullId,
+    mapItems,
+    toFlatList,
+} from '../Menu/Menu.js';
 import './LinkMenu.scss';
 
 const CONTAINER_CLASS = 'link-menu';
@@ -16,6 +22,7 @@ const defaultProps = {
     allowActiveLink: false,
     afterContent: false,
     preventNavigation: true,
+    renderNotSelected: true,
     itemParam: 'value',
     url: window.location,
     items: [],
@@ -42,21 +49,8 @@ export class LinkMenu extends Menu {
         return this.state.disabled;
     }
 
-    getItemByValue(value) {
-        return this.state.items.find((item) => item.id === value);
-    }
-
-    getItemValue(elem) {
-        return elem.dataset.value;
-    }
-
     onItemClick(id, e) {
         super.onItemClick(id, e);
-
-        const item = this.getItemById(id);
-        if (this.isNullValue(item)) {
-            this.clearSelection();
-        }
 
         this.sendChangeEvent();
     }
@@ -66,16 +60,12 @@ export class LinkMenu extends Menu {
             return;
         }
 
-        const selectedItems = this.state.items
-            .filter((item) => !this.isNullValue(item) && item.selected)
-            .map((item) => item.value);
+        const selectedItems = toFlatList(this.state.items)
+            .filter((item) => !isNullId(item) && item.selected)
+            .map((item) => item.id?.toString());
 
         const data = (this.state.multiple) ? selectedItems : selectedItems[0];
         this.props.onChange(data);
-    }
-
-    isNullValue(item) {
-        return (item?.value ?? null) === null;
     }
 
     setURL(value) {
