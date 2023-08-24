@@ -92,6 +92,7 @@ class MenuView extends DemoView {
         this.initHeaderFooter();
         this.initListPlaceholder();
         this.initScroll();
+        this.initFocusOnHover();
         this.initGroups();
         this.initCheckboxGroups();
         this.initCollapsibleGroups();
@@ -247,6 +248,23 @@ class MenuView extends DemoView {
                 createContainer('scrollContainer', menu.elem),
                 logsField.elem,
             ],
+        });
+    }
+
+    initFocusOnHover() {
+        this.addSection({
+            id: 'focusOnHover',
+            title: '\'focusItemOnHover\' option',
+            description: 'This demo shows disabled \'focusItemOnHover\' option. Default is enabled.',
+            content: createContainer(
+                'focusOnHoverContainer',
+                Menu.create({
+                    id: 'focusOnHoverMenu',
+                    focusItemOnHover: false,
+                    className: 'horizontal-menu',
+                    items: initItems('Menu item', 4),
+                }).elem,
+            ),
         });
     }
 

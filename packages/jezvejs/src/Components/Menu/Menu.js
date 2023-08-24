@@ -70,6 +70,7 @@ const defaultProps = {
     useURLParam: false,
     itemParam: 'value',
     preventNavigation: false,
+    focusItemOnHover: true,
     components: {
         Header: null,
         MenuList,
@@ -421,7 +422,11 @@ export class Menu extends Component {
 
     /** 'mousemove' event handler */
     onMouseMove(e) {
-        if (this.state.blockScroll || this.state.ignoreTouch) {
+        if (
+            this.state.blockScroll
+            || this.state.ignoreTouch
+            || !this.state.focusItemOnHover
+        ) {
             return;
         }
 
@@ -434,6 +439,10 @@ export class Menu extends Component {
 
     /** 'mouseleave' event handler */
     onMouseLeave() {
+        if (!this.state.focusItemOnHover) {
+            return;
+        }
+
         this.setActive(null);
 
         const focused = document.activeElement;

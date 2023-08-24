@@ -22,6 +22,7 @@ const defaultProps = {
     allowActiveLink: false,
     afterContent: false,
     preventNavigation: true,
+    focusItemOnHover: false,
     renderNotSelected: true,
     itemParam: 'value',
     url: window.location,
