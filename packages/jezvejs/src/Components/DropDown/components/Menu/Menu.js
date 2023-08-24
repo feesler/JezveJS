@@ -29,6 +29,7 @@ const defaultProps = {
         Input: null,
         MenuList: null,
         ListItem: null,
+        Checkbox: null,
         ListPlaceholder: null,
         GroupItem: null,
     },
