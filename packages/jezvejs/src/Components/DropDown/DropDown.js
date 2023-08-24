@@ -2099,11 +2099,11 @@ export class DropDown extends Component {
         }
         this.renderListContent(state, prevState);
 
-        if (
-            state.items === prevState.items
-            && state.visible === prevState.visible
-            && state.filtered === prevState.filtered
-        ) {
+        if (state.visible === prevState.visible) {
+            if (state.items !== prevState.items) {
+                this.updateListPosition();
+            }
+
             return;
         }
 
