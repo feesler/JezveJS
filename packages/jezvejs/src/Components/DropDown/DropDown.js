@@ -86,32 +86,62 @@ const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group'];
 
 /** Default properties */
 const defaultProps = {
+    /* Select element 'name' property */
     name: undefined,
+    /* Select element 'form' property */
     form: undefined,
-    multiple: false,
-    listAttach: false,
-    static: false,
-    isValidToggleTarget: null,
-    fixedMenu: false,
-    enableFilter: false,
-    openOnFocus: false,
-    noResultsMessage: 'No items',
-    allowCreate: false,
-    addItemMessage: (title) => `Add item: '${title}'`,
-    disabled: false,
-    useNativeSelect: false,
-    fullScreen: false,
-    placeholder: null,
-    blurInputOnSingleSelect: true,
-    useSingleSelectionAsPlaceholder: true,
-    clearFilterOnMultiSelect: false,
-    showMultipleSelection: true,
-    showClearButton: true,
-    showToggleButton: true,
-    onItemSelect: null,
-    onChange: null,
-    onInput: null,
+    /* Additional CSS classes */
     className: null,
+    /* Identifier or element to attach DropDown component to */
+    elem: undefined,
+    /* allow to select multiple items */
+    multiple: false,
+    /* attach menu to element and don't create combo box */
+    listAttach: false,
+    /* If enabled component container will use static position */
+    static: false,
+    /* Callback to verity element to toggle menu list popup */
+    isValidToggleTarget: null,
+    /* If enabled menu will use fixed position or absolute otherwise */
+    fixedMenu: false,
+    /* Enables filtering items by text input */
+    enableFilter: false,
+    /* If enabled menu will be opened on component receive focus */
+    openOnFocus: false,
+    /* Title for empty menu list placeholder */
+    noResultsMessage: 'No items',
+    /* Enables create new items from filter input value */
+    allowCreate: false,
+    /* Callback returning title for 'Create from filter' menu item */
+    addItemMessage: (title) => `Add item: '${title}'`,
+    /* Disabled any interactions with component */
+    disabled: false,
+    /* If enabled component will use native select element on
+       small devices(less 768px width) to view list and edit selection */
+    useNativeSelect: false,
+    /* if set true component will show fullscreen popup */
+    fullScreen: false,
+    /* Placeholder text for component */
+    placeholder: null,
+    /* If enabled single select component will move focus from input to container
+       after select item */
+    blurInputOnSingleSelect: true,
+    /* If enabled single select component will use title of selected item as placeholder */
+    useSingleSelectionAsPlaceholder: true,
+    /* If enabled multiple select component will clear filter input after select item */
+    clearFilterOnMultiSelect: false,
+    /* Enables render multiple selection inside combo box */
+    showMultipleSelection: true,
+    /* Enables render 'clear multiple selection' button inside combo box */
+    showClearButton: true,
+    /* Enables render 'toggle' button inside combo box */
+    showToggleButton: true,
+    /* item selected event handler */
+    onItemSelect: null,
+    /* selection changed event handler */
+    onChange: null,
+    /* filer input event handler */
+    onInput: null,
     components: {
         Input: DropDownInput,
         Placeholder: DropDownPlaceholder,
@@ -132,22 +162,7 @@ const defaultProps = {
 };
 
 /**
- * Drop Down comoponent
- * @param {Object} props
- * @param {string|Element} props.elem - identifier or element to attach DropDown component to
- * @param {boolean} props.disabled - if set true any interactions with component will be disabled
- * @param {boolean} props.useNativeSelect - if set true component will use native select element on
- *     small devices(less 768px width) to view list and edit selection
- * @param {boolean} props.fullScreen - if set true component will show fullscreen popup
- * @param {string} props.placeholder - placeholder text for component
- * @param {Function} props.onItemSelect - item selected event handler
- * @param {Function} props.onChange - selection changed event handler
- * @param {boolean|Function} props.onInput - text input event handler
- *    If set to true list items will be filtered by input value
- * @param {Function} props.components.ListItem - custom list item component
- * @param {Function} props.components.MultiSelectionItem - custom selected item component
- * @param {string} props.className - additional CSS classes
- * @param {Object} props.data - array of item objects { id, title }
+ * Drop Down component
  */
 export class DropDown extends Component {
     static userProps = {
@@ -168,11 +183,11 @@ export class DropDown extends Component {
 
         this.hostElem = this.elem;
         this.elem = null;
+        this.inputElem = null;
+        this.focusedElem = null;
         if (!this.hostElem) {
             this.props.listAttach = false;
         }
-
-        this.focusedElem = null;
 
         const disabled = (
             this.props.disabled
@@ -222,74 +237,8 @@ export class DropDown extends Component {
             SHOW_LIST_SCROLL_TIMEOUT,
         );
 
-        this.inputElem = null;
-
-        if (this.props.listAttach) {
-            this.attachToElement();
-        } else {
-            this.attachToInput();
-        }
-
-        this.setUserProps();
-        this.setClassNames();
-
-        if (this.props.useNativeSelect) {
-            this.elem.classList.add(NATIVE_CLASS);
-        }
-        if (this.props.fullScreen) {
-            this.elem.classList.add(FULLSCREEN_CLASS);
-        }
-
-        this.elem.dataset.target = this.state.menuId;
-
-        this.createList();
-        setEvents(this.selectElem, { change: (e) => this.onChange(e) });
-
-        if (!this.props.listAttach) {
-            const {
-                ComboBox,
-                Input,
-                SingleSelection,
-                Placeholder,
-                MultipleSelection,
-                MultiSelectionItem,
-                ToggleButton,
-                ClearButton,
-            } = this.props.components;
-
-            this.combo = ComboBox.create({
-                inputElem: this.inputElem,
-                multiple: this.props.multiple,
-                placeholder: this.props.placeholder,
-                useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
-                showMultipleSelection: this.props.showMultipleSelection,
-                showClearButton: this.props.showClearButton,
-                showToggleButton: this.props.showToggleButton,
-                editable: this.isEditable(),
-                enableFilter: this.props.enableFilter,
-                disabled: this.state.disabled,
-                items: this.state.items,
-                actSelItemIndex: this.state.actSelItemIndex,
-                inputString: this.state.inputString,
-                onInput: (e) => this.onInput(e),
-                onDeleteSelectedItem: (e) => this.onDeleteSelectedItem(e),
-                onClearSelection: (e) => this.onClear(e),
-                components: {
-                    Input,
-                    SingleSelection,
-                    Placeholder,
-                    MultipleSelection,
-                    MultiSelectionItem,
-                    ToggleButton,
-                    ClearButton,
-                },
-            });
-            this.elem.appendChild(this.combo.elem);
-        }
-
-        if (this.hostElem.tagName === 'SELECT') {
-            this.parseSelect(this.selectElem);
-        }
+        this.init();
+        this.postInit();
 
         if (this.props.data) {
             const newItems = this.createItems(this.props.data);
@@ -299,6 +248,33 @@ export class DropDown extends Component {
         }
 
         this.render(this.state);
+    }
+
+    init() {
+        if (this.props.listAttach) {
+            this.attachToElement();
+        } else {
+            this.attachToInput();
+        }
+
+        this.elem.classList.toggle(NATIVE_CLASS, !!this.props.useNativeSelect);
+        this.elem.classList.toggle(FULLSCREEN_CLASS, !!this.props.fullScreen);
+
+        this.elem.dataset.target = this.state.menuId;
+
+        this.createList();
+        setEvents(this.selectElem, { change: (e) => this.onChange(e) });
+
+        this.createCombo();
+
+        if (this.hostElem.tagName === 'SELECT') {
+            this.parseSelect(this.selectElem);
+        }
+    }
+
+    postInit() {
+        this.setUserProps();
+        this.setClassNames();
     }
 
     /** Return array of all list items */
@@ -387,6 +363,53 @@ export class DropDown extends Component {
     /** Creates select element */
     createSelect() {
         this.selectElem = createElement('select');
+    }
+
+    /** Creates combo box */
+    createCombo() {
+        if (this.props.listAttach) {
+            return;
+        }
+
+        const {
+            ComboBox,
+            Input,
+            SingleSelection,
+            Placeholder,
+            MultipleSelection,
+            MultiSelectionItem,
+            ToggleButton,
+            ClearButton,
+        } = this.props.components;
+
+        this.combo = ComboBox.create({
+            inputElem: this.inputElem,
+            multiple: this.props.multiple,
+            placeholder: this.props.placeholder,
+            useSingleSelectionAsPlaceholder: this.props.useSingleSelectionAsPlaceholder,
+            showMultipleSelection: this.props.showMultipleSelection,
+            showClearButton: this.props.showClearButton,
+            showToggleButton: this.props.showToggleButton,
+            editable: this.isEditable(),
+            enableFilter: this.props.enableFilter,
+            disabled: this.state.disabled,
+            items: this.state.items,
+            actSelItemIndex: this.state.actSelItemIndex,
+            inputString: this.state.inputString,
+            onInput: (e) => this.onInput(e),
+            onDeleteSelectedItem: (e) => this.onDeleteSelectedItem(e),
+            onClearSelection: (e) => this.onClear(e),
+            components: {
+                Input,
+                SingleSelection,
+                Placeholder,
+                MultipleSelection,
+                MultiSelectionItem,
+                ToggleButton,
+                ClearButton,
+            },
+        });
+        this.elem.appendChild(this.combo.elem);
     }
 
     /** Creates list element */
