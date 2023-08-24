@@ -34,6 +34,22 @@ const defaultItems = [{
     title: 'Checkbox item',
 }];
 
+const horizontalItems = [{
+    id: 'selectBtnItem',
+    title: 'Button item',
+}, {
+    id: 'separator1',
+    type: 'separator',
+}, {
+    id: 'linkItem',
+    type: 'link',
+    title: 'Link item',
+    url: '#123',
+}, {
+    id: 'noIconItem',
+    title: 'Item 3',
+}];
+
 const groupItems = [{
     id: 'noGroupItem1',
     title: 'No group item 1',
@@ -131,21 +147,7 @@ class MenuView extends DemoView {
                 Menu.create({
                     id: 'horizontalMenu',
                     className: 'horizontal-menu',
-                    items: [{
-                        id: 'selectBtnItem',
-                        title: 'Button item',
-                    }, {
-                        id: 'separator1',
-                        type: 'separator',
-                    }, {
-                        id: 'linkItem',
-                        type: 'link',
-                        title: 'Link item',
-                        url: '#123',
-                    }, {
-                        id: 'noIconItem',
-                        title: 'Item 3',
-                    }],
+                    items: structuredClone(horizontalItems),
                 }).elem,
             ),
         });
