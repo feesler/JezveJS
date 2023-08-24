@@ -15,10 +15,20 @@
   --menu-item-border-width: 0;
   --menu-item-line-height: var(--dd-list-item-line-height);
 
+  /* Hovered menu item */
+  --menu-item-hover-text-color: var(--dd-active-list-item-text);
+  --menu-item-hover-background: var(--dd-active-list-item-bg);
+  --menu-item-hover-checkbox-icon-color: var(--dd-active-list-item-check);
+
+  /* Focused menu item */
+  --menu-item-focus-text-color: var(--dd-active-list-item-text);
+  --menu-item-focus-background: var(--dd-active-list-item-bg);
+  --menu-item-focus-checkbox-icon-color: var(--dd-active-list-item-check);
+
   /* Active menu item */
-  --menu-item-active-text-color: var(--dd-active-list-item-text);
-  --menu-item-active-background: var(--dd-active-list-item-bg);
-  --menu-item-active-checkbox-icon-color: var(--dd-active-list-item-check);
+  --menu-item-active-text-color: var(--dd-list-item-text);
+  --menu-item-active-background: var(--dd-list-item-bg);
+  --menu-item-active-checkbox-icon-color: var(--dd-list-item-check);
 
   /* Selected item */
   --menu-item-selected-checkbox-icon-color: var(--dd-list-item-check);
