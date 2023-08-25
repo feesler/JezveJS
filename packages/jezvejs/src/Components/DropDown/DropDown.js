@@ -17,6 +17,7 @@ import {
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 
+import { MenuCheckbox } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
 
@@ -151,6 +152,7 @@ const defaultProps = {
         MenuList: DropDownMenuList,
         ListItem: DropDownListItem,
         Checkbox: DropDownCheckboxItem,
+        Check: MenuCheckbox,
         GroupItem: DropDownGroupItem,
         GroupHeader: DropDownGroupHeader,
         ListPlaceholder: DropDownListPlaceholder,
@@ -417,12 +419,6 @@ export class DropDown extends Component {
         const {
             Input,
             Menu,
-            MenuList,
-            ListItem,
-            Checkbox,
-            GroupItem,
-            GroupHeader,
-            ListPlaceholder,
         } = this.props.components;
 
         const { multiple } = this.props;
@@ -451,13 +447,7 @@ export class DropDown extends Component {
                 },
             },
             components: {
-                Input,
-                MenuList,
-                ListItem,
-                Checkbox,
-                GroupItem,
-                GroupHeader,
-                ListPlaceholder,
+                ...this.props.components,
                 Header: (showInput) ? DropDownMenuHeader : null,
             },
         });

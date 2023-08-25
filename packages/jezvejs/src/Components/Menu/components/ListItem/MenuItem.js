@@ -29,17 +29,11 @@ export class MenuItem extends Component {
         id: null,
         title: null,
         icon: null,
-        beforeContent: undefined,
-        afterContent: undefined,
-        iconAlign: undefined,
         selectable: true,
         selected: false,
         disabled: false,
         hidden: false,
-        tabThrough: undefined,
         url: window.location,
-        useURLParam: undefined,
-        itemParam: undefined,
         getItemURL: null,
     };
 

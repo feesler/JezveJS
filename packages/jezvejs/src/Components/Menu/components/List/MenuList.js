@@ -2,9 +2,6 @@ import { getClassName, isFunction } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 
 import { isNullId } from '../../helpers.js';
-import { MenuCheckbox } from '../Checkbox/MenuCheckbox.js';
-import { CheckboxItem } from '../CheckboxItem/CheckboxItem.js';
-import { MenuItem } from '../ListItem/MenuItem.js';
 import './MenuList.scss';
 
 /* CSS classes */
@@ -22,11 +19,11 @@ const defaultProps = {
     renderTime: null,
     getItemComponent: null,
     components: {
-        ListItem: MenuItem,
+        ListItem: null,
         GroupHeader: null,
         GroupItem: null,
-        Check: MenuCheckbox,
-        Checkbox: CheckboxItem,
+        Check: null,
+        Checkbox: null,
         Separator: null,
         ListPlaceholder: null,
     },
@@ -65,26 +62,13 @@ export class MenuList extends ListContainer {
         return super.getItemComponent(item, state);
     }
 
-    isChanged(state, prevState) {
-        return (
-            state.items !== prevState?.items
-            || state.disabled !== prevState?.disabled
-            || state.itemParam !== prevState?.itemParam
-            || state.useURLParam !== prevState?.useURLParam
-            || state.beforeContent !== prevState?.beforeContent
-            || state.afterContent !== prevState?.afterContent
-            || state.iconAlign !== prevState?.iconAlign
-            || state.checkboxSide !== prevState?.checkboxSide
-            || state.renderNotSelected !== prevState?.renderNotSelected
-            || state.renderTime !== prevState?.renderTime
-        );
-    }
-
     /**
      * Item click event handler
      * @param {Event} e - click event object
      */
     onItemClick(e) {
+        e?.stopPropagation();
+
         const item = this.itemFromElem(e?.target);
         if (!item) {
             return;

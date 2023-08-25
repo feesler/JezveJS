@@ -25,6 +25,7 @@ import {
     getNextItem,
     getPreviousItem,
     mapItems,
+    getMenuProps,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -55,9 +56,9 @@ const MENU_CLASS = 'menu';
 const SCROLL_TO_ITEM_TIMEOUT = 200;
 
 const defaultProps = {
-    items: [],
     header: {},
     footer: {},
+    items: [],
     disabled: false,
     onItemClick: null,
     onGroupHeaderClick: null,
@@ -76,6 +77,7 @@ const defaultProps = {
         MenuList,
         ListItem: MenuItem,
         Checkbox: CheckboxItem,
+        Check: MenuCheckbox,
         GroupHeader: MenuGroupHeader,
         GroupItem: MenuGroupItem,
         Separator: MenuSeparator,
@@ -102,6 +104,13 @@ export class Menu extends Component {
             },
         });
 
+        this.capturedEvents = {
+            focus: (e) => this.onFocus(e),
+            blur: (e) => this.onBlur(e),
+            keydown: (e) => this.onKeyDown(e),
+            touchstart: (e) => this.onTouchStart(e),
+        };
+
         this.state = this.onStateChange({
             ...this.props,
             blockScroll: false,
@@ -116,62 +125,41 @@ export class Menu extends Component {
 
     init() {
         const {
-            Header,
-            Footer,
-            ListItem,
-            Checkbox,
-            ListPlaceholder,
-            GroupHeader,
-            GroupItem,
-            Separator,
-        } = this.props.components;
-        const List = this.props.components.MenuList;
+            header,
+            footer,
+            components,
+            list,
+        } = getMenuProps(this.state);
+        delete list.id;
+        delete list.className;
+
+        const { Header, Footer, ...listComponents } = components;
         const children = [];
 
         if (Header) {
-            this.header = Header.create(this.props.header);
+            this.header = Header.create(header);
             children.push(this.header.elem);
         }
 
-        this.list = List.create({
-            multiple: this.props.multiple,
-            iconAlign: this.props.iconAlign,
-            checkboxSide: this.props.checkboxSide,
-            renderNotSelected: this.props.renderNotSelected,
-            useURLParam: this.props.useURLParam,
-            itemParam: this.props.itemParam,
-            tabThrough: this.props.tabThrough,
-            disabled: this.props.disabled,
+        this.list = components.MenuList.create({
+            ...list,
             getItemComponent: (item, state) => this.getItemComponent(item, state),
             getItemProps: (item, state) => this.getItemProps(item, state),
+            isListChanged: (state, prevState) => this.isListChanged(state, prevState),
             getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
-            getPlaceholderProps: this.props.getPlaceholderProps,
             onGroupHeaderClick: (id, e) => this.onGroupHeaderClick(id, e),
             components: {
-                MenuList: List,
-                ListItem,
-                Checkbox,
-                GroupHeader,
-                GroupItem,
-                Separator,
-                ListPlaceholder,
+                ...listComponents,
             },
         });
         children.push(this.list.elem);
 
         if (Footer) {
-            this.footer = Footer.create(this.props.footer);
+            this.footer = Footer.create(footer);
             children.push(this.footer.elem);
         }
-
-        this.capturedEvents = {
-            focus: (e) => this.onFocus(e),
-            blur: (e) => this.onBlur(e),
-            keydown: (e) => this.onKeyDown(e),
-            touchstart: (e) => this.onTouchStart(e),
-        };
 
         this.elem = createElement('div', {
             props: { className: MENU_CLASS, tabIndex: 0 },
@@ -295,17 +283,14 @@ export class Menu extends Component {
     getItemProps(item, state) {
         const { ListItem } = this.props.components;
 
+        const { list } = getMenuProps(state);
+        delete list.id;
+        delete list.className;
+
         const res = {
             ...ListItem.defaultProps,
+            ...list,
             ...item,
-            beforeContent: item.beforeContent ?? state.beforeContent,
-            afterContent: item.afterContent ?? state.afterContent,
-            iconAlign: item.iconAlign ?? state.iconAlign,
-            tabThrough: item.tabThrough ?? state.tabThrough,
-            checkboxSide: item.checkboxSide ?? state.checkboxSide,
-            renderNotSelected: item.renderNotSelected ?? state.renderNotSelected,
-            useURLParam: item.useURLParam ?? state.useURLParam,
-            itemParam: item.itemParam ?? state.itemParam,
             disabled: item.disabled || state.disabled,
             getItemURL: (itemState) => this.getItemURL(itemState, state),
             components: {
@@ -319,6 +304,24 @@ export class Menu extends Component {
         }
 
         return res;
+    }
+
+    isListChanged(state, prevState) {
+        const changeProps = [
+            'items',
+            'disabled',
+            'itemParam',
+            'useURLParam',
+            'beforeContent',
+            'afterContent',
+            'iconAlign',
+            'checkboxSide',
+            'renderNotSelected',
+            'listScroll',
+            'renderTime',
+        ];
+
+        return changeProps.some((prop) => (state[prop] !== prevState?.[prop]));
     }
 
     getItemURL(item, state) {
@@ -746,24 +749,16 @@ export class Menu extends Component {
     }
 
     renderList(state, prevState) {
-        if (
-            state.items === prevState?.items
-            && state.listScroll === prevState?.listScroll
-            && state.iconAlign === prevState?.iconAlign
-            && state.checkboxSide === prevState?.checkboxSide
-            && state.renderNotSelected === prevState?.renderNotSelected
-            && state.useURLParam === prevState?.useURLParam
-            && state.itemParam === prevState?.itemParam
-            && state.disabled === prevState?.disabled
-            && state.renderTime === prevState?.renderTime
-        ) {
+        if (!this.isListChanged(state, prevState)) {
             return;
         }
+
+        const { list } = getMenuProps(state);
 
         let beforeContent = false;
         let afterContent = false;
 
-        forItems(state.items, (item) => {
+        forItems(list.items, (item) => {
             const { type } = item;
             const isCheckbox = (type === 'checkbox' || type === 'checkbox-link');
 
@@ -772,8 +767,8 @@ export class Menu extends Component {
             }
 
             if (
-                (isCheckbox && state.checkboxSide === 'left')
-                || (item.icon && state.iconAlign === 'left')
+                (isCheckbox && list.checkboxSide === 'left')
+                || (item.icon && list.iconAlign === 'left')
             ) {
                 beforeContent = true;
             } else {
@@ -783,16 +778,9 @@ export class Menu extends Component {
 
         this.list.setState((listState) => ({
             ...listState,
-            items: state.items,
+            ...list,
             beforeContent,
             afterContent,
-            iconAlign: state.iconAlign,
-            checkboxSide: state.checkboxSide,
-            renderNotSelected: state.renderNotSelected,
-            useURLParam: state.useURLParam,
-            itemParam: state.itemParam,
-            disabled: state.disabled,
-            renderTime: state.renderTime,
         }));
 
         this.list.elem.scrollTop = state.listScroll;

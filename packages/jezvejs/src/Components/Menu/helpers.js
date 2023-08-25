@@ -1,4 +1,4 @@
-import { isFunction } from '../../js/common.js';
+import { isFunction, isObject } from '../../js/common.js';
 
 /**
  * Returns true if item id is undefined or null
@@ -9,6 +9,32 @@ import { isFunction } from '../../js/common.js';
 export const isNullId = (item) => (
     (item?.id ?? null) === null
 );
+
+/**
+ * Returns menu state object with all list-related properties moved under 'list' object
+ *
+ * @param {Object} state
+ * @returns {Object}
+ */
+export const getMenuProps = (state) => {
+    if (!isObject(state)) {
+        throw new Error('Invalid state');
+    }
+
+    const {
+        header,
+        footer,
+        components,
+        ...list
+    } = state;
+
+    return {
+        header,
+        footer,
+        components,
+        list,
+    };
+};
 
 /**
  * Searches for first menu item for which callback function return true

@@ -6,16 +6,6 @@ import './GroupItem.scss';
 /* CSS classes */
 const GROUP_CLASS = 'dd__list-group';
 
-const defaultProps = {
-    id: null,
-    title: null,
-    components: {
-        GroupHeader: null,
-        MenuList: null,
-        ListItem: null,
-    },
-};
-
 /**
  * Items group component
  */
@@ -26,13 +16,8 @@ export class DropDownGroupItem extends MenuGroupItem {
 
     constructor(props = {}) {
         super({
-            ...defaultProps,
             ...props,
             className: getClassName(GROUP_CLASS, props.className),
-            components: {
-                ...defaultProps.components,
-                ...(props?.components ?? {}),
-            },
         });
     }
 }
