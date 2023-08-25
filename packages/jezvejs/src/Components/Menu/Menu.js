@@ -142,6 +142,8 @@ export class Menu extends Component {
             itemParam: this.props.itemParam,
             tabThrough: this.props.tabThrough,
             disabled: this.props.disabled,
+            getItemComponent: (item, state) => this.getItemComponent(item, state),
+            getItemProps: (item, state) => this.getItemProps(item, state),
             getItemById: (id) => this.getItemById(id),
             onItemClick: (id, e) => this.onItemClick(id, e),
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
@@ -251,6 +253,91 @@ export class Menu extends Component {
 
     generateGroupId(state = this.state) {
         return generateItemId(state.items, 'group');
+    }
+
+    /**
+     * Returns component class for specified item
+     * @param {object} item
+     * @param {object} state current state of list
+     */
+    getItemComponent(item, state) {
+        const {
+            type = state.defaultItemType,
+        } = item;
+
+        if (type === 'button' || type === 'link') {
+            return state.components.ListItem;
+        }
+
+        if (
+            item.selectable
+            && (type === 'checkbox' || type === 'checkbox-link')
+        ) {
+            return state.components.Checkbox;
+        }
+
+        if (type === 'separator') {
+            return state.components.Separator;
+        }
+
+        if (type === 'group') {
+            return state.components.GroupItem;
+        }
+
+        throw new Error('Unknown type of menu item');
+    }
+
+    /**
+     * Returns render properties for specified item
+     * @param {object} item
+     * @param {object} state current list state object
+     */
+    getItemProps(item, state) {
+        const { ListItem } = this.props.components;
+
+        const res = {
+            ...ListItem.defaultProps,
+            ...item,
+            beforeContent: item.beforeContent ?? state.beforeContent,
+            afterContent: item.afterContent ?? state.afterContent,
+            iconAlign: item.iconAlign ?? state.iconAlign,
+            tabThrough: item.tabThrough ?? state.tabThrough,
+            checkboxSide: item.checkboxSide ?? state.checkboxSide,
+            renderNotSelected: item.renderNotSelected ?? state.renderNotSelected,
+            useURLParam: item.useURLParam ?? state.useURLParam,
+            itemParam: item.itemParam ?? state.itemParam,
+            disabled: item.disabled || state.disabled,
+            getItemURL: (itemState) => this.getItemURL(itemState, state),
+            components: {
+                ...state.components,
+            },
+        };
+
+        if (item.type === 'group') {
+            res.getItemComponent = (...args) => this.getItemComponent(...args);
+            res.getItemProps = (...args) => this.getItemProps(...args);
+        }
+
+        return res;
+    }
+
+    getItemURL(item, state) {
+        const baseURL = item.url ?? window.location;
+        const { itemParam } = state;
+        const arrayParam = `${itemParam}[]`;
+        const param = (state.multiple) ? arrayParam : itemParam;
+
+        const url = new URL(baseURL);
+        if (!isNullId(item)) {
+            url.searchParams.set(param, item.id);
+
+            const delParam = (state.multiple) ? itemParam : arrayParam;
+            url.searchParams.delete(delParam);
+        } else {
+            url.searchParams.delete(param);
+        }
+
+        return url;
     }
 
     getItemById(id) {

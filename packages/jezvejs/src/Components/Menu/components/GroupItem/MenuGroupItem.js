@@ -13,6 +13,7 @@ const defaultProps = {
     defaultItemType: 'button',
     useURLParam: false,
     itemParam: 'value',
+    getItemComponent: null,
     components: {
         GroupHeader: null,
         MenuList: null,
@@ -108,6 +109,8 @@ export class MenuGroupItem extends Component {
             itemParam: this.props.itemParam,
             tabThrough: this.props.tabThrough,
             defaultItemType: this.props.defaultItemType,
+            getItemComponent: this.props.getItemComponent,
+            getItemProps: this.props.getItemProps,
             components: {
                 ListItem,
                 GroupItem: null,

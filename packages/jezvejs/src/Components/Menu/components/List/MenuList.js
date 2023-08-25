@@ -20,6 +20,7 @@ const defaultProps = {
     useURLParam: false,
     itemParam: 'value',
     renderTime: null,
+    getItemComponent: null,
     components: {
         ListItem: MenuItem,
         GroupHeader: null,
@@ -57,76 +58,11 @@ export class MenuList extends ListContainer {
      * @param {object} state current state of list
      */
     getItemComponent(item, state) {
-        const {
-            type = state.defaultItemType,
-        } = item;
-
-        if (type === 'button' || type === 'link') {
-            return state.components.ListItem;
+        if (isFunction(state.getItemComponent)) {
+            return state.getItemComponent(item, state);
         }
 
-        if (
-            item.selectable
-            && (type === 'checkbox' || type === 'checkbox-link')
-        ) {
-            return state.components.Checkbox;
-        }
-
-        if (type === 'separator') {
-            return state.components.Separator;
-        }
-
-        if (type === 'group') {
-            return state.components.GroupItem;
-        }
-
-        throw new Error('Unknown type of menu item');
-    }
-
-    /**
-     * Returns render properties for specified item
-     * @param {object} item
-     * @param {object} state current list state object
-     */
-    getItemProps(item, state) {
-        const { ListItem } = this.props.components;
-
-        return {
-            ...ListItem.defaultProps,
-            ...item,
-            beforeContent: item.beforeContent ?? state.beforeContent,
-            afterContent: item.afterContent ?? state.afterContent,
-            iconAlign: item.iconAlign ?? state.iconAlign,
-            tabThrough: item.tabThrough ?? state.tabThrough,
-            checkboxSide: item.checkboxSide ?? state.checkboxSide,
-            renderNotSelected: item.renderNotSelected ?? state.renderNotSelected,
-            useURLParam: item.useURLParam ?? state.useURLParam,
-            itemParam: item.itemParam ?? state.itemParam,
-            disabled: item.disabled || state.disabled,
-            getItemURL: (itemState) => this.getItemURL(itemState, state),
-            components: {
-                ...state.components,
-            },
-        };
-    }
-
-    getItemURL(item, state) {
-        const baseURL = item.url ?? window.location;
-        const { itemParam } = state;
-        const arrayParam = `${itemParam}[]`;
-        const param = (state.multiple) ? arrayParam : itemParam;
-
-        const url = new URL(baseURL);
-        if (!isNullId(item)) {
-            url.searchParams.set(param, item.id);
-
-            const delParam = (state.multiple) ? itemParam : arrayParam;
-            url.searchParams.delete(delParam);
-        } else {
-            url.searchParams.delete(param);
-        }
-
-        return url;
+        return super.getItemComponent(item, state);
     }
 
     isChanged(state, prevState) {
