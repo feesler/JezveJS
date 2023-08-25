@@ -2121,24 +2121,25 @@ export class DropDown extends Component {
         if (this.isFullScreen()) {
             this.renderFullscreenList(state, prevState);
             setTimeout(() => this.listenWindowEvents());
-        } else {
-            this.startScrollIgnore(state);
-            const editable = this.isEditable(state);
-            const allowScrollAndResize = !state.isTouch || !editable;
-
-            PopupPosition.calculate({
-                elem: this.menu.elem,
-                refElem: this.elem,
-                margin: LIST_MARGIN,
-                screenPadding: SCREEN_PADDING,
-                useRefWidth: true,
-                minRefHeight: this.getMinRefHeight(),
-                scrollOnOverflow: allowScrollAndResize,
-                allowResize: allowScrollAndResize,
-                allowFlip: false,
-                onScrollDone: () => this.listenWindowEvents(),
-            });
+            return;
         }
+
+        this.startScrollIgnore(state);
+        const editable = this.isEditable(state);
+        const allowScrollAndResize = !state.isTouch || !editable;
+
+        PopupPosition.calculate({
+            elem: this.menu.elem,
+            refElem: this.elem,
+            margin: LIST_MARGIN,
+            screenPadding: SCREEN_PADDING,
+            useRefWidth: true,
+            minRefHeight: this.getMinRefHeight(),
+            scrollOnOverflow: allowScrollAndResize,
+            allowResize: allowScrollAndResize,
+            allowFlip: false,
+            onScrollDone: () => this.listenWindowEvents(),
+        });
     }
 
     render(state, prevState = {}) {
