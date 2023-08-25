@@ -389,7 +389,7 @@ export class Menu extends Component {
         }
     }
 
-    activateItem(id) {
+    activateItem(id, scrollToItem = true) {
         const item = getItemById(id, this.state.items);
         if (!this.isAvailableItem(item)) {
             return;
@@ -405,7 +405,9 @@ export class Menu extends Component {
             elem?.focus();
         } else {
             this.setActive(id);
-            this.scrollToItem(item);
+            if (scrollToItem) {
+                this.scrollToItem(item);
+            }
         }
     }
 
@@ -433,7 +435,7 @@ export class Menu extends Component {
         const item = this.list.itemFromElem(e?.target);
         if (item) {
             e.preventDefault();
-            this.activateItem(item.id);
+            this.activateItem(item.id, false);
         }
     }
 
