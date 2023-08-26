@@ -62,6 +62,8 @@ export class Button extends Component {
         } else {
             this.init();
         }
+
+        this.postInit();
     }
 
     /** Returns id of root element of component */
@@ -96,8 +98,6 @@ export class Button extends Component {
             props.type = type;
         }
         this.elem = createElement(tagName, { props });
-
-        this.postInit();
     }
 
     parse() {
@@ -137,8 +137,6 @@ export class Button extends Component {
         }
 
         this.state.enabled = !this.elem.hasAttribute('disabled');
-
-        this.postInit();
     }
 
     postInit() {
