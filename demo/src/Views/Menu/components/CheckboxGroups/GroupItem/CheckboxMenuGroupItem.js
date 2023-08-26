@@ -38,6 +38,7 @@ export class CheckboxMenuGroupItem extends MenuGroupItem {
         }
 
         this.header = GroupHeader.create({
+            id: this.props.id,
             title: this.props.title,
             selected: this.props.selected,
         });
@@ -53,6 +54,7 @@ export class CheckboxMenuGroupItem extends MenuGroupItem {
 
         this.header.setState((headerState) => ({
             ...headerState,
+            id: state.id,
             title: state.title,
             selected: state.selected,
         }));

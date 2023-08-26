@@ -11,6 +11,7 @@ export class CheckboxGroupsMenu extends Menu {
         super({
             ...props,
             renderNotSelected: true,
+            allowActiveGroupHeader: true,
             components: {
                 ...props.components,
                 GroupHeader: CheckboxMenuGroupHeader,

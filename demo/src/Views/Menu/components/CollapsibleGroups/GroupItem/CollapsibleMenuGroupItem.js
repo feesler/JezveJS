@@ -38,6 +38,7 @@ export class CollapsibleMenuGroupItem extends MenuGroupItem {
         }
 
         this.header = GroupHeader.create({
+            id: this.props.id,
             title: this.props.title,
             expanded: this.props.expanded,
         });
@@ -45,7 +46,8 @@ export class CollapsibleMenuGroupItem extends MenuGroupItem {
 
     renderHeader(state, prevState) {
         if (
-            state.title === prevState?.title
+            state.id === prevState?.id
+            && state.title === prevState?.title
             && state.expanded === prevState?.expanded
         ) {
             return;
@@ -53,6 +55,7 @@ export class CollapsibleMenuGroupItem extends MenuGroupItem {
 
         this.header.setState((headerState) => ({
             ...headerState,
+            id: state.id,
             title: state.title,
             expanded: state.expanded,
         }));

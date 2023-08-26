@@ -72,6 +72,7 @@ const defaultProps = {
     itemParam: 'value',
     preventNavigation: false,
     focusItemOnHover: true,
+    allowActiveGroupHeader: false,
     components: {
         Header: null,
         MenuList,
@@ -430,7 +431,10 @@ export class Menu extends Component {
             && !item.hidden
             && !item.disabled
             && item.type !== 'separator'
-            && item.type !== 'group'
+            && (
+                item.type !== 'group'
+                || this.state.allowActiveGroupHeader
+            )
         );
     }
 
@@ -440,12 +444,15 @@ export class Menu extends Component {
      */
     onKeyDown(e) {
         const availCallback = (item) => this.isAvailableItem(item);
+        const options = {
+            includeGroupItems: this.state.allowActiveGroupHeader,
+        };
 
         if (e.code === 'ArrowDown') {
             const activeItem = getActiveItem(this.state.items);
             const nextItem = (activeItem)
-                ? getNextItem(activeItem.id, this.state.items, availCallback)
-                : findMenuItem(this.state.items, availCallback);
+                ? getNextItem(activeItem.id, this.state.items, availCallback, options)
+                : findMenuItem(this.state.items, availCallback, options);
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.activateItem(nextItem.id);
@@ -459,8 +466,8 @@ export class Menu extends Component {
         if (e.code === 'ArrowUp') {
             const activeItem = getActiveItem(this.state.items);
             const nextItem = (activeItem)
-                ? getPreviousItem(activeItem.id, this.state.items, availCallback)
-                : findMenuItem(this.state.items, availCallback);
+                ? getPreviousItem(activeItem.id, this.state.items, availCallback, options)
+                : findMenuItem(this.state.items, availCallback, options);
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.activateItem(nextItem.id);
@@ -492,7 +499,12 @@ export class Menu extends Component {
 
         if (this.state.tabThrough) {
             const elem = this.list.itemElemById(id);
-            elem?.focus();
+            if (item.type === 'group' && this.state.allowActiveGroupHeader) {
+                const groupHeader = elem?.querySelector('.menu-group__header');
+                groupHeader?.focus();
+            } else {
+                elem?.focus();
+            }
         } else {
             this.setActive(id);
             if (scrollToItem) {
@@ -552,7 +564,7 @@ export class Menu extends Component {
                 (item.active === (item.id?.toString() === strId))
                     ? item
                     : { ...item, active: !item.active }
-            )),
+            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
@@ -565,7 +577,7 @@ export class Menu extends Component {
                 (item.selected === items.includes(item.id?.toString()) || !item.selectable)
                     ? item
                     : { ...item, selected: !item.selected }
-            )),
+            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
@@ -578,7 +590,7 @@ export class Menu extends Component {
                 (item.selected === selected || !item.selectable)
                     ? item
                     : { ...item, selected }
-            )),
+            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
@@ -614,7 +626,7 @@ export class Menu extends Component {
                 }
 
                 return newState;
-            }),
+            }, { includeGroupItems: state.allowActiveGroupHeader }),
         };
     }
 
@@ -642,7 +654,7 @@ export class Menu extends Component {
                 return (this.state.multiple)
                     ? item
                     : { ...item, selected: false };
-            }),
+            }, { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
