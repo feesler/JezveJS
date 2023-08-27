@@ -301,7 +301,6 @@ class MenuView extends DemoView {
             multiple: true,
             checkboxSide: 'right',
             defaultItemType: 'checkbox',
-            className: 'checkbox-groups-menu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items,
         });
