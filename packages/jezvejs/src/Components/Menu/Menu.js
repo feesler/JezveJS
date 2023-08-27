@@ -448,7 +448,7 @@ export class Menu extends Component {
             includeGroupItems: this.state.allowActiveGroupHeader,
         };
 
-        if (e.code === 'ArrowDown') {
+        if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
             const activeItem = getActiveItem(this.state.items);
             const nextItem = (activeItem)
                 ? getNextItem(activeItem.id, this.state.items, availCallback, options)
@@ -463,7 +463,7 @@ export class Menu extends Component {
             return;
         }
 
-        if (e.code === 'ArrowUp') {
+        if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
             const activeItem = getActiveItem(this.state.items);
             const nextItem = (activeItem)
                 ? getPreviousItem(activeItem.id, this.state.items, availCallback, options)
