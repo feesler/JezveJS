@@ -435,6 +435,7 @@ export class DropDown extends Component {
             onItemClick: (id) => this.onListItemClick(id),
             onItemActivate: (id) => this.setActive(id),
             onPlaceholderClick: () => this.handlePlaceholderSelect(),
+            isLostFocus: (e) => this.isLostFocus(e),
             renderTime: this.state.renderTime,
             header: {
                 inputElem: this.inputElem,
@@ -615,11 +616,7 @@ export class DropDown extends Component {
 
     /** 'blur' event handler */
     onBlur(e) {
-        const lostFocus = (
-            !this.isChildTarget(e.relatedTarget)
-            && !this.isMenuTarget(e.relatedTarget)
-        );
-        if (lostFocus) {
+        if (this.isLostFocus(e)) {
             this.focusedElem = null;
             this.stopScrollWaiting();
             this.activate(false);
@@ -628,6 +625,13 @@ export class DropDown extends Component {
         if (e.target === this.selectElem) {
             this.sendChangeEvent();
         }
+    }
+
+    isLostFocus(e) {
+        return (
+            !this.isChildTarget(e.relatedTarget)
+            && !this.isMenuTarget(e.relatedTarget)
+        );
     }
 
     /** Click by delete button of selected item event handler */

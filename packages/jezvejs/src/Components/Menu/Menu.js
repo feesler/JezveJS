@@ -60,6 +60,7 @@ const defaultProps = {
     footer: {},
     items: [],
     disabled: false,
+    isLostFocus: null,
     onItemClick: null,
     onGroupHeaderClick: null,
     tabThrough: true,
@@ -435,8 +436,23 @@ export class Menu extends Component {
         this.scrollToItem(item);
     }
 
-    onBlur() {
-        this.setActive(null);
+    onBlur(e) {
+        if (this.isLostFocus(e)) {
+            this.setActive(null);
+        }
+    }
+
+    isLostFocus(e) {
+        if (isFunction(this.props.isLostFocus)) {
+            return this.props.isLostFocus(e);
+        }
+
+        return !this.isChildElem(e.relatedTarget);
+    }
+
+    /** Returns true if element is child of component */
+    isChildElem(elem) {
+        return !!elem && this.elem.contains(elem);
     }
 
     isAvailableItem(item) {
