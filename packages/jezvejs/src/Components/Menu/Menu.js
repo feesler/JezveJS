@@ -535,10 +535,23 @@ export class Menu extends Component {
         }
 
         const item = this.list.itemFromElem(e?.target);
-        if (item) {
-            e.preventDefault();
-            this.activateItem(item.id, false);
+        if (!item) {
+            return;
         }
+
+        if (item.type === 'group') {
+            if (!this.state.allowActiveGroupHeader) {
+                return;
+            }
+
+            const { GroupHeader } = this.state.components;
+            if (!e?.target.closest(GroupHeader?.selector)) {
+                return;
+            }
+        }
+
+        e.preventDefault();
+        this.activateItem(item.id, false);
     }
 
     /** 'mouseleave' event handler */
