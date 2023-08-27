@@ -1,7 +1,6 @@
 import { getClassName, isFunction } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 
-import { isNullId } from '../../helpers.js';
 import './MenuList.scss';
 
 /* CSS classes */
@@ -13,7 +12,6 @@ const defaultProps = {
     items: [],
     disabled: false,
     defaultItemType: 'button',
-    onGroupHeaderClick: null,
     useURLParam: false,
     itemParam: 'value',
     renderTime: null,
@@ -60,47 +58,6 @@ export class MenuList extends ListContainer {
         }
 
         return super.getItemComponent(item, state);
-    }
-
-    /**
-     * Item click event handler
-     * @param {Event} e - click event object
-     */
-    onItemClick(e) {
-        e?.stopPropagation();
-
-        const item = this.itemFromElem(e?.target);
-        if (!item) {
-            return;
-        }
-
-        if (item.type === 'placeholder') {
-            if (isFunction(this.props.onPlaceholderClick)) {
-                this.props.onPlaceholderClick(e);
-            }
-            return;
-        }
-
-        if (isNullId(item)) {
-            return;
-        }
-
-        const { GroupHeader } = this.state.components;
-
-        if (item.type === 'group') {
-            if (!e?.target.closest(GroupHeader?.selector)) {
-                return;
-            }
-
-            if (isFunction(this.props.onGroupHeaderClick)) {
-                this.props.onGroupHeaderClick(item.id, e);
-            }
-            return;
-        }
-
-        if (isFunction(this.props.onItemClick)) {
-            this.props.onItemClick(item.id, e);
-        }
     }
 
     render(state, prevState = {}) {

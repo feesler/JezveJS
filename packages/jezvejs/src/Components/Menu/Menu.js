@@ -112,6 +112,15 @@ export class Menu extends Component {
             touchstart: (e) => this.onTouchStart(e),
         };
 
+        this.callbacks = {
+            getItemComponent: (item, state) => this.getItemComponent(item, state),
+            getItemProps: (item, state) => this.getItemProps(item, state),
+            isListChanged: (state, prevState) => this.isListChanged(state, prevState),
+            getItemById: (id) => this.getItemById(id),
+            onItemClick: (id, e) => this.onItemClick(id, e),
+            onPlaceholderClick: (e) => this.onPlaceholderClick(e),
+        };
+
         this.state = this.onStateChange({
             ...this.props,
             blockScroll: false,
@@ -144,13 +153,7 @@ export class Menu extends Component {
 
         this.list = components.MenuList.create({
             ...list,
-            getItemComponent: (item, state) => this.getItemComponent(item, state),
-            getItemProps: (item, state) => this.getItemProps(item, state),
-            isListChanged: (state, prevState) => this.isListChanged(state, prevState),
-            getItemById: (id) => this.getItemById(id),
-            onItemClick: (id, e) => this.onItemClick(id, e),
-            onPlaceholderClick: (e) => this.onPlaceholderClick(e),
-            onGroupHeaderClick: (id, e) => this.onGroupHeaderClick(id, e),
+            ...this.callbacks,
             components: {
                 ...listComponents,
             },
@@ -294,6 +297,7 @@ export class Menu extends Component {
             ...item,
             disabled: item.disabled || state.disabled,
             getItemURL: (itemState) => this.getItemURL(itemState, state),
+            ...this.callbacks,
             components: {
                 ...state.components,
             },
@@ -367,6 +371,16 @@ export class Menu extends Component {
             && (type === 'link' || type === 'checkbox-link')
         ) {
             e?.preventDefault();
+        }
+
+        if (type === 'group') {
+            const { GroupHeader } = this.state.components;
+            if (!e?.target.closest(GroupHeader?.selector)) {
+                return;
+            }
+
+            this.onGroupHeaderClick(item.id, e);
+            return;
         }
 
         this.toggleSelectItem(id);
