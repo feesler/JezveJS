@@ -158,7 +158,7 @@ export class ListContainer extends Component {
             return;
         }
 
-        if (!item.id) {
+        if ((item.id ?? null) === null) {
             return;
         }
 
