@@ -17,11 +17,12 @@
 }
 
 /* Hover state */
-.menu-item_active > .menu-item__side-content > .menu-checkbox {
-  background: var(--menu-item-hover-checkbox-background);
+.menu-item_active > .menu-item__side-content > .menu-checkbox,
+.menu-item_active.menu-item_selected > .menu-item__side-content > .menu-checkbox {
+  background: var(--menu-item-focus-checkbox-background);
 
   .menu-checkbox__icon {
-    fill: var(--menu-item-hover-checkbox-icon-color);
+    fill: var(--menu-item-focus-checkbox-icon-color);
   }
 }
 
@@ -63,13 +64,52 @@
 }
 
 /* Focused state */
-.menu:focus-visible .menu-item_active,
-.menu .menu-item:focus-visible {
+.menu:focus .menu-item_active,
+.menu .menu-item:focus {
   > .menu-item__side-content > .menu-checkbox {
     background: var(--menu-item-focus-checkbox-background);
 
     .menu-checkbox__icon {
       fill: var(--menu-item-focus-checkbox-icon-color);
+    }
+  }
+}
+
+@media (hover: hover) {
+  /* Hover state */
+  .menu .menu-item > .menu-item__side-content > .menu-checkbox:hover,
+  .menu .menu-item > .menu-group__header > .menu-checkbox:hover {
+    background: var(--menu-item-hover-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-hover-checkbox-icon-color);
+    }
+  }
+
+  /* Hover and selected state */
+  .menu .menu-item_selected > .menu-item__side-content > .menu-checkbox:hover,
+  .menu .menu-group__header.menu-item_selected > .menu-checkbox:hover {
+    background: var(--menu-item-hover-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-hover-selected-checkbox-icon-color);
+    }
+  }
+
+  /* Hover and active state */
+  .menu .menu-group__header:active > .menu-checkbox:hover,
+  .menu .menu-item:active > .menu-item__side-content > .menu-checkbox:hover,
+  .menu
+    .menu-item_selected:active
+    > .menu-item__side-content
+    > .menu-checkbox:hover {
+    background: var(--menu-item-active-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-active-checkbox-icon-color);
     }
   }
 }

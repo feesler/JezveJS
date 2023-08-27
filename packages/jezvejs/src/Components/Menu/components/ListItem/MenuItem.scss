@@ -152,12 +152,11 @@
 }
 
 /* Focused state */
-.menu:focus-visible .menu-item_active,
-.menu .menu-item:focus-visible {
+.menu:focus .menu-item_active,
+.menu .menu-item:focus {
   color: var(--menu-item-focus-text-color);
   background: var(--menu-item-focus-background);
   border-color: var(--menu-item-focus-border-color);
-  box-shadow: var(--menu-item-focus-shadow);
 
   .menu-item__content {
     color: var(--menu-item-focus-text-color);
@@ -166,4 +165,10 @@
   .menu-item__icon {
     fill: var(--menu-item-focus-icon-color);
   }
+}
+
+/* Focus visible state */
+.menu:focus-visible .menu-item_active,
+.menu .menu-item:focus-visible {
+  box-shadow: var(--menu-item-focus-shadow);
 }

@@ -76,6 +76,14 @@
   --menu-item-selected-checkbox-background: var(--menu-checkbox-background);
   --menu-item-selected-checkbox-icon-color: var(--menu-checkbox-icon-color);
 
+  /* Hover selected checkbox */
+  --menu-item-hover-selected-checkbox-background: var(
+    --menu-item-hover-checkbox-background
+  );
+  --menu-item-hover-selected-checkbox-icon-color: var(
+    --menu-item-focus-checkbox-icon-color
+  );
+
   /* Disabled item */
   --menu-item-disabled-text-color: #808080;
   --menu-item-disabled-background: var(--menu-item-background);

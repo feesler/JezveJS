@@ -73,6 +73,11 @@
   /* Hover item */
   --menu-item-hover-checkbox-background: #cccccc;
 
+  /* Hover selected checkbox */
+  --menu-item-hover-selected-checkbox-icon-color: var(
+    --menu-checkbox-icon-color
+  );
+
   /* Selected item */
   --menu-item-selected-checkbox-icon-color: #5082aa;
 
