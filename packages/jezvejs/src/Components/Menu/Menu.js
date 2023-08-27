@@ -355,6 +355,11 @@ export class Menu extends Component {
             : getItemById(id, this.state.items);
     }
 
+    /** Returns active item for specified state */
+    getActiveItem(state = this.state) {
+        return getActiveItem(state?.items);
+    }
+
     /** List item 'click' event handler */
     onItemClick(id, e) {
         e?.stopPropagation();
@@ -479,7 +484,7 @@ export class Menu extends Component {
         };
 
         if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
-            const activeItem = getActiveItem(this.state.items);
+            const activeItem = this.getActiveItem();
             const nextItem = (activeItem)
                 ? getNextItem(activeItem.id, this.state.items, availCallback, options)
                 : findMenuItem(this.state.items, availCallback, options);
@@ -494,7 +499,7 @@ export class Menu extends Component {
         }
 
         if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
-            const activeItem = getActiveItem(this.state.items);
+            const activeItem = this.getActiveItem();
             const nextItem = (activeItem)
                 ? getPreviousItem(activeItem.id, this.state.items, availCallback, options)
                 : findMenuItem(this.state.items, availCallback, options);
@@ -507,7 +512,7 @@ export class Menu extends Component {
         }
 
         if (e.key === 'Enter') {
-            const activeItem = getActiveItem(this.state.items);
+            const activeItem = this.getActiveItem();
             if (activeItem) {
                 this.toggleSelectItem(activeItem.id);
             }
