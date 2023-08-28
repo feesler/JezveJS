@@ -732,7 +732,7 @@ export class Menu extends Component {
             return;
         }
 
-        const itemTop = elem.offsetTop;
+        const itemTop = elem.offsetTop - this.list.elem.offsetTop;
         const itemBottom = itemTop + elem.offsetHeight;
         const listTop = this.list.elem.scrollTop;
         const listHeight = this.list.elem.clientHeight;
