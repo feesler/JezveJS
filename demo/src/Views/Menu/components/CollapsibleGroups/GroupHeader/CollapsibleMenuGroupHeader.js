@@ -1,4 +1,4 @@
-import { createElement } from 'jezvejs';
+import { createElement, getClassName } from 'jezvejs';
 import { MenuGroupHeader } from 'jezvejs/Menu';
 import { Icon } from 'jezvejs/Icon';
 
@@ -25,8 +25,6 @@ export class CollapsibleMenuGroupHeader extends MenuGroupHeader {
     }
 
     init() {
-        super.init();
-
         this.titleElem = createElement('span', {
             props: { className: TITLE_CLASS },
         });
@@ -34,13 +32,25 @@ export class CollapsibleMenuGroupHeader extends MenuGroupHeader {
             className: TOGGLE_ICON_CLASS,
         });
 
-        this.elem.append(this.titleElem, this.toggleBtn.elem);
+        this.elem = createElement('button', {
+            props: {
+                className: getClassName(MenuGroupHeader.className, 'menu-item'),
+                type: 'button',
+            },
+            children: [this.titleElem, this.toggleBtn.elem],
+        });
+    }
+
+    get id() {
+        return this.state.id;
     }
 
     render(state, prevState = {}) {
         if (!state) {
             throw new Error('Invalid state');
         }
+
+        this.elem.dataset.id = state.id;
 
         this.titleElem.textContent = state.title ?? '';
 

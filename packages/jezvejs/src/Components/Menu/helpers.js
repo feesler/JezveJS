@@ -1,4 +1,4 @@
-import { isFunction } from '../../js/common.js';
+import { isFunction, isObject } from '../../js/common.js';
 
 /**
  * Returns true if item id is undefined or null
@@ -9,6 +9,66 @@ import { isFunction } from '../../js/common.js';
 export const isNullId = (item) => (
     (item?.id ?? null) === null
 );
+
+/**
+ * Returns menu state object with all list-related properties moved under 'list' object
+ *
+ * @param {Object} state
+ * @returns {Object}
+ */
+export const getMenuProps = (state) => {
+    if (!isObject(state)) {
+        throw new Error('Invalid state');
+    }
+
+    const {
+        header,
+        footer,
+        components,
+        ...list
+    } = state;
+
+    return {
+        header,
+        footer,
+        components,
+        list,
+    };
+};
+
+/**
+ * Converts multilevel menu list to flat array of items and returns result
+ *
+ * @param {Array} items source multilevel array of menu items
+ * @returns {Array}
+ */
+export const toFlatList = (items, options = {}) => {
+    const res = [];
+    for (let index = 0; index < items.length; index += 1) {
+        const item = items[index];
+        const disabled = options?.disabled || item.disabled;
+
+        if (item.type === 'group') {
+            if (options.includeGroupItems) {
+                res.push({ ...item, disabled });
+            }
+
+            res.push(
+                ...toFlatList(
+                    item.items,
+                    {
+                        disabled,
+                        includeGroupItems: options.includeGroupItems,
+                    },
+                ),
+            );
+        } else {
+            res.push({ ...item, disabled });
+        }
+    }
+
+    return res;
+};
 
 /**
  * Searches for first menu item for which callback function return true
@@ -35,6 +95,32 @@ export const findMenuItem = (items, callback) => {
             if (item) {
                 return item;
             }
+        }
+    }
+
+    return null;
+};
+
+/**
+ * Searches for last menu item for which callback function return true
+ *
+ * @param {Array} items array of items to search in
+ * @param {Function} callback function to
+ * @param {Object} options
+ */
+export const findLastMenuItem = (items, callback, options = {}) => {
+    if (!Array.isArray(items)) {
+        throw new Error('Invalid items parameter');
+    }
+    if (!isFunction(callback)) {
+        throw new Error('Invalid callback parameter');
+    }
+
+    const flatList = toFlatList(items, options);
+    for (let index = flatList.length - 1; index >= 0; index -= 1) {
+        const item = flatList[index];
+        if (callback(item)) {
+            return item;
         }
     }
 
@@ -85,8 +171,9 @@ export const getActiveItem = (items) => (
  * Iterates list of menu items with callback function
  * @param {Array} items menu items array
  * @param {Function} callback
+ * @param {Object} options
  */
-export const forItems = (items, callback) => {
+export const forItems = (items, callback, options = {}) => {
     if (!isFunction(callback)) {
         throw new Error('Invalid callback parameter');
     }
@@ -96,6 +183,10 @@ export const forItems = (items, callback) => {
         const item = items[index];
 
         if (item.type === 'group') {
+            if (options.includeGroupItems) {
+                callback(item, index, items);
+            }
+
             forItems(item.items, callback);
         } else {
             callback(item, index, items);
@@ -109,9 +200,10 @@ export const forItems = (items, callback) => {
  * Returns list of menu items transformed with callback function
  * @param {Array} items menu items array
  * @param {Function} callback
+ * @param {Object} options
  * @returns {Array}
  */
-export const mapItems = (items, callback) => {
+export const mapItems = (items, callback, options = {}) => {
     if (!isFunction(callback)) {
         throw new Error('Invalid callback parameter');
     }
@@ -121,36 +213,16 @@ export const mapItems = (items, callback) => {
         const item = items[index];
 
         if (item.type === 'group') {
+            const group = (options.includeGroupItems)
+                ? callback(item, index, items)
+                : item;
+
             res.push({
-                ...item,
+                ...group,
                 items: mapItems(item.items, callback),
             });
         } else {
             res.push(callback(item, index, items));
-        }
-    }
-
-    return res;
-};
-
-/**
- * Converts multilevel menu list to flat array of items and returns result
- *
- * @param {Array} items source multilevel array of menu items
- * @returns {Array}
- */
-export const toFlatList = (items, options = {}) => {
-    const res = [];
-    for (let index = 0; index < items.length; index += 1) {
-        const item = items[index];
-
-        if (item.type === 'group') {
-            res.push(...toFlatList(item.items, item));
-        } else {
-            res.push({
-                ...item,
-                disabled: options?.disabled ?? item.disabled,
-            });
         }
     }
 
@@ -163,15 +235,16 @@ export const toFlatList = (items, options = {}) => {
  * @param {String} id identifier of item to start from
  * @param {Array} items array of menu list items
  * @param {Function|null} filterCallback optional callback function to verify
+ * @param {Object} options
  * @returns
  */
-export const getPreviousItem = (id, items, filterCallback = null) => {
+export const getPreviousItem = (id, items, filterCallback = null, options = {}) => {
     const strId = id?.toString() ?? null;
     if (strId === null) {
         return null;
     }
 
-    const flatList = toFlatList(items);
+    const flatList = toFlatList(items, options);
     let startItem = null;
     const callback = isFunction(filterCallback) ? filterCallback : null;
 
@@ -198,15 +271,16 @@ export const getPreviousItem = (id, items, filterCallback = null) => {
  * @param {String} id identifier of item to start from
  * @param {Array} items array of menu list items
  * @param {Function|null} filterCallback optional callback function to filter returned item
+ * @param {Object} options
  * @returns
  */
-export const getNextItem = (id, items, filterCallback = null) => {
+export const getNextItem = (id, items, filterCallback = null, options = {}) => {
     const strId = id?.toString() ?? null;
     if (strId === null) {
         return null;
     }
 
-    const flatList = toFlatList(items);
+    const flatList = toFlatList(items, options);
     let startItem = null;
     const callback = isFunction(filterCallback) ? filterCallback : null;
 

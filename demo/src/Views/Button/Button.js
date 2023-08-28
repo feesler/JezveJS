@@ -20,6 +20,7 @@ class ButtonView extends DemoView {
         this.initStatic();
 
         this.initBorder();
+        this.initIconAlign();
         this.initCustomContent();
         this.initBackground();
         this.initFullWidth();
@@ -120,6 +121,22 @@ class ButtonView extends DemoView {
         this.addSection({
             id: 'border',
             title: 'Styled border',
+            content: createElement('div', { children: btn.elem }),
+        });
+    }
+
+    initIconAlign() {
+        const btn = Button.create({
+            icon: 'del',
+            iconAlign: 'right',
+            title: 'Border',
+            className: 'btn-border',
+        });
+
+        this.addSection({
+            id: 'iconAlign',
+            title: 'Icon alignment',
+            description: '\'iconAlign\' option with available values: \'left\' and \'right\'. Default is \'left\'.',
             content: createElement('div', { children: btn.elem }),
         });
     }

@@ -20,6 +20,7 @@ const defaultProps = {
     url: undefined,
     title: undefined,
     icon: undefined,
+    iconAlign: 'left', // available value: 'left', 'right'
     onClick: null,
     id: undefined,
     tabIndex: undefined,
@@ -61,6 +62,8 @@ export class Button extends Component {
         } else {
             this.init();
         }
+
+        this.postInit();
     }
 
     /** Returns id of root element of component */
@@ -95,8 +98,6 @@ export class Button extends Component {
             props.type = type;
         }
         this.elem = createElement(tagName, { props });
-
-        this.postInit();
     }
 
     parse() {
@@ -136,8 +137,6 @@ export class Button extends Component {
         }
 
         this.state.enabled = !this.elem.hasAttribute('disabled');
-
-        this.postInit();
     }
 
     postInit() {
@@ -227,7 +226,11 @@ export class Button extends Component {
             this.elem.removeAttribute('tabindex');
         }
 
-        if (state.icon === prevState.icon && state.title === prevState.title) {
+        if (
+            state.icon === prevState.icon
+            && state.title === prevState.title
+            && state.iconAlign === prevState.iconAlign
+        ) {
             return;
         }
 
@@ -250,6 +253,11 @@ export class Button extends Component {
 
         const contentElem = createElement('span', { props: { className: CONTENT_CLASS } });
         setContent(contentElem, title);
-        this.elem.append(contentElem);
+
+        if (state.iconAlign === 'left') {
+            this.elem.append(contentElem);
+        } else {
+            this.elem.prepend(contentElem);
+        }
     }
 }

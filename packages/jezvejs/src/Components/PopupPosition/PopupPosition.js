@@ -74,6 +74,7 @@ export class PopupPosition {
             refElem,
             margin = 0,
             screenPadding = 0,
+            bottomSafeArea = 30,
             useRefWidth = false,
             allowFlip = true,
             scrollOnOverflow = true,
@@ -148,7 +149,7 @@ export class PopupPosition {
         };
 
         let height = elem.offsetHeight;
-        let bottom = reference.bottom + margin + height;
+        let bottom = reference.bottom + margin + height + bottomSafeArea;
         const minHeight = minRefHeight + margin + screenPadding + height;
 
         // Check element taller than screen
@@ -156,7 +157,7 @@ export class PopupPosition {
             height = screenHeight - minRefHeight - screenPadding - margin;
             style.maxHeight = px(height);
 
-            bottom = reference.bottom + margin + height;
+            bottom = reference.bottom + margin + height + bottomSafeArea;
         }
 
         const refOverflowTop = -refScrollTop;

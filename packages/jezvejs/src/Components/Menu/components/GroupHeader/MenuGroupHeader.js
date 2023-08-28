@@ -14,6 +14,10 @@ const defaultProps = {
  * Menu group header component
  */
 export class MenuGroupHeader extends Component {
+    static get className() {
+        return HEADER_CLASS;
+    }
+
     static get selector() {
         return `.${HEADER_CLASS}`;
     }

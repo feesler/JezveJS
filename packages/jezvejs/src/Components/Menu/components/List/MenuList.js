@@ -1,10 +1,6 @@
 import { getClassName, isFunction } from '../../../../js/common.js';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 
-import { isNullId } from '../../helpers.js';
-import { MenuCheckbox } from '../Checkbox/MenuCheckbox.js';
-import { CheckboxItem } from '../CheckboxItem/CheckboxItem.js';
-import { MenuItem } from '../ListItem/MenuItem.js';
 import './MenuList.scss';
 
 /* CSS classes */
@@ -16,16 +12,16 @@ const defaultProps = {
     items: [],
     disabled: false,
     defaultItemType: 'button',
-    onGroupHeaderClick: null,
     useURLParam: false,
     itemParam: 'value',
     renderTime: null,
+    getItemComponent: null,
     components: {
-        ListItem: MenuItem,
+        ListItem: null,
         GroupHeader: null,
         GroupItem: null,
-        Check: MenuCheckbox,
-        Checkbox: CheckboxItem,
+        Check: null,
+        Checkbox: null,
         Separator: null,
         ListPlaceholder: null,
     },
@@ -57,130 +53,11 @@ export class MenuList extends ListContainer {
      * @param {object} state current state of list
      */
     getItemComponent(item, state) {
-        const {
-            type = state.defaultItemType,
-        } = item;
-
-        if (type === 'button' || type === 'link') {
-            return state.components.ListItem;
+        if (isFunction(state.getItemComponent)) {
+            return state.getItemComponent(item, state);
         }
 
-        if (
-            item.selectable
-            && (type === 'checkbox' || type === 'checkbox-link')
-        ) {
-            return state.components.Checkbox;
-        }
-
-        if (type === 'separator') {
-            return state.components.Separator;
-        }
-
-        if (type === 'group') {
-            return state.components.GroupItem;
-        }
-
-        throw new Error('Unknown type of menu item');
-    }
-
-    /**
-     * Returns render properties for specified item
-     * @param {object} item
-     * @param {object} state current list state object
-     */
-    getItemProps(item, state) {
-        const { ListItem } = this.props.components;
-
-        return {
-            ...ListItem.defaultProps,
-            ...item,
-            beforeContent: item.beforeContent ?? state.beforeContent,
-            afterContent: item.afterContent ?? state.afterContent,
-            iconAlign: item.iconAlign ?? state.iconAlign,
-            tabThrough: item.tabThrough ?? state.tabThrough,
-            checkboxSide: item.checkboxSide ?? state.checkboxSide,
-            renderNotSelected: item.renderNotSelected ?? state.renderNotSelected,
-            useURLParam: item.useURLParam ?? state.useURLParam,
-            itemParam: item.itemParam ?? state.itemParam,
-            disabled: item.disabled || state.disabled,
-            getItemURL: (itemState) => this.getItemURL(itemState, state),
-            components: {
-                ...state.components,
-            },
-        };
-    }
-
-    getItemURL(item, state) {
-        const baseURL = item.url ?? window.location;
-        const { itemParam } = state;
-        const arrayParam = `${itemParam}[]`;
-        const param = (state.multiple) ? arrayParam : itemParam;
-
-        const url = new URL(baseURL);
-        if (!isNullId(item)) {
-            url.searchParams.set(param, item.id);
-
-            const delParam = (state.multiple) ? itemParam : arrayParam;
-            url.searchParams.delete(delParam);
-        } else {
-            url.searchParams.delete(param);
-        }
-
-        return url;
-    }
-
-    isChanged(state, prevState) {
-        return (
-            state.items !== prevState?.items
-            || state.disabled !== prevState?.disabled
-            || state.itemParam !== prevState?.itemParam
-            || state.useURLParam !== prevState?.useURLParam
-            || state.beforeContent !== prevState?.beforeContent
-            || state.afterContent !== prevState?.afterContent
-            || state.iconAlign !== prevState?.iconAlign
-            || state.checkboxSide !== prevState?.checkboxSide
-            || state.renderNotSelected !== prevState?.renderNotSelected
-            || state.renderTime !== prevState?.renderTime
-        );
-    }
-
-    /**
-     * Item click event handler
-     * @param {Event} e - click event object
-     */
-    onItemClick(e) {
-        const item = this.itemFromElem(e?.target);
-        if (!item) {
-            return;
-        }
-
-        if (item.type === 'placeholder') {
-            if (isFunction(this.props.onPlaceholderClick)) {
-                this.props.onPlaceholderClick(e);
-            }
-            return;
-        }
-
-        if (isNullId(item)) {
-            return;
-        }
-
-        const { GroupHeader } = this.state.components;
-
-        if (item.type === 'group') {
-            if (!e?.target.closest(GroupHeader?.selector)) {
-                return;
-            }
-
-            if (isFunction(this.props.onGroupHeaderClick)) {
-                this.props.onGroupHeaderClick(item.id, e);
-            }
-            return;
-        }
-
-        if (isFunction(this.props.onItemClick)) {
-            this.props.onItemClick(item.id, e);
-        }
+        return super.getItemComponent(item, state);
     }
 
     render(state, prevState = {}) {

@@ -13,6 +13,7 @@ const defaultProps = {
     defaultItemType: 'button',
     useURLParam: false,
     itemParam: 'value',
+    getItemComponent: null,
     components: {
         GroupHeader: null,
         MenuList: null,
@@ -99,16 +100,9 @@ export class MenuGroupItem extends Component {
         }
 
         this.list = MenuList.create({
-            beforeContent: this.props.beforeContent,
-            afterContent: this.props.afterContent,
-            iconAlign: this.props.iconAlign,
-            checkboxSide: this.props.checkboxSide,
-            renderNotSelected: this.props.renderNotSelected,
-            useURLParam: this.props.useURLParam,
-            itemParam: this.props.itemParam,
-            tabThrough: this.props.tabThrough,
-            defaultItemType: this.props.defaultItemType,
+            ...this.props,
             components: {
+                ...this.props.components,
                 ListItem,
                 GroupItem: null,
             },
@@ -126,30 +120,10 @@ export class MenuGroupItem extends Component {
         }));
     }
 
-    renderList(state, prevState) {
-        if (
-            state.items === prevState?.items
-            && state.beforeContent === prevState?.beforeContent
-            && state.afterContent === prevState?.afterContent
-            && state.iconAlign === prevState?.iconAlign
-            && state.checkboxSide === prevState?.checkboxSide
-            && state.renderNotSelected === prevState?.renderNotSelected
-            && state.useURLParam === prevState?.useURLParam
-            && state.itemParam === prevState?.itemParam
-        ) {
-            return;
-        }
-
+    renderList(state) {
         this.list.setState((listState) => ({
             ...listState,
-            items: state.items,
-            beforeContent: state.beforeContent,
-            afterContent: state.afterContent,
-            iconAlign: state.iconAlign,
-            checkboxSide: state.checkboxSide,
-            renderNotSelected: state.renderNotSelected,
-            useURLParam: state.useURLParam,
-            itemParam: state.itemParam,
+            ...state,
         }));
     }
 

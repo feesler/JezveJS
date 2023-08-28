@@ -82,24 +82,3 @@
   box-shadow: var(--menu-item-focus-shadow);
   z-index: 2;
 }
-
-/* Hover state */
-@media (hover: hover) {
-  .link-menu {
-    .link-menu-item:hover,
-    .checkbox-menu-item:hover,
-    .button-menu-item:hover {
-      > .menu-item__side-content > .menu-checkbox .menu-checkbox__icon {
-        display: block;
-      }
-    }
-
-    .menu-item_active.menu-item_selected:active:hover
-      > .menu-item__side-content
-      > .menu-checkbox {
-      .menu-checkbox__icon {
-        fill: var(--menu-item-active-checkbox-icon-color);
-      }
-    }
-  }
-}

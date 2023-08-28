@@ -25,6 +25,8 @@ import {
     getNextItem,
     getPreviousItem,
     mapItems,
+    getMenuProps,
+    findLastMenuItem,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -55,13 +57,15 @@ const MENU_CLASS = 'menu';
 const SCROLL_TO_ITEM_TIMEOUT = 200;
 
 const defaultProps = {
-    items: [],
     header: {},
     footer: {},
+    items: [],
     disabled: false,
+    isLostFocus: null,
     onItemClick: null,
     onGroupHeaderClick: null,
     tabThrough: true,
+    loopNavigation: true,
     multiple: false,
     iconAlign: 'left', // available value: 'left', 'right'
     checkboxSide: 'left', // available value: 'left', 'right'
@@ -70,11 +74,14 @@ const defaultProps = {
     useURLParam: false,
     itemParam: 'value',
     preventNavigation: false,
+    focusItemOnHover: true,
+    allowActiveGroupHeader: false,
     components: {
         Header: null,
         MenuList,
         ListItem: MenuItem,
         Checkbox: CheckboxItem,
+        Check: MenuCheckbox,
         GroupHeader: MenuGroupHeader,
         GroupItem: MenuGroupItem,
         Separator: MenuSeparator,
@@ -101,6 +108,22 @@ export class Menu extends Component {
             },
         });
 
+        this.capturedEvents = {
+            focus: (e) => this.onFocus(e),
+            blur: (e) => this.onBlur(e),
+            keydown: (e) => this.onKeyDown(e),
+            touchstart: (e) => this.onTouchStart(e),
+        };
+
+        this.callbacks = {
+            getItemComponent: (item, state) => this.getItemComponent(item, state),
+            getItemProps: (item, state) => this.getItemProps(item, state),
+            isListChanged: (state, prevState) => this.isListChanged(state, prevState),
+            getItemById: (id) => this.getItemById(id),
+            onItemClick: (id, e) => this.onItemClick(id, e),
+            onPlaceholderClick: (e) => this.onPlaceholderClick(e),
+        };
+
         this.state = this.onStateChange({
             ...this.props,
             blockScroll: false,
@@ -115,60 +138,40 @@ export class Menu extends Component {
 
     init() {
         const {
-            Header,
-            Footer,
-            ListItem,
-            Checkbox,
-            ListPlaceholder,
-            GroupHeader,
-            GroupItem,
-            Separator,
-        } = this.props.components;
-        const List = this.props.components.MenuList;
+            header,
+            footer,
+            components,
+            list,
+        } = getMenuProps(this.state);
+        delete list.id;
+        delete list.className;
+
+        const { Header, Footer, ...listComponents } = components;
         const children = [];
 
         if (Header) {
-            this.header = Header.create(this.props.header);
+            this.header = Header.create(header);
             children.push(this.header.elem);
         }
 
-        this.list = List.create({
-            multiple: this.props.multiple,
-            iconAlign: this.props.iconAlign,
-            checkboxSide: this.props.checkboxSide,
-            renderNotSelected: this.props.renderNotSelected,
-            useURLParam: this.props.useURLParam,
-            itemParam: this.props.itemParam,
-            tabThrough: this.props.tabThrough,
-            disabled: this.props.disabled,
-            getItemById: (id) => this.getItemById(id),
-            onItemClick: (id, e) => this.onItemClick(id, e),
-            onPlaceholderClick: (e) => this.onPlaceholderClick(e),
-            getPlaceholderProps: this.props.getPlaceholderProps,
-            onGroupHeaderClick: (id, e) => this.onGroupHeaderClick(id, e),
+        this.list = components.MenuList.create({
+            ...list,
+            ...this.callbacks,
             components: {
-                MenuList: List,
-                ListItem,
-                Checkbox,
-                GroupHeader,
-                GroupItem,
-                Separator,
-                ListPlaceholder,
+                ...listComponents,
             },
         });
+        setEvents(this.list.elem, {
+            mousemove: (e) => this.onMouseMove(e),
+            mouseleave: (e) => this.onMouseLeave(e),
+        });
+
         children.push(this.list.elem);
 
         if (Footer) {
-            this.footer = Footer.create(this.props.footer);
+            this.footer = Footer.create(footer);
             children.push(this.footer.elem);
         }
-
-        this.capturedEvents = {
-            focus: (e) => this.onFocus(e),
-            blur: (e) => this.onBlur(e),
-            keydown: (e) => this.onKeyDown(e),
-            touchstart: (e) => this.onTouchStart(e),
-        };
 
         this.elem = createElement('div', {
             props: { className: MENU_CLASS, tabIndex: 0 },
@@ -178,8 +181,6 @@ export class Menu extends Component {
                     listener: (e) => this.onScroll(e),
                     options: { capture: true, passive: true },
                 },
-                mousemove: (e) => this.onMouseMove(e),
-                mouseleave: (e) => this.onMouseLeave(e),
             },
         });
 
@@ -252,10 +253,116 @@ export class Menu extends Component {
         return generateItemId(state.items, 'group');
     }
 
+    /**
+     * Returns component class for specified item
+     * @param {object} item
+     * @param {object} state current state of list
+     */
+    getItemComponent(item, state) {
+        const {
+            type = state.defaultItemType,
+        } = item;
+
+        if (type === 'button' || type === 'link') {
+            return state.components.ListItem;
+        }
+
+        if (
+            item.selectable
+            && (type === 'checkbox' || type === 'checkbox-link')
+        ) {
+            return state.components.Checkbox;
+        }
+
+        if (type === 'separator') {
+            return state.components.Separator;
+        }
+
+        if (type === 'group') {
+            return state.components.GroupItem;
+        }
+
+        throw new Error('Unknown type of menu item');
+    }
+
+    /**
+     * Returns render properties for specified item
+     * @param {object} item
+     * @param {object} state current list state object
+     */
+    getItemProps(item, state) {
+        const { ListItem } = this.props.components;
+
+        const { list } = getMenuProps(state);
+        delete list.id;
+        delete list.className;
+
+        const res = {
+            ...ListItem.defaultProps,
+            ...list,
+            ...item,
+            disabled: item.disabled || state.disabled,
+            getItemURL: (itemState) => this.getItemURL(itemState, state),
+            ...this.callbacks,
+            components: {
+                ...state.components,
+            },
+        };
+
+        if (item.type === 'group') {
+            res.getItemComponent = (...args) => this.getItemComponent(...args);
+            res.getItemProps = (...args) => this.getItemProps(...args);
+        }
+
+        return res;
+    }
+
+    isListChanged(state, prevState) {
+        const changeProps = [
+            'items',
+            'disabled',
+            'itemParam',
+            'useURLParam',
+            'beforeContent',
+            'afterContent',
+            'iconAlign',
+            'checkboxSide',
+            'renderNotSelected',
+            'listScroll',
+            'renderTime',
+        ];
+
+        return changeProps.some((prop) => (state[prop] !== prevState?.[prop]));
+    }
+
+    getItemURL(item, state) {
+        const baseURL = item.url ?? window.location;
+        const { itemParam } = state;
+        const arrayParam = `${itemParam}[]`;
+        const param = (state.multiple) ? arrayParam : itemParam;
+
+        const url = new URL(baseURL);
+        if (!isNullId(item)) {
+            url.searchParams.set(param, item.id);
+
+            const delParam = (state.multiple) ? itemParam : arrayParam;
+            url.searchParams.delete(delParam);
+        } else {
+            url.searchParams.delete(param);
+        }
+
+        return url;
+    }
+
     getItemById(id) {
         return isFunction(this.state.getItemById)
             ? this.state.getItemById(id)
             : getItemById(id, this.state.items);
+    }
+
+    /** Returns active item for specified state */
+    getActiveItem(state = this.state) {
+        return getActiveItem(state?.items);
     }
 
     /** List item 'click' event handler */
@@ -268,13 +375,32 @@ export class Menu extends Component {
         }
 
         const item = this.getItemById(id);
+        const activeItem = this.getActiveItem();
         const { type } = item;
 
+        // Prevent navigation by link if needed
         if (
             this.state.preventNavigation
             && (type === 'link' || type === 'checkbox-link')
         ) {
             e?.preventDefault();
+        }
+
+        // Prevent selection item if active item is exist and not equal to current item
+        if (activeItem && activeItem.id !== item.id) {
+            this.activateItem(item.id, false);
+            return;
+        }
+
+        // Handle clicks by group header
+        if (type === 'group') {
+            const { GroupHeader } = this.state.components;
+            if (!e?.target.closest(GroupHeader?.selector)) {
+                return;
+            }
+
+            this.onGroupHeaderClick(item.id, e);
+            return;
         }
 
         this.toggleSelectItem(id);
@@ -321,16 +447,30 @@ export class Menu extends Component {
 
     onFocus(e) {
         const item = this.list.itemFromElem(e?.target);
-        if (!item) {
+        if (!item || item.active) {
             return;
         }
 
         this.setActive(item.id);
-        this.scrollToItem(item);
     }
 
-    onBlur() {
-        this.setActive(null);
+    onBlur(e) {
+        if (this.isLostFocus(e)) {
+            this.setActive(null);
+        }
+    }
+
+    isLostFocus(e) {
+        if (isFunction(this.props.isLostFocus)) {
+            return this.props.isLostFocus(e);
+        }
+
+        return !this.isChildElem(e.relatedTarget);
+    }
+
+    /** Returns true if element is child of component */
+    isChildElem(elem) {
+        return !!elem && this.elem.contains(elem);
     }
 
     isAvailableItem(item) {
@@ -339,7 +479,10 @@ export class Menu extends Component {
             && !item.hidden
             && !item.disabled
             && item.type !== 'separator'
-            && item.type !== 'group'
+            && (
+                item.type !== 'group'
+                || this.state.allowActiveGroupHeader
+            )
         );
     }
 
@@ -349,12 +492,19 @@ export class Menu extends Component {
      */
     onKeyDown(e) {
         const availCallback = (item) => this.isAvailableItem(item);
+        const options = {
+            includeGroupItems: this.state.allowActiveGroupHeader,
+        };
 
-        if (e.code === 'ArrowDown') {
-            const activeItem = getActiveItem(this.state.items);
-            const nextItem = (activeItem)
-                ? getNextItem(activeItem.id, this.state.items, availCallback)
+        if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
+            const activeItem = this.getActiveItem();
+            let nextItem = (activeItem)
+                ? getNextItem(activeItem.id, this.state.items, availCallback, options)
                 : findMenuItem(this.state.items, availCallback);
+
+            if (this.state.loopNavigation && activeItem && !nextItem) {
+                nextItem = findMenuItem(this.state.items, availCallback);
+            }
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.activateItem(nextItem.id);
@@ -365,11 +515,15 @@ export class Menu extends Component {
             return;
         }
 
-        if (e.code === 'ArrowUp') {
-            const activeItem = getActiveItem(this.state.items);
-            const nextItem = (activeItem)
-                ? getPreviousItem(activeItem.id, this.state.items, availCallback)
-                : findMenuItem(this.state.items, availCallback);
+        if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
+            const activeItem = this.getActiveItem();
+            let nextItem = (activeItem)
+                ? getPreviousItem(activeItem.id, this.state.items, availCallback, options)
+                : findLastMenuItem(this.state.items, availCallback);
+
+            if (this.state.loopNavigation && activeItem && !nextItem) {
+                nextItem = findLastMenuItem(this.state.items, availCallback);
+            }
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.activateItem(nextItem.id);
@@ -379,7 +533,7 @@ export class Menu extends Component {
         }
 
         if (e.key === 'Enter') {
-            const activeItem = getActiveItem(this.state.items);
+            const activeItem = this.getActiveItem();
             if (activeItem) {
                 this.toggleSelectItem(activeItem.id);
             }
@@ -388,22 +542,29 @@ export class Menu extends Component {
         }
     }
 
-    activateItem(id) {
+    activateItem(id, scrollToItem = true) {
         const item = getItemById(id, this.state.items);
         if (!this.isAvailableItem(item)) {
             return;
         }
 
-        const activeItem = getActiveItem(this.state.items);
+        const activeItem = this.getActiveItem();
         if (item.id === activeItem?.id) {
             return;
         }
 
-        if (this.state.tabThrough) {
-            const elem = this.list.itemElemById(id);
-            elem?.focus();
+        const focusOptions = { preventScroll: !scrollToItem };
+
+        const elem = this.list.itemElemById(id);
+        if (item.type === 'group' && this.state.allowActiveGroupHeader) {
+            const { GroupHeader } = this.state.components;
+            const groupHeader = elem?.querySelector(GroupHeader?.selector);
+            groupHeader?.focus(focusOptions);
         } else {
-            this.setActive(id);
+            elem?.focus(focusOptions);
+        }
+
+        if (scrollToItem) {
             this.scrollToItem(item);
         }
     }
@@ -421,24 +582,49 @@ export class Menu extends Component {
 
     /** 'mousemove' event handler */
     onMouseMove(e) {
-        if (this.state.blockScroll || this.state.ignoreTouch) {
+        if (
+            this.state.blockScroll
+            || this.state.ignoreTouch
+            || !this.state.focusItemOnHover
+        ) {
             return;
         }
 
         const item = this.list.itemFromElem(e?.target);
-        if (item) {
-            e.preventDefault();
-            this.activateItem(item.id);
+        if (!item) {
+            return;
         }
+
+        if (item.type === 'group') {
+            if (!this.state.allowActiveGroupHeader) {
+                return;
+            }
+
+            const { GroupHeader } = this.state.components;
+            if (!e?.target.closest(GroupHeader?.selector)) {
+                return;
+            }
+        }
+
+        this.activateItem(item.id, false);
     }
 
     /** 'mouseleave' event handler */
-    onMouseLeave() {
+    onMouseLeave(e) {
+        if (this.state.blockScroll) {
+            return;
+        }
+
         this.setActive(null);
+
+        if (isFunction(this.props.onMouseLeave)) {
+            this.props.onMouseLeave(e);
+            return;
+        }
 
         const focused = document.activeElement;
         if (this.elem.contains(focused)) {
-            this.elem.focus();
+            this.elem.focus({ preventScroll: true });
         }
     }
 
@@ -451,7 +637,7 @@ export class Menu extends Component {
                 (item.active === (item.id?.toString() === strId))
                     ? item
                     : { ...item, active: !item.active }
-            )),
+            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
@@ -464,7 +650,7 @@ export class Menu extends Component {
                 (item.selected === items.includes(item.id?.toString()) || !item.selectable)
                     ? item
                     : { ...item, selected: !item.selected }
-            )),
+            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
@@ -477,7 +663,7 @@ export class Menu extends Component {
                 (item.selected === selected || !item.selectable)
                     ? item
                     : { ...item, selected }
-            )),
+            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
@@ -513,7 +699,7 @@ export class Menu extends Component {
                 }
 
                 return newState;
-            }),
+            }, { includeGroupItems: state.allowActiveGroupHeader }),
         };
     }
 
@@ -541,7 +727,7 @@ export class Menu extends Component {
                 return (this.state.multiple)
                     ? item
                     : { ...item, selected: false };
-            }),
+            }, { includeGroupItems: this.state.allowActiveGroupHeader }),
         });
     }
 
@@ -556,7 +742,7 @@ export class Menu extends Component {
             return;
         }
 
-        const itemTop = elem.offsetTop;
+        const itemTop = elem.offsetTop - this.list.elem.offsetTop;
         const itemBottom = itemTop + elem.offsetHeight;
         const listTop = this.list.elem.scrollTop;
         const listHeight = this.list.elem.clientHeight;
@@ -648,24 +834,16 @@ export class Menu extends Component {
     }
 
     renderList(state, prevState) {
-        if (
-            state.items === prevState?.items
-            && state.listScroll === prevState?.listScroll
-            && state.iconAlign === prevState?.iconAlign
-            && state.checkboxSide === prevState?.checkboxSide
-            && state.renderNotSelected === prevState?.renderNotSelected
-            && state.useURLParam === prevState?.useURLParam
-            && state.itemParam === prevState?.itemParam
-            && state.disabled === prevState?.disabled
-            && state.renderTime === prevState?.renderTime
-        ) {
+        if (!this.isListChanged(state, prevState)) {
             return;
         }
+
+        const { list } = getMenuProps(state);
 
         let beforeContent = false;
         let afterContent = false;
 
-        forItems(state.items, (item) => {
+        forItems(list.items, (item) => {
             const { type } = item;
             const isCheckbox = (type === 'checkbox' || type === 'checkbox-link');
 
@@ -674,8 +852,8 @@ export class Menu extends Component {
             }
 
             if (
-                (isCheckbox && state.checkboxSide === 'left')
-                || (item.icon && state.iconAlign === 'left')
+                (isCheckbox && list.checkboxSide === 'left')
+                || (item.icon && list.iconAlign === 'left')
             ) {
                 beforeContent = true;
             } else {
@@ -685,19 +863,14 @@ export class Menu extends Component {
 
         this.list.setState((listState) => ({
             ...listState,
-            items: state.items,
+            ...list,
             beforeContent,
             afterContent,
-            iconAlign: state.iconAlign,
-            checkboxSide: state.checkboxSide,
-            renderNotSelected: state.renderNotSelected,
-            useURLParam: state.useURLParam,
-            itemParam: state.itemParam,
-            disabled: state.disabled,
-            renderTime: state.renderTime,
         }));
 
-        this.list.elem.scrollTop = state.listScroll;
+        if (this.list.elem.scrollTop !== state.listScroll) {
+            this.list.elem.scrollTop = state.listScroll;
+        }
     }
 
     render(state, prevState = {}) {

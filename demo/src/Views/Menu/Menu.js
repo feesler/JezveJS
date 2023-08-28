@@ -34,6 +34,22 @@ const defaultItems = [{
     title: 'Checkbox item',
 }];
 
+const horizontalItems = [{
+    id: 'selectBtnItem',
+    title: 'Button item',
+}, {
+    id: 'separator1',
+    type: 'separator',
+}, {
+    id: 'linkItem',
+    type: 'link',
+    title: 'Link item',
+    url: '#123',
+}, {
+    id: 'noIconItem',
+    title: 'Item 3',
+}];
+
 const groupItems = [{
     id: 'noGroupItem1',
     title: 'No group item 1',
@@ -92,6 +108,7 @@ class MenuView extends DemoView {
         this.initHeaderFooter();
         this.initListPlaceholder();
         this.initScroll();
+        this.initFocusOnHover();
         this.initGroups();
         this.initCheckboxGroups();
         this.initCollapsibleGroups();
@@ -130,21 +147,7 @@ class MenuView extends DemoView {
                 Menu.create({
                     id: 'horizontalMenu',
                     className: 'horizontal-menu',
-                    items: [{
-                        id: 'selectBtnItem',
-                        title: 'Button item',
-                    }, {
-                        id: 'separator1',
-                        type: 'separator',
-                    }, {
-                        id: 'linkItem',
-                        type: 'link',
-                        title: 'Link item',
-                        url: '#123',
-                    }, {
-                        id: 'noIconItem',
-                        title: 'Item 3',
-                    }],
+                    items: structuredClone(horizontalItems),
                 }).elem,
             ),
         });
@@ -250,6 +253,23 @@ class MenuView extends DemoView {
         });
     }
 
+    initFocusOnHover() {
+        this.addSection({
+            id: 'focusOnHover',
+            title: '\'focusItemOnHover\' option',
+            description: 'This demo shows disabled \'focusItemOnHover\' option. Default is enabled.',
+            content: createContainer(
+                'focusOnHoverContainer',
+                Menu.create({
+                    id: 'focusOnHoverMenu',
+                    focusItemOnHover: false,
+                    className: 'horizontal-menu',
+                    items: initItems('Menu item', 4),
+                }).elem,
+            ),
+        });
+    }
+
     initGroups() {
         const logsField = LogsField.create();
 
@@ -281,7 +301,6 @@ class MenuView extends DemoView {
             multiple: true,
             checkboxSide: 'right',
             defaultItemType: 'checkbox',
-            className: 'checkbox-groups-menu',
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
             items,
         });

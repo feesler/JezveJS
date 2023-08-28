@@ -10,6 +10,7 @@ export class CollapsibleGroupsMenu extends Menu {
     constructor(props = {}) {
         super({
             ...props,
+            allowActiveGroupHeader: true,
             components: {
                 ...props.components,
                 GroupHeader: CollapsibleMenuGroupHeader,

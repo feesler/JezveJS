@@ -1,4 +1,4 @@
-import { getClassName, isFunction } from '../../../../js/common.js';
+import { deepMeet, getClassName, isFunction } from '../../../../js/common.js';
 import { Menu } from '../../../Menu/Menu.js';
 
 import './Menu.scss';
@@ -29,6 +29,8 @@ const defaultProps = {
         Input: null,
         MenuList: null,
         ListItem: null,
+        Check: null,
+        Checkbox: null,
         ListPlaceholder: null,
         GroupItem: null,
     },
@@ -67,5 +69,26 @@ export class DropDownMenu extends Menu {
         if (isFunction(this.props.onItemActivate)) {
             this.props.onItemActivate(itemId);
         }
+    }
+
+    getItemProps(item, state) {
+        const props = super.getItemProps(item, state);
+
+        props.multiple = state.multiple;
+        props.filtered = state.filtered;
+        props.hidden = item.hidden || (state.filtered && !item.matchFilter);
+
+        return props;
+    }
+
+    isListChanged(state, prevState) {
+        return (
+            super.isListChanged(state, prevState)
+            || !deepMeet(state.items, prevState?.items)
+            || state.multiple !== prevState?.multiple
+            || state.filtered !== prevState?.filtered
+            || state.inputString !== prevState?.inputString
+            || state.PlaceholderComponent !== prevState?.PlaceholderComponent
+        );
     }
 }
