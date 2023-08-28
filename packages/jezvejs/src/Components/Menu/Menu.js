@@ -159,6 +159,11 @@ export class Menu extends Component {
                 ...listComponents,
             },
         });
+        setEvents(this.list.elem, {
+            mousemove: (e) => this.onMouseMove(e),
+            mouseleave: (e) => this.onMouseLeave(e),
+        });
+
         children.push(this.list.elem);
 
         if (Footer) {
@@ -174,8 +179,6 @@ export class Menu extends Component {
                     listener: (e) => this.onScroll(e),
                     options: { capture: true, passive: true },
                 },
-                mousemove: (e) => this.onMouseMove(e),
-                mouseleave: (e) => this.onMouseLeave(e),
             },
         });
 
@@ -370,8 +373,10 @@ export class Menu extends Component {
         }
 
         const item = this.getItemById(id);
+        const activeItem = this.getActiveItem();
         const { type } = item;
 
+        // Prevent navigation by link if needed
         if (
             this.state.preventNavigation
             && (type === 'link' || type === 'checkbox-link')
@@ -379,6 +384,13 @@ export class Menu extends Component {
             e?.preventDefault();
         }
 
+        // Prevent selection item if active item is exist and not equal to current item
+        if (activeItem && activeItem.id !== item.id) {
+            this.activateItem(item.id, false);
+            return;
+        }
+
+        // Handle clicks by group header
         if (type === 'group') {
             const { GroupHeader } = this.state.components;
             if (!e?.target.closest(GroupHeader?.selector)) {
@@ -433,12 +445,11 @@ export class Menu extends Component {
 
     onFocus(e) {
         const item = this.list.itemFromElem(e?.target);
-        if (!item) {
+        if (!item || item.active) {
             return;
         }
 
         this.setActive(item.id);
-        this.scrollToItem(item);
     }
 
     onBlur(e) {
@@ -527,24 +538,24 @@ export class Menu extends Component {
             return;
         }
 
-        const activeItem = getActiveItem(this.state.items);
+        const activeItem = this.getActiveItem();
         if (item.id === activeItem?.id) {
             return;
         }
 
-        if (this.state.tabThrough) {
-            const elem = this.list.itemElemById(id);
-            if (item.type === 'group' && this.state.allowActiveGroupHeader) {
-                const groupHeader = elem?.querySelector('.menu-group__header');
-                groupHeader?.focus();
-            } else {
-                elem?.focus();
-            }
+        const focusOptions = { preventScroll: !scrollToItem };
+
+        const elem = this.list.itemElemById(id);
+        if (item.type === 'group' && this.state.allowActiveGroupHeader) {
+            const { GroupHeader } = this.state.components;
+            const groupHeader = elem?.querySelector(GroupHeader?.selector);
+            groupHeader?.focus(focusOptions);
         } else {
-            this.setActive(id);
-            if (scrollToItem) {
-                this.scrollToItem(item);
-            }
+            elem?.focus(focusOptions);
+        }
+
+        if (scrollToItem) {
+            this.scrollToItem(item);
         }
     }
 
@@ -585,21 +596,25 @@ export class Menu extends Component {
             }
         }
 
-        e.preventDefault();
         this.activateItem(item.id, false);
     }
 
     /** 'mouseleave' event handler */
-    onMouseLeave() {
-        if (!this.state.focusItemOnHover) {
+    onMouseLeave(e) {
+        if (this.state.blockScroll) {
             return;
         }
 
         this.setActive(null);
 
+        if (isFunction(this.props.onMouseLeave)) {
+            this.props.onMouseLeave(e);
+            return;
+        }
+
         const focused = document.activeElement;
         if (this.elem.contains(focused)) {
-            focused.blur();
+            this.elem.focus({ preventScroll: true });
         }
     }
 

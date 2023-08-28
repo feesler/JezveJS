@@ -436,6 +436,7 @@ export class DropDown extends Component {
             onItemActivate: (id) => this.setActive(id),
             onPlaceholderClick: () => this.handlePlaceholderSelect(),
             isLostFocus: (e) => this.isLostFocus(e),
+            onMouseLeave: (e) => this.onMouseLeave(e),
             renderTime: this.state.renderTime,
             header: {
                 inputElem: this.inputElem,
@@ -524,7 +525,7 @@ export class DropDown extends Component {
         removeEvents(this.elem, this.commonEvents, { capture: true });
     }
 
-    /** viewPort 'resize' event handler */
+    /** Window 'scroll' event handler */
     onWindowScroll() {
         if (this.state.waitForScroll) {
             this.showListHandler();
@@ -591,10 +592,8 @@ export class DropDown extends Component {
             !this.props.multiple
             && this.props.blurInputOnSingleSelect
         );
-        if (
-            blurOnSelect
-            && this.isMenuTarget(e.target)
-        ) {
+        const menuTarget = this.isMenuTarget(e.target);
+        if (blurOnSelect && menuTarget) {
             return;
         }
 
@@ -627,11 +626,38 @@ export class DropDown extends Component {
         }
     }
 
+    /**
+     * Returns true if focus moved outside of component
+     *
+     * @param {Event} e event object
+     * @returns {Boolean}
+     */
     isLostFocus(e) {
+        return !this.isChildElement(e.relatedTarget);
+    }
+
+    /**
+     * Returns true if component is containing specified element
+     *
+     * @param {Element} elem
+     * @returns {Boolean}
+     */
+    isChildElement(elem) {
         return (
-            !this.isChildTarget(e.relatedTarget)
-            && !this.isMenuTarget(e.relatedTarget)
+            !!elem
+            && (
+                this.isChildTarget(elem)
+                || this.isMenuTarget(elem)
+            )
         );
+    }
+
+    /** 'mouseleave' event handler */
+    onMouseLeave() {
+        const focused = document.activeElement;
+        if (this.isChildElement(focused)) {
+            this.elem.focus({ preventScroll: true });
+        }
     }
 
     /** Click by delete button of selected item event handler */
@@ -786,9 +812,8 @@ export class DropDown extends Component {
         }
 
         if (newItem) {
-            this.setActive(newItem.id);
-            this.menu.scrollToItem(newItem);
             e.preventDefault();
+            this.menu.activateItem(newItem.id);
         }
 
         if (focusInput) {
@@ -1401,7 +1426,11 @@ export class DropDown extends Component {
 
     /** Activate specified selected item */
     activateSelectedItem(index) {
-        if (this.state.disabled || !this.props.multiple) {
+        if (
+            this.state.disabled
+            || !this.props.multiple
+            || (this.state.actSelItemIndex === index)
+        ) {
             return;
         }
 
@@ -1839,7 +1868,7 @@ export class DropDown extends Component {
         const itemToActivate = this.getItem(itemId);
         const activeItem = this.getActiveItem();
         if (
-            (activeItem === itemToActivate && (activeItem || itemToActivate))
+            (activeItem && itemToActivate && activeItem.id === itemToActivate.id)
             || (!activeItem && !itemToActivate)
         ) {
             return;
@@ -1850,7 +1879,7 @@ export class DropDown extends Component {
             actSelItemIndex: -1,
             items: this.state.items.map((item) => ({
                 ...item,
-                active: item === itemToActivate,
+                active: item.id === itemToActivate?.id,
             })),
         });
     }
