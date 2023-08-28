@@ -26,6 +26,7 @@ import {
     getPreviousItem,
     mapItems,
     getMenuProps,
+    findLastMenuItem,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -64,6 +65,7 @@ const defaultProps = {
     onItemClick: null,
     onGroupHeaderClick: null,
     tabThrough: true,
+    loopNavigation: true,
     multiple: false,
     iconAlign: 'left', // available value: 'left', 'right'
     checkboxSide: 'left', // available value: 'left', 'right'
@@ -496,9 +498,13 @@ export class Menu extends Component {
 
         if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
             const activeItem = this.getActiveItem();
-            const nextItem = (activeItem)
+            let nextItem = (activeItem)
                 ? getNextItem(activeItem.id, this.state.items, availCallback, options)
-                : findMenuItem(this.state.items, availCallback, options);
+                : findMenuItem(this.state.items, availCallback);
+
+            if (this.state.loopNavigation && activeItem && !nextItem) {
+                nextItem = findMenuItem(this.state.items, availCallback);
+            }
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.activateItem(nextItem.id);
@@ -511,9 +517,13 @@ export class Menu extends Component {
 
         if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
             const activeItem = this.getActiveItem();
-            const nextItem = (activeItem)
+            let nextItem = (activeItem)
                 ? getPreviousItem(activeItem.id, this.state.items, availCallback, options)
-                : findMenuItem(this.state.items, availCallback, options);
+                : findLastMenuItem(this.state.items, availCallback);
+
+            if (this.state.loopNavigation && activeItem && !nextItem) {
+                nextItem = findLastMenuItem(this.state.items, availCallback);
+            }
 
             if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
                 this.activateItem(nextItem.id);

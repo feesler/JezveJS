@@ -109,6 +109,8 @@ const defaultProps = {
     enableFilter: false,
     /* If enabled menu will be opened on component receive focus */
     openOnFocus: false,
+    /* If enabled then after last item will be activated first and vice versa */
+    loopNavigation: true,
     /* Title for empty menu list placeholder */
     noResultsMessage: 'No items',
     /* Enables create new items from filter input value */
@@ -778,14 +780,19 @@ export class DropDown extends Component {
             } else if (this.state.visible) {
                 if (activeItem) {
                     newItem = this.getNextAvailableItem(activeItem.id);
+                    if (this.props.loopNavigation && !newItem) {
+                        [newItem] = availItems;
+                    }
                 } else if (availItems.length > 0) {
                     [newItem] = availItems;
                 }
             }
         } else if (e.code === 'ArrowUp') {
-            if (this.state.visible) {
-                if (activeItem) {
-                    newItem = this.getPrevAvailableItem(activeItem.id);
+            const availItems = this.getAvailableItems(this.state);
+            if (this.state.visible && activeItem) {
+                newItem = this.getPrevAvailableItem(activeItem.id);
+                if (this.props.loopNavigation && !newItem) {
+                    newItem = availItems[availItems.length - 1];
                 }
             }
         } else if (e.code === 'Home') {
