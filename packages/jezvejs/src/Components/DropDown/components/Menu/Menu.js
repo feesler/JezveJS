@@ -74,12 +74,11 @@ export class DropDownMenu extends Menu {
     getItemProps(item, state) {
         const props = super.getItemProps(item, state);
 
-        return {
-            ...props,
-            multiple: state.multiple,
-            filtered: state.filtered,
-            hidden: item.hidden || (state.filtered && !item.matchFilter),
-        };
+        props.multiple = state.multiple;
+        props.filtered = state.filtered;
+        props.hidden = item.hidden || (state.filtered && !item.matchFilter);
+
+        return props;
     }
 
     isListChanged(state, prevState) {
