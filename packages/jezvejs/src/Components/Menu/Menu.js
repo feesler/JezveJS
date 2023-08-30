@@ -124,6 +124,8 @@ export class Menu extends Component {
             onPlaceholderClick: (e) => this.onPlaceholderClick(e),
         };
 
+        this.renderInProgress = false;
+
         this.state = this.onStateChange({
             ...this.props,
             blockScroll: false,
@@ -455,6 +457,10 @@ export class Menu extends Component {
     }
 
     onBlur(e) {
+        if (this.renderInProgress) {
+            return;
+        }
+
         if (this.isLostFocus(e)) {
             this.setActive(null);
         }
@@ -878,11 +884,15 @@ export class Menu extends Component {
             throw new Error('Invalid state');
         }
 
+        this.renderInProgress = true;
+
         enable(this.elem, !state.disabled);
         this.elem.tabIndex = (state.tabThrough) ? -1 : 0;
 
         this.renderHeader(state, prevState);
         this.renderList(state, prevState);
         this.renderFooter(state, prevState);
+
+        this.renderInProgress = false;
     }
 }

@@ -617,6 +617,10 @@ export class DropDown extends Component {
 
     /** 'blur' event handler */
     onBlur(e) {
+        if (this.menu?.renderInProgress) {
+            return;
+        }
+
         if (this.isLostFocus(e)) {
             this.focusedElem = null;
             this.stopScrollWaiting();
