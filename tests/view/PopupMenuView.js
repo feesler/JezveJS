@@ -19,7 +19,7 @@ const controlSelectors = {
     defaultBtn: '#defaultContainer .menu-btn',
     attachTarget: '#attachTarget',
     listContainer: '#listContainer',
-    clippingBtn: '#headerContent .menu-btn',
+    clippingBtn: '.nav-header__content .menu-btn',
 };
 
 export class PopupMenuView extends AppView {

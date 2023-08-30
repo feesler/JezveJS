@@ -21,7 +21,6 @@
 
   .collapsible-content {
     flex-flow: column nowrap;
-    padding: 8px;
     margin: 0 1px;
     border: 0 none;
     border-bottom-left-radius: 5px;
@@ -30,6 +29,15 @@
     border-color: #303030;
     background-color: #252525;
   }
+}
+
+.collapsible-content-container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  width: 100%;
 }
 
 #styled-content {
@@ -53,8 +61,6 @@
   }
 
   .collapsible-content {
-    padding: 8px;
-    justify-content: center;
     background-color: #94bde0;
   }
 }

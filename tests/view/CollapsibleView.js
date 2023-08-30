@@ -3,6 +3,7 @@ import {
     query,
     asyncMap,
     click,
+    waitForFunction,
 } from 'jezve-test';
 import { Collapsible } from 'jezvejs-test';
 import { AppView } from './AppView.js';
@@ -83,21 +84,42 @@ export class CollapsibleView extends AppView {
     async toggleById(id) {
         const component = this.getComponentById(id);
 
-        if (toggleableList.includes(id)) {
-            this.model[id].collapsed = !this.model[id].collapsed;
-        }
+        const componentModel = this.model[id];
+        const collapsedExpected = (toggleableList.includes(id))
+            ? !componentModel.collapsed
+            : componentModel.collapsed;
+        this.model[id].collapsed = collapsedExpected;
         const expected = this.getExpectedState();
 
         await this.performAction(() => component.toggle());
+        await waitForFunction(async () => {
+            await this.parse();
+
+            const collapsible = this.getComponentById(id);
+            return (
+                collapsible.collapsed === collapsedExpected
+                && !collapsible.animationInProgress
+            );
+        });
 
         return this.checkState(expected);
     }
 
     async toggleDisabled() {
-        this.model.toggleOnClick.collapsed = !this.model.toggleOnClick.collapsed;
+        const collapsedExpected = !this.model.toggleOnClick.collapsed;
+        this.model.toggleOnClick.collapsed = collapsedExpected;
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.toggleDisabledBtn.elem));
+        await waitForFunction(async () => {
+            await this.parse();
+
+            const collapsible = this.getComponentById('toggleOnClick');
+            return (
+                collapsible.collapsed === collapsedExpected
+                && !collapsible.animationInProgress
+            );
+        });
 
         return this.checkState(expected);
     }

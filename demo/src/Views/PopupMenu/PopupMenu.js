@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement, ge } from 'jezvejs';
+import { createElement } from 'jezvejs';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 
@@ -116,7 +116,11 @@ class PopupMenuView extends DemoView {
 
     initClipping() {
         const btn = MenuButton.create();
-        ge('headerContent').append(btn.elem);
+        const headerContent = createElement('div', {
+            props: { className: 'nav-header__content' },
+            children: btn.elem,
+        });
+        this.header.elem.append(headerContent);
 
         PopupMenu.create({
             id: 'clippingMenu',

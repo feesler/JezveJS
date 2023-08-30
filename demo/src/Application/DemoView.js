@@ -1,5 +1,7 @@
-import { createElement, ge, setEvents } from 'jezvejs';
+import { createElement } from 'jezvejs';
 import { mapItems } from 'jezvejs/Menu';
+import { Header } from 'jezvejs/Header';
+import { HeaderMenuButton } from 'jezvejs/HeaderMenuButton';
 import { View } from 'jezvejs/View';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
@@ -17,7 +19,6 @@ export class DemoView extends View {
      */
     preStart() {
         this.initNavigation();
-        this.renderVersion();
         this.initContainer();
 
         this.sections = {};
@@ -25,7 +26,7 @@ export class DemoView extends View {
 
     /**
      * Returns new instance of NavigationMenu component
-     * @returns NavigationMenu
+     * @returns {NavigationMenu}
      */
     createNavigationMenu() {
         const baseURL = App.getBaseURL();
@@ -38,16 +39,51 @@ export class DemoView extends View {
     }
 
     /**
+     * Creates and initializes page header
+     */
+    createHeader() {
+        const hrdButton = HeaderMenuButton.create({
+            onClick: () => this.navOffcanvas?.toggle(),
+        });
+
+        const baseURL = App.getBaseURL();
+        const logoLink = createElement('a', {
+            props: {
+                className: 'nav-header__logo',
+                href: `${baseURL}demo/index.html`,
+                textContent: 'JezveJS',
+            },
+        });
+
+        const versionLabel = createElement('div', {
+            props: {
+                className: 'nav-header__version',
+                textContent: App.getVersion(),
+            },
+        });
+
+        this.header = Header.create({
+            content: [
+                hrdButton.elem,
+                logoLink,
+                versionLabel,
+            ],
+        });
+
+        const page = document.querySelector('.page-wrapper');
+        page.prepend(this.header.elem);
+    }
+
+    /**
      * Initializes navigation menu
      */
     initNavigation() {
         const navMenu = this.createNavigationMenu();
-        const offcanvas = Offcanvas.create({
+        this.navOffcanvas = Offcanvas.create({
             content: navMenu.elem,
         });
 
-        const navToggleBtn = document.querySelector('.nav-header .nav-toggle-btn');
-        setEvents(navToggleBtn, { click: () => offcanvas.toggle() });
+        this.createHeader();
     }
 
     /**
@@ -163,13 +199,5 @@ export class DemoView extends View {
             id,
             title,
         });
-    }
-
-    /**
-     * Renders version of library from package data
-     */
-    renderVersion() {
-        const version = ge('version');
-        version.textContent = App.getVersion();
     }
 }

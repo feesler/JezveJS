@@ -1,0 +1,25 @@
+/* Header custom properties */
+:root {
+  --header-size: 50px;
+  --header-color: #dddddd;
+  --header-background: #404040;
+  --header-hover-button-background: #606060;
+  --header-active-button-background: #202020;
+  --header-z-index: 2000;
+}
+
+/* Header */
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  position: fixed;
+  overflow: hidden;
+  height: var(--header-size);
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: var(--header-z-index);
+  color: var(--header-color);
+  background: var(--header-background);
+}
