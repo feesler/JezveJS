@@ -22,7 +22,7 @@
     "dependencies": {
         "@babel/runtime": "^7.22.11",
         "core-js": "^3.32.1",
-        "whatwg-fetch": "^3.6.17"
+        "whatwg-fetch": "^3.6.18"
     },
     "main": "index.js",
     "exports": {
