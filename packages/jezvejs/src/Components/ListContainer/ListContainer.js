@@ -401,10 +401,14 @@ export class ListContainer extends Component {
             ));
 
             let listItem = this.getListItemById(item.id);
-            const insertNode = (index !== indexBefore) || !listItem;
+            let insertNode = (index !== indexBefore) || !listItem;
 
             if (listItem) {
+                const elemBefore = listItem.elem;
                 listItem.setState(itemProps);
+                if (elemBefore !== listItem.elem) {
+                    insertNode = true;
+                }
             } else {
                 const ItemComponent = this.getItemComponent(item, state);
                 listItem = ItemComponent.create(itemProps);
