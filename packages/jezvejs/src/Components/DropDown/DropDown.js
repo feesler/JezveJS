@@ -724,12 +724,12 @@ export class DropDown extends Component {
         e.stopPropagation();
 
         const editable = this.isEditable();
-        const { multiple } = this.props;
+        const { multiple, showMultipleSelection, listAttach } = this.props;
         const input = this.getInput();
         let newItem = null;
 
-        let allowSelectionNavigate = multiple;
-        if (multiple && editable && e.target === input.elem) {
+        let allowSelectionNavigate = multiple && showMultipleSelection && !listAttach;
+        if (allowSelectionNavigate && editable && e.target === input.elem) {
             // Check cursor is at start of input
             const cursorPos = getCursorPos(input.elem);
             if (cursorPos?.start !== 0 || cursorPos.start !== cursorPos.end) {
