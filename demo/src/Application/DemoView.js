@@ -1,5 +1,6 @@
-import { createElement, ge, setEvents } from 'jezvejs';
+import { createElement, ge } from 'jezvejs';
 import { mapItems } from 'jezvejs/Menu';
+import { HeaderMenuButton } from 'jezvejs/HeaderMenuButton';
 import { View } from 'jezvejs/View';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
@@ -46,8 +47,12 @@ export class DemoView extends View {
             content: navMenu.elem,
         });
 
-        const navToggleBtn = document.querySelector('.nav-header .nav-toggle-btn');
-        setEvents(navToggleBtn, { click: () => offcanvas.toggle() });
+        const hrdButton = HeaderMenuButton.create({
+            onClick: () => offcanvas.toggle(),
+        });
+
+        const navHeader = document.querySelector('.nav-header');
+        navHeader.prepend(hrdButton.elem);
     }
 
     /**

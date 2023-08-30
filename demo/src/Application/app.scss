@@ -139,19 +139,14 @@ a:visited {
 }
 
 /* Navigation toggle button */
-.nav-toggle-btn {
-  background: none;
-  border: 0;
-  border-radius: 100vh;
-  cursor: pointer;
-  display: block;
-  padding: 13px;
-}
+.btn.header-menu-btn {
+  --btn-border-radius: 100vh;
+  --btn-padding: 4px;
+  --btn-icon-color: #dddddd;
+  --btn-active-background: #4e4e4e;
+  --btn-hover-background: #646464;
 
-.nav-toggle-icon {
-  width: 24px;
-  height: 24px;
-  fill: #dddddd;
+  margin: 9px;
 }
 
 .offcanvas__content .nav-menu-container {
