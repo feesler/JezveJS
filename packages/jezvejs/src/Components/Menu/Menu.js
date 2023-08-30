@@ -298,6 +298,8 @@ export class Menu extends Component {
         const { list } = getMenuProps(state);
         delete list.id;
         delete list.className;
+        delete list.title;
+        delete list.hidden;
 
         const res = {
             ...ListItem.defaultProps,
