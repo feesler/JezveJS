@@ -41,6 +41,7 @@ export default {
         PopupPosition: './src/Components/PopupPosition/PopupPosition.js',
         Progress: './src/Components/Progress/Progress.js',
         Radio: './src/Components/Radio/Radio.js',
+        ScrollLock: './src/Components/ScrollLock/ScrollLock.js',
         Slidable: './src/Components/Slidable/Slidable.js',
         Slider: './src/Components/Slider/Slider.js',
         Sortable: './src/Components/Sortable/Sortable.js',
@@ -51,6 +52,7 @@ export default {
         TabList: './src/Components/TabList/TabList.js',
         Tag: './src/Components/Tag/Tag.js',
         Tags: './src/Components/Tags/Tags.js',
+        View: './src/Components/View/View.js',
         WeekDaySelect: './src/Components/WeekDaySelect/WeekDaySelect.js',
     },
     output: {
