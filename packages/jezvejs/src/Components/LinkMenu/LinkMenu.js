@@ -7,7 +7,6 @@ import {
 import {
     Menu,
     isNullId,
-    mapItems,
     toFlatList,
 } from '../Menu/Menu.js';
 import './LinkMenu.scss';
@@ -50,6 +49,25 @@ export class LinkMenu extends Menu {
         return this.state.disabled;
     }
 
+    /**
+     * Returns render properties for specified item
+     * @param {object} item
+     * @param {object} state current list state object
+     */
+    getItemProps(item, state) {
+        const res = super.getItemProps(item, state);
+
+        if (
+            res.selected
+            && !state.allowActiveLink
+            && (res.type === 'link' || res.type === 'checkbox-link')
+        ) {
+            res.type = (res.type === 'link') ? 'button' : 'checkbox';
+        }
+
+        return res;
+    }
+
     onItemClick(id, e) {
         super.onItemClick(id, e);
 
@@ -84,30 +102,6 @@ export class LinkMenu extends Menu {
             && !state.disabled
             && (!item.selected || state.allowActiveLink)
         );
-    }
-
-    onStateChange(state, prevState = {}) {
-        if (state.items === prevState?.items) {
-            return state;
-        }
-
-        const newState = super.onStateChange(state, prevState);
-
-        return {
-            ...state,
-            items: mapItems(newState.items, (item) => (
-                (
-                    item.selected
-                    && !state.allowActiveLink
-                    && (item.type === 'link' || item.type === 'checkbox-link')
-                )
-                    ? {
-                        ...item,
-                        type: (item.type === 'link') ? 'button' : 'checkbox',
-                    }
-                    : item
-            )),
-        };
     }
 
     render(state, prevState = {}) {
