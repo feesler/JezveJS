@@ -22,6 +22,7 @@ export default {
         DecimalInput: './src/Components/DecimalInput/DecimalInput.js',
         DragnDrop: './src/Components/DragnDrop/DragnDrop.js',
         DropDown: './src/Components/DropDown/DropDown.js',
+        Header: './src/Components/Header/Header.js',
         HeaderMenuButton: './src/Components/HeaderMenuButton/HeaderMenuButton.js',
         Histogram: './src/Components/Histogram/Histogram.js',
         Icon: './src/Components/Icon/Icon.js',

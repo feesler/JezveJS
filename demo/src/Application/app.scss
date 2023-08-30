@@ -106,22 +106,7 @@ a:visited {
   outline-offset: 0.1rem;
 }
 
-/* Navigation */
-.nav-header {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 50px;
-  z-index: 2000;
-  box-sizing: border-box;
-  background-color: #404040;
-  color: #dddddd;
-}
-
+/* Header logo */
 .nav-header__logo,
 .nav-header__logo:visited {
   display: flex;

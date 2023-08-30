@@ -8,6 +8,8 @@ class MainView extends DemoView {
      * Initializes navigation menu
      */
     initNavigation() {
+        this.createHeader();
+
         const navMenu = this.createNavigationMenu();
 
         const menuContainer = document.querySelector('.menu-container');
