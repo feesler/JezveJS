@@ -17,8 +17,10 @@ export class Collapsible extends TestComponent {
 
         [
             res.collapsed,
+            res.animationInProgress,
         ] = await evaluate((elem) => ([
             !elem.classList.contains('collapsible__expanded'),
+            elem.classList.contains('collapsible_animated'),
         ]), this.elem);
 
         return res;
@@ -26,6 +28,10 @@ export class Collapsible extends TestComponent {
 
     get collapsed() {
         return this.content.collapsed;
+    }
+
+    get animationInProgress() {
+        return this.content.animationInProgress;
     }
 
     async toggle() {

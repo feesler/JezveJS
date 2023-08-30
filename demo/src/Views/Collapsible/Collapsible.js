@@ -21,6 +21,15 @@ const createButton = (icon) => createElement('button', {
     events: { click: (e) => e.stopPropagation() },
 });
 
+/** Returns new content */
+const createContent = (content) => createElement('div', {
+    props: {
+        className: 'collapsible-content-container',
+        textContent: (typeof content === 'string') ? content : '',
+    },
+    children: (typeof content !== 'string') ? content : null,
+});
+
 /**
  * Collapsible component demo view
  */
@@ -31,6 +40,7 @@ class CollapsibleView extends DemoView {
     onStart() {
         this.initSimple();
         this.initStyled();
+        this.initAnimated();
         this.initCustomHeader();
         this.initDisabledToggle();
         this.initMethods();
@@ -52,7 +62,7 @@ class CollapsibleView extends DemoView {
 
     initStyled() {
         const collapse = Collapsible.create({
-            content: ge('styledContent'),
+            content: createContent(ge('styledContent')),
             className: 'styled',
             onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
         });
@@ -60,6 +70,24 @@ class CollapsibleView extends DemoView {
         this.addSection({
             id: 'styled',
             title: 'Styled container',
+            content: createElement('div', { children: collapse.elem }),
+        });
+    }
+
+    initAnimated() {
+        const content = ge('styledContent').cloneNode(true);
+        content.id = 'animatedContent';
+
+        const collapse = Collapsible.create({
+            content: createContent(content),
+            className: 'styled',
+            animated: true,
+            onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
+        });
+
+        this.addSection({
+            id: 'animated',
+            title: 'Animated',
             content: createElement('div', { children: collapse.elem }),
         });
     }
@@ -76,8 +104,9 @@ class CollapsibleView extends DemoView {
 
         const collapse = Collapsible.create({
             header: [titleContainer, updateBtn, delBtn],
-            content: 'Custom header',
+            content: createContent('Custom header'),
             className: 'custom',
+            animated: true,
             onStateChange: (expanded) => {
                 titleContainer.textContent = (expanded) ? 'Hide' : 'Show';
             },
@@ -106,7 +135,8 @@ class CollapsibleView extends DemoView {
         const collapse = Collapsible.create({
             toggleOnClick: false,
             header: [titleContainer, toggleBtn],
-            content: 'Content',
+            content: createContent('Content'),
+            animated: true,
             className: 'disabled-toggle',
         });
         setEvents(toggleBtn, { click: () => collapse?.toggle() });

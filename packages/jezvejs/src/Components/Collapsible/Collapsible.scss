@@ -20,3 +20,9 @@
 .collapsible__expanded > .collapsible-content {
   display: flex;
 }
+
+.collapsible_animated > .collapsible-content {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
