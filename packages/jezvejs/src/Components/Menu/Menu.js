@@ -125,6 +125,7 @@ export class Menu extends Component {
         };
 
         this.renderInProgress = false;
+        this.activeElem = null;
 
         this.state = this.onStateChange({
             ...this.props,
@@ -164,7 +165,8 @@ export class Menu extends Component {
             },
         });
         setEvents(this.list.elem, {
-            mousemove: (e) => this.onMouseMove(e),
+            mouseover: (e) => this.onMouseOver(e),
+            mouseout: (e) => this.onMouseOut(e),
             mouseleave: (e) => this.onMouseLeave(e),
         });
 
@@ -579,7 +581,7 @@ export class Menu extends Component {
 
     /**
      * 'touchstart' event on handler
-     * Sets ignoreTouch flag for further 'mousemove' event
+     * Sets ignoreTouch flag for further mouse events
      * @param {TouchEvent} e - event object
      */
     onTouchStart(e) {
@@ -588,16 +590,57 @@ export class Menu extends Component {
         }
     }
 
-    /** 'mousemove' event handler */
-    onMouseMove(e) {
+    /** 'mouseover' event handler */
+    onMouseOver(e) {
         if (
             this.state.blockScroll
             || this.state.ignoreTouch
             || !this.state.focusItemOnHover
+            || this.activeElem
         ) {
             return;
         }
 
+        const itemElem = this.list.getClosestItemElement(e?.target);
+        if (!itemElem || !this.isChildElem(itemElem)) {
+            return;
+        }
+
+        this.activeElem = itemElem;
+        this.handleMouseEnter(e);
+    }
+
+    /** 'mouseout' event handler */
+    onMouseOut(e) {
+        if (
+            this.state.blockScroll
+            || !this.activeElem
+        ) {
+            return;
+        }
+
+        const itemElem = this.list.getClosestItemElement(e.relatedTarget);
+        if (itemElem === this.activeElem) {
+            return;
+        }
+
+        this.activeElem = null;
+        if (!this.isChildElem(itemElem)) {
+            this.handleLeaveItem(e);
+        }
+    }
+
+    /** 'mouseleave' event handler */
+    onMouseLeave(e) {
+        if (this.state.blockScroll) {
+            return;
+        }
+
+        this.handleLeaveItem(e);
+    }
+
+    /** Handles mouse entering list item element */
+    handleMouseEnter(e) {
         const item = this.list.itemFromElem(e?.target);
         if (!item) {
             return;
@@ -617,12 +660,8 @@ export class Menu extends Component {
         this.activateItem(item.id, false);
     }
 
-    /** 'mouseleave' event handler */
-    onMouseLeave(e) {
-        if (this.state.blockScroll) {
-            return;
-        }
-
+    /** Handles mouse leaving list element */
+    handleLeaveItem(e) {
         this.setActive(null);
 
         if (isFunction(this.props.onMouseLeave)) {
