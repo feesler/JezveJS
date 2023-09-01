@@ -346,7 +346,6 @@ export class Menu extends Component {
             'iconAlign',
             'checkboxSide',
             'renderNotSelected',
-            'listScroll',
             'renderTime',
         ];
 
@@ -591,7 +590,7 @@ export class Menu extends Component {
             return;
         }
 
-        const focusOptions = { preventScroll: !scrollToItem };
+        const focusOptions = { preventScroll: true };
 
         const elem = this.list.itemElemById(id);
         if (item.type === 'group' && this.state.allowActiveGroupHeader) {
@@ -956,7 +955,7 @@ export class Menu extends Component {
         }
     }
 
-    renderList(state, prevState) {
+    renderListContent(state, prevState) {
         if (!this.isListChanged(state, prevState)) {
             return;
         }
@@ -993,10 +992,17 @@ export class Menu extends Component {
             beforeContent,
             afterContent,
         }));
+    }
 
+    renderListScroll(state) {
         if (this.list.elem.scrollTop !== state.listScroll) {
             this.list.elem.scrollTop = state.listScroll;
         }
+    }
+
+    renderList(state, prevState) {
+        this.renderListContent(state, prevState);
+        this.renderListScroll(state, prevState);
     }
 
     render(state, prevState = {}) {
