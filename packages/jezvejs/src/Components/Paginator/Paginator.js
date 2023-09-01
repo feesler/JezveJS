@@ -20,7 +20,7 @@ const defaultProps = {
     showSingleItem: false,
     arrows: false,
     pageParam: 'page',
-    url: window.location,
+    url: window.location.href,
 };
 
 const CONTAINER_CLASS = 'paginator';
