@@ -310,17 +310,8 @@ export class Menu extends Component {
      * @param {object} state current list state object
      */
     getItemProps(item, state) {
-        const { ListItem } = this.props.components;
-
-        const { list } = getMenuProps(state);
-        delete list.id;
-        delete list.className;
-        delete list.title;
-        delete list.hidden;
-
         const res = {
-            ...ListItem.defaultProps,
-            ...list,
+            ...this.itemPropsCache,
             ...item,
             disabled: item.disabled || state.disabled,
             getItemURL: (itemState) => this.getItemURL(itemState, state),
@@ -948,6 +939,23 @@ export class Menu extends Component {
         }));
     }
 
+    /** Prepares cache for common item properties */
+    cacheItemProps(listProps) {
+        const skipProps = ['id', 'className', 'title', 'hidden', 'items'];
+        const { ListItem } = this.props.components;
+        this.itemPropsCache = {
+            ...ListItem.defaultProps,
+        };
+
+        const keys = Object.keys(listProps);
+        for (let ind = 0; ind < keys.length; ind += 1) {
+            const key = keys[ind];
+            if (!skipProps.includes(key)) {
+                this.itemPropsCache[key] = listProps[key];
+            }
+        }
+    }
+
     renderList(state, prevState) {
         if (!this.isListChanged(state, prevState)) {
             return;
@@ -955,6 +963,9 @@ export class Menu extends Component {
 
         const { list } = getMenuProps(state);
 
+        this.cacheItemProps(list);
+
+        // Prepare alignment before and after item content
         let beforeContent = false;
         let afterContent = false;
 
