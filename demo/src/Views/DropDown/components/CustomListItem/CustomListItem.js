@@ -1,7 +1,7 @@
 import {
     createElement,
 } from 'jezvejs';
-import { CheckboxItem } from 'jezvejs/Menu';
+import { MenuItem } from 'jezvejs/Menu';
 
 const defaultProps = {
     selected: false,
@@ -26,7 +26,7 @@ const customColorsMap = {
     11: 'magenta',
 };
 
-export class CustomListItem extends CheckboxItem {
+export class CustomListItem extends MenuItem {
     constructor(props = {}) {
         super({
             ...defaultProps,

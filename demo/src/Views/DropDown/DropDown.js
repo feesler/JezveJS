@@ -174,7 +174,7 @@ class DropDownView extends DemoView {
         const input = createElement('input', { props: { id: 'selinp4', type: 'text' } });
         const container = createElement('div', {
             props: { className: 'allwidth halfwidth' },
-            children: [input, logsField.elem],
+            children: input,
         });
 
         DropDown.create({
@@ -193,7 +193,7 @@ class DropDownView extends DemoView {
         this.addSection({
             id: 'callbacks',
             title: 'Callbacks',
-            content: container,
+            content: [container, logsField.elem],
         });
     }
 
@@ -206,6 +206,7 @@ class DropDownView extends DemoView {
             content: DropDown.create({
                 elem: input,
                 fixedMenu: true,
+                className: 'dd_form',
                 data: initItems('Item', 50),
             }).elem,
         });
@@ -217,6 +218,7 @@ class DropDownView extends DemoView {
             title: 'Parse select without selection',
             content: DropDown.create({
                 elem: 'sel0',
+                className: 'dd_form',
                 placeholder: 'Select item 5',
             }).elem,
         });
@@ -228,6 +230,7 @@ class DropDownView extends DemoView {
             title: 'Parse select with selected option',
             content: DropDown.create({
                 elem: 'sel',
+                className: 'dd_form',
                 placeholder: 'Select item 5',
             }).elem,
         });
@@ -240,6 +243,7 @@ class DropDownView extends DemoView {
             title: 'Disabled option',
             content: DropDown.create({
                 elem: 'disabledopt',
+                className: 'dd_form',
             }).elem,
         });
     }
@@ -251,6 +255,7 @@ class DropDownView extends DemoView {
             title: 'Option groups',
             content: DropDown.create({
                 elem: 'optgroupssel',
+                className: 'dd_form',
             }).elem,
         });
     }
@@ -260,7 +265,7 @@ class DropDownView extends DemoView {
         const input = createElement('input', { props: { id: 'optgroupsdyn', type: 'text' } });
         const dropDown = DropDown.create({
             elem: input,
-            className: 'dd__styled-group',
+            className: 'dd_form dd__styled-group',
         });
         const visibleGroup = dropDown.addGroup({ id: 'grVisible', title: 'Visible' });
         const visibleGroupItems = initItems('Visible item', 2);
@@ -294,6 +299,7 @@ class DropDownView extends DemoView {
             title: 'Create without host element',
             content: DropDown.create({
                 data: initItems('Item', 10),
+                className: 'dd_form',
             }).elem,
         });
     }
@@ -497,6 +503,7 @@ class DropDownView extends DemoView {
             elem: input,
             enableFilter: true,
             placeholder: 'Type to filter',
+            className: 'dd_form',
             data: initItems('Filter item', 100),
         });
 
@@ -543,6 +550,7 @@ class DropDownView extends DemoView {
             noResultsMessage: 'Nothing found',
             multiple: true,
             placeholder: 'Type to filter',
+            className: 'dd_stretch',
             data: initItems('Filter item', 100),
         });
 
@@ -584,6 +592,7 @@ class DropDownView extends DemoView {
             noResultsMessage: 'Nothing found',
             multiple: true,
             placeholder: 'Type to filter',
+            className: 'dd_stretch',
         });
 
         const group10 = dropDown.addGroup({ title: '1 - 9' });
@@ -615,6 +624,7 @@ class DropDownView extends DemoView {
                 enableFilter: true,
                 blurInputOnSingleSelect: false,
                 placeholder: 'Type to filter',
+                className: 'dd_stretch',
                 data: initItems('Item', 10),
             }).elem,
         });
@@ -630,6 +640,7 @@ class DropDownView extends DemoView {
                 clearFilterOnMultiSelect: true,
                 multiple: true,
                 placeholder: 'Type to filter',
+                className: 'dd_stretch',
                 data: initItems('Item', 10),
             }).elem,
         });
@@ -661,6 +672,7 @@ class DropDownView extends DemoView {
             noResultsMessage: 'Nothing found',
             multiple: true,
             placeholder: 'Type to filter',
+            className: 'dd_stretch',
             data: initItems('Filter item', 20),
             onItemSelect: renderTags,
             onChange: renderTags,
@@ -682,6 +694,7 @@ class DropDownView extends DemoView {
             noResultsMessage: 'Nothing found',
             multiple: true,
             placeholder: 'Type to filter',
+            className: 'dd_form',
             data: initItems('Item', 20),
         });
 
@@ -700,6 +713,7 @@ class DropDownView extends DemoView {
             noResultsMessage: 'Nothing found',
             multiple: true,
             placeholder: 'Type to filter',
+            className: 'dd_form',
             data: initItems('Item', 20),
         });
 
@@ -718,6 +732,7 @@ class DropDownView extends DemoView {
             addItemMessage: (title) => `Add item: '${title}'`,
             multiple: true,
             placeholder: 'Type to filter',
+            className: 'dd_form',
             data: initItems('Item', 20),
         });
 
@@ -814,6 +829,7 @@ class DropDownView extends DemoView {
             content: DropDown.create({
                 elem: 'selinp11single',
                 placeholder: 'Use native select',
+                className: 'dd_form',
                 useNativeSelect: true,
             }).elem,
         });
@@ -827,6 +843,7 @@ class DropDownView extends DemoView {
                 elem: createElement('input', { props: { id: 'nativeGenerated', type: 'text' } }),
                 placeholder: 'Use native select',
                 useNativeSelect: true,
+                className: 'dd_form',
                 data: initItems('Item', 5),
             }).elem,
         });
@@ -839,6 +856,7 @@ class DropDownView extends DemoView {
             content: DropDown.create({
                 elem: 'selinp11',
                 placeholder: 'Use native select',
+                className: 'dd_form',
                 useNativeSelect: true,
             }).elem,
         });
@@ -851,6 +869,7 @@ class DropDownView extends DemoView {
             content: DropDown.create({
                 elem: 'selinp12',
                 placeholder: 'Full screen',
+                className: 'dd_form',
                 fullScreen: true,
             }).elem,
         });
@@ -865,6 +884,7 @@ class DropDownView extends DemoView {
                 fullScreen: true,
                 multiple: true,
                 enableFilter: true,
+                className: 'dd_form',
                 data: initItems('Item', 50),
             }).elem,
         });
@@ -877,6 +897,7 @@ class DropDownView extends DemoView {
             elem: select,
             placeholder: 'Dynamic Drop Down',
             multiple: true,
+            className: 'dd_form',
         });
 
         const controls = createButtons([{
@@ -1001,6 +1022,7 @@ class DropDownView extends DemoView {
         const dropDown = DropDown.create({
             enableFilter: true,
             placeholder: 'Select item',
+            className: 'dd_form',
             data: initItems('Popup item', 50),
         });
         ge('popupDropDownContainer').append(dropDown.elem);

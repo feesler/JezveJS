@@ -18,6 +18,15 @@
   user-select: none;
 }
 
+/* Checkbox menu item */
+.checkbox-menu-item
+  > .menu-item__side-content
+  > .menu-checkbox
+  .menu-checkbox__icon {
+  display: none;
+}
+
+/* Before/after content */
 .menu-item__side-content {
   display: flex;
   flex-flow: row nowrap;
@@ -60,6 +69,15 @@
   .menu-item__icon {
     fill: var(--menu-item-selected-icon-color);
   }
+
+  > .menu-item__side-content > .menu-checkbox {
+    background: var(--menu-item-selected-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-selected-checkbox-icon-color);
+    }
+  }
 }
 
 /* Hover state */
@@ -75,11 +93,20 @@
   .menu-item__icon {
     fill: var(--menu-item-hover-icon-color);
   }
+
+  > .menu-item__side-content > .menu-checkbox {
+    background: var(--menu-item-focus-checkbox-background);
+
+    .menu-checkbox__icon {
+      fill: var(--menu-item-focus-checkbox-icon-color);
+    }
+  }
 }
 
 /* Active state */
 .menu-item:active,
-.menu-item_active:active {
+.menu-item_active:active,
+.menu-item_selected:active {
   color: var(--menu-item-active-text-color);
   background: var(--menu-item-active-background);
   border-color: var(--menu-item-active-border-color);
@@ -90,6 +117,14 @@
 
   .menu-item__icon {
     fill: var(--menu-item-active-icon-color);
+  }
+
+  > .menu-item__side-content > .menu-checkbox {
+    background: var(--menu-item-active-checkbox-background);
+
+    .menu-checkbox__icon {
+      fill: var(--menu-item-active-checkbox-icon-color);
+    }
   }
 }
 
@@ -105,6 +140,14 @@
 
   .menu-item__icon {
     fill: var(--menu-item-hover-icon-color);
+  }
+
+  > .menu-item__side-content > .menu-checkbox {
+    background: var(--menu-item-focus-checkbox-background);
+
+    .menu-checkbox__icon {
+      fill: var(--menu-item-focus-checkbox-icon-color);
+    }
   }
 }
 
@@ -123,6 +166,14 @@
 
   .menu-item__icon {
     fill: var(--menu-item-disabled-icon-color);
+  }
+
+  > .menu-item__side-content > .menu-checkbox {
+    background: var(--menu-item-disabled-checkbox-background);
+
+    .menu-checkbox__icon {
+      fill: var(--menu-item-disabled-checkbox-icon-color);
+    }
   }
 }
 
@@ -150,6 +201,14 @@
   .menu-item__icon {
     fill: var(--menu-item-disabled-selected-icon-color);
   }
+
+  .menu-checkbox {
+    background: var(--menu-item-disabled-checkbox-background);
+
+    .menu-checkbox__icon {
+      fill: var(--menu-item-disabled-checkbox-icon-color);
+    }
+  }
 }
 
 /* Focused state */
@@ -166,10 +225,57 @@
   .menu-item__icon {
     fill: var(--menu-item-focus-icon-color);
   }
+
+  > .menu-item__side-content > .menu-checkbox {
+    background: var(--menu-item-focus-checkbox-background);
+
+    .menu-checkbox__icon {
+      fill: var(--menu-item-focus-checkbox-icon-color);
+    }
+  }
 }
 
 /* Focus visible state */
 .menu:focus-visible .menu-item_active,
 .menu .menu-item:focus-visible {
   box-shadow: var(--menu-item-focus-shadow);
+}
+
+@media (hover: hover) {
+  /* Hover state */
+  .menu .menu-item > .menu-item__side-content > .menu-checkbox:hover,
+  .menu .menu-item > .menu-group__header > .menu-checkbox:hover {
+    background: var(--menu-item-hover-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-hover-checkbox-icon-color);
+    }
+  }
+
+  /* Hover and selected state */
+  .menu .menu-item_selected > .menu-item__side-content > .menu-checkbox:hover,
+  .menu .menu-group__header.menu-item_selected > .menu-checkbox:hover {
+    background: var(--menu-item-hover-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-hover-selected-checkbox-icon-color);
+    }
+  }
+
+  /* Hover and active state */
+  .menu .menu-group__header:active > .menu-checkbox:hover,
+  .menu .menu-item:active > .menu-item__side-content > .menu-checkbox:hover,
+  .menu
+    .menu-item_selected:active
+    > .menu-item__side-content
+    > .menu-checkbox:hover {
+    background: var(--menu-item-active-checkbox-background);
+
+    .menu-checkbox__icon {
+      display: block;
+      fill: var(--menu-item-active-checkbox-icon-color);
+    }
+  }
 }

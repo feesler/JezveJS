@@ -6,6 +6,7 @@ import {
     isFunction,
 } from '../../../../js/common.js';
 import { Icon } from '../../../Icon/Icon.js';
+import { isCheckbox } from '../../helpers.js';
 
 import './MenuItem.scss';
 
@@ -13,6 +14,7 @@ import './MenuItem.scss';
 const ITEM_CLASS = 'menu-item';
 const BUTTON_ITEM_CLASS = 'button-menu-item';
 const LINK_ITEM_CLASS = 'link-menu-item';
+const CHECKBOX_ITEM_CLASS = 'checkbox-menu-item';
 const ICON_CLASS = 'menu-item__icon';
 const CONTENT_CLASS = 'menu-item__content';
 const BEFORE_CLASS = 'menu-item__side-content menu-item__before';
@@ -88,6 +90,9 @@ export class MenuItem extends Component {
         } else if (isLink) {
             props.className = getClassName(props.className, LINK_ITEM_CLASS);
         }
+        if (isCheckbox(state)) {
+            props.className = getClassName(props.className, CHECKBOX_ITEM_CLASS);
+        }
 
         this.contentElem = createElement('div', {
             props: { className: CONTENT_CLASS },
@@ -116,6 +121,23 @@ export class MenuItem extends Component {
         return createElement('div', { props: { className: AFTER_CLASS }, children });
     }
 
+    isCheckbox(state = this.state) {
+        return isCheckbox(state);
+    }
+
+    createCheck(state) {
+        if (!isCheckbox(state)) {
+            throw new Error('Invalid type of menu item');
+        }
+
+        const { Check } = state.components;
+        if (!Check) {
+            throw new Error('Invalid check component');
+        }
+
+        return Check.create().elem;
+    }
+
     renderBeforeContainer(state, prevState) {
         const beforeContent = this.renderBeforeContent(state, prevState);
         if (this.beforeContent === beforeContent) {
@@ -139,19 +161,12 @@ export class MenuItem extends Component {
     }
 
     renderBeforeContent(state, prevState) {
-        if (
-            state.icon === prevState?.icon
-            && state.iconAlign === prevState?.iconAlign
-            && state.type === prevState?.type
-        ) {
-            return this.beforeContent;
+        if (isCheckbox(state) && state.checkboxSide === 'left') {
+            return this.renderCheckbox({ state, prevState, before: true });
         }
 
         if (state.icon && state.iconAlign === 'left') {
-            return Icon.create({
-                icon: state.icon,
-                className: ICON_CLASS,
-            }).elem;
+            return this.renderIcon(({ state, prevState, before: true }));
         }
 
         return null;
@@ -180,19 +195,47 @@ export class MenuItem extends Component {
     }
 
     renderAfterContent(state, prevState) {
+        if (isCheckbox(state) && state.checkboxSide === 'right') {
+            return this.renderCheckbox({ state, prevState, before: false });
+        }
+
+        if (state.icon && state.iconAlign === 'right') {
+            return this.renderIcon(({ state, prevState, before: false }));
+        }
+
+        return null;
+    }
+
+    renderIcon({ state, prevState, before = true }) {
         if (
             state.icon === prevState?.icon
             && state.iconAlign === prevState?.iconAlign
             && state.type === prevState?.type
         ) {
-            return this.afterContent;
+            return (before) ? this.beforeContent : this.afterContent;
         }
 
-        if (state.icon && state.iconAlign === 'right') {
-            return Icon.create({
-                icon: state.icon,
-                className: ICON_CLASS,
-            }).elem;
+        if (!state.icon) {
+            return null;
+        }
+
+        return Icon.create({
+            icon: state.icon,
+            className: ICON_CLASS,
+        }).elem;
+    }
+
+    renderCheckbox({ state, prevState, before = true }) {
+        if (
+            state.selected === prevState?.selected
+            && state.renderNotSelected === prevState?.renderNotSelected
+            && state.type === prevState?.type
+        ) {
+            return (before) ? this.beforeContent : this.afterContent;
+        }
+
+        if (state.selected || state.renderNotSelected) {
+            return this.createCheck(state);
         }
 
         return null;

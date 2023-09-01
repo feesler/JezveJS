@@ -1,4 +1,4 @@
-import { createElement, getClassName } from 'jezvejs';
+import { createElement, enable, getClassName } from 'jezvejs';
 import { MenuGroupHeader, MenuCheckbox } from 'jezvejs/Menu';
 
 import './CheckboxMenuGroupHeader.scss';
@@ -54,6 +54,8 @@ export class CheckboxMenuGroupHeader extends MenuGroupHeader {
         this.elem.dataset.id = state.id;
 
         this.titleElem.textContent = state.title ?? '';
+
+        enable(this.elem, !state.disabled);
 
         this.elem.classList.toggle(ACTIVE_ITEM_CLASS, !!state.active);
         this.elem.classList.toggle(SELECTED_ITEM_CLASS, !!state.selected);

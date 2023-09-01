@@ -36,7 +36,6 @@ import { DropDownMenu } from './components/Menu/Menu.js';
 import { DropDownMenuHeader } from './components/MenuHeader/MenuHeader.js';
 import { DropDownMenuList } from './components/MenuList/MenuList.js';
 import { DropDownListItem } from './components/ListItem/ListItem.js';
-import { DropDownCheckboxItem } from './components/CheckboxItem/CheckboxItem.js';
 import { DropDownGroupItem } from './components/GroupItem/GroupItem.js';
 import { DropDownGroupHeader } from './components/GroupHeader/GroupHeader.js';
 import { DropDownListPlaceholder } from './components/ListPlaceholder/ListPlaceholder.js';
@@ -153,7 +152,6 @@ const defaultProps = {
         Menu: DropDownMenu,
         MenuList: DropDownMenuList,
         ListItem: DropDownListItem,
-        Checkbox: DropDownCheckboxItem,
         Check: MenuCheckbox,
         GroupItem: DropDownGroupItem,
         GroupHeader: DropDownGroupHeader,

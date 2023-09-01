@@ -1,9 +1,9 @@
 import 'jezvejs/style';
 
 import { DemoView } from '../../Application/DemoView.js';
-import './MainView.scss';
+import './IndexView.scss';
 
-class MainView extends DemoView {
+class IndexView extends DemoView {
     /**
      * Initializes navigation menu
      */
@@ -17,4 +17,4 @@ class MainView extends DemoView {
     }
 }
 
-MainView.create();
+IndexView.create();
