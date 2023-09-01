@@ -61,7 +61,6 @@ export class PopupMenu extends Menu {
         this.hostElem = null;
         this.containerElem = null;
         this.ignoreScroll = false;
-        this.items = {};
 
         this.emptyClickHandler = () => this.hideMenu();
         this.windowEvents = {

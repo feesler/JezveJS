@@ -283,7 +283,7 @@ export class DropDown extends Component {
 
     /** Return array of all list items */
     get items() {
-        return [...this.state.items];
+        return structuredClone(this.state.items);
     }
 
     /** Return disabled state */

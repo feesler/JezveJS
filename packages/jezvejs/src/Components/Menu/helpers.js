@@ -143,6 +143,24 @@ export const getItemById = (id, items) => {
 };
 
 /**
+ * Returns menu group item for specified id
+ *
+ * @param {String} id item id
+ * @param {Array} items array of items to search in
+ */
+export const getGroupById = (id, items) => {
+    const strId = id?.toString() ?? null;
+    if (strId === null) {
+        return null;
+    }
+
+    return findMenuItem(items, (item) => (
+        item.id?.toString() === strId
+        && item.type === 'group'
+    ));
+};
+
+/**
  * Returns new identifier not existing in the specified list of items
  *
  * @param {Array} items array of items to search in
@@ -299,4 +317,25 @@ export const getNextItem = (id, items, filterCallback = null, options = {}) => {
     }
 
     return null;
+};
+
+/**
+ * Appends specified item to the end of list or group and returns resulting list
+ * @param {Object} item
+ * @param {Array} items
+ * @returns {Array}
+ */
+export const pushItem = (item, items) => {
+    const res = items;
+
+    if (item.group) {
+        const group = getGroupById(item.group, res);
+        if (group) {
+            group.items.push(item);
+        }
+    } else {
+        res.push(item);
+    }
+
+    return res;
 };

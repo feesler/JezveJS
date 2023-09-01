@@ -27,6 +27,8 @@ import {
     mapItems,
     getMenuProps,
     findLastMenuItem,
+    getGroupById,
+    pushItem,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -45,10 +47,12 @@ export {
     findMenuItem,
     getActiveItem,
     getItemById,
+    getGroupById,
     toFlatList,
     getNextItem,
     getPreviousItem,
     mapItems,
+    pushItem,
 };
 
 /* CSS classes */
@@ -195,6 +199,11 @@ export class Menu extends Component {
     postInit() {
         this.setClassNames();
         this.setUserProps();
+    }
+
+    /** Return array of all list items */
+    get items() {
+        return structuredClone(this.state.items);
     }
 
     /**
@@ -813,6 +822,45 @@ export class Menu extends Component {
         }
 
         return res;
+    }
+
+    /**
+     * Create new list item
+     * @param {Object} props
+     */
+    addItem(props) {
+        const newItem = this.createItem(props);
+        if (!newItem) {
+            return null;
+        }
+
+        this.setState({
+            ...this.state,
+            items: pushItem(newItem, this.items),
+        });
+
+        return newItem.id;
+    }
+
+    /**
+     * Creates new item(s) from specified and appends to the list
+     * @param {Object|Object[]} items
+     */
+    append(items) {
+        const newItems = this.createItems(items);
+        if (!Array.isArray(newItems)) {
+            return false;
+        }
+
+        this.setState({
+            ...this.state,
+            items: newItems.reduce(
+                (prev, item) => pushItem(item, prev),
+                this.items,
+            ),
+        });
+
+        return true;
     }
 
     toggleSelectItem(id) {
