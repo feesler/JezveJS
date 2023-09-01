@@ -245,14 +245,29 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Disables item by id
+     * Shortcut for .enableItem(id, false) call
+     * @param {string} id item id
+     */
     disableItem(id) {
         this.enableItem(id, false);
     }
 
+    /**
+     * Returns new unique id for item
+     * @param {object} state
+     * @returns {string} state of component
+     */
     generateItemId(state = this.state) {
         return generateItemId(state.items, 'item');
     }
 
+    /**
+     * Returns new unique id for group
+     * @param {object} state
+     * @returns {string} state of component
+     */
     generateGroupId(state = this.state) {
         return generateItemId(state.items, 'group');
     }
@@ -323,6 +338,12 @@ export class Menu extends Component {
         return res;
     }
 
+    /**
+     * Returns true if list was changed and should be rendered
+     * @param {object} state new state of component
+     * @param {object} prevState previous state of component
+     * @returns {boolean}
+     */
     isListChanged(state, prevState) {
         const changeProps = [
             'items',
@@ -360,13 +381,22 @@ export class Menu extends Component {
         return url;
     }
 
+    /**
+     * Returns item by specified id
+     * @param {string} id item id
+     * @returns {object|null}
+     */
     getItemById(id) {
         return isFunction(this.state.getItemById)
             ? this.state.getItemById(id)
             : getItemById(id, this.state.items);
     }
 
-    /** Returns active item for specified state */
+    /**
+     * Returns active item for specified state
+     * @param {object} state
+     * @returns
+     */
     getActiveItem(state = this.state) {
         return getActiveItem(state?.items);
     }
@@ -451,6 +481,7 @@ export class Menu extends Component {
         this.unblockScroll();
     }
 
+    /** 'focus' event handler */
     onFocus(e) {
         const item = this.list.itemFromElem(e?.target);
         if (!item || item.active) {
@@ -460,6 +491,7 @@ export class Menu extends Component {
         this.setActive(item.id);
     }
 
+    /** 'blur' event handler */
     onBlur(e) {
         if (this.renderInProgress) {
             return;
@@ -470,6 +502,11 @@ export class Menu extends Component {
         }
     }
 
+    /**
+     * Returns true if component lost focus
+     * @param {Event} e event object
+     * @returns {boolean}
+     */
     isLostFocus(e) {
         if (isFunction(this.props.isLostFocus)) {
             return this.props.isLostFocus(e);
@@ -582,7 +619,7 @@ export class Menu extends Component {
     /**
      * 'touchstart' event on handler
      * Sets ignoreTouch flag for further mouse events
-     * @param {TouchEvent} e - event object
+     * @param {TouchEvent} e event object
      */
     onTouchStart(e) {
         if (e.touches) {
@@ -590,7 +627,10 @@ export class Menu extends Component {
         }
     }
 
-    /** 'mouseover' event handler */
+    /**
+     * 'mouseover' event handler
+     * @param {MouseEvent} e event object
+     */
     onMouseOver(e) {
         if (
             this.state.blockScroll
@@ -610,7 +650,10 @@ export class Menu extends Component {
         this.handleMouseEnter(e);
     }
 
-    /** 'mouseout' event handler */
+    /**
+     * 'mouseout' event handler
+     * @param {MouseEvent} e event object
+     */
     onMouseOut(e) {
         if (
             this.state.blockScroll
@@ -630,7 +673,10 @@ export class Menu extends Component {
         }
     }
 
-    /** 'mouseleave' event handler */
+    /**
+     * 'mouseleave' event handler
+     * @param {MouseEvent} e event object
+     */
     onMouseLeave(e) {
         if (this.state.blockScroll) {
             return;
@@ -639,7 +685,10 @@ export class Menu extends Component {
         this.handleLeaveItem(e);
     }
 
-    /** Handles mouse entering list item element */
+    /**
+     * Handles mouse entering to list item element
+     * @param {MouseEvent} e event object
+     */
     handleMouseEnter(e) {
         const item = this.list.itemFromElem(e?.target);
         if (!item) {
@@ -660,7 +709,10 @@ export class Menu extends Component {
         this.activateItem(item.id, false);
     }
 
-    /** Handles mouse leaving list element */
+    /**
+     * Handles mouse leaving list element
+     * @param {MouseEvent} e event object
+     */
     handleLeaveItem(e) {
         this.setActive(null);
 
@@ -675,6 +727,10 @@ export class Menu extends Component {
         }
     }
 
+    /**
+     * Activates item by id
+     * @param {string} id item id
+     */
     setActive(id) {
         const strId = id?.toString() ?? null;
 
@@ -688,6 +744,10 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Selects only specified items by ids
+     * @param {string|string[]} selectedItems
+     */
     setSelection(selectedItems) {
         const items = asArray(selectedItems).map((value) => value.toString());
 
@@ -701,6 +761,10 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Selects/deselect all items
+     * @param {boolean} value
+     */
     selectAll(value = true) {
         const selected = !!value;
 
@@ -714,6 +778,10 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Deselects all items
+     * Shortcut for .selectAll(false) call
+     */
     clearSelection() {
         this.selectAll(false);
     }
