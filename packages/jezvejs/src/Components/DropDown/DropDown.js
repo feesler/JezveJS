@@ -586,12 +586,11 @@ export class DropDown extends Component {
         const focusedBefore = !!this.focusedElem;
         this.focusedElem = e.target;
 
-        const blurOnSelect = (
+        if (
             !this.props.multiple
             && this.props.blurInputOnSingleSelect
-        );
-        const menuTarget = this.isMenuTarget(e.target);
-        if (blurOnSelect && menuTarget) {
+            && e.target === this.elem
+        ) {
             return;
         }
 
@@ -605,7 +604,6 @@ export class DropDown extends Component {
         if (
             index === -1
             && !this.isClearButtonTarget(e.target)
-            && (!blurOnSelect || !focusedBefore)
         ) {
             this.focusInputIfNeeded();
         }
