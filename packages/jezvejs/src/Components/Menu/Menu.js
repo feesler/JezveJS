@@ -11,7 +11,6 @@ import { MenuList } from './components/List/MenuList.js';
 import { MenuItem } from './components/ListItem/MenuItem.js';
 import { MenuGroupHeader } from './components/GroupHeader/MenuGroupHeader.js';
 import { MenuGroupItem } from './components/GroupItem/MenuGroupItem.js';
-import { CheckboxItem } from './components/CheckboxItem/CheckboxItem.js';
 import { MenuCheckbox } from './components/Checkbox/MenuCheckbox.js';
 import { MenuSeparator } from './components/Separator/MenuSeparator.js';
 import {
@@ -29,6 +28,7 @@ import {
     findLastMenuItem,
     getGroupById,
     pushItem,
+    isCheckbox,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -41,7 +41,6 @@ export {
     MenuGroupItem,
     MenuSeparator,
     MenuCheckbox,
-    CheckboxItem,
     /* helper functions */
     isNullId,
     findMenuItem,
@@ -84,7 +83,7 @@ const defaultProps = {
         Header: null,
         MenuList,
         ListItem: MenuItem,
-        Checkbox: CheckboxItem,
+        Checkbox: MenuItem,
         Check: MenuCheckbox,
         GroupHeader: MenuGroupHeader,
         GroupItem: MenuGroupItem,
@@ -292,15 +291,11 @@ export class Menu extends Component {
             type = state.defaultItemType,
         } = item;
 
-        if (type === 'button' || type === 'link') {
+        if (
+            (type === 'button' || type === 'link')
+            || (type === 'checkbox' || type === 'checkbox-link')
+        ) {
             return state.components.ListItem;
-        }
-
-        if (type === 'checkbox' || type === 'checkbox-link') {
-            const checkboxAvail = item.selectable && this.props.multiple;
-            return (checkboxAvail)
-                ? state.components.Checkbox
-                : state.components.ListItem;
         }
 
         if (type === 'separator') {
@@ -330,6 +325,11 @@ export class Menu extends Component {
                 ...state.components,
             },
         };
+
+        const checkboxAvail = res.selectable && state.multiple;
+        if (isCheckbox(res) && !checkboxAvail) {
+            res.type = (res.type === 'checkbox') ? 'button' : 'link';
+        }
 
         if (item.type === 'group') {
             res.getItemComponent = (...args) => this.getItemComponent(...args);
@@ -1024,15 +1024,13 @@ export class Menu extends Component {
         let afterContent = false;
 
         forItems(list.items, (item) => {
-            const { type } = item;
-            const isCheckbox = (type === 'checkbox' || type === 'checkbox-link');
-
-            if (!item.icon && !isCheckbox) {
+            const checkbox = isCheckbox(item);
+            if (!item.icon && !checkbox) {
                 return;
             }
 
             if (
-                (isCheckbox && list.checkboxSide === 'left')
+                (checkbox && list.checkboxSide === 'left')
                 || (item.icon && list.iconAlign === 'left')
             ) {
                 beforeContent = true;

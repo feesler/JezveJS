@@ -1,5 +1,7 @@
 import { isFunction, isObject } from '../../js/common.js';
 
+const checkboxTypes = ['checkbox', 'checkbox-link'];
+
 /**
  * Returns true if item id is undefined or null
  *
@@ -8,6 +10,16 @@ import { isFunction, isObject } from '../../js/common.js';
  */
 export const isNullId = (item) => (
     (item?.id ?? null) === null
+);
+
+/**
+ * Returns true if type of specified item
+ * @param {Object} state
+ * @returns {boolean}
+ */
+export const isCheckbox = (item) => (
+    typeof item?.type === 'string'
+    && checkboxTypes.includes(item.type.toLowerCase())
 );
 
 /**
