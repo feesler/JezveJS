@@ -161,6 +161,8 @@ export class Menu extends Component {
             children.push(this.header.elem);
         }
 
+        this.cacheItemProps(list);
+
         this.list = components.MenuList.create({
             ...list,
             ...this.callbacks,
