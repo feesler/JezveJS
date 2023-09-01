@@ -27,6 +27,8 @@ import {
     mapItems,
     getMenuProps,
     findLastMenuItem,
+    getGroupById,
+    pushItem,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -45,10 +47,12 @@ export {
     findMenuItem,
     getActiveItem,
     getItemById,
+    getGroupById,
     toFlatList,
     getNextItem,
     getPreviousItem,
     mapItems,
+    pushItem,
 };
 
 /* CSS classes */
@@ -125,13 +129,15 @@ export class Menu extends Component {
         };
 
         this.renderInProgress = false;
+        this.activeElem = null;
 
-        this.state = this.onStateChange({
+        this.state = {
             ...this.props,
+            items: this.createItems(this.props.items, this.props),
             blockScroll: false,
             scrollTimeout: 0,
             ignoreTouch: false,
-        });
+        };
 
         this.init();
         this.postInit();
@@ -164,7 +170,8 @@ export class Menu extends Component {
             },
         });
         setEvents(this.list.elem, {
-            mousemove: (e) => this.onMouseMove(e),
+            mouseover: (e) => this.onMouseOver(e),
+            mouseout: (e) => this.onMouseOut(e),
             mouseleave: (e) => this.onMouseLeave(e),
         });
 
@@ -192,6 +199,11 @@ export class Menu extends Component {
     postInit() {
         this.setClassNames();
         this.setUserProps();
+    }
+
+    /** Return array of all list items */
+    get items() {
+        return structuredClone(this.state.items);
     }
 
     /**
@@ -243,16 +255,31 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Disables item by id
+     * Shortcut for .enableItem(id, false) call
+     * @param {string} id item id
+     */
     disableItem(id) {
         this.enableItem(id, false);
     }
 
+    /**
+     * Returns new unique id for item
+     * @param {object} state
+     * @returns {string} state of component
+     */
     generateItemId(state = this.state) {
-        return generateItemId(state.items, 'item');
+        return generateItemId(state?.items ?? [], 'item');
     }
 
+    /**
+     * Returns new unique id for group
+     * @param {object} state
+     * @returns {string} state of component
+     */
     generateGroupId(state = this.state) {
-        return generateItemId(state.items, 'group');
+        return generateItemId(state?.items ?? [], 'group');
     }
 
     /**
@@ -269,11 +296,11 @@ export class Menu extends Component {
             return state.components.ListItem;
         }
 
-        if (
-            item.selectable
-            && (type === 'checkbox' || type === 'checkbox-link')
-        ) {
-            return state.components.Checkbox;
+        if (type === 'checkbox' || type === 'checkbox-link') {
+            const checkboxAvail = item.selectable && this.props.multiple;
+            return (checkboxAvail)
+                ? state.components.Checkbox
+                : state.components.ListItem;
         }
 
         if (type === 'separator') {
@@ -293,17 +320,8 @@ export class Menu extends Component {
      * @param {object} state current list state object
      */
     getItemProps(item, state) {
-        const { ListItem } = this.props.components;
-
-        const { list } = getMenuProps(state);
-        delete list.id;
-        delete list.className;
-        delete list.title;
-        delete list.hidden;
-
         const res = {
-            ...ListItem.defaultProps,
-            ...list,
+            ...this.itemPropsCache,
             ...item,
             disabled: item.disabled || state.disabled,
             getItemURL: (itemState) => this.getItemURL(itemState, state),
@@ -321,6 +339,12 @@ export class Menu extends Component {
         return res;
     }
 
+    /**
+     * Returns true if list was changed and should be rendered
+     * @param {object} state new state of component
+     * @param {object} prevState previous state of component
+     * @returns {boolean}
+     */
     isListChanged(state, prevState) {
         const changeProps = [
             'items',
@@ -332,7 +356,6 @@ export class Menu extends Component {
             'iconAlign',
             'checkboxSide',
             'renderNotSelected',
-            'listScroll',
             'renderTime',
         ];
 
@@ -358,13 +381,22 @@ export class Menu extends Component {
         return url;
     }
 
+    /**
+     * Returns item by specified id
+     * @param {string} id item id
+     * @returns {object|null}
+     */
     getItemById(id) {
         return isFunction(this.state.getItemById)
             ? this.state.getItemById(id)
             : getItemById(id, this.state.items);
     }
 
-    /** Returns active item for specified state */
+    /**
+     * Returns active item for specified state
+     * @param {object} state
+     * @returns
+     */
     getActiveItem(state = this.state) {
         return getActiveItem(state?.items);
     }
@@ -393,7 +425,6 @@ export class Menu extends Component {
         // Prevent selection item if active item is exist and not equal to current item
         if (activeItem && activeItem.id !== item.id) {
             this.activateItem(item.id, false);
-            return;
         }
 
         // Handle clicks by group header
@@ -449,6 +480,7 @@ export class Menu extends Component {
         this.unblockScroll();
     }
 
+    /** 'focus' event handler */
     onFocus(e) {
         const item = this.list.itemFromElem(e?.target);
         if (!item || item.active) {
@@ -458,6 +490,7 @@ export class Menu extends Component {
         this.setActive(item.id);
     }
 
+    /** 'blur' event handler */
     onBlur(e) {
         if (this.renderInProgress) {
             return;
@@ -468,6 +501,11 @@ export class Menu extends Component {
         }
     }
 
+    /**
+     * Returns true if component lost focus
+     * @param {Event} e event object
+     * @returns {boolean}
+     */
     isLostFocus(e) {
         if (isFunction(this.props.isLostFocus)) {
             return this.props.isLostFocus(e);
@@ -561,7 +599,7 @@ export class Menu extends Component {
             return;
         }
 
-        const focusOptions = { preventScroll: !scrollToItem };
+        const focusOptions = { preventScroll: true };
 
         const elem = this.list.itemElemById(id);
         if (item.type === 'group' && this.state.allowActiveGroupHeader) {
@@ -579,8 +617,8 @@ export class Menu extends Component {
 
     /**
      * 'touchstart' event on handler
-     * Sets ignoreTouch flag for further 'mousemove' event
-     * @param {TouchEvent} e - event object
+     * Sets ignoreTouch flag for further mouse events
+     * @param {TouchEvent} e event object
      */
     onTouchStart(e) {
         if (e.touches) {
@@ -588,16 +626,69 @@ export class Menu extends Component {
         }
     }
 
-    /** 'mousemove' event handler */
-    onMouseMove(e) {
+    /**
+     * 'mouseover' event handler
+     * @param {MouseEvent} e event object
+     */
+    onMouseOver(e) {
         if (
             this.state.blockScroll
             || this.state.ignoreTouch
             || !this.state.focusItemOnHover
+            || this.activeElem
         ) {
             return;
         }
 
+        const itemElem = this.list.getClosestItemElement(e?.target);
+        if (!itemElem || !this.isChildElem(itemElem)) {
+            return;
+        }
+
+        this.activeElem = itemElem;
+        this.handleMouseEnter(e);
+    }
+
+    /**
+     * 'mouseout' event handler
+     * @param {MouseEvent} e event object
+     */
+    onMouseOut(e) {
+        if (
+            this.state.blockScroll
+            || !this.activeElem
+        ) {
+            return;
+        }
+
+        const itemElem = this.list.getClosestItemElement(e.relatedTarget);
+        if (itemElem === this.activeElem) {
+            return;
+        }
+
+        this.activeElem = null;
+        if (!this.isChildElem(itemElem)) {
+            this.handleLeaveItem(e);
+        }
+    }
+
+    /**
+     * 'mouseleave' event handler
+     * @param {MouseEvent} e event object
+     */
+    onMouseLeave(e) {
+        if (this.state.blockScroll) {
+            return;
+        }
+
+        this.handleLeaveItem(e);
+    }
+
+    /**
+     * Handles mouse entering to list item element
+     * @param {MouseEvent} e event object
+     */
+    handleMouseEnter(e) {
         const item = this.list.itemFromElem(e?.target);
         if (!item) {
             return;
@@ -617,12 +708,11 @@ export class Menu extends Component {
         this.activateItem(item.id, false);
     }
 
-    /** 'mouseleave' event handler */
-    onMouseLeave(e) {
-        if (this.state.blockScroll) {
-            return;
-        }
-
+    /**
+     * Handles mouse leaving list element
+     * @param {MouseEvent} e event object
+     */
+    handleLeaveItem(e) {
         this.setActive(null);
 
         if (isFunction(this.props.onMouseLeave)) {
@@ -636,6 +726,10 @@ export class Menu extends Component {
         }
     }
 
+    /**
+     * Activates item by id
+     * @param {string} id item id
+     */
     setActive(id) {
         const strId = id?.toString() ?? null;
 
@@ -649,6 +743,10 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Selects only specified items by ids
+     * @param {string|string[]} selectedItems
+     */
     setSelection(selectedItems) {
         const items = asArray(selectedItems).map((value) => value.toString());
 
@@ -662,6 +760,10 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Selects/deselect all items
+     * @param {boolean} value
+     */
     selectAll(value = true) {
         const selected = !!value;
 
@@ -675,40 +777,90 @@ export class Menu extends Component {
         });
     }
 
+    /**
+     * Deselects all items
+     * Shortcut for .selectAll(false) call
+     */
     clearSelection() {
         this.selectAll(false);
     }
 
-    onStateChange(state, prevState = {}) {
-        if (state.items === prevState?.items) {
-            return state;
+    /**
+     * Create items from specified array
+     * @param {Object|Object[]} items
+     */
+    createItems(items, state) {
+        return mapItems(
+            asArray(items),
+            (item) => this.createItem(item),
+            { includeGroupItems: state.allowActiveGroupHeader },
+        );
+    }
+
+    /** Returns item object for specified props after applying default values */
+    createItem(props = {}) {
+        if (!props) {
+            throw new Error('Invalid item object');
         }
 
         const { ListItem } = this.props.components;
-
-        return {
-            ...state,
-            items: mapItems(state.items, (item) => {
-                const newState = {
-                    ...ListItem.defaultProps,
-                    ...item,
-                    active: item.active ?? false,
-                    id: item.id ?? item.value?.toString() ?? this.generateItemId(state),
-                    type: item.type ?? this.props.defaultItemType,
-                };
-
-                const { type } = newState;
-                const checkboxAvail = newState.selectable && state.multiple;
-                if (
-                    !checkboxAvail
-                    && (type === 'checkbox' || type === 'checkbox-link')
-                ) {
-                    newState.type = (type === 'checkbox') ? 'button' : 'link';
-                }
-
-                return newState;
-            }, { includeGroupItems: state.allowActiveGroupHeader }),
+        const res = {
+            ...ListItem.defaultProps,
+            ...props,
+            active: false,
+            id: props.id?.toString() ?? this.generateItemId(),
+            type: props.type ?? this.props.defaultItemType,
         };
+
+        const { type } = res;
+        const checkboxAvail = res.selectable && this.props.multiple;
+        if (
+            !checkboxAvail
+            && (type === 'checkbox' || type === 'checkbox-link')
+        ) {
+            res.type = (type === 'checkbox') ? 'button' : 'link';
+        }
+
+        return res;
+    }
+
+    /**
+     * Create new list item
+     * @param {Object} props
+     */
+    addItem(props) {
+        const newItem = this.createItem(props);
+        if (!newItem) {
+            return null;
+        }
+
+        this.setState({
+            ...this.state,
+            items: pushItem(newItem, this.items),
+        });
+
+        return newItem.id;
+    }
+
+    /**
+     * Creates new item(s) from specified and appends to the list
+     * @param {Object|Object[]} items
+     */
+    append(items) {
+        const newItems = this.createItems(items);
+        if (!Array.isArray(newItems)) {
+            return false;
+        }
+
+        this.setState({
+            ...this.state,
+            items: newItems.reduce(
+                (prev, item) => pushItem(item, prev),
+                this.items,
+            ),
+        });
+
+        return true;
     }
 
     toggleSelectItem(id) {
@@ -841,13 +993,33 @@ export class Menu extends Component {
         }));
     }
 
-    renderList(state, prevState) {
+    /** Prepares cache for common item properties */
+    cacheItemProps(listProps) {
+        const skipProps = ['id', 'className', 'title', 'hidden', 'items'];
+        const { ListItem } = this.props.components;
+        this.itemPropsCache = {
+            ...ListItem.defaultProps,
+        };
+
+        const keys = Object.keys(listProps);
+        for (let ind = 0; ind < keys.length; ind += 1) {
+            const key = keys[ind];
+            if (!skipProps.includes(key)) {
+                this.itemPropsCache[key] = listProps[key];
+            }
+        }
+    }
+
+    renderListContent(state, prevState) {
         if (!this.isListChanged(state, prevState)) {
             return;
         }
 
         const { list } = getMenuProps(state);
 
+        this.cacheItemProps(list);
+
+        // Prepare alignment before and after item content
         let beforeContent = false;
         let afterContent = false;
 
@@ -875,10 +1047,17 @@ export class Menu extends Component {
             beforeContent,
             afterContent,
         }));
+    }
 
+    renderListScroll(state) {
         if (this.list.elem.scrollTop !== state.listScroll) {
             this.list.elem.scrollTop = state.listScroll;
         }
+    }
+
+    renderList(state, prevState) {
+        this.renderListContent(state, prevState);
+        this.renderListScroll(state, prevState);
     }
 
     render(state, prevState = {}) {

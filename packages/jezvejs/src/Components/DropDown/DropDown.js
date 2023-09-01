@@ -283,7 +283,7 @@ export class DropDown extends Component {
 
     /** Return array of all list items */
     get items() {
-        return [...this.state.items];
+        return structuredClone(this.state.items);
     }
 
     /** Return disabled state */
@@ -491,10 +491,6 @@ export class DropDown extends Component {
 
     /* Assignes window and viewport event handlers */
     listenWindowEvents() {
-        setTimeout(() => {
-            this.stopScrollIgnore();
-        }, IGNORE_SCROLL_TIMEOUT);
-
         if (this.state.listeningWindow) {
             return;
         }
@@ -590,12 +586,11 @@ export class DropDown extends Component {
         const focusedBefore = !!this.focusedElem;
         this.focusedElem = e.target;
 
-        const blurOnSelect = (
+        if (
             !this.props.multiple
             && this.props.blurInputOnSingleSelect
-        );
-        const menuTarget = this.isMenuTarget(e.target);
-        if (blurOnSelect && menuTarget) {
+            && e.target === this.elem
+        ) {
             return;
         }
 
@@ -609,7 +604,6 @@ export class DropDown extends Component {
         if (
             index === -1
             && !this.isClearButtonTarget(e.target)
-            && (!blurOnSelect || !focusedBefore)
         ) {
             this.focusInputIfNeeded();
         }
@@ -1791,7 +1785,7 @@ export class DropDown extends Component {
             active: false,
         };
 
-        return res;
+        return this.menu.createItem(res);
     }
 
     /**
@@ -2120,6 +2114,11 @@ export class DropDown extends Component {
         return ref.elem.offsetHeight + borderWidth;
     }
 
+    onScrollDone() {
+        setTimeout(() => this.stopScrollIgnore(), IGNORE_SCROLL_TIMEOUT);
+        this.listenWindowEvents();
+    }
+
     renderList(state, prevState) {
         // Skip render if currently native select is visible
         if (isVisible(this.selectElem, true)) {
@@ -2172,7 +2171,7 @@ export class DropDown extends Component {
             scrollOnOverflow: allowScrollAndResize,
             allowResize: allowScrollAndResize,
             allowFlip: false,
-            onScrollDone: () => this.listenWindowEvents(),
+            onScrollDone: () => this.onScrollDone(),
         });
     }
 

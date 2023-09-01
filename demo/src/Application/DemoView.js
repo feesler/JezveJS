@@ -118,19 +118,12 @@ export class DemoView extends View {
 
         this.initTableOfContents();
 
-        const groupId = this.tocMenu.generateGroupId();
-        this.tocMenu.setState((menuState) => ({
-            ...menuState,
-            items: [
-                ...menuState.items,
-                {
-                    id: groupId,
-                    type: 'group',
-                    title,
-                    items,
-                },
-            ],
-        }));
+        this.tocMenu.addItem({
+            id: this.tocMenu.generateGroupId(),
+            type: 'group',
+            title,
+            items,
+        });
     }
 
     addContentsMenuItem(options = {}) {
@@ -145,29 +138,27 @@ export class DemoView extends View {
 
         this.initTableOfContents();
 
-        const groupId = this.tocMenu.generateGroupId();
-        this.tocMenu.setState((menuState) => {
-            const newState = {
-                ...menuState,
-                items: [...menuState.items],
-            };
-            const { items } = newState;
-
-            if (items.length === 0) {
-                items.push({
-                    id: groupId,
-                    type: 'group',
-                    items: [],
-                });
-            }
-            const lastSection = items[items.length - 1];
-            lastSection.items.push({
-                id,
-                title,
-                url: `#${id}`,
+        const { items } = this.tocMenu;
+        let groupId;
+        if (items.length === 0) {
+            groupId = this.tocMenu.addItem({
+                id: this.tocMenu.generateGroupId(),
+                type: 'group',
+                items: [],
             });
+        } else {
+            const lastItem = items[items.length - 1];
+            if (lastItem.type !== 'group') {
+                throw new Error('Invalid type of item: group is expected');
+            }
+            groupId = lastItem.id;
+        }
 
-            return newState;
+        this.tocMenu.addItem({
+            id,
+            title,
+            url: `#${id}`,
+            group: groupId,
         });
     }
 

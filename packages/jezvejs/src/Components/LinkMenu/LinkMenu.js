@@ -24,7 +24,7 @@ const defaultProps = {
     focusItemOnHover: false,
     renderNotSelected: true,
     itemParam: 'value',
-    url: window.location,
+    url: window.location.href,
     items: [],
     onChange: null,
 };

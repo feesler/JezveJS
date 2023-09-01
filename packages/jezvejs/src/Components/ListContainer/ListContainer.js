@@ -105,11 +105,19 @@ export class ListContainer extends Component {
     }
 
     /**
+     * Returns closest item element if available for the specified element
+     * @param {Element} elem - target list item element
+     */
+    getClosestItemElement(elem) {
+        return elem?.closest(this.props.itemSelector) ?? null;
+    }
+
+    /**
      * Returns item id from specified item element
      * @param {Element} elem - target list item element
      */
     itemIdFromElem(elem) {
-        const listItemElem = elem?.closest(this.props.itemSelector);
+        const listItemElem = this.getClosestItemElement(elem);
         return listItemElem?.dataset?.id ?? null;
     }
 
