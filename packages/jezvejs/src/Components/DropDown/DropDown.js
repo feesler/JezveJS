@@ -491,10 +491,6 @@ export class DropDown extends Component {
 
     /* Assignes window and viewport event handlers */
     listenWindowEvents() {
-        setTimeout(() => {
-            this.stopScrollIgnore();
-        }, IGNORE_SCROLL_TIMEOUT);
-
         if (this.state.listeningWindow) {
             return;
         }
@@ -2120,6 +2116,11 @@ export class DropDown extends Component {
         return ref.elem.offsetHeight + borderWidth;
     }
 
+    onScrollDone() {
+        setTimeout(() => this.stopScrollIgnore(), IGNORE_SCROLL_TIMEOUT);
+        this.listenWindowEvents();
+    }
+
     renderList(state, prevState) {
         // Skip render if currently native select is visible
         if (isVisible(this.selectElem, true)) {
@@ -2172,7 +2173,7 @@ export class DropDown extends Component {
             scrollOnOverflow: allowScrollAndResize,
             allowResize: allowScrollAndResize,
             allowFlip: false,
-            onScrollDone: () => this.listenWindowEvents(),
+            onScrollDone: () => this.onScrollDone(),
         });
     }
 
