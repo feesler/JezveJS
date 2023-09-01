@@ -18,7 +18,7 @@ const routeMap = {
     common: AppView,
     dateinput: DateInputView,
     debug: AppView,
-    decimal: DecimalInputView,
+    decimalinput: DecimalInputView,
     dpitest: AppView,
     dragndrop: AppView,
     emptyclick: AppView,
