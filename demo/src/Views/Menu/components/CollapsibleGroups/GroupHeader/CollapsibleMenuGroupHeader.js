@@ -6,7 +6,7 @@ import './CollapsibleMenuGroupHeader.scss';
 
 /* CSS classes */
 const TITLE_CLASS = 'menu-group-header__title';
-const TOGGLE_ICON_CLASS = 'menu-group-header__toggle-icon';
+const TOGGLE_ICON_CLASS = 'menu-item__icon menu-group-header__toggle-icon';
 
 const defaultProps = {
     title: null,
