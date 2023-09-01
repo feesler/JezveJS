@@ -1787,7 +1787,7 @@ export class DropDown extends Component {
             active: false,
         };
 
-        return res;
+        return this.menu.createItem(res);
     }
 
     /**

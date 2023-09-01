@@ -33,7 +33,7 @@ export class MenuItem extends Component {
         selected: false,
         disabled: false,
         hidden: false,
-        url: window.location,
+        url: window.location.href,
         getItemURL: null,
     };
 
@@ -207,7 +207,7 @@ export class MenuItem extends Component {
     }
 
     renderContainer(state, prevState) {
-        if (state.type === prevState?.type) {
+        if (this.elem && state.type === prevState?.type) {
             return;
         }
 

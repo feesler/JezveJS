@@ -127,12 +127,13 @@ export class Menu extends Component {
         this.renderInProgress = false;
         this.activeElem = null;
 
-        this.state = this.onStateChange({
+        this.state = {
             ...this.props,
+            items: this.createItems(this.props.items, this.props),
             blockScroll: false,
             scrollTimeout: 0,
             ignoreTouch: false,
-        });
+        };
 
         this.init();
         this.postInit();
@@ -260,7 +261,7 @@ export class Menu extends Component {
      * @returns {string} state of component
      */
     generateItemId(state = this.state) {
-        return generateItemId(state.items, 'item');
+        return generateItemId(state?.items ?? [], 'item');
     }
 
     /**
@@ -269,7 +270,7 @@ export class Menu extends Component {
      * @returns {string} state of component
      */
     generateGroupId(state = this.state) {
-        return generateItemId(state.items, 'group');
+        return generateItemId(state?.items ?? [], 'group');
     }
 
     /**
@@ -286,11 +287,11 @@ export class Menu extends Component {
             return state.components.ListItem;
         }
 
-        if (
-            item.selectable
-            && (type === 'checkbox' || type === 'checkbox-link')
-        ) {
-            return state.components.Checkbox;
+        if (type === 'checkbox' || type === 'checkbox-link') {
+            const checkboxAvail = item.selectable && this.props.multiple;
+            return (checkboxAvail)
+                ? state.components.Checkbox
+                : state.components.ListItem;
         }
 
         if (type === 'separator') {
@@ -415,7 +416,6 @@ export class Menu extends Component {
         // Prevent selection item if active item is exist and not equal to current item
         if (activeItem && activeItem.id !== item.id) {
             this.activateItem(item.id, false);
-            return;
         }
 
         // Handle clicks by group header
@@ -776,36 +776,43 @@ export class Menu extends Component {
         this.selectAll(false);
     }
 
-    onStateChange(state, prevState = {}) {
-        if (state.items === prevState?.items) {
-            return state;
+    /**
+     * Create items from specified array
+     * @param {Object|Object[]} items
+     */
+    createItems(items, state) {
+        return mapItems(
+            asArray(items),
+            (item) => this.createItem(item),
+            { includeGroupItems: state.allowActiveGroupHeader },
+        );
+    }
+
+    /** Returns item object for specified props after applying default values */
+    createItem(props = {}) {
+        if (!props) {
+            throw new Error('Invalid item object');
         }
 
         const { ListItem } = this.props.components;
-
-        return {
-            ...state,
-            items: mapItems(state.items, (item) => {
-                const newState = {
-                    ...ListItem.defaultProps,
-                    ...item,
-                    active: item.active ?? false,
-                    id: item.id ?? item.value?.toString() ?? this.generateItemId(state),
-                    type: item.type ?? this.props.defaultItemType,
-                };
-
-                const { type } = newState;
-                const checkboxAvail = newState.selectable && state.multiple;
-                if (
-                    !checkboxAvail
-                    && (type === 'checkbox' || type === 'checkbox-link')
-                ) {
-                    newState.type = (type === 'checkbox') ? 'button' : 'link';
-                }
-
-                return newState;
-            }, { includeGroupItems: state.allowActiveGroupHeader }),
+        const res = {
+            ...ListItem.defaultProps,
+            ...props,
+            active: false,
+            id: props.id?.toString() ?? this.generateItemId(),
+            type: props.type ?? this.props.defaultItemType,
         };
+
+        const { type } = res;
+        const checkboxAvail = res.selectable && this.props.multiple;
+        if (
+            !checkboxAvail
+            && (type === 'checkbox' || type === 'checkbox-link')
+        ) {
+            res.type = (type === 'checkbox') ? 'button' : 'link';
+        }
+
+        return res;
     }
 
     toggleSelectItem(id) {

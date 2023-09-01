@@ -123,12 +123,12 @@ export class DemoView extends View {
             ...menuState,
             items: [
                 ...menuState.items,
-                {
+                this.tocMenu.createItem({
                     id: groupId,
                     type: 'group',
                     title,
                     items,
-                },
+                }),
             ],
         }));
     }
@@ -149,23 +149,23 @@ export class DemoView extends View {
         this.tocMenu.setState((menuState) => {
             const newState = {
                 ...menuState,
-                items: [...menuState.items],
+                items: structuredClone(menuState.items),
             };
             const { items } = newState;
 
             if (items.length === 0) {
-                items.push({
+                items.push(this.tocMenu.createItem({
                     id: groupId,
                     type: 'group',
                     items: [],
-                });
+                }));
             }
             const lastSection = items[items.length - 1];
-            lastSection.items.push({
+            lastSection.items.push(this.tocMenu.createItem({
                 id,
                 title,
                 url: `#${id}`,
-            });
+            }));
 
             return newState;
         });

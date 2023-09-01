@@ -42,6 +42,8 @@ export class TabList extends Component {
         };
 
         this.init();
+        this.postInit();
+        this.render(this.state);
     }
 
     get disabled() {
@@ -76,9 +78,12 @@ export class TabList extends Component {
                 this.contentList.elem,
             ],
         });
+    }
 
+    postInit() {
         this.setClassNames();
-        this.render(this.state);
+
+        this.state.items = this.tabs.createItems(this.props.items, this.props);
     }
 
     onChange(selected) {
@@ -188,11 +193,8 @@ export class TabList extends Component {
             ...tabsState,
             disabled: state.disabled,
             items: state.items.map((item) => ({
-                id: item.id,
-                title: item.title,
+                ...item,
                 selected: item.id?.toString() === state.selectedId,
-                disabled: item.disabled,
-                hidden: item.hidden,
             })),
         }));
 
