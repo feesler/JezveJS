@@ -41,6 +41,7 @@ export class CheckboxMenuGroupItem extends MenuGroupItem {
             id: this.props.id,
             title: this.props.title,
             selected: this.props.selected,
+            disabled: this.props.disabled,
         });
     }
 
@@ -48,6 +49,7 @@ export class CheckboxMenuGroupItem extends MenuGroupItem {
         if (
             state.title === prevState?.title
             && state.selected === prevState?.selected
+            && state.disabled === prevState?.disabled
         ) {
             return;
         }
@@ -57,6 +59,7 @@ export class CheckboxMenuGroupItem extends MenuGroupItem {
             id: state.id,
             title: state.title,
             selected: state.selected,
+            disabled: state.disabled,
         }));
     }
 
