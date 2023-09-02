@@ -9,7 +9,7 @@ import { Button } from 'jezvejs/Button';
 import { DatePicker } from 'jezvejs/DatePicker';
 import { Input } from 'jezvejs/Input';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
 import { DateInputGroup } from './components/DateInputGroup/DateInputGroup.js';
 import { DateRangeInputGroup } from './components/DateRangeInputGroup/DateRangeInputGroup.js';

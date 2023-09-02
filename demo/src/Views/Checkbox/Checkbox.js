@@ -4,7 +4,7 @@ import { Checkbox } from 'jezvejs/Checkbox';
 import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './CheckboxView.scss';

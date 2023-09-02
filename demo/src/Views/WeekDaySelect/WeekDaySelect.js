@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { Button } from 'jezvejs/Button';
 import { WeekDaySelect } from 'jezvejs/WeekDaySelect';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';

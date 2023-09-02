@@ -3,7 +3,7 @@ import 'jezvejs/style/Input';
 import { createElement } from 'jezvejs';
 import { DateInput } from 'jezvejs/DateInput';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createControls } from '../../Application/utils.js';
 import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
 

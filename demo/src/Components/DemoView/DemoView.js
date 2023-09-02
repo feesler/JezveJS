@@ -5,10 +5,10 @@ import { HeaderMenuButton } from 'jezvejs/HeaderMenuButton';
 import { View } from 'jezvejs/View';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
-import * as App from './app.js';
-import { NavigationMenu } from '../Components/NavigationMenu/NavigationMenu.js';
-import { TableOfContents } from '../Components/TableOfContents/TableOfContents.js';
-import { DemoSection } from '../Components/DemoSection/DemoSection.js';
+import * as App from '../../Application/app.js';
+import { NavigationMenu } from '../NavigationMenu/NavigationMenu.js';
+import { TableOfContents } from '../TableOfContents/TableOfContents.js';
+import { DemoSection } from '../DemoSection/DemoSection.js';
 
 /**
  * Demo view base class

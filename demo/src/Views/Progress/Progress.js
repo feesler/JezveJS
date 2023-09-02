@@ -4,7 +4,7 @@ import { Progress } from 'jezvejs/Progress';
 import { IndetermProgress } from 'jezvejs/IndetermProgress';
 import { Spinner } from 'jezvejs/Spinner';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons, createContainer, createControls } from '../../Application/utils.js';
 import './ProgressView.scss';
 

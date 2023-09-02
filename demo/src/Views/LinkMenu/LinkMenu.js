@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { Button } from 'jezvejs/Button';
 import { LinkMenu } from 'jezvejs/LinkMenu';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 
 import './LinkMenuView.scss';

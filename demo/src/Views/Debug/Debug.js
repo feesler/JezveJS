@@ -1,7 +1,7 @@
 import 'jezvejs/style';
 import { Debug } from 'jezvejs/Debug';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 
 class DebugView extends DemoView {
     /**

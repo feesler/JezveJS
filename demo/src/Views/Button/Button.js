@@ -4,7 +4,7 @@ import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './ButtonView.scss';

@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { ge } from 'jezvejs';
 import { Switch } from 'jezvejs/Switch';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createForm, createButtons } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './SwitchView.scss';

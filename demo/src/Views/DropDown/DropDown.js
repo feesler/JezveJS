@@ -14,7 +14,7 @@ import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
 import { Tags } from 'jezvejs/Tags';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 

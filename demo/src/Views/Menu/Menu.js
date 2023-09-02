@@ -1,7 +1,7 @@
 import 'jezvejs/style';
 import { Menu } from 'jezvejs/Menu';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 

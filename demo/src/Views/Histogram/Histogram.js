@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { createElement } from 'jezvejs';
 import { Histogram } from 'jezvejs/Histogram';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
