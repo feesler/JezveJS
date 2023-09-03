@@ -414,17 +414,15 @@ export class DropDown extends Component {
         this.elem.appendChild(this.combo.elem);
     }
 
-    /** Creates list element */
-    createList() {
+    getMenuProps() {
         const {
             Input,
-            Menu,
         } = this.props.components;
 
         const { multiple } = this.props;
         const showInput = this.props.listAttach && this.props.enableFilter;
 
-        this.menu = Menu.create({
+        return {
             parentId: this.state.menuId,
             className: (this.props.fixedMenu) ? FIXED_LIST_CLASS : null,
             multiple,
@@ -452,7 +450,15 @@ export class DropDown extends Component {
                 ...this.props.components,
                 Header: (showInput) ? DropDownMenuHeader : null,
             },
-        });
+        };
+    }
+
+    /** Creates list element */
+    createList() {
+        const { Menu } = this.props.components;
+
+        const menuProps = this.getMenuProps();
+        this.menu = Menu.create(menuProps);
 
         if (this.props.fixedMenu) {
             document.body.append(this.menu.elem);
