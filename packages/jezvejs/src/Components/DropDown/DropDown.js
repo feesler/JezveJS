@@ -48,6 +48,24 @@ import '../../css/common.scss';
 import './DropDown.scss';
 
 export {
+    /* Child components */
+    /* Combobox */
+    DropDownComboBox,
+    DropDownInput,
+    DropDownPlaceholder,
+    DropDownSingleSelection,
+    DropDownMultipleSelection,
+    DropDownMultiSelectionItem,
+    DropDownToggleButton,
+    DropDownClearButton,
+    /* Menu */
+    DropDownMenu,
+    DropDownMenuList,
+    DropDownListItem,
+    DropDownGroupItem,
+    DropDownGroupHeader,
+    DropDownListPlaceholder,
+    /* utils */
     getGroupItems,
     getSelectedItems,
     getVisibleGroupItems,
