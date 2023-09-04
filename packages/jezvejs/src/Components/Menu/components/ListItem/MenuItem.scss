@@ -16,6 +16,7 @@
   border-radius: var(--menu-item-border-radius);
   cursor: pointer;
   user-select: none;
+  text-decoration: var(--menu-item-text-decoration);
 }
 
 /* Checkbox menu item */
@@ -87,6 +88,7 @@
   color: var(--menu-item-hover-text-color);
   background: var(--menu-item-hover-background);
   border-color: var(--menu-item-hover-border-color);
+  text-decoration: var(--menu-item-hover-text-decoration);
 
   .menu-item__content {
     color: var(--menu-item-hover-text-color);
@@ -243,6 +245,11 @@
 
 @media (hover: hover) {
   /* Hover state */
+  .menu .menu-item:hover {
+    text-decoration: var(--menu-item-hover-text-decoration);
+  }
+
+  /* Checkbox hover state */
   .menu .menu-item > .menu-item__side-content > .menu-checkbox:hover,
   .menu .menu-item > .menu-group__header > .menu-checkbox:hover {
     background: var(--menu-item-hover-checkbox-background);
