@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { asArray, createElement } from 'jezvejs';
 import { PieChart } from 'jezvejs/PieChart';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
 import './PieChartView.scss';
 

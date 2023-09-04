@@ -3,7 +3,7 @@ import { createElement } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Slider } from 'jezvejs/Slider';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 import './SliderView.scss';
 

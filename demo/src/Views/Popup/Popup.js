@@ -9,7 +9,7 @@ import {
 import { Popup } from 'jezvejs/Popup';
 import { Notification } from 'jezvejs/Notification';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';

@@ -3,7 +3,7 @@ import { createElement } from 'jezvejs';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './PopupMenuView.scss';
 
@@ -155,6 +155,29 @@ class PopupMenuView extends DemoView {
         if (!btn) {
             return;
         }
+        const titleElem = elem.querySelector(':scope > span');
+        const title = titleElem?.textContent;
+
+        menu.setItems([{
+            id: 'selectModeBtn',
+            icon: 'select',
+            title: 'Select',
+        }, {
+            id: 'separator1',
+            type: 'separator',
+        }, {
+            id: 'selectAllBtn',
+            title: 'Select all',
+        }, {
+            id: 'deselectAllBtn',
+            title: 'Clear selection',
+        }, {
+            id: 'separator2',
+            type: 'separator',
+        }, {
+            id: 'updateItemBtn',
+            title: `Edit '${title}' ...`,
+        }]);
 
         menu.attachAndShow(btn);
     }
@@ -162,20 +185,6 @@ class PopupMenuView extends DemoView {
     initList() {
         const menu = PopupMenu.create({
             id: 'listMenu',
-            items: [{
-                id: 'selectModeBtn',
-                icon: 'select',
-                title: 'Select',
-            }, {
-                id: 'separator1',
-                type: 'separator',
-            }, {
-                id: 'selectAllBtn',
-                title: 'Select all',
-            }, {
-                id: 'deselectAllBtn',
-                title: 'Clear selection',
-            }],
         });
 
         const list = createElement('div', {

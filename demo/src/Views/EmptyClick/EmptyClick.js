@@ -7,7 +7,7 @@ import {
     setEvents,
 } from 'jezvejs';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './EmptyClickView.scss';
 
 let count = 0;

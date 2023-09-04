@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import { Button } from 'jezvejs/Button';
 import { Tags } from 'jezvejs/Tags';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './TagsView.scss';

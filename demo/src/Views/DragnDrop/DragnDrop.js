@@ -9,7 +9,7 @@ import { Icon } from 'jezvejs/Icon';
 import { Sortable } from 'jezvejs/Sortable';
 import { SortableListContainer } from 'jezvejs/SortableListContainer';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';

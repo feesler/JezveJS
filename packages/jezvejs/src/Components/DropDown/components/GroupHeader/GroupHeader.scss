@@ -7,6 +7,10 @@
   --menu-group-header-font-weight: var(--dd-list-group-header-font-weight);
   --menu-group-header-line-height: var(--dd-list-group-header-line-height);
 
+  /* Active group header */
+  --menu-group-header-active-text-color: var(--dd-list-group-text);
+  --menu-group-header-active-background: var(--dd-list-group-bg);
+
   box-sizing: border-box;
   width: 100%;
   margin: 0;

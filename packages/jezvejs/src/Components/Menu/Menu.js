@@ -790,8 +790,9 @@ export class Menu extends Component {
     /**
      * Create items from specified array
      * @param {Object|Object[]} items
+     * @param {Object} state
      */
-    createItems(items, state) {
+    createItems(items, state = this.state) {
         return mapItems(
             asArray(items),
             (item) => this.createItem(item),
@@ -838,7 +839,10 @@ export class Menu extends Component {
 
         this.setState({
             ...this.state,
-            items: pushItem(newItem, this.items),
+            items: pushItem(
+                newItem,
+                structuredClone(this.state.items),
+            ),
         });
 
         return newItem.id;
@@ -858,7 +862,28 @@ export class Menu extends Component {
             ...this.state,
             items: newItems.reduce(
                 (prev, item) => pushItem(item, prev),
-                this.items,
+                structuredClone(this.state.items),
+            ),
+        });
+
+        return true;
+    }
+
+    /**
+     * Creates new item(s) from specified and replaces contents of the list
+     * @param {Object|Object[]} items
+     */
+    setItems(items) {
+        const newItems = this.createItems(items);
+        if (!Array.isArray(newItems)) {
+            return false;
+        }
+
+        this.setState({
+            ...this.state,
+            items: newItems.reduce(
+                (prev, item) => pushItem(item, prev),
+                [],
             ),
         });
 

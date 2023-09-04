@@ -4,7 +4,7 @@ import { createElement } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { DecimalInput } from 'jezvejs/DecimalInput';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createControls } from '../../Application/utils.js';
 
 /**

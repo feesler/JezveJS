@@ -1,6 +1,6 @@
 import 'jezvejs/style';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './IndexView.scss';
 
 class IndexView extends DemoView {

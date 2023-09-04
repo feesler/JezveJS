@@ -4,7 +4,7 @@ import { ChartGrid } from 'jezvejs/ChartGrid';
 import { Histogram } from 'jezvejs/Histogram';
 import { LineChart } from 'jezvejs/LineChart';
 
-import { DemoView } from '../../Application/DemoView.js';
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './ChartGridView.scss';
 
 const assert = {
