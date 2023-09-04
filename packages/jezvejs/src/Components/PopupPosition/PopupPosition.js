@@ -52,7 +52,7 @@ export class PopupPosition {
             return clientHeight;
         }
 
-        return window.innerHeight;
+        return window.visualViewport.height;
     }
 
     static getWindowScrollTop() {
@@ -74,7 +74,7 @@ export class PopupPosition {
             refElem,
             margin = 0,
             screenPadding = 0,
-            bottomSafeArea = 30,
+            bottomSafeArea = 70,
             useRefWidth = false,
             allowFlip = true,
             scrollOnOverflow = true,
@@ -110,6 +110,10 @@ export class PopupPosition {
             : elem.offsetParent.getBoundingClientRect();
 
         const reference = refElem.getBoundingClientRect();
+
+        const bottomSafe = (screenHeight - html.clientHeight > 50)
+            ? bottomSafeArea
+            : 0;
 
         // Vertical offset
 
@@ -149,7 +153,7 @@ export class PopupPosition {
         };
 
         let height = elem.offsetHeight;
-        let bottom = reference.bottom + margin + height + bottomSafeArea;
+        let bottom = reference.bottom + margin + height + bottomSafe;
         const minHeight = minRefHeight + margin + screenPadding + height;
 
         // Check element taller than screen
@@ -157,7 +161,7 @@ export class PopupPosition {
             height = screenHeight - minRefHeight - screenPadding - margin;
             style.maxHeight = px(height);
 
-            bottom = reference.bottom + margin + height + bottomSafeArea;
+            bottom = reference.bottom + margin + height + bottomSafe;
         }
 
         const refOverflowTop = -refScrollTop;
