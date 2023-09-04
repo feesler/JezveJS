@@ -2,6 +2,9 @@
 .menu-group__header {
   color: var(--menu-group-header-text-color);
   background: var(--menu-group-header-background);
+  border-color: var(--menu-group-header-border-color);
+  border-style: var(--menu-group-header-border-style);
+  border-width: var(--menu-group-header-border-width);
   font-size: var(--menu-group-header-font-size);
   font-weight: var(--menu-group-header-font-weight);
   line-height: var(--menu-group-header-line-height);
@@ -11,9 +14,9 @@
 
 /* Active state */
 .menu-group__header:active {
-  color: var(--menu-item-active-text-color);
-  background: var(--menu-item-active-background);
-  border-color: var(--menu-item-active-border-color);
+  color: var(--menu-group-header-active-text-color);
+  background: var(--menu-group-header-active-background);
+  border-color: var(--menu-group-header-active-border-color);
 
   .menu-item__icon {
     fill: var(--menu-item-active-icon-color);
