@@ -278,4 +278,18 @@
       fill: var(--menu-item-active-checkbox-icon-color);
     }
   }
+
+  .menu
+    .menu-item_active.menu-item_selected
+    > .menu-item__side-content
+    > .menu-checkbox:hover,
+  .menu
+    .menu-group__header.menu-item_active.menu-item_selected
+    > .menu-checkbox:hover {
+    background: var(--menu-item-active-checkbox-background);
+
+    .menu-checkbox__icon {
+      fill: var(--menu-item-active-checkbox-icon-color);
+    }
+  }
 }
