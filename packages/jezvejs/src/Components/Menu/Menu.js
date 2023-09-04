@@ -29,6 +29,7 @@ import {
     getGroupById,
     pushItem,
     isCheckbox,
+    filterItems,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -52,6 +53,9 @@ export {
     getPreviousItem,
     mapItems,
     pushItem,
+    filterItems,
+    forItems,
+    findLastMenuItem,
 };
 
 /* CSS classes */

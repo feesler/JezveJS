@@ -1,4 +1,4 @@
-import { DropDown } from 'jezvejs/DropDown';
+import { DropDown, mapItems } from 'jezvejs/DropDown';
 
 import { DropDownCollapsibleGroupsMenu } from '../Menu/CollapsibleGroupsMenu.js';
 import { DropDownCollapsibleMenuGroupHeader } from '../GroupHeader/CollapsibleMenuGroupHeader.js';
@@ -86,13 +86,17 @@ export class CollapsibleGroupsSelect extends DropDown {
             return;
         }
 
+        const options = {
+            includeGroupItems: this.state.allowActiveGroupHeader,
+        };
+
         this.setState({
             ...this.state,
-            groups: this.state.groups.map((item) => (
+            items: mapItems(this.state.items, (item) => (
                 (item.type === 'group' && item.id.toString() === strId)
                     ? { ...item, expanded: !item.expanded }
                     : item
-            )),
+            ), options),
         });
     }
 }

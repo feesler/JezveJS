@@ -260,6 +260,43 @@ export const mapItems = (items, callback, options = {}) => {
 };
 
 /**
+ * Returns list of menu items filtered by callback function
+ * @param {Array} items menu items array
+ * @param {Function} callback
+ * @param {Object} options
+ * @returns {Array}
+ */
+export const filterItems = (items, callback, options = {}) => {
+    if (!isFunction(callback)) {
+        throw new Error('Invalid callback parameter');
+    }
+
+    const res = [];
+    for (let index = 0; index < items.length; index += 1) {
+        const item = items[index];
+
+        if (item.type === 'group') {
+            if (
+                !options.includeGroupItems
+                || callback(item, index, items)
+            ) {
+                const children = filterItems(item.items, callback, options);
+                if (children.length > 0) {
+                    res.push({
+                        ...item,
+                        items: children,
+                    });
+                }
+            }
+        } else if (callback(item, index, items)) {
+            res.push({ ...item });
+        }
+    }
+
+    return res;
+};
+
+/**
  * Returns closest item before specified that satisfies filter
  *
  * @param {String} id identifier of item to start from

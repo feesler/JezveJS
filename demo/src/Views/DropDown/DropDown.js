@@ -281,11 +281,8 @@ class DropDownView extends DemoView {
             (item) => dropDown.addItem({ ...item, group: hiddenGroup }),
         );
 
-        const group1 = dropDown.getGroupById('grVisible');
-        dropDown.addItem({ id: 3, title: 'Visible item 3', group: group1 });
-
-        const group2 = dropDown.getGroupById(hiddenGroup.id);
-        dropDown.addItem({ id: 6, title: 'Hidden item 3', group: group2 });
+        dropDown.addItem({ id: 3, title: 'Visible item 3', group: 'grVisible' });
+        dropDown.addItem({ id: 6, title: 'Hidden item 6', group: hiddenGroup });
 
         this.addSection({
             id: 'createGroups',
@@ -856,11 +853,8 @@ class DropDownView extends DemoView {
             (item) => dropDown.addItem({ ...item, group: hiddenGroup }),
         );
 
-        const group1 = dropDown.getGroupById('grVisible');
-        dropDown.addItem({ id: 3, title: 'Visible item 3', group: group1 });
-
-        const group2 = dropDown.getGroupById(hiddenGroup.id);
-        dropDown.addItem({ id: 6, title: 'Hidden item 3', group: group2 });
+        dropDown.addItem({ id: 3, title: 'Visible item 3', group: 'grVisible' });
+        dropDown.addItem({ id: 6, title: 'Hidden item 6', group: hiddenGroup });
 
         this.addSection({
             id: 'collapsibleGroups',
