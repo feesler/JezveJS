@@ -21,6 +21,7 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { BlueBox } from './components/BlueBox/BlueBox.js';
 import { CustomListItem } from './components/CustomListItem/CustomListItem.js';
 import { CustomSelectionItem } from './components/CustomSelectionItem/CustomSelectionItem.js';
+import { CollapsibleGroupsSelect } from './components/CollapsibleGroups/Select/CollapsibleGroupsSelect.js';
 import './DropDownView.scss';
 
 const initItems = (title, count, startFrom = 1) => {
@@ -104,6 +105,7 @@ class DropDownView extends DemoView {
         this.attachedFilterMulti();
 
         this.customRender();
+        this.collapsibleGroups();
 
         this.parseNativeSelect();
         this.createNativeSelect();
@@ -819,6 +821,51 @@ class DropDownView extends DemoView {
             id: 'custom',
             title: 'Custom render',
             content: [dropDown.elem, controls, logsField.elem],
+        });
+    }
+
+    collapsibleGroups() {
+        const logsField = LogsField.create();
+
+        const dropDown = CollapsibleGroupsSelect.create({
+            className: 'dd_stretch',
+            placeholder: 'Select items',
+            multiple: true,
+            onItemSelect(selection) {
+                logsField.write(`itemselect: ${formatObject(selection)}`);
+            },
+            onChange(selection) {
+                logsField.write(`change: ${formatObject(selection)}`);
+            },
+        });
+
+        // Add groups data
+        const visibleGroup = dropDown.addGroup({
+            id: 'grVisible',
+            title: 'Visible',
+            expanded: true,
+        });
+        const visibleGroupItems = initItems('Visible item', 2);
+        visibleGroupItems.forEach(
+            (item) => dropDown.addItem({ ...item, group: visibleGroup }),
+        );
+
+        const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
+        const hiddenGroupItems = initItems('Hidden item', 2, 4);
+        hiddenGroupItems.forEach(
+            (item) => dropDown.addItem({ ...item, group: hiddenGroup }),
+        );
+
+        const group1 = dropDown.getGroupById('grVisible');
+        dropDown.addItem({ id: 3, title: 'Visible item 3', group: group1 });
+
+        const group2 = dropDown.getGroupById(hiddenGroup.id);
+        dropDown.addItem({ id: 6, title: 'Hidden item 3', group: group2 });
+
+        this.addSection({
+            id: 'collapsibleGroups',
+            title: 'Collapsible groups',
+            content: [dropDown.elem, logsField.elem],
         });
     }
 
