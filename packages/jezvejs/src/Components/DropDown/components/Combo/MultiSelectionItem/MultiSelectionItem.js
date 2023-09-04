@@ -1,5 +1,5 @@
-import { getClassName } from '../../../../js/common.js';
-import { Tag } from '../../../Tag/Tag.js';
+import { getClassName } from '../../../../../js/common.js';
+import { Tag } from '../../../../Tag/Tag.js';
 import './MultiSelectionItem.scss';
 
 /* CSS classes */

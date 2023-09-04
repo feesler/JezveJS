@@ -1,5 +1,5 @@
-import { getClassNames, createSVGElement } from '../../../../js/common.js';
-import { Button } from '../../../Button/Button.js';
+import { getClassNames, createSVGElement } from '../../../../../js/common.js';
+import { Button } from '../../../../Button/Button.js';
 import './ToggleButton.scss';
 
 /* Toggle icon path */

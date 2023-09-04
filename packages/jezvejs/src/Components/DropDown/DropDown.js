@@ -41,20 +41,22 @@ import {
 } from './utils.js';
 
 import { DropDownInput } from './components/Input/Input.js';
-import { DropDownSingleSelection } from './components/SingleSelection/SingleSelection.js';
-import { DropDownPlaceholder } from './components/Placeholder/Placeholder.js';
-import { DropDownComboBox } from './components/ComboBox/ComboBox.js';
-import { DropDownMenu } from './components/Menu/Menu.js';
-import { DropDownMenuHeader } from './components/MenuHeader/MenuHeader.js';
-import { DropDownMenuList } from './components/MenuList/MenuList.js';
-import { DropDownListItem } from './components/ListItem/ListItem.js';
-import { DropDownGroupItem } from './components/GroupItem/GroupItem.js';
-import { DropDownGroupHeader } from './components/GroupHeader/GroupHeader.js';
-import { DropDownListPlaceholder } from './components/ListPlaceholder/ListPlaceholder.js';
-import { DropDownMultipleSelection } from './components/MultipleSelection/MultipleSelection.js';
-import { DropDownMultiSelectionItem } from './components/MultiSelectionItem/MultiSelectionItem.js';
-import { DropDownClearButton } from './components/ClearButton/ClearButton.js';
-import { DropDownToggleButton } from './components/ToggleButton/ToggleButton.js';
+/* Combo box */
+import { DropDownComboBox } from './components/Combo/ComboBox/ComboBox.js';
+import { DropDownSingleSelection } from './components/Combo/SingleSelection/SingleSelection.js';
+import { DropDownMultipleSelection } from './components/Combo/MultipleSelection/MultipleSelection.js';
+import { DropDownMultiSelectionItem } from './components/Combo/MultiSelectionItem/MultiSelectionItem.js';
+import { DropDownPlaceholder } from './components/Combo/Placeholder/Placeholder.js';
+import { DropDownClearButton } from './components/Combo/ClearButton/ClearButton.js';
+import { DropDownToggleButton } from './components/Combo/ToggleButton/ToggleButton.js';
+/* Menu */
+import { DropDownMenu } from './components/Menu/Menu/Menu.js';
+import { DropDownMenuHeader } from './components/Menu/MenuHeader/MenuHeader.js';
+import { DropDownMenuList } from './components/Menu/MenuList/MenuList.js';
+import { DropDownListItem } from './components/Menu/ListItem/ListItem.js';
+import { DropDownGroupItem } from './components/Menu/GroupItem/GroupItem.js';
+import { DropDownGroupHeader } from './components/Menu/GroupHeader/GroupHeader.js';
+import { DropDownListPlaceholder } from './components/Menu/ListPlaceholder/ListPlaceholder.js';
 
 import '../../css/common.scss';
 import './DropDown.scss';

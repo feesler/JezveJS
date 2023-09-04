@@ -1,4 +1,4 @@
-import { MenuList } from '../../../Menu/Menu.js';
+import { MenuList } from '../../../../Menu/Menu.js';
 
 const defaultProps = {
     items: [],

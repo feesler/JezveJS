@@ -1,10 +1,10 @@
-import { createElement, isFunction } from '../../../../js/common.js';
-import { Component } from '../../../../js/Component.js';
-import { getSelectedItems } from '../../utils.js';
+import { createElement, isFunction } from '../../../../../js/common.js';
+import { Component } from '../../../../../js/Component.js';
+import { getSelectedItems } from '../../../utils.js';
 import { DropDownMultiSelectionItem } from '../MultiSelectionItem/MultiSelectionItem.js';
 import { DropDownClearButton } from '../ClearButton/ClearButton.js';
 import { DropDownToggleButton } from '../ToggleButton/ToggleButton.js';
-import { DropDownInput } from '../Input/Input.js';
+import { DropDownInput } from '../../Input/Input.js';
 import { DropDownMultipleSelection } from '../MultipleSelection/MultipleSelection.js';
 import { DropDownSingleSelection } from '../SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from '../Placeholder/Placeholder.js';

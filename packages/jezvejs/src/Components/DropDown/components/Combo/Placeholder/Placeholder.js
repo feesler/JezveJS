@@ -1,5 +1,5 @@
-import { createElement } from '../../../../js/common.js';
-import { Component } from '../../../../js/Component.js';
+import { createElement } from '../../../../../js/common.js';
+import { Component } from '../../../../../js/Component.js';
 import './Placeholder.scss';
 
 /* CSS classes */

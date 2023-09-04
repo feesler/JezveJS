@@ -1,5 +1,5 @@
-import { getClassName } from '../../../../js/common.js';
-import { MenuGroupHeader } from '../../../Menu/Menu.js';
+import { getClassName } from '../../../../../js/common.js';
+import { MenuGroupHeader } from '../../../../Menu/Menu.js';
 
 import './GroupHeader.scss';
 

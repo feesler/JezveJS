@@ -1,5 +1,5 @@
-import { getClassName } from '../../../../js/common.js';
-import { MenuItem } from '../../../Menu/Menu.js';
+import { getClassName } from '../../../../../js/common.js';
+import { MenuItem } from '../../../../Menu/Menu.js';
 
 /* CSS classes */
 const LIST_ITEM_CLASS = 'dd__list-item';

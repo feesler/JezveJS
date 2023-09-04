@@ -1,5 +1,5 @@
-import { getClassNames } from '../../../../js/common.js';
-import { CloseButton } from '../../../CloseButton/CloseButton.js';
+import { getClassNames } from '../../../../../js/common.js';
+import { CloseButton } from '../../../../CloseButton/CloseButton.js';
 import './ClearButton.scss';
 
 /* CSS classes */
