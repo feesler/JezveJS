@@ -10,7 +10,7 @@
   --menu-background: none;
 
   /* Items */
-  --menu-item-padding: 0.5rem;
+  --menu-item-padding: 0.5rem 0.75rem;
   --menu-item-text-color: #000000;
   --menu-item-font-size: 1rem;
   --menu-item-font-weight: 400;
@@ -21,15 +21,16 @@
   --menu-item-border-radius: 0;
   --menu-item-size: 2rem;
   --menu-item-line-height: var(--menu-item-size);
-  --menu-item-gap: 0.5rem;
+  --menu-item-gap: 0.75rem;
   --menu-item-text-transform: none;
+  --menu-item-side-content-size: 1.5rem;
 
   /* Icons */
   --menu-item-icon-size: calc(1.275rem + 0.3vw);
   --menu-item-icon-color: var(--menu-item-text-color);
 
   /* Checkbox */
-  --menu-checkbox-size: 2rem;
+  --menu-checkbox-size: var(--menu-item-side-content-size);
   --menu-checkbox-icon-size: 1.5rem;
   --menu-checkbox-icon-color: #000000;
   --menu-checkbox-border-radius: 0;
@@ -81,7 +82,7 @@
     --menu-item-hover-checkbox-background
   );
   --menu-item-hover-selected-checkbox-icon-color: var(
-    --menu-item-focus-checkbox-icon-color
+    --menu-checkbox-icon-color
   );
 
   /* Disabled item */
@@ -125,7 +126,7 @@
   --menu-group-header-font-size: 0.6875rem;
   --menu-group-header-font-weight: 700;
   --menu-group-header-line-height: 1rem;
-  --menu-group-header-padding: 0.5rem 0.5rem 0.25rem 0.5rem;
+  --menu-group-header-padding: 0.5rem 0.75rem 0.25rem 0.75rem;
   --menu-group-header-text-transform: uppercase;
 
   /* Active group header */
