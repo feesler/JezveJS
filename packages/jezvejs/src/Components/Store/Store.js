@@ -29,6 +29,17 @@ export class Store {
         this.listeners.forEach((listener) => listener(newState, prevState));
     }
 
+    setState(state) {
+        const newState = isFunction(state) ? state(this.state) : state;
+        if (this.state === newState) {
+            return;
+        }
+
+        const prevState = this.state;
+        this.state = newState;
+        this.listeners.forEach((listener) => listener(newState, prevState));
+    }
+
     subscribe(listener) {
         if (!isFunction(listener)) {
             throw new Error('Expected listener to be a function');
