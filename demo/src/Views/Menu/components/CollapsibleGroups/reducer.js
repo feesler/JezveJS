@@ -1,5 +1,4 @@
 import { createSlice } from 'jezvejs/Store';
-import { mapItems } from 'jezvejs/DropDown';
 
 // Reducers
 const slice = createSlice({
