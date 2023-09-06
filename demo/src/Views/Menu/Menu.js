@@ -5,8 +5,8 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
-import { CheckboxGroupsMenu } from './components/CheckboxGroups/Menu/CheckboxGroupsMenu.js';
-import { CollapsibleGroupsMenu } from './components/CollapsibleGroups/Menu/CollapsibleGroupsMenu.js';
+import { CheckboxGroupsMenu } from './components/CheckboxGroups/CheckboxGroupsMenu.js';
+import { CollapsibleGroupsMenu } from './components/CollapsibleGroups/CollapsibleGroupsMenu.js';
 import { CustomMenuHeader } from './components/CustomHeader/CustomMenuHeader.js';
 import { CustomMenuFooter } from './components/CustomFooter/CustomMenuFooter.js';
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/LoadingPlaceholder.js';

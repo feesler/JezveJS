@@ -1,8 +1,8 @@
 import { getClassName } from 'jezvejs';
 import { Menu, mapItems } from 'jezvejs/Menu';
 
-import { CheckboxMenuGroupItem } from '../GroupItem/CheckboxMenuGroupItem.js';
-import { CheckboxMenuGroupHeader } from '../GroupHeader/CheckboxMenuGroupHeader.js';
+import { CheckboxMenuGroupItem } from './GroupItem/CheckboxMenuGroupItem.js';
+import { CheckboxMenuGroupHeader } from './GroupHeader/CheckboxMenuGroupHeader.js';
 import './CheckboxGroupsMenu.scss';
 
 /* CSS classes */

@@ -1,7 +1,7 @@
 import { Menu } from 'jezvejs/Menu';
 
-import { CollapsibleMenuGroupItem } from '../GroupItem/CollapsibleMenuGroupItem.js';
-import { CollapsibleMenuGroupHeader } from '../GroupHeader/CollapsibleMenuGroupHeader.js';
+import { CollapsibleMenuGroupItem } from './GroupItem/CollapsibleMenuGroupItem.js';
+import { CollapsibleMenuGroupHeader } from './GroupHeader/CollapsibleMenuGroupHeader.js';
 
 /**
  * Collapsible groups menu component
