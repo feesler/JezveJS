@@ -24,6 +24,7 @@
   --menu-item-gap: 0.75rem;
   --menu-item-text-transform: none;
   --menu-item-side-content-size: 1.5rem;
+  --menu-item-text-decoration: none;
 
   /* Icons */
   --menu-item-icon-size: calc(1.275rem + 0.3vw);
@@ -56,6 +57,7 @@
     --menu-item-active-checkbox-icon-color
   );
   --menu-item-hover-checkbox-background: var(--menu-checkbox-background);
+  --menu-item-hover-text-decoration: none;
 
   /* Focused item */
   --menu-item-focus-shadow: none;

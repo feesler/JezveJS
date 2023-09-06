@@ -29,6 +29,17 @@ export class Store {
         this.listeners.forEach((listener) => listener(newState, prevState));
     }
 
+    setState(state) {
+        const newState = isFunction(state) ? state(this.state) : state;
+        if (this.state === newState) {
+            return;
+        }
+
+        const prevState = this.state;
+        this.state = newState;
+        this.listeners.forEach((listener) => listener(newState, prevState));
+    }
+
     subscribe(listener) {
         if (!isFunction(listener)) {
             throw new Error('Expected listener to be a function');
@@ -60,7 +71,7 @@ export const createSlice = (reducers) => {
         reducers: {},
         reducer(state, action) {
             if (!(action.type in slice.reducers)) {
-                throw new Error('Invalid action type');
+                return state;
             }
 
             const reduceFunc = slice.reducers[action.type];
@@ -75,3 +86,17 @@ export const createSlice = (reducers) => {
 
     return slice;
 };
+
+export const combineReducers = (...reducers) => (
+    (state, action) => {
+        for (let i = 0; i < reducers.length; i += 1) {
+            const reducer = reducers[i];
+            const res = reducer(state, action);
+            if (res !== state) {
+                return res;
+            }
+        }
+
+        return state;
+    }
+);

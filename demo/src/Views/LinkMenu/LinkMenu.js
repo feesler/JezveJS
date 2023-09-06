@@ -53,7 +53,7 @@ class LinkMenuView extends DemoView {
             items: [
                 {
                     title: 'Clear',
-                    id: null,
+                    id: 'clear',
                     selectable: false,
                     className: 'clear-menu-item',
                     onClick: () => menu.clearSelection(),
@@ -97,7 +97,7 @@ class LinkMenuView extends DemoView {
             defaultItemType: 'checkbox-link',
             items: [
                 {
-                    id: null,
+                    id: 'clear',
                     title: 'Clear',
                     selectable: false,
                     className: 'clear-menu-item',
@@ -137,8 +137,8 @@ class LinkMenuView extends DemoView {
             defaultItemType: 'checkbox-link',
             items: [
                 {
+                    id: 'clear',
                     title: 'Clear',
-                    id: null,
                     selectable: false,
                     className: 'clear-menu-item',
                     onClick: () => menu.clearSelection(),
@@ -178,8 +178,8 @@ class LinkMenuView extends DemoView {
             defaultItemType: 'checkbox-link',
             items: [
                 {
+                    id: 'clear',
                     title: 'Clear',
-                    id: null,
                     selectable: false,
                     className: 'clear-menu-item',
                     onClick: () => menu.clearSelection(),

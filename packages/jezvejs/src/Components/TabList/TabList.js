@@ -83,7 +83,7 @@ export class TabList extends Component {
     postInit() {
         this.setClassNames();
 
-        this.state.items = this.tabs.createItems(this.props.items, this.props);
+        this.state.items = this.tabs.createItems(this.props.items);
     }
 
     onChange(selected) {

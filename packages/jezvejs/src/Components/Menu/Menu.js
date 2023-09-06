@@ -29,9 +29,13 @@ import {
     getGroupById,
     pushItem,
     isCheckbox,
+    filterItems,
+    createMenuItem,
 } from './helpers.js';
 
 import './Menu.scss';
+import { combineReducers, createStore } from '../Store/Store.js';
+import { reducer, actions } from './reducer.js';
 
 export {
     /* Child components */
@@ -42,6 +46,7 @@ export {
     MenuSeparator,
     MenuCheckbox,
     /* helper functions */
+    generateItemId,
     isNullId,
     findMenuItem,
     getActiveItem,
@@ -52,6 +57,10 @@ export {
     getPreviousItem,
     mapItems,
     pushItem,
+    filterItems,
+    forItems,
+    findLastMenuItem,
+    createMenuItem,
 };
 
 /* CSS classes */
@@ -79,6 +88,7 @@ const defaultProps = {
     preventNavigation: false,
     focusItemOnHover: true,
     allowActiveGroupHeader: false,
+    reducers: null,
     components: {
         Header: null,
         MenuList,
@@ -130,7 +140,7 @@ export class Menu extends Component {
         this.renderInProgress = false;
         this.activeElem = null;
 
-        this.state = {
+        const initialState = {
             ...this.props,
             items: this.createItems(this.props.items, this.props),
             blockScroll: false,
@@ -138,9 +148,16 @@ export class Menu extends Component {
             ignoreTouch: false,
         };
 
+        // Setup store
+        const extraReducers = asArray(this.props.reducers);
+        const storeReducer = (extraReducers.length > 0)
+            ? combineReducers(reducer, ...extraReducers)
+            : reducer;
+        this.store = createStore(storeReducer, { initialState });
+
         this.init();
         this.postInit();
-        this.render(this.state);
+        this.subscribeToStore(this.store);
     }
 
     init() {
@@ -149,7 +166,7 @@ export class Menu extends Component {
             footer,
             components,
             list,
-        } = getMenuProps(this.state);
+        } = getMenuProps(this.props);
         delete list.id;
         delete list.className;
 
@@ -202,6 +219,11 @@ export class Menu extends Component {
         this.setUserProps();
     }
 
+    /** Returns current state object */
+    get state() {
+        return this.store.getState();
+    }
+
     /** Return array of all list items */
     get items() {
         return structuredClone(this.state.items);
@@ -212,12 +234,11 @@ export class Menu extends Component {
      * @param {boolean} val - if true component will be enabled, disabled otherwise. Default is true
      */
     enable(value = true) {
-        const disabled = !value;
-        if (this.state.disabled === disabled) {
+        if (this.state.disabled === !value) {
             return;
         }
 
-        this.setState({ ...this.state, disabled });
+        this.store.dispatch(actions.toggleEnable());
     }
 
     showItem(id, value = true) {
@@ -226,14 +247,10 @@ export class Menu extends Component {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            items: mapItems(this.state.items, (item) => (
-                (item.id?.toString() !== strId)
-                    ? item
-                    : { ...item, hidden: !value }
-            )),
-        });
+        const action = (value)
+            ? actions.showItem(strId)
+            : actions.hideItem(strId);
+        this.store.dispatch(action);
     }
 
     hideItem(id) {
@@ -246,14 +263,10 @@ export class Menu extends Component {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            items: mapItems(this.state.items, (item) => (
-                (item.id?.toString() !== strId)
-                    ? item
-                    : { ...item, disabled: !value }
-            )),
-        });
+        const action = (value)
+            ? actions.enableItem(strId)
+            : actions.disableItem(strId);
+        this.store.dispatch(action);
     }
 
     /**
@@ -624,7 +637,7 @@ export class Menu extends Component {
      */
     onTouchStart(e) {
         if (e.touches) {
-            this.setState({ ...this.state, ignoreTouch: true });
+            this.store.dispatch(actions.ignoreTouch());
         }
     }
 
@@ -734,15 +747,7 @@ export class Menu extends Component {
      */
     setActive(id) {
         const strId = id?.toString() ?? null;
-
-        this.setState({
-            ...this.state,
-            items: mapItems(this.state.items, (item) => (
-                (item.active === (item.id?.toString() === strId))
-                    ? item
-                    : { ...item, active: !item.active }
-            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
-        });
+        this.store.dispatch(actions.activateItem(strId));
     }
 
     /**
@@ -751,15 +756,7 @@ export class Menu extends Component {
      */
     setSelection(selectedItems) {
         const items = asArray(selectedItems).map((value) => value.toString());
-
-        this.setState({
-            ...this.state,
-            items: mapItems(this.state.items, (item) => (
-                (item.selected === items.includes(item.id?.toString()) || !item.selectable)
-                    ? item
-                    : { ...item, selected: !item.selected }
-            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
-        });
+        this.store.dispatch(actions.setSelection(items));
     }
 
     /**
@@ -767,16 +764,7 @@ export class Menu extends Component {
      * @param {boolean} value
      */
     selectAll(value = true) {
-        const selected = !!value;
-
-        this.setState({
-            ...this.state,
-            items: mapItems(this.state.items, (item) => (
-                (item.selected === selected || !item.selectable)
-                    ? item
-                    : { ...item, selected }
-            ), { includeGroupItems: this.state.allowActiveGroupHeader }),
-        });
+        this.store.dispatch(actions.selectAll(!!value));
     }
 
     /**
@@ -795,36 +783,14 @@ export class Menu extends Component {
     createItems(items, state = this.state) {
         return mapItems(
             asArray(items),
-            (item) => this.createItem(item),
+            (item) => this.createItem(item, state),
             { includeGroupItems: state.allowActiveGroupHeader },
         );
     }
 
     /** Returns item object for specified props after applying default values */
-    createItem(props = {}) {
-        if (!props) {
-            throw new Error('Invalid item object');
-        }
-
-        const { ListItem } = this.props.components;
-        const res = {
-            ...ListItem.defaultProps,
-            ...props,
-            active: false,
-            id: props.id?.toString() ?? this.generateItemId(),
-            type: props.type ?? this.props.defaultItemType,
-        };
-
-        const { type } = res;
-        const checkboxAvail = res.selectable && this.props.multiple;
-        if (
-            !checkboxAvail
-            && (type === 'checkbox' || type === 'checkbox-link')
-        ) {
-            res.type = (type === 'checkbox') ? 'button' : 'link';
-        }
-
-        return res;
+    createItem(props = {}, state = this.state) {
+        return createMenuItem(props, state);
     }
 
     /**
@@ -832,20 +798,8 @@ export class Menu extends Component {
      * @param {Object} props
      */
     addItem(props) {
-        const newItem = this.createItem(props);
-        if (!newItem) {
-            return null;
-        }
-
-        this.setState({
-            ...this.state,
-            items: pushItem(
-                newItem,
-                structuredClone(this.state.items),
-            ),
-        });
-
-        return newItem.id;
+        const item = this.createItem(props);
+        this.store.dispatch(actions.addItem(item));
     }
 
     /**
@@ -854,19 +808,7 @@ export class Menu extends Component {
      */
     append(items) {
         const newItems = this.createItems(items);
-        if (!Array.isArray(newItems)) {
-            return false;
-        }
-
-        this.setState({
-            ...this.state,
-            items: newItems.reduce(
-                (prev, item) => pushItem(item, prev),
-                structuredClone(this.state.items),
-            ),
-        });
-
-        return true;
+        this.store.dispatch(actions.append(newItems));
     }
 
     /**
@@ -875,19 +817,7 @@ export class Menu extends Component {
      */
     setItems(items) {
         const newItems = this.createItems(items);
-        if (!Array.isArray(newItems)) {
-            return false;
-        }
-
-        this.setState({
-            ...this.state,
-            items: newItems.reduce(
-                (prev, item) => pushItem(item, prev),
-                [],
-            ),
-        });
-
-        return true;
+        this.store.dispatch(actions.setItems(newItems));
     }
 
     toggleSelectItem(id) {
@@ -896,26 +826,11 @@ export class Menu extends Component {
         }
 
         const strId = id?.toString() ?? null;
+        if (strId === null) {
+            return;
+        }
 
-        this.setState({
-            ...this.state,
-            items: mapItems(this.state.items, (item) => {
-                if (item.id?.toString() === strId) {
-                    if (!item.selectable || item.disabled) {
-                        return item;
-                    }
-
-                    return {
-                        ...item,
-                        selected: (this.state.multiple) ? !item.selected : true,
-                    };
-                }
-
-                return (this.state.multiple)
-                    ? item
-                    : { ...item, selected: false };
-            }, { includeGroupItems: this.state.allowActiveGroupHeader }),
-        });
+        this.store.dispatch(actions.toggleSelectItem(strId));
     }
 
     /** Scroll list element until specified list item be fully visible */
@@ -949,7 +864,7 @@ export class Menu extends Component {
 
     setListScroll(listScroll) {
         if (this.state.listScroll !== listScroll) {
-            this.setState({ ...this.state, listScroll });
+            this.store.dispatch(actions.setListScroll(listScroll));
         }
     }
 
@@ -962,18 +877,12 @@ export class Menu extends Component {
             clearTimeout(this.state.scrollTimeout);
         }
 
-        this.setState({
-            ...this.state,
+        this.store.dispatch(actions.requestListScroll({
             listScroll,
-            blockScroll: true,
             scrollTimeout: setTimeout(() => {
-                this.setState({
-                    ...this.state,
-                    blockScroll: false,
-                    scrollTimeout: 0,
-                });
+                this.store.dispatch(actions.unblockScroll());
             }, SCROLL_TO_ITEM_TIMEOUT),
-        });
+        }));
     }
 
     unblockScroll() {
@@ -985,11 +894,7 @@ export class Menu extends Component {
             clearTimeout(this.state.scrollTimeout);
         }
 
-        this.setState({
-            ...this.state,
-            blockScroll: false,
-            scrollTimeout: 0,
-        });
+        this.store.dispatch(actions.unblockScroll());
     }
 
     renderHeader(state, prevState) {
@@ -1083,6 +988,10 @@ export class Menu extends Component {
     renderList(state, prevState) {
         this.renderListContent(state, prevState);
         this.renderListScroll(state, prevState);
+    }
+
+    setState(state) {
+        this.store.setState(state);
     }
 
     render(state, prevState = {}) {

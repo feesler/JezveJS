@@ -138,27 +138,25 @@ export class DemoView extends View {
 
         this.initTableOfContents();
 
-        const { items } = this.tocMenu;
-        let groupId;
-        if (items.length === 0) {
-            groupId = this.tocMenu.addItem({
+        if (this.tocMenu.items.length === 0) {
+            this.tocMenu.addItem({
                 id: this.tocMenu.generateGroupId(),
                 type: 'group',
                 items: [],
             });
-        } else {
-            const lastItem = items[items.length - 1];
-            if (lastItem.type !== 'group') {
-                throw new Error('Invalid type of item: group is expected');
-            }
-            groupId = lastItem.id;
+        }
+
+        const { items } = this.tocMenu;
+        const lastItem = items[items.length - 1];
+        if (lastItem.type !== 'group') {
+            throw new Error('Invalid type of item: group is expected');
         }
 
         this.tocMenu.addItem({
             id,
             title,
             url: `#${id}`,
-            group: groupId,
+            group: lastItem.id,
         });
     }
 

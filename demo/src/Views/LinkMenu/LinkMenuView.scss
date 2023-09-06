@@ -1,4 +1,5 @@
 /* 'Clear' item */
-.menu-item.clear-menu-item .menu-item__content {
-  padding-left: 0;
+.menu-list_left .clear-menu-item .menu-item__content:first-child::before,
+.menu-list_right .clear-menu-item .menu-item__content:last-child::after {
+  width: 0;
 }

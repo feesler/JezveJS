@@ -240,7 +240,10 @@ export const mapItems = (items, callback, options = {}) => {
 
     const res = [];
     for (let index = 0; index < items.length; index += 1) {
-        const item = items[index];
+        const item = {
+            ...items[index],
+            group: options.group?.id,
+        };
 
         if (item.type === 'group') {
             const group = (options.includeGroupItems)
@@ -249,10 +252,51 @@ export const mapItems = (items, callback, options = {}) => {
 
             res.push({
                 ...group,
-                items: mapItems(item.items, callback),
+                items: mapItems(
+                    item.items,
+                    callback,
+                    { ...options, group },
+                ),
             });
         } else {
             res.push(callback(item, index, items));
+        }
+    }
+
+    return res;
+};
+
+/**
+ * Returns list of menu items filtered by callback function
+ * @param {Array} items menu items array
+ * @param {Function} callback
+ * @param {Object} options
+ * @returns {Array}
+ */
+export const filterItems = (items, callback, options = {}) => {
+    if (!isFunction(callback)) {
+        throw new Error('Invalid callback parameter');
+    }
+
+    const res = [];
+    for (let index = 0; index < items.length; index += 1) {
+        const item = items[index];
+
+        if (item.type === 'group') {
+            if (
+                !options.includeGroupItems
+                || callback(item, index, items)
+            ) {
+                const children = filterItems(item.items, callback, options);
+                if (children.length > 0) {
+                    res.push({
+                        ...item,
+                        items: children,
+                    });
+                }
+            }
+        } else if (callback(item, index, items)) {
+            res.push({ ...item });
         }
     }
 
@@ -338,8 +382,11 @@ export const getNextItem = (id, items, filterCallback = null, options = {}) => {
  * @returns {Array}
  */
 export const pushItem = (item, items) => {
-    const res = items;
+    if (!item) {
+        return null;
+    }
 
+    const res = items;
     if (item.group) {
         const group = getGroupById(item.group, res);
         if (group) {
@@ -347,6 +394,38 @@ export const pushItem = (item, items) => {
         }
     } else {
         res.push(item);
+    }
+
+    return res;
+};
+
+/** Returns item object for specified props after applying default values */
+export const createMenuItem = (props, state) => {
+    if (!props) {
+        throw new Error('Invalid item object');
+    }
+    if (!state) {
+        throw new Error('Invalid state object');
+    }
+
+    const { ListItem } = state.components;
+    const defaultItemType = state.defaultItemType ?? ((state.multiple) ? 'checkbox' : 'button');
+
+    const res = {
+        ...ListItem.defaultProps,
+        ...props,
+        active: false,
+        id: props.id?.toString() ?? generateItemId(state?.items ?? [], 'item'),
+        type: props.type ?? defaultItemType,
+    };
+
+    const { type } = res;
+    const checkboxAvail = res.selectable && state.multiple;
+    if (
+        !checkboxAvail
+        && (type === 'checkbox' || type === 'checkbox-link')
+    ) {
+        res.type = (type === 'checkbox') ? 'button' : 'link';
     }
 
     return res;
