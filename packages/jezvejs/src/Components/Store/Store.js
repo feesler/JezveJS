@@ -60,7 +60,7 @@ export const createSlice = (reducers) => {
         reducers: {},
         reducer(state, action) {
             if (!(action.type in slice.reducers)) {
-                throw new Error('Invalid action type');
+                return state;
             }
 
             const reduceFunc = slice.reducers[action.type];
