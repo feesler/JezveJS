@@ -21,7 +21,7 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { BlueBox } from './components/BlueBox/BlueBox.js';
 import { CustomListItem } from './components/CustomListItem/CustomListItem.js';
 import { CustomSelectionItem } from './components/CustomSelectionItem/CustomSelectionItem.js';
-import { CollapsibleGroupsSelect } from './components/CollapsibleGroups/Select/CollapsibleGroupsSelect.js';
+import { CollapsibleGroupsSelect } from './components/CollapsibleGroups/CollapsibleGroupsSelect.js';
 import './DropDownView.scss';
 
 const initItems = (title, count, startFrom = 1) => {

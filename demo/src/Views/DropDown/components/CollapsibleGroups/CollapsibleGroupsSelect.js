@@ -1,8 +1,8 @@
 import { DropDown, mapItems } from 'jezvejs/DropDown';
 
-import { DropDownCollapsibleGroupsMenu } from '../Menu/CollapsibleGroupsMenu.js';
-import { DropDownCollapsibleMenuGroupHeader } from '../GroupHeader/CollapsibleMenuGroupHeader.js';
-import { DropDownCollapsibleMenuGroupItem } from '../GroupItem/CollapsibleMenuGroupItem.js';
+import { DropDownCollapsibleGroupsMenu } from './Menu/CollapsibleGroupsMenu.js';
+import { DropDownCollapsibleMenuGroupHeader } from './GroupHeader/CollapsibleMenuGroupHeader.js';
+import { DropDownCollapsibleMenuGroupItem } from './GroupItem/CollapsibleMenuGroupItem.js';
 
 const defaultProps = {
     components: {
