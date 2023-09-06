@@ -241,6 +241,9 @@ export class DropDown extends Component {
         this.elem = null;
         this.inputElem = null;
         this.focusedElem = null;
+        if (this.hostElem?.tagName === 'SELECT') {
+            this.selectElem = this.hostElem;
+        }
         if (!this.hostElem) {
             this.props.listAttach = false;
         }
@@ -268,7 +271,24 @@ export class DropDown extends Component {
             SHOW_LIST_SCROLL_TIMEOUT,
         );
 
-        // Initial state
+        // Setup store
+        const extraReducers = asArray(this.props.reducers);
+        const storeReducer = (extraReducers.length > 0)
+            ? combineReducers(reducer, ...extraReducers)
+            : reducer;
+        this.store = createStore(storeReducer, {
+            initialState: this.getInitialState(),
+        });
+
+        this.init();
+        this.postInit();
+
+        if (this.props.data) {
+            this.store.dispatch(actions.append(this.props.data));
+        }
+    }
+
+    getInitialState() {
         const disabled = (
             this.props.disabled
             || (!this.props.listAttach && !!this.hostElem?.disabled)
@@ -301,24 +321,11 @@ export class DropDown extends Component {
             },
         };
 
-        if (this.hostElem?.tagName === 'SELECT') {
-            this.selectElem = this.hostElem;
+        if (this.selectElem) {
             initialState = this.parseSelect(this.selectElem, initialState);
         }
 
-        // Setup store
-        const extraReducers = asArray(this.props.reducers);
-        const storeReducer = (extraReducers.length > 0)
-            ? combineReducers(reducer, ...extraReducers)
-            : reducer;
-        this.store = createStore(storeReducer, { initialState });
-
-        this.init();
-        this.postInit();
-
-        if (this.props.data) {
-            this.store.dispatch(actions.append(this.props.data));
-        }
+        return initialState;
     }
 
     init() {
