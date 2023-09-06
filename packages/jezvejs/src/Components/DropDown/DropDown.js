@@ -328,6 +328,10 @@ export class DropDown extends Component {
         return initialState;
     }
 
+    setState(state) {
+        this.store.setState(state);
+    }
+
     init() {
         if (this.props.listAttach) {
             this.attachToElement();
