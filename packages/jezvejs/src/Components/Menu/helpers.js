@@ -375,8 +375,11 @@ export const getNextItem = (id, items, filterCallback = null, options = {}) => {
  * @returns {Array}
  */
 export const pushItem = (item, items) => {
-    const res = items;
+    if (!item) {
+        return null;
+    }
 
+    const res = items;
     if (item.group) {
         const group = getGroupById(item.group, res);
         if (group) {
@@ -384,6 +387,38 @@ export const pushItem = (item, items) => {
         }
     } else {
         res.push(item);
+    }
+
+    return res;
+};
+
+/** Returns item object for specified props after applying default values */
+export const createMenuItem = (props, state) => {
+    if (!props) {
+        throw new Error('Invalid item object');
+    }
+    if (!state) {
+        throw new Error('Invalid state object');
+    }
+
+    const { ListItem } = state.components;
+    const defaultItemType = state.defaultItemType ?? ((state.multiple) ? 'checkbox' : 'button');
+
+    const res = {
+        ...ListItem.defaultProps,
+        ...props,
+        active: false,
+        id: props.id?.toString() ?? generateItemId(state?.items ?? [], 'item'),
+        type: props.type ?? defaultItemType,
+    };
+
+    const { type } = res;
+    const checkboxAvail = res.selectable && state.multiple;
+    if (
+        !checkboxAvail
+        && (type === 'checkbox' || type === 'checkbox-link')
+    ) {
+        res.type = (type === 'checkbox') ? 'button' : 'link';
     }
 
     return res;

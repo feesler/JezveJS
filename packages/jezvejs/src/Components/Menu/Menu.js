@@ -30,6 +30,7 @@ import {
     pushItem,
     isCheckbox,
     filterItems,
+    createMenuItem,
 } from './helpers.js';
 
 import './Menu.scss';
@@ -43,6 +44,7 @@ export {
     MenuSeparator,
     MenuCheckbox,
     /* helper functions */
+    generateItemId,
     isNullId,
     findMenuItem,
     getActiveItem,
@@ -56,6 +58,7 @@ export {
     filterItems,
     forItems,
     findLastMenuItem,
+    createMenuItem,
 };
 
 /* CSS classes */
@@ -799,36 +802,14 @@ export class Menu extends Component {
     createItems(items, state = this.state) {
         return mapItems(
             asArray(items),
-            (item) => this.createItem(item),
+            (item) => this.createItem(item, state),
             { includeGroupItems: state.allowActiveGroupHeader },
         );
     }
 
     /** Returns item object for specified props after applying default values */
-    createItem(props = {}) {
-        if (!props) {
-            throw new Error('Invalid item object');
-        }
-
-        const { ListItem } = this.props.components;
-        const res = {
-            ...ListItem.defaultProps,
-            ...props,
-            active: false,
-            id: props.id?.toString() ?? this.generateItemId(),
-            type: props.type ?? this.props.defaultItemType,
-        };
-
-        const { type } = res;
-        const checkboxAvail = res.selectable && this.props.multiple;
-        if (
-            !checkboxAvail
-            && (type === 'checkbox' || type === 'checkbox-link')
-        ) {
-            res.type = (type === 'checkbox') ? 'button' : 'link';
-        }
-
-        return res;
+    createItem(props = {}, state = this.state) {
+        return createMenuItem(props, state);
     }
 
     /**

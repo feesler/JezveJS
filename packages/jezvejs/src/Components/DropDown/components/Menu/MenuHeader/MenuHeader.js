@@ -33,6 +33,7 @@ export class DropDownMenuHeader extends Component {
         this.state = {
             inputString: this.props.inputString,
             inputPlaceholder: this.props.inputPlaceholder,
+            multiple: this.props.multiple,
         };
 
         this.init();
@@ -70,7 +71,7 @@ export class DropDownMenuHeader extends Component {
         }
 
         let placeholder = state.inputPlaceholder;
-        if (!this.props.multiple) {
+        if (!state.multiple) {
             const [item] = getSelectedItems(state);
             const str = item?.title ?? '';
             const usePlaceholder = (

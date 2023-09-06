@@ -10,6 +10,8 @@ import {
     pushItem,
     mapItems,
     findLastMenuItem,
+    generateItemId,
+    createMenuItem,
 } from '../Menu/Menu.js';
 
 export {
@@ -24,6 +26,8 @@ export {
     pushItem,
     mapItems,
     findLastMenuItem,
+    generateItemId,
+    createMenuItem,
 };
 
 /** Returns array of selected items */

@@ -269,20 +269,22 @@ class DropDownView extends DemoView {
             elem: input,
             className: 'dd_form dd__styled-group',
         });
-        const visibleGroup = dropDown.addGroup({ id: 'grVisible', title: 'Visible' });
+        const visibleGroupId = 'grVisible';
+        dropDown.addGroup({ id: visibleGroupId, title: 'Visible' });
         const visibleGroupItems = initItems('Visible item', 2);
         visibleGroupItems.forEach(
-            (item) => dropDown.addItem({ ...item, group: visibleGroup }),
+            (item) => dropDown.addItem({ ...item, group: visibleGroupId }),
         );
 
-        const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
+        const hiddenGroupId = 'grHidden';
+        dropDown.addGroup({ id: hiddenGroupId, title: 'Hidden' });
         const hiddenGroupItems = initItems('Hidden item', 2, 4);
         hiddenGroupItems.forEach(
-            (item) => dropDown.addItem({ ...item, group: hiddenGroup }),
+            (item) => dropDown.addItem({ ...item, group: hiddenGroupId }),
         );
 
-        dropDown.addItem({ id: 3, title: 'Visible item 3', group: 'grVisible' });
-        dropDown.addItem({ id: 6, title: 'Hidden item 6', group: hiddenGroup });
+        dropDown.addItem({ id: 3, title: 'Visible item 3', group: visibleGroupId });
+        dropDown.addItem({ id: 6, title: 'Hidden item 6', group: hiddenGroupId });
 
         this.addSection({
             id: 'createGroups',
@@ -594,15 +596,20 @@ class DropDownView extends DemoView {
             className: 'dd_stretch',
         });
 
-        const group10 = dropDown.addGroup({ title: '1 - 9' });
+        const group10 = 'group10';
+        dropDown.addGroup({ id: group10, title: '1 - 9' });
         initItems('Item', 9).forEach(
             (item) => dropDown.addItem({ ...item, group: group10 }),
         );
-        const group20 = dropDown.addGroup({ title: '10 - 19' });
+
+        const group20 = 'group20';
+        dropDown.addGroup({ id: group20, title: '10 - 19' });
         initItems('Item', 10, 10).forEach(
             (item) => dropDown.addItem({ ...item, group: group20 }),
         );
-        const group30 = dropDown.addGroup({ title: '20 - 29' });
+
+        const group30 = 'group30';
+        dropDown.addGroup({ id: group30, title: '20 - 29' });
         initItems('Item', 10, 20).forEach(
             (item) => dropDown.addItem({ ...item, group: group30 }),
         );
@@ -837,24 +844,26 @@ class DropDownView extends DemoView {
         });
 
         // Add groups data
-        const visibleGroup = dropDown.addGroup({
+        const visibleGroupId = 'grVisible';
+        dropDown.addGroup({
             id: 'grVisible',
             title: 'Visible',
             expanded: true,
         });
         const visibleGroupItems = initItems('Visible item', 2);
         visibleGroupItems.forEach(
-            (item) => dropDown.addItem({ ...item, group: visibleGroup }),
+            (item) => dropDown.addItem({ ...item, group: visibleGroupId }),
         );
 
-        const hiddenGroup = dropDown.addGroup({ title: 'Hidden' });
+        const hiddenGroupId = 'grHidden';
+        dropDown.addGroup({ id: hiddenGroupId, title: 'Hidden' });
         const hiddenGroupItems = initItems('Hidden item', 2, 4);
         hiddenGroupItems.forEach(
-            (item) => dropDown.addItem({ ...item, group: hiddenGroup }),
+            (item) => dropDown.addItem({ ...item, group: hiddenGroupId }),
         );
 
-        dropDown.addItem({ id: 3, title: 'Visible item 3', group: 'grVisible' });
-        dropDown.addItem({ id: 6, title: 'Hidden item 6', group: hiddenGroup });
+        dropDown.addItem({ id: 3, title: 'Visible item 3', group: visibleGroupId });
+        dropDown.addItem({ id: 6, title: 'Hidden item 6', group: hiddenGroupId });
 
         this.addSection({
             id: 'collapsibleGroups',
