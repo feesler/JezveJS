@@ -20,7 +20,7 @@ import { Component } from '../../js/Component.js';
 import { MenuCheckbox } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
-import { createStore } from '../Store/Store.js';
+import { combineReducers, createStore } from '../Store/Store.js';
 
 import {
     findMenuItem,
@@ -177,6 +177,8 @@ const defaultProps = {
     fullScreen: false,
     /* Placeholder text for component */
     placeholder: null,
+    /* Additional reducers */
+    reducers: null,
     /* If enabled single select component will move focus from input to container
        after select item */
     blurInputOnSingleSelect: true,
@@ -303,7 +305,12 @@ export class DropDown extends Component {
             initialState = this.parseSelect(this.selectElem, initialState);
         }
 
-        this.store = createStore(reducer, { initialState });
+        // Setup store
+        const extraReducers = asArray(this.props.reducers);
+        const storeReducer = (extraReducers.length > 0)
+            ? combineReducers(reducer, ...extraReducers)
+            : reducer;
+        this.store = createStore(storeReducer, { initialState });
 
         this.init();
         this.postInit();
