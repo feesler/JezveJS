@@ -1162,15 +1162,6 @@ export class DropDown extends Component {
         return getSelectedItems(state);
     }
 
-    /** Return list item object which list element contains specified element */
-    getItemByElem(elem) {
-        const li = elem?.closest('li');
-        if (!li) {
-            return null;
-        }
-        return this.getItem(li.dataset.id);
-    }
-
     /** Show or hide drop down list */
     showList(val) {
         if (this.state.visible === val) {
