@@ -295,6 +295,7 @@ export class DropDown extends Component {
             waitForScroll: false,
             renderTime: Date.now(),
             createItem: (item, state) => createMenuItem(item, state),
+            isAvailableItem: (item, state) => this.isAvailableItem(item, state),
             components: {
                 ...this.props.components,
             },
@@ -1137,7 +1138,7 @@ export class DropDown extends Component {
         const options = {
             includeGroupItems: this.state.allowActiveGroupHeader,
         };
-        const filter = (item) => this.isAvailableItem(item);
+        const filter = (item, state) => this.isAvailableItem(item, state);
 
         return getPreviousItem(itemId, this.state.items, filter, options);
     }
@@ -1151,7 +1152,7 @@ export class DropDown extends Component {
         const options = {
             includeGroupItems: this.state.allowActiveGroupHeader,
         };
-        const filter = (item) => this.isAvailableItem(item);
+        const filter = (item, state) => this.isAvailableItem(item, state);
 
         return getNextItem(itemId, this.state.items, filter, options);
     }
@@ -1647,8 +1648,8 @@ export class DropDown extends Component {
     }
 
     /**
-     * Create new group
-     * @param {string} label
+     * Creates new group item
+     * @param {Object} options
      */
     addGroup(options) {
         this.store.dispatch(actions.addGroup(options));

@@ -103,8 +103,11 @@ export const getAvailableItems = (state) => {
         includeGroupItems: state.allowActiveGroupHeader,
     };
 
-    return toFlatList(state.items, options)
-        .filter((item) => isAvailableItem(item, state));
+    const filterCallback = isFunction(state.isAvailableItem)
+        ? (item) => state.isAvailableItem(item, state)
+        : (item) => isAvailableItem(item, state);
+
+    return toFlatList(state.items, options).filter(filterCallback);
 };
 
 /**

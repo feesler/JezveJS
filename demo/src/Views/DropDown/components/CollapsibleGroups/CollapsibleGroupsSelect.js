@@ -1,8 +1,9 @@
-import { DropDown, mapItems } from 'jezvejs/DropDown';
+import { DropDown } from 'jezvejs/DropDown';
 
 import { DropDownCollapsibleGroupsMenu } from './Menu/CollapsibleGroupsMenu.js';
 import { DropDownCollapsibleMenuGroupHeader } from './GroupHeader/CollapsibleMenuGroupHeader.js';
 import { DropDownCollapsibleMenuGroupItem } from './GroupItem/CollapsibleMenuGroupItem.js';
+import { actions, reducer } from './reducer.js';
 
 const defaultProps = {
     components: {
@@ -21,6 +22,7 @@ export class CollapsibleGroupsSelect extends DropDown {
             ...defaultProps,
             ...props,
             allowActiveGroupHeader: true,
+            reducers: reducer,
             components: {
                 ...defaultProps.components,
                 ...(props?.components ?? {}),
@@ -41,9 +43,8 @@ export class CollapsibleGroupsSelect extends DropDown {
             return false;
         }
 
-        const groupId = item.group?.id;
-        if (groupId) {
-            const group = this.getItem(groupId, state);
+        if (item.group) {
+            const group = this.getItem(item.group, state);
             return group?.expanded;
         }
 
@@ -51,18 +52,16 @@ export class CollapsibleGroupsSelect extends DropDown {
     }
 
     /**
-     * Creates new group
-     * @param {string} label
+     * Creates new group item
+     * @param {Object} options
      */
-    createGroup(options = {}, groups = []) {
+    addGroup(options) {
         const {
             expanded = true,
             ...rest
         } = options;
 
-        const group = super.createGroup({ expanded, ...rest }, groups);
-
-        return group;
+        super.addGroup({ expanded, ...rest });
     }
 
     onGroupHeaderClick(id) {
@@ -86,17 +85,6 @@ export class CollapsibleGroupsSelect extends DropDown {
             return;
         }
 
-        const options = {
-            includeGroupItems: this.state.allowActiveGroupHeader,
-        };
-
-        this.setState({
-            ...this.state,
-            items: mapItems(this.state.items, (item) => (
-                (item.type === 'group' && item.id.toString() === strId)
-                    ? { ...item, expanded: !item.expanded }
-                    : item
-            ), options),
-        });
+        this.store.dispatch(actions.toggleGroup(strId));
     }
 }
