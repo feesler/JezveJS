@@ -240,7 +240,10 @@ export const mapItems = (items, callback, options = {}) => {
 
     const res = [];
     for (let index = 0; index < items.length; index += 1) {
-        const item = items[index];
+        const item = {
+            ...items[index],
+            group: options.group?.id,
+        };
 
         if (item.type === 'group') {
             const group = (options.includeGroupItems)
@@ -249,7 +252,11 @@ export const mapItems = (items, callback, options = {}) => {
 
             res.push({
                 ...group,
-                items: mapItems(item.items, callback),
+                items: mapItems(
+                    item.items,
+                    callback,
+                    { ...options, group },
+                ),
             });
         } else {
             res.push(callback(item, index, items));

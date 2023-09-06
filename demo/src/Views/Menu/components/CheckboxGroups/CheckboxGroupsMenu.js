@@ -3,6 +3,7 @@ import { Menu, mapItems } from 'jezvejs/Menu';
 
 import { CheckboxMenuGroupItem } from './GroupItem/CheckboxMenuGroupItem.js';
 import { CheckboxMenuGroupHeader } from './GroupHeader/CheckboxMenuGroupHeader.js';
+import { actions, reducer } from './reducer.js';
 import './CheckboxGroupsMenu.scss';
 
 /* CSS classes */
@@ -18,6 +19,8 @@ export class CheckboxGroupsMenu extends Menu {
             renderNotSelected: true,
             allowActiveGroupHeader: true,
             className: getClassName(MENU_CLASS, props.className),
+            reducers: reducer,
+            onGroupHeaderClick: (id, e) => this.onGroupHeaderClick(id, e),
             components: {
                 ...props.components,
                 GroupHeader: CheckboxMenuGroupHeader,
@@ -26,9 +29,19 @@ export class CheckboxGroupsMenu extends Menu {
         });
     }
 
-    onGroupHeaderClick(id, e) {
+    onGroupHeaderClick(id) {
         this.toggleGroup(id);
-        super.onGroupHeaderClick(id, e);
+    }
+
+    /** Toggle item selected status */
+    toggleSelectItem(itemId) {
+        const item = this.getItemById(itemId);
+        if (item?.type === 'group') {
+            this.toggleGroup(itemId);
+            return;
+        }
+
+        super.toggleSelectItem(itemId);
     }
 
     toggleGroup(id) {
@@ -37,20 +50,6 @@ export class CheckboxGroupsMenu extends Menu {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            items: this.state.items.map((item) => (
-                (item.type === 'group' && item.id.toString() === strId)
-                    ? {
-                        ...item,
-                        selected: !item.selected,
-                        items: mapItems(
-                            item.items,
-                            (child) => ({ ...child, selected: !item.selected }),
-                        ),
-                    }
-                    : item
-            )),
-        });
+        this.store.dispatch(actions.toggleGroup(strId));
     }
 }
