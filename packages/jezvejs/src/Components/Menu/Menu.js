@@ -140,24 +140,28 @@ export class Menu extends Component {
         this.renderInProgress = false;
         this.activeElem = null;
 
-        const initialState = {
+        // Setup store
+        const extraReducers = asArray(this.props.reducers);
+        const storeReducer = (extraReducers.length > 0)
+            ? combineReducers(reducer, ...extraReducers)
+            : reducer;
+        this.store = createStore(storeReducer, {
+            initialState: this.getInitialState(),
+        });
+
+        this.init();
+        this.postInit();
+        this.subscribeToStore(this.store);
+    }
+
+    getInitialState() {
+        return {
             ...this.props,
             items: this.createItems(this.props.items, this.props),
             blockScroll: false,
             scrollTimeout: 0,
             ignoreTouch: false,
         };
-
-        // Setup store
-        const extraReducers = asArray(this.props.reducers);
-        const storeReducer = (extraReducers.length > 0)
-            ? combineReducers(reducer, ...extraReducers)
-            : reducer;
-        this.store = createStore(storeReducer, { initialState });
-
-        this.init();
-        this.postInit();
-        this.subscribeToStore(this.store);
     }
 
     init() {
