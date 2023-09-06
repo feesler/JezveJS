@@ -132,7 +132,7 @@ const ATTACH_REF_HEIGHT = 5;
 const IGNORE_SCROLL_TIMEOUT = 500;
 const SHOW_LIST_SCROLL_TIMEOUT = 100;
 
-const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group'];
+const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group', 'items'];
 
 /** Default properties */
 const defaultProps = {
@@ -326,6 +326,10 @@ export class DropDown extends Component {
         }
 
         return initialState;
+    }
+
+    setState(state) {
+        this.store.setState(state);
     }
 
     init() {
@@ -1757,24 +1761,16 @@ export class DropDown extends Component {
             return;
         }
 
-        const optGroups = [];
         const options = [];
 
         state.items.forEach((item) => {
-            const option = this.createOption(item);
-
-            if (item.group) {
-                let group = optGroups.find((groupItem) => groupItem.group === item.group);
-                if (!group) {
-                    group = {
-                        group: item.group,
-                        elem: this.createOptGroup(item.group.title, item.group.disabled),
-                    };
-                    optGroups.push(group);
-                    options.push(group.elem);
-                }
-                group.elem.append(option);
+            if (item.type === 'group') {
+                const group = this.createOptGroup(item.title, item.disabled);
+                const children = item.items.map((i) => this.createOption(i));
+                group.append(...children);
+                options.push(group);
             } else {
+                const option = this.createOption(item);
                 options.push(option);
             }
         });
