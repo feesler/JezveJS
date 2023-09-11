@@ -45,7 +45,6 @@
     content: "";
     top: 0;
     left: 0;
-    transition: left 0.2s;
     position: absolute;
     margin: var(--switch-padding);
     width: calc(var(--switch-height) - var(--switch-padding) * 2);
@@ -53,6 +52,11 @@
     background-color: var(--switch-slider-color);
     border-radius: 100vh;
   }
+}
+
+/* Animated only focused */
+.switch input:focus + .switch-slider::before {
+  transition: left 0.2s;
 }
 
 /* Focused state */
