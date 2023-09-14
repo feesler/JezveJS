@@ -173,7 +173,6 @@
   --input-focus-outline: none;
   --input-border-width: 0;
 
-  background: none;
   border: 0 none;
   height: var(--ig-inner-height);
 }
@@ -182,9 +181,10 @@
 .input-group__input-outer .btn.input-group__inner-btn {
   --btn-focus-shadow: none;
   --btn-focus-outline: none;
+  --btn-disabled-opacity: 1;
+  --btn-disabled-background: var(--input-disabled-bg);
 
   border: 0 none;
-  background: none;
   height: var(--ig-inner-height);
 }
 
@@ -192,10 +192,6 @@
 .input-group__input:focus ~ .input-group__inner-btn,
 .input-group__inner-btn_active {
   border-color: var(--ig-input-active-border);
-}
-
-.input-group__inner-btn[disabled] {
-  display: none;
 }
 
 /* Inner content of input group button */

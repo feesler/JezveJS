@@ -8,6 +8,10 @@
   --menu-item-selected-text-color: #ffffff;
   --menu-item-selected-background: #ff3c00;
 
+  /* Focused item */
+  --menu-item-focus-text-color: #ffffff;
+  --menu-item-focus-background: #ff3c00;
+
   /* Hover item */
   --menu-item-hover-text-color: #ffffff;
   --menu-item-hover-background: #ff3c00;
@@ -26,6 +30,7 @@
     .menu-item__content {
       min-height: 0;
       text-align: center;
+      justify-content: center;
     }
   }
 
