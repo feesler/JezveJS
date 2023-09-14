@@ -97,6 +97,10 @@
 }
 
 /* Input outer container */
+.input-group > .input-group__input-outer {
+  overflow: hidden;
+}
+
 .input-group > .input-group__input-outer,
 .input-group.input-group__input-outer {
   display: flex;
