@@ -19,6 +19,11 @@
   --dp-width: 19rem;
   --dp-min-width: 300px;
 
+  /* Day cells */
+  --dp-day-cell-size: 2.2rem;
+  --dp-day-cell-font-size: 1rem;
+  --dp-day-cell-border-radius: 100vh;
+
   position: relative;
   max-width: 100%;
 }
@@ -98,6 +103,7 @@
 /* Container of view cells */
 .dp__view-container {
   display: grid;
+  justify-items: center;
   flex-shrink: 0;
   max-width: 100%;
   min-width: var(--dp-min-width);
@@ -157,10 +163,13 @@
 }
 
 .dp__day-cell {
-  font-size: 1rem;
+  font-size: var(--dp-day-cell-font-size);
+  line-height: var(--dp-day-cell-size);
+  height: var(--dp-day-cell-size);
+  width: var(--dp-day-cell-size);
+  border-radius: var(--dp-day-cell-border-radius);
+  padding: 0;
   cursor: pointer;
-  padding: 0 0.6rem;
-  line-height: 1.4rem;
 }
 
 .dp__day-cell[disabled] {
