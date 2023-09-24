@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
+import { createElement, enable } from 'jezvejs';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 
@@ -185,6 +185,7 @@ class PopupMenuView extends DemoView {
     initList() {
         const menu = PopupMenu.create({
             id: 'listMenu',
+            fixed: false,
         });
 
         const list = createElement('div', {
@@ -195,6 +196,9 @@ class PopupMenuView extends DemoView {
         const itemsCount = 20;
         for (let i = 1; i <= itemsCount; i += 1) {
             const itemElem = renderListItem(i);
+            if (i === 2) {
+                enable(itemElem, false);
+            }
             list.append(itemElem);
         }
 

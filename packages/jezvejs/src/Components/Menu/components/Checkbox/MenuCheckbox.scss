@@ -20,11 +20,14 @@
 }
 
 /* Disabled state */
-[disabled] .menu-checkbox {
-  border-color: var(--menu-item-disabled-checkbox-border-color);
-  background: var(--menu-item-disabled-checkbox-background);
+.menu-item[disabled],
+.menu[disabled] {
+  .menu-checkbox {
+    border-color: var(--menu-item-disabled-checkbox-border-color);
+    background: var(--menu-item-disabled-checkbox-background);
 
-  .menu-checkbox__icon {
-    fill: var(--menu-item-disabled-checkbox-icon-color);
+    .menu-checkbox__icon {
+      fill: var(--menu-item-disabled-checkbox-icon-color);
+    }
   }
 }

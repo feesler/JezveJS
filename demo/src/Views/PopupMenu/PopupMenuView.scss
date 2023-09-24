@@ -40,4 +40,12 @@
   font-size: 1rem;
   padding: 0.5rem;
   background-color: #dddddd;
+
+  .popup-menu {
+    position: static;
+  }
+}
+
+.list-item[disabled] {
+  color: #888888;
 }

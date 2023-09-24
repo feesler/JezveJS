@@ -157,7 +157,7 @@
 
 /* Disabled state */
 .menu-item[disabled],
-[disabled] .menu-item {
+.menu[disabled] .menu-item {
   pointer-events: none;
   cursor: auto;
   color: var(--menu-item-disabled-text-color);
@@ -204,7 +204,7 @@
     fill: var(--menu-item-disabled-selected-icon-color);
   }
 
-  .menu-checkbox {
+  > .menu-item__side-content > .menu-checkbox {
     background: var(--menu-item-disabled-checkbox-background);
 
     .menu-checkbox__icon {
