@@ -78,7 +78,7 @@
 }
 
 /* Disabled component */
-[disabled] .tag,
+[disabled] > .tag,
 .tag[disabled] {
   color: var(--tag-disabled-text-color);
   background-color: var(--tag-disabled-background-color);
