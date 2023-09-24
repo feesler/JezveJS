@@ -61,6 +61,7 @@ export class Offcanvas extends Component {
             props: { className: CONTAINER_CLASS },
             children: [this.contentElem],
         });
+        this.elem.classList.toggle(CLOSED_CLASS, !!this.props.closed);
 
         if (this.props.placement === 'right') {
             this.elem.classList.add(RIGHT_CONTAINER_CLASS);
