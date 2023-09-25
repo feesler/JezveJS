@@ -1,11 +1,18 @@
 .switch {
   --switch-width: 2.6rem;
   --switch-height: 1.5rem;
-  --switch-padding: 2px;
+  --switch-slider-padding: 2px;
+  --switch-gap: 0.5rem;
   --switch-bg: #555555;
   --switch-hover-bg: #707070;
   --switch-slider-color: #f0f0f0;
   --switch-hover-slider: #ffffff;
+  --switch-padding: 0;
+
+  /* Label */
+  --switch-label-order: 1;
+  --switch-font-size: 1rem;
+  --switch-text-color: #000000;
 
   /* Checked state */
   --switch-checked-bg: #0d9c00;
@@ -15,9 +22,10 @@
   --switch-focus-outline-color: #aee5ff;
 
   display: flex;
+  flex-flow: row nowrap;
   position: relative;
-  width: var(--switch-width);
-  height: var(--switch-height);
+  padding: var(--switch-padding);
+  gap: var(--switch-gap);
 
   input {
     position: absolute;
@@ -31,14 +39,16 @@
 
 /* Slider container */
 .switch-slider {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--switch-width);
+  height: var(--switch-height);
   background-color: var(--switch-bg);
   border-radius: 100vh;
   cursor: pointer;
+  position: relative;
 
   /* Sliding disc */
   &::before {
@@ -46,12 +56,21 @@
     top: 0;
     left: 0;
     position: absolute;
-    margin: var(--switch-padding);
-    width: calc(var(--switch-height) - var(--switch-padding) * 2);
-    height: calc(var(--switch-height) - var(--switch-padding) * 2);
+    margin: var(--switch-slider-padding);
+    width: calc(var(--switch-height) - var(--switch-slider-padding) * 2);
+    height: calc(var(--switch-height) - var(--switch-slider-padding) * 2);
     background-color: var(--switch-slider-color);
     border-radius: 100vh;
   }
+}
+
+/* Label */
+.switch__label {
+  font-size: var(--switch-font-size);
+  color: var(--switch-text-color);
+  min-height: var(--switch-height);
+  line-height: var(--switch-height);
+  order: var(--switch-label-order);
 }
 
 /* Animated only focused */
