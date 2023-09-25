@@ -8,6 +8,9 @@
   --checkbox-hover-bg: #cccccc;
   --checkbox-label-size: 16px;
   --checkbox-icon-size: 14px;
+  --checkbox-label-order: 1;
+  --checkbox-gap: 0.5rem;
+  --checkbox-padding: 0;
 
   /* Checked state */
   --checkbox-checked-fill: #5082aa;
@@ -26,9 +29,9 @@
   position: relative;
   display: inline-flex;
   flex-flow: row nowrap;
+  gap: var(--checkbox-gap);
   align-items: center;
-  padding: 0;
-  margin: 0 12px 0 0;
+  padding: var(--checkbox-padding);
   white-space: nowrap;
 
   input {
@@ -96,6 +99,7 @@
 .checkbox__label {
   font-size: var(--checkbox-label-size);
   color: var(--checkbox-text);
+  order: var(--checkbox-label-order);
 }
 
 .checkbox input[disabled] ~ .checkbox__label {

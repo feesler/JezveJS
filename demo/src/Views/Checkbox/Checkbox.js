@@ -60,6 +60,7 @@ class CheckboxView extends DemoView {
             id: 'checkboxIcon',
             title: 'Custom icon',
             content: Checkbox.create({
+                checked: true,
                 checkIcon: Icon.create({ icon: 'close-icon', className: 'checkbox__icon' }).elem,
             }).elem,
         });
@@ -70,6 +71,7 @@ class CheckboxView extends DemoView {
             id: 'dynCheckbox',
             name: 'check1',
             label: 'Checkbox methods',
+            className: 'right-check',
             onChange: (checked) => this.addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
         });
 
@@ -142,11 +144,14 @@ class CheckboxView extends DemoView {
         this.addSection({
             id: 'radioParse',
             title: 'Parse component from DOM',
-            content: ids.map((item) => (
-                Radio.fromElement(ge(`defaultRadio${item}`), {
-                    onChange: (checked) => this.addEventLog(`Parsed Radio ${item} change. checked: ${checked}`),
-                }).elem
-            )),
+            content: createElement('form', {
+                props: { className: 'radio-group' },
+                children: ids.map((item) => (
+                    Radio.fromElement(ge(`defaultRadio${item}`), {
+                        onChange: (checked) => this.addEventLog(`Parsed Radio ${item} change. checked: ${checked}`),
+                    }).elem
+                )),
+            }),
         });
     }
 
@@ -164,7 +169,10 @@ class CheckboxView extends DemoView {
         const radio3 = radios[2];
 
         const form = createElement('form', {
-            props: { id: 'dynamicRadioContainer' },
+            props: {
+                id: 'dynamicRadioContainer',
+                className: 'radio-group',
+            },
             children: radios.map((item) => item.elem),
         });
 
