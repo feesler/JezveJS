@@ -3,9 +3,19 @@
   --checkbox-border-radius: 100vh;
 }
 
+.right-check {
+  --checkbox-label-order: -1;
+}
+
 /* Large */
 .checkbox.checkbox-large .checkbox__check {
   --checkbox-size: 28px;
   --checkbox-icon-size: 24px;
   --checkbox-bg: #97ff77;
+}
+
+.radio-group {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem 2.5rem;
 }

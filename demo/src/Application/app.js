@@ -15,6 +15,7 @@ export const navigationMenuSections = [{
     items: [
         { id: 'dpiUtil', title: 'DPI test', url: 'demo/dpitest.html' },
         { id: 'emptyClickUtil', title: 'Empty click', url: 'demo/emptyclick.html' },
+        { id: 'debug', title: 'Debug', url: 'demo/debug.html' },
         { id: 'dragndropUtil', title: 'Drag\'n\'Drop and Sortable', url: 'demo/dragndrop.html' },
     ],
 }, {

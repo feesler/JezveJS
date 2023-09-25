@@ -5,6 +5,9 @@
   --radio-text: #000000;
   --radio-hover-bg: #cccccc;
   --radio-label-size: 16px;
+  --radio-label-order: 1;
+  --radio-gap: 0.5rem;
+  --radio-padding: 0;
 
   /* Checked state */
   --radio-check-color: #ffffff;
@@ -24,8 +27,8 @@
   display: inline-flex;
   flex-flow: row nowrap;
   align-items: center;
-  padding: 2px;
-  margin: 0 12px 0 0;
+  padding: var(--radio-padding);
+  gap: var(--radio-gap);
   white-space: nowrap;
 
   input {
@@ -96,6 +99,7 @@
 .radio__label {
   font-size: var(--radio-label-size);
   color: var(--radio-text);
+  order: var(--radio-label-order);
 }
 
 .radio input[disabled] ~ .radio__label {
