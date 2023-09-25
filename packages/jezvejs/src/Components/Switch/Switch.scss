@@ -4,9 +4,7 @@
   --switch-slider-padding: 2px;
   --switch-gap: 0.5rem;
   --switch-bg: #555555;
-  --switch-hover-bg: #707070;
   --switch-slider-color: #f0f0f0;
-  --switch-hover-slider: #ffffff;
   --switch-padding: 0;
 
   /* Label */
@@ -20,6 +18,16 @@
 
   /* Focused state */
   --switch-focus-outline-color: #aee5ff;
+
+  /* Hover state */
+  --switch-hover-bg: #707070;
+  --switch-hover-slider: #ffffff;
+
+  /* Disabled state */
+  --switch-disabled-bg: #dddddd;
+  --switch-disabled-slider-color: #f0f0f0;
+  --switch-disabled-text-color: #888888;
+  --switch-disabled-opacity: 0.8;
 
   display: flex;
   flex-flow: row nowrap;
@@ -98,7 +106,17 @@
 /* Disabled state */
 .switch input[disabled] + .switch-slider {
   pointer-events: none;
-  opacity: 0.8;
+  opacity: var(--switch-disabled-opacity);
+  background-color: var(--switch-disabled-bg);
+
+  &::before {
+    background-color: var(--switch-disabled-slider-color);
+  }
+}
+
+.switch input[disabled] ~ .switch__label {
+  pointer-events: none;
+  color: var(--switch-disabled-text-color);
 }
 
 @media (hover: hover) {
