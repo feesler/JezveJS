@@ -137,12 +137,11 @@ export class Collapsible extends Component {
             throw new Error('Invalid state');
         }
 
-        if (
-            state.expanded === prevState.expanded
-            || !this.props.animated
-            || !prevState
-            || !('expanded' in prevState)
-        ) {
+        if (state.expanded === prevState.expanded) {
+            return;
+        }
+
+        if (!this.props.animated) {
             this.elem.classList.toggle(EXPANDED_CLASS, !!state.expanded);
             return;
         }
