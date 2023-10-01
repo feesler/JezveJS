@@ -10,6 +10,7 @@
   /* Label */
   --switch-label-order: 1;
   --switch-font-size: 1rem;
+  --switch-font-weight: 400;
   --switch-text-color: #000000;
 
   /* Checked state */
@@ -75,6 +76,7 @@
 /* Label */
 .switch__label {
   font-size: var(--switch-font-size);
+  font-weight: var(--switch-font-weight);
   color: var(--switch-text-color);
   min-height: var(--switch-height);
   line-height: var(--switch-height);

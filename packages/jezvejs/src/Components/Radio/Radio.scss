@@ -2,12 +2,15 @@
   --radio-size: 20px;
   --radio-border: #cccccc;
   --radio-bg: #ffffff;
-  --radio-text: #000000;
   --radio-hover-bg: #cccccc;
-  --radio-label-size: 16px;
-  --radio-label-order: 1;
   --radio-gap: 0.5rem;
   --radio-padding: 0;
+
+  /* Label */
+  --radio-text: #000000;
+  --radio-label-size: 16px;
+  --radio-font-weight: 400;
+  --radio-label-order: 1;
 
   /* Checked state */
   --radio-check-color: #ffffff;
@@ -98,6 +101,7 @@
 
 .radio__label {
   font-size: var(--radio-label-size);
+  font-weight: var(--radio-font-weight);
   color: var(--radio-text);
   order: var(--radio-label-order);
 }

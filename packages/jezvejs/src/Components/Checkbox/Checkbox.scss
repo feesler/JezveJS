@@ -4,13 +4,15 @@
   --checkbox-border-width: 1px;
   --checkbox-border-radius: 0;
   --checkbox-bg: #ffffff;
-  --checkbox-text: #000000;
-  --checkbox-hover-bg: #cccccc;
-  --checkbox-label-size: 16px;
   --checkbox-icon-size: 14px;
-  --checkbox-label-order: 1;
   --checkbox-gap: 0.5rem;
   --checkbox-padding: 0;
+
+  /* Label */
+  --checkbox-text: #000000;
+  --checkbox-label-size: 16px;
+  --checkbox-font-weight: 400;
+  --checkbox-label-order: 1;
 
   /* Checked state */
   --checkbox-checked-fill: #5082aa;
@@ -21,6 +23,9 @@
 
   /* Focused state */
   --checkbox-focus-outline-color: #aee5ff;
+
+  /* Hover state */
+  --checkbox-hover-bg: #cccccc;
 
   /* Disabled state */
   --checkbox-disabled-bg: #dddddd;
@@ -98,6 +103,7 @@
 
 .checkbox__label {
   font-size: var(--checkbox-label-size);
+  font-weight: var(--checkbox-font-weight);
   color: var(--checkbox-text);
   order: var(--checkbox-label-order);
 }
