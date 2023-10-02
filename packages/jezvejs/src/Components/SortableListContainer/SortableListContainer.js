@@ -4,6 +4,10 @@ import { ListContainer } from '../ListContainer/ListContainer.js';
 
 const defaultProps = {
     ascending: true,
+    animated: false,
+    vertical: true,
+    animatedClass: 'animated',
+    transitionTimeout: 300,
     itemSortSelector: null,
     placeholderClass: null,
     sortModeClass: null,
@@ -38,6 +42,10 @@ export class SortableListContainer extends ListContainer {
             group: state.sortGroup,
             selector: state.itemSortSelector,
             tree: state.treeSort,
+            animated: state.animated,
+            vertical: state.vertical,
+            animatedClass: state.animatedClass,
+            transitionTimeout: state.transitionTimeout,
             containerSelector: state.childContainerSelector,
             placeholderClass: state.placeholderClass,
             copyWidth: true,
