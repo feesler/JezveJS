@@ -19,6 +19,8 @@ export class SortableDragAvatar extends DragAvatar {
         const offset = getOffset(this.dragZoneElem);
         this.shiftX = downX - offset.left;
         this.shiftY = downY - offset.top;
+        this.width = this.dragZoneElem.offsetWidth;
+        this.height = this.dragZoneElem.offsetHeight;
 
         this.dragZoneElem.classList.add(this.dragZone.getPlaceholder());
 

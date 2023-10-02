@@ -98,7 +98,6 @@
 .list-area {
   display: inline-flex;
   flex-flow: column nowrap;
-  row-gap: 10px;
   max-width: 300px;
   width: 100%;
 }
@@ -114,8 +113,15 @@
   flex-flow: row nowrap;
   align-items: center;
   width: 100% !important;
-  padding: 5px;
   background-color: #55dd99;
+  overflow: hidden;
+  min-height: 0;
+  margin-bottom: 10px;
+}
+
+.animated {
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
 }
 
 .list_item_2 {
@@ -123,9 +129,8 @@
 }
 
 .list_item > span {
-  height: 24px;
-  line-height: 24px;
   font-size: 18px;
+  padding: 5px;
   margin: 0 5px;
   color: #ffffff;
 }

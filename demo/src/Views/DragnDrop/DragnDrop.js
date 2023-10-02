@@ -301,6 +301,8 @@ class DragAndDropView extends DemoView {
             selector: '.sortable-tile',
             placeholderClass: 'sortable-tile_placeholder',
             group: 'tiles',
+            animated: true,
+            vertical: false,
         });
 
         this.addSection({
@@ -349,6 +351,7 @@ class DragAndDropView extends DemoView {
             placeholderClass: 'list_item_placeholder',
             listMode: 'sort',
             sortGroup: 'list',
+            animated: true,
             onItemClick: (id) => logsField?.write(`onItemClick() id: ${id}`),
             onSort: (info) => this.onListSort(info, logsField),
         });
@@ -380,6 +383,7 @@ class DragAndDropView extends DemoView {
             dragClass: true,
             group: 'exch',
             copyWidth: true,
+            animated: true,
             allowSingleItemSort: true,
         });
         Sortable.create({
@@ -390,6 +394,7 @@ class DragAndDropView extends DemoView {
             dragClass: 'list_item_drag',
             group: 'exch',
             copyWidth: true,
+            animated: true,
             allowSingleItemSort: true,
         });
 
