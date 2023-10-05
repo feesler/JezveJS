@@ -26,6 +26,8 @@ const DAY_CELL_CLASS = 'dp__day-cell';
 const WEEKDAY_CELL_CLASS = 'dp__weekday-cell';
 const TODAY_CELL_CLASS = 'dp__today-cell';
 const HIGHLIGHT_CELL_CLASS = 'dp__cell_hl';
+const RANGE_START_CELL_CLASS = 'dp__cell_hl-range-start';
+const RANGE_END_CELL_CLASS = 'dp__cell_hl-range-end';
 const ACTIVE_CELL_CLASS = 'dp__cell_act';
 
 export class DatePickerMonthView extends Component {
@@ -156,6 +158,14 @@ export class DatePickerMonthView extends Component {
 
             const highlight = state.range && this.inRange(item.date, state.curRange);
             item.elem.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
+
+            const startDate = state.curRange?.start ?? null;
+            const isRangeStart = !!startDate && isSameDate(item.date, startDate);
+            item.elem.classList.toggle(RANGE_START_CELL_CLASS, isRangeStart);
+
+            const endDate = state.curRange?.end ?? null;
+            const isRangeEnd = !!endDate && isSameDate(item.date, endDate);
+            item.elem.classList.toggle(RANGE_END_CELL_CLASS, isRangeEnd);
 
             const disabled = disabledFilter && state.disabledDateFilter(item.date, state);
             enable(item.elem, !disabled);

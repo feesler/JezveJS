@@ -201,6 +201,17 @@
   background-color: var(--dp-hl-bg-color);
   border: 1px solid var(--dp-hl-bg-color);
   color: var(--dp-hl-color);
+  border-radius: 0;
+}
+
+.dp__cell_hl.dp__cell_hl-range-start {
+  border-top-left-radius: var(--dp-day-cell-border-radius);
+  border-bottom-left-radius: var(--dp-day-cell-border-radius);
+}
+
+.dp__cell_hl.dp__cell_hl-range-end {
+  border-top-right-radius: var(--dp-day-cell-border-radius);
+  border-bottom-right-radius: var(--dp-day-cell-border-radius);
 }
 
 /* Animation */
