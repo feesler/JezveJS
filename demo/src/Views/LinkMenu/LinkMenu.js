@@ -48,7 +48,7 @@ class LinkMenuView extends DemoView {
             itemParam: 'action',
             allowActiveLink: true,
             multiple: true,
-            useURLParam: true,
+            useURLParam: false,
             defaultItemType: 'checkbox-link',
             items: [
                 {
@@ -58,10 +58,10 @@ class LinkMenuView extends DemoView {
                     className: 'clear-menu-item',
                     onClick: () => menu.clearSelection(),
                 },
-                { title: 'Zero', id: 0 },
-                { title: 'Create', id: 'create' },
-                { title: 'Update', id: 'update' },
-                { title: 'Delete', id: 'delete' },
+                { title: 'Zero', id: 0, url: 'zero/' },
+                { title: 'Create', id: 'create', url: 'create/' },
+                { title: 'Update', id: 'update', url: 'update/' },
+                { title: 'Delete', id: 'delete', url: 'delete/' },
             ],
         });
 

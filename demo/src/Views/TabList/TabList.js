@@ -38,6 +38,27 @@ const getItems = (disableLast = false) => ([{
     disabled: disableLast,
 }]);
 
+const getItemsWithURL = (disableLast = false) => ([{
+    id: 1,
+    title: 'First',
+    value: 1,
+    url: 'first/',
+    content: renderContent(1),
+}, {
+    id: 2,
+    title: 'Second',
+    value: 2,
+    url: 'second/',
+    content: renderContent(2),
+}, {
+    id: 'str',
+    title: 'Array content',
+    value: 'str',
+    url: 'str/',
+    content: renderArrayContent(),
+    disabled: disableLast,
+}]);
+
 /**
  * TabList component demo view
  */
@@ -48,6 +69,9 @@ class TabListView extends DemoView {
     onStart() {
         this.initDefault();
         this.initStyled();
+        this.initItemParam();
+        this.initUseURLParam();
+        this.initItemURL();
         this.initHiddenItem();
         this.initDisabledItem();
         this.initDisabled();
@@ -81,6 +105,50 @@ class TabListView extends DemoView {
             id: 'styled',
             title: 'Styled',
             content: createContainer('styledContainer', tabList.elem),
+        });
+    }
+
+    initItemParam() {
+        const tabList = TabList.create({
+            className: 'styled bold',
+            useURLParam: true,
+            itemParam: 'value',
+            items: getItems(),
+        });
+
+        this.addSection({
+            id: 'itemParam',
+            title: '\'itemParam\' option',
+            content: createContainer('itemParamContainer', tabList.elem),
+        });
+    }
+
+    initUseURLParam() {
+        const tabList = TabList.create({
+            className: 'styled bold',
+            useURLParam: false,
+            items: getItems(),
+        });
+
+        this.addSection({
+            id: 'urlParam',
+            title: '\'useURLParam\' option',
+            content: createContainer('urlParamContainer', tabList.elem),
+        });
+    }
+
+    initItemURL() {
+        const tabList = TabList.create({
+            className: 'styled bold',
+            useURLParam: false,
+            itemParam: 'value',
+            items: getItemsWithURL(),
+        });
+
+        this.addSection({
+            id: 'itemURL',
+            title: 'Item URL option',
+            content: createContainer('itemURLContainer', tabList.elem),
         });
     }
 

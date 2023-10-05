@@ -382,12 +382,18 @@ export class Menu extends Component {
     }
 
     getItemURL(item, state) {
-        const baseURL = item.url ?? window.location;
+        const useURLParam = item.useURLParam ?? state.useURLParam;
+        const itemURL = item.url ?? '';
+        const baseURL = window.location;
         const { itemParam } = state;
         const arrayParam = `${itemParam}[]`;
         const param = (state.multiple) ? arrayParam : itemParam;
 
-        const url = new URL(baseURL);
+        const url = new URL(itemURL, baseURL);
+        if (!useURLParam) {
+            return url;
+        }
+
         if (!isNullId(item)) {
             url.searchParams.set(param, item.id);
 

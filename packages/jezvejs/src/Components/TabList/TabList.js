@@ -18,6 +18,8 @@ const defaultProps = {
     items: [],
     disabled: false,
     selectedId: null,
+    useURLParam: undefined,
+    itemParam: 'id',
     onChange: null,
 };
 
@@ -51,11 +53,18 @@ export class TabList extends Component {
     }
 
     init() {
-        this.tabs = LinkMenu.create({
-            itemParam: 'id',
+        const menuProps = {
             className: HEADER_CLASS,
             onChange: (selection) => this.onChange(selection),
-        });
+        };
+        if (typeof this.props.useURLParam !== 'undefined') {
+            menuProps.useURLParam = this.props.useURLParam;
+        }
+        if (typeof this.props.itemParam !== 'undefined') {
+            menuProps.itemParam = this.props.itemParam;
+        }
+
+        this.tabs = LinkMenu.create(menuProps);
 
         this.contentList = ListContainer.create({
             ItemComponent: TabContentItem,
