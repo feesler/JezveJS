@@ -1,3 +1,5 @@
+import { isObject } from 'jezve-test';
+
 /** Format specified value */
 export function formatValue(val) {
     return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
@@ -8,6 +10,10 @@ export function formatProps(params) {
 
     return res.join(', ');
 }
+
+export const formatObject = (value) => (
+    isObject(value) ? JSON.stringify(value) : (value?.toString() ?? value)
+);
 
 export function checkPHPerrors(content) {
     const errSignatures = [

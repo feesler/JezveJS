@@ -186,6 +186,89 @@ const trimDecimalTests = async () => {
     await Actions.trimDecimalTest('-10.12345', 0, '-10');
 };
 
+const colorToIntTests = async () => {
+    setBlock('colorToInt() function', 1);
+
+    await Actions.colorToIntTest('#ffffff', 0xffffff);
+    await Actions.colorToIntTest('#000000', 0x000000);
+    await Actions.colorToIntTest('#123abc', 0x123abc);
+    await Actions.colorToIntTest('#1', 0x000001);
+    await Actions.colorToIntTest('123456', 0x123456);
+    await Actions.colorToIntTest(123456, 123456);
+    await Actions.colorToIntTest(0x8ffffff, 0xffffff);
+    await Actions.colorToIntTest('', 0);
+    await Actions.colorToIntTest(null, 0);
+    await Actions.colorToIntTest(NaN, 0);
+};
+
+const intToColorTests = async () => {
+    setBlock('intToColor() function', 1);
+
+    await Actions.intToColorTest(0xffffff, '#ffffff');
+    await Actions.intToColorTest(0x000000, '#000000');
+    await Actions.intToColorTest(0x123abc, '#123abc');
+    await Actions.intToColorTest(0x000001, '#000001');
+};
+
+const rgbToHSLTests = async () => {
+    setBlock('rgbToHSL() function', 1);
+
+    await Actions.rgbToHSLTest(
+        0xffffff,
+        { hue: 0, saturation: 0, lightness: 100 },
+    );
+    await Actions.rgbToHSLTest(
+        '#000000',
+        { hue: 0, saturation: 0, lightness: 0 },
+    );
+    await Actions.rgbToHSLTest(
+        '#ff0000',
+        { hue: 0, saturation: 100, lightness: 50 },
+    );
+    await Actions.rgbToHSLTest(
+        '#00ff00',
+        { hue: 120, saturation: 100, lightness: 50 },
+    );
+    await Actions.rgbToHSLTest(
+        '#0000ff',
+        { hue: 240, saturation: 100, lightness: 50 },
+    );
+};
+
+const hslToRGBTests = async () => {
+    setBlock('hslToRGB() function', 1);
+
+    await Actions.hslToRGBTest(
+        { hue: 0, saturation: 0, lightness: 100 },
+        { red: 255, green: 255, blue: 255 },
+    );
+    await Actions.hslToRGBTest(
+        { hue: 0, saturation: 0, lightness: 0 },
+        { red: 0, green: 0, blue: 0 },
+    );
+    await Actions.hslToRGBTest(
+        { hue: 0, saturation: 100, lightness: 50 },
+        { red: 255, green: 0, blue: 0 },
+    );
+    await Actions.hslToRGBTest(
+        { hue: 120, saturation: 100, lightness: 50 },
+        { red: 0, green: 255, blue: 0 },
+    );
+    await Actions.hslToRGBTest(
+        { hue: 240, saturation: 100, lightness: 50 },
+        { red: 0, green: 0, blue: 255 },
+    );
+};
+
+const colorTests = async () => {
+    setBlock('Color functions', 1);
+
+    await colorToIntTests();
+    await intToColorTests();
+    await rgbToHSLTests();
+    await hslToRGBTests();
+};
+
 export const commonTests = async () => {
     setBlock('Common', 1);
 
@@ -193,4 +276,5 @@ export const commonTests = async () => {
     await minMaxTests();
     await fixFloatTests();
     await trimDecimalTests();
+    await colorTests();
 };
