@@ -1,10 +1,12 @@
 import { Component, createElement, isFunction } from 'jezvejs';
+import { generateId } from '../../Application/utils.js';
 import './RangeInputField.scss';
 
 /* CSS classes */
 const FIELD_CLASS = 'range-field';
 
 const defaultProps = {
+    inputId: undefined,
     title: null,
     min: 1,
     max: 10,
@@ -21,16 +23,23 @@ export class RangeInputField extends Component {
         super({
             ...defaultProps,
             ...props,
+            inputId: props.inputId ?? generateId(),
         });
 
         this.init();
     }
 
     init() {
-        this.label = createElement('label', { props: { textContent: this.props.title } });
+        this.label = createElement('label', {
+            props: {
+                htmlFor: this.props.inputId,
+                textContent: this.props.title,
+            },
+        });
 
         this.input = createElement('input', {
             props: {
+                id: this.props.inputId,
                 type: 'range',
                 min: this.props.min,
                 max: this.props.max,
