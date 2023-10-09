@@ -15,6 +15,7 @@ const routeMap = {
     chartgrid: AppView,
     checkbox: AppView,
     collapsible: CollapsibleView,
+    colorutils: AppView,
     common: AppView,
     dateinput: DateInputView,
     debug: AppView,

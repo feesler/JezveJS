@@ -8,6 +8,7 @@ import {
 const views = {
     chartgrid: 'ChartGrid',
     checkbox: 'Checkbox',
+    colorutils: 'Color utils',
     debug: 'Debug',
     dpitest: 'DPI test',
     dragndrop: 'DragnDrop',

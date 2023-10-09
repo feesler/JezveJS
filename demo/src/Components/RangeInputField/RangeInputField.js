@@ -29,6 +29,10 @@ export class RangeInputField extends Component {
         this.init();
     }
 
+    get value() {
+        return this.input?.value;
+    }
+
     init() {
         this.label = createElement('label', {
             props: {

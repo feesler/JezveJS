@@ -17,6 +17,7 @@ const entryPoints = [
     'ChartGrid',
     'Checkbox',
     'Collapsible',
+    'ColorUtils',
     'DateInput',
     'DatePicker',
     'Debug',
