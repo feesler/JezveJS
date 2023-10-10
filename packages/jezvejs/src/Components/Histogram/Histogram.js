@@ -5,6 +5,7 @@ import './Histogram.scss';
 /* CSS classes */
 const CONTAINER_CLASS = 'histogram';
 const BAR_CLASS = 'histogram__bar';
+const CATEGORY_INDEX_CLASS = 'histogram_category-ind-';
 const CATEGORY_CLASS = 'histogram_category-';
 const COLUMN_CLASS = 'histogram_column-';
 
@@ -178,8 +179,13 @@ export class Histogram extends BaseChart {
         const columnClass = `${COLUMN_CLASS}${columnIndex + 1}`;
         const classNames = [BAR_CLASS, columnClass];
         if (state.data.stacked) {
-            const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
-            classNames.push(categoryClass);
+            const categoryIndexClass = `${CATEGORY_INDEX_CLASS}${categoryIndex + 1}`;
+            classNames.push(categoryIndexClass);
+
+            if (category !== null) {
+                const categoryClass = `${CATEGORY_CLASS}${category}`;
+                classNames.push(categoryClass);
+            }
         }
 
         item.elem = createSVGElement('rect', {
