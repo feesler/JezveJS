@@ -1,10 +1,12 @@
 import { Component, createElement } from 'jezvejs';
+import { generateId } from '../../Application/utils.js';
 import './LogsField.scss';
 
 /* CSS classes */
 const FIELD_CLASS = 'logs-container';
 
 const defaultProps = {
+    inputId: undefined,
     title: 'Event log',
 };
 
@@ -16,14 +18,22 @@ export class LogsField extends Component {
         super({
             ...defaultProps,
             ...props,
+            inputId: props.inputId ?? generateId(),
         });
 
         this.init();
     }
 
     init() {
-        this.textarea = createElement('textarea');
-        this.label = createElement('label', { props: { textContent: this.props.title } });
+        this.textarea = createElement('textarea', {
+            props: { id: this.props.inputId },
+        });
+        this.label = createElement('label', {
+            props: {
+                htmlFor: this.props.inputId,
+                textContent: this.props.title,
+            },
+        });
 
         this.elem = createElement('div', {
             props: { className: FIELD_CLASS },

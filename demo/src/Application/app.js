@@ -13,6 +13,7 @@ export const navigationMenuSections = [{
     type: 'group',
     title: 'Utils',
     items: [
+        { id: 'colorUtil', title: 'Colors', url: 'demo/colorutils.html' },
         { id: 'dpiUtil', title: 'DPI test', url: 'demo/dpitest.html' },
         { id: 'emptyClickUtil', title: 'Empty click', url: 'demo/emptyclick.html' },
         { id: 'debug', title: 'Debug', url: 'demo/debug.html' },

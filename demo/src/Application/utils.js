@@ -28,3 +28,13 @@ export const createButtons = (items) => (
         )),
     )
 );
+
+export const generateId = () => {
+    while (true) {
+        const id = (Date.now() + Math.round(Math.random() * 1000000000000)).toString(36);
+        const found = document.getElementById(id);
+        if (!found) {
+            return id;
+        }
+    }
+};

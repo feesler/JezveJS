@@ -1,0 +1,26 @@
+:root {
+  --color-item-size: 20px;
+}
+
+.scrollable-container {
+  overflow: auto;
+}
+
+.colors-container {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.colors-row {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.color-item {
+  display: block;
+  width: var(--color-item-size);
+  height: var(--color-item-size);
+  border-radius: 100vh;
+  background-color: var(--color-item-value);
+  flex: 0 0 auto;
+}

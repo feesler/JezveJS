@@ -2,6 +2,10 @@ import { asArray, minmax } from './common.js';
 
 /* eslint-disable no-bitwise */
 
+export const MAX_HUE = 360;
+export const MAX_LIGHTNESS = 100;
+export const MAX_SATURATION = 100;
+
 /**
  * Converts color string to integer and returns result
  * @param {string|number} value
@@ -160,8 +164,8 @@ export const rgbToHSL = (color) => {
     }
 
     hue = Math.round(hue * 60);
-    if (hue < 0) {
-        hue += 360;
+    while (hue < 0) {
+        hue += MAX_HUE;
     }
 
     lightness = (cMax + cMin) / 2;
@@ -169,8 +173,8 @@ export const rgbToHSL = (color) => {
         ? 0
         : (delta / (1 - Math.abs(2 * lightness - 1)));
 
-    saturation = +(saturation * 100).toFixed(1);
-    lightness = +(lightness * 100).toFixed(1);
+    saturation = +(saturation * MAX_SATURATION).toFixed(1);
+    lightness = +(lightness * MAX_LIGHTNESS).toFixed(1);
 
     return { hue, saturation, lightness };
 };
@@ -182,9 +186,9 @@ export const rgbToHSL = (color) => {
  */
 export const hslToRGB = (color) => {
     let { hue, saturation, lightness } = color;
-    hue %= 360;
-    saturation = minmax(0, 100, saturation) / 100;
-    lightness = minmax(0, 100, lightness) / 100;
+    hue %= MAX_HUE;
+    saturation = minmax(0, MAX_SATURATION, saturation) / MAX_SATURATION;
+    lightness = minmax(0, MAX_LIGHTNESS, lightness) / MAX_LIGHTNESS;
 
     const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
     const x = chroma * (1 - Math.abs(((hue / 60) % 2) - 1));
