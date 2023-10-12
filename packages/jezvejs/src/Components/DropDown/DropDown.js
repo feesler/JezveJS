@@ -136,6 +136,8 @@ const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group', 'item
 
 /** Default properties */
 const defaultProps = {
+    /* DropDown container element 'id' property */
+    id: undefined,
     /* Select element 'name' property */
     name: undefined,
     /* Select element 'form' property */
@@ -222,6 +224,7 @@ const defaultProps = {
  */
 export class DropDown extends Component {
     static userProps = {
+        elem: ['id'],
         selectElem: ['name', 'form'],
     };
 
