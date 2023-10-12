@@ -250,6 +250,7 @@ export class DropDown extends Component {
         if (!this.hostElem) {
             this.props.listAttach = false;
         }
+        this.renderInProgress = false;
 
         // Callbacks
         this.emptyClickHandler = () => this.showList(false);
@@ -709,7 +710,10 @@ export class DropDown extends Component {
 
     /** 'blur' event handler */
     onBlur(e) {
-        if (this.menu?.renderInProgress) {
+        if (
+            this.renderInProgress
+            || this.menu?.renderInProgress
+        ) {
             return;
         }
 
@@ -1954,6 +1958,8 @@ export class DropDown extends Component {
     }
 
     render(state, prevState = {}) {
+        this.renderInProgress = true;
+
         this.elem.classList.toggle(MULTIPLE_CLASS, !!state.multiple);
         this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
 
@@ -1990,5 +1996,7 @@ export class DropDown extends Component {
         }
 
         this.renderList(state, prevState);
+
+        this.renderInProgress = false;
     }
 }
