@@ -1716,6 +1716,10 @@ export class DropDown extends Component {
 
     /** Set active state for specified list item */
     setActive(itemId) {
+        if (this.state.ignoreScroll) {
+            return;
+        }
+
         const itemToActivate = this.getItem(itemId);
         const activeItem = this.getActiveItem();
         if (
