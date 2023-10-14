@@ -213,6 +213,7 @@ export class DropDownComboBox extends Component {
                 ...selectionState,
                 items: selectedItems,
                 activeItemId: activeItem?.id ?? 0,
+                disabled: state.disabled,
             }));
             this.multipleSelection.show(selectedItems.length > 0);
         }
