@@ -80,10 +80,6 @@ export class MenuItem extends Component {
             className: ITEM_CLASS,
         };
 
-        if (!state.tabThrough) {
-            props.tabIndex = -1;
-        }
-
         if (isButton) {
             props.type = 'button';
             props.className = getClassName(props.className, BUTTON_ITEM_CLASS);
@@ -275,6 +271,11 @@ export class MenuItem extends Component {
 
         if (state.type === 'link' || state.type === 'checkbox-link') {
             this.elem.href = this.getItemURL(state);
+        }
+        if (!state.tabThrough || state.disabled) {
+            this.elem.setAttribute('tabindex', -1);
+        } else {
+            this.elem.removeAttribute('tabindex');
         }
 
         this.show(!state.hidden);
