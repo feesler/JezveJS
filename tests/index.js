@@ -8,16 +8,19 @@ const isBrowser = typeof window !== 'undefined';
 const run = async () => {
     if (isBrowser) {
         const { origin } = window.location;
-        if (origin.includes('jezve.net')) {
-            envOptions.appPath = '/jezvejs/';
-        } else if (origin.includes('localtest')) {
-            envOptions.appPath = '/jezvejs/dist/';
-        }
+        envOptions.appPath = origin.includes('localtest')
+            ? '/jezvejs/dist/'
+            : '/jezvejs/';
 
         envOptions.container = document.getElementById('testscontainer');
     }
 
-    environment.init(envOptions);
+    await environment.init(envOptions);
+
+    if (isBrowser) {
+        const baseURL = await environment.baseUrl();
+        environment.goTo(`${baseURL}/demo/`);
+    }
 };
 
 if (isBrowser) {
