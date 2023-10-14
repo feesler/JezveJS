@@ -1838,12 +1838,13 @@ export class DropDown extends Component {
         const items = filterItems(state.items, (item) => (
             !item.hidden && (!state.filtered || item.matchFilter)
         ));
+        const menuShown = state.visible !== prevState.visible && state.visible;
 
         this.menu.setState((menuState) => ({
             ...menuState,
             items,
             renderTime: state.renderTime,
-            listScroll: (prevState.visible) ? menuState.listScroll : 0,
+            listScroll: (menuShown) ? 0 : menuState.listScroll,
             header: {
                 ...menuState.header,
                 items: state.items,
