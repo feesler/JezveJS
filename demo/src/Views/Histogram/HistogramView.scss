@@ -22,7 +22,7 @@ section {
 }
 
 @for $i from 1 through length($colors) {
-  .chart_stacked .histogram_category-#{$i} {
+  .chart_stacked .histogram_category-ind-#{$i} {
     --historgam-bar-color: var(--charts-color-#{$i});
     --historgam-active-bar-color: var(--charts-active-color-#{$i});
   }
