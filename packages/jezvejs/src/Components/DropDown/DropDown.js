@@ -623,7 +623,15 @@ export class DropDown extends Component {
     }
 
     /** Window 'scroll' event handler */
-    onWindowScroll() {
+    onWindowScroll(e) {
+        if (
+            this.menu.elem
+            && !e.target.contains(this.menu.elem)
+            && !e.target.contains(this.elem)
+        ) {
+            return;
+        }
+
         if (this.state.waitForScroll) {
             this.showListHandler();
             return;
