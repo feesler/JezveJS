@@ -637,10 +637,6 @@ export class DropDown extends Component {
             return;
         }
 
-        if (this.state.ignoreScroll) {
-            return;
-        }
-
         this.updateListPosition();
     }
 
@@ -1887,6 +1883,7 @@ export class DropDown extends Component {
         }
 
         PopupPosition.calculate({
+            update: true,
             elem: this.menu.elem,
             refElem: this.elem,
             margin: LIST_MARGIN,
