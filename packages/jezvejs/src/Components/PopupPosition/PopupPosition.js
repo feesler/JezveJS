@@ -1,4 +1,9 @@
-import { computedStyle, isFunction, px } from '../../js/common.js';
+import {
+    computedStyle,
+    isFunction,
+    px,
+    transform,
+} from '../../js/common.js';
 
 export class PopupPosition {
     static windowScrollDistance = 0;
@@ -72,6 +77,7 @@ export class PopupPosition {
         const {
             elem,
             refElem,
+            update = false,
             margin = 0,
             screenPadding = 0,
             bottomSafeArea = 70,
@@ -79,7 +85,6 @@ export class PopupPosition {
             allowFlip = true,
             scrollOnOverflow = true,
             allowResize = true,
-            scrollTimeout = 200,
             minRefHeight = 20,
             onScrollDone = null,
         } = options;
@@ -122,8 +127,8 @@ export class PopupPosition {
         if (fixedParent && fixedParent === elem.offsetParent && !fixedElement) {
             initialTop += scrollTop;
         }
-        style.top = px(initialTop);
-        style.bottom = '';
+        style.top = px(0);
+        transform(elem, `translateY(${px(initialTop)})`);
 
         const scrollHeight = (scrollAvailable) ? scrollParent.scrollHeight : screenBottom;
 
@@ -180,15 +185,12 @@ export class PopupPosition {
             )
         );
 
-        let flipBottom = 0;
         if (flip) {
             initialTop = reference.top - offset.top - height - margin;
 
             if (fixedParent && fixedParent === elem.offsetParent && !fixedElement) {
                 initialTop += scrollTop;
             }
-
-            flipBottom = offset.height - initialTop - height;
         }
 
         const elemOverflow = (flip) ? overflowTop : overflowBottom;
@@ -197,7 +199,6 @@ export class PopupPosition {
         const topToBottom = flip !== isRefOverflow;
         const direction = (topToBottom) ? -1 : 1;
 
-        let waitForScroll = false;
         let overflow = (isRefOverflow) ? refOverflow : elemOverflow;
         if (overflow > 1 && scrollAvailable && scrollOnOverflow) {
             const maxDistance = (topToBottom) ? dist.top : dist.bottom;
@@ -218,27 +219,12 @@ export class PopupPosition {
             const newWindowScrollY = window.scrollY + this.windowScrollDistance;
             const scrollAbsolute = absoluteParent && overflow > 1;
 
-            waitForScroll = true;
-            setTimeout(() => {
-                if (fixedElement || absoluteParent) {
-                    if (flip) {
-                        style.bottom = px(flipBottom - distance);
-                        style.top = '';
-                    } else {
-                        style.top = px(initialTop - distance);
-                        style.bottom = '';
-                    }
-                }
-
-                scrollParent.scrollTop = newScrollTop;
-                if (fixedParent && Math.abs(this.windowScrollDistance) > 0) {
-                    window.scrollTo(window.scrollX, newWindowScrollY);
-                } else if (absoluteParent && scrollAbsolute) {
-                    elem.scrollIntoView(flip);
-                }
-
-                this.notifyScrollDone(onScrollDone);
-            }, scrollTimeout);
+            scrollParent.scrollTop = newScrollTop;
+            if (fixedParent && Math.abs(this.windowScrollDistance) > 0) {
+                window.scrollTo(window.scrollX, newWindowScrollY);
+            } else if (absoluteParent && scrollAbsolute) {
+                elem.scrollIntoView(flip);
+            }
         }
         // Decrease height of element if overflow is not cleared
         if (overflow > 1 && allowResize) {
@@ -249,11 +235,10 @@ export class PopupPosition {
             }
         }
         if (flip) {
-            style.top = '';
-            style.bottom = px(flipBottom);
+            transform(elem, `translateY(${px(initialTop)})`);
         }
 
-        if (!waitForScroll) {
+        if (!update) {
             setTimeout(() => {
                 this.notifyScrollDone(onScrollDone);
             });

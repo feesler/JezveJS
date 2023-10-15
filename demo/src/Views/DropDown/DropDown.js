@@ -299,6 +299,7 @@ class DropDownView extends DemoView {
             id: 'noHost',
             title: 'Create without host element',
             content: DropDown.create({
+                id: 'noHostSelect',
                 data: initItems('Item', 10),
                 className: 'dd_form',
             }).elem,

@@ -136,6 +136,8 @@ const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group', 'item
 
 /** Default properties */
 const defaultProps = {
+    /* DropDown container element 'id' property */
+    id: undefined,
     /* Select element 'name' property */
     name: undefined,
     /* Select element 'form' property */
@@ -222,6 +224,7 @@ const defaultProps = {
  */
 export class DropDown extends Component {
     static userProps = {
+        elem: ['id'],
         selectElem: ['name', 'form'],
     };
 
@@ -247,6 +250,7 @@ export class DropDown extends Component {
         if (!this.hostElem) {
             this.props.listAttach = false;
         }
+        this.renderInProgress = false;
 
         // Callbacks
         this.emptyClickHandler = () => this.showList(false);
@@ -619,13 +623,17 @@ export class DropDown extends Component {
     }
 
     /** Window 'scroll' event handler */
-    onWindowScroll() {
-        if (this.state.waitForScroll) {
-            this.showListHandler();
+    onWindowScroll(e) {
+        if (
+            this.menu.elem
+            && !e.target.contains(this.menu.elem)
+            && !e.target.contains(this.elem)
+        ) {
             return;
         }
 
-        if (this.state.ignoreScroll) {
+        if (this.state.waitForScroll) {
+            this.showListHandler();
             return;
         }
 
@@ -706,7 +714,10 @@ export class DropDown extends Component {
 
     /** 'blur' event handler */
     onBlur(e) {
-        if (this.menu?.renderInProgress) {
+        if (
+            this.renderInProgress
+            || this.menu?.renderInProgress
+        ) {
             return;
         }
 
@@ -1709,6 +1720,10 @@ export class DropDown extends Component {
 
     /** Set active state for specified list item */
     setActive(itemId) {
+        if (this.state.ignoreScroll) {
+            return;
+        }
+
         const itemToActivate = this.getItem(itemId);
         const activeItem = this.getActiveItem();
         if (
@@ -1819,12 +1834,13 @@ export class DropDown extends Component {
         const items = filterItems(state.items, (item) => (
             !item.hidden && (!state.filtered || item.matchFilter)
         ));
+        const menuShown = state.visible !== prevState.visible && state.visible;
 
         this.menu.setState((menuState) => ({
             ...menuState,
             items,
             renderTime: state.renderTime,
-            listScroll: (prevState.visible) ? menuState.listScroll : 0,
+            listScroll: (menuShown) ? 0 : menuState.listScroll,
             header: {
                 ...menuState.header,
                 items: state.items,
@@ -1867,6 +1883,7 @@ export class DropDown extends Component {
         }
 
         PopupPosition.calculate({
+            update: true,
             elem: this.menu.elem,
             refElem: this.elem,
             margin: LIST_MARGIN,
@@ -1951,6 +1968,8 @@ export class DropDown extends Component {
     }
 
     render(state, prevState = {}) {
+        this.renderInProgress = true;
+
         this.elem.classList.toggle(MULTIPLE_CLASS, !!state.multiple);
         this.elem.classList.toggle(ACTIVE_CLASS, !!state.active);
 
@@ -1987,5 +2006,7 @@ export class DropDown extends Component {
         }
 
         this.renderList(state, prevState);
+
+        this.renderInProgress = false;
     }
 }

@@ -61,21 +61,23 @@ export async function route(env, url) {
         reqPath = reqPath.substring(testUrl.pathname.length);
     }
 
-    const path = reqPath.replace(/^\/+|\/+$/g, ''); // cut leading and trailing slashes
+    // cut leading and trailing slashes
+    const path = reqPath.replace(/^\/+|\/+$/g, '');
     const parts = path.split('/');
-    let part = parts.shift().toLowerCase();
+    let part = parts.shift()?.toLowerCase();
+
     if (part === 'jezvejs') {
-        part = parts.shift().toLowerCase();
+        part = parts.shift()?.toLowerCase();
     }
     if (part === 'demo') {
-        part = parts.shift().toLowerCase();
+        part = parts.shift()?.toLowerCase();
     }
 
-    if (!part) {
+    if (typeof part !== 'string' || part.length === 0) {
         return routeMap.index;
     }
 
-    const dotInd = part.indexOf('.');
+    const dotInd = part.lastIndexOf('.');
     if (dotInd !== -1) {
         part = part.substring(0, dotInd);
     }

@@ -120,16 +120,33 @@ export class BaseChart extends Component {
         this.scrollRequested = false;
         this.contentOffset = null;
 
+        this.cancelScaleFunc = null;
+        this.cancelScrollFunc = null;
+
         if (!this.props.autoScale) {
             this.scaleFunc = null;
         } else if (this.props.autoScaleTimeout === false) {
             this.scaleFunc = () => this.scaleVisible();
         } else {
-            this.scaleFunc = debounce(() => this.scaleVisible(), this.props.autoScaleTimeout);
+            const scaleHandler = debounce(
+                () => this.scaleVisible(),
+                this.props.autoScaleTimeout,
+                { cancellable: true },
+            );
+
+            this.scaleFunc = scaleHandler.run;
+            this.cancelScaleFunc = scaleHandler.cancel;
         }
 
         if (this.props.scrollToEnd) {
-            this.scrollFunc = debounce(() => this.scrollToRight(), 100);
+            const scrollHandler = debounce(
+                () => this.scrollToRight(),
+                100,
+                { cancellable: true },
+            );
+
+            this.scrollFunc = scrollHandler.run;
+            this.cancelScrollFunc = scrollHandler.cancel;
         } else {
             this.scrollFunc = null;
         }
@@ -140,6 +157,7 @@ export class BaseChart extends Component {
             ...this.props,
             data: null,
             chartContentWidth: 0,
+            lastHLabelOffset: 0,
             hLabelsHeight: 25,
             scrollerWidth: 0,
             containerWidth: 0,
@@ -253,12 +271,20 @@ export class BaseChart extends Component {
             return;
         }
 
+        if (this.cancelScaleFunc) {
+            this.cancelScaleFunc();
+        }
+        if (this.cancelScrollFunc) {
+            this.cancelScrollFunc();
+        }
+
         const state = {
             ...this.state,
             data: {
                 ...defaultProps.data,
                 ...data,
             },
+            lastHLabelOffset: 0,
         };
 
         state.dataSets = this.getDataSets(state);
@@ -299,6 +325,7 @@ export class BaseChart extends Component {
         const state = {
             ...this.state,
             columnWidth: width,
+            lastHLabelOffset: 0,
         };
         const newState = this.updateChartWidth(state);
         this.setState(newState);
@@ -313,6 +340,7 @@ export class BaseChart extends Component {
         const state = {
             ...this.state,
             groupsGap: gap,
+            lastHLabelOffset: 0,
         };
         const newState = this.updateChartWidth(state);
         this.setState(newState);
@@ -461,13 +489,8 @@ export class BaseChart extends Component {
 
     /** Update width of chart block */
     updateChartWidth(state) {
-        const labelsBox = this.xAxisLabelsGroup?.getBBox();
-        const lastHLabelOffset = (labelsBox && !state.fitToWidth)
-            ? Math.round(labelsBox.x + labelsBox.width)
-            : 0;
-
         const groupsWidth = state.groupsCount * this.getGroupOuterWidth(state);
-        const contentWidth = Math.max(groupsWidth, lastHLabelOffset);
+        const contentWidth = Math.max(groupsWidth, state.lastHLabelOffset);
 
         const newState = {
             ...state,
@@ -945,6 +968,13 @@ export class BaseChart extends Component {
     onResize() {
         this.contentOffset = getOffset(this.chartScroller);
         let newState = this.updateColumnWidth(this.state);
+
+        // Update width of x axis labels
+        const labelsBox = this.xAxisLabelsGroup?.getBBox();
+        newState.lastHLabelOffset = (labelsBox && !newState.fitToWidth)
+            ? Math.round(labelsBox.x + labelsBox.width)
+            : 0;
+
         newState = this.updateChartWidth(newState);
         this.setState(newState);
 

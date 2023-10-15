@@ -989,8 +989,8 @@ export class Menu extends Component {
         }));
     }
 
-    renderListScroll(state) {
-        if (this.list.elem.scrollTop !== state.listScroll) {
+    renderListScroll(state, prevState) {
+        if (state.listScroll !== prevState?.listScroll) {
             this.list.elem.scrollTop = state.listScroll;
         }
     }
