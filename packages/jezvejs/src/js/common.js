@@ -869,13 +869,20 @@ export function throttle(func, ms) {
  * Runs only last call of function after timeout
  * @param {Function} func - function to debounce
  * @param {Number} ms - timeout
- * @param {Boolean} immediate - run function on start of timeout
+ * @param {object} options - options object
+ * @param {Boolean} options.immediate - run function on start of timeout
+ * @param {Boolean} options.cancellable - return object with 'cancel' method last function call
  * @returns {Function}
  */
-export function debounce(func, ms, immediate = false) {
+export function debounce(func, ms, options = {}) {
+    const {
+        immediate = false,
+        cancellable = false,
+    } = options;
+
     let timeout = null;
 
-    return function (...args) {
+    const run = function (...args) {
         const savedThis = this;
         const savedArgs = args;
 
@@ -893,4 +900,16 @@ export function debounce(func, ms, immediate = false) {
             func.apply(savedThis, savedArgs);
         }
     };
+
+    if (cancellable) {
+        return {
+            run,
+            cancel: () => {
+                clearTimeout(timeout);
+                timeout = null;
+            },
+        };
+    }
+
+    return run;
 }
