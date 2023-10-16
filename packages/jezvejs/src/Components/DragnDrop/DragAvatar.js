@@ -26,6 +26,7 @@ export class DragAvatar {
         this.dragZone = this.props.dragZone;
         this.dragZoneElem = this.props.elem;
         this.elem = this.props.elem; // element of avatar
+        this.scrollRequested = false;
     }
 
     /**
@@ -64,12 +65,14 @@ export class DragAvatar {
                 return;
             }
 
+            this.scrollRequested = true;
             docElem.scrollTop += scrollMargin;
         } else if (coords.y < scrollMargin) {
             if (docElem.scrollTop === 0) {
                 return;
             }
 
+            this.scrollRequested = true;
             docElem.scrollTop -= scrollMargin;
         }
     }
