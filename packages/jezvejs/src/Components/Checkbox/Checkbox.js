@@ -27,6 +27,7 @@ const defaultProps = {
     checked: undefined,
     disabled: undefined,
     label: undefined,
+    tooltip: undefined,
     checkIcon: null,
     onChange: null,
 };
@@ -95,9 +96,13 @@ export class Checkbox extends Component {
 
         this.input = this.elem.querySelector('input[type="checkbox"]');
         this.checkIcon = this.elem.querySelector(`.${CHECK_CLASS}`);
-        this.label = this.elem.querySelector(`.${LABEL_CLASS}`);
         if (!this.input || !this.checkIcon) {
             throw new Error('Invalid structure of checkbox');
+        }
+
+        const label = this.elem.querySelector(`.${LABEL_CLASS}`);
+        if (label?.childElementCount === 0) {
+            this.props.label = label.textContent;
         }
 
         this.postInit();
@@ -116,6 +121,11 @@ export class Checkbox extends Component {
         if (typeof this.props.label !== 'undefined') {
             this.setLabel(this.props.label);
         }
+
+        const tooltip = this.props.tooltip ?? null;
+        this.elem.title = (tooltip === null && typeof this.props.label === 'string')
+            ? this.props.label
+            : (tooltip ?? '');
     }
 
     onChange() {

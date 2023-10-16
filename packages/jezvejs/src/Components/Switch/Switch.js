@@ -22,6 +22,7 @@ const defaultProps = {
     checked: undefined,
     disabled: undefined,
     label: undefined,
+    tooltip: undefined,
     onChange: null,
 };
 
@@ -78,8 +79,13 @@ export class Switch extends Component {
         this.elem = elem;
         this.input = elem.querySelector('input[type="checkbox"]');
         this.slider = elem.querySelector(`.${SLIDER_CLASS}`);
+        this.label = elem.querySelector(`.${LABEL_CLASS}`);
         if (!this.input || !this.slider) {
             throw new Error('Invalid structure of switch');
+        }
+
+        if (this.label?.childElementCount === 0) {
+            this.props.label = this.label.textContent;
         }
 
         this.postInit();
@@ -98,6 +104,11 @@ export class Switch extends Component {
         if (typeof this.props.label !== 'undefined') {
             this.setLabel(this.props.label);
         }
+
+        const tooltip = this.props.tooltip ?? null;
+        this.elem.title = (tooltip === null && typeof this.props.label === 'string')
+            ? this.props.label
+            : (tooltip ?? '');
     }
 
     onChange() {

@@ -23,6 +23,7 @@ const defaultProps = {
     disabled: undefined,
     value: undefined,
     label: undefined,
+    tooltip: undefined,
     onChange: null,
 };
 
@@ -88,6 +89,10 @@ export class Radio extends Component {
             throw new Error('Invalid structure of radio button');
         }
 
+        if (this.label?.childElementCount === 0) {
+            this.props.label = this.label.textContent;
+        }
+
         this.postInit();
     }
 
@@ -104,6 +109,11 @@ export class Radio extends Component {
         if (typeof this.props.label !== 'undefined') {
             this.setLabel(this.props.label);
         }
+
+        const tooltip = this.props.tooltip ?? null;
+        this.elem.title = (tooltip === null && typeof this.props.label === 'string')
+            ? this.props.label
+            : (tooltip ?? '');
     }
 
     onChange() {

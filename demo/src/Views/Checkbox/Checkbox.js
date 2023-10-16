@@ -71,6 +71,7 @@ class CheckboxView extends DemoView {
             id: 'dynCheckbox',
             name: 'check1',
             label: 'Checkbox methods',
+            tooltip: 'Custom tooltip',
             className: 'right-check',
             onChange: (checked) => this.addEventLog(`Dynamic Checkbox change. checked: ${checked}`),
         });
@@ -163,6 +164,7 @@ class CheckboxView extends DemoView {
                 value: item.toString(),
                 name: 'radio2',
                 label: `Value ${item}`,
+                tooltip: `Custom tooltip for value ${item}`,
                 onChange: (checked) => this.addEventLog(`Dynamic Radio ${item} change. checked: ${checked}`),
             })
         ));

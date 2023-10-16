@@ -19,6 +19,7 @@ const defaultProps = {
     enabled: true,
     url: undefined,
     title: undefined,
+    tooltip: undefined,
     icon: undefined,
     iconAlign: 'left', // available value: 'left', 'right'
     onClick: null,
@@ -225,6 +226,11 @@ export class Button extends Component {
         } else {
             this.elem.removeAttribute('tabindex');
         }
+
+        const tooltip = state.tooltip ?? null;
+        this.elem.title = (tooltip === null && typeof state.title === 'string')
+            ? state.title
+            : (tooltip ?? '');
 
         if (
             state.icon === prevState.icon

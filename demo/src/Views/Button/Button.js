@@ -60,6 +60,7 @@ class ButtonView extends DemoView {
 
         const dynamicBtn = Button.create({
             title: 'Icon button',
+            tooltip: 'Custom tooltip',
             icon: 'update',
             className: 'circle-icon',
             onClick: () => logsField?.write('Update button clicked'),
@@ -68,6 +69,7 @@ class ButtonView extends DemoView {
         const noTitleBtn = Button.create({
             type: 'submit',
             icon: 'del',
+            tooltip: 'No title button',
             className: 'circle-icon',
             onClick: () => logsField?.write('Del button clicked'),
         });
