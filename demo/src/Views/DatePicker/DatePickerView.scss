@@ -11,6 +11,10 @@
 
 .dp_full-width {
   --dp-width: 100%;
+
+  .dp__wrapper {
+    width: var(--dp-width);
+  }
 }
 
 .right-container {
