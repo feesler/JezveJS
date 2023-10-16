@@ -1,4 +1,9 @@
-import { createSVGElement, insertBefore, asArray } from '../../js/common.js';
+import {
+    createSVGElement,
+    insertBefore,
+    asArray,
+    getClassName,
+} from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
 import './LineChart.scss';
 
@@ -8,6 +13,7 @@ const SHOW_NODES_CLASS = 'linechart__nodes';
 const PATH_CLASS = 'linechart__path';
 const ITEM_CLASS = 'linechart__item';
 const CATEGORY_CLASS = 'linechart_category-';
+const CATEGORY_INDEX_CLASS = 'linechart_category-ind-';
 
 /** Default properties */
 const defaultProps = {
@@ -111,10 +117,16 @@ export class LineChart extends BaseChart {
             item.dot.y += state.hLabelsHeight;
         }
 
-        const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
+        const categoryIndexClass = `${CATEGORY_INDEX_CLASS}${categoryIndex + 1}`;
+        const classNames = [ITEM_CLASS, categoryIndexClass];
+        if (category !== null) {
+            const categoryClass = `${CATEGORY_CLASS}${category}`;
+            classNames.push(categoryClass);
+        }
+
         item.elem = createSVGElement('circle', {
             attrs: {
-                class: [ITEM_CLASS, categoryClass].join(' '),
+                class: getClassName(classNames),
                 cx: item.dot.x,
                 cy: item.dot.y,
                 r: state.nodeCircleRadius,
@@ -174,7 +186,13 @@ export class LineChart extends BaseChart {
     }
 
     /** Draw path currently saved at nodes */
-    drawPath(values, categoryIndex, state) {
+    drawPath(data, state) {
+        const {
+            values,
+            categoryIndex = 0,
+            category = null,
+        } = data;
+
         const groupWidth = this.getGroupOuterWidth(state);
         const coords = values.map((value, index) => ({
             x: index * groupWidth + groupWidth / 2,
@@ -188,11 +206,17 @@ export class LineChart extends BaseChart {
         if (this.paths && this.paths[categoryIndex]) {
             path = this.paths[categoryIndex];
         } else {
-            const categoryClass = `${CATEGORY_CLASS}${categoryIndex + 1}`;
+            const categoryIndexClass = `${CATEGORY_INDEX_CLASS}${categoryIndex + 1}`;
+            const classNames = [PATH_CLASS, categoryIndexClass];
+            if (category !== null) {
+                const categoryClass = `${CATEGORY_CLASS}${category}`;
+                classNames.push(categoryClass);
+            }
+
             path = {
                 elem: createSVGElement('path', {
                     attrs: {
-                        class: [PATH_CLASS, categoryClass].join(' '),
+                        class: getClassName(classNames),
                     },
                 }),
             };
@@ -251,8 +275,15 @@ export class LineChart extends BaseChart {
         const categoriesCount = this.getCategoriesCount(state);
         for (let i = 0; i < categoriesCount; i += 1) {
             const items = this.getCategoryItems(i);
-            const values = items.map((item) => item.dot.y);
-            this.drawPath(values, i, state);
+            if (items.length === 0) {
+                continue;
+            }
+
+            this.drawPath({
+                values: items.map((item) => item.dot.y),
+                categoryIndex: i,
+                category: items[0].category,
+            }, state);
         }
     }
 

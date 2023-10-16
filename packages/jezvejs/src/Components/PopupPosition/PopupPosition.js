@@ -250,11 +250,14 @@ export class PopupPosition {
             style.width = '';
         }
 
-        // Check element wider than screen
         const width = elem.offsetWidth;
-        if (width >= html.clientWidth) {
-            style.width = px(html.clientWidth);
-            style.left = px(0);
+        const maxWidth = html.clientWidth - (screenPadding * 2);
+        const minLeft = screenPadding - offset.left;
+
+        // Check element wider than screen
+        if (width >= maxWidth) {
+            style.width = px(maxWidth);
+            style.left = px(minLeft);
             return;
         }
 
@@ -262,18 +265,18 @@ export class PopupPosition {
         // if rendered from the left of reference
         const relLeft = reference.left - offset.left;
         const leftOffset = reference.left - html.scrollLeft;
-        if (leftOffset + width <= html.clientWidth) {
+        if (leftOffset + width <= html.clientWidth - screenPadding) {
             style.left = px(relLeft);
             return;
         }
 
-        const left = relLeft + reference.width - width;
+        let left = relLeft + reference.width - width;
         overflow = offset.left + left;
         if (overflow < 0) {
-            style.left = px(left - overflow);
-        } else {
-            style.left = px(left);
+            left -= overflow;
         }
+
+        style.left = px(Math.max(left, minLeft));
     }
 
     /* Reset previously applied style properties of element */

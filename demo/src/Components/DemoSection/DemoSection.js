@@ -52,11 +52,18 @@ export class DemoSection extends Component {
         const children = [this.headerElem];
 
         if (description) {
+            const lines = description.split(/[\r\n]+/);
+            const descrChilds = [];
+            lines.forEach((textContent, index) => {
+                descrChilds.push(createElement('span', { props: { textContent } }));
+                if (index < lines.length - 1) {
+                    descrChilds.push(createElement('br'));
+                }
+            });
+
             this.descrElem = createElement('header', {
-                props: {
-                    className: DESCRIPTION_CLASS,
-                    textContent: description,
-                },
+                props: { className: DESCRIPTION_CLASS },
+                children: descrChilds,
             });
             children.push(this.descrElem);
         }

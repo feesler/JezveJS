@@ -43,6 +43,7 @@ class SwitchView extends DemoView {
         const dynamicSwitch = Switch.create({
             className: 'blue-switch',
             label: 'Switch component',
+            tooltip: 'Custom tooltip',
             onChange: (checked) => logsField.write(`Dynamic Switch change. checked: ${checked}`),
         });
         const form = createForm('dynamicContainer', dynamicSwitch.elem);

@@ -1534,6 +1534,7 @@ export class DropDown extends Component {
 
         const item = {
             id: option.value,
+            index: option.index,
             title: option.textContent,
             group,
             selected: option.selected,
@@ -1570,7 +1571,7 @@ export class DropDown extends Component {
                     if (!item) {
                         return state;
                     }
-                    res.items.push(item);
+                    group.items.push(item);
                 }
             } else if (childElem.tagName === 'OPTION') {
                 const item = this.parseOption(childElem, null, res);
@@ -1586,9 +1587,9 @@ export class DropDown extends Component {
         }
 
         // For single select check only one item is selected
-        res.items = mapItems(res.items, (item, ind) => ({
+        res.items = mapItems(res.items, (item) => ({
             ...item,
-            selected: ind === elem.selectedIndex,
+            selected: item.index === elem.selectedIndex,
         }));
 
         return res;
