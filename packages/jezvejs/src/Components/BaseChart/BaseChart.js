@@ -358,8 +358,8 @@ export class BaseChart extends Component {
 
     /** Returns count of data columns */
     getGroupsCount(state = this.state) {
-        const valuesLength = state.dataSets.map((item) => item.data.length);
-        return Math.max(...valuesLength);
+        const valuesLength = state?.dataSets?.map((item) => item.data.length) ?? [];
+        return Math.max(0, ...valuesLength);
     }
 
     /** Returns array of data sets */
@@ -419,6 +419,10 @@ export class BaseChart extends Component {
      * @param {number[]} values
      */
     calculateGrid(values, state = this.state) {
+        if (!state?.dataSets?.length) {
+            return null;
+        }
+
         const grid = new ChartGrid({
             scaleAroundAxis: state.scaleAroundAxis,
             height: state.chartHeight,
