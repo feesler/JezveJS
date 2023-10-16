@@ -227,7 +227,10 @@ class DragAndDropView extends DemoView {
         this.addSection({
             id: 'original',
             title: 'Drag original object',
-            description: 'Drop target accept only OriginalDragAvatar',
+            description: `Drop target accept only OriginalDragAvatar.
+            'mouseMoveThreshold' option is used to limit move distance after mouse pressed to start drag. Default value is 5.
+            'touchMoveTimeout' options is used to limit time after touch start to start drag.
+            `,
             content: dropArea,
         });
     }
@@ -277,6 +280,7 @@ class DragAndDropView extends DemoView {
         this.addSection({
             id: 'xAxis',
             title: 'Drag only by X axis',
+            description: '\'mouseMoveThreshold\' and \'touchMoveTimeout\' options are set to 0',
             content: createElement('div', {
                 props: { className: 'section-h200' },
                 children: dropArea,
