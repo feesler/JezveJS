@@ -85,6 +85,10 @@ export class DragMaster {
             touchmove: (e) => this.mouseMove(e),
         };
 
+        this.touchScrollHandler = {
+            scroll: (e) => this.onScroll(e),
+        };
+
         this.touchEvents = {
             move: 'touchmove',
             end: 'touchend',
@@ -176,6 +180,14 @@ export class DragMaster {
         }
     }
 
+    setupScrollHandler() {
+        setEvents(document, this.touchScrollHandler, { passive: true });
+    }
+
+    removeScrollHandler() {
+        removeEvents(document, this.touchScrollHandler, { passive: true });
+    }
+
     /** Clean up drag objects */
     cleanUp() {
         this.dragZone = null;
@@ -193,6 +205,7 @@ export class DragMaster {
             return;
         }
 
+        this.setupScrollHandler();
         this.touchTimeout = setTimeout(() => {
             this.touchMoveReady = true;
             this.handleMove(e);
@@ -205,6 +218,7 @@ export class DragMaster {
             clearTimeout(this.touchTimeout);
             this.touchTimeout = 0;
         }
+        this.removeScrollHandler();
     }
 
     /** Search for drag zone object */
@@ -307,9 +321,12 @@ export class DragMaster {
         }
 
         this.resetMoveTimeout();
+        this.finishDrag(e);
+    }
 
+    finishDrag(e, cancel = false) {
         if (this.avatar) {
-            if (this.dropTarget) {
+            if (!cancel && this.dropTarget) {
                 this.dropTarget.onDragEnd(this.avatar, e);
             } else {
                 this.avatar.onDragCancel(e);
@@ -320,15 +337,14 @@ export class DragMaster {
         this.removeHandlers();
     }
 
+    cancelDrag(e) {
+        this.finishDrag(e, true);
+    }
+
     /** Keydown event handler */
     onKey(e) {
         if (e.code === 'Escape') {
-            if (this.avatar) {
-                this.avatar.onDragCancel(e);
-            }
-
-            this.cleanUp();
-            this.removeHandlers();
+            this.cancelDrag(e);
         }
     }
 
@@ -355,5 +371,20 @@ export class DragMaster {
         if (this.isTouch) {
             this.initTouchMove(e);
         }
+    }
+
+    onScroll(e) {
+        if (!this.isTouch || this.avatar?.scrollRequested) {
+            return;
+        }
+
+        if (e.cancelable) {
+            e.preventDefault();
+            return;
+        }
+
+        this.touchMoveReady = false;
+        this.resetMoveTimeout();
+        this.cancelDrag(e);
     }
 }
