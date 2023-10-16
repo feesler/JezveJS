@@ -42,7 +42,7 @@ const slice = createSlice({
         ...state,
         items: mapItems(state.items, (item) => (
             (item.id?.toString() === id)
-                ? { ...item, disabled: false }
+                ? { ...item, disabled: true }
                 : item
         )),
     }),
