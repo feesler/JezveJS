@@ -410,7 +410,7 @@ export class BaseChart extends Component {
     }
 
     formatCoord(value, asPixels = false) {
-        const fmt = value.toFixed(3);
+        const fmt = parseFloat(parseFloat(value).toFixed(3)).toString();
         return (asPixels) ? `${fmt}px` : fmt;
     }
 
