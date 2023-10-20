@@ -1,0 +1,46 @@
+/** Default properties */
+export const defaultProps = {
+    // Layout
+    height: 300,
+    columnWidth: 38,
+    groupsGap: 10,
+    marginTop: 10,
+    // Grid behavior
+    visibilityOffset: 1,
+    scaleAroundAxis: true,
+    gridValuesMargin: 0.1,
+    minGridStep: 30,
+    maxGridStep: 60,
+    // Render properties
+    fitToWidth: false,
+    scrollToEnd: false,
+    autoScale: false,
+    animate: false,
+    autoScaleTimeout: 400,
+    resizeTimeout: 200,
+    activateOnClick: false,
+    activateOnHover: false,
+    xAxis: 'bottom', // available values: 'bottom', 'top' and 'none'
+    yAxis: 'right', // available values: 'right', 'left' and 'none'
+    renderXAxisLabel: null,
+    renderYAxisLabel: null,
+    showLegend: false,
+    renderLegend: null,
+    // Popup
+    showPopupOnClick: false,
+    pinPopupOnClick: false,
+    showPopupOnHover: false,
+    animatePopup: false,
+    renderPopup: null,
+    // Callbacks
+    onScroll: null,
+    onItemClick: null,
+    onItemOver: null,
+    onItemOut: null,
+    // Data
+    data: {
+        values: [],
+        series: [],
+        stacked: false,
+    },
+};
