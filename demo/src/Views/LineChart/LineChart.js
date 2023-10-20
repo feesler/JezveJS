@@ -320,6 +320,7 @@ class LineChartView extends DemoView {
         const chart = LineChart.create({
             data: eurData,
             autoScale: true,
+            autoScaleTimeout: 0,
             drawNodeCircles: true,
         });
 
