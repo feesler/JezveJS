@@ -1,10 +1,10 @@
 import {
     createSVGElement,
-    insertBefore,
     asArray,
     getClassName,
 } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
+import { findItem } from '../BaseChart/helpers.js';
 import './LineChart.scss';
 
 /* CSS classes */
@@ -35,10 +35,13 @@ export class LineChart extends BaseChart {
             scaleAroundAxis: false,
             className: [CONTAINER_CLASS, ...asArray(props.className)],
         });
+    }
 
+    init() {
         this.paths = [];
+        this.pathsGroup = null;
 
-        this.init();
+        super.init();
     }
 
     getItemBBox(item) {
@@ -138,6 +141,16 @@ export class LineChart extends BaseChart {
         return item;
     }
 
+    /** Remove all items from chart */
+    resetItems() {
+        super.resetItems();
+
+        this.pathsGroup?.remove();
+        this.pathsGroup = createSVGElement('g');
+        this.itemsGroup.before(this.pathsGroup);
+        this.paths = [];
+    }
+
     /** Create items with default scale */
     createItems(state) {
         const { dataSets } = state;
@@ -145,9 +158,13 @@ export class LineChart extends BaseChart {
             return;
         }
 
-        this.paths = [];
-        const longestSet = this.getLongestDataSet(state);
-        longestSet.forEach((_, groupIndex) => {
+        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
+        const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
+
+        const flatItems = this.items.flat();
+        const newItems = [];
+        for (let i = 0; i < visibleGroups; i += 1) {
+            const groupIndex = firstGroupIndex + i;
             const group = [];
             let valueOffset = 0;
 
@@ -155,13 +172,20 @@ export class LineChart extends BaseChart {
                 const value = dataSet.data[groupIndex] ?? 0;
                 const category = dataSet.category ?? null;
 
-                const item = this.createItem({
-                    value,
+                let [item] = findItem(flatItems, {
                     groupIndex,
                     category,
                     categoryIndex,
-                    valueOffset,
-                }, state);
+                });
+                if (!item) {
+                    item = this.createItem({
+                        value,
+                        groupIndex,
+                        category,
+                        categoryIndex,
+                        valueOffset,
+                    }, state);
+                }
                 group.push(item);
 
                 if (state.data.stacked) {
@@ -169,8 +193,17 @@ export class LineChart extends BaseChart {
                 }
             });
 
-            this.items.push(group);
+            newItems.push(group);
+        }
+
+        const flatNewItems = newItems.flat();
+        flatItems.forEach((item) => {
+            if (!flatNewItems.includes(item)) {
+                item.elem?.remove();
+            }
         });
+
+        this.items = newItems;
 
         this.renderPaths(state);
     }
@@ -193,13 +226,14 @@ export class LineChart extends BaseChart {
             category = null,
         } = data;
 
+        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const groupWidth = this.getGroupOuterWidth(state);
         const coords = values.map((value, index) => ({
-            x: index * groupWidth + groupWidth / 2,
+            x: (firstGroupIndex + index) * groupWidth + groupWidth / 2,
             y: value,
         }));
 
-        const isAnimated = state.autoScale && state.animate;
+        const isAnimated = state.autoScale && state.animate && state.animateNow;
         const shape = this.formatPath(coords);
 
         let path = null;
@@ -221,35 +255,36 @@ export class LineChart extends BaseChart {
                 }),
             };
 
-            this.itemsGroup.append(path.elem);
-            // Insert path before circles
-            const group = this.items[0];
-            const groupItems = asArray(group);
-            insertBefore(path.elem, groupItems[0].elem);
-
-            path.animateElem = createSVGElement('animate', {
-                attrs: {
-                    attributeType: 'XML',
-                    attributeName: 'd',
-                    dur: '0.5s',
-                    begin: 'indefinite',
-                    fill: 'freeze',
-                    repeatCount: '1',
-                    calcMode: 'linear',
-                },
-            });
-            path.elem.append(path.animateElem);
-
+            this.pathsGroup.append(path.elem);
             this.paths[categoryIndex] = path;
         }
 
         if (isAnimated) {
+            if (!path.animateElem) {
+                path.animateElem = createSVGElement('animate', {
+                    attrs: {
+                        attributeType: 'XML',
+                        attributeName: 'd',
+                        dur: '0.5s',
+                        begin: 'indefinite',
+                        fill: 'freeze',
+                        repeatCount: '1',
+                        calcMode: 'linear',
+                    },
+                });
+            }
+
             if (shape !== path.shape) {
                 path.animateElem.setAttribute('from', path.shape);
                 path.animateElem.setAttribute('to', shape);
                 path.animateElem.beginElement();
             }
+
+            path.elem.append(path.animateElem);
         } else {
+            path.animateElem?.remove();
+            path.animateElem = null;
+
             path.elem.setAttribute('d', shape);
         }
         path.shape = shape;
