@@ -14,6 +14,7 @@ import {
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
+import { defaultProps } from './defaultProps.js';
 import '../../css/common.scss';
 import './BaseChart.scss';
 
@@ -37,53 +38,6 @@ const POPUP_LIST_CLASS = 'chart__popup-list';
 const LEGEND_CLASS = 'chart__legend';
 const LEGEND_LIST_CLASS = 'chart__legend-list';
 const LEGEND_LIST_ITEM_CLASS = 'chart__legend-list-item';
-
-/** Default properties */
-const defaultProps = {
-    // Layout
-    height: 300,
-    columnWidth: 38,
-    groupsGap: 10,
-    marginTop: 10,
-    // Grid behavior
-    visibilityOffset: 1,
-    scaleAroundAxis: true,
-    gridValuesMargin: 0.1,
-    minGridStep: 30,
-    maxGridStep: 60,
-    // Render properties
-    fitToWidth: false,
-    scrollToEnd: false,
-    autoScale: false,
-    animate: false,
-    autoScaleTimeout: 200,
-    resizeTimeout: 200,
-    activateOnClick: false,
-    activateOnHover: false,
-    xAxis: 'bottom', // available values: 'bottom', 'top' and 'none'
-    yAxis: 'right', // available values: 'right', 'left' and 'none'
-    renderXAxisLabel: null,
-    renderYAxisLabel: null,
-    showLegend: false,
-    renderLegend: null,
-    // Popup
-    showPopupOnClick: false,
-    pinPopupOnClick: false,
-    showPopupOnHover: false,
-    animatePopup: false,
-    renderPopup: null,
-    // Callbacks
-    onScroll: null,
-    onItemClick: null,
-    onItemOver: null,
-    onItemOut: null,
-    // Data
-    data: {
-        values: [],
-        series: [],
-        stacked: false,
-    },
-};
 
 /**
  * Base chart class
