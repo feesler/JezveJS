@@ -599,15 +599,19 @@ export class BaseChart extends Component {
         this.labelsContainer.setAttribute('height', state.height + 20);
     }
 
+    getXAxisLabelRenderer(state = this.state) {
+        return isFunction(state.renderXAxisLabel)
+            ? state.renderXAxisLabel
+            : (value) => value?.toString();
+    }
+
     /** Create horizontal labels */
-    createHLabels(state) {
+    createHLabels(state, prevState) {
         const { xAxis } = state;
         if (xAxis === 'none') {
             return;
         }
 
-        let lastOffset = 0;
-        const lblMarginLeft = 10;
         const dyOffset = 5.5;
         const lblY = (xAxis === 'top')
             ? (state.hLabelsHeight / 2)
@@ -616,34 +620,35 @@ export class BaseChart extends Component {
         const groupOuterWidth = this.getGroupOuterWidth(state);
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
-
-        const formatFunction = isFunction(state.renderXAxisLabel)
-            ? state.renderXAxisLabel
-            : (value) => value?.toString();
+        const formatFunction = this.getXAxisLabelRenderer(state);
 
         let prevValue = null;
         const labels = [];
         for (let i = 0; i < visibleGroups; i += 1) {
             const groupIndex = firstGroupIndex + i;
-            const itemValue = state.data.series[groupIndex];
-            if (typeof itemValue === 'undefined') {
+            const value = state.data.series[groupIndex];
+            if (typeof value === 'undefined') {
                 break;
             }
-            if (itemValue === prevValue) {
+            if (value === prevValue) {
                 continue;
             }
 
             let label = this.labels.find((item) => item?.groupIndex === groupIndex);
-            if (!label) {
+            if (label) {
+                label.reused = true;
+            } else {
                 label = {
+                    reused: false,
                     groupIndex,
-                    value: itemValue,
+                    value,
+                    formattedValue: formatFunction(value),
                     elem: createSVGElement('text', {
                         attrs: { class: XAXIS_LABEL_CLASS },
                     }),
                 };
 
-                label.elem.textContent = formatFunction(itemValue);
+                label.elem.textContent = label.formattedValue;
                 this.xAxisLabelsGroup.append(label.elem);
             }
 
@@ -654,27 +659,47 @@ export class BaseChart extends Component {
 
             labels.push(label);
 
-            prevValue = itemValue;
+            prevValue = value;
         }
 
-        const labelsToRemove = [];
         requestAnimationFrame(() => {
-            for (let ind = 0; ind < labels.length; ind += 1) {
-                const label = labels[ind];
+            let lastOffset = 0;
+            const lblMarginLeft = 10;
+            const labelsToRemove = [];
+            let prevLabel = null;
+            const toLeft = (
+                !this.isHorizontalScaleNeeded(state, prevState)
+                && prevState.scrollLeft > 0
+                && state.scrollLeft < prevState.scrollLeft
+            );
 
+            for (let ind = 0; ind < labels.length; ind += 1) {
+                const index = (toLeft) ? (labels.length - ind - 1) : ind;
+                const label = labels[index];
                 const labelRect = label.elem.getBBox();
                 const currentOffset = Math.ceil(labelRect.x + labelRect.width);
 
+                const overflow = (toLeft)
+                    ? (currentOffset + lblMarginLeft > lastOffset)
+                    : (labelRect.x < lastOffset + lblMarginLeft);
+
+                // Check current label not intersects previous one
+                if (lastOffset > 0 && overflow) {
+                    labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
+                    if (prevLabel?.reused || !label.reused) {
+                        continue;
+                    }
+                }
+
                 // Check last label not overflow chart to prevent
                 // horizontal scroll in fitToWidth mode
-                if (
-                    (lastOffset > 0 && labelRect.x < lastOffset + lblMarginLeft)
-                    || (state.fitToWidth && currentOffset > state.chartContentWidth)
-                ) {
+                if (state.fitToWidth && currentOffset > state.chartContentWidth) {
                     labelsToRemove.push(label);
-                } else {
-                    lastOffset = currentOffset;
+                    continue;
                 }
+
+                lastOffset = (toLeft) ? labelRect.x : currentOffset;
+                prevLabel = label;
             }
 
             // Remove overflow labels
