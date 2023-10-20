@@ -948,14 +948,15 @@ export class BaseChart extends Component {
 
         const itemBBox = this.getItemBBox(target.item);
         const chartsBRect = this.chartScroller.getBoundingClientRect();
+        const verticalOffset = 10;
 
         let popupX = itemBBox.x - this.chartScroller.scrollLeft
             + (itemBBox.width - this.popup.offsetWidth) / 2;
-        let popupY = itemBBox.y - this.popup.offsetHeight - 10;
+        let popupY = itemBBox.y - this.popup.offsetHeight - verticalOffset;
 
         const viewportPopupY = chartsBRect.top + popupY;
         if (viewportPopupY < 0) {
-            popupY -= viewportPopupY;
+            popupY = itemBBox.y + itemBBox.height + verticalOffset;
         }
 
         if (popupX < 0) {
