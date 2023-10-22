@@ -10,6 +10,7 @@ import { AppView } from './AppView.js';
 
 const componentSelectors = {
     default: '#defaultMenu',
+    hideOnSelect: '#hideOnSelectMenu',
     absPosition: '#absPosMenu',
     clipping: '#clippingMenu',
     list: '#listMenu',
@@ -17,6 +18,7 @@ const componentSelectors = {
 
 const controlSelectors = {
     defaultBtn: '#defaultContainer .menu-btn',
+    hideOnSelectBtn: '#hideOnSelectContainer .menu-btn',
     attachTarget: '#attachTarget',
     listContainer: '#listContainer',
     clippingBtn: '.nav-header__content .menu-btn',
@@ -116,6 +118,15 @@ export class PopupMenuView extends AppView {
         return this.checkState(expected);
     }
 
+    async toggleHideOnSelect() {
+        this.onToggleMenu('hideOnSelect');
+        const expected = this.getExpectedState();
+
+        await this.performAction(() => click(this.content.hideOnSelectBtn.elem));
+
+        return this.checkState(expected);
+    }
+
     async toggleAbsPosition() {
         this.onToggleMenu('absPosition');
         const expected = this.getExpectedState();
@@ -146,6 +157,7 @@ export class PopupMenuView extends AppView {
     async toggleMenu(name, ...args) {
         const menuTogglersMap = {
             default: 'toggleDefault',
+            hideOnSelect: 'toggleHideOnSelect',
             absPosition: 'toggleAbsPosition',
             clipping: 'toggleClipping',
             list: 'toggleListMenu',
@@ -168,6 +180,9 @@ export class PopupMenuView extends AppView {
     async selectItemByIndex(name, index, ...args) {
         await this.openMenu(name, ...args);
         const expected = this.getExpectedState();
+        if (name !== 'hideOnSelect') {
+            expected[name].visible = false;
+        }
 
         await this.performAction(() => this.getComponent(name)?.selectItemByIndex(index));
 
@@ -177,8 +192,8 @@ export class PopupMenuView extends AppView {
     async selectItemById(name, id, ...args) {
         await this.openMenu(name, ...args);
         const expected = this.getExpectedState();
-        if (name === 'list') {
-            expected.list.visible = false;
+        if (name !== 'hideOnSelect') {
+            expected[name].visible = false;
         }
 
         await this.performAction(() => this.getComponent(name)?.selectItemById(id));

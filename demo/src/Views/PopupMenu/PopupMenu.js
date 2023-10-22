@@ -20,6 +20,30 @@ const renderListItem = (id) => (
     })
 );
 
+const getDefaultItems = (logsField) => ([{
+    id: 'selectBtnItem',
+    icon: 'select',
+    title: 'Button item',
+    onClick: () => logsField.write('Button item clicked'),
+}, {
+    id: 'linkItem',
+    type: 'link',
+    title: 'Link item',
+    icon: 'search',
+    url: '#',
+}, {
+    id: 'noIconItem',
+    title: 'No icon item',
+}, {
+    id: 'separator1',
+    type: 'separator',
+}, {
+    id: 'checkboxItem',
+    type: 'checkbox',
+    title: 'Checkbox item',
+    onClick: (checked) => logsField.write(`Checkbox item toggled: ${checked}`),
+}]);
+
 /**
  * PopupMenu component demio view
  */
@@ -29,6 +53,7 @@ class PopupMenuView extends DemoView {
      */
     onStart() {
         this.initDefault();
+        this.initHideOnSelect();
         this.initAttached();
         this.initClipping();
         this.initList();
@@ -47,34 +72,41 @@ class PopupMenuView extends DemoView {
             attachTo: btn.elem,
             multiple: true,
             onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
-            items: [{
-                id: 'selectBtnItem',
-                icon: 'select',
-                title: 'Button item',
-                onClick: () => logsField.write('Button item clicked'),
-            }, {
-                id: 'linkItem',
-                type: 'link',
-                title: 'Link item',
-                icon: 'search',
-                url: '#',
-            }, {
-                id: 'noIconItem',
-                title: 'No icon item',
-            }, {
-                id: 'separator1',
-                type: 'separator',
-            }, {
-                id: 'checkboxItem',
-                type: 'checkbox',
-                title: 'Checkbox item',
-                onClick: (checked) => logsField.write(`Checkbox item toggled: ${checked}`),
-            }],
+            items: getDefaultItems(logsField),
         });
 
         this.addSection({
             id: 'attach',
             title: 'Attach to button',
+            content: [
+                container,
+                logsField.elem,
+            ],
+        });
+    }
+
+    initHideOnSelect() {
+        const logsField = LogsField.create();
+        const btn = MenuButton.create();
+        const container = createElement('div', {
+            props: { id: 'hideOnSelectContainer' },
+            children: btn.elem,
+        });
+
+        PopupMenu.create({
+            id: 'hideOnSelectMenu',
+            attachTo: btn.elem,
+            multiple: true,
+            hideOnSelect: false,
+            preventNavigation: true,
+            onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
+            items: getDefaultItems(logsField),
+        });
+
+        this.addSection({
+            id: 'hideOnSelect',
+            title: '\'hideOnSelect\' option',
+            description: 'With disabled \'hideOnSelect\' option popup will stay open after selecting the menu item.',
             content: [
                 container,
                 logsField.elem,

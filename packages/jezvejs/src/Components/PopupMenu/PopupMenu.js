@@ -31,6 +31,7 @@ const LIST_MARGIN = 5;
 const defaultProps = {
     attachTo: null,
     hideOnScroll: true,
+    hideOnSelect: true,
     ignoreScrollTimeout: 500,
     fixed: true,
     content: null,
@@ -121,6 +122,22 @@ export class PopupMenu extends Menu {
             this.hideMenu();
             this.elem.blur();
         }
+    }
+
+    /** List item 'click' event handler */
+    onItemClick(id, e) {
+        super.onItemClick(id, e);
+
+        if (!this.props.hideOnSelect) {
+            return;
+        }
+
+        const item = this.getItemById(id);
+        if (item.type === 'group') {
+            return;
+        }
+
+        this.hideMenu();
     }
 
     onScroll(e) {
