@@ -150,6 +150,8 @@ export class PopupMenu extends Menu {
             return;
         }
 
+        this.setActive(null);
+
         this.removeHandlers();
         removeEvents(this.hostElem, this.togglerEvents);
 
@@ -236,6 +238,8 @@ export class PopupMenu extends Menu {
         if (!this.isMenuVisible()) {
             return;
         }
+
+        this.setActive(null);
 
         show(this.elem, false);
         PopupPosition.reset(this.elem);
