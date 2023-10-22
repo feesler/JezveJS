@@ -34,9 +34,11 @@ try {
     const files = await readdir(src, { withFileTypes: true, recursive: true });
     const total = files.reduce((prev, file) => (prev + (file.isFile() ? 1 : 0)), 1);
 
-    progress = new ProgressBar('[:bar] :percent :file', {
+    progress = new ProgressBar(':bar :percent :file', {
         total,
         width: 20,
+        complete: '█',
+        incomplete: ' ',
     });
 
     await client.connect(config);

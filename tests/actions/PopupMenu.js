@@ -5,6 +5,10 @@ export const toggleDefault = async () => {
     await test('Toggle default menu', () => App.view.toggleDefault());
 };
 
+export const toggleHideOnSelect = async () => {
+    await test('Toggle \'hideOnSelect\' option test menu', () => App.view.toggleHideOnSelect());
+};
+
 export const toggleAbsPosition = async () => {
     await test('Toggle absolute position menu', () => App.view.toggleAbsPosition());
 };
