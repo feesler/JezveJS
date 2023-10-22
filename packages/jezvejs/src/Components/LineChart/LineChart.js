@@ -47,8 +47,8 @@ export class LineChart extends BaseChart {
     getItemBBox(item) {
         const radius = this.state.nodeCircleRadius;
         return {
-            x: item.dot.x - radius,
-            y: item.dot.y - radius,
+            x: item.point.x - radius,
+            y: item.point.y - radius,
             width: radius * 2,
             height: radius * 2,
         };
@@ -62,7 +62,7 @@ export class LineChart extends BaseChart {
         }
 
         const y = e.offsetY;
-        const diffs = result.item.map((item, ind) => ({ ind, diff: Math.abs(y - item.dot.y) }));
+        const diffs = result.item.map((item, ind) => ({ ind, diff: Math.abs(y - item.point.y) }));
         diffs.sort((a, b) => a.diff - b.diff);
 
         let item = null;
@@ -106,18 +106,18 @@ export class LineChart extends BaseChart {
             groupIndex,
             category,
             categoryIndex,
-            dot: {
+            point: {
                 x: this.getX(groupIndex, groupWidth),
                 y: grid.getY(fixedValue + fixedOffset),
             },
         };
 
-        if (Number.isNaN(item.dot.x) || Number.isNaN(item.dot.y)) {
+        if (Number.isNaN(item.point.x) || Number.isNaN(item.point.y)) {
             throw new Error('Invalid values');
         }
 
         if (xAxis === 'top') {
-            item.dot.y += state.hLabelsHeight;
+            item.point.y += state.hLabelsHeight;
         }
 
         const categoryIndexClass = `${CATEGORY_INDEX_CLASS}${categoryIndex + 1}`;
@@ -130,8 +130,8 @@ export class LineChart extends BaseChart {
         item.elem = createSVGElement('circle', {
             attrs: {
                 class: getClassName(classNames),
-                cx: item.dot.x,
-                cy: item.dot.y,
+                cx: item.point.x,
+                cy: item.point.y,
                 r: state.nodeCircleRadius,
             },
         });
@@ -315,7 +315,7 @@ export class LineChart extends BaseChart {
             }
 
             this.drawPath({
-                values: items.map((item) => item.dot.y),
+                values: items.map((item) => item.point.y),
                 categoryIndex: i,
                 category: items[0].category,
             }, state);
@@ -326,7 +326,7 @@ export class LineChart extends BaseChart {
     setItemVerticalPos(item, y, state) {
         const point = item;
 
-        if (point.dot.y === y) {
+        if (point.point.y === y) {
             return;
         }
 
@@ -336,7 +336,7 @@ export class LineChart extends BaseChart {
             point.elem.setAttribute('cy', y);
         }
 
-        point.dot.y = y;
+        point.point.y = y;
     }
 
     /** Update scale of path */
@@ -357,12 +357,12 @@ export class LineChart extends BaseChart {
     /** Set horizontal position of item */
     setItemHorizontalPos(item, x) {
         const point = item;
-        if (point.dot.x === x) {
+        if (point.point.x === x) {
             return;
         }
 
-        point.dot.x = x;
-        point.elem.setAttribute('cx', point.dot.x);
+        point.point.x = x;
+        point.elem.setAttribute('cx', point.point.x);
     }
 
     /** Update horizontal scale of items */
