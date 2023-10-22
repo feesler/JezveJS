@@ -233,6 +233,10 @@ export class PopupMenu extends Menu {
     }
 
     hideMenu() {
+        if (!this.isMenuVisible()) {
+            return;
+        }
+
         show(this.elem, false);
         PopupPosition.reset(this.elem);
 

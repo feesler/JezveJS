@@ -177,6 +177,9 @@ export class PopupMenuView extends AppView {
     async selectItemById(name, id, ...args) {
         await this.openMenu(name, ...args);
         const expected = this.getExpectedState();
+        if (name === 'list') {
+            expected.list.visible = false;
+        }
 
         await this.performAction(() => this.getComponent(name)?.selectItemById(id));
 

@@ -176,6 +176,8 @@ class PopupMenuView extends DemoView {
             type: 'separator',
         }, {
             id: 'updateItemBtn',
+            type: 'link',
+            url: '#123',
             title: `Edit '${title}' ...`,
         }]);
 
@@ -186,6 +188,9 @@ class PopupMenuView extends DemoView {
         const menu = PopupMenu.create({
             id: 'listMenu',
             fixed: false,
+            preventNavigation: true,
+            onItemClick: () => menu.hideMenu(),
+            onClose: () => menu.hideMenu(),
         });
 
         const list = createElement('div', {
