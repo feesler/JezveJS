@@ -472,6 +472,10 @@ export class Menu extends Component {
         if (isFunction(item.onClick)) {
             item.onClick(id, e);
         }
+
+        if (this.state.ignoreTouch) {
+            this.handleLeaveItem(e);
+        }
     }
 
     /** List placeholder 'click' event handler */
@@ -641,7 +645,7 @@ export class Menu extends Component {
     }
 
     /**
-     * 'touchstart' event on handler
+     * 'touchstart' event handler
      * Sets ignoreTouch flag for further mouse events
      * @param {TouchEvent} e event object
      */
@@ -734,13 +738,16 @@ export class Menu extends Component {
     }
 
     /**
-     * Handles mouse leaving list element
+     * Handles mouse/pointer leaving list element
      * @param {MouseEvent} e event object
      */
     handleLeaveItem(e) {
         this.setActive(null);
 
-        if (isFunction(this.props.onMouseLeave)) {
+        if (
+            (e.type === 'mouseleave' || e.type === 'mouseout')
+            && isFunction(this.props.onMouseLeave)
+        ) {
             this.props.onMouseLeave(e);
             return;
         }
