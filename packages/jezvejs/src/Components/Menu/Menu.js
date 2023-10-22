@@ -473,6 +473,7 @@ export class Menu extends Component {
             item.onClick(id, e);
         }
 
+        this.activeElem = null;
         if (this.state.ignoreTouch) {
             this.handleLeaveItem(e);
         }
@@ -742,6 +743,7 @@ export class Menu extends Component {
      * @param {MouseEvent} e event object
      */
     handleLeaveItem(e) {
+        this.activeElem = null;
         this.setActive(null);
 
         if (
