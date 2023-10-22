@@ -16,6 +16,11 @@ export class Store {
         this.state = { ...initialState };
         this.listeners = [];
         this.sendInitialState = sendInitialState;
+
+        this.asyncOptions = {
+            dispatch: (action) => this.dispatch(action),
+            getState: () => this.getState(),
+        };
     }
 
     getState() {
@@ -23,6 +28,11 @@ export class Store {
     }
 
     dispatch(action) {
+        if (isFunction(action)) {
+            action(this.asyncOptions);
+            return;
+        }
+
         const newState = this.reducer(this.state, action);
         const prevState = this.state;
         this.state = newState;
