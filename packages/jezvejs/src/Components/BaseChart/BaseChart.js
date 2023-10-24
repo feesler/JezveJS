@@ -11,7 +11,6 @@ import {
     debounce,
     minmax,
     setAttributes,
-    afterTransition,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
@@ -43,8 +42,6 @@ const POPUP_LIST_CLASS = 'chart__popup-list';
 const LEGEND_CLASS = 'chart__legend';
 const LEGEND_LIST_CLASS = 'chart__legend-list';
 const LEGEND_LIST_ITEM_CLASS = 'chart__legend-list-item';
-
-const TRANSITION_END_TIMEOUT = 500;
 
 /**
  * Base chart class
@@ -993,16 +990,12 @@ export class BaseChart extends Component {
 
         this.updateItemsScale(vItems, newState);
         this.setState(newState);
-
-        if (newState.animateNow) {
-            afterTransition(this.content, {
-                duration: TRANSITION_END_TIMEOUT,
-            }, () => this.onAnimationDone());
-        }
     }
 
     onAnimationDone() {
-        this.setState({ ...this.state, animateNow: false });
+        if (this.state.animateNow) {
+            this.setState({ ...this.state, animateNow: false });
+        }
     }
 
     /** Chart content 'scroll' event handler */
