@@ -1,4 +1,4 @@
-import { asArray, createSVGElement } from '../../js/common.js';
+import { afterTransition, asArray, createSVGElement } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';
 import { findItem } from '../BaseChart/helpers.js';
 import './Histogram.scss';
@@ -325,6 +325,12 @@ export class Histogram extends BaseChart {
 
             this.setItemVerticalPos(item, newY, height, state);
         });
+
+        if (state.animateNow) {
+            afterTransition(this.content, {
+                duration: this.props.animationEndTimeout,
+            }, () => this.onAnimationDone());
+        }
     }
 
     isHorizontalScaleNeeded(state, prevState = {}) {

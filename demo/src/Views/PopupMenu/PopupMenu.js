@@ -6,6 +6,7 @@ import { PopupMenu } from 'jezvejs/PopupMenu';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './PopupMenuView.scss';
+import { createContainer } from '../../Application/utils.js';
 
 const renderListItem = (id) => (
     createElement('div', {
@@ -53,6 +54,7 @@ class PopupMenuView extends DemoView {
      */
     onStart() {
         this.initDefault();
+        this.initToggleOnClick();
         this.initHideOnSelect();
         this.initAttached();
         this.initClipping();
@@ -80,6 +82,35 @@ class PopupMenuView extends DemoView {
             title: 'Attach to button',
             content: [
                 container,
+                logsField.elem,
+            ],
+        });
+    }
+
+    initToggleOnClick() {
+        const logsField = LogsField.create();
+        let menu = null;
+
+        const btn = MenuButton.create({
+            onClick: () => menu.showMenu(),
+        });
+
+        menu = PopupMenu.create({
+            id: 'toggleOnClickMenu',
+            attachTo: btn.elem,
+            multiple: true,
+            toggleOnClick: false,
+            preventNavigation: true,
+            onItemClick: (id) => logsField.write(`Item '${id}' clicked`),
+            items: getDefaultItems(logsField),
+        });
+
+        this.addSection({
+            id: 'toggleOnClick',
+            title: '\'toggleOnClick\' option',
+            description: 'With disabled \'toggleOnClick\' option menu will not be opened/closed by click on host element.',
+            content: [
+                createContainer('toggleOnClickContainer', btn.elem),
                 logsField.elem,
             ],
         });

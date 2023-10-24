@@ -271,16 +271,19 @@ export class LineChart extends BaseChart {
                         repeatCount: '1',
                         calcMode: 'linear',
                     },
+                    events: {
+                        endEvent: () => this.onAnimationDone(),
+                    },
                 });
             }
 
             if (shape !== path.shape) {
                 path.animateElem.setAttribute('from', path.shape);
                 path.animateElem.setAttribute('to', shape);
-                path.animateElem.beginElement();
             }
 
             path.elem.append(path.animateElem);
+            path.animateElem.beginElement();
         } else {
             path.animateElem?.remove();
             path.animateElem = null;
