@@ -10,6 +10,7 @@ import { AppView } from './AppView.js';
 
 const componentSelectors = {
     default: '#defaultMenu',
+    toggleOnClick: '#toggleOnClickMenu',
     hideOnSelect: '#hideOnSelectMenu',
     absPosition: '#absPosMenu',
     clipping: '#clippingMenu',
@@ -18,6 +19,8 @@ const componentSelectors = {
 
 const controlSelectors = {
     defaultBtn: '#defaultContainer .menu-btn',
+    toggleOnClickBtn: '#toggleOnClickContainer .menu-btn',
+    toggleOnClickTitle: '#toggleOnClick',
     hideOnSelectBtn: '#hideOnSelectContainer .menu-btn',
     attachTarget: '#attachTarget',
     listContainer: '#listContainer',
@@ -118,6 +121,28 @@ export class PopupMenuView extends AppView {
         return this.checkState(expected);
     }
 
+    async openToggleOnClick() {
+        if (!this.model.toggleOnClick.visible) {
+            this.onToggleMenu('toggleOnClick');
+        }
+        const expected = this.getExpectedState();
+
+        await this.performAction(() => click(this.content.toggleOnClickBtn.elem));
+
+        return this.checkState(expected);
+    }
+
+    async closeToggleOnClick() {
+        assert(this.model.toggleOnClick.visible, 'Menu not visible');
+
+        this.onToggleMenu('toggleOnClick');
+        const expected = this.getExpectedState();
+
+        await this.performAction(() => click(this.content.toggleOnClickTitle.elem));
+
+        return this.checkState(expected);
+    }
+
     async toggleHideOnSelect() {
         this.onToggleMenu('hideOnSelect');
         const expected = this.getExpectedState();
@@ -157,6 +182,7 @@ export class PopupMenuView extends AppView {
     async toggleMenu(name, ...args) {
         const menuTogglersMap = {
             default: 'toggleDefault',
+            toggleOnClick: 'openToggleOnClick',
             hideOnSelect: 'toggleHideOnSelect',
             absPosition: 'toggleAbsPosition',
             clipping: 'toggleClipping',

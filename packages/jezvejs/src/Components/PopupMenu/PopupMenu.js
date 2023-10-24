@@ -30,6 +30,7 @@ const LIST_MARGIN = 5;
 
 const defaultProps = {
     attachTo: null,
+    toggleOnClick: true,
     hideOnScroll: true,
     hideOnSelect: true,
     ignoreScrollTimeout: 500,
@@ -170,7 +171,9 @@ export class PopupMenu extends Menu {
         this.setActive(null);
 
         this.removeHandlers();
-        removeEvents(this.hostElem, this.togglerEvents);
+        if (this.props.toggleOnClick) {
+            removeEvents(this.hostElem, this.togglerEvents);
+        }
 
         if (this.containerElem) {
             insertBefore(this.hostElem, this.containerElem);
@@ -196,7 +199,9 @@ export class PopupMenu extends Menu {
         this.detach();
 
         this.hostElem = elem;
-        setEvents(this.hostElem, this.togglerEvents);
+        if (this.props.toggleOnClick) {
+            setEvents(this.hostElem, this.togglerEvents);
+        }
 
         if (this.props.fixed) {
             document.body.append(this.elem);

@@ -5,6 +5,14 @@ export const toggleDefault = async () => {
     await test('Toggle default menu', () => App.view.toggleDefault());
 };
 
+export const openToggleOnClick = async () => {
+    await test('Click by menu button of \'toggleOnClick\' option menu', () => App.view.openToggleOnClick());
+};
+
+export const closeToggleOnClick = async () => {
+    await test('Close \'toggleOnClick\' option menu by click outside', () => App.view.closeToggleOnClick());
+};
+
 export const toggleHideOnSelect = async () => {
     await test('Toggle \'hideOnSelect\' option test menu', () => App.view.toggleHideOnSelect());
 };
