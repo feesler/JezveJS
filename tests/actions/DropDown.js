@@ -1,31 +1,25 @@
-import { assert, test } from 'jezve-test';
+import { test } from 'jezve-test';
 import { App } from '../app.js';
 
-export const selectTest = async (name, value) => {
-    assert.isString(name, 'Invalid name of component');
-
-    await test(`[DropDown] Select by value '${value}' of ${name}`, () => (
+export const selectTest = async (name, value) => (
+    test(`[DropDown] Select by value '${value}' of ${name}`, () => (
         App.view.toggleItem(name, value)
-    ));
-};
+    ))
+);
 
-export const deselectTest = async (name, value) => {
-    assert.isString(name, 'Invalid name of component');
-
-    await test(`[DropDown] Deselect by tag '${value}' of ${name}`, () => (
+export const deselectTest = async (name, value) => (
+    test(`[DropDown] Deselect by tag '${value}' of ${name}`, () => (
         App.view.deselectByTag(name, value)
-    ));
-};
+    ))
+);
 
-export const clearTest = async (name) => {
-    assert.isString(name, 'Invalid name of component');
+export const clearTest = async (name) => (
+    test(`[DropDown] Clear selection of ${name}`, () => App.view.clearSelection(name))
+);
 
-    await test(`[DropDown] Clear selection of ${name}`, () => App.view.clearSelection(name));
-};
-
-export const toggleEnableFilter = async () => {
-    await test('[DropDown] Toggle enable filter', () => App.view.toggleEnableFilter());
-};
+export const toggleEnableFilter = async () => (
+    test('[DropDown] Toggle enable filter', () => App.view.toggleEnableFilter())
+);
 
 export const toggleEnableMultiFilter = async () => {
     await test('[DropDown] Toggle enable filter multiple select', () => (
@@ -33,31 +27,29 @@ export const toggleEnableMultiFilter = async () => {
     ));
 };
 
-export const filterTest = async (name, value) => {
-    assert.isString(name, 'Invalid name of component');
+export const filterTest = async (name, value) => (
+    test(`[DropDown] Filter ${name} by '${value}'`, () => App.view.filter(name, value))
+);
 
-    await test(`[DropDown] Filter ${name} by '${value}'`, () => App.view.filter(name, value));
-};
+export const addItemTest = async () => (
+    test('[DropDown] Add item', () => App.view.addItem())
+);
 
-export const addItemTest = async () => {
-    await test('[DropDown] Add item', () => App.view.addItem());
-};
+export const addDisabledItem = async () => (
+    test('[DropDown] Add disabled item', () => App.view.addDisabledItem())
+);
 
-export const addDisabledItem = async () => {
-    await test('[DropDown] Add disabled item', () => App.view.addDisabledItem());
-};
+export const addHiddenItem = async () => (
+    test('[DropDown] Add hidden item', () => App.view.addHiddenItem())
+);
 
-export const addHiddenItem = async () => {
-    await test('[DropDown] Add hidden item', () => App.view.addHiddenItem());
-};
+export const removeLastItem = async () => (
+    test('[DropDown] Remove last item', () => App.view.removeLastItem())
+);
 
-export const removeLastItem = async () => {
-    await test('[DropDown] Remove last item', () => App.view.removeLastItem());
-};
-
-export const removeAllItems = async () => {
-    await test('[DropDown] Remove all items', () => App.view.removeAllItems());
-};
+export const removeAllItems = async () => (
+    test('[DropDown] Remove all items', () => App.view.removeAllItems())
+);
 
 export const addRemoveItemsTest = async () => {
     await addItemTest();
