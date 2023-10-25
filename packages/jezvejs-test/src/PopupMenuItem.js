@@ -1,9 +1,9 @@
 import {
     TestComponent,
-    assert,
     click,
     evaluate,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 export class PopupMenuItem extends TestComponent {
     async parseContent() {

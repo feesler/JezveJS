@@ -1,20 +1,12 @@
 import 'jezvejs/style';
 import { createElement } from 'jezvejs';
+import { assert } from '@jezvejs/assert';
 import { ChartGrid } from 'jezvejs/ChartGrid';
 import { Histogram } from 'jezvejs/Histogram';
 import { LineChart } from 'jezvejs/LineChart';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './ChartGridView.scss';
-
-const assert = {
-    equal(a, b) {
-        const result = (a === b);
-        if (!result) {
-            throw new Error(`Value '${a}' not equal to '${b}'`);
-        }
-    },
-};
 
 const runTests = () => {
     const exponentTestsData = [

@@ -1,10 +1,10 @@
 import {
     TestComponent,
-    assert,
     query,
     click,
     evaluate,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 export class LinkMenuItem extends TestComponent {
     async parseContent() {

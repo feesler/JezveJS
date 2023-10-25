@@ -1,6 +1,5 @@
 import {
     TestComponent,
-    assert,
     asyncMap,
     query,
     queryAll,
@@ -10,6 +9,7 @@ import {
     asArray,
     input,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 export class DropDown extends TestComponent {
     /** Find for closest parent DropDown container of element */

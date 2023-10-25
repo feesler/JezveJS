@@ -1,4 +1,5 @@
-import { assert, test } from 'jezve-test';
+import { test } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 import { deepMeet, minmax } from '../../packages/jezvejs/src/js/common.js';
 import { fixFloat, trimDecimalPlaces } from '../../packages/jezvejs/src/js/NumberUtils.js';

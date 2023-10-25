@@ -1,9 +1,9 @@
 import {
-    assert,
     baseUrl,
     goTo,
     test,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { App } from '../app.js';
 import { DateInputView } from '../view/DateInputView.js';
 

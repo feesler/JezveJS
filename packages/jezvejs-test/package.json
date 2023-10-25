@@ -24,6 +24,7 @@
     },
     "homepage": "https://github.com/feesler/JezveJS#readme",
     "dependencies": {
-        "jezve-test": "^1.12.0"
+        "@jezvejs/assert": "^0.1.0",
+        "jezve-test": "^1.13.0"
     }
 }

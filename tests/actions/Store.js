@@ -1,4 +1,5 @@
-import { assert, test } from 'jezve-test';
+import { test } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { createSlice, createStore } from '../../packages/jezvejs/src/Components/Store/Store.js';
 
 /** Runs tests for createStore(), subscribe and dispatch action */

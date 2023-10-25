@@ -1,10 +1,10 @@
 import {
     query,
     click,
-    assert,
     asyncMap,
     waitForFunction,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { DropDown } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 

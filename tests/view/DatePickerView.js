@@ -1,10 +1,10 @@
 import {
-    assert,
     query,
     click,
     evaluate,
     asyncMap,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { DatePicker } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 import { formatDate } from '../../packages/jezvejs/src/js/DateUtils.js';

@@ -1,9 +1,9 @@
 import {
-    assert,
     Runner,
     setBlock,
     getSelectedStory,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { commonTests } from './common.js';
 import { assertTests } from './assert.js';
 import { collapsibleTests } from './Collapsible.js';
