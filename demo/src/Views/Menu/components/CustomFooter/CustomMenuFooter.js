@@ -1,4 +1,5 @@
-import { Component, createElement } from 'jezvejs';
+import { Component } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import './CustomMenuFooter.scss';
 
 export class CustomMenuFooter extends Component {

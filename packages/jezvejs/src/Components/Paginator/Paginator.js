@@ -6,7 +6,7 @@ import {
     setEvents,
     createElement,
     getClassName,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import './Paginator.scss';
 

@@ -1,5 +1,5 @@
 import { isFunction } from '@jezvejs/types';
-import { createElement } from '../../js/common.js';
+import { createElement } from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './Debug.scss';

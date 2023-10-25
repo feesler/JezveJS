@@ -1,5 +1,5 @@
 import { isFunction, asArray } from '@jezvejs/types';
-import { ge } from './common.js';
+import { ge } from '@jezvejs/dom';
 
 const clickHandlersMap = [];
 

@@ -2,7 +2,7 @@ import { isFunction } from '@jezvejs/types';
 import {
     enable,
     getClassName,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 
 import {
     Menu,

@@ -1,4 +1,4 @@
-import { getClassName } from 'jezvejs';
+import { getClassName } from '@jezvejs/dom';
 import { MenuGroupItem } from 'jezvejs/Menu';
 
 import { CheckboxMenuGroupHeader } from '../GroupHeader/CheckboxMenuGroupHeader.js';

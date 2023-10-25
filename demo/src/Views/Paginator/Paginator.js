@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge } from 'jezvejs';
+import { ge } from '@jezvejs/dom';
 import { Paginator } from 'jezvejs/Paginator';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

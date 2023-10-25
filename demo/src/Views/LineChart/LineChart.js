@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { LineChart } from 'jezvejs/LineChart';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

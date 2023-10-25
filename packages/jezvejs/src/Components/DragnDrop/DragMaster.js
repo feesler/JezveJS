@@ -1,4 +1,4 @@
-import { removeEvents, setEvents } from '../../js/common.js';
+import { removeEvents, setEvents } from '@jezvejs/dom';
 
 /** Main drag and drop class */
 export class DragMaster {

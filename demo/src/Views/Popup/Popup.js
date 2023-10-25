@@ -5,7 +5,7 @@ import {
     selectedValue,
     setEvents,
     show,
-} from 'jezvejs';
+} from '@jezvejs/dom';
 import { Popup } from 'jezvejs/Popup';
 import { Notification } from 'jezvejs/Notification';
 

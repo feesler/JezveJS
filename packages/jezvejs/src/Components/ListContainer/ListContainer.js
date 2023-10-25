@@ -5,7 +5,7 @@ import {
     re,
     removeChilds,
     insertAfter,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {

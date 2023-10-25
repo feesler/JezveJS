@@ -1,4 +1,5 @@
-import { getOffset, px } from 'jezvejs';
+import { px } from 'jezvejs';
+import { getOffset } from '@jezvejs/dom';
 import { DragMaster, DropTarget } from 'jezvejs/DragnDrop';
 import { OriginalDragAvatar } from './OriginalDragAvatar.js';
 

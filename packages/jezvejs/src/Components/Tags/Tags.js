@@ -1,9 +1,9 @@
 import { isFunction } from '@jezvejs/types';
 import {
-    deepMeet,
     enable,
     getClassNames,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
+import { deepMeet } from '../../js/common.js';
 import { SortableListContainer } from '../SortableListContainer/SortableListContainer.js';
 import { Tag } from '../Tag/Tag.js';
 import './Tags.scss';

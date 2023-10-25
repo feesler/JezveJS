@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge, getRealDPI } from 'jezvejs';
+import { ge, getRealDPI } from '@jezvejs/dom';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './DpiTestView.scss';

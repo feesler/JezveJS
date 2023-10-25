@@ -10,7 +10,7 @@ import {
     insertAfter,
     insertBefore,
     getClassName,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 
 import { Menu } from '../Menu/Menu.js';

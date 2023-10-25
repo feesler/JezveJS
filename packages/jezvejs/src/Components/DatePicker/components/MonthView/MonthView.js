@@ -3,7 +3,7 @@ import {
     createElement,
     enable,
     getClassName,
-} from '../../../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
 import {
     DAYS_IN_WEEK,

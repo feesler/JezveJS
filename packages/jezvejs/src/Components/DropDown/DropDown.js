@@ -3,7 +3,6 @@ import {
     createElement,
     removeChilds,
     re,
-    px,
     insertAfter,
     prependChild,
     isVisible,
@@ -11,6 +10,9 @@ import {
     setEvents,
     removeEvents,
     enable,
+} from '@jezvejs/dom';
+import {
+    px,
     debounce,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';

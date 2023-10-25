@@ -6,11 +6,13 @@ import {
     show,
     transform,
     isVisible,
-    px,
     createElement,
-    minmax,
     removeChilds,
     afterTransition,
+} from '@jezvejs/dom';
+import {
+    px,
+    minmax,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { isSameYearMonth } from '../../js/DateUtils.js';

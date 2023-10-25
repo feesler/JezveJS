@@ -1,6 +1,6 @@
 import 'jezvejs/style';
 import { asArray } from '@jezvejs/types';
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { PieChart } from 'jezvejs/PieChart';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

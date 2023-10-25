@@ -1,10 +1,12 @@
 import { asArray } from '@jezvejs/types';
 import {
-    px,
     createElement,
     re,
-    minmax,
     afterTransition,
+} from '@jezvejs/dom';
+import {
+    px,
+    minmax,
 } from '../../js/common.js';
 import '../../css/common.scss';
 import { Component } from '../../js/Component.js';

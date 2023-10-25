@@ -3,7 +3,7 @@ import {
     createElement,
     setEvents,
     enable,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import { Icon } from '../Icon/Icon.js';
 import './Button.scss';

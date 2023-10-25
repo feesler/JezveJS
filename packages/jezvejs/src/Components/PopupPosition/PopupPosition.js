@@ -1,9 +1,9 @@
 import { isFunction } from '@jezvejs/types';
 import {
     computedStyle,
-    px,
     transform,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
+import { px } from '../../js/common.js';
 
 export class PopupPosition {
     static windowScrollDistance = 0;

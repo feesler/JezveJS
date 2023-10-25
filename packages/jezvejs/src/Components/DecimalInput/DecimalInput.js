@@ -6,7 +6,7 @@ import {
     createElement,
     setProps,
     setAttributes,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import {
     fixFloat,
     getAllowedDecimalPlaces,

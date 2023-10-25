@@ -7,7 +7,7 @@ import {
     createElement,
     setProps,
     setAttributes,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 

@@ -1,10 +1,12 @@
 import 'jezvejs/style';
 import {
-    ge,
     formatDate,
     parseDateString,
-    createElement,
 } from 'jezvejs';
+import {
+    ge,
+    createElement,
+} from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { DatePicker } from 'jezvejs/DatePicker';
 import { Input } from 'jezvejs/Input';

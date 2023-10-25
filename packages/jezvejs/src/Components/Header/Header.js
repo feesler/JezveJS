@@ -1,10 +1,10 @@
-import { Component } from '../../js/Component.js';
 import {
     addChilds,
     createElement,
     getClassName,
     removeChilds,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
+import { Component } from '../../js/Component.js';
 
 import './Header.scss';
 

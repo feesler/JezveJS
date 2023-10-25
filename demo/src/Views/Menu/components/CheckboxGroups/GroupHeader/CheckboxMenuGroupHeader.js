@@ -1,4 +1,4 @@
-import { createElement, enable, getClassName } from 'jezvejs';
+import { createElement, enable, getClassName } from '@jezvejs/dom';
 import { MenuGroupHeader, MenuCheckbox } from 'jezvejs/Menu';
 
 import './CheckboxMenuGroupHeader.scss';

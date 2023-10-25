@@ -1,4 +1,5 @@
-import { getOffset, minmax, px } from 'jezvejs';
+import { minmax, px } from 'jezvejs';
+import { getOffset } from '@jezvejs/dom';
 import { DragAvatar, DragMaster } from 'jezvejs/DragnDrop';
 
 /**

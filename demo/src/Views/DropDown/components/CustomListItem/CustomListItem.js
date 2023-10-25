@@ -1,6 +1,4 @@
-import {
-    createElement,
-} from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { MenuItem } from 'jezvejs/Menu';
 
 const defaultProps = {

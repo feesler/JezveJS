@@ -1,4 +1,4 @@
-import { getClassName } from 'jezvejs';
+import { getClassName } from '@jezvejs/dom';
 import { Menu } from 'jezvejs/Menu';
 
 import { CheckboxMenuGroupItem } from './GroupItem/CheckboxMenuGroupItem.js';

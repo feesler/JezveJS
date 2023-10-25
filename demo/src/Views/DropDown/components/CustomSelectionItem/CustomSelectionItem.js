@@ -1,8 +1,8 @@
+import { Component } from 'jezvejs';
 import {
     createElement,
-    Component,
     getClassName,
-} from 'jezvejs';
+} from '@jezvejs/dom';
 
 /* CSS classes */
 const SELECTION_ITEM_CLASS = 'dd__selection-item';

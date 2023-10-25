@@ -1,5 +1,5 @@
 import { isFunction } from '@jezvejs/types';
-import { getClassName } from '../../../../js/common.js';
+import { getClassName } from '@jezvejs/dom';
 import { ListContainer } from '../../../ListContainer/ListContainer.js';
 
 import './MenuList.scss';

@@ -2,7 +2,7 @@ import { isFunction, isObject, asArray } from '@jezvejs/types';
 import {
     createSVGElement,
     setEvents,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import {
     hexColor,

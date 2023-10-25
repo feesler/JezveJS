@@ -3,7 +3,7 @@ import {
     createElement,
     enable,
     setEvents,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 
 import { MenuList } from './components/List/MenuList.js';

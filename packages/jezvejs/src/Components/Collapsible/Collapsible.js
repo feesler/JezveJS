@@ -5,8 +5,8 @@ import {
     addChilds,
     setEvents,
     afterTransition,
-    px,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
+import { px } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './Collapsible.scss';

@@ -1,8 +1,5 @@
-import {
-    re,
-    getOffset,
-    px,
-} from 'jezvejs';
+import { re, getOffset } from '@jezvejs/dom';
+import { px } from 'jezvejs';
 import { DragAvatar } from 'jezvejs/DragnDrop';
 
 /**

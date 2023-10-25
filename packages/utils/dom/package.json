@@ -1,7 +1,7 @@
 {
-    "name": "@jezvejs/assert",
-    "version": "0.1.1",
-    "description": "Simple assertions utility",
+    "name": "@jezvejs/dom",
+    "version": "0.1.0",
+    "description": "Collection of simple DOM utilities",
     "type": "module",
     "module": "./src/index.js",
     "files": [
@@ -10,7 +10,7 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/feesler/JezveJS.git",
-        "directory": "packages/utils/assert"
+        "directory": "packages/utils/dom"
     },
     "bugs": {
         "url": "https://github.com/feesler/JezveJS/issues"
@@ -18,10 +18,6 @@
     "homepage": "https://github.com/feesler/JezveJS#readme",
     "author": "Henry Feesler",
     "license": "ISC",
-    "keywords": [
-        "assert",
-        "tests"
-    ],
     "main": "./src/index.js",
     "exports": {
         ".": "./src/index.js",

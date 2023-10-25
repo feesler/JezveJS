@@ -3,7 +3,7 @@ import {
     createElement,
     createSVGElement,
     getClassName,
-} from '../../../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
 
 /* CSS classes */

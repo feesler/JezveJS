@@ -7,7 +7,7 @@ import {
     enable,
     isVisible,
     createElement,
-} from 'jezvejs';
+} from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';

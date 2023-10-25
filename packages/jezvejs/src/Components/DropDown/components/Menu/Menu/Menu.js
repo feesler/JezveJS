@@ -1,5 +1,6 @@
 import { isFunction } from '@jezvejs/types';
-import { deepMeet, getClassName } from '../../../../../js/common.js';
+import { getClassName } from '@jezvejs/dom';
+import { deepMeet } from '../../../../../js/common.js';
 import { Menu } from '../../../../Menu/Menu.js';
 
 import './Menu.scss';

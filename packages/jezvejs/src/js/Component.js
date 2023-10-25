@@ -5,7 +5,7 @@ import {
     enable,
     isVisible,
     getClassNames,
-} from './common.js';
+} from '@jezvejs/dom';
 
 /**
  * Base component constructor

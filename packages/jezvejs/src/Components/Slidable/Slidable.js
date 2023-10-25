@@ -1,5 +1,5 @@
 import { isFunction } from '@jezvejs/types';
-import { ge, setEvents } from '../../js/common.js';
+import { ge, setEvents } from '@jezvejs/dom';
 import { SliderDragZone } from './components/SliderDragZone.js';
 import { SliderDropTarget } from './components/SliderDropTarget.js';
 

@@ -3,9 +3,11 @@ import {
     comparePosition,
     insertAfter,
     insertBefore,
-    hasFlag,
     afterTransition,
     transform,
+} from '@jezvejs/dom';
+import {
+    hasFlag,
     px,
 } from '../../js/common.js';
 import { DropTarget } from '../DragnDrop/DropTarget.js';

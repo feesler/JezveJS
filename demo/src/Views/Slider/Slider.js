@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { Slider } from 'jezvejs/Slider';
 

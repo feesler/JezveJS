@@ -5,7 +5,7 @@ import {
     setAttributes,
     setEvents,
     setProps,
-} from '../../../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
 import './Input.scss';
 

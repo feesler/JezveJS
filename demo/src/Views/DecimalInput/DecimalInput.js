@@ -1,6 +1,6 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Input';
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { DecimalInput } from 'jezvejs/DecimalInput';
 

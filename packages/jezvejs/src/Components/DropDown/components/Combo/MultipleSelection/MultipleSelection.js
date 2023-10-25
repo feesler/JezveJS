@@ -1,4 +1,4 @@
-import { getClassName } from '../../../../../js/common.js';
+import { getClassName } from '@jezvejs/dom';
 import { Tags } from '../../../../Tags/Tags.js';
 import { DropDownMultiSelectionItem } from '../MultiSelectionItem/MultiSelectionItem.js';
 import './MultipleSelection.scss';

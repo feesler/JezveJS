@@ -1,5 +1,5 @@
+import { onReady } from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
-import { onReady } from '../../js/common.js';
 
 /**
  * View component

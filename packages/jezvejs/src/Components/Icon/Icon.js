@@ -1,4 +1,4 @@
-import { createSVGElement } from '../../js/common.js';
+import { createSVGElement } from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {

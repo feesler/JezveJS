@@ -1,5 +1,5 @@
 import { isDate } from '@jezvejs/types';
-import { createElement, getClassName } from '../../../../js/common.js';
+import { createElement, getClassName } from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
 import { getShortMonthName, MONTHS_COUNT } from '../../../../js/DateUtils.js';
 import { getNextViewDate, getPrevViewDate, YEAR_VIEW } from '../../utils.js';

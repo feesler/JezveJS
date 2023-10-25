@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { assert } from '@jezvejs/assert';
 import { ChartGrid } from 'jezvejs/ChartGrid';
 import { Histogram } from 'jezvejs/Histogram';

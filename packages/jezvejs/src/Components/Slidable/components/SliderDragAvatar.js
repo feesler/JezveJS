@@ -1,4 +1,4 @@
-import { getOffset } from '../../../js/common.js';
+import { getOffset } from '@jezvejs/dom';
 import { DragMaster } from '../../DragnDrop/DragMaster.js';
 import { DragAvatar } from '../../DragnDrop/DragAvatar.js';
 

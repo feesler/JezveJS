@@ -1,5 +1,5 @@
+import { createElement, createSVGElement } from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
-import { createElement, createSVGElement } from '../../../../js/common.js';
 import { Icon } from '../../../Icon/Icon.js';
 
 import './MenuCheckbox.scss';

@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement, ge } from 'jezvejs';
+import { createElement, ge } from '@jezvejs/dom';
 import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
