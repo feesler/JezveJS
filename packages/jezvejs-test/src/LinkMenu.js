@@ -1,12 +1,12 @@
 import {
     TestComponent,
-    asArray,
     queryAll,
     hasClass,
     hasAttr,
     asyncMap,
 } from 'jezve-test';
 import { assert } from '@jezvejs/assert';
+import { asArray } from '@jezvejs/types';
 import { LinkMenuItem } from './LinkMenuItem.js';
 
 export class LinkMenu extends TestComponent {

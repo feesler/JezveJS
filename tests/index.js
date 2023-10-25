@@ -1,5 +1,5 @@
 import { environment } from 'jezve-test/NodeEnvironment';
-import { onReady } from 'jezve-test';
+import { onReady } from '@jezvejs/dom';
 import options from './options.js';
 
 const envOptions = { ...options };
