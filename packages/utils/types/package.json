@@ -1,0 +1,29 @@
+{
+    "name": "@jezvejs/types",
+    "version": "0.1.0",
+    "description": "Simple type checker utility",
+    "type": "module",
+    "module": "./src/index.js",
+    "files": [
+        "src"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/feesler/JezveJS.git",
+        "directory": "packages/utils/assert"
+    },
+    "bugs": {
+        "url": "https://github.com/feesler/JezveJS/issues"
+    },
+    "homepage": "https://github.com/feesler/JezveJS#readme",
+    "author": "Henry Feesler",
+    "license": "ISC",
+    "main": "./src/index.js",
+    "exports": {
+        ".": "./src/index.js",
+        "./package.json": "./package.json"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
