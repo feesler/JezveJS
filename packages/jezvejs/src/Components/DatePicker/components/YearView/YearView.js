@@ -1,7 +1,7 @@
 import { isDate } from '@jezvejs/types';
 import { createElement, getClassName } from '@jezvejs/dom';
+import { getShortMonthName, MONTHS_COUNT } from '@jezvejs/datetime';
 import { Component } from '../../../../js/Component.js';
-import { getShortMonthName, MONTHS_COUNT } from '../../../../js/DateUtils.js';
 import { getNextViewDate, getPrevViewDate, YEAR_VIEW } from '../../utils.js';
 
 /* CSS classes */

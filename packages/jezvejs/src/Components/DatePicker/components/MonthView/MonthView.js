@@ -4,7 +4,6 @@ import {
     enable,
     getClassName,
 } from '@jezvejs/dom';
-import { Component } from '../../../../js/Component.js';
 import {
     DAYS_IN_WEEK,
     getWeekdayShort,
@@ -13,7 +12,8 @@ import {
     getWeekDays,
     isSameYearMonth,
     isSameDate,
-} from '../../../../js/DateUtils.js';
+} from '@jezvejs/datetime';
+import { Component } from '../../../../js/Component.js';
 import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from '../../utils.js';
 
 /* CSS classes */

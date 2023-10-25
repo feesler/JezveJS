@@ -1,6 +1,6 @@
 import { getClassNames } from '@jezvejs/dom';
+import { getWeekDays, getWeekdayShort } from '@jezvejs/datetime';
 import '../../css/common.scss';
-import { getWeekDays, getWeekdayShort } from '../../js/DateUtils.js';
 import { LinkMenu } from '../LinkMenu/LinkMenu.js';
 import './WeekDaySelect.scss';
 

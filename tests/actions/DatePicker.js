@@ -1,4 +1,5 @@
-import { formatDate, test } from 'jezve-test';
+import { test } from 'jezve-test';
+import { formatDate } from '@jezvejs/datetime';
 import { App } from '../app.js';
 
 export const selectDateStatic = async (date) => {

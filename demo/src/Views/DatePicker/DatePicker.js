@@ -2,7 +2,7 @@ import 'jezvejs/style';
 import {
     formatDate,
     parseDateString,
-} from 'jezvejs';
+} from '@jezvejs/datetime';
 import {
     ge,
     createElement,

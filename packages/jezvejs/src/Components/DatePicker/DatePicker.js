@@ -10,12 +10,12 @@ import {
     removeChilds,
     afterTransition,
 } from '@jezvejs/dom';
+import { isSameYearMonth } from '@jezvejs/datetime';
 import {
     px,
     minmax,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
-import { isSameYearMonth } from '../../js/DateUtils.js';
 import { Component } from '../../js/Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { Slidable } from '../Slidable/Slidable.js';
