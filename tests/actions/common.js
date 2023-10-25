@@ -8,7 +8,7 @@ import {
     hslToRGB,
     intToColor,
     rgbToHSL,
-} from '../../packages/jezvejs/src/js/colorUtils.js';
+} from '../../packages/utils/color/src/index.js';
 import { formatObject } from '../common.js';
 
 export const deepMeetTest = async ({
