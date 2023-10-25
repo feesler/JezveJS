@@ -14,7 +14,7 @@ import {
     isMultipleLeadingZeros,
     isNumberString,
     trimDecimalPlaces,
-} from '../../js/NumberUtils.js';
+} from '@jezvejs/number';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
