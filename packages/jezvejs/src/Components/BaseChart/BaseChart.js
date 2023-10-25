@@ -1,7 +1,6 @@
+import { isFunction, isObject } from '@jezvejs/types';
 import {
     createSVGElement,
-    isFunction,
-    isObject,
     show,
     getOffset,
     re,

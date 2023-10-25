@@ -1,4 +1,4 @@
-import { isFunction } from '../../js/common.js';
+import { isFunction } from '@jezvejs/types';
 import { Sortable } from '../Sortable/Sortable.js';
 import { ListContainer } from '../ListContainer/ListContainer.js';
 

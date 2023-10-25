@@ -1,6 +1,6 @@
 import 'jezvejs/style';
+import { isObject } from '@jezvejs/types';
 import {
-    isObject,
     ge,
     setEvents,
     show,

@@ -1,9 +1,9 @@
+import { isFunction } from '@jezvejs/types';
 import { Component } from '../../../../js/Component.js';
 import {
     createElement,
     enable,
     getClassName,
-    isFunction,
 } from '../../../../js/common.js';
 import { Icon } from '../../../Icon/Icon.js';
 import { isCheckbox } from '../../helpers.js';

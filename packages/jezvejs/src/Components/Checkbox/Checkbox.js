@@ -1,5 +1,5 @@
+import { isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     createSVGElement,
     setEvents,
     enable,

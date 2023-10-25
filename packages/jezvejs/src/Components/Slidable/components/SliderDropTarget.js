@@ -1,4 +1,4 @@
-import { isFunction } from '../../../js/common.js';
+import { isFunction } from '@jezvejs/types';
 import { DropTarget } from '../../DragnDrop/DropTarget.js';
 import { SliderDragAvatar } from './SliderDragAvatar.js';
 

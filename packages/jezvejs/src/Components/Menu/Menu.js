@@ -1,8 +1,8 @@
+import { isFunction } from '@jezvejs/types';
 import {
     asArray,
     createElement,
     enable,
-    isFunction,
     setEvents,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';

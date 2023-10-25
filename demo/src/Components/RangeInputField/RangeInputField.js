@@ -1,4 +1,5 @@
-import { Component, createElement, isFunction } from 'jezvejs';
+import { isFunction } from '@jezvejs/types';
+import { Component, createElement } from 'jezvejs';
 import { generateId } from '../../Application/utils.js';
 import './RangeInputField.scss';
 

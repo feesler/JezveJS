@@ -1,6 +1,6 @@
+import { isFunction } from '@jezvejs/types';
 import {
     computedStyle,
-    isFunction,
     px,
     transform,
 } from '../../js/common.js';

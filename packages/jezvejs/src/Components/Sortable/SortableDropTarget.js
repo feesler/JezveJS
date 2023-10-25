@@ -1,9 +1,9 @@
+import { isFunction } from '@jezvejs/types';
 import {
     comparePosition,
     insertAfter,
     insertBefore,
     hasFlag,
-    isFunction,
     afterTransition,
     transform,
     asArray,

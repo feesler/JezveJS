@@ -1,9 +1,8 @@
+import { isNumber, isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     setEvents,
     getCursorPos,
     setCursorPos,
-    isNum,
     removeEvents,
     createElement,
     setProps,
@@ -595,7 +594,7 @@ export class DateInput extends Component {
 
         const dayStr = expectedDay.replaceAll(search, '');
         const dayVal = parseInt(dayStr, 10);
-        if (dayStr.length > 0 && (!isNum(dayStr) || !(dayVal >= 0 && dayVal <= 31))) {
+        if (dayStr.length > 0 && (!isNumber(dayStr) || !(dayVal >= 0 && dayVal <= 31))) {
             return this.state;
         }
         if (dayStr.length === 2 && dayVal === 0) {
@@ -604,7 +603,7 @@ export class DateInput extends Component {
 
         const monthStr = expectedMonth.replaceAll(search, '');
         const monthVal = parseInt(monthStr, 10);
-        if (monthStr.length > 0 && (!isNum(monthStr) || !(monthVal >= 0 && monthVal <= 12))) {
+        if (monthStr.length > 0 && (!isNumber(monthStr) || !(monthVal >= 0 && monthVal <= 12))) {
             return this.state;
         }
         if (monthStr.length === 2 && monthVal === 0) {
@@ -615,7 +614,7 @@ export class DateInput extends Component {
         const yearVal = parseInt(yearStr, 10);
         if (
             yearStr.length > 0
-            && (!isNum(yearStr) || (this.yearRange.length === 4 && yearVal < 1))
+            && (!isNumber(yearStr) || (this.yearRange.length === 4 && yearVal < 1))
         ) {
             return this.state;
         }

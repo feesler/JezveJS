@@ -1,7 +1,7 @@
+import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     setEvents,
-    isFunction,
     re,
     removeChilds,
     insertAfter,

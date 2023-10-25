@@ -1,4 +1,5 @@
-import { createElement, isFunction } from '../../js/common.js';
+import { isFunction } from '@jezvejs/types';
+import { createElement } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './Debug.scss';

@@ -1,4 +1,5 @@
-import { createElement, getClassName, isDate } from '../../../../js/common.js';
+import { isDate } from '@jezvejs/types';
+import { createElement, getClassName } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import {
     getNextViewDate,

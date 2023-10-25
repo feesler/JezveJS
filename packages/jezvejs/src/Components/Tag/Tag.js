@@ -1,7 +1,7 @@
+import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
-    isFunction,
     re,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';

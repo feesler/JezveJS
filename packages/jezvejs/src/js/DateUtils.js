@@ -1,4 +1,4 @@
-import { isDate } from './common.js';
+import { isDate } from '@jezvejs/types';
 
 export const DAYS_IN_WEEK = 7;
 export const DEFAULT_FIRST_DAY_OF_WEEK = 7;

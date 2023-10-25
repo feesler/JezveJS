@@ -1,7 +1,6 @@
+import { isFunction, isObject } from '@jezvejs/types';
 import {
     createSVGElement,
-    isObject,
-    isFunction,
     setEvents,
     asArray,
 } from '../../js/common.js';

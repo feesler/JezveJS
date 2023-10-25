@@ -1,7 +1,6 @@
+import { isInteger, isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     getCursorPos,
-    isInt,
     setEvents,
     removeEvents,
     createElement,
@@ -72,7 +71,7 @@ export class DecimalInput extends Component {
         }
 
         if (typeof this.state.digits !== 'undefined') {
-            if (!isInt(this.state.digits)) {
+            if (!isInteger(this.state.digits)) {
                 throw new Error('Invalid digits property specified');
             }
         }

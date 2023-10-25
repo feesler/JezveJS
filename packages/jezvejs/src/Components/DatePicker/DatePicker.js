@@ -1,10 +1,9 @@
+import { isDate, isFunction } from '@jezvejs/types';
 import '../../css/common.scss';
 import {
     ge,
     re,
     show,
-    isDate,
-    isFunction,
     transform,
     isVisible,
     px,

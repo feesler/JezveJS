@@ -1,9 +1,8 @@
+import { isDate, isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
     getClassName,
-    isDate,
-    isFunction,
 } from '../../../../js/common.js';
 import { Component } from '../../../../js/Component.js';
 import {

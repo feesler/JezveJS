@@ -1,6 +1,6 @@
+import { isFunction } from '@jezvejs/types';
 import '../../css/common.scss';
 import {
-    isFunction,
     createElement,
     enable,
 } from '../../js/common.js';

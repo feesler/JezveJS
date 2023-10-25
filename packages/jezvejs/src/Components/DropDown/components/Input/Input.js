@@ -1,7 +1,7 @@
+import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
-    isFunction,
     setAttributes,
     setEvents,
     setProps,

@@ -1,5 +1,5 @@
+import { isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     enable,
     getClassName,
 } from '../../js/common.js';

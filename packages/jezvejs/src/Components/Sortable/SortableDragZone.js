@@ -1,4 +1,4 @@
-import { isFunction } from '../../js/common.js';
+import { isFunction } from '@jezvejs/types';
 import { SortableDragAvatar } from './SortableDragAvatar.js';
 import { SortableTableDragAvatar } from './SortableTableDragAvatar.js';
 import { DragZone } from '../DragnDrop/DragZone.js';

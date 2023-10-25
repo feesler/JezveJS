@@ -1,4 +1,5 @@
-import { deepMeet, getClassName, isFunction } from '../../../../../js/common.js';
+import { isFunction } from '@jezvejs/types';
+import { deepMeet, getClassName } from '../../../../../js/common.js';
 import { Menu } from '../../../../Menu/Menu.js';
 
 import './Menu.scss';
