@@ -1,12 +1,12 @@
+import { isFunction } from '@jezvejs/types';
 import {
     addChilds,
     createSVGElement,
-    isFunction,
     removeChilds,
     setEvents,
     createElement,
     getClassName,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import './Paginator.scss';
 

@@ -1,10 +1,10 @@
-import { Component } from '../../../../js/Component.js';
+import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
     getClassName,
-    isFunction,
-} from '../../../../js/common.js';
+} from '@jezvejs/dom';
+import { Component } from '../../../../js/Component.js';
 import { Icon } from '../../../Icon/Icon.js';
 import { isCheckbox } from '../../helpers.js';
 

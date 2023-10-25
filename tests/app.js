@@ -1,4 +1,5 @@
-import { formatDate, TestApplication } from 'jezve-test';
+import { TestApplication } from 'jezve-test';
+import { formatDate } from '@jezvejs/datetime';
 import { config } from './config.js';
 import { Scenario } from './scenario/index.js';
 

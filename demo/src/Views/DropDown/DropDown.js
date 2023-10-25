@@ -1,14 +1,13 @@
 import 'jezvejs/style';
+import { isObject, asArray } from '@jezvejs/types';
 import {
-    isObject,
     ge,
     setEvents,
     show,
     enable,
     isVisible,
-    asArray,
     createElement,
-} from 'jezvejs';
+} from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';

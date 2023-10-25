@@ -2,9 +2,9 @@ import {
     TestComponent,
     query,
     click,
-    assert,
     evaluate,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 export class Collapsible extends TestComponent {
     async parseContent() {

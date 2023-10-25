@@ -1,4 +1,4 @@
-import { isObject } from '../../js/common.js';
+import { isObject } from '@jezvejs/types';
 
 const mandatoryProps = ['height', 'margin'];
 

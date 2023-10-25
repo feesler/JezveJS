@@ -1,4 +1,4 @@
-import { isFunction, isObject } from '../../js/common.js';
+import { isFunction, isObject } from '@jezvejs/types';
 
 const checkboxTypes = ['checkbox', 'checkbox-link'];
 

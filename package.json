@@ -17,7 +17,7 @@
         "test": "node ./tests/index.js",
         "all": "npm-run-all lint build test",
         "lint": "npm-run-all --parallel lint-src lint-style lint-tests",
-        "lint-src": "eslint --quiet ./packages/jezvejs/src/**/*.js ./demo/src/**/*.js",
+        "lint-src": "eslint --quiet ./packages/jezvejs/src/**/*.js ./packages/utils/**/*.js ./demo/src/**/*.js",
         "lint-style": "npx stylelint packages/jezvejs/src/**/*.scss demo/src/**/*.scss",
         "lint-tests": "eslint -c ./tests.eslintrc.json --quiet ./tests/ ./packages/jezvejs-test/**/*.js ./config/ ./scripts/",
         "debug": "node --inspect-brk ./tests/index.js",
@@ -29,27 +29,8 @@
         "build-src-dev": "npx webpack --progress -c ./config/common.js -c ./config/dev.js -m",
         "build-tests": "npx webpack --progress -c ./config/tests.js",
         "serve": "npx webpack serve -c ./config/demo.js -c ./config/dev.js -m",
-        "i-jezvejs": "npm install -w jezvejs",
-        "p-jezvejs": "npm publish -w jezvejs",
-        "i-jezvejs-test": "npm install -w jezvejs-test",
-        "p-jezvejs-test": "npm publish -w jezvejs-test",
-        "update": "npm update --save",
-        "publish": "npm-run-all i-jezvejs update build-all p-jezvejs",
-        "publish-test": "npm-run-all i-jezvejs-test update p-jezvejs-test",
         "commit-version": "node ./scripts/commit-version.js",
-        "release": "npm-run-all publish commit-version deploy",
-        "ver-test-major": "npm version major -w jezvejs-test",
-        "ver-test-minor": "npm version minor -w jezvejs-test",
-        "ver-test-patch": "npm version patch -w jezvejs-test",
-        "ver-major": "npm version major -w jezvejs",
-        "ver-minor": "npm version minor -w jezvejs",
-        "ver-patch": "npm version patch -w jezvejs",
-        "release-major": "npm-run-all all ver-major release",
-        "release-minor": "npm-run-all all ver-minor release",
-        "release-patch": "npm-run-all all ver-patch release",
-        "release-test-major": "npm-run-all ver-test-major publish-test",
-        "release-test-minor": "npm-run-all ver-test-minor publish-test",
-        "release-test-patch": "npm-run-all ver-test-patch publish-test"
+        "release": "node ./scripts/release.js"
     },
     "author": "Henry Feesler",
     "license": "ISC",
@@ -74,8 +55,8 @@
         "eslint-import-resolver-webpack": "^0.13.8",
         "eslint-plugin-import": "^2.29.0",
         "html-webpack-plugin": "^5.5.3",
-        "jezve-test": "^1.12.0",
-        "jezvejs-test": "^1.13.0",
+        "jezve-test": "^2.0.0",
+        "jezvejs-test": "^1.13.2",
         "npm-run-all": "^4.1.5",
         "postcss-cli": "^8.3.1",
         "postcss-loader": "^5.3.0",
@@ -95,11 +76,14 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.23.2",
+        "@jezvejs/datetime": "^0.1.0",
+        "@jezvejs/types": "^0.2.0",
         "core-js": "^3.33.1",
         "whatwg-fetch": "^3.6.19"
     },
     "workspaces": [
         "packages/*",
+        "packages/utils/*",
         "demo"
     ]
 }

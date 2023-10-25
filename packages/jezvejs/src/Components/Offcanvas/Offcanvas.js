@@ -1,5 +1,5 @@
+import { isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     createElement,
     re,
     removeChilds,
@@ -7,7 +7,7 @@ import {
     reflow,
     isVisible,
     afterTransition,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
 import '../../css/common.scss';

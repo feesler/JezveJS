@@ -1,4 +1,4 @@
-import { asArray } from '../../js/common.js';
+import { asArray } from '@jezvejs/types';
 
 /**
  * Returns array of items filtered by specified query object

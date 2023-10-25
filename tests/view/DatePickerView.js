@@ -1,13 +1,13 @@
 import {
-    assert,
     query,
     click,
     evaluate,
     asyncMap,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
+import { formatDate } from '@jezvejs/datetime';
 import { DatePicker } from 'jezvejs-test';
 import { AppView } from './AppView.js';
-import { formatDate } from '../../packages/jezvejs/src/js/DateUtils.js';
 
 const datePickerSelectors = {
     staticDatePicker: '#staticDateInp + .dp__container',

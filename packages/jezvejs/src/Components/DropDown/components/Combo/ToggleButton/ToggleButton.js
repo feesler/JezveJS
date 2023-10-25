@@ -1,4 +1,4 @@
-import { getClassNames, createSVGElement } from '../../../../../js/common.js';
+import { getClassNames, createSVGElement } from '@jezvejs/dom';
 import { Button } from '../../../../Button/Button.js';
 import './ToggleButton.scss';
 

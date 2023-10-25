@@ -1,13 +1,12 @@
+import { isInteger, isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     getCursorPos,
-    isInt,
     setEvents,
     removeEvents,
     createElement,
     setProps,
     setAttributes,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import {
     fixFloat,
     getAllowedDecimalPlaces,
@@ -15,7 +14,7 @@ import {
     isMultipleLeadingZeros,
     isNumberString,
     trimDecimalPlaces,
-} from '../../js/NumberUtils.js';
+} from '@jezvejs/number';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 
@@ -72,7 +71,7 @@ export class DecimalInput extends Component {
         }
 
         if (typeof this.state.digits !== 'undefined') {
-            if (!isInt(this.state.digits)) {
+            if (!isInteger(this.state.digits)) {
                 throw new Error('Invalid digits property specified');
             }
         }

@@ -1,4 +1,4 @@
-import { isDate } from './common.js';
+import { isDate } from '@jezvejs/types';
 
 export const DAYS_IN_WEEK = 7;
 export const DEFAULT_FIRST_DAY_OF_WEEK = 7;
@@ -221,4 +221,19 @@ export const getLongMonthName = (date, locales = []) => (
 export const getShortMonthName = (date, locales = []) => (
     formatDate(date, { locales, options: { month: 'short' } })
         .substring(0, 3)
+);
+
+/**
+ * Returns formatted time string for specified value
+ * @param {number} time
+ * @param {string|string[]} locales
+ * @returns {string}
+ */
+export const formatTime = (time, locales = []) => (
+    Intl.DateTimeFormat(locales, {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'UTC',
+    }).format(time)
 );

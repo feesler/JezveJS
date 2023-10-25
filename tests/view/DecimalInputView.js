@@ -1,5 +1,4 @@
 import {
-    assert,
     query,
     asyncMap,
     evaluate,
@@ -13,6 +12,7 @@ import {
     cutText,
     click,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { AppView } from './AppView.js';
 
 const inputSelectors = {

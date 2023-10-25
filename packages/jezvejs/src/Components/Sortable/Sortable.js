@@ -1,4 +1,4 @@
-import { ge } from '../../js/common.js';
+import { ge } from '@jezvejs/dom';
 import { SortableDragAvatar } from './SortableDragAvatar.js';
 import { SortableDragZone } from './SortableDragZone.js';
 import { SortableDropTarget } from './SortableDropTarget.js';

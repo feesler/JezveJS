@@ -1,10 +1,10 @@
 import {
     test,
-    assert,
     baseUrl,
     goTo,
     setBlock,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import * as Actions from '../actions/DropDown.js';
 import { App } from '../app.js';
 

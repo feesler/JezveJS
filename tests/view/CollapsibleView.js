@@ -1,10 +1,10 @@
 import {
-    assert,
     query,
     asyncMap,
     click,
     waitForFunction,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { Collapsible } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 

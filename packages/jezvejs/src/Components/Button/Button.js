@@ -1,10 +1,9 @@
+import { isFunction, asArray } from '@jezvejs/types';
 import {
-    isFunction,
     createElement,
     setEvents,
     enable,
-    asArray,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import { Icon } from '../Icon/Icon.js';
 import './Button.scss';

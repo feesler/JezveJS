@@ -1,13 +1,14 @@
-import { assert, test } from 'jezve-test';
+import { test } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 import { deepMeet, minmax } from '../../packages/jezvejs/src/js/common.js';
-import { fixFloat, trimDecimalPlaces } from '../../packages/jezvejs/src/js/NumberUtils.js';
+import { fixFloat, trimDecimalPlaces } from '../../packages/utils/number/src/index.js';
 import {
     colorToInt,
     hslToRGB,
     intToColor,
     rgbToHSL,
-} from '../../packages/jezvejs/src/js/colorUtils.js';
+} from '../../packages/utils/color/src/index.js';
 import { formatObject } from '../common.js';
 
 export const deepMeetTest = async ({

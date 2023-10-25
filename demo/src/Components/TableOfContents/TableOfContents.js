@@ -1,4 +1,4 @@
-import { createElement, getClassName } from 'jezvejs';
+import { createElement, getClassName } from '@jezvejs/dom';
 import { Menu } from 'jezvejs/Menu';
 
 import './TableOfContents.scss';

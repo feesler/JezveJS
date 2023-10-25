@@ -1,11 +1,11 @@
 import {
     TestComponent,
-    assert,
     query,
     hasClass,
     click,
     evaluate,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 export class Button extends TestComponent {
     async parseContent() {

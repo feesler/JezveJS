@@ -1,4 +1,5 @@
-import { asArray, ge, isFunction } from './common.js';
+import { isFunction, asArray } from '@jezvejs/types';
+import { ge } from '@jezvejs/dom';
 
 const clickHandlersMap = [];
 

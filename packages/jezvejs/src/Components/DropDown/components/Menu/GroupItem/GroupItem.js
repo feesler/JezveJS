@@ -1,4 +1,4 @@
-import { getClassName } from '../../../../../js/common.js';
+import { getClassName } from '@jezvejs/dom';
 import { MenuGroupItem } from '../../../../Menu/Menu.js';
 
 import './GroupItem.scss';

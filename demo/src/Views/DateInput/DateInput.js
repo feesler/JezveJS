@@ -1,6 +1,6 @@
 import 'jezvejs/style';
 import 'jezvejs/style/Input';
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { DateInput } from 'jezvejs/DateInput';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

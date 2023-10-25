@@ -1,4 +1,4 @@
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { mapItems } from 'jezvejs/Menu';
 import { Header } from 'jezvejs/Header';
 import { HeaderMenuButton } from 'jezvejs/HeaderMenuButton';

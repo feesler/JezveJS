@@ -1,9 +1,9 @@
 import {
-    assert,
     query,
     prop,
     asyncMap,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { Paginator } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 

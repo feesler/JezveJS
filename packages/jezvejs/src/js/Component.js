@@ -1,13 +1,11 @@
+import { isFunction, isObject, asArray } from '@jezvejs/types';
 import {
     ge,
     show,
     enable,
     isVisible,
-    isFunction,
-    isObject,
-    asArray,
     getClassNames,
-} from './common.js';
+} from '@jezvejs/dom';
 
 /**
  * Base component constructor

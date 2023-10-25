@@ -1,4 +1,4 @@
-import { getClassNames } from '../../../../../js/common.js';
+import { getClassNames } from '@jezvejs/dom';
 import { CloseButton } from '../../../../CloseButton/CloseButton.js';
 import './ClearButton.scss';
 

@@ -2,10 +2,10 @@ import {
     TestComponent,
     query,
     queryAll,
-    assert,
     evaluate,
     asyncMap,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { LinkMenu } from './LinkMenu.js';
 
 export class TabList extends TestComponent {

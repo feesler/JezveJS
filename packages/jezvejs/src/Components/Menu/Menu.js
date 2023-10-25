@@ -1,10 +1,9 @@
+import { isFunction, asArray } from '@jezvejs/types';
 import {
-    asArray,
     createElement,
     enable,
-    isFunction,
     setEvents,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 
 import { MenuList } from './components/List/MenuList.js';

@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge, setEvents } from 'jezvejs';
+import { ge, setEvents } from '@jezvejs/dom';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

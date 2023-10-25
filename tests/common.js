@@ -1,4 +1,4 @@
-import { isObject } from 'jezve-test';
+import { isObject } from '@jezvejs/types';
 
 /** Format specified value */
 export function formatValue(val) {

@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement, enable } from 'jezvejs';
+import { createElement, enable } from '@jezvejs/dom';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 

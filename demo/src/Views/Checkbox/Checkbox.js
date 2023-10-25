@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement, ge } from 'jezvejs';
+import { createElement, ge } from '@jezvejs/dom';
 import { Checkbox } from 'jezvejs/Checkbox';
 import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';

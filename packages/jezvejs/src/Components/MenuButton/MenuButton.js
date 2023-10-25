@@ -1,4 +1,4 @@
-import { createSVGElement, getClassNames } from '../../js/common.js';
+import { createSVGElement, getClassNames } from '@jezvejs/dom';
 import { Button } from '../Button/Button.js';
 
 const BUTTON_CLASS = 'menu-btn';

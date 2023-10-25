@@ -1,16 +1,17 @@
+import { isFunction, isObject } from '@jezvejs/types';
 import {
     createSVGElement,
-    isFunction,
-    isObject,
     show,
     getOffset,
     re,
     removeChilds,
-    px,
     createElement,
+    setAttributes,
+} from '@jezvejs/dom';
+import {
+    px,
     debounce,
     minmax,
-    setAttributes,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';

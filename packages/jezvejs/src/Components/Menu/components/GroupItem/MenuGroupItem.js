@@ -1,4 +1,4 @@
-import { createElement, enable } from '../../../../js/common.js';
+import { createElement, enable } from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
 
 import './MenuGroupItem.scss';

@@ -1,10 +1,10 @@
 import {
     TestComponent,
-    assert,
     queryAll,
     hasClass,
     asyncMap,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { PopupMenuItem } from './PopupMenuItem.js';
 
 export class PopupMenu extends TestComponent {

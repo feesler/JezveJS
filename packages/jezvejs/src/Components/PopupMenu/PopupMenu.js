@@ -1,17 +1,16 @@
+import { isFunction, asArray } from '@jezvejs/types';
 import '../../css/common.scss';
 import {
-    isFunction,
     createElement,
     setEvents,
     re,
     removeEvents,
-    asArray,
     show,
     removeChilds,
     insertAfter,
     insertBefore,
     getClassName,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 
 import { Menu } from '../Menu/Menu.js';

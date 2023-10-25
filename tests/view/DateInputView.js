@@ -1,5 +1,4 @@
 import {
-    assert,
     query,
     asyncMap,
     evaluate,
@@ -12,6 +11,7 @@ import {
     typeText,
     cutText,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 import { AppView } from './AppView.js';
 
 const inputSelectors = {

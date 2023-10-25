@@ -1,9 +1,9 @@
+import { isFunction } from '@jezvejs/types';
 import '../../css/common.scss';
 import {
-    isFunction,
     createElement,
     enable,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import { LinkMenu } from '../LinkMenu/LinkMenu.js';
 import { ListContainer } from '../ListContainer/ListContainer.js';

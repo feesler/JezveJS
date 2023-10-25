@@ -1,4 +1,4 @@
-import { createElement, getClassName } from 'jezvejs';
+import { createElement, getClassName } from '@jezvejs/dom';
 import { DropDownGroupHeader } from 'jezvejs/DropDown';
 import { Icon } from 'jezvejs/Icon';
 

@@ -1,4 +1,4 @@
-import { asArray } from '../../js/common.js';
+import { asArray } from '@jezvejs/types';
 import { createSlice } from '../Store/Store.js';
 import { mapItems, pushItem } from './helpers.js';
 

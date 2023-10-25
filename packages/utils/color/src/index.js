@@ -1,10 +1,18 @@
-import { asArray, minmax } from './common.js';
+import { asArray } from '@jezvejs/types';
 
 /* eslint-disable no-bitwise */
 
 export const MAX_HUE = 360;
 export const MAX_LIGHTNESS = 100;
 export const MAX_SATURATION = 100;
+
+/** Returns value normalized to specified range */
+const minmax = (min, max, value) => (
+    Math.max(
+        Math.min(min, max),
+        Math.min(Math.max(min, max), value),
+    )
+);
 
 /**
  * Converts color string to integer and returns result

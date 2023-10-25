@@ -3,7 +3,7 @@ import {
     ge,
     setEvents,
     createElement,
-} from 'jezvejs';
+} from '@jezvejs/dom';
 import { Collapsible } from 'jezvejs/Collapsible';
 import { Icon } from 'jezvejs/Icon';
 

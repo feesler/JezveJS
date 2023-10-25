@@ -1,9 +1,9 @@
+import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
-    isFunction,
     re,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';
 import './Tag.scss';

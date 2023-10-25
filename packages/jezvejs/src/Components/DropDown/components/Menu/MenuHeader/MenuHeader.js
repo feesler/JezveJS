@@ -1,5 +1,5 @@
+import { isFunction } from '@jezvejs/types';
 import { Component } from '../../../../../js/Component.js';
-import { isFunction } from '../../../../../js/common.js';
 import { getSelectedItems } from '../../../utils.js';
 
 import './MenuHeader.scss';

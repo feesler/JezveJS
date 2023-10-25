@@ -1,12 +1,13 @@
+import { isFunction, asArray } from '@jezvejs/types';
 import {
     comparePosition,
     insertAfter,
     insertBefore,
-    hasFlag,
-    isFunction,
     afterTransition,
     transform,
-    asArray,
+} from '@jezvejs/dom';
+import {
+    hasFlag,
     px,
 } from '../../js/common.js';
 import { DropTarget } from '../DragnDrop/DropTarget.js';

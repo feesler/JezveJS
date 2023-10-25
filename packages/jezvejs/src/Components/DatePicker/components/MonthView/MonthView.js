@@ -1,11 +1,9 @@
+import { isDate, isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
     getClassName,
-    isDate,
-    isFunction,
-} from '../../../../js/common.js';
-import { Component } from '../../../../js/Component.js';
+} from '@jezvejs/dom';
 import {
     DAYS_IN_WEEK,
     getWeekdayShort,
@@ -14,7 +12,8 @@ import {
     getWeekDays,
     isSameYearMonth,
     isSameDate,
-} from '../../../../js/DateUtils.js';
+} from '@jezvejs/datetime';
+import { Component } from '../../../../js/Component.js';
 import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from '../../utils.js';
 
 /* CSS classes */

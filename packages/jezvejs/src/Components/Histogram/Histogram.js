@@ -1,4 +1,5 @@
-import { afterTransition, asArray, createSVGElement } from '../../js/common.js';
+import { asArray } from '@jezvejs/types';
+import { afterTransition, createSVGElement } from '@jezvejs/dom';
 import { BaseChart } from '../BaseChart/BaseChart.js';
 import { findItem } from '../BaseChart/helpers.js';
 import './Histogram.scss';

@@ -1,9 +1,9 @@
+import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     createSVGElement,
     getClassName,
-    isFunction,
-} from '../../../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
 
 /* CSS classes */

@@ -1,4 +1,4 @@
-import { asArray, isFunction } from '../../js/common.js';
+import { isFunction, asArray } from '@jezvejs/types';
 import { createSlice } from '../Store/Store.js';
 import {
     filterItems,

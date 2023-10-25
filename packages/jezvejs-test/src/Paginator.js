@@ -1,12 +1,12 @@
 import {
     TestComponent,
-    assert,
     queryAll,
     hasClass,
     click,
     asyncMap,
     evaluate,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 export class Paginator extends TestComponent {
     async parseContent() {

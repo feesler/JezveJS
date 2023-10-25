@@ -1,5 +1,5 @@
+import { isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     ge,
     re,
     insertAfter,
@@ -7,7 +7,7 @@ import {
     removeChilds,
     createElement,
     addChilds,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';

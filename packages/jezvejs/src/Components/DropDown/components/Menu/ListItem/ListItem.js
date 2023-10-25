@@ -1,4 +1,4 @@
-import { getClassName } from '../../../../../js/common.js';
+import { getClassName } from '@jezvejs/dom';
 import { MenuItem } from '../../../../Menu/Menu.js';
 
 /* CSS classes */

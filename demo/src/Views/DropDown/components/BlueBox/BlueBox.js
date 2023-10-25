@@ -1,4 +1,5 @@
-import { Component, createElement } from 'jezvejs';
+import { Component } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { CloseButton } from 'jezvejs/CloseButton';
 import './BlueBox.scss';
 

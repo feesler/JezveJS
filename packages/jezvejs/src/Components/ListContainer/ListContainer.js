@@ -1,12 +1,11 @@
+import { isFunction, asArray } from '@jezvejs/types';
 import {
     createElement,
     setEvents,
-    isFunction,
     re,
     removeChilds,
     insertAfter,
-    asArray,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 
 const defaultProps = {

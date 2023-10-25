@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 import { Histogram } from 'jezvejs/Histogram';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

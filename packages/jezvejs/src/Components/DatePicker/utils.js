@@ -1,4 +1,4 @@
-import { isDate, isFunction } from '../../js/common.js';
+import { isDate, isFunction } from '@jezvejs/types';
 
 export const MONTH_VIEW = 'month';
 export const YEAR_VIEW = 'year';

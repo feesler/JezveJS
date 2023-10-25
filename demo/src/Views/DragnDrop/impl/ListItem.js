@@ -1,4 +1,5 @@
-import { Component, createElement } from 'jezvejs';
+import { Component } from 'jezvejs';
+import { createElement } from '@jezvejs/dom';
 
 const ITEM_CLASS = 'list_item';
 

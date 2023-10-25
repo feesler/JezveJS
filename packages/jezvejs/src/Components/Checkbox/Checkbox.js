@@ -1,12 +1,12 @@
+import { isFunction } from '@jezvejs/types';
 import {
-    isFunction,
     createSVGElement,
     setEvents,
     enable,
     removeChilds,
     createElement,
     re,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
 import '../../css/common.scss';
 import './Checkbox.scss';

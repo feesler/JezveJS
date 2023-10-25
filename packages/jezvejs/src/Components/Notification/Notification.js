@@ -1,4 +1,4 @@
-import { getClassNames } from '../../js/common.js';
+import { getClassNames } from '@jezvejs/dom';
 import { Popup } from '../Popup/Popup.js';
 import './Notification.scss';
 

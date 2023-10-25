@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge } from 'jezvejs';
+import { ge } from '@jezvejs/dom';
 import { Switch } from 'jezvejs/Switch';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

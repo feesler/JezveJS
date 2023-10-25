@@ -1,8 +1,8 @@
+import { asArray } from '@jezvejs/types';
 import {
     createSVGElement,
-    asArray,
     getClassName,
-} from '../../js/common.js';
+} from '@jezvejs/dom';
 import { BaseChart } from '../BaseChart/BaseChart.js';
 import { findItem } from '../BaseChart/helpers.js';
 import './LineChart.scss';

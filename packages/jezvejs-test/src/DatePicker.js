@@ -1,6 +1,5 @@
 import {
     TestComponent,
-    assert,
     query,
     queryAll,
     prop,
@@ -10,6 +9,7 @@ import {
     evaluate,
     asyncMap,
 } from 'jezve-test';
+import { assert } from '@jezvejs/assert';
 
 const monthTitles = [{
     locale: 'en',

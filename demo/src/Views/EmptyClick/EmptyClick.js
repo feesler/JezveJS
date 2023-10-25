@@ -2,9 +2,11 @@ import 'jezvejs/style';
 import 'jezvejs/style/Button';
 import {
     ge,
+    setEvents,
+} from '@jezvejs/dom';
+import {
     setEmptyClick,
     removeEmptyClick,
-    setEvents,
 } from 'jezvejs';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';

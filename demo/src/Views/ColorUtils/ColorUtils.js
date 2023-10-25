@@ -4,10 +4,10 @@ import {
     MAX_HUE,
     MAX_LIGHTNESS,
     MAX_SATURATION,
-    createElement,
     hslToRGB,
     rgbToColor,
-} from 'jezvejs';
+} from '@jezvejs/color';
+import { createElement } from '@jezvejs/dom';
 
 import { createControls } from '../../Application/utils.js';
 
