@@ -1,6 +1,6 @@
+import { asArray } from '@jezvejs/types';
 import {
     createSVGElement,
-    asArray,
     getClassName,
 } from '../../js/common.js';
 import { BaseChart } from '../BaseChart/BaseChart.js';

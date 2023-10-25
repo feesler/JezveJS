@@ -1,11 +1,10 @@
-import { isFunction } from '@jezvejs/types';
+import { isFunction, asArray } from '@jezvejs/types';
 import '../../css/common.scss';
 import {
     createElement,
     setEvents,
     re,
     removeEvents,
-    asArray,
     show,
     removeChilds,
     insertAfter,

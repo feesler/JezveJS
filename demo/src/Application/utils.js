@@ -1,4 +1,5 @@
-import { asArray, createElement, getClassName } from 'jezvejs';
+import { asArray } from '@jezvejs/types';
+import { createElement, getClassName } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 
 export const createContainer = (id, children) => createElement('div', {

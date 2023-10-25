@@ -1,5 +1,5 @@
-import { isObject } from '@jezvejs/types';
-import { asArray, ge } from '../../js/common.js';
+import { isObject, asArray } from '@jezvejs/types';
+import { ge } from '../../js/common.js';
 import { DragMaster } from './DragMaster.js';
 
 const defaultProps = {

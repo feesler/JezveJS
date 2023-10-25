@@ -1,12 +1,11 @@
 import 'jezvejs/style';
-import { isObject } from '@jezvejs/types';
+import { isObject, asArray } from '@jezvejs/types';
 import {
     ge,
     setEvents,
     show,
     enable,
     isVisible,
-    asArray,
     createElement,
 } from 'jezvejs';
 import { Button } from 'jezvejs/Button';

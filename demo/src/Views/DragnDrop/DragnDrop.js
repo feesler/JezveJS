@@ -1,8 +1,8 @@
 import 'jezvejs/style';
+import { asArray } from '@jezvejs/types';
 import {
     ge,
     createElement,
-    asArray,
 } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';

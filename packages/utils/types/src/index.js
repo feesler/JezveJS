@@ -42,3 +42,15 @@ export const isInteger = (x) => {
 
     return x === y && x.toString() === y.toString();
 };
+
+/** Checks if a parameter is array */
+export const isArray = (obj) => Array.isArray(obj);
+
+/** Returns parameter if it is array, else wrap value to array */
+export const asArray = (value) => {
+    if (value === null || value === undefined) {
+        return [];
+    }
+
+    return Array.isArray(value) ? value : [value];
+};

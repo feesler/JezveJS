@@ -1,8 +1,8 @@
+import { asArray } from '@jezvejs/types';
 import {
     px,
     createElement,
     re,
-    asArray,
     minmax,
     afterTransition,
 } from '../../js/common.js';

@@ -1,16 +1,7 @@
-import { isFunction, isObject } from '@jezvejs/types';
+import { isFunction, isObject, asArray } from '@jezvejs/types';
 
 /* eslint no-restricted-globals: "off" */
 /* eslint no-bitwise: "off" */
-
-/** Returns parameter if it is array, else wrap value to array */
-export const asArray = (value) => {
-    if (value === null || value === undefined) {
-        return [];
-    }
-
-    return Array.isArray(value) ? value : [value];
-};
 
 /** Returns value normalized to specified range */
 export const minmax = (min, max, value) => (

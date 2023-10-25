@@ -1,10 +1,9 @@
-import { isFunction, isObject } from '@jezvejs/types';
+import { isFunction, isObject, asArray } from '@jezvejs/types';
 import {
     ge,
     show,
     enable,
     isVisible,
-    asArray,
     getClassNames,
 } from './common.js';
 

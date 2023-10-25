@@ -1,8 +1,7 @@
-import { isFunction, isObject } from '@jezvejs/types';
+import { isFunction, isObject, asArray } from '@jezvejs/types';
 import {
     createSVGElement,
     setEvents,
-    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 import {

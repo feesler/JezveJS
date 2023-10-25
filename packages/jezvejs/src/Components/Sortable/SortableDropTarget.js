@@ -1,4 +1,4 @@
-import { isFunction } from '@jezvejs/types';
+import { isFunction, asArray } from '@jezvejs/types';
 import {
     comparePosition,
     insertAfter,
@@ -6,7 +6,6 @@ import {
     hasFlag,
     afterTransition,
     transform,
-    asArray,
     px,
 } from '../../js/common.js';
 import { DropTarget } from '../DragnDrop/DropTarget.js';

@@ -1,4 +1,4 @@
-import { isFunction } from '@jezvejs/types';
+import { isFunction, asArray } from '@jezvejs/types';
 import {
     createElement,
     removeChilds,
@@ -11,7 +11,6 @@ import {
     setEvents,
     removeEvents,
     enable,
-    asArray,
     debounce,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';

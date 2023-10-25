@@ -1,4 +1,5 @@
-import { asArray, createElement, getClassName } from '../../../../../js/common.js';
+import { asArray } from '@jezvejs/types';
+import { createElement, getClassName } from '../../../../../js/common.js';
 import { Component } from '../../../../../js/Component.js';
 import './ListPlaceholder.scss';
 

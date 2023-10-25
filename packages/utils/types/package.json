@@ -1,6 +1,6 @@
 {
     "name": "@jezvejs/types",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "Simple type checker utility",
     "type": "module",
     "module": "./src/index.js",

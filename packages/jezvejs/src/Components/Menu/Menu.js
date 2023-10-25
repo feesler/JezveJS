@@ -1,6 +1,5 @@
-import { isFunction } from '@jezvejs/types';
+import { isFunction, asArray } from '@jezvejs/types';
 import {
-    asArray,
     createElement,
     enable,
     setEvents,

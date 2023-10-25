@@ -1,4 +1,5 @@
-import { asArray, minmax } from './common.js';
+import { asArray } from '@jezvejs/types';
+import { minmax } from './common.js';
 
 /* eslint-disable no-bitwise */
 

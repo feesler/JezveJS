@@ -1,11 +1,10 @@
-import { isFunction } from '@jezvejs/types';
+import { isFunction, asArray } from '@jezvejs/types';
 import {
     createElement,
     setEvents,
     re,
     removeChilds,
     insertAfter,
-    asArray,
 } from '../../js/common.js';
 import { Component } from '../../js/Component.js';
 

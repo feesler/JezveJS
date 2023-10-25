@@ -1,5 +1,6 @@
+import { asArray } from '@jezvejs/types';
 import { Component } from '../../js/Component.js';
-import { asArray, createElement } from '../../js/common.js';
+import { createElement } from '../../js/common.js';
 import '../../css/common.scss';
 import './InputGroup.scss';
 
