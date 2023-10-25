@@ -1,6 +1,6 @@
 {
     "name": "@jezvejs/types",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Simple type checker utility",
     "type": "module",
     "module": "./src/index.js",
@@ -10,7 +10,7 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/feesler/JezveJS.git",
-        "directory": "packages/utils/assert"
+        "directory": "packages/utils/types"
     },
     "bugs": {
         "url": "https://github.com/feesler/JezveJS/issues"

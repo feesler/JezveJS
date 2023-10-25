@@ -95,7 +95,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.23.2",
-        "@jezvejs/types": "^0.1.0",
+        "@jezvejs/types": "^0.1.1",
         "core-js": "^3.33.1",
         "whatwg-fetch": "^3.6.19"
     },
