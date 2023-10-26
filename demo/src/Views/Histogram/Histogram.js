@@ -37,6 +37,15 @@ const chartData = {
     ],
 };
 
+const maxColumnWidthData = {
+    values: [
+        30, 100, 50,
+    ],
+    series: [
+        '01.01.2013', '27.01.2013', '04.02.2013',
+    ],
+};
+
 const chartData2 = {
     values: [
         1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200,
@@ -296,6 +305,7 @@ class HistogramView extends DemoView {
     onStart() {
         this.columnWidthAndGap();
         this.fitToWidth();
+        this.maxColumnWidth();
 
         this.leftYAxis();
         this.noYAxis();
@@ -320,6 +330,7 @@ class HistogramView extends DemoView {
 
     columnWidthAndGap() {
         const histogram = Histogram.create({
+            maxColumnWidth: 40,
             data: chartData,
         });
 
@@ -360,6 +371,20 @@ class HistogramView extends DemoView {
             id: 'fitToWidth',
             title: '\'fitToWidth\' option',
             content: chartContainer('chart_fittowidth', histogram),
+        });
+    }
+
+    maxColumnWidth() {
+        const histogram = Histogram.create({
+            data: maxColumnWidthData,
+            maxColumnWidth: 75,
+            fitToWidth: true,
+        });
+
+        this.addSection({
+            id: 'maxColumnWidth',
+            title: '\'maxColumnWidth\' option',
+            content: chartContainer('maxColumnWidthChart', histogram),
         });
     }
 
