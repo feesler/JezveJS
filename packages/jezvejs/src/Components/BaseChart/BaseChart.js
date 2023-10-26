@@ -304,7 +304,7 @@ export class BaseChart extends Component {
 
         const state = {
             ...this.state,
-            columnWidth: width,
+            columnWidth: Math.min(width, this.state.maxColumnWidth),
             lastHLabelOffset: 0,
         };
         const newState = this.updateChartWidth(state);
@@ -497,7 +497,10 @@ export class BaseChart extends Component {
         const valuesExtended = state.groupsCount + 2;
         const newState = {
             ...state,
-            columnWidth: this.chartScroller.offsetWidth / valuesExtended,
+            columnWidth: Math.min(
+                state.maxColumnWidth,
+                this.chartScroller.offsetWidth / valuesExtended,
+            ),
         };
         if (newState.columnWidth > 10) {
             newState.groupsGap = newState.columnWidth / 5;

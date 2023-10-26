@@ -3,6 +3,7 @@ export const defaultProps = {
     // Layout
     height: 300,
     columnWidth: 38,
+    maxColumnWidth: 38,
     groupsGap: 10,
     marginTop: 10,
     // Grid behavior
