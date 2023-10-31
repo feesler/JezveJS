@@ -23,6 +23,7 @@ const routeMap = {
     dpitest: AppView,
     dragndrop: AppView,
     emptyclick: AppView,
+    header: AppView,
     histogram: AppView,
     button: AppView,
     index: AppView,

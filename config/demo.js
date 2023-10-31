@@ -26,6 +26,7 @@ const entryPoints = [
     'DragnDrop',
     'DropDown',
     'EmptyClick',
+    'Header',
     'Histogram',
     'Index',
     'Input',

@@ -13,6 +13,7 @@ const views = {
     dpitest: 'DPI test',
     dragndrop: 'DragnDrop',
     emptyclick: 'emptyClick',
+    header: 'Header',
     histogram: 'Histogram',
     button: 'Button',
     index: 'Main view',

@@ -49,6 +49,7 @@ export const navigationMenuSections = [{
         { id: 'collapsible', title: 'Collapsible', url: 'demo/collapsible.html' },
         { id: 'datePicker', title: 'Date Picker', url: 'demo/datepicker.html' },
         { id: 'dropDown', title: 'Drop Down', url: 'demo/dropdown.html' },
+        { id: 'header', title: 'Header', url: 'demo/header.html' },
         { id: 'menu', title: 'Menu', url: 'demo/menu.html' },
         { id: 'lineMenu', title: 'Link Menu', url: 'demo/linkmenu.html' },
         { id: 'offcanvas', title: 'Offcanvas', url: 'demo/offcanvas.html' },
