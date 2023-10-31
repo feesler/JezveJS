@@ -7,6 +7,7 @@ import {
     closest,
     evaluate,
     input,
+    waitForFunction,
 } from 'jezve-test';
 import { asArray } from '@jezvejs/types';
 import { assert } from '@jezvejs/assert';
@@ -38,35 +39,43 @@ export class DropDown extends TestComponent {
             }
 
             const menuId = elem.dataset.target;
+            const isMulti = elem.classList.contains('dd__container_multiple');
             const menu = document.querySelector(`.dd__list[data-parent="${menuId}"]`);
             const isFixedMenu = menu?.classList.contains('dd__list_fixed');
             const menuList = menu?.querySelector(':scope > .menu-list');
             const select = elem.querySelector('select');
             const inputElem = elem.querySelector('input[type="text"]');
             const menuItems = Array.from(menuList?.querySelectorAll('.button-menu-item') ?? []);
+            const options = Array.from(select.options);
+
+            const items = (options.length > 0)
+                ? options.map((option) => ({
+                    id: option.value,
+                    text: option.textContent,
+                    selected: option.selected,
+                    disabled: option.disabled,
+                }))
+                : menuItems
+                    .filter((item) => (!!item && !item.hidden))
+                    .map((el) => ({
+                        id: el.dataset?.id,
+                        text: el.textContent,
+                        selected: el.classList.contains('menu-item_selected'),
+                        disabled: el.disabled,
+                    }));
+
+            const selectedValue = elem.dataset.value;
 
             const content = {
                 menuId,
                 isAttached,
                 isFixedMenu,
                 disabled: elem.hasAttribute('disabled'),
-                isMulti: select.hasAttribute('multiple'),
+                isMulti,
                 editable: elem.classList.contains('dd__editable'),
-                value: select.value,
+                value: (isMulti) ? selectedValue.split(',') : selectedValue,
                 selectedItems: [],
-                options: Array.from(select.querySelectorAll('option')).map((option) => ({
-                    id: option.value,
-                    title: option.textContent,
-                    selected: option.selected,
-                    disabled: option.disabled,
-                })),
-                items: menuItems.map((el) => ({
-                    id: el.dataset.id,
-                    text: el.textContent,
-                    hidden: el.hidden,
-                    selected: el.classList.contains('menu-item_selected'),
-                    disabled: el.disabled,
-                })),
+                items,
                 listContainer: { visible: menu && !menu.hidden },
                 renderTime: menuList?.dataset.time,
             };
@@ -133,7 +142,7 @@ export class DropDown extends TestComponent {
                 return item;
             });
 
-            res.value = res.selectedItems;
+            res.value = res.selectedItems.map((item) => item.id);
         }
 
         return res;
@@ -147,16 +156,8 @@ export class DropDown extends TestComponent {
             textValue: cont.textValue,
             isMulti: cont.isMulti,
             renderTime: cont.renderTime,
+            value: structuredClone(cont.value),
         };
-
-        if (res.isMulti) {
-            res.value = cont.value.map((item) => ({
-                id: item.id,
-                title: item.title,
-            }));
-        } else {
-            res.value = cont.value;
-        }
 
         if (cont.items) {
             res.items = structuredClone(cont.items);
@@ -205,8 +206,33 @@ export class DropDown extends TestComponent {
         return this.content.renderTime;
     }
 
-    async getListItemElement(id) {
-        return query(this.listContainer.elem, `.button-menu-item[data-id="${id}"]`);
+    async waitForList(action) {
+        const prevTime = this.model.renderTime;
+
+        await action();
+
+        await waitForFunction(async () => {
+            await this.parse();
+            return (prevTime !== this.model.renderTime);
+        });
+    }
+
+    async getListItem(id) {
+        const elem = await query(this.listContainer.elem, `.button-menu-item[data-id="${id}"]`);
+        if (!elem) {
+            return { elem: null };
+        }
+
+        const res = await evaluate((el) => ({
+            id: el.dataset?.id,
+            text: el.textContent,
+            selected: el.classList?.contains('menu-item_selected'),
+            disabled: el.disabled,
+        }), elem);
+
+        res.elem = elem;
+
+        return res;
     }
 
     getItem(itemId) {
@@ -226,7 +252,7 @@ export class DropDown extends TestComponent {
     }
 
     getSelectedValues() {
-        return this.getSelectedItems().map((item) => item.id);
+        return asArray(this.value);
     }
 
     getVisibleItems() {
@@ -240,7 +266,7 @@ export class DropDown extends TestComponent {
             return;
         }
 
-        await click(this.content.toggleBtn);
+        await this.waitForList(() => click(this.content.toggleBtn));
     }
 
     async toggleItem(itemId) {
@@ -268,19 +294,17 @@ export class DropDown extends TestComponent {
     async selectItem(itemId) {
         assert(!this.content.disabled, 'Component is disabled');
 
-        const li = this.getItem(itemId);
-        assert(li, `List item ${itemId} not found`);
+        await this.showList();
+
+        const li = await this.getListItem(itemId);
+        assert(li?.elem, 'Item element not found');
         assert(!li.hidden, `List item ${itemId} is hidden`);
 
         if (li.selected && this.content.isMulti) {
             return;
         }
 
-        await this.showList();
-
-        const elem = await this.getListItemElement(itemId);
-        assert(elem, 'Item element not found');
-        await click(elem);
+        await click(li.elem);
     }
 
     async clearSelection() {
@@ -295,19 +319,17 @@ export class DropDown extends TestComponent {
         assert(!this.content.disabled, 'Component is disabled');
         assert(this.content.isMulti, 'Deselect item not available for single select DropDown');
 
-        const li = this.getItem(itemId);
-        assert(li, `List item ${itemId} not found`);
+        await this.showList();
+
+        const li = await this.getListItem(itemId);
+        assert(li?.elem, 'Item element not found');
         assert(!li.hidden, `List item ${itemId} is hidden`);
 
         if (!li.selected) {
             return;
         }
 
-        await this.showList();
-
-        const elem = await this.getListItemElement(itemId);
-        assert(elem, 'Item element not found');
-        await click(elem);
+        await click(li.elem);
     }
 
     async deselectItemByTag(itemId) {

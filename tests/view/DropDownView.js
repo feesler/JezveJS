@@ -189,12 +189,9 @@ export class DropDownView extends AppView {
 
     async filter(name, value) {
         let dropdown = this.getComponentByName(name);
-
-        if (dropdown.attached) {
-            await dropdown.showList();
-            await this.parse();
-            dropdown = this.getComponentByName(name);
-        }
+        await dropdown.showList();
+        await this.parse();
+        dropdown = this.getComponentByName(name);
 
         if (
             dropdown.inputValue !== ''
@@ -227,6 +224,17 @@ export class DropDownView extends AppView {
         return this.checkState(expected);
     }
 
+    getExpectedDynamicItems() {
+        return this.dynItems
+            .filter((item) => (!!item && !item.hidden))
+            .map((item) => ({
+                id: item.id,
+                text: item.text,
+                selected: item.selected,
+                disabled: item.disabled,
+            }));
+    }
+
     async addItem() {
         this.lastId += 1;
         this.dynItems.push({
@@ -236,7 +244,7 @@ export class DropDownView extends AppView {
             disabled: false,
             hidden: false,
         });
-        const expected = this.dynItems.filter((item) => !item.hidden);
+        const expected = this.getExpectedDynamicItems();
 
         await this.performAction(() => click(this.content.addItemBtn));
         await this.performAction(() => this.dynamicDropDown.showList());
@@ -255,7 +263,7 @@ export class DropDownView extends AppView {
             disabled: true,
             hidden: false,
         });
-        const expected = this.dynItems.filter((item) => !item.hidden);
+        const expected = this.getExpectedDynamicItems();
 
         await this.performAction(() => click(this.content.addDisabledItemBtn));
         await this.performAction(() => this.dynamicDropDown.showList());
@@ -274,7 +282,7 @@ export class DropDownView extends AppView {
             disabled: true,
             hidden: true,
         });
-        const expected = this.dynItems.filter((item) => !item.hidden);
+        const expected = this.getExpectedDynamicItems();
 
         await this.performAction(() => click(this.content.addHiddenItemBtn));
         await this.performAction(() => this.dynamicDropDown.showList());
@@ -287,9 +295,10 @@ export class DropDownView extends AppView {
     async removeLastItem() {
         this.lastId -= 1;
         this.dynItems.splice(this.dynItems.length - 1);
-        const expected = this.dynItems.filter((item) => !item.hidden);
+        const expected = this.getExpectedDynamicItems();
 
         await this.performAction(() => click(this.content.delLastItemBtn));
+        await this.performAction(() => this.dynamicDropDown.showList());
 
         const { items } = this.dynamicDropDown.model;
         assert.exactMeet(items, expected);
@@ -302,6 +311,7 @@ export class DropDownView extends AppView {
         const expected = [];
 
         await this.performAction(() => click(this.content.delAllItemsBtn));
+        await this.performAction(() => this.dynamicDropDown.showList());
 
         const { items } = this.dynamicDropDown.model;
         assert.exactMeet(items, expected);
