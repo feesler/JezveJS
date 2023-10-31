@@ -1,7 +1,6 @@
 import { isFunction, asArray } from '@jezvejs/types';
 import {
     createElement,
-    removeChilds,
     re,
     insertAfter,
     prependChild,
@@ -1246,6 +1245,8 @@ export class DropDown extends Component {
         if (!this.state.visible) {
             this.elem.focus();
         }
+
+        this.setRenderTime();
     }
 
     /** Activate or deactivate component */
@@ -1772,11 +1773,19 @@ export class DropDown extends Component {
     }
 
     renderSelect(state, prevState) {
-        this.selectElem.multiple = !!state.multiple;
-
-        if (!this.isSelectChanged(state, prevState)) {
+        if (!this.props.useNativeSelect) {
+            this.selectElem.textContent = '';
             return;
         }
+
+        if (
+            state.items === prevState?.items
+            && state.multiple === prevState?.multiple
+        ) {
+            return;
+        }
+
+        this.selectElem.multiple = !!state.multiple;
 
         const options = [];
 
@@ -1792,7 +1801,7 @@ export class DropDown extends Component {
             }
         });
 
-        removeChilds(this.selectElem);
+        this.selectElem.textContent = '';
         this.fixIOS(this.selectElem);
         this.selectElem.append(...options);
     }
@@ -1833,9 +1842,11 @@ export class DropDown extends Component {
             return;
         }
 
-        const items = filterItems(state.items, (item) => (
-            !item.hidden && (!state.filtered || item.matchFilter)
-        ));
+        const items = (state.visible)
+            ? filterItems(state.items, (item) => (
+                !item.hidden && (!state.filtered || item.matchFilter)
+            ))
+            : [];
         const menuShown = state.visible !== prevState.visible && state.visible;
 
         this.menu.setState((menuState) => ({
@@ -1969,6 +1980,15 @@ export class DropDown extends Component {
         });
     }
 
+    renderValue(state, prevState) {
+        if (state.items === prevState?.items) {
+            return;
+        }
+
+        const selected = getSelectedItems(state);
+        this.elem.dataset.value = selected.map((item) => item.id).join();
+    }
+
     render(state, prevState = {}) {
         this.renderInProgress = true;
 
@@ -1995,6 +2015,7 @@ export class DropDown extends Component {
 
         this.setTabIndexes(state);
         this.renderSelect(state, prevState);
+        this.renderValue(state, prevState);
 
         if (this.combo) {
             this.combo.setState((comboState) => ({
