@@ -129,7 +129,7 @@ const SCREEN_PADDING = 5;
 const LIST_MARGIN = 5;
 const ATTACH_REF_HEIGHT = 5;
 
-const IGNORE_SCROLL_TIMEOUT = 500;
+const IGNORE_SCROLL_TIMEOUT = 1;
 const SHOW_LIST_SCROLL_TIMEOUT = 100;
 
 const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group', 'items'];
