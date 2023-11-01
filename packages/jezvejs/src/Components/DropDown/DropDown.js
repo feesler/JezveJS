@@ -129,10 +129,9 @@ const SCREEN_PADDING = 5;
 const LIST_MARGIN = 5;
 const ATTACH_REF_HEIGHT = 5;
 
-const IGNORE_SCROLL_TIMEOUT = 500;
+const IGNORE_SCROLL_TIMEOUT = 1;
 const SHOW_LIST_SCROLL_TIMEOUT = 100;
-
-const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group', 'items'];
+const INPUT_FOCUS_TIMEOUT = 100;
 
 /** Default properties */
 const defaultProps = {
@@ -273,6 +272,10 @@ export class DropDown extends Component {
         this.showListHandler = debounce(
             () => this.stopScrollWaiting(),
             SHOW_LIST_SCROLL_TIMEOUT,
+        );
+        this.focusInputHandler = debounce(
+            () => this.focusInputIfNeeded(true),
+            INPUT_FOCUS_TIMEOUT,
         );
 
         // Setup store
@@ -708,7 +711,7 @@ export class DropDown extends Component {
             index === -1
             && !this.isClearButtonTarget(e.target)
         ) {
-            this.focusInputIfNeeded();
+            this.focusInputHandler();
         }
     }
 
@@ -1279,11 +1282,13 @@ export class DropDown extends Component {
         return this.combo.input;
     }
 
-    focusInputIfNeeded() {
+    focusInputIfNeeded(keepActiveItem = false) {
         const input = this.getInput();
         if (!input) {
             return;
         }
+
+        const activeItem = (keepActiveItem) ? this.getActiveItem() : null;
 
         if (
             this.props.enableFilter
@@ -1291,6 +1296,10 @@ export class DropDown extends Component {
             && this.state.actSelItemIndex === -1
         ) {
             input.focus();
+
+            if (activeItem) {
+                this.setActive(activeItem.id);
+            }
         }
     }
 
@@ -1754,22 +1763,6 @@ export class DropDown extends Component {
 
     getGroupItems(group, state = this.state) {
         return getGroupItems(group, state);
-    }
-
-    isSelectChanged(state, prevState) {
-        if (state.items === prevState.items) {
-            return false;
-        }
-
-        return (
-            state.items.length !== prevState.items?.length
-            || state.items.some((item, index) => (
-                selectOptionProps.some((prop) => (
-                    !prevState.items[index]
-                    || item[prop] !== prevState.items[index][prop]
-                ))
-            ))
-        );
     }
 
     renderSelect(state, prevState) {
