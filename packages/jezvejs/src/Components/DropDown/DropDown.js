@@ -132,8 +132,6 @@ const ATTACH_REF_HEIGHT = 5;
 const IGNORE_SCROLL_TIMEOUT = 1;
 const SHOW_LIST_SCROLL_TIMEOUT = 100;
 
-const selectOptionProps = ['id', 'title', 'selected', 'disabled', 'group', 'items'];
-
 /** Default properties */
 const defaultProps = {
     /* DropDown container element 'id' property */
@@ -1754,22 +1752,6 @@ export class DropDown extends Component {
 
     getGroupItems(group, state = this.state) {
         return getGroupItems(group, state);
-    }
-
-    isSelectChanged(state, prevState) {
-        if (state.items === prevState.items) {
-            return false;
-        }
-
-        return (
-            state.items.length !== prevState.items?.length
-            || state.items.some((item, index) => (
-                selectOptionProps.some((prop) => (
-                    !prevState.items[index]
-                    || item[prop] !== prevState.items[index][prop]
-                ))
-            ))
-        );
     }
 
     renderSelect(state, prevState) {
