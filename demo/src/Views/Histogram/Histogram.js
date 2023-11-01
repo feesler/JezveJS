@@ -270,7 +270,7 @@ const renderCategoriesPopup = (target) => {
                 className: `list-item_category-${item.categoryIndex + 1}`,
             },
             children: createElement(((target.index === index) ? 'b' : 'span'), {
-                props: { textContent: item.value },
+                props: { textContent: `Long data category name ${index + 1}: ${item.value}` },
             }),
         });
         listItems.push(listItem);

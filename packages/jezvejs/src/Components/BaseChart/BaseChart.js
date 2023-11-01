@@ -9,13 +9,15 @@ import {
     setAttributes,
 } from '@jezvejs/dom';
 import {
-    px,
     debounce,
     minmax,
 } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
+
+import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
+
 import { defaultProps } from './defaultProps.js';
 import '../../css/common.scss';
 import './BaseChart.scss';
@@ -910,6 +912,7 @@ export class BaseChart extends Component {
 
     hidePopup() {
         show(this.popup, false);
+        PopupPosition.reset(this.popup);
 
         if (this.state.pinPopupOnClick) {
             show(this.pinnedPopup, false);
@@ -947,28 +950,17 @@ export class BaseChart extends Component {
             this.popup.append(content);
         }
 
-        const itemBBox = this.getItemBBox(target.item);
-        const chartsBRect = this.chartScroller.getBoundingClientRect();
-        const verticalOffset = 10;
-
-        let popupX = itemBBox.x - this.chartScroller.scrollLeft
-            + (itemBBox.width - this.popup.offsetWidth) / 2;
-        let popupY = itemBBox.y - this.popup.offsetHeight - verticalOffset;
-
-        const viewportPopupY = chartsBRect.top + popupY;
-        if (viewportPopupY < 0) {
-            popupY = itemBBox.y + itemBBox.height + verticalOffset;
-        }
-
-        if (popupX < 0) {
-            popupX = 0;
-        }
-        if (this.popup.offsetWidth + popupX > chartsBRect.right) {
-            popupX = chartsBRect.width - this.popup.offsetWidth;
-        }
-
-        this.popup.style.left = px(popupX);
-        this.popup.style.top = px(popupY);
+        PopupPosition.calculate({
+            elem: this.popup,
+            refElem: target.item.elem,
+            margin: 5,
+            screenPadding: 5,
+            useRefWidth: false,
+            minRefHeight: 5,
+            scrollOnOverflow: true,
+            allowResize: true,
+            allowFlip: true,
+        });
 
         setEmptyClick(this.emptyClickHandler, [
             target.item.elem,
