@@ -276,6 +276,7 @@ export class DropDown extends Component {
         this.focusInputHandler = debounce(
             () => this.focusInputIfNeeded(true),
             INPUT_FOCUS_TIMEOUT,
+            { cancellable: true },
         );
 
         // Setup store
@@ -697,6 +698,10 @@ export class DropDown extends Component {
             && this.props.blurInputOnSingleSelect
             && e.target === this.elem
         ) {
+            if (!this.state.isTouch) {
+                this.focusInputHandler.cancel();
+            }
+
             return;
         }
 
@@ -711,7 +716,11 @@ export class DropDown extends Component {
             index === -1
             && !this.isClearButtonTarget(e.target)
         ) {
-            this.focusInputHandler();
+            if (this.state.isTouch) {
+                this.focusInputIfNeeded();
+            } else {
+                this.focusInputHandler.run();
+            }
         }
     }
 
