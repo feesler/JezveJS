@@ -180,6 +180,31 @@ const chartGroupedCategoriesData = {
     stacked: true,
 };
 
+const legendCategoriesData = {
+    values: [{
+        data: [1000, 450, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        group: 'first',
+        category: 'cat1',
+    }, {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0],
+        group: 'second',
+        category: 'cat2',
+    }, {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 560, 890],
+        group: 'third',
+        category: 'cat3',
+    }, {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        group: 'fourth',
+        category: 'cat4',
+    }],
+    series: [
+        '10.22', '10.22', '10.22', '10.22', '11.22',
+        '11.22', '11.22', '11.22', '12.22', '12.22',
+        '12.22', '12.22',
+    ],
+};
+
 const emptyData = {
     values: [],
     series: [],
@@ -240,12 +265,12 @@ const renderCustomLegend = (categories) => {
 
     return createElement('ul', {
         props: { className: 'chart__legend-list' },
-        children: categories.map((_, index) => createElement('li', {
+        children: categories.map((category) => createElement('li', {
             props: {
-                className: `list-item_category-${index + 1}`,
+                className: `list-item_category-${category + 1}`,
             },
             children: createElement('span', {
-                props: { textContent: `Category ${index + 1}` },
+                props: { textContent: `Category ${category + 1}` },
             }),
         })),
     });
@@ -319,7 +344,8 @@ class HistogramView extends DemoView {
         this.stackedNegative();
         this.stackedGrouped();
         this.stackedCategories();
-        // Different data tests
+        this.legendCategories();
+
         this.noData();
         this.singleNegative();
         this.onlyPositive();
@@ -605,6 +631,35 @@ class HistogramView extends DemoView {
             title: 'Stacked and grouped with custom categories',
             description: ' + \'showPopupOnHover\', \'animatePopup\' and \'pinPopupOnClick\' options',
             content: chartContainer('stacked-categories-histogram', histogram),
+        });
+    }
+
+    legendCategories() {
+        const histogram = Histogram.create({
+            data: legendCategoriesData,
+            height: 320,
+            marginTop: 35,
+            columnWidth: 25,
+            groupsGap: 15,
+            columnGap: 2,
+            autoScale: true,
+            showPopupOnClick: true,
+            showPopupOnHover: true,
+            animatePopup: true,
+            pinPopupOnClick: true,
+            renderPopup: renderMultiColumnPopup,
+            activateOnClick: true,
+            activateOnHover: true,
+            showLegend: true,
+            renderLegend: renderCustomLegend,
+            onlyVisibleCategoriesLegend: true,
+        });
+
+        this.addSection({
+            id: 'legendCategories',
+            title: 'Only visible categories legend',
+            description: '\'onlyVisibleCategoriesLegend\' option. Default value if false',
+            content: chartContainer('legendCategoriesHistogram', histogram),
         });
     }
 

@@ -28,6 +28,7 @@ export const defaultProps = {
     renderYAxisLabel: null,
     showLegend: false,
     renderLegend: null,
+    onlyVisibleCategoriesLegend: false,
     // Popup
     showPopupOnClick: false,
     pinPopupOnClick: false,

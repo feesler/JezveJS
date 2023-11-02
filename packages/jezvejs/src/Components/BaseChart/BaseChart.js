@@ -1097,14 +1097,26 @@ export class BaseChart extends Component {
         });
     }
 
-    renderLegend(state) {
-        re(this.legend);
-        if (!state.showLegend) {
-            this.legend = null;
-            return;
-        }
-
+    getVisibleCategories(state) {
+        const vItems = this.getVisibleItems(state);
         const categories = [];
+
+        vItems.flat().forEach((item) => {
+            const category = (state.data.stacked)
+                ? (item.category ?? null)
+                : (item.categoryIndex ?? item.columnIndex ?? null);
+
+            if (!categories.includes(category)) {
+                categories.push(category);
+            }
+        });
+
+        return categories;
+    }
+
+    getAllCategories(state) {
+        const categories = [];
+
         state.dataSets.forEach((dataSet, index) => {
             const category = (state.data.stacked)
                 ? (dataSet.category ?? null)
@@ -1113,6 +1125,20 @@ export class BaseChart extends Component {
                 categories.push(category);
             }
         });
+
+        return categories;
+    }
+
+    renderLegend(state) {
+        re(this.legend);
+        if (!state.showLegend) {
+            this.legend = null;
+            return;
+        }
+
+        const categories = (state.onlyVisibleCategoriesLegend)
+            ? this.getVisibleCategories(state)
+            : this.getAllCategories(state);
 
         const legendContent = isFunction(state.renderLegend)
             ? state.renderLegend(categories)
