@@ -1,4 +1,5 @@
-import { isDate, isFunction } from '@jezvejs/types';
+import { isSameDate } from '@jezvejs/datetime';
+import { asArray, isDate, isFunction } from '@jezvejs/types';
 
 export const MONTH_VIEW = 'month';
 export const YEAR_VIEW = 'year';
@@ -60,3 +61,8 @@ export const getNextViewDate = (date, viewType) => {
 
     return typeMap[viewType](date);
 };
+
+/** Returns true if array includes Date object for same date as specified */
+export const includesDate = (arr, date) => (
+    asArray(arr).some((item) => isSameDate(item, date))
+);

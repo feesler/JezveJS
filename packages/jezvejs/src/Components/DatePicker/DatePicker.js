@@ -1,4 +1,4 @@
-import { isDate, isFunction } from '@jezvejs/types';
+import { asArray, isDate, isFunction } from '@jezvejs/types';
 import '../../css/common.scss';
 import {
     ge,
@@ -10,7 +10,7 @@ import {
     removeChilds,
     afterTransition,
 } from '@jezvejs/dom';
-import { isSameYearMonth } from '@jezvejs/datetime';
+import { isSameDate, isSameYearMonth } from '@jezvejs/datetime';
 import {
     px,
     minmax,
@@ -30,6 +30,7 @@ import {
     MONTH_VIEW,
     YEAR_VIEW,
     YEARRANGE_VIEW,
+    includesDate,
 } from './utils.js';
 import './DatePicker.scss';
 
@@ -59,6 +60,7 @@ const defaultProps = {
     popupScreenPadding: 5,
     date: new Date(),
     static: false,
+    multiple: false,
     range: false,
     rangePart: null, // possible values: 'start', 'end' or null
     locales: [],
@@ -399,13 +401,25 @@ export class DatePicker extends Component {
 
     /** Day cell click inner callback */
     onDayClick(date) {
-        this.setState({
-            ...this.state,
-            actDate: date,
-        });
+        if (this.props.multiple) {
+            const selectedDates = asArray(this.state.actDate);
+            const selected = includesDate(selectedDates, date);
+
+            this.setState({
+                ...this.state,
+                actDate: (selected)
+                    ? selectedDates.filter((item) => !isSameDate(item, date))
+                    : [...selectedDates, date],
+            });
+        } else {
+            this.setState({
+                ...this.state,
+                actDate: date,
+            });
+        }
 
         if (isFunction(this.props.onDateSelect)) {
-            this.props.onDateSelect(date);
+            this.props.onDateSelect(this.state.actDate);
         }
 
         if (this.props.range) {
@@ -750,6 +764,7 @@ export class DatePicker extends Component {
                 locales: this.props.locales,
                 firstDay: this.props.firstDay,
                 actDate: state.actDate,
+                multiple: this.props.multiple,
                 range: this.props.range,
                 curRange: state.curRange,
                 disabledDateFilter: state.disabledDateFilter,

@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import { asArray } from '@jezvejs/types';
 import {
     formatDate,
     parseDateString,
@@ -62,6 +63,7 @@ class DatePickerView extends DemoView {
         this.initFillWidth();
         this.initPopup();
         this.initPosition();
+        this.initMultiple();
         this.initRangeSelect();
         this.initCallbacks();
         this.initSetSelection();
@@ -158,6 +160,35 @@ class DatePickerView extends DemoView {
                     datePicker.elem,
                 ],
             }),
+        });
+    }
+
+    initMultiple() {
+        const inputId = 'multipleInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpMultipleGroup',
+            inputId,
+            buttonId: 'showMultipleBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            multiple: true,
+            onDateSelect: (dates) => {
+                const inputEl = document.getElementById(inputId);
+                inputEl.value = asArray(dates).map((date) => formatDate(date)).join(' ');
+            },
+        });
+
+        this.addSection({
+            id: 'multiple',
+            title: 'Select multiple dates',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
         });
     }
 

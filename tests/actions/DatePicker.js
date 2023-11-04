@@ -13,6 +13,14 @@ export const selectDatePopup = async (date) => {
     await test(`Select date (${dateFmt})`, () => App.view.selectDatePopup(date));
 };
 
+export const toggleShowMultiple = async () => (
+    test('Toggle show multiple date picker', () => App.view.toggleShowMultiple())
+);
+
+export const toggleMultipleDate = async (date) => (
+    test(`Toggle select date (${formatDate(date)})`, () => App.view.toggleMultipleDate(date))
+);
+
 export const selectDateRange = async (range) => {
     const rangeFmt = `${formatDate(range.start)} - ${formatDate(range.end)}`;
     await test('Show date picker', () => App.view.showRange());

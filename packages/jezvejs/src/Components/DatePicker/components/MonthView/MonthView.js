@@ -14,7 +14,12 @@ import {
     isSameDate,
 } from '@jezvejs/datetime';
 import { Component } from '../../../../js/Component.js';
-import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from '../../utils.js';
+import {
+    getNextViewDate,
+    getPrevViewDate,
+    includesDate,
+    MONTH_VIEW,
+} from '../../utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container dp__month-view';
@@ -152,7 +157,7 @@ export class DatePickerMonthView extends Component {
         const disabledFilter = isFunction(state.disabledDateFilter);
 
         this.items.forEach((item) => {
-            const isActive = state.actDate && isSameDate(item.date, state.actDate);
+            const isActive = includesDate(state.actDate, item.date);
             item.elem.classList.toggle(ACTIVE_CELL_CLASS, isActive);
 
             const highlight = state.range && this.inRange(item.date, state.curRange);
