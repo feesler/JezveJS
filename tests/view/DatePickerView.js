@@ -17,6 +17,8 @@ const datePickerSelectors = {
     callbacksDatePicker: '#dpCallbacksGroup + .dp__container',
     selDatePicker: '#dpSelectionGroup + .dp__container',
     disabledFilterDatePicker: '#dpDisabledDateGroup + .dp__container',
+    monthDatePicker: '#dpMonthGroup + .dp__container',
+    yearDatePicker: '#dpYearGroup + .dp__container',
     rangePartDatePicker: '#dpRangePartGroup + .dp__container',
     enLocaleDatePicker: '#dpEnLocale .dp__container',
     frLocaleDatePicker: '#dpFrLocale .dp__container',
@@ -43,6 +45,10 @@ const controlIds = [
     'clearDisabledBtn',
     'selectStartDateBtn',
     'selectEndDateBtn',
+    'monthInp',
+    'showMonthBtn',
+    'yearInp',
+    'showYearBtn',
 ];
 
 export class DatePickerView extends AppView {
@@ -61,30 +67,29 @@ export class DatePickerView extends AppView {
         });
 
         [
+            res.cbStatusText.title,
             res.staticDateInp.value,
             res.popupDateInp.value,
             res.multipleInp.value,
             res.rangeInp.value,
             res.cbInp.value,
-            res.cbStatusText.title,
             res.setSelInp.value,
+            res.monthInp.value,
+            res.yearInp.value,
         ] = await evaluate(
-            (stInp, popupInp, multiInp, rangeInp, chInp, statusEl, selInp) => ([
-                stInp.value,
-                popupInp.value,
-                multiInp.value,
-                rangeInp.value,
-                chInp.value,
+            (statusEl, ...inputElems) => ([
                 statusEl.textContent,
-                selInp.value,
+                ...inputElems.map((el) => el.value),
             ]),
+            res.cbStatusText.elem,
             res.staticDateInp.elem,
             res.popupDateInp.elem,
             res.multipleInp.elem,
             res.rangeInp.elem,
             res.cbInp.elem,
-            res.cbStatusText.elem,
             res.setSelInp.elem,
+            res.monthInp.elem,
+            res.yearInp.elem,
         );
 
         return res;
@@ -223,5 +228,55 @@ export class DatePickerView extends AppView {
         assert.isDate(date, 'Invalid date');
 
         await this.performAction(() => this.content.rangePartDatePicker.selectDate(date));
+    }
+
+    async showMonth() {
+        return this.clickShowButton('showMonthBtn', 'monthDatePicker');
+    }
+
+    async selectMonth(date) {
+        assert.isDate(date, 'Invalid date');
+
+        const expected = {
+            monthInp: {
+                value: formatDate(date, {
+                    locales: ['en'],
+                    options: { month: 'long', year: 'numeric' },
+                }),
+            },
+        };
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        await this.performAction(() => (
+            this.content.monthDatePicker.selectMonth(month, year, false)
+        ));
+
+        return this.checkState(expected);
+    }
+
+    async showYear() {
+        return this.clickShowButton('showYearBtn', 'yearDatePicker');
+    }
+
+    async selectYear(date) {
+        assert.isDate(date, 'Invalid date');
+
+        const expected = {
+            yearInp: {
+                value: formatDate(date, {
+                    locales: ['en'],
+                    options: { year: 'numeric' },
+                }),
+            },
+        };
+
+        const year = date.getFullYear();
+        await this.performAction(() => (
+            this.content.yearDatePicker.selectYear(year, false)
+        ));
+
+        return this.checkState(expected);
     }
 }

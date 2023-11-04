@@ -51,4 +51,16 @@ export const datePickerTests = async () => {
 
     setBlock('Date range parts', 2);
     await Actions.testRangeParts();
+
+    setBlock('Month select', 2);
+    await Actions.showMonth();
+    await Actions.selectMonth(App.dates.now);
+    await Actions.showMonth();
+    await Actions.selectMonth(App.dates.monthAgo);
+
+    setBlock('Year select', 2);
+    await Actions.showYear();
+    await Actions.selectYear(App.dates.now);
+    await Actions.showYear();
+    await Actions.selectYear(App.dates.yearAgo);
 };

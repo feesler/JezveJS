@@ -58,6 +58,7 @@ const defaultProps = {
     relparent: null,
     popupMargin: 5,
     popupScreenPadding: 5,
+    mode: 'date', // possible values: 'date', 'month', 'year'
     date: new Date(),
     static: false,
     multiple: false,
@@ -98,8 +99,20 @@ export class DatePicker extends Component {
             ...this.props,
         };
 
+        const viewTypesMap = {
+            date: MONTH_VIEW,
+            month: YEAR_VIEW,
+            year: YEARRANGE_VIEW,
+        };
+
+        const { mode } = this.props;
+        if (!(mode in viewTypesMap)) {
+            throw new Error('Invalid mode');
+        }
+
         this.state = {
-            viewType: MONTH_VIEW,
+            mode,
+            viewType: viewTypesMap[mode],
             date: isDate(this.props.date) ? this.props.date : new Date(),
             curRange: { start: null, end: null },
             selRange: { start: null, end: null },
@@ -292,11 +305,18 @@ export class DatePicker extends Component {
         if (!item) {
             return;
         }
-        const { viewType } = this.state;
-        if (viewType === MONTH_VIEW) {
+        const { viewType, mode } = this.state;
+        if (viewType === MONTH_VIEW && mode === 'date') {
             this.onDayClick(item.date);
         } else if (viewType === YEAR_VIEW || viewType === YEARRANGE_VIEW) {
-            this.zoomIn(item.date);
+            if (
+                (viewType === YEAR_VIEW && mode === 'month')
+                || (viewType === YEARRANGE_VIEW && mode === 'year')
+            ) {
+                this.onDayClick(item.date);
+            } else {
+                this.zoomIn(item.date);
+            }
         }
     }
 

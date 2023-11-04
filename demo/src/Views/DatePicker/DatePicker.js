@@ -26,6 +26,26 @@ const formatDateToInput = (date, inputId) => {
     }
 };
 
+const formatMonthToInput = (date, inputId) => {
+    const input = ge(inputId);
+    if (input) {
+        input.value = formatDate(date, {
+            locales: ['en'],
+            options: { month: 'long', year: 'numeric' },
+        });
+    }
+};
+
+const formatYearToInput = (date, inputId) => {
+    const input = ge(inputId);
+    if (input) {
+        input.value = formatDate(date, {
+            locales: ['en'],
+            options: { year: 'numeric' },
+        });
+    }
+};
+
 const parseDateFromInput = (inputId) => {
     const input = ge(inputId);
     return parseDateString(input?.value);
@@ -69,6 +89,8 @@ class DatePickerView extends DemoView {
         this.initSetSelection();
         this.initDisabledDate();
         this.initRangePart();
+        this.initMonthSelect();
+        this.initYearSelect();
         this.initFirstDay();
         this.initLocales();
     }
@@ -390,6 +412,64 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'rangePart',
             title: '\'rangePart\' option',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initMonthSelect() {
+        const inputId = 'monthInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpMonthGroup',
+            inputId,
+            buttonId: 'showMonthBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            mode: 'month',
+            onDateSelect: (date) => {
+                formatMonthToInput(date, inputId);
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'month',
+            title: 'Month select',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initYearSelect() {
+        const inputId = 'yearInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpYearGroup',
+            inputId,
+            buttonId: 'showYearBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            mode: 'year',
+            onDateSelect: (date) => {
+                formatYearToInput(date, inputId);
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'year',
+            title: 'Year select',
             content: [
                 inpGroup.elem,
                 datePicker.elem,

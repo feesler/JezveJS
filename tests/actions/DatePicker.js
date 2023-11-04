@@ -263,3 +263,19 @@ export const testRangeParts = async () => {
         return App.view.checkState(expected);
     });
 };
+
+export const showMonth = async () => (
+    test('Show month date picker', () => App.view.showMonth())
+);
+
+export const selectMonth = async (date) => (
+    test(`Select month (${formatDate(date)})`, () => App.view.selectMonth(date))
+);
+
+export const showYear = async () => (
+    test('Show year date picker', () => App.view.showYear())
+);
+
+export const selectYear = async (date) => (
+    test(`Select year (${formatDate(date)})`, () => App.view.selectYear(date))
+);

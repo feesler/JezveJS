@@ -147,7 +147,7 @@ export class DatePicker extends TestComponent {
         await this.parse();
     }
 
-    async selectYear(year) {
+    async selectYear(year, waitForViewChange = true) {
         assert(this.content.viewType === 'yearRange', `Invalid type of date picker view: ${this.content.viewType}`);
 
         while (this.content.current.yearRange.start > year) {
@@ -159,11 +159,15 @@ export class DatePicker extends TestComponent {
         }
 
         await this.selectCell(year);
+        if (!waitForViewChange) {
+            return;
+        }
+
         await wait(() => this.isTitleChanged());
         await this.parse();
     }
 
-    async selectMonth(month, year) {
+    async selectMonth(month, year, waitForViewChange = true) {
         assert(this.content.viewType === 'year', `Invalid type of date picker view: ${this.content.viewType}`);
 
         if (this.content.current.year !== year) {
@@ -184,6 +188,10 @@ export class DatePicker extends TestComponent {
 
         const cell = this.content.cells[month];
         await this.selectCell(cell.title);
+        if (!waitForViewChange) {
+            return;
+        }
+
         await wait(() => this.isTitleChanged());
         await this.parse();
     }
