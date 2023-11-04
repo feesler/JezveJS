@@ -75,29 +75,14 @@ const defaultProps = {
 };
 
 /**
- * Date picker constructor
- * @param {object} props:
- * @param {string} props.relparent - identifier of relative alignment element
- * @param {Date} props.date - initial date to show
- * @param {boolean} props.static - if true, date picker will be statically placed
- * @param {boolean} props.range - if true turn on date range select mode
- * @param {String|null} props.rangePart - currently selecting part of date range
- * @param {String|[]} props.locales - locales to render component
- * @param {number} props.firstDay - first day of week(1 - Monday, 7 - Sunday)
- * @param {boolean} props.animated - animate transitions between views if possible
- * @param {function} props.onRangeSelect - date range select callback
- * @param {function} props.onDateSelect - single date select callback
- * @param {function} props.onShow - dynamic date picker shown callback
- * @param {function} props.onHide - dynamic date picker hidden callback
+ * Date picker component
  */
 export class DatePicker extends Component {
-    constructor(props) {
-        super(props);
-
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+        });
 
         const viewTypesMap = {
             date: MONTH_VIEW,
