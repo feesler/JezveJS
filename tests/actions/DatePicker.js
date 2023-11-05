@@ -13,6 +13,14 @@ export const selectDatePopup = async (date) => {
     await test(`Select date (${dateFmt})`, () => App.view.selectDatePopup(date));
 };
 
+export const toggleShowMultiple = async () => (
+    test('Toggle show multiple date picker', () => App.view.toggleShowMultiple())
+);
+
+export const toggleMultipleDate = async (date) => (
+    test(`Toggle select date (${formatDate(date)})`, () => App.view.toggleMultipleDate(date))
+);
+
 export const selectDateRange = async (range) => {
     const rangeFmt = `${formatDate(range.start)} - ${formatDate(range.end)}`;
     await test('Show date picker', () => App.view.showRange());
@@ -255,3 +263,19 @@ export const testRangeParts = async () => {
         return App.view.checkState(expected);
     });
 };
+
+export const showMonth = async () => (
+    test('Show month date picker', () => App.view.showMonth())
+);
+
+export const selectMonth = async (date) => (
+    test(`Select month (${formatDate(date)})`, () => App.view.selectMonth(date))
+);
+
+export const showYear = async () => (
+    test('Show year date picker', () => App.view.showYear())
+);
+
+export const selectYear = async (date) => (
+    test(`Select year (${formatDate(date)})`, () => App.view.selectYear(date))
+);

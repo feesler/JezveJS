@@ -14,7 +14,12 @@ import {
     isSameDate,
 } from '@jezvejs/datetime';
 import { Component } from '../../../../js/Component.js';
-import { getNextViewDate, getPrevViewDate, MONTH_VIEW } from '../../utils.js';
+import {
+    getNextViewDate,
+    getPrevViewDate,
+    includesDate,
+    MONTH_VIEW,
+} from '../../utils.js';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container dp__month-view';
@@ -29,9 +34,21 @@ const RANGE_START_CELL_CLASS = 'dp__cell_hl-range-start';
 const RANGE_END_CELL_CLASS = 'dp__cell_hl-range-end';
 const ACTIVE_CELL_CLASS = 'dp__cell_act';
 
+const defaultProps = {
+    date: null,
+    title: null,
+    nav: null,
+    locales: [],
+    firstDay: null,
+    doubleView: false,
+};
+
 export class DatePickerMonthView extends Component {
-    constructor(props) {
-        super(props);
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+        });
 
         if (!isDate(this.props.date)) {
             throw new Error('Invalid date');
@@ -60,11 +77,12 @@ export class DatePickerMonthView extends Component {
     }
 
     init() {
+        const { locales, firstDay, doubleView } = this.props;
         const { date } = this.state;
         const today = new Date();
         const rMonth = date.getMonth();
         const rYear = date.getFullYear();
-        const monthLong = getLongMonthName(date, this.props.locales);
+        const monthLong = getLongMonthName(date, locales);
 
         this.state.title = `${monthLong} ${rYear}`;
         this.state.nav = {
@@ -76,11 +94,11 @@ export class DatePickerMonthView extends Component {
         // header
         const firstMonthDay = new Date(rYear, rMonth, 1);
         const weekDayParams = {
-            locales: this.props.locales,
+            locales,
         };
-        if (typeof this.props.firstDay === 'number') {
+        if (typeof firstDay === 'number') {
             weekDayParams.options = {
-                firstDay: this.props.firstDay,
+                firstDay,
             };
         }
 
@@ -88,7 +106,7 @@ export class DatePickerMonthView extends Component {
         const headerElems = week.map((weekday) => createElement('div', {
             props: {
                 className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, WEEKDAY_CELL_CLASS),
-                textContent: getWeekdayShort(weekday, this.props.locales),
+                textContent: getWeekdayShort(weekday, locales),
             },
         }));
         this.elem.append(...headerElems);
@@ -98,8 +116,12 @@ export class DatePickerMonthView extends Component {
 
         do {
             week.forEach((weekday) => {
+                const isOtherMonth = !isSameYearMonth(date, weekday);
+                const isToday = isSameDate(weekday, today) && (!doubleView || !isOtherMonth);
                 const item = {
                     date: weekday,
+                    isOtherMonth,
+                    isToday,
                     elem: createElement('div', {
                         props: {
                             className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
@@ -108,8 +130,8 @@ export class DatePickerMonthView extends Component {
                     }),
                 };
 
-                item.elem.classList.toggle(OTHER_CELL_CLASS, !isSameYearMonth(date, weekday));
-                item.elem.classList.toggle(TODAY_CELL_CLASS, isSameDate(weekday, today));
+                item.elem.classList.toggle(OTHER_CELL_CLASS, item.isOtherMonth);
+                item.elem.classList.toggle(TODAY_CELL_CLASS, item.isToday);
 
                 const disabled = disabledFilter && this.state.disabledDateFilter(item.date);
                 enable(item.elem, !disabled);
@@ -149,13 +171,18 @@ export class DatePickerMonthView extends Component {
             return;
         }
 
+        const { doubleView } = this.props;
         const disabledFilter = isFunction(state.disabledDateFilter);
 
         this.items.forEach((item) => {
-            const isActive = state.actDate && isSameDate(item.date, state.actDate);
+            const isActive = includesDate(state.actDate, item.date);
             item.elem.classList.toggle(ACTIVE_CELL_CLASS, isActive);
 
-            const highlight = state.range && this.inRange(item.date, state.curRange);
+            const highlight = (
+                state.range
+                && (!doubleView || !item.isOtherMonth)
+                && this.inRange(item.date, state.curRange)
+            );
             item.elem.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
 
             const startDate = state.curRange?.start ?? null;

@@ -23,6 +23,14 @@ export const datePickerTests = async () => {
     await Actions.selectDatePopup(App.dates.yesterday);
     await Actions.selectDatePopup(App.dates.monthAgo);
 
+    setBlock('Multiple dates select', 2);
+    await Actions.toggleShowMultiple();
+    await Actions.toggleMultipleDate(App.dates.yesterday);
+    await Actions.toggleMultipleDate(App.dates.now);
+    await Actions.toggleMultipleDate(App.dates.weekAgo);
+    await Actions.toggleMultipleDate(App.dates.yesterday);
+    await Actions.toggleShowMultiple();
+
     setBlock('Range select', 2);
     await Actions.selectDateRange({
         start: App.dates.monthAgo,
@@ -43,4 +51,16 @@ export const datePickerTests = async () => {
 
     setBlock('Date range parts', 2);
     await Actions.testRangeParts();
+
+    setBlock('Month select', 2);
+    await Actions.showMonth();
+    await Actions.selectMonth(App.dates.now);
+    await Actions.showMonth();
+    await Actions.selectMonth(App.dates.monthAgo);
+
+    setBlock('Year select', 2);
+    await Actions.showYear();
+    await Actions.selectYear(App.dates.now);
+    await Actions.showYear();
+    await Actions.selectYear(App.dates.yearAgo);
 };

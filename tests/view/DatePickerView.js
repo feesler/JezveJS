@@ -5,17 +5,20 @@ import {
     asyncMap,
 } from 'jezve-test';
 import { assert } from '@jezvejs/assert';
-import { formatDate } from '@jezvejs/datetime';
+import { formatDate, isSameDate, parseDateString } from '@jezvejs/datetime';
 import { DatePicker } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
 const datePickerSelectors = {
     staticDatePicker: '#staticDateInp + .dp__container',
     popupDatePicker: '#dpPopupGroup + .dp__container',
+    multipleDatePicker: '#dpMultipleGroup + .dp__container',
     rangeDatePicker: '#dpRangeGroup + .dp__container',
     callbacksDatePicker: '#dpCallbacksGroup + .dp__container',
     selDatePicker: '#dpSelectionGroup + .dp__container',
     disabledFilterDatePicker: '#dpDisabledDateGroup + .dp__container',
+    monthDatePicker: '#dpMonthGroup + .dp__container',
+    yearDatePicker: '#dpYearGroup + .dp__container',
     rangePartDatePicker: '#dpRangePartGroup + .dp__container',
     enLocaleDatePicker: '#dpEnLocale .dp__container',
     frLocaleDatePicker: '#dpFrLocale .dp__container',
@@ -26,6 +29,8 @@ const controlIds = [
     'staticDateInp',
     'popupDateInp',
     'showPopupBtn',
+    'multipleInp',
+    'showMultipleBtn',
     'rangeInp',
     'showRangeBtn',
     'cbInp',
@@ -40,6 +45,10 @@ const controlIds = [
     'clearDisabledBtn',
     'selectStartDateBtn',
     'selectEndDateBtn',
+    'monthInp',
+    'showMonthBtn',
+    'yearInp',
+    'showYearBtn',
 ];
 
 export class DatePickerView extends AppView {
@@ -58,27 +67,29 @@ export class DatePickerView extends AppView {
         });
 
         [
+            res.cbStatusText.title,
             res.staticDateInp.value,
             res.popupDateInp.value,
+            res.multipleInp.value,
             res.rangeInp.value,
             res.cbInp.value,
-            res.cbStatusText.title,
             res.setSelInp.value,
+            res.monthInp.value,
+            res.yearInp.value,
         ] = await evaluate(
-            (stInp, popupInp, rangeInp, chInp, statusEl, selInp) => ([
-                stInp.value,
-                popupInp.value,
-                rangeInp.value,
-                chInp.value,
+            (statusEl, ...inputElems) => ([
                 statusEl.textContent,
-                selInp.value,
+                ...inputElems.map((el) => el.value),
             ]),
+            res.cbStatusText.elem,
             res.staticDateInp.elem,
             res.popupDateInp.elem,
+            res.multipleInp.elem,
             res.rangeInp.elem,
             res.cbInp.elem,
-            res.cbStatusText.elem,
             res.setSelInp.elem,
+            res.monthInp.elem,
+            res.yearInp.elem,
         );
 
         return res;
@@ -126,6 +137,35 @@ export class DatePickerView extends AppView {
         await this.performAction(() => this.content.popupDatePicker.selectDate(date));
 
         return this.checkState(expected);
+    }
+
+    async toggleMultipleDate(date) {
+        assert.isDate(date, 'Invalid date');
+
+        const selectedDates = this.content.multipleInp.value
+            .trim()
+            .split(' ')
+            .filter((item) => item?.length > 0)
+            .map((item) => parseDateString(item));
+
+        const selected = selectedDates.some((item) => isSameDate(item, date));
+        const expectedDates = (selected)
+            ? selectedDates.filter((item) => !isSameDate(item, date))
+            : [...selectedDates, date];
+
+        const expected = {
+            multipleInp: {
+                value: expectedDates.map((item) => formatDate(item)).join(' '),
+            },
+        };
+
+        await this.performAction(() => this.content.multipleDatePicker.selectDate(date));
+
+        return this.checkState(expected);
+    }
+
+    async toggleShowMultiple() {
+        return this.clickShowButton('showMultipleBtn', 'multipleDatePicker');
     }
 
     async showRange() {
@@ -188,5 +228,55 @@ export class DatePickerView extends AppView {
         assert.isDate(date, 'Invalid date');
 
         await this.performAction(() => this.content.rangePartDatePicker.selectDate(date));
+    }
+
+    async showMonth() {
+        return this.clickShowButton('showMonthBtn', 'monthDatePicker');
+    }
+
+    async selectMonth(date) {
+        assert.isDate(date, 'Invalid date');
+
+        const expected = {
+            monthInp: {
+                value: formatDate(date, {
+                    locales: ['en'],
+                    options: { month: 'long', year: 'numeric' },
+                }),
+            },
+        };
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        await this.performAction(() => (
+            this.content.monthDatePicker.selectMonth(month, year, false)
+        ));
+
+        return this.checkState(expected);
+    }
+
+    async showYear() {
+        return this.clickShowButton('showYearBtn', 'yearDatePicker');
+    }
+
+    async selectYear(date) {
+        assert.isDate(date, 'Invalid date');
+
+        const expected = {
+            yearInp: {
+                value: formatDate(date, {
+                    locales: ['en'],
+                    options: { year: 'numeric' },
+                }),
+            },
+        };
+
+        const year = date.getFullYear();
+        await this.performAction(() => (
+            this.content.yearDatePicker.selectYear(year, false)
+        ));
+
+        return this.checkState(expected);
     }
 }

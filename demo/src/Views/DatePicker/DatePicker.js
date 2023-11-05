@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import { asArray } from '@jezvejs/types';
 import {
     formatDate,
     parseDateString,
@@ -11,17 +12,41 @@ import { Button } from 'jezvejs/Button';
 import { DatePicker } from 'jezvejs/DatePicker';
 import { Input } from 'jezvejs/Input';
 
-import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
+
+import { DemoView } from '../../Components/DemoView/DemoView.js';
+import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
+
 import { DateInputGroup } from './components/DateInputGroup/DateInputGroup.js';
 import { DateRangeInputGroup } from './components/DateRangeInputGroup/DateRangeInputGroup.js';
-import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
+import { CustomDatePickerFooter } from './components/CustomFooter/CustomDatePickerFooter.js';
+
 import './DatePickerView.scss';
 
 const formatDateToInput = (date, inputId) => {
     const input = ge(inputId);
     if (input) {
         input.value = formatDate(date);
+    }
+};
+
+const formatMonthToInput = (date, inputId) => {
+    const input = ge(inputId);
+    if (input) {
+        input.value = formatDate(date, {
+            locales: ['en'],
+            options: { month: 'long', year: 'numeric' },
+        });
+    }
+};
+
+const formatYearToInput = (date, inputId) => {
+    const input = ge(inputId);
+    if (input) {
+        input.value = formatDate(date, {
+            locales: ['en'],
+            options: { year: 'numeric' },
+        });
     }
 };
 
@@ -62,11 +87,16 @@ class DatePickerView extends DemoView {
         this.initFillWidth();
         this.initPopup();
         this.initPosition();
+        this.initCustomFooter();
+        this.initMultiple();
         this.initRangeSelect();
+        this.initDoubleView();
         this.initCallbacks();
         this.initSetSelection();
         this.initDisabledDate();
         this.initRangePart();
+        this.initMonthSelect();
+        this.initYearSelect();
         this.initFirstDay();
         this.initLocales();
     }
@@ -161,6 +191,71 @@ class DatePickerView extends DemoView {
         });
     }
 
+    initCustomFooter() {
+        const inputId = 'customFooterInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpCustomFooterGroup',
+            inputId,
+            buttonId: 'showFooterBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            multiple: true,
+            footer: {
+                title: 'Custom footer',
+                onSubmit: () => datePicker.hide(),
+            },
+            components: {
+                Footer: CustomDatePickerFooter,
+            },
+            onDateSelect: (date) => {
+                formatDateToInput(date, inputId);
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'customFooter',
+            title: 'Custom footer',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initMultiple() {
+        const inputId = 'multipleInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpMultipleGroup',
+            inputId,
+            buttonId: 'showMultipleBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            multiple: true,
+            onDateSelect: (dates) => {
+                const inputEl = document.getElementById(inputId);
+                inputEl.value = asArray(dates).map((date) => formatDate(date)).join(' ');
+            },
+        });
+
+        this.addSection({
+            id: 'multiple',
+            title: 'Select multiple dates',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
     initRangeSelect() {
         let datePicker = null;
         const inpGroup = DateInputGroup.create({
@@ -182,6 +277,36 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'range',
             title: 'Range select',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initDoubleView() {
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpDoubleViewGroup',
+            inputId: 'doubleViewInp',
+            buttonId: 'showDoubleViewBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            range: true,
+            doubleView: true,
+            animated: true,
+            onRangeSelect: (range) => {
+                formatRangeToInput(range, 'doubleViewInp');
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'doubleView',
+            title: '\'doubleView\' option',
             content: [
                 inpGroup.elem,
                 datePicker.elem,
@@ -359,6 +484,64 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'rangePart',
             title: '\'rangePart\' option',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initMonthSelect() {
+        const inputId = 'monthInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpMonthGroup',
+            inputId,
+            buttonId: 'showMonthBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            mode: 'month',
+            onDateSelect: (date) => {
+                formatMonthToInput(date, inputId);
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'month',
+            title: 'Month select',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initYearSelect() {
+        const inputId = 'yearInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpYearGroup',
+            inputId,
+            buttonId: 'showYearBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            mode: 'year',
+            onDateSelect: (date) => {
+                formatYearToInput(date, inputId);
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'year',
+            title: 'Year select',
             content: [
                 inpGroup.elem,
                 datePicker.elem,
