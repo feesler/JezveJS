@@ -12,11 +12,15 @@ import { Button } from 'jezvejs/Button';
 import { DatePicker } from 'jezvejs/DatePicker';
 import { Input } from 'jezvejs/Input';
 
-import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
+
+import { DemoView } from '../../Components/DemoView/DemoView.js';
+import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
+
 import { DateInputGroup } from './components/DateInputGroup/DateInputGroup.js';
 import { DateRangeInputGroup } from './components/DateRangeInputGroup/DateRangeInputGroup.js';
-import { LocalesContainer } from '../../Components/LocalesContainer/LocalesContainer.js';
+import { CustomDatePickerFooter } from './components/CustomFooter/CustomDatePickerFooter.js';
+
 import './DatePickerView.scss';
 
 const formatDateToInput = (date, inputId) => {
@@ -83,6 +87,7 @@ class DatePickerView extends DemoView {
         this.initFillWidth();
         this.initPopup();
         this.initPosition();
+        this.initCustomFooter();
         this.initMultiple();
         this.initRangeSelect();
         this.initDoubleView();
@@ -183,6 +188,42 @@ class DatePickerView extends DemoView {
                     datePicker.elem,
                 ],
             }),
+        });
+    }
+
+    initCustomFooter() {
+        const inputId = 'customFooterInp';
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpCustomFooterGroup',
+            inputId,
+            buttonId: 'showFooterBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            multiple: true,
+            footer: {
+                title: 'Custom footer',
+                onSubmit: () => datePicker.hide(),
+            },
+            components: {
+                Footer: CustomDatePickerFooter,
+            },
+            onDateSelect: (date) => {
+                formatDateToInput(date, inputId);
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'customFooter',
+            title: 'Custom footer',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
         });
     }
 

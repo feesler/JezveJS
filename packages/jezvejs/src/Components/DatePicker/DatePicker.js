@@ -78,6 +78,10 @@ const defaultProps = {
     onDateSelect: null,
     onShow: null,
     onHide: null,
+    footer: {},
+    components: {
+        Footer: null,
+    },
 };
 
 /**
@@ -88,6 +92,10 @@ export class DatePicker extends Component {
         super({
             ...defaultProps,
             ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
         });
 
         const viewTypesMap = {
@@ -150,9 +158,17 @@ export class DatePicker extends Component {
             children: this.slider,
         });
 
+        const children = [this.header.elem, this.cellsContainer];
+
+        const { Footer } = this.props.components;
+        if (Footer) {
+            this.footer = Footer.create(this.props.footer);
+            children.push(this.footer.elem);
+        }
+
         this.wrapper = createElement('div', {
             props: { className: WRAPPER_CLASS },
-            children: [this.header.elem, this.cellsContainer],
+            children,
             events: {
                 click: (e) => this.onViewClick(e),
             },
@@ -1060,16 +1076,35 @@ export class DatePicker extends Component {
         throw new Error('Invalid view type');
     }
 
-    render(state, prevState = {}) {
-        if (!state) {
-            throw new Error('Invalid state');
-        }
-
+    renderContent(state, prevState) {
         if (!this.isViewUpdated(state, prevState)) {
             return;
         }
 
         const view = this.renderView(state, prevState);
         this.setView(view, state);
+    }
+
+    renderFooter(state, prevState) {
+        if (
+            !this.footer
+            || state.footer === prevState?.footer
+        ) {
+            return;
+        }
+
+        this.footer.setState((footerState) => ({
+            ...footerState,
+            ...state.footer,
+        }));
+    }
+
+    render(state, prevState = {}) {
+        if (!state) {
+            throw new Error('Invalid state');
+        }
+
+        this.renderContent(state, prevState);
+        this.renderFooter(state, prevState);
     }
 }

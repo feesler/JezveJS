@@ -1,0 +1,14 @@
+/* Custom DatePicker footer */
+.custom-footer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 0.5rem;
+  padding: 0.25rem;
+}
+
+.custom-footer__title {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
