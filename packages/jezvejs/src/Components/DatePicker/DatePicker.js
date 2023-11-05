@@ -250,6 +250,10 @@ export class DatePicker extends Component {
             return;
         }
 
+        if (this.width === 0 || this.height === 0) {
+            this.onResize();
+        }
+
         // check position of control in window and place it to be visible
         if (value) {
             PopupPosition.calculate({
