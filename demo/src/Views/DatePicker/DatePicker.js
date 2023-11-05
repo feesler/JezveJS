@@ -85,6 +85,7 @@ class DatePickerView extends DemoView {
         this.initPosition();
         this.initMultiple();
         this.initRangeSelect();
+        this.initDoubleView();
         this.initCallbacks();
         this.initSetSelection();
         this.initDisabledDate();
@@ -235,6 +236,36 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'range',
             title: 'Range select',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initDoubleView() {
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpDoubleViewGroup',
+            inputId: 'doubleViewInp',
+            buttonId: 'showDoubleViewBtn',
+            onButtonClick: () => datePicker.show(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            range: true,
+            doubleView: true,
+            animated: true,
+            onRangeSelect: (range) => {
+                formatRangeToInput(range, 'doubleViewInp');
+                datePicker.hide();
+            },
+        });
+
+        this.addSection({
+            id: 'doubleView',
+            title: '\'doubleView\' option',
             content: [
                 inpGroup.elem,
                 datePicker.elem,
