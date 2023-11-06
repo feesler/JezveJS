@@ -114,7 +114,7 @@ export class DatePickerView extends AppView {
 
         const expected = {
             [datePicker]: {
-                visible: !this.content[datePicker].visible,
+                visible: !this.content[datePicker].content.visible,
             },
         };
 

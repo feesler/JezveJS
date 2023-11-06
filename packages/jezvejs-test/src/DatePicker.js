@@ -31,6 +31,11 @@ export class DatePicker extends TestComponent {
             wrapper: await query(this.elem, '.dp__wrapper'),
         };
 
+        res.visible = await evaluate((el) => (!!el && !el.hidden), res.wrapper);
+        if (!res.visible) {
+            return res;
+        }
+
         res.prevBtn = await query(res.wrapper, '.dp__header .dp__header_nav:first-child');
         res.nextBtn = await query(res.wrapper, '.dp__header .dp__header_nav:last-child');
         res.titleElem = await query(res.wrapper, '.dp__header .dp__header_title');
@@ -39,10 +44,10 @@ export class DatePicker extends TestComponent {
         const elems = await queryAll(res.wrapper, '.dp__current-view .dp__cell');
 
         res.viewType = await evaluate((elem) => {
-            if (elem.classList.contains('dp__year-view__cell')) {
+            if (elem?.classList?.contains('dp__year-view__cell')) {
                 return 'year';
             }
-            if (elem.classList.contains('dp__year-range-view__cell')) {
+            if (elem?.classList?.contains('dp__year-range-view__cell')) {
                 return 'yearRange';
             }
 

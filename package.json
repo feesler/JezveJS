@@ -55,7 +55,7 @@
         "eslint-plugin-import": "^2.29.0",
         "html-webpack-plugin": "^5.5.3",
         "jezve-test": "^2.0.0",
-        "jezvejs-test": "^1.14.1",
+        "jezvejs-test": "^1.14.2",
         "npm-run-all": "^4.1.5",
         "postcss-cli": "^8.3.1",
         "postcss-loader": "^5.3.0",
