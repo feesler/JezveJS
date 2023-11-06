@@ -5,7 +5,6 @@ import {
     re,
     show,
     transform,
-    isVisible,
     createElement,
     removeChilds,
     afterTransition,
@@ -43,7 +42,7 @@ const CONTAINER_CLASS = 'dp__container';
 const WRAPPER_CLASS = 'dp__wrapper';
 const DOUBLE_VIEW_CLASS = 'dp__double-view';
 const SLIDER_CLASS = 'dp__slider';
-const STATIC_WRAPPER_CLASS = 'dp__static-wrapper';
+const INLINE_WRAPPER_CLASS = 'dp__inline-wrapper';
 const CURRENT_CLASS = 'dp__current-view';
 /* View */
 const VIEW_CLASS = 'dp__view';
@@ -65,7 +64,7 @@ const defaultProps = {
     popupScreenPadding: 5,
     mode: 'date', // possible values: 'date', 'month', 'year'
     date: new Date(),
-    static: false,
+    inline: false,
     multiple: false,
     range: false,
     doubleView: false,
@@ -111,6 +110,7 @@ export class DatePicker extends Component {
 
         this.state = {
             mode,
+            visible: this.props.inline,
             viewType: viewTypesMap[mode],
             date: isDate(this.props.date) ? this.props.date : new Date(),
             curRange: { start: null, end: null },
@@ -132,7 +132,7 @@ export class DatePicker extends Component {
         this.nextView = null;
         this.newView = null;
 
-        this.emptyClickHandler = () => this.showView(false);
+        this.emptyClickHandler = () => this.hide();
 
         this.init();
     }
@@ -174,8 +174,8 @@ export class DatePicker extends Component {
             },
         });
         this.wrapper.classList.toggle(DOUBLE_VIEW_CLASS, !!doubleView);
-        if (this.props.static) {
-            this.wrapper.classList.add(STATIC_WRAPPER_CLASS);
+        if (this.props.inline) {
+            this.wrapper.classList.add(INLINE_WRAPPER_CLASS);
         } else {
             show(this.wrapper, false);
         }
@@ -245,8 +245,7 @@ export class DatePicker extends Component {
     showView(value = true) {
         show(this.wrapper, value);
 
-        if (this.props.static) {
-            this.sendShowEvents(value);
+        if (this.props.inline) {
             return;
         }
 
@@ -278,23 +277,31 @@ export class DatePicker extends Component {
         } else {
             removeEmptyClick(this.emptyClickHandler);
         }
-
-        this.sendShowEvents(value);
     }
 
     /**
      * Show/hide date picker
-     * @param {boolean} val - if true then show view, hide otherwise
+     * @param {boolean} visible - if true then show view, hide otherwise
      */
-    show(val) {
-        this.showView(val);
+    show(visible = true) {
+        if (this.state.visible === visible) {
+            return;
+        }
+
+        this.setState({ ...this.state, visible });
+        this.sendShowEvents(visible);
     }
 
     /**
      * Check date picker is visible
      */
     visible() {
-        return isVisible(this.wrapper);
+        return this.state.visible;
+    }
+
+    /** Toggle shows/hides date picker */
+    toggle() {
+        this.show(!this.visible());
     }
 
     /**
@@ -975,6 +982,7 @@ export class DatePicker extends Component {
 
     renderView(state, prevState = {}) {
         const typeChanged = (state.viewType !== prevState?.viewType);
+        const visibilityChanged = (state.visible !== prevState?.visible);
 
         if (state.transition === 'slideRight') {
             const res = {
@@ -1015,6 +1023,7 @@ export class DatePicker extends Component {
         if (
             state.viewType === MONTH_VIEW
             && !typeChanged
+            && !visibilityChanged
             && isSameYearMonth(state.date, prevState?.date)
         ) {
             this.setMonthViewState(this.prevView, state);
@@ -1055,9 +1064,13 @@ export class DatePicker extends Component {
     }
 
     isViewUpdated(state, prevState) {
-        if (state.viewType !== prevState.viewType) {
+        if (
+            state.viewType !== prevState.viewType
+            || state.visible !== prevState.visible
+        ) {
             return true;
         }
+
         if (state.viewType === MONTH_VIEW) {
             return (
                 !isSameYearMonth(state.date, prevState.date)
@@ -1081,6 +1094,14 @@ export class DatePicker extends Component {
     }
 
     renderContent(state, prevState) {
+        if (state.visible !== prevState?.visible) {
+            this.showView(state.visible);
+        }
+
+        if (!state.visible) {
+            return;
+        }
+
         if (!this.isViewUpdated(state, prevState)) {
             return;
         }

@@ -102,14 +102,14 @@ class DatePickerView extends DemoView {
     }
 
     initStatic() {
-        const id = 'staticDateInp';
+        const id = 'inlineDateInp';
         this.addSection({
-            id: 'static',
-            title: 'Animated static component',
+            id: 'inline',
+            title: 'Animated inline component',
             content: [
                 Input.create({ id }).elem,
                 DatePicker.create({
-                    static: true,
+                    inline: true,
                     animated: true,
                     onDateSelect: (date) => formatDateToInput(date, id),
                 }).elem,
@@ -127,7 +127,7 @@ class DatePickerView extends DemoView {
                 children: [
                     Input.create({ id }).elem,
                     DatePicker.create({
-                        static: true,
+                        inline: true,
                         animated: true,
                         className: 'dp_full-width',
                         onDateSelect: (date) => formatDateToInput(date, id),
@@ -145,7 +145,7 @@ class DatePickerView extends DemoView {
             id: 'dpPopupGroup',
             inputId: id,
             buttonId: 'showPopupBtn',
-            onButtonClick: () => datePicker?.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -172,7 +172,7 @@ class DatePickerView extends DemoView {
             id: 'showPosBtn',
             className: 'action-btn',
             title: 'Show',
-            onClick: () => datePicker.show(),
+            onClick: () => datePicker?.toggle(),
         });
         datePicker = DatePicker.create({
             relparent: btn.elem,
@@ -198,7 +198,7 @@ class DatePickerView extends DemoView {
             id: 'dpCustomFooterGroup',
             inputId,
             buttonId: 'showFooterBtn',
-            onButtonClick: () => datePicker.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -234,7 +234,7 @@ class DatePickerView extends DemoView {
             id: 'dpMultipleGroup',
             inputId,
             buttonId: 'showMultipleBtn',
-            onButtonClick: () => datePicker.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -262,7 +262,7 @@ class DatePickerView extends DemoView {
             id: 'dpRangeGroup',
             inputId: 'rangeInp',
             buttonId: 'showRangeBtn',
-            onButtonClick: () => datePicker.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -290,7 +290,7 @@ class DatePickerView extends DemoView {
             id: 'dpDoubleViewGroup',
             inputId: 'doubleViewInp',
             buttonId: 'showDoubleViewBtn',
-            onButtonClick: () => datePicker.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -320,7 +320,7 @@ class DatePickerView extends DemoView {
             id: 'dpCallbacksGroup',
             inputId: 'cbInp',
             buttonId: 'showCbBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         const cbStatusText = createElement('span', {
@@ -359,7 +359,7 @@ class DatePickerView extends DemoView {
             id: 'dpSelectionGroup',
             inputId: 'setSelInp',
             buttonId: 'showSelectionBtn',
-            onButtonClick: () => datePicker?.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -401,7 +401,7 @@ class DatePickerView extends DemoView {
             id: 'dpDisabledDateGroup',
             inputId: 'disabledDateInp',
             buttonId: 'showDisabledDateBtn',
-            onButtonClick: () => datePicker?.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -498,7 +498,7 @@ class DatePickerView extends DemoView {
             id: 'dpMonthGroup',
             inputId,
             buttonId: 'showMonthBtn',
-            onButtonClick: () => datePicker.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -527,7 +527,7 @@ class DatePickerView extends DemoView {
             id: 'dpYearGroup',
             inputId,
             buttonId: 'showYearBtn',
-            onButtonClick: () => datePicker.show(),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -567,7 +567,7 @@ class DatePickerView extends DemoView {
                 items,
                 renderItem: ({ firstDay }) => (
                     DatePicker.create({
-                        static: true,
+                        inline: true,
                         locales: ['en-US'],
                         firstDay,
                     }).elem
@@ -598,7 +598,7 @@ class DatePickerView extends DemoView {
                 items,
                 renderItem: ({ locales }) => (
                     DatePicker.create({
-                        static: true,
+                        inline: true,
                         locales,
                     }).elem
                 ),
