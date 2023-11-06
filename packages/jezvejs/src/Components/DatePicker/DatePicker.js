@@ -42,7 +42,7 @@ const CONTAINER_CLASS = 'dp__container';
 const WRAPPER_CLASS = 'dp__wrapper';
 const DOUBLE_VIEW_CLASS = 'dp__double-view';
 const SLIDER_CLASS = 'dp__slider';
-const STATIC_WRAPPER_CLASS = 'dp__static-wrapper';
+const INLINE_WRAPPER_CLASS = 'dp__inline-wrapper';
 const CURRENT_CLASS = 'dp__current-view';
 /* View */
 const VIEW_CLASS = 'dp__view';
@@ -64,7 +64,7 @@ const defaultProps = {
     popupScreenPadding: 5,
     mode: 'date', // possible values: 'date', 'month', 'year'
     date: new Date(),
-    static: false,
+    inline: false,
     multiple: false,
     range: false,
     doubleView: false,
@@ -110,7 +110,7 @@ export class DatePicker extends Component {
 
         this.state = {
             mode,
-            visible: this.props.static,
+            visible: this.props.inline,
             viewType: viewTypesMap[mode],
             date: isDate(this.props.date) ? this.props.date : new Date(),
             curRange: { start: null, end: null },
@@ -174,8 +174,8 @@ export class DatePicker extends Component {
             },
         });
         this.wrapper.classList.toggle(DOUBLE_VIEW_CLASS, !!doubleView);
-        if (this.props.static) {
-            this.wrapper.classList.add(STATIC_WRAPPER_CLASS);
+        if (this.props.inline) {
+            this.wrapper.classList.add(INLINE_WRAPPER_CLASS);
         } else {
             show(this.wrapper, false);
         }
@@ -245,7 +245,7 @@ export class DatePicker extends Component {
     showView(value = true) {
         show(this.wrapper, value);
 
-        if (this.props.static) {
+        if (this.props.inline) {
             return;
         }
 

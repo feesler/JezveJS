@@ -10,7 +10,7 @@ import { DatePicker } from 'jezvejs-test';
 import { AppView } from './AppView.js';
 
 const datePickerSelectors = {
-    staticDatePicker: '#staticDateInp + .dp__container',
+    inlineDatePicker: '#inlineDateInp + .dp__container',
     popupDatePicker: '#dpPopupGroup + .dp__container',
     multipleDatePicker: '#dpMultipleGroup + .dp__container',
     rangeDatePicker: '#dpRangeGroup + .dp__container',
@@ -26,7 +26,7 @@ const datePickerSelectors = {
 };
 
 const controlIds = [
-    'staticDateInp',
+    'inlineDateInp',
     'popupDateInp',
     'showPopupBtn',
     'multipleInp',
@@ -68,7 +68,7 @@ export class DatePickerView extends AppView {
 
         [
             res.cbStatusText.title,
-            res.staticDateInp.value,
+            res.inlineDateInp.value,
             res.popupDateInp.value,
             res.multipleInp.value,
             res.rangeInp.value,
@@ -82,7 +82,7 @@ export class DatePickerView extends AppView {
                 ...inputElems.map((el) => el.value),
             ]),
             res.cbStatusText.elem,
-            res.staticDateInp.elem,
+            res.inlineDateInp.elem,
             res.popupDateInp.elem,
             res.multipleInp.elem,
             res.rangeInp.elem,
@@ -99,11 +99,11 @@ export class DatePickerView extends AppView {
         assert.isDate(date, 'Invalid date');
 
         const expected = {
-            staticDateInp: { value: formatDate(date) },
-            staticDatePicker: { visible: true },
+            inlineDateInp: { value: formatDate(date) },
+            inlineDatePicker: { visible: true },
         };
 
-        await this.performAction(() => this.content.staticDatePicker.selectDate(date));
+        await this.performAction(() => this.content.inlineDatePicker.selectDate(date));
 
         return this.checkState(expected);
     }

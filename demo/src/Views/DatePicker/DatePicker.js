@@ -102,14 +102,14 @@ class DatePickerView extends DemoView {
     }
 
     initStatic() {
-        const id = 'staticDateInp';
+        const id = 'inlineDateInp';
         this.addSection({
-            id: 'static',
-            title: 'Animated static component',
+            id: 'inline',
+            title: 'Animated inline component',
             content: [
                 Input.create({ id }).elem,
                 DatePicker.create({
-                    static: true,
+                    inline: true,
                     animated: true,
                     onDateSelect: (date) => formatDateToInput(date, id),
                 }).elem,
@@ -127,7 +127,7 @@ class DatePickerView extends DemoView {
                 children: [
                     Input.create({ id }).elem,
                     DatePicker.create({
-                        static: true,
+                        inline: true,
                         animated: true,
                         className: 'dp_full-width',
                         onDateSelect: (date) => formatDateToInput(date, id),
@@ -567,7 +567,7 @@ class DatePickerView extends DemoView {
                 items,
                 renderItem: ({ firstDay }) => (
                     DatePicker.create({
-                        static: true,
+                        inline: true,
                         locales: ['en-US'],
                         firstDay,
                     }).elem
@@ -598,7 +598,7 @@ class DatePickerView extends DemoView {
                 items,
                 renderItem: ({ locales }) => (
                     DatePicker.create({
-                        static: true,
+                        inline: true,
                         locales,
                     }).elem
                 ),
