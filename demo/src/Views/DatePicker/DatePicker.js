@@ -145,7 +145,7 @@ class DatePickerView extends DemoView {
             id: 'dpPopupGroup',
             inputId: id,
             buttonId: 'showPopupBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -172,7 +172,7 @@ class DatePickerView extends DemoView {
             id: 'showPosBtn',
             className: 'action-btn',
             title: 'Show',
-            onClick: () => datePicker.show(!datePicker.visible()),
+            onClick: () => datePicker?.toggle(),
         });
         datePicker = DatePicker.create({
             relparent: btn.elem,
@@ -198,7 +198,7 @@ class DatePickerView extends DemoView {
             id: 'dpCustomFooterGroup',
             inputId,
             buttonId: 'showFooterBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -234,7 +234,7 @@ class DatePickerView extends DemoView {
             id: 'dpMultipleGroup',
             inputId,
             buttonId: 'showMultipleBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -262,7 +262,7 @@ class DatePickerView extends DemoView {
             id: 'dpRangeGroup',
             inputId: 'rangeInp',
             buttonId: 'showRangeBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -290,7 +290,7 @@ class DatePickerView extends DemoView {
             id: 'dpDoubleViewGroup',
             inputId: 'doubleViewInp',
             buttonId: 'showDoubleViewBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -320,7 +320,7 @@ class DatePickerView extends DemoView {
             id: 'dpCallbacksGroup',
             inputId: 'cbInp',
             buttonId: 'showCbBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         const cbStatusText = createElement('span', {
@@ -359,7 +359,7 @@ class DatePickerView extends DemoView {
             id: 'dpSelectionGroup',
             inputId: 'setSelInp',
             buttonId: 'showSelectionBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -401,7 +401,7 @@ class DatePickerView extends DemoView {
             id: 'dpDisabledDateGroup',
             inputId: 'disabledDateInp',
             buttonId: 'showDisabledDateBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -498,7 +498,7 @@ class DatePickerView extends DemoView {
             id: 'dpMonthGroup',
             inputId,
             buttonId: 'showMonthBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({
@@ -527,7 +527,7 @@ class DatePickerView extends DemoView {
             id: 'dpYearGroup',
             inputId,
             buttonId: 'showYearBtn',
-            onButtonClick: () => datePicker.show(!datePicker.visible()),
+            onButtonClick: () => datePicker?.toggle(),
         });
 
         datePicker = DatePicker.create({

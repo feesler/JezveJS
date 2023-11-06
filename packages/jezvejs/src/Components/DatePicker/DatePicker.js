@@ -299,6 +299,11 @@ export class DatePicker extends Component {
         return this.state.visible;
     }
 
+    /** Toggle shows/hides date picker */
+    toggle() {
+        this.show(!this.visible());
+    }
+
     /**
      * Mouse whell event handler
      * @param {Event} e - wheel event object
