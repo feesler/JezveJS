@@ -9,7 +9,7 @@ import { Component } from '../../js/Component.js';
 import { RangeSliderDragZone } from './components/RangeSliderDragZone.js';
 import { RangeSliderDropTarget } from './components/RangeSliderDropTarget.js';
 import './RangeSlider.scss';
-import { debounce, px } from '../../js/common.js';
+import { debounce, minmax, px } from '../../js/common.js';
 import { positionToValue, valueToPosition } from './helpers.js';
 
 /* CSS classes */
@@ -103,6 +103,7 @@ export class RangeSlider extends Component {
 
         this.initSlider(this.slider, (pos) => this.onPosChange(pos));
         this.initSlider(this.endSlider, (pos) => this.onEndPosChange(pos));
+        this.initSlider(this.selectedArea, (pos) => this.onScroll(pos));
         RangeSliderDropTarget.create({ elem: this.elem });
     }
 
@@ -226,6 +227,20 @@ export class RangeSlider extends Component {
         const value = this.positionToValue(pos);
         const end = Math.max(this.state.start, value);
         this.setState({ ...this.state, end });
+        this.notifyChanged();
+    }
+
+    onScroll(pos) {
+        if (!this.props.range) {
+            return;
+        }
+
+        const value = this.positionToValue(pos);
+        const size = Math.abs(this.state.end - this.state.start);
+        const start = minmax(this.state.min, this.state.max - size, value);
+        const end = start + size;
+
+        this.setState({ ...this.state, start, end });
         this.notifyChanged();
     }
 
