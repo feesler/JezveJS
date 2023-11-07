@@ -1,0 +1,26 @@
+.range-slider.vertical {
+  --rs-area-length: 200px;
+}
+
+.range-slider.styled {
+  /* Area */
+  --rs-area-border-style: solid;
+  --rs-area-border-width: 2px;
+  --rs-area-border-color: #6a2b97;
+  --rs-area-border-radius: 100vh;
+  --rs-background: #8b36c9;
+
+  /* Slider  */
+  --rs-slider-size: 1.6rem;
+  --rs-slider-color: #ff9f20;
+  --rs-slider-border-style: solid;
+  --rs-slider-border-width: 2px;
+  --rs-slider-border-color: #ffffff;
+  --rs-slider-border-radius: 100vh;
+  --rs-slider-offset: calc(-0.25rem - var(--rs-slider-border-width));
+
+  /* Hover state */
+  --rs-hover-background: #9e31ec;
+  --rs-hover-slider-color: #ffaf48;
+  --rs-hover-slider-border-color: #ffeed8;
+}
