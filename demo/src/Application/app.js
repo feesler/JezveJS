@@ -57,6 +57,7 @@ export const navigationMenuSections = [{
         { id: 'popup', title: 'Popup', url: 'demo/popup.html' },
         { id: 'popupMenu', title: 'Popup Menu', url: 'demo/popupmenu.html' },
         { id: 'progress', title: 'Progress and Spinner', url: 'demo/progress.html' },
+        { id: 'rangeslider', title: 'Range slider', url: 'demo/rangeslider.html' },
         { id: 'slider', title: 'Slider', url: 'demo/slider.html' },
         { id: 'switch', title: 'Switch', url: 'demo/switch.html' },
         { id: 'tabList', title: 'Tab List', url: 'demo/tablist.html' },
