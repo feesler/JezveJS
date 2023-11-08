@@ -2,7 +2,7 @@
 .range-slider {
   /* Slider area */
   --rs-area-size: 0.8rem;
-  --rs-area-length: 400px;
+  --rs-max-length: 400px;
   --rs-area-border-style: none;
   --rs-area-border-width: 0;
   --rs-area-border-color: transparent;
@@ -63,11 +63,12 @@
 
   /* x axis */
   &.range-slider_x-axis {
-    width: var(--rs-area-length);
+    max-width: var(--rs-max-length);
+    height: var(--rs-area-size);
 
     .range-slider__area {
       height: var(--rs-area-size);
-      width: var(--rs-area-length);
+      max-width: var(--rs-max-length);
     }
 
     .range-slider__selected-area {
@@ -83,10 +84,11 @@
 
   /* y axis */
   &.range-slider_y-axis {
-    height: var(--rs-area-length);
+    height: var(--rs-max-length);
+    width: var(--rs-area-size);
 
     .range-slider__area {
-      height: var(--rs-area-length);
+      height: var(--rs-max-length);
       width: var(--rs-area-size);
     }
 

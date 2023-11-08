@@ -9,6 +9,7 @@ const FIELD_CLASS = 'logs-container';
 const defaultProps = {
     inputId: undefined,
     title: 'Event log',
+    scrollToBottom: true,
 };
 
 /**
@@ -47,5 +48,9 @@ export class LogsField extends Component {
 
     write(value) {
         this.textarea.value += `${value}\r\n`;
+
+        if (this.props.scrollToBottom) {
+            this.textarea.scrollTop = this.textarea.scrollHeight;
+        }
     }
 }

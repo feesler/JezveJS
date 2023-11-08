@@ -5,12 +5,17 @@ import {
     enable,
 } from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
+import { minmax, px } from '../../js/common.js';
 
 import { RangeSliderDragZone } from './components/RangeSliderDragZone.js';
 import { RangeSliderDropTarget } from './components/RangeSliderDropTarget.js';
+import {
+    getStepPrecision,
+    positionToValue,
+    stepValue,
+    valueToPosition,
+} from './helpers.js';
 import './RangeSlider.scss';
-import { debounce, minmax, px } from '../../js/common.js';
-import { positionToValue, valueToPosition } from './helpers.js';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'range-slider';
@@ -32,7 +37,6 @@ const defaultProps = {
     max: 100,
     step: 1,
     range: false,
-    resizeTimeout: 200,
     onFocus: null,
     onBlur: null,
     onChange: null,
@@ -52,6 +56,8 @@ export class RangeSlider extends Component {
             ...props,
         });
 
+        this.resizeHandler = () => this.onResize();
+
         this.state = {
             ...this.props,
             maxPos: 0,
@@ -67,6 +73,8 @@ export class RangeSlider extends Component {
             this.state.value = this.state.value ?? this.props.min;
         }
 
+        this.precision = getStepPrecision(this.props.step);
+
         this.init();
         this.postInit();
         this.render(this.state);
@@ -75,6 +83,13 @@ export class RangeSlider extends Component {
     /** Returns id of root element of component */
     get id() {
         return this.props.id;
+    }
+
+    /** Returns current value of component */
+    get value() {
+        return (this.props.range)
+            ? { start: this.state.start, end: this.state.end }
+            : this.state.value;
     }
 
     /** Returns disabled state of component */
@@ -139,8 +154,7 @@ export class RangeSlider extends Component {
     }
 
     observeSize() {
-        const handler = debounce(() => this.onResize(), this.props.resizeTimeout);
-        const observer = new ResizeObserver(handler);
+        const observer = new ResizeObserver(this.resizeHandler);
         observer.observe(this.elem);
     }
 
@@ -148,12 +162,13 @@ export class RangeSlider extends Component {
         const rect = slider.getBoundingClientRect();
         const offset = this.elem.getBoundingClientRect();
         return (this.props.axis === 'x')
-            ? Math.round(offset.width - rect.width)
-            : Math.round(offset.height - rect.height);
+            ? (offset.width - rect.width)
+            : (offset.height - rect.height);
     }
 
     positionToValue(pos) {
-        return positionToValue(pos, this.state.min, this.state.max, this.getMaxPos());
+        const value = positionToValue(pos, this.state.min, this.state.max, this.getMaxPos());
+        return stepValue(value, this.state.step, this.precision);
     }
 
     onClick(e) {
@@ -249,10 +264,7 @@ export class RangeSlider extends Component {
             return;
         }
 
-        const value = (this.props.range)
-            ? { start: this.state.start, end: this.state.end }
-            : this.state.value;
-        this.props.onChange(value);
+        this.props.onChange(this.value);
     }
 
     notifyRangeChanged() {
@@ -271,6 +283,14 @@ export class RangeSlider extends Component {
         }
 
         this.setState({ ...this.state, disabled: !value });
+    }
+
+    updatePrecision(state, prevState) {
+        if (state.step === prevState?.step) {
+            return;
+        }
+
+        this.precision = getStepPrecision(state.step);
     }
 
     renderSlider(state, prevState) {
@@ -366,6 +386,7 @@ export class RangeSlider extends Component {
             this.elem.removeAttribute('tabindex');
         }
 
+        this.updatePrecision(state, prevState);
         this.renderSlider(state, prevState);
         this.renderEndSlider(state, prevState);
         this.renderSelectedRange(state, prevState);

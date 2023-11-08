@@ -26,13 +26,8 @@ export class SortableDragAvatar extends DragAvatar {
         this.dragZoneElem.classList.add(this.dragZone.getPlaceholder());
 
         if (this.dragZone.props.copyWidth) {
-            const quirks = !elem.style.getPropertyValue; // IE < 9
             const width = px(this.dragZoneElem.offsetWidth);
-            if (quirks) {
-                elem.style.cssText += `;width: ${width}!important`;
-            } else {
-                elem.style.setProperty('width', px(this.dragZoneElem.offsetWidth), 'important');
-            }
+            elem.style.setProperty('width', width, 'important');
         }
 
         document.body.appendChild(elem);
