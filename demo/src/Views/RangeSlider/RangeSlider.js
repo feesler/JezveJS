@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import { createElement } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { RangeSlider } from 'jezvejs/RangeSlider';
 
@@ -7,6 +8,21 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 import './RangeSliderView.scss';
+
+const createValueElement = () => {
+    const res = createElement('div', { props: { className: 'range-slider-value' } });
+
+    res.renderValue = (rangeSlider) => {
+        if (rangeSlider.props.range) {
+            const { start, end } = rangeSlider.value;
+            res.textContent = `${start} - ${end}`;
+        } else {
+            res.textContent = rangeSlider.value;
+        }
+    };
+
+    return res;
+};
 
 /**
  * RangeSlider component demo view
@@ -25,18 +41,27 @@ class RangeSliderView extends DemoView {
 
     initDefault() {
         const logsField = LogsField.create();
+        const valueElem = createValueElement();
 
         const rangeSlider = RangeSlider.create({
             onFocus: () => logsField.write('onFocus'),
             onBlur: () => logsField.write('onBlur'),
-            onChange: (value) => logsField.write(`onChange value: ${value}`),
+            onChange: (value) => {
+                logsField.write(`onChange value: ${value}`);
+                valueElem.renderValue(rangeSlider);
+            },
         });
+
+        valueElem.renderValue(rangeSlider);
 
         this.addSection({
             id: 'default',
             title: 'Default settings',
             content: [
-                createContainer('defaultContainer', rangeSlider.elem),
+                createContainer('defaultContainer', [
+                    rangeSlider.elem,
+                    valueElem,
+                ]),
                 logsField.elem,
             ],
         });
@@ -44,58 +69,87 @@ class RangeSliderView extends DemoView {
 
     initYAxis() {
         const logsField = LogsField.create();
+        const valueElem = createValueElement();
 
         const rangeSlider = RangeSlider.create({
             axis: 'y',
             className: 'vertical',
-            onChange: (value) => logsField.write(`onChange value: ${value}`),
+            onChange: (value) => {
+                logsField.write(`onChange value: ${value}`);
+                valueElem.renderValue(rangeSlider);
+            },
         });
+
+        valueElem.renderValue(rangeSlider);
 
         this.addSection({
             id: 'yAxis',
             title: 'Vertical',
             content: [
-                createContainer('yAxisContainer', rangeSlider.elem),
+                createContainer('yAxisContainer', [
+                    rangeSlider.elem,
+                    valueElem,
+                ]),
                 logsField.elem,
             ],
         });
     }
 
     initStyled() {
+        const valueElem = createValueElement();
         const rangeSlider = RangeSlider.create({
             className: 'styled',
+            onChange: () => valueElem.renderValue(rangeSlider),
         });
+
+        valueElem.renderValue(rangeSlider);
 
         this.addSection({
             id: 'styled',
             title: 'Styled',
-            content: createContainer('styledContainer', rangeSlider.elem),
+            content: createContainer('styledContainer', [
+                rangeSlider.elem,
+                valueElem,
+            ]),
         });
     }
 
     initRange() {
         const logsField = LogsField.create();
+        const valueElem = createValueElement();
 
         const rangeSlider = RangeSlider.create({
             range: true,
             className: 'styled',
-            onChange: ({ start, end }) => logsField.write(`onChange start: ${start}, end: ${end}`),
+            onChange: ({ start, end }) => {
+                logsField.write(`onChange start: ${start}, end: ${end}`);
+                valueElem.renderValue(rangeSlider);
+            },
         });
+
+        valueElem.renderValue(rangeSlider);
 
         this.addSection({
             id: 'range',
             title: 'Range',
             content: [
-                createContainer('rangeContainer', rangeSlider.elem),
+                createContainer('rangeContainer', [
+                    rangeSlider.elem,
+                    valueElem,
+                ]),
                 logsField.elem,
             ],
         });
     }
 
     initDisabled() {
+        const valueElem = createValueElement();
         const rangeSlider = RangeSlider.create({
             disabled: true,
+            onChange: () => valueElem.renderValue(rangeSlider),
         });
+
+        valueElem.renderValue(rangeSlider);
 
         const toggleEnableBtn = Button.create({
             id: 'toggleEnableBtn',
@@ -112,7 +166,10 @@ class RangeSliderView extends DemoView {
             id: 'disabled',
             title: 'Disabled component',
             content: [
-                createContainer('disabledContainer', rangeSlider.elem),
+                createContainer('disabledContainer', [
+                    rangeSlider.elem,
+                    valueElem,
+                ]),
                 createControls(toggleEnableBtn.elem),
             ],
         });
