@@ -35,6 +35,7 @@ class RangeSliderView extends DemoView {
         this.initDefault();
         this.initYAxis();
         this.initStyled();
+        this.initStep();
         this.initRange();
         this.initDisabled();
     }
@@ -108,6 +109,29 @@ class RangeSliderView extends DemoView {
             id: 'styled',
             title: 'Styled',
             content: createContainer('styledContainer', [
+                rangeSlider.elem,
+                valueElem,
+            ]),
+        });
+    }
+
+    initStep() {
+        const valueElem = createValueElement();
+        const rangeSlider = RangeSlider.create({
+            className: 'styled',
+            step: 0.02,
+            min: -10,
+            max: 10,
+            onChange: () => valueElem.renderValue(rangeSlider),
+        });
+
+        valueElem.renderValue(rangeSlider);
+
+        this.addSection({
+            id: 'step',
+            title: 'Value step',
+            description: '\'step\' property is set 0.02',
+            content: createContainer('stepContainer', [
                 rangeSlider.elem,
                 valueElem,
             ]),
