@@ -162,8 +162,8 @@ export class RangeSlider extends Component {
         const rect = slider.getBoundingClientRect();
         const offset = this.elem.getBoundingClientRect();
         return (this.props.axis === 'x')
-            ? Math.round(offset.width - rect.width)
-            : Math.round(offset.height - rect.height);
+            ? (offset.width - rect.width)
+            : (offset.height - rect.height);
     }
 
     positionToValue(pos) {
