@@ -5,12 +5,12 @@ import {
     enable,
 } from '@jezvejs/dom';
 import { Component } from '../../js/Component.js';
+import { minmax, px } from '../../js/common.js';
 
 import { RangeSliderDragZone } from './components/RangeSliderDragZone.js';
 import { RangeSliderDropTarget } from './components/RangeSliderDropTarget.js';
-import './RangeSlider.scss';
-import { debounce, minmax, px } from '../../js/common.js';
 import { positionToValue, valueToPosition } from './helpers.js';
+import './RangeSlider.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'range-slider';
@@ -32,7 +32,6 @@ const defaultProps = {
     max: 100,
     step: 1,
     range: false,
-    resizeTimeout: 200,
     onFocus: null,
     onBlur: null,
     onChange: null,
@@ -51,6 +50,8 @@ export class RangeSlider extends Component {
             ...defaultProps,
             ...props,
         });
+
+        this.resizeHandler = () => this.onResize();
 
         this.state = {
             ...this.props,
@@ -139,8 +140,7 @@ export class RangeSlider extends Component {
     }
 
     observeSize() {
-        const handler = debounce(() => this.onResize(), this.props.resizeTimeout);
-        const observer = new ResizeObserver(handler);
+        const observer = new ResizeObserver(this.resizeHandler);
         observer.observe(this.elem);
     }
 
