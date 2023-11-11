@@ -575,9 +575,21 @@ export const afterTransition = (elem, options, callback) => {
         target = null,
         duration = 500,
     } = options;
+    const transitionEvents = {};
 
     let timeout = 0;
     let waiting = true;
+
+    const removeHandler = () => {
+        waiting = false;
+        if (timeout === 0) {
+            return;
+        }
+
+        clearTimeout(timeout);
+        timeout = 0;
+        removeEvents(elem, transitionEvents);
+    };
 
     const handler = (e) => {
         if (!waiting) {
@@ -591,17 +603,15 @@ export const afterTransition = (elem, options, callback) => {
             return;
         }
 
-        waiting = false;
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-        removeEvents(elem, { transitionend: handler });
-
+        removeHandler();
         callback();
     };
 
-    setEvents(elem, { transitionend: handler });
+    transitionEvents.transitionend = handler;
+    setEvents(elem, transitionEvents);
     timeout = setTimeout(handler, duration);
+
+    return removeHandler;
 };
 
 /**
