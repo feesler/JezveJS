@@ -181,11 +181,21 @@ export class DragMaster {
     }
 
     setupScrollHandler() {
+        if (this.listenScroll) {
+            return;
+        }
+
         setEvents(document, this.touchScrollHandler, { passive: true });
+        this.listenScroll = true;
     }
 
     removeScrollHandler() {
+        if (!this.listenScroll) {
+            return;
+        }
+
         removeEvents(document, this.touchScrollHandler, { passive: true });
+        this.listenScroll = false;
     }
 
     /** Clean up drag objects */
@@ -198,6 +208,7 @@ export class DragMaster {
     /** Sets touch move timeout */
     initTouchMove(e) {
         this.resetMoveTimeout();
+        this.setupScrollHandler();
 
         this.touchMoveReady = (this.dragZone.touchMoveTimeout <= 0);
         if (this.touchMoveReady) {
@@ -205,7 +216,6 @@ export class DragMaster {
             return;
         }
 
-        this.setupScrollHandler();
         this.touchTimeout = setTimeout(() => {
             this.touchMoveReady = true;
             this.handleMove(e);
