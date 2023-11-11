@@ -66,3 +66,12 @@ export const getNextViewDate = (date, viewType) => {
 export const includesDate = (arr, date) => (
     asArray(arr).some((item) => isSameDate(item, date))
 );
+
+/** Returns width of screen considering orientation */
+export const getScreenWidth = () => {
+    const { angle } = window.screen.orientation;
+    const { width, height } = window.screen;
+    return (angle === 270 || angle === 90)
+        ? Math.max(width, height)
+        : Math.min(width, height);
+};

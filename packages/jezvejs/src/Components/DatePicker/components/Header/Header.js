@@ -47,31 +47,13 @@ export class DatePickerHeader extends Component {
         this.titleEl = createElement('div', {
             props: { className: HEADER_TITLE_CLASS },
         });
-
-        const children = [
-            this.navPrevElem,
-            this.titleEl,
-        ];
-
-        if (this.props.doubleView) {
-            const titlePlaceholder = createElement('div', {
-                props: { className: HEADER_TITLE_PLACEHOLDER_CLASS },
-            });
-            this.secondTitleEl = createElement('div', {
-                props: { className: HEADER_TITLE_CLASS },
-            });
-            children.push(titlePlaceholder, this.secondTitleEl);
-        }
-
         this.navNextElem = createElement('div', {
             props: { className: getClassName(HEADER_NAV_CLASS, HEADER_NEXT_NAV_CLASS) },
             children: this.renderNavIcon(),
         });
-        children.push(this.navNextElem);
 
         this.elem = createElement('div', {
             props: { className: HEADER_CLASS },
-            children,
             events: {
                 click: (e) => this.onClick(e),
             },
@@ -83,7 +65,7 @@ export class DatePickerHeader extends Component {
         e.stopPropagation();
 
         const isTitle = this.titleEl.contains(e.target);
-        const isSecondTitle = this.props.doubleView && this.secondTitleEl?.contains(e.target);
+        const isSecondTitle = this.state.doubleView && this.secondTitleEl?.contains(e.target);
         if (isTitle || isSecondTitle) {
             if (isFunction(this.props.onClickTitle)) {
                 this.props.onClickTitle({ e, isSecondTitle });
@@ -106,11 +88,20 @@ export class DatePickerHeader extends Component {
     }
 
     setTitle(title) {
-        this.setState({ ...this.state, title });
+        this.setState({
+            ...this.state,
+            title,
+            doubleView: false,
+        });
     }
 
     setDoubleTitle(title, secondTitle) {
-        this.setState({ ...this.state, title, secondTitle });
+        this.setState({
+            ...this.state,
+            title,
+            secondTitle,
+            doubleView: true,
+        });
     }
 
     renderNavIcon() {
@@ -120,7 +111,34 @@ export class DatePickerHeader extends Component {
         });
     }
 
-    render(state) {
+    render(state, prevState = {}) {
+        if (
+            state.title === prevState?.title
+            && state.secondTitle === prevState?.secondTitle
+            && state.doubleView === prevState?.doubleView
+        ) {
+            return;
+        }
+
+        const children = [
+            this.navPrevElem,
+            this.titleEl,
+        ];
+
+        if (state.doubleView) {
+            const titlePlaceholder = createElement('div', {
+                props: { className: HEADER_TITLE_PLACEHOLDER_CLASS },
+            });
+            this.secondTitleEl = createElement('div', {
+                props: { className: HEADER_TITLE_CLASS },
+            });
+            children.push(titlePlaceholder, this.secondTitleEl);
+        }
+
+        children.push(this.navNextElem);
+
+        this.elem.replaceChildren(...children);
+
         this.titleEl.textContent = state.title;
         if (this.secondTitleEl) {
             this.secondTitleEl.textContent = state.secondTitle;
