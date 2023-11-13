@@ -333,6 +333,9 @@ export class DatePicker extends Component {
             });
         } else {
             PopupPosition.reset(this.wrapper);
+
+            this.wrapper.classList.remove(ANIMATED_CLASS);
+            this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
         }
 
         // set automatic hide on empty click
@@ -629,10 +632,10 @@ export class DatePicker extends Component {
 
     setContentPosition(position) {
         if (this.props.vertical) {
-            this.position = minmax(-this.height * 2, 0, position);
+            this.position = minmax(-this.height * 2, this.height, position);
             this.slider.style.top = px(this.position);
         } else {
-            this.position = minmax(-this.width * 2, 0, position);
+            this.position = minmax(-this.width * 2, this.width, position);
             this.slider.style.left = px(this.position);
         }
     }
