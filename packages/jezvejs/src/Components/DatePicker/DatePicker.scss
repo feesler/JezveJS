@@ -1,23 +1,41 @@
 /* Relative container of Date Picker */
 .dp__container {
-  --dp-header-font-size: 1rem;
-  --dp-header-font-weight: 400;
+  --dp-padding: 0.5rem;
+  --dp-min-width: 200px;
   --dp-bg-color: #ffffff;
   --dp-border-color: #000000;
   --dp-border-width: 2px;
   --dp-text-color: #000000;
   --dp-disabled-text-color: #dddddd;
+
+  /* Other item */
   --dp-other-text-color: #b0b0b0;
-  --dp-active-color: #20d0ff;
-  --dp-today-color: #20d0ff;
+
+  /* Selected item */
+  --dp-active-text-color: #ffffff;
+  --dp-active-background: #20d0ff;
+  --dp-active-border-color: #20d0ff;
+
+  /* Today item */
+  --dp-today-text-color: var(--dp-text-color);
+  --dp-today-background: var(--dp-bg-color);
+  --dp-today-border-color: #20d0ff;
+
+  /* Hover item */
   --dp-hover-bg-color: #80d0ff;
   --dp-hover-color: #ffffff;
-  --dp-hl-bg-color: #80d0ff;
+  --dp-hover-border-color: transparent;
+
+  /* Selected range item */
+  --dp-hl-border-color: #20d0ff;
+  --dp-hl-bg-color: #20d0ff;
   --dp-hl-color: #ffffff;
+
+  /* Header */
+  --dp-header-font-size: 1rem;
+  --dp-header-font-weight: 400;
   --dp-nav-fill: #b0b0b0;
   --dp-nav-hover-fill: #80d0ff;
-  --dp-padding: 0.5rem;
-  --dp-min-width: 200px;
 
   /* Day cells */
   --dp-day-cell-size: 2.5rem;
@@ -271,16 +289,20 @@
 }
 
 .dp__today-cell {
-  border: 1px dashed var(--dp-today-color);
+  color: var(--dp-today-text-color);
+  background-color: var(--dp-today-background);
+  border: 1px dashed var(--dp-today-border-color);
 }
 
 .dp__cell_act {
-  border: 1px solid var(--dp-active-color);
+  color: var(--dp-active-text-color);
+  background-color: var(--dp-active-background);
+  border: 1px solid var(--dp-active-border-color);
 }
 
 .dp__cell_hl {
   background-color: var(--dp-hl-bg-color);
-  border: 1px solid var(--dp-hl-bg-color);
+  border: 1px solid var(--dp-hl-border-color);
   color: var(--dp-hl-color);
   border-radius: 0;
 }
@@ -362,5 +384,6 @@
   .dp__day-cell:hover {
     background-color: var(--dp-hover-bg-color);
     color: var(--dp-hover-color);
+    border-color: var(--dp-hover-border-color);
   }
 }
