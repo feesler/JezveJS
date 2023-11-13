@@ -10,6 +10,7 @@
         "selector-no-vendor-prefix": true,
         "at-rule-no-vendor-prefix": true,
         "media-feature-name-no-vendor-prefix": true,
+        "media-feature-range-notation": null,
         "selector-class-pattern": null,
         "color-function-notation": null,
         "alpha-value-notation": null,
