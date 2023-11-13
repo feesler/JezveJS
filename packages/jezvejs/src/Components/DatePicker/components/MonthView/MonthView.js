@@ -143,6 +143,7 @@ export class DatePickerMonthView extends Component {
             week.forEach((weekday) => {
                 const isOtherMonth = !isSameYearMonth(date, weekday);
                 const isToday = isSameDate(weekday, today) && (!doubleView || !isOtherMonth);
+                const itemDate = weekday.getDate();
                 const item = {
                     date: weekday,
                     isOtherMonth,
@@ -150,7 +151,10 @@ export class DatePickerMonthView extends Component {
                     elem: createElement('div', {
                         props: {
                             className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
-                            textContent: weekday.getDate(),
+                            textContent: itemDate,
+                            dataset: {
+                                date: itemDate,
+                            },
                         },
                     }),
                 };
