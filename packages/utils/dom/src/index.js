@@ -305,20 +305,7 @@ export const getCaretPos = (elem) => {
 
     elem.focus();
 
-    if (elem.selectionStart) {
-        return elem.selectionStart;
-    }
-    /* IE */
-    if (document.selection) {
-        const sel = document.selection.createRange();
-        const clone = sel.duplicate();
-        sel.collapse(true);
-        clone.moveToElementText(elem);
-        clone.setEndPoint('EndToEnd', sel);
-        return clone.text.length;
-    }
-
-    return 0;
+    return elem.selectionStart ?? 0;
 };
 
 /**
@@ -337,33 +324,6 @@ export const getCursorPos = (input) => {
         };
     }
 
-    if (input.createTextRange) {
-        const sel = document.selection.createRange();
-        if (sel.parentElement() === input) {
-            const rng = input.createTextRange();
-            rng.moveToBookmark(sel.getBookmark());
-            let len;
-            for (
-                len = 0;
-                rng.compareEndPoints('EndToStart', rng) > 0;
-                rng.moveEnd('character', -1)
-            ) {
-                len += 1;
-            }
-            rng.setEndPoint('StartToStart', input.createTextRange());
-            let pos;
-            for (
-                pos = { start: 0, end: len };
-                rng.compareEndPoints('EndToStart', rng) > 0;
-                rng.moveEnd('character', -1)
-            ) {
-                pos.start += 1;
-                pos.end += 1;
-            }
-            return pos;
-        }
-    }
-
     return null;
 };
 
@@ -374,19 +334,11 @@ export const getCursorPos = (input) => {
  * @param {number} endPos
  */
 export const selectText = (input, startPos, endPos) => {
-    if (!input) {
+    if (!input?.setSelectionRange) {
         return;
     }
 
-    if (input.createTextRange) {
-        const range = input.createTextRange();
-        range.collapse(true);
-        range.moveEnd('character', endPos);
-        range.moveStart('character', startPos);
-        range.select();
-    } else if (input.setSelectionRange) {
-        input.setSelectionRange(startPos, endPos);
-    }
+    input.setSelectionRange(startPos, endPos);
 };
 
 /**
@@ -623,9 +575,21 @@ export const afterTransition = (elem, options, callback) => {
         target = null,
         duration = 500,
     } = options;
+    const transitionEvents = {};
 
     let timeout = 0;
     let waiting = true;
+
+    const removeHandler = () => {
+        waiting = false;
+        if (timeout === 0) {
+            return;
+        }
+
+        clearTimeout(timeout);
+        timeout = 0;
+        removeEvents(elem, transitionEvents);
+    };
 
     const handler = (e) => {
         if (!waiting) {
@@ -639,17 +603,15 @@ export const afterTransition = (elem, options, callback) => {
             return;
         }
 
-        waiting = false;
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-        removeEvents(elem, { transitionend: handler });
-
+        removeHandler();
         callback();
     };
 
-    setEvents(elem, { transitionend: handler });
+    transitionEvents.transitionend = handler;
+    setEvents(elem, transitionEvents);
     timeout = setTimeout(handler, duration);
+
+    return removeHandler;
 };
 
 /**

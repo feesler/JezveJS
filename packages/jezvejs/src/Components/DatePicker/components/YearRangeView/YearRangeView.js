@@ -6,6 +6,7 @@ import {
     getPrevViewDate,
     YEARRANGE_VIEW,
     YEAR_RANGE_LENGTH,
+    getHeaderTitle,
 } from '../../utils.js';
 
 /* CSS classes */
@@ -14,19 +15,44 @@ const CELL_CLASS = 'dp__cell';
 const OTHER_CELL_CLASS = 'dp__other-month-cell';
 const YEARRANGE_CELL_CLASS = 'dp__year-range-view__cell';
 
-export class DatePickerYearRangeView extends Component {
-    constructor(props) {
-        super(props);
+const defaultProps = {
+    renderHeader: false,
+    header: null,
+    components: {
+        Header: null,
+    },
+};
 
-        if (!isDate(this.props.date)) {
+export class DatePickerYearRangeView extends Component {
+    constructor(props = {}) {
+        super({
+            ...defaultProps,
+            ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
+        });
+
+        const { date } = this.props;
+        if (!isDate(date)) {
             throw new Error('Invalid date');
         }
 
-        this.state = {
-            ...this.props,
-        };
         this.type = YEARRANGE_VIEW;
         this.items = [];
+
+        this.state = {
+            ...this.props,
+            title: getHeaderTitle({
+                viewType: this.type,
+                date,
+            }),
+            nav: {
+                prev: getPrevViewDate(date, this.type),
+                next: getNextViewDate(date, this.type),
+            },
+        };
 
         this.init();
     }
@@ -48,12 +74,17 @@ export class DatePickerYearRangeView extends Component {
         const rYear = date.getFullYear();
         const startYear = rYear - (rYear % 10) - 1;
 
-        this.state.title = `${startYear + 1}-${startYear + YEAR_RANGE_LENGTH}`;
-        this.state.nav = {
-            prev: getPrevViewDate(date, this.type),
-            next: getNextViewDate(date, this.type),
-        };
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
+
+        // year range header
+        const { Header } = this.props.components;
+        if (this.props.renderHeader && Header) {
+            this.header = Header.create({
+                ...(this.props.header ?? {}),
+                title: this.state.title,
+            });
+            this.elem.append(this.header.elem);
+        }
 
         // years of current range
         for (let i = 0; i < YEAR_RANGE_LENGTH + 2; i += 1) {

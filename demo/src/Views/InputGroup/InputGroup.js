@@ -1,9 +1,15 @@
 import 'jezvejs/style';
-import { ge, createElement, getClassName } from '@jezvejs/dom';
+import {
+    ge,
+    createElement,
+    getClassName,
+    enable,
+} from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 import { InputGroup } from 'jezvejs/InputGroup';
 
+import { createContainer, createControls } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './InputGroupView.scss';
 
@@ -233,18 +239,43 @@ class InputGroupView extends DemoView {
     }
 
     disabled() {
+        const searchButton = createInnerButton({
+            icon: 'search',
+            className: 'search-btn',
+            enabled: false,
+        });
+        const input = createInput({ className: 'stretch-input', disabled: true });
+        const closeBtn = createInnerButton({ icon: 'close-icon', enabled: false });
+
+        const inputGroup = InputGroup.create({
+            className: 'input-group__input-outer',
+            children: [
+                searchButton,
+                input,
+                closeBtn,
+            ],
+        });
+
+        const toggleEnableBtn = Button.create({
+            id: 'toggleEnableBtn',
+            className: 'action-btn',
+            title: 'Enable',
+            onClick: () => {
+                const { disabled } = searchButton;
+                toggleEnableBtn.setTitle((disabled) ? 'Disable' : 'Enable');
+                enable(inputGroup.elem, disabled);
+                enable(searchButton, disabled);
+                enable(input, disabled);
+                enable(closeBtn, disabled);
+            },
+        });
+
         this.addSection({
             id: 'disabled',
             title: 'Disabled',
             content: [
-                InputGroup.create({
-                    className: 'input-group__input-outer',
-                    children: [
-                        createInnerButton({ icon: 'search', className: 'search-btn', enabled: false }),
-                        createInput({ className: 'stretch-input', disabled: true }),
-                        createInnerButton({ icon: 'close-icon', enabled: false }),
-                    ],
-                }).elem,
+                createContainer('disabledContainer', inputGroup.elem),
+                createControls(toggleEnableBtn.elem),
             ],
         });
     }

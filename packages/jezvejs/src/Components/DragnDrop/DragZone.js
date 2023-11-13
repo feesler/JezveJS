@@ -62,8 +62,7 @@ export class DragZone {
      */
     onDragStart(downX, downY, event) {
         const avatar = this.makeAvatar();
-
-        if (!avatar?.initFromEvent(downX, downY, event)) {
+        if (avatar && !avatar.initFromEvent(downX, downY, event)) {
             return false;
         }
 

@@ -1,7 +1,7 @@
 /* Range slider component */
 .range-slider {
   /* Slider area */
-  --rs-area-size: 0.8rem;
+  --rs-area-size: 1rem;
   --rs-max-length: 400px;
   --rs-area-border-style: none;
   --rs-area-border-width: 0;
@@ -12,7 +12,7 @@
   --rs-focus-background: #d4d4d4;
 
   /* Slider */
-  --rs-slider-size: 0.8rem;
+  --rs-slider-size: 1rem;
   --rs-slider-offset: 0;
   --rs-slider-border-style: none;
   --rs-slider-border-width: 0;

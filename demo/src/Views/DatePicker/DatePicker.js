@@ -91,6 +91,8 @@ class DatePickerView extends DemoView {
         this.initMultiple();
         this.initRangeSelect();
         this.initDoubleView();
+        this.initVertical();
+        this.initVerticalDouble();
         this.initCallbacks();
         this.initSetSelection();
         this.initDisabledDate();
@@ -307,6 +309,57 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'doubleView',
             title: '\'doubleView\' option',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initVertical() {
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpVerticalGroup',
+            inputId: 'verticalInp',
+            buttonId: 'showVerticalBtn',
+            onButtonClick: () => datePicker?.toggle(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            vertical: true,
+            animated: true,
+        });
+
+        this.addSection({
+            id: 'vertical',
+            title: '\'vertical\' option',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
+    initVerticalDouble() {
+        let datePicker = null;
+        const inpGroup = DateInputGroup.create({
+            id: 'dpVerticalDoubleGroup',
+            inputId: 'verticalDoubleInp',
+            buttonId: 'showVerticalDoubleBtn',
+            onButtonClick: () => datePicker?.toggle(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            vertical: true,
+            doubleView: true,
+            animated: true,
+        });
+
+        this.addSection({
+            id: 'verticalDouble',
+            title: '\'vertical\' + \'doubleView\'',
             content: [
                 inpGroup.elem,
                 datePicker.elem,

@@ -116,11 +116,11 @@ input[type="number"] {
   overflow: hidden;
 }
 
+/* iOS Safari styling issue fix */
 input[type="button"],
 input[type="submit"],
 button {
-  overflow: visible; /* IE button padding fix */
-  appearance: button; /* iOS Safari styling issue fix */
+  appearance: button;
 }
 
 /* iOS safari fix for styling disabled inputs */

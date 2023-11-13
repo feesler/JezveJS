@@ -625,7 +625,6 @@ export class BaseChart extends Component {
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
         const formatFunction = this.getXAxisLabelRenderer(state);
 
-        let prevValue = null;
         const labels = [];
         for (let i = 0; i < visibleGroups; i += 1) {
             const groupIndex = firstGroupIndex + i;
@@ -633,6 +632,8 @@ export class BaseChart extends Component {
             if (typeof value === 'undefined') {
                 break;
             }
+
+            const prevValue = state.data.series[groupIndex - 1] ?? null;
             if (value === prevValue) {
                 continue;
             }
@@ -661,8 +662,6 @@ export class BaseChart extends Component {
             });
 
             labels.push(label);
-
-            prevValue = value;
         }
 
         requestAnimationFrame(() => {
