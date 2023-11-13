@@ -27,6 +27,7 @@ import { Slidable } from '../Slidable/Slidable.js';
 // Local components
 import { DatePickerHeader } from './components/Header/Header.js';
 import { DatePickerMonthView } from './components/MonthView/MonthView.js';
+import { DatePickerWeekDaysHeader } from './components/WeekDaysHeader/WeekDaysHeader.js';
 import { DatePickerYearView } from './components/YearView/YearView.js';
 import { DatePickerYearRangeView } from './components/YearRangeView/YearRangeView.js';
 
@@ -99,6 +100,7 @@ const defaultProps = {
     components: {
         Footer: null,
         Header: DatePickerHeader,
+        WeekDaysHeader: DatePickerWeekDaysHeader,
     },
 };
 
@@ -168,12 +170,23 @@ export class DatePicker extends Component {
                 : relparent;
         }
 
+        // Header
         const { Header } = this.props.components;
         this.header = Header.create({
             doubleView: doubleView && !vertical,
             ...this.headerEvents,
         });
 
+        // Weekdays header
+        const { WeekDaysHeader } = this.props.components;
+        if (this.props.vertical && WeekDaysHeader) {
+            this.weekdays = WeekDaysHeader.create({
+                locales: this.props.locales,
+                firstDay: this.props.firstDay,
+            });
+        }
+
+        // Content
         this.slider = createElement('div', { props: { className: SLIDER_CLASS } });
 
         this.cellsContainer = createElement('div', {
@@ -181,17 +194,20 @@ export class DatePicker extends Component {
             children: this.slider,
         });
 
-        const children = [this.header.elem, this.cellsContainer];
-
+        // Footer
         const { Footer } = this.props.components;
         if (Footer) {
             this.footer = Footer.create(this.props.footer);
-            children.push(this.footer.elem);
         }
 
         this.wrapper = createElement('div', {
             props: { className: WRAPPER_CLASS },
-            children,
+            children: [
+                this.header.elem,
+                this.weekdays?.elem,
+                this.cellsContainer,
+                this.footer?.elem,
+            ],
             events: {
                 click: (e) => this.onViewClick(e),
             },
@@ -908,6 +924,10 @@ export class DatePicker extends Component {
             return;
         }
 
+        if (this.weekdays) {
+            this.weekdays.show(state.viewType === MONTH_VIEW);
+        }
+
         const { current, second } = views;
 
         if (
@@ -1137,6 +1157,7 @@ export class DatePicker extends Component {
             },
             components: {
                 Header: this.props.components.Header,
+                WeekDaysHeader: this.props.components.WeekDaysHeader,
             },
         };
 
@@ -1150,6 +1171,7 @@ export class DatePicker extends Component {
                 curRange: state.curRange,
                 disabledDateFilter: state.disabledDateFilter,
                 rangePart: state.rangePart,
+                renderWeekdays: !this.props.vertical,
             });
         }
 

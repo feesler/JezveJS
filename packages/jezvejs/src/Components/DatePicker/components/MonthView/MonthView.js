@@ -6,7 +6,6 @@ import {
 } from '@jezvejs/dom';
 import {
     DAYS_IN_WEEK,
-    getWeekdayShort,
     shiftDate,
     getWeekDays,
     isSameYearMonth,
@@ -27,7 +26,6 @@ const CELL_CLASS = 'dp__cell';
 const OTHER_CELL_CLASS = 'dp__other-month-cell';
 const MONTH_CELL_CLASS = 'dp__month-view_cell';
 const DAY_CELL_CLASS = 'dp__day-cell';
-const WEEKDAY_CELL_CLASS = 'dp__weekday-cell';
 const TODAY_CELL_CLASS = 'dp__today-cell';
 const HIGHLIGHT_CELL_CLASS = 'dp__cell_hl';
 const RANGE_START_CELL_CLASS = 'dp__cell_hl-range-start';
@@ -46,6 +44,7 @@ const defaultProps = {
     header: null,
     components: {
         Header: null,
+        WeekDaysHeader: null,
     },
 };
 
@@ -127,18 +126,17 @@ export class DatePickerMonthView extends Component {
             };
         }
 
-        let week = getWeekDays(firstMonthDay, weekDayParams);
-        if (this.props.renderWeekdays) {
-            const headerElems = week.map((weekday) => createElement('div', {
-                props: {
-                    className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, WEEKDAY_CELL_CLASS),
-                    textContent: getWeekdayShort(weekday, locales),
-                },
-            }));
-            this.elem.append(...headerElems);
+        const { WeekDaysHeader } = this.props.components;
+        if (this.props.renderWeekdays && WeekDaysHeader) {
+            this.weekdays = WeekDaysHeader.create({
+                locales,
+                firstDay,
+            });
+            this.elem.append(this.weekdays.elem);
         }
 
         // days
+        let week = getWeekDays(firstMonthDay, weekDayParams);
         const disabledFilter = isFunction(this.state.disabledDateFilter);
 
         do {
