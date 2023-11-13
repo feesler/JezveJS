@@ -7,7 +7,6 @@ import {
 import {
     DAYS_IN_WEEK,
     getWeekdayShort,
-    getLongMonthName,
     shiftDate,
     getWeekDays,
     isSameYearMonth,
@@ -15,6 +14,7 @@ import {
 } from '@jezvejs/datetime';
 import { Component } from '../../../../js/Component.js';
 import {
+    getHeaderTitle,
     getNextViewDate,
     getPrevViewDate,
     includesDate,
@@ -41,6 +41,12 @@ const defaultProps = {
     locales: [],
     firstDay: null,
     doubleView: false,
+    renderWeekdays: true,
+    renderHeader: false,
+    header: null,
+    components: {
+        Header: null,
+    },
 };
 
 export class DatePickerMonthView extends Component {
@@ -48,17 +54,32 @@ export class DatePickerMonthView extends Component {
         super({
             ...defaultProps,
             ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
         });
 
-        if (!isDate(this.props.date)) {
+        const { date, locales } = this.props;
+        if (!isDate(date)) {
             throw new Error('Invalid date');
         }
 
-        this.state = {
-            ...this.props,
-        };
         this.type = MONTH_VIEW;
         this.items = [];
+
+        this.state = {
+            ...this.props,
+            title: getHeaderTitle({
+                viewType: this.type,
+                date,
+                locales,
+            }),
+            nav: {
+                prev: getPrevViewDate(date, this.type),
+                next: getNextViewDate(date, this.type),
+            },
+        };
 
         this.init();
         this.render(this.state);
@@ -82,16 +103,20 @@ export class DatePickerMonthView extends Component {
         const today = new Date();
         const rMonth = date.getMonth();
         const rYear = date.getFullYear();
-        const monthLong = getLongMonthName(date, locales);
 
-        this.state.title = `${monthLong} ${rYear}`;
-        this.state.nav = {
-            prev: getPrevViewDate(date, this.type),
-            next: getNextViewDate(date, this.type),
-        };
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
 
-        // header
+        // month header
+        const { Header } = this.props.components;
+        if (this.props.renderHeader && Header) {
+            this.header = Header.create({
+                ...(this.props.header ?? {}),
+                title: this.state.title,
+            });
+            this.elem.append(this.header.elem);
+        }
+
+        // week days header
         const firstMonthDay = new Date(rYear, rMonth, 1);
         const weekDayParams = {
             locales,
@@ -103,13 +128,15 @@ export class DatePickerMonthView extends Component {
         }
 
         let week = getWeekDays(firstMonthDay, weekDayParams);
-        const headerElems = week.map((weekday) => createElement('div', {
-            props: {
-                className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, WEEKDAY_CELL_CLASS),
-                textContent: getWeekdayShort(weekday, locales),
-            },
-        }));
-        this.elem.append(...headerElems);
+        if (this.props.renderWeekdays) {
+            const headerElems = week.map((weekday) => createElement('div', {
+                props: {
+                    className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, WEEKDAY_CELL_CLASS),
+                    textContent: getWeekdayShort(weekday, locales),
+                },
+            }));
+            this.elem.append(...headerElems);
+        }
 
         // days
         const disabledFilter = isFunction(this.state.disabledDateFilter);

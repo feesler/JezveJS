@@ -1,4 +1,4 @@
-import { isSameDate } from '@jezvejs/datetime';
+import { getLongMonthName, isSameDate } from '@jezvejs/datetime';
 import { asArray, isDate, isFunction } from '@jezvejs/types';
 
 export const MONTH_VIEW = 'month';
@@ -75,3 +75,30 @@ export const getScreenWidth = () => {
         ? Math.max(width, height)
         : Math.min(width, height);
 };
+
+/** Returns header title string for specified view state */
+export const getHeaderTitle = (state) => {
+    const { viewType, date, locales } = state;
+    const rYear = date.getFullYear();
+
+    if (viewType === MONTH_VIEW) {
+        const monthLong = getLongMonthName(date, locales);
+        return `${monthLong} ${rYear}`;
+    }
+
+    if (viewType === YEAR_VIEW) {
+        return rYear;
+    }
+
+    if (viewType === YEARRANGE_VIEW) {
+        const startYear = rYear - (rYear % 10) - 1;
+        return `${startYear + 1}-${startYear + YEAR_RANGE_LENGTH}`;
+    }
+
+    throw new Error('Invalid view type');
+};
+
+/** Returns offsetHeight for specified component */
+export const getComponentHeight = (component) => (
+    component?.elem?.offsetHeight ?? 0
+);

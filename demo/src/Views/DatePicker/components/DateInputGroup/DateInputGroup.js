@@ -1,6 +1,11 @@
+import { getClassName } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 import { InputGroup } from 'jezvejs/InputGroup';
+
+import './DateInputGroup.scss';
+
+const DATE_INPUT_GROUP_CLASS = 'date-input-group';
 
 const defaultProps = {
     inputId: undefined,
@@ -19,6 +24,7 @@ export class DateInputGroup extends InputGroup {
         const userProps = {
             ...defaultProps,
             ...props,
+            className: getClassName(DATE_INPUT_GROUP_CLASS, props.className),
         };
 
         super({

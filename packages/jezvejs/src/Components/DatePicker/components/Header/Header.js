@@ -17,6 +17,8 @@ const NAV_ICON_CLASS = 'dp__header_nav-icon';
 const NAV_ICON_PATH = 'm2 0.47-0.35-0.35-1.6 1.6 1.6 1.6 0.35-0.35-1.2-1.2z';
 
 const defaultProps = {
+    title: null,
+    secondTitle: null,
     doubleView: false,
     onClickTitle: null,
     onClickPrev: null,

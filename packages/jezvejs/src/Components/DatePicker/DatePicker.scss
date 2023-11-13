@@ -27,6 +27,7 @@
   /* Container */
   --dp-width: calc(var(--dp-day-cell-size) * 7);
   --dp-double-view-column-gap: 0.5rem;
+  --dp-double-view-row-gap: 0.5rem;
 
   position: relative;
   max-width: 100%;
@@ -60,6 +61,7 @@
   grid-template-columns: 1fr 6fr 1fr;
   text-align: center;
   align-items: center;
+  width: 100%;
 }
 
 .dp__header_item {
@@ -100,17 +102,29 @@
 
 .dp__slider {
   display: flex;
-  flex-flow: row nowrap;
   align-items: flex-start;
   position: relative;
-  left: -100%;
   max-width: 100%;
 }
 
+/* Horizontal slider */
+.dp__horizontal .dp__slider {
+  flex-flow: row nowrap;
+  left: -100%;
+}
+
+/* Vertical slider */
+.dp__vertical .dp__slider {
+  flex-flow: column nowrap;
+  top: -100%;
+}
+
+/* Double views */
 .dp__double-view {
   .dp__slider,
   .dp__view {
     column-gap: var(--dp-double-view-column-gap);
+    row-gap: var(--dp-double-view-row-gap);
   }
 
   .dp__header-placeholder,
@@ -120,25 +134,33 @@
 }
 
 @media (min-width: 724px) {
-  .dp__wrapper.dp__double-view {
-    width: calc(
-      ((var(--dp-width) + var(--dp-border-width) + var(--dp-padding)) * 2) +
-        var(--dp-double-view-column-gap)
-    );
+  .dp__horizontal {
+    .dp__double-view {
+      &.dp__wrapper {
+        width: calc(
+          ((var(--dp-width) + var(--dp-border-width) + var(--dp-padding)) * 2) +
+            var(--dp-double-view-column-gap)
+        );
+      }
+
+      .dp__header {
+        grid-template-columns: 1fr 6fr 2fr 6fr 1fr;
+      }
+
+      .dp__header-placeholder,
+      .dp__header-placeholder + .dp__header_title {
+        display: inline-flex;
+      }
+
+      .dp__slider {
+        left: -50%;
+      }
+    }
   }
 
-  .dp__double-view {
-    .dp__header {
-      grid-template-columns: 1fr 6fr 2fr 6fr 1fr;
-    }
-
-    .dp__slider {
-      left: -50%;
-    }
-
-    .dp__header-placeholder,
-    .dp__header-placeholder + .dp__header_title {
-      display: inline-flex;
+  .dp__vertical {
+    .dp__double-view .dp__slider {
+      top: -50%;
     }
   }
 }
@@ -169,15 +191,24 @@
 /* Year view */
 .dp__year-view {
   grid-template-columns: repeat(4, 1fr);
+
+  .dp__header {
+    grid-column: 1 / 5;
+  }
 }
 
 /* Year range view */
 .dp__year-range-view {
   grid-template-columns: repeat(4, 1fr);
+
+  .dp__header {
+    grid-column: 1 / 5;
+  }
 }
 
 .dp__year-range-view__cell,
 .dp__year-view__cell {
+  width: 100%;
   padding: 0.25rem;
   text-transform: capitalize;
   font-weight: normal;
@@ -189,6 +220,10 @@
 /* Month view */
 .dp__month-view {
   grid-template-columns: repeat(7, 1fr);
+
+  .dp__header {
+    grid-column: 1 / 8;
+  }
 }
 
 .dp__month-view_cell {
@@ -253,7 +288,6 @@
 /* Zoom-in and zoom-out animations container */
 .dp__layered-view {
   display: flex;
-  flex-flow: row nowrap;
   column-gap: var(--dp-double-view-column-gap);
   position: absolute;
   top: 0;
@@ -281,6 +315,14 @@
     z-index: 2;
     opacity: 0;
   }
+}
+
+.dp__horizontal .dp__layered-view {
+  flex-flow: row nowrap;
+}
+
+.dp__vertical .dp__layered-view {
+  flex-flow: column nowrap;
 }
 
 /* Animation */
