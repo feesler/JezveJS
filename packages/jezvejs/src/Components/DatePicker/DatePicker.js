@@ -1133,6 +1133,7 @@ export class DatePicker extends Component {
             renderHeader: doubleView && this.props.vertical,
             header: {
                 ...this.headerEvents,
+                onClickTitle: (options) => this.zoomOut({ ...options, isSecondTitle: true }),
             },
             components: {
                 Header: this.props.components.Header,
