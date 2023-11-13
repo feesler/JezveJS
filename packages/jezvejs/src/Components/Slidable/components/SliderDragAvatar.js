@@ -49,10 +49,10 @@ export class SliderDragAvatar extends DragAvatar {
      * @param {Event} e - event object
      */
     onDragMove(e) {
-        const client = DragMaster.getEventClientCoordinates(e);
+        const coord = DragMaster.getEventPageCoordinates(e);
         this.currentTargetElem = this.dragZoneElem;
 
-        const position = this.getPositionForCoordinates(client);
+        const position = this.getPositionForCoordinates(coord);
         const distance = this.position - position;
         this.position = position;
 
