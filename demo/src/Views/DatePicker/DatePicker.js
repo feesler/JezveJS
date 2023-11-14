@@ -329,11 +329,13 @@ class DatePickerView extends DemoView {
             relparent: inpGroup.elem,
             vertical: true,
             animated: true,
+            showOtherMonthDays: false,
         });
 
         this.addSection({
             id: 'vertical',
             title: '\'vertical\' option',
+            description: '+ disabled \'showOtherMonthDays\' option',
             content: [
                 inpGroup.elem,
                 datePicker.elem,
@@ -355,6 +357,7 @@ class DatePickerView extends DemoView {
             vertical: true,
             doubleView: true,
             animated: true,
+            showOtherMonthDays: false,
         });
 
         this.addSection({

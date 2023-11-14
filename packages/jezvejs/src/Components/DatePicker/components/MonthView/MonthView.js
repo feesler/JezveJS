@@ -41,6 +41,7 @@ const defaultProps = {
     doubleView: false,
     renderWeekdays: true,
     renderHeader: false,
+    showOtherMonthDays: true,
     header: null,
     components: {
         Header: null,
@@ -136,6 +137,7 @@ export class DatePickerMonthView extends Component {
         }
 
         // days
+        const { showOtherMonthDays } = this.props;
         let week = getWeekDays(firstMonthDay, weekDayParams);
         const disabledFilter = isFunction(this.state.disabledDateFilter);
 
@@ -151,18 +153,24 @@ export class DatePickerMonthView extends Component {
                     elem: createElement('div', {
                         props: {
                             className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
-                            textContent: itemDate,
-                            dataset: {
-                                date: itemDate,
-                            },
                         },
                     }),
                 };
 
+                if (showOtherMonthDays || !isOtherMonth) {
+                    item.elem.textContent = itemDate;
+                }
+                if (!isOtherMonth) {
+                    item.elem.dataset.date = itemDate;
+                }
+
                 item.elem.classList.toggle(OTHER_CELL_CLASS, item.isOtherMonth);
                 item.elem.classList.toggle(TODAY_CELL_CLASS, item.isToday);
 
-                const disabled = disabledFilter && this.state.disabledDateFilter(item.date);
+                const disabled = (
+                    (!showOtherMonthDays && isOtherMonth)
+                    || (!!disabledFilter && this.state.disabledDateFilter(item.date))
+                );
                 enable(item.elem, !disabled);
 
                 this.items.push(item);
@@ -200,7 +208,7 @@ export class DatePickerMonthView extends Component {
             return;
         }
 
-        const { doubleView } = this.props;
+        const { doubleView, showOtherMonthDays } = this.props;
         const disabledFilter = isFunction(state.disabledDateFilter);
 
         this.items.forEach((item) => {
@@ -222,7 +230,10 @@ export class DatePickerMonthView extends Component {
             const isRangeEnd = !!endDate && isSameDate(item.date, endDate);
             item.elem.classList.toggle(RANGE_END_CELL_CLASS, isRangeEnd);
 
-            const disabled = disabledFilter && state.disabledDateFilter(item.date, state);
+            const disabled = (
+                (!showOtherMonthDays && item.isOtherMonth)
+                || (!!disabledFilter && state.disabledDateFilter(item.date, state))
+            );
             enable(item.elem, !disabled);
         });
     }
