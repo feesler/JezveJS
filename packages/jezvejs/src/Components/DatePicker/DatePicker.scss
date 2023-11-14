@@ -340,6 +340,8 @@
 .dp__cell_hl.dp__cell_hl-range-start::before,
 .dp__cell_hl.dp__cell_hl-range-end::before {
   content: "";
+  left: 0;
+  right: 0;
   background-color: var(--dp-hl-bg-color);
   border: 1px solid var(--dp-hl-border-color);
   z-index: 1;
@@ -367,13 +369,13 @@
 }
 
 .dp__cell_hl.dp__cell_hl-range-start::before {
-  left: 50%;
-  right: 0;
+  border-top-left-radius: var(--dp-day-cell-border-radius);
+  border-bottom-left-radius: var(--dp-day-cell-border-radius);
 }
 
 .dp__cell_hl.dp__cell_hl-range-end::before {
-  left: 0;
-  right: 50%;
+  border-top-right-radius: var(--dp-day-cell-border-radius);
+  border-bottom-right-radius: var(--dp-day-cell-border-radius);
 }
 
 .dp__cell_hl.dp__cell_hl-range-end::after {
