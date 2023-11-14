@@ -8,6 +8,7 @@ import {
     createElement,
     afterTransition,
     getClassName,
+    setEvents,
 } from '@jezvejs/dom';
 import {
     isSameDate,
@@ -146,6 +147,7 @@ export class DatePicker extends Component {
 
         this.waitingForAnimation = false;
         this.rebuildContent = true;
+        this.resizeRequested = false;
         this.removeTransitionHandler = null;
         this.position = 0;
         this.width = 0;
@@ -237,6 +239,7 @@ export class DatePicker extends Component {
         });
 
         this.observeSliderSize();
+        this.setHandlers();
 
         this.setClassNames();
         this.render(this.state);
@@ -269,17 +272,30 @@ export class DatePicker extends Component {
         observer.observe(this.elem);
     }
 
+    /** Setup event handlers element */
+    setHandlers() {
+        setEvents(window.screen.orientation, {
+            change: () => (
+                requestAnimationFrame(() => this.onResize())
+            ),
+        });
+    }
+
     /** Updates height of container */
     onResize() {
         if (!this.currView || this.waitingForAnimation) {
+            this.resizeRequested = true;
             return;
         }
 
         this.viewHeights = this.getViewsHeights();
         const containerHeight = this.getContainerHeight(this.viewHeights);
         if (containerHeight === 0) {
+            this.resizeRequested = true;
             return;
         }
+
+        this.resizeRequested = false;
 
         this.width = this.cellsContainer.offsetWidth;
         this.height = containerHeight;
@@ -334,8 +350,19 @@ export class DatePicker extends Component {
         } else {
             PopupPosition.reset(this.wrapper);
 
+            this.waitingForAnimation = false;
+
+            this.removeTransition();
+
             this.wrapper.classList.remove(ANIMATED_CLASS);
             this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
+
+            if (this.width > 0) {
+                this.setDefaultContentPosition();
+            }
+
+            transform(this.slider, '');
+            this.cellsContainer.style.width = '';
         }
 
         // set automatic hide on empty click
@@ -425,7 +452,7 @@ export class DatePicker extends Component {
     }
 
     navigateTo(state) {
-        if (!this.currView || this.waitingForAnimation) {
+        if (this.waitingForAnimation) {
             return;
         }
 
@@ -437,6 +464,10 @@ export class DatePicker extends Component {
     }
 
     setRangePart(rangePart) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         if (this.state.rangePart === rangePart) {
             return;
         }
@@ -445,6 +476,10 @@ export class DatePicker extends Component {
     }
 
     onStateReady() {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             transition: null,
@@ -499,6 +534,10 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of month to show
      */
     showMonth(date) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             viewType: MONTH_VIEW,
@@ -511,6 +550,10 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of year to show
      */
     showYear(date) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             viewType: YEAR_VIEW,
@@ -523,6 +566,10 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of year range to show
      */
     showYearRange(date) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             viewType: YEARRANGE_VIEW,
@@ -532,6 +579,10 @@ export class DatePicker extends Component {
 
     /** Day cell click inner callback */
     onDayClick(date) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         if (this.props.multiple) {
             const selectedDates = asArray(this.state.actDate);
             const selected = includesDate(selectedDates, date);
@@ -560,6 +611,10 @@ export class DatePicker extends Component {
 
     /** Range select inner callback */
     onRangeSelect(date) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         const { start } = this.state.selRange;
         if (!start) {
             this.setState({
@@ -585,6 +640,10 @@ export class DatePicker extends Component {
      * @param {Date} endDate  - date to finnish selection at
      */
     setSelection(startDate, endDate, navigateToFirst = true) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         if (!isDate(startDate)) {
             return;
         }
@@ -614,6 +673,10 @@ export class DatePicker extends Component {
 
     /** Clears selected items range */
     clearSelection() {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         this.setState({
             ...this.state,
             curRange: { start: null, end: null },
@@ -623,6 +686,10 @@ export class DatePicker extends Component {
     }
 
     setDisabledDateFilter(disabledDateFilter) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         if (this.state.disabledDateFilter === disabledDateFilter) {
             return;
         }
@@ -631,6 +698,10 @@ export class DatePicker extends Component {
     }
 
     setContentPosition(position) {
+        if (!this.currView || this.waitingForAnimation) {
+            return;
+        }
+
         if (this.props.vertical) {
             this.position = minmax(-this.height * 2, this.height, position);
             this.slider.style.top = px(this.position);
@@ -689,6 +760,10 @@ export class DatePicker extends Component {
     }
 
     setDefaultContentPosition() {
+        if (!this.currView || this.waitingForAnimation) {
+            return;
+        }
+
         const contentPos = this.getSlidePosition(0);
         this.setContentPosition(contentPos);
     }
@@ -773,6 +848,10 @@ export class DatePicker extends Component {
         }
 
         this.onStateReady();
+
+        if (this.resizeRequested) {
+            this.onResize();
+        }
     }
 
     renderSlider(views, state) {
@@ -858,14 +937,19 @@ export class DatePicker extends Component {
         ];
         transform(this.slider, `matrix(${trMatrix.join()})`);
 
-        if (this.removeTransitionHandler) {
-            this.removeTransitionHandler();
-        }
+        this.removeTransition();
         this.removeTransitionHandler = afterTransition(this.cellsContainer, {
             property: 'transform',
             duration: TRANSITION_END_TIMEOUT,
             target: this.slider,
         }, () => this.onAnimationDone());
+    }
+
+    removeTransition() {
+        if (this.removeTransitionHandler) {
+            this.removeTransitionHandler();
+        }
+        this.removeTransitionHandler = null;
     }
 
     /** Returns array of heights of all views */
@@ -947,6 +1031,9 @@ export class DatePicker extends Component {
             this.height = this.getContainerHeight(this.viewHeights);
             this.cellsContainer.style.height = px(this.height);
 
+            transform(this.slider, '');
+            this.cellsContainer.style.width = '';
+
             this.applyView(views);
             return;
         }
@@ -975,6 +1062,8 @@ export class DatePicker extends Component {
             }
             return;
         }
+
+        this.waitingForAnimation = true;
 
         // Zoom out or zoom in animation
         const { doubleView } = state;
@@ -1018,10 +1107,9 @@ export class DatePicker extends Component {
             cellObj = secondCellView.items.find(isRelativeItem);
         }
         if (!cellObj) {
+            this.waitingForAnimation = false;
             return;
         }
-
-        this.waitingForAnimation = true;
 
         const animationTarget = createElement('div', {
             props: {
@@ -1099,9 +1187,7 @@ export class DatePicker extends Component {
 
             this.newView = views;
 
-            if (this.removeTransitionHandler) {
-                this.removeTransitionHandler();
-            }
+            this.removeTransition();
             this.removeTransitionHandler = afterTransition(this.cellsContainer, {
                 property: 'transform',
                 duration: TRANSITION_END_TIMEOUT,

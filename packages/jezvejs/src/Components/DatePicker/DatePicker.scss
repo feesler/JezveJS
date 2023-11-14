@@ -127,7 +127,7 @@
 
 /* View layer */
 .dp__view {
-  display: flex;
+  display: grid;
   position: relative;
   overflow: hidden;
 }
@@ -428,10 +428,6 @@
 }
 
 /* Animation */
-.dp__animated {
-  pointer-events: none;
-}
-
 .dp__animated-view,
 .dp__animated-view > .dp__layered-view,
 .dp__animated-view .dp__slider {
