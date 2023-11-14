@@ -10,6 +10,7 @@ import {
     getWeekDays,
     isSameYearMonth,
     isSameDate,
+    getDaysInMonth,
 } from '@jezvejs/datetime';
 import { Component } from '../../../../js/Component.js';
 import {
@@ -42,6 +43,7 @@ const defaultProps = {
     renderWeekdays: true,
     renderHeader: false,
     showOtherMonthDays: true,
+    fixedHeight: false,
     header: null,
     components: {
         Header: null,
@@ -137,9 +139,24 @@ export class DatePickerMonthView extends Component {
         }
 
         // days
-        const { showOtherMonthDays } = this.props;
+        const { showOtherMonthDays, fixedHeight } = this.props;
         let week = getWeekDays(firstMonthDay, weekDayParams);
+        let weeks = 1;
         const disabledFilter = isFunction(this.state.disabledDateFilter);
+
+        // Start from previous week if 'fixedHeight' option is enabled
+        // and current month is exacly 4 weeks:
+        // February of the leap year, starting on first day of week
+        if (fixedHeight) {
+            const daysInMonth = getDaysInMonth(firstMonthDay);
+            if (
+                (daysInMonth === DAYS_IN_WEEK * 4)
+                && isSameDate(week[0], firstMonthDay)
+            ) {
+                const prevWeekDay = shiftDate(week[0], -DAYS_IN_WEEK);
+                week = getWeekDays(prevWeekDay, weekDayParams);
+            }
+        }
 
         do {
             week.forEach((weekday) => {
@@ -178,9 +195,15 @@ export class DatePickerMonthView extends Component {
             });
 
             const nextWeekDay = shiftDate(week[0], DAYS_IN_WEEK);
-            week = isSameYearMonth(date, nextWeekDay)
+            const addNextWeek = (
+                isSameYearMonth(date, nextWeekDay)
+                || (fixedHeight && weeks < 6)
+            );
+
+            week = (addNextWeek)
                 ? getWeekDays(nextWeekDay, weekDayParams)
                 : null;
+            weeks += 1;
         } while (week);
     }
 

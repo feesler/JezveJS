@@ -92,6 +92,7 @@ const defaultProps = {
     locales: [],
     firstDay: null,
     showOtherMonthDays: true,
+    fixedHeight: false,
     animated: false,
     disabledDateFilter: null,
     onRangeSelect: null,
@@ -1263,6 +1264,7 @@ export class DatePicker extends Component {
                 rangePart: state.rangePart,
                 renderWeekdays: !this.props.vertical,
                 showOtherMonthDays: this.props.showOtherMonthDays,
+                fixedHeight: this.props.fixedHeight,
             });
         }
 

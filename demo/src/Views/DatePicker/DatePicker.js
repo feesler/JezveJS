@@ -84,6 +84,7 @@ class DatePickerView extends DemoView {
      */
     onStart() {
         this.initStatic();
+        this.initFixedHeight();
         this.initFillWidth();
         this.initPopup();
         this.initPosition();
@@ -113,6 +114,24 @@ class DatePickerView extends DemoView {
                 DatePicker.create({
                     inline: true,
                     animated: true,
+                    onDateSelect: (date) => formatDateToInput(date, id),
+                }).elem,
+            ],
+        });
+    }
+
+    initFixedHeight() {
+        const id = 'fixedHeightDateInp';
+        this.addSection({
+            id: 'fixedHeight',
+            title: '\'fixedHeight\' option',
+            description: 'Month view will always render 6 weeks.',
+            content: [
+                Input.create({ id }).elem,
+                DatePicker.create({
+                    inline: true,
+                    animated: true,
+                    fixedHeight: true,
                     onDateSelect: (date) => formatDateToInput(date, id),
                 }).elem,
             ],
