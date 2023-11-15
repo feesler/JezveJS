@@ -14,6 +14,7 @@ const PATH_CLASS = 'linechart__path';
 const ITEM_CLASS = 'linechart__item';
 const CATEGORY_CLASS = 'linechart_category-';
 const CATEGORY_INDEX_CLASS = 'linechart_category-ind-';
+const ACTIVE_ITEM_CLASS = 'chart__item_active';
 
 /** Default properties */
 const defaultProps = {
@@ -93,6 +94,7 @@ export class LineChart extends BaseChart {
         groupIndex,
         category = null,
         categoryIndex = 0,
+        active = false,
         valueOffset = 0,
     }, state) {
         const { grid, xAxis } = state;
@@ -106,6 +108,7 @@ export class LineChart extends BaseChart {
             groupIndex,
             category,
             categoryIndex,
+            active,
             point: {
                 x: this.getX(groupIndex, groupWidth),
                 y: grid.getY(fixedValue + fixedOffset),
@@ -125,6 +128,10 @@ export class LineChart extends BaseChart {
         if (category !== null) {
             const categoryClass = `${CATEGORY_CLASS}${category}`;
             classNames.push(categoryClass);
+        }
+
+        if (active) {
+            classNames.push(ACTIVE_ITEM_CLASS);
         }
 
         item.elem = createSVGElement('circle', {
@@ -160,6 +167,7 @@ export class LineChart extends BaseChart {
 
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
+        const activeCategory = state.activeCategory?.toString() ?? null;
 
         const flatItems = this.items.flat();
         const newItems = [];
@@ -171,18 +179,24 @@ export class LineChart extends BaseChart {
             dataSets.forEach((dataSet, categoryIndex) => {
                 const value = dataSet.data[groupIndex] ?? 0;
                 const category = dataSet.category ?? null;
+                const active = (
+                    (category?.toString() === activeCategory)
+                    || (categoryIndex.toString() === activeCategory)
+                );
 
                 let [item] = findItem(flatItems, {
                     groupIndex,
                     category,
                     categoryIndex,
                 });
-                if (!item) {
+
+                if (!item || (item.active !== active)) {
                     item = this.createItem({
                         value,
                         groupIndex,
                         category,
                         categoryIndex,
+                        active,
                         valueOffset,
                     }, state);
                 }
@@ -311,16 +325,25 @@ export class LineChart extends BaseChart {
         }
 
         const categoriesCount = this.getCategoriesCount(state);
+        const activeCategory = state.activeCategory?.toString() ?? null;
+
         for (let i = 0; i < categoriesCount; i += 1) {
             const items = this.getCategoryItems(i);
             if (items.length === 0) {
                 continue;
             }
 
+            const { category, categoryIndex } = items[0];
+            const active = (
+                (category?.toString() === activeCategory)
+                || (categoryIndex.toString() === activeCategory)
+            );
+
             this.drawPath({
                 values: items.map((item) => item.point.y),
-                categoryIndex: i,
-                category: items[0].category,
+                categoryIndex,
+                category,
+                active,
             }, state);
         }
     }

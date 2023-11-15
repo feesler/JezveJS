@@ -121,6 +121,7 @@ export class BaseChart extends Component {
             dataSets: [],
             groupsCount: 0,
             columnsInGroup: 0,
+            activeCategory: null,
             chartContentWidth: 0,
             lastHLabelOffset: 0,
             hLabelsHeight: 25,
@@ -137,6 +138,10 @@ export class BaseChart extends Component {
         this.postInit();
         this.render(this.state);
         this.setData(this.props.data);
+    }
+
+    get activeCategory() {
+        return this.state.activeCategory;
     }
 
     getGroupOuterWidth(state = this.state) {
@@ -326,6 +331,14 @@ export class BaseChart extends Component {
         };
         const newState = this.updateChartWidth(state);
         this.setState(newState);
+    }
+
+    setActiveCategory(activeCategory) {
+        if (this.state.activeCategory === activeCategory) {
+            return;
+        }
+
+        this.setState({ ...this.state, activeCategory });
     }
 
     /** Returns count of data categories */
@@ -1165,8 +1178,8 @@ export class BaseChart extends Component {
             : this.getAllCategories(state);
 
         const legendContent = isFunction(state.renderLegend)
-            ? state.renderLegend(categories)
-            : this.defaultLegendContent(categories);
+            ? state.renderLegend(categories, state)
+            : this.defaultLegendContent(categories, state);
 
         this.legend = createElement('div', {
             props: { className: LEGEND_CLASS },
@@ -1183,6 +1196,7 @@ export class BaseChart extends Component {
             && state.containerWidth === prevState.containerWidth
             && state.scrollLeft === prevState.scrollLeft
             && state.animateNow === prevState.animateNow
+            && state.activeCategory === prevState.activeCategory
         ) {
             return;
         }
