@@ -190,26 +190,37 @@ export class DatePickerMonthView extends DatePickerBaseView {
             return;
         }
 
-        const { doubleView, showOtherMonthDays } = this.props;
+        const { showOtherMonthDays } = this.props;
         const disabledFilter = isFunction(state.disabledDateFilter);
 
         this.items.forEach((item) => {
-            const isActive = includesDate(state.actDate, item.date);
+            const isActive = (
+                includesDate(state.actDate, item.date)
+                && !item.isOtherMonth
+            );
             item.elem.classList.toggle(ACTIVE_CELL_CLASS, isActive);
 
             const highlight = (
                 state.range
-                && (!doubleView || !item.isOtherMonth)
+                && !item.isOtherMonth
                 && this.inRange(item.date, state.curRange)
             );
             item.elem.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
 
             const startDate = state.curRange?.start ?? null;
-            const isRangeStart = !!startDate && isSameDate(item.date, startDate);
+            const isRangeStart = (
+                !!startDate
+                && !item.isOtherMonth
+                && isSameDate(item.date, startDate)
+            );
             item.elem.classList.toggle(RANGE_START_CELL_CLASS, isRangeStart);
 
             const endDate = state.curRange?.end ?? null;
-            const isRangeEnd = !!endDate && isSameDate(item.date, endDate);
+            const isRangeEnd = (
+                !!endDate
+                && !item.isOtherMonth
+                && isSameDate(item.date, endDate)
+            );
             item.elem.classList.toggle(RANGE_END_CELL_CLASS, isRangeEnd);
 
             const disabled = (
