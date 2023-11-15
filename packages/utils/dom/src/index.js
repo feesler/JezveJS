@@ -608,6 +608,7 @@ export const afterTransition = (elem, options, callback) => {
     };
 
     transitionEvents.transitionend = handler;
+    transitionEvents.transitioncancel = removeHandler;
     setEvents(elem, transitionEvents);
     timeout = setTimeout(handler, duration);
 

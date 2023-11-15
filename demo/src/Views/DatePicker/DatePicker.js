@@ -23,11 +23,13 @@ import { CustomDatePickerFooter } from './components/CustomFooter/CustomDatePick
 
 import './DatePickerView.scss';
 
-const formatDateToInput = (date, inputId) => {
+const formatDateToInput = (dates, inputId) => {
     const input = ge(inputId);
-    if (input) {
-        input.value = formatDate(date);
+    if (!input) {
+        return;
     }
+
+    input.value = asArray(dates).map((date) => formatDate(date)).join(' ');
 };
 
 const formatMonthToInput = (date, inputId) => {
@@ -84,9 +86,11 @@ class DatePickerView extends DemoView {
      */
     onStart() {
         this.initStatic();
+        this.initFixedHeight();
         this.initFillWidth();
         this.initPopup();
         this.initPosition();
+        this.initHideOnSelect();
         this.initCustomFooter();
         this.initMultiple();
         this.initRangeSelect();
@@ -113,6 +117,24 @@ class DatePickerView extends DemoView {
                 DatePicker.create({
                     inline: true,
                     animated: true,
+                    onDateSelect: (date) => formatDateToInput(date, id),
+                }).elem,
+            ],
+        });
+    }
+
+    initFixedHeight() {
+        const id = 'fixedHeightDateInp';
+        this.addSection({
+            id: 'fixedHeight',
+            title: '\'fixedHeight\' option',
+            description: 'Month view will always render 6 weeks.',
+            content: [
+                Input.create({ id }).elem,
+                DatePicker.create({
+                    inline: true,
+                    animated: true,
+                    fixedHeight: true,
                     onDateSelect: (date) => formatDateToInput(date, id),
                 }).elem,
             ],
@@ -193,6 +215,33 @@ class DatePickerView extends DemoView {
         });
     }
 
+    initHideOnSelect() {
+        const id = 'hideOnSelectDateInp';
+        let datePicker = null;
+
+        const inpGroup = DateInputGroup.create({
+            id: 'dpHideOnSelectGroup',
+            inputId: id,
+            buttonId: 'showHideOnSelectBtn',
+            onButtonClick: () => datePicker?.toggle(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            hideOnSelect: true,
+            onDateSelect: (date) => formatDateToInput(date, id),
+        });
+
+        this.addSection({
+            id: 'hideOnSelect',
+            title: '\'hideOnSelect\' option',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
     initCustomFooter() {
         const inputId = 'customFooterInp';
         let datePicker = null;
@@ -213,10 +262,7 @@ class DatePickerView extends DemoView {
             components: {
                 Footer: CustomDatePickerFooter,
             },
-            onDateSelect: (date) => {
-                formatDateToInput(date, inputId);
-                datePicker.hide();
-            },
+            onDateSelect: (date) => formatDateToInput(date, inputId),
         });
 
         this.addSection({
@@ -309,6 +355,7 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'doubleView',
             title: '\'doubleView\' option',
+            description: 'Shows two views if screen width at least 724px.',
             content: [
                 inpGroup.elem,
                 datePicker.elem,
@@ -329,11 +376,13 @@ class DatePickerView extends DemoView {
             relparent: inpGroup.elem,
             vertical: true,
             animated: true,
+            showOtherMonthDays: false,
         });
 
         this.addSection({
             id: 'vertical',
             title: '\'vertical\' option',
+            description: '+ disabled \'showOtherMonthDays\' option',
             content: [
                 inpGroup.elem,
                 datePicker.elem,
@@ -355,6 +404,7 @@ class DatePickerView extends DemoView {
             vertical: true,
             doubleView: true,
             animated: true,
+            showOtherMonthDays: false,
         });
 
         this.addSection({

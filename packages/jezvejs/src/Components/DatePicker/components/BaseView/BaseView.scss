@@ -1,0 +1,22 @@
+/* Container of view cells */
+.dp__view-container {
+  display: grid;
+  justify-items: center;
+  flex-shrink: 0;
+  max-width: 100%;
+  min-width: var(--dp-min-width);
+  width: var(--dp-width);
+  transform: none;
+  transition-delay: 0s;
+  transform-origin: 0 0;
+}
+
+/* Common class for all kind of cells */
+.dp__cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--dp-text-color);
+  border: 1px solid var(--dp-bg-color);
+  background-color: var(--dp-bg-color);
+}

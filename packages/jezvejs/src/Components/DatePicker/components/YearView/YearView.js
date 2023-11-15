@@ -1,13 +1,8 @@
-import { isDate } from '@jezvejs/types';
 import { createElement, getClassName } from '@jezvejs/dom';
 import { getShortMonthName, MONTHS_COUNT } from '@jezvejs/datetime';
-import { Component } from '../../../../js/Component.js';
-import {
-    getHeaderTitle,
-    getNextViewDate,
-    getPrevViewDate,
-    YEAR_VIEW,
-} from '../../utils.js';
+import { YEAR_VIEW } from '../../utils.js';
+import { DatePickerBaseView } from '../BaseView/BaseView.js';
+import './YearView.scss';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container dp__year-view';
@@ -22,7 +17,10 @@ const defaultProps = {
     },
 };
 
-export class DatePickerYearView extends Component {
+/**
+ * Year view component
+ */
+export class DatePickerYearView extends DatePickerBaseView {
     constructor(props = {}) {
         super({
             ...defaultProps,
@@ -32,40 +30,10 @@ export class DatePickerYearView extends Component {
                 ...(props?.components ?? {}),
             },
         });
-
-        const { date } = this.props;
-        if (!isDate(date)) {
-            throw new Error('Invalid date');
-        }
-
-        this.type = YEAR_VIEW;
-        this.items = [];
-
-        this.state = {
-            ...this.props,
-            title: getHeaderTitle({
-                viewType: this.type,
-                date,
-            }),
-            nav: {
-                prev: getPrevViewDate(date, this.type),
-                next: getNextViewDate(date, this.type),
-            },
-        };
-
-        this.init();
     }
 
-    get date() {
-        return this.state.date;
-    }
-
-    get title() {
-        return this.state.title;
-    }
-
-    get nav() {
-        return this.state.nav;
+    get type() {
+        return YEAR_VIEW;
     }
 
     init() {
@@ -75,14 +43,7 @@ export class DatePickerYearView extends Component {
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
 
         // year header
-        const { Header } = this.props.components;
-        if (this.props.renderHeader && Header) {
-            this.header = Header.create({
-                ...(this.props.header ?? {}),
-                title: this.state.title,
-            });
-            this.elem.append(this.header.elem);
-        }
+        this.createHeader();
 
         // months of current year
         for (let i = 0; i < MONTHS_COUNT; i += 1) {

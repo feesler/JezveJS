@@ -10,15 +10,11 @@ import {
     getWeekDays,
     isSameYearMonth,
     isSameDate,
+    getDaysInMonth,
 } from '@jezvejs/datetime';
-import { Component } from '../../../../js/Component.js';
-import {
-    getHeaderTitle,
-    getNextViewDate,
-    getPrevViewDate,
-    includesDate,
-    MONTH_VIEW,
-} from '../../utils.js';
+import { includesDate, MONTH_VIEW } from '../../utils.js';
+import { DatePickerBaseView } from '../BaseView/BaseView.js';
+import './MonthView.scss';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container dp__month-view';
@@ -41,6 +37,8 @@ const defaultProps = {
     doubleView: false,
     renderWeekdays: true,
     renderHeader: false,
+    showOtherMonthDays: true,
+    fixedHeight: false,
     header: null,
     components: {
         Header: null,
@@ -48,7 +46,10 @@ const defaultProps = {
     },
 };
 
-export class DatePickerMonthView extends Component {
+/**
+ * Month view component
+ */
+export class DatePickerMonthView extends DatePickerBaseView {
     constructor(props = {}) {
         super({
             ...defaultProps,
@@ -58,42 +59,10 @@ export class DatePickerMonthView extends Component {
                 ...(props?.components ?? {}),
             },
         });
-
-        const { date, locales } = this.props;
-        if (!isDate(date)) {
-            throw new Error('Invalid date');
-        }
-
-        this.type = MONTH_VIEW;
-        this.items = [];
-
-        this.state = {
-            ...this.props,
-            title: getHeaderTitle({
-                viewType: this.type,
-                date,
-                locales,
-            }),
-            nav: {
-                prev: getPrevViewDate(date, this.type),
-                next: getNextViewDate(date, this.type),
-            },
-        };
-
-        this.init();
-        this.render(this.state);
     }
 
-    get date() {
-        return this.state.date;
-    }
-
-    get title() {
-        return this.state.title;
-    }
-
-    get nav() {
-        return this.state.nav;
+    get type() {
+        return MONTH_VIEW;
     }
 
     init() {
@@ -106,14 +75,7 @@ export class DatePickerMonthView extends Component {
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
 
         // month header
-        const { Header } = this.props.components;
-        if (this.props.renderHeader && Header) {
-            this.header = Header.create({
-                ...(this.props.header ?? {}),
-                title: this.state.title,
-            });
-            this.elem.append(this.header.elem);
-        }
+        this.createHeader();
 
         // week days header
         const firstMonthDay = new Date(rYear, rMonth, 1);
@@ -136,8 +98,24 @@ export class DatePickerMonthView extends Component {
         }
 
         // days
+        const { showOtherMonthDays, fixedHeight } = this.props;
         let week = getWeekDays(firstMonthDay, weekDayParams);
+        let weeks = 1;
         const disabledFilter = isFunction(this.state.disabledDateFilter);
+
+        // Start from previous week if 'fixedHeight' option is enabled
+        // and current month is exacly 4 weeks:
+        // February of the leap year, starting on first day of week
+        if (fixedHeight) {
+            const daysInMonth = getDaysInMonth(firstMonthDay);
+            if (
+                (daysInMonth === DAYS_IN_WEEK * 4)
+                && isSameDate(week[0], firstMonthDay)
+            ) {
+                const prevWeekDay = shiftDate(week[0], -DAYS_IN_WEEK);
+                week = getWeekDays(prevWeekDay, weekDayParams);
+            }
+        }
 
         do {
             week.forEach((weekday) => {
@@ -151,18 +129,24 @@ export class DatePickerMonthView extends Component {
                     elem: createElement('div', {
                         props: {
                             className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
-                            textContent: itemDate,
-                            dataset: {
-                                date: itemDate,
-                            },
                         },
                     }),
                 };
 
+                if (showOtherMonthDays || !isOtherMonth) {
+                    item.elem.textContent = itemDate;
+                }
+                if (!isOtherMonth) {
+                    item.elem.dataset.date = itemDate;
+                }
+
                 item.elem.classList.toggle(OTHER_CELL_CLASS, item.isOtherMonth);
                 item.elem.classList.toggle(TODAY_CELL_CLASS, item.isToday);
 
-                const disabled = disabledFilter && this.state.disabledDateFilter(item.date);
+                const disabled = (
+                    (!showOtherMonthDays && isOtherMonth)
+                    || (!!disabledFilter && this.state.disabledDateFilter(item.date))
+                );
                 enable(item.elem, !disabled);
 
                 this.items.push(item);
@@ -170,9 +154,15 @@ export class DatePickerMonthView extends Component {
             });
 
             const nextWeekDay = shiftDate(week[0], DAYS_IN_WEEK);
-            week = isSameYearMonth(date, nextWeekDay)
+            const addNextWeek = (
+                isSameYearMonth(date, nextWeekDay)
+                || (fixedHeight && weeks < 6)
+            );
+
+            week = (addNextWeek)
                 ? getWeekDays(nextWeekDay, weekDayParams)
                 : null;
+            weeks += 1;
         } while (week);
     }
 
@@ -200,29 +190,43 @@ export class DatePickerMonthView extends Component {
             return;
         }
 
-        const { doubleView } = this.props;
+        const { showOtherMonthDays } = this.props;
         const disabledFilter = isFunction(state.disabledDateFilter);
 
         this.items.forEach((item) => {
-            const isActive = includesDate(state.actDate, item.date);
+            const isActive = (
+                includesDate(state.actDate, item.date)
+                && !item.isOtherMonth
+            );
             item.elem.classList.toggle(ACTIVE_CELL_CLASS, isActive);
 
             const highlight = (
                 state.range
-                && (!doubleView || !item.isOtherMonth)
+                && !item.isOtherMonth
                 && this.inRange(item.date, state.curRange)
             );
             item.elem.classList.toggle(HIGHLIGHT_CELL_CLASS, highlight);
 
             const startDate = state.curRange?.start ?? null;
-            const isRangeStart = !!startDate && isSameDate(item.date, startDate);
+            const isRangeStart = (
+                !!startDate
+                && !item.isOtherMonth
+                && isSameDate(item.date, startDate)
+            );
             item.elem.classList.toggle(RANGE_START_CELL_CLASS, isRangeStart);
 
             const endDate = state.curRange?.end ?? null;
-            const isRangeEnd = !!endDate && isSameDate(item.date, endDate);
+            const isRangeEnd = (
+                !!endDate
+                && !item.isOtherMonth
+                && isSameDate(item.date, endDate)
+            );
             item.elem.classList.toggle(RANGE_END_CELL_CLASS, isRangeEnd);
 
-            const disabled = disabledFilter && state.disabledDateFilter(item.date, state);
+            const disabled = (
+                (!showOtherMonthDays && item.isOtherMonth)
+                || (!!disabledFilter && state.disabledDateFilter(item.date, state))
+            );
             enable(item.elem, !disabled);
         });
     }

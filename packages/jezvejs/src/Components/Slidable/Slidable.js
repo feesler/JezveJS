@@ -24,7 +24,12 @@ export class Slidable {
             ...props,
         };
 
-        this.wheelHandler = { wheel: (e) => this.onWheel(e) };
+        this.wheelHandler = {
+            wheel: {
+                listener: (e) => this.onWheel(e),
+                options: { passive: false, capture: true },
+            },
+        };
 
         this.init();
     }
@@ -62,7 +67,7 @@ export class Slidable {
         });
 
         if (isFunction(this.props.onWheel)) {
-            setEvents(this.elem, this.wheelHandler);
+            setEvents(document.documentElement, this.wheelHandler);
         }
     }
 
@@ -71,6 +76,11 @@ export class Slidable {
      * @param {Event} e - wheel event object
      */
     onWheel(e) {
+        if (!this.elem.contains(e.target)) {
+            return;
+        }
+
+        e.stopImmediatePropagation();
         e.preventDefault();
 
         if (e.deltaY === 0) {

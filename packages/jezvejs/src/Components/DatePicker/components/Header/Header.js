@@ -5,6 +5,7 @@ import {
     getClassName,
 } from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
+import './Header.scss';
 
 /* CSS classes */
 const HEADER_CLASS = 'dp__header';
@@ -70,7 +71,7 @@ export class DatePickerHeader extends Component {
         const isSecondTitle = this.state.doubleView && this.secondTitleEl?.contains(e.target);
         if (isTitle || isSecondTitle) {
             if (isFunction(this.props.onClickTitle)) {
-                this.props.onClickTitle({ e, isSecondTitle });
+                this.props.onClickTitle({ e, secondViewTransition: isSecondTitle });
             }
             return;
         }

@@ -23,11 +23,11 @@ export class SliderDropTarget extends DropTarget {
             return;
         }
 
-        const { position, distance, velocity } = avatar;
+        const { position, totalDistance, velocity } = avatar;
         avatar.onDragEnd();
 
-        if (isFunction(this.props.onDragEnd)) {
-            this.props.onDragEnd(position, distance, velocity);
+        if (Math.abs(totalDistance) > 0 && isFunction(this.props.onDragEnd)) {
+            this.props.onDragEnd(position, totalDistance, velocity);
         }
 
         this.targetElem = null;

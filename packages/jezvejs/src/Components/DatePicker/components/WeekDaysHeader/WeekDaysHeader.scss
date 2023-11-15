@@ -1,0 +1,16 @@
+/* Weekdays header */
+.dp__weekdays-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  align-items: center;
+  width: 100%;
+  grid-column: 1 / 8;
+}
+
+.dp__weekday-cell {
+  text-align: center;
+  text-transform: capitalize;
+  font-weight: 500;
+  line-height: 1.4rem;
+}

@@ -1,5 +1,5 @@
 import '../../css/common.scss';
-import { asArray, isDate, isFunction } from '@jezvejs/types';
+import { isDate, isFunction } from '@jezvejs/types';
 import {
     ge,
     re,
@@ -8,21 +8,17 @@ import {
     createElement,
     afterTransition,
     getClassName,
+    setEvents,
 } from '@jezvejs/dom';
-import {
-    isSameDate,
-    isSameYearMonth,
-} from '@jezvejs/datetime';
-import {
-    px,
-    minmax,
-} from '../../js/common.js';
+import { isSameYearMonth } from '@jezvejs/datetime';
+import { px, minmax } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 
 // Components
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { Slidable } from '../Slidable/Slidable.js';
+import { createStore } from '../Store/Store.js';
 
 // Local components
 import { DatePickerHeader } from './components/Header/Header.js';
@@ -38,10 +34,10 @@ import {
     MONTH_VIEW,
     YEAR_VIEW,
     YEARRANGE_VIEW,
-    includesDate,
     getScreenWidth,
     getComponentHeight,
 } from './utils.js';
+import { actions, reducer } from './reducer.js';
 import './DatePicker.scss';
 
 /* CSS classes */
@@ -66,7 +62,7 @@ const BOTTOM_TO_CLASS = 'bottom_to';
 
 const TRANSITION_END_TIMEOUT = 500;
 const SWIPE_THRESHOLD = 0.1;
-const MIN_DOUBLE_VIEW_SCREEN_WIDTH = 768;
+const MIN_DOUBLE_VIEW_SCREEN_WIDTH = 724;
 
 const viewTypesMap = {
     date: MONTH_VIEW,
@@ -81,6 +77,7 @@ const defaultProps = {
     mode: 'date', // possible values: 'date', 'month', 'year'
     date: new Date(),
     inline: false,
+    hideOnSelect: false,
     multiple: false,
     range: false,
     columnGap: 8,
@@ -90,6 +87,8 @@ const defaultProps = {
     rangePart: null, // possible values: 'start', 'end' or null
     locales: [],
     firstDay: null,
+    showOtherMonthDays: true,
+    fixedHeight: false,
     animated: false,
     disabledDateFilter: null,
     onRangeSelect: null,
@@ -118,34 +117,15 @@ export class DatePicker extends Component {
             },
         });
 
-        const { mode } = this.props;
-        if (!(mode in viewTypesMap)) {
-            throw new Error('Invalid mode');
-        }
-
         this.headerEvents = {
             onClickTitle: (options) => this.zoomOut(options),
             onClickPrev: () => this.navigateToPrev(),
             onClickNext: () => this.navigateToNext(),
         };
 
-        this.state = {
-            mode,
-            visible: this.props.inline,
-            viewType: viewTypesMap[mode],
-            date: isDate(this.props.date) ? this.props.date : new Date(),
-            curRange: { start: null, end: null },
-            selRange: { start: null, end: null },
-            rangePart: this.props.rangePart,
-            disabledDateFilter: this.props.disabledDateFilter,
-            actDate: null,
-            transition: null,
-            doubleView: this.doubleView,
-            secondViewTransition: false,
-        };
-
         this.waitingForAnimation = false;
         this.rebuildContent = true;
+        this.resizeRequested = false;
         this.removeTransitionHandler = null;
         this.position = 0;
         this.width = 0;
@@ -158,7 +138,32 @@ export class DatePicker extends Component {
 
         this.emptyClickHandler = () => this.hide();
 
+        this.store = createStore(reducer, {
+            initialState: this.getInitialState(),
+        });
+
         this.init();
+        this.postInit();
+    }
+
+    getInitialState() {
+        const { mode } = this.props;
+        if (!(mode in viewTypesMap)) {
+            throw new Error('Invalid mode');
+        }
+
+        return {
+            ...this.props,
+            visible: !!this.props.inline,
+            viewType: viewTypesMap[mode],
+            date: isDate(this.props.date) ? this.props.date : new Date(),
+            curRange: { start: null, end: null },
+            selRange: { start: null, end: null },
+            actDate: null,
+            transition: null,
+            doubleView: this.doubleView,
+            secondViewTransition: false,
+        };
     }
 
     init() {
@@ -235,11 +240,18 @@ export class DatePicker extends Component {
             onDragEnd: (...args) => this.onDragEnd(...args),
             onWheel: (e) => this.onWheel(e),
         });
+    }
 
+    postInit() {
         this.observeSliderSize();
-
+        this.setHandlers();
         this.setClassNames();
-        this.render(this.state);
+        this.subscribeToStore(this.store);
+    }
+
+    /** Returns current state object */
+    get state() {
+        return this.store.getState();
     }
 
     get doubleView() {
@@ -269,17 +281,30 @@ export class DatePicker extends Component {
         observer.observe(this.elem);
     }
 
+    /** Setup event handlers element */
+    setHandlers() {
+        setEvents(window.screen.orientation, {
+            change: () => (
+                requestAnimationFrame(() => this.onResize())
+            ),
+        });
+    }
+
     /** Updates height of container */
     onResize() {
         if (!this.currView || this.waitingForAnimation) {
+            this.resizeRequested = true;
             return;
         }
 
         this.viewHeights = this.getViewsHeights();
         const containerHeight = this.getContainerHeight(this.viewHeights);
         if (containerHeight === 0) {
+            this.resizeRequested = true;
             return;
         }
+
+        this.resizeRequested = false;
 
         this.width = this.cellsContainer.offsetWidth;
         this.height = containerHeight;
@@ -288,12 +313,10 @@ export class DatePicker extends Component {
 
         this.setDefaultContentPosition();
 
-        this.setState({
-            ...this.state,
+        this.store.dispatch(actions.resize({
             doubleView: this.doubleView,
             date: this.currView.date,
-            secondViewTransition: false,
-        });
+        }));
     }
 
     sendShowEvents(value = true) {
@@ -333,6 +356,20 @@ export class DatePicker extends Component {
             });
         } else {
             PopupPosition.reset(this.wrapper);
+
+            this.waitingForAnimation = false;
+
+            this.removeTransition();
+
+            this.wrapper.classList.remove(ANIMATED_CLASS);
+            this.cellsContainer.classList.remove(ANIMATED_VIEW_CLASS);
+
+            if (this.width > 0) {
+                this.setDefaultContentPosition();
+            }
+
+            transform(this.slider, '');
+            this.cellsContainer.style.width = '';
         }
 
         // set automatic hide on empty click
@@ -355,7 +392,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.setState({ ...this.state, visible });
+        this.store.dispatch(actions.show(visible));
         this.sendShowEvents(visible);
     }
 
@@ -395,11 +432,11 @@ export class DatePicker extends Component {
         }
 
         // Cells
-        let usingSecondView = false;
+        let secondViewTransition = false;
         let item = this.currView.items.find((i) => i.elem === e.target);
         if (!item && this.doubleView) {
             item = this.secondView.items.find((i) => i.elem === e.target);
-            usingSecondView = !!item;
+            secondViewTransition = !!item;
         }
 
         if (!item) {
@@ -416,17 +453,17 @@ export class DatePicker extends Component {
             ) {
                 this.onDayClick(item.date);
             } else {
-                this.zoomIn(item.date, usingSecondView);
+                this.zoomIn({ date: item.date, secondViewTransition });
             }
         }
     }
 
-    navigateTo(state) {
-        if (!this.currView || this.waitingForAnimation) {
+    navigateTo(action) {
+        if (this.waitingForAnimation) {
             return;
         }
 
-        this.setState({ ...this.state, ...state });
+        this.store.dispatch(action);
 
         if (!this.props.animated) {
             this.onStateReady();
@@ -434,61 +471,54 @@ export class DatePicker extends Component {
     }
 
     setRangePart(rangePart) {
-        if (this.state.rangePart === rangePart) {
+        if (this.waitingForAnimation) {
             return;
         }
 
-        this.setState({ ...this.state, rangePart });
+        this.store.dispatch(actions.setRangePart(rangePart));
     }
 
     onStateReady() {
-        this.setState({
-            ...this.state,
-            transition: null,
+        if (this.waitingForAnimation) {
+            return;
+        }
+
+        this.store.dispatch(actions.setReadyState({
             date: this.currView.date,
-            secondViewTransition: false,
-        });
+        }));
     }
 
-    zoomIn(date, secondViewTransition = false) {
+    zoomIn({ date, secondViewTransition = false }) {
         const { viewType } = this.state;
         if (viewType !== YEAR_VIEW && viewType !== YEARRANGE_VIEW) {
             return;
         }
 
-        this.navigateTo({
+        this.navigateTo(actions.zoomIn({
             date,
             viewType: (viewType === YEAR_VIEW) ? MONTH_VIEW : YEAR_VIEW,
             transition: 'zoomIn',
             secondViewTransition,
-        });
+        }));
     }
 
-    zoomOut(options = {}) {
+    zoomOut({ secondViewTransition = false }) {
         const { viewType } = this.state;
         if (viewType !== MONTH_VIEW && viewType !== YEAR_VIEW) {
             return;
         }
 
-        this.navigateTo({
-            viewType: (viewType === MONTH_VIEW) ? YEAR_VIEW : YEARRANGE_VIEW,
-            transition: 'zoomOut',
-            secondViewTransition: !!options?.isSecondTitle,
-        });
+        this.navigateTo(actions.zoomOut({
+            secondViewTransition,
+        }));
     }
 
     navigateToPrev() {
-        this.navigateTo({
-            date: getPrevViewDate(this.state.date, this.state.viewType),
-            transition: 'slideToPrevious',
-        });
+        this.navigateTo(actions.navigateToPrev());
     }
 
     navigateToNext() {
-        this.navigateTo({
-            date: getNextViewDate(this.state.date, this.state.viewType),
-            transition: 'slideToNext',
-        });
+        this.navigateTo(actions.navigateToNext());
     }
 
     /**
@@ -496,11 +526,11 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of month to show
      */
     showMonth(date) {
-        this.setState({
-            ...this.state,
-            viewType: MONTH_VIEW,
-            date,
-        });
+        if (this.waitingForAnimation) {
+            return;
+        }
+
+        this.store.dispatch(actions.showMonth(date));
     }
 
     /**
@@ -508,11 +538,11 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of year to show
      */
     showYear(date) {
-        this.setState({
-            ...this.state,
-            viewType: YEAR_VIEW,
-            date,
-        });
+        if (this.waitingForAnimation) {
+            return;
+        }
+
+        this.store.dispatch(actions.showYear(date));
     }
 
     /**
@@ -520,31 +550,20 @@ export class DatePicker extends Component {
      * @param {Date} date - date object of year range to show
      */
     showYearRange(date) {
-        this.setState({
-            ...this.state,
-            viewType: YEARRANGE_VIEW,
-            date,
-        });
+        if (this.waitingForAnimation) {
+            return;
+        }
+
+        this.store.dispatch(actions.showYearRange(date));
     }
 
     /** Day cell click inner callback */
     onDayClick(date) {
-        if (this.props.multiple) {
-            const selectedDates = asArray(this.state.actDate);
-            const selected = includesDate(selectedDates, date);
-
-            this.setState({
-                ...this.state,
-                actDate: (selected)
-                    ? selectedDates.filter((item) => !isSameDate(item, date))
-                    : [...selectedDates, date],
-            });
-        } else {
-            this.setState({
-                ...this.state,
-                actDate: date,
-            });
+        if (this.waitingForAnimation) {
+            return;
         }
+
+        this.store.dispatch(actions.selectDay(date));
 
         if (isFunction(this.props.onDateSelect)) {
             this.props.onDateSelect(this.state.actDate);
@@ -553,20 +572,21 @@ export class DatePicker extends Component {
         if (this.props.range) {
             this.onRangeSelect(date);
         }
+
+        if (this.props.hideOnSelect) {
+            this.hide();
+        }
     }
 
     /** Range select inner callback */
     onRangeSelect(date) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
         const { start } = this.state.selRange;
         if (!start) {
-            this.setState({
-                ...this.state,
-                curRange: { start: null, end: null },
-                selRange: {
-                    start: date,
-                    end: null,
-                },
-            });
+            this.store.dispatch(actions.startRangeSelect(date));
         } else {
             this.setSelection(start, date, false);
 
@@ -582,57 +602,44 @@ export class DatePicker extends Component {
      * @param {Date} endDate  - date to finnish selection at
      */
     setSelection(startDate, endDate, navigateToFirst = true) {
-        if (!isDate(startDate)) {
+        if (this.waitingForAnimation) {
             return;
         }
 
-        const date = startDate.getTime();
-        const newState = {
-            ...this.state,
-        };
-        if (navigateToFirst) {
-            newState.viewType = MONTH_VIEW;
-            newState.date = new Date(date);
-        }
-
-        if (isDate(endDate)) {
-            const dateTo = endDate.getTime();
-            newState.curRange = {
-                start: new Date(Math.min(date, dateTo)),
-                end: new Date(Math.max(date, dateTo)),
-            };
-            newState.selRange = { start: null, end: null };
-        } else {
-            newState.actDate = new Date(date);
-        }
-
-        this.setState(newState);
+        this.store.dispatch(actions.setSelection({
+            startDate,
+            endDate,
+            navigateToFirst,
+        }));
     }
 
     /** Clears selected items range */
     clearSelection() {
-        this.setState({
-            ...this.state,
-            curRange: { start: null, end: null },
-            selRange: { start: null, end: null },
-            actDate: null,
-        });
-    }
-
-    setDisabledDateFilter(disabledDateFilter) {
-        if (this.state.disabledDateFilter === disabledDateFilter) {
+        if (this.waitingForAnimation) {
             return;
         }
 
-        this.setState({ ...this.state, disabledDateFilter });
+        this.store.dispatch(actions.clearSelection());
+    }
+
+    setDisabledDateFilter(disabledDateFilter) {
+        if (this.waitingForAnimation) {
+            return;
+        }
+
+        this.store.dispatch(actions.setDisabledDateFilter(disabledDateFilter));
     }
 
     setContentPosition(position) {
+        if (!this.currView || this.waitingForAnimation) {
+            return;
+        }
+
         if (this.props.vertical) {
-            this.position = minmax(-this.height * 2, 0, position);
+            this.position = minmax(-this.height * 2, this.height, position);
             this.slider.style.top = px(this.position);
         } else {
-            this.position = minmax(-this.width * 2, 0, position);
+            this.position = minmax(-this.width * 2, this.width, position);
             this.slider.style.left = px(this.position);
         }
     }
@@ -686,6 +693,10 @@ export class DatePicker extends Component {
     }
 
     setDefaultContentPosition() {
+        if (!this.currView || this.waitingForAnimation) {
+            return;
+        }
+
         const contentPos = this.getSlidePosition(0);
         this.setContentPosition(contentPos);
     }
@@ -770,6 +781,10 @@ export class DatePicker extends Component {
         }
 
         this.onStateReady();
+
+        if (this.resizeRequested) {
+            this.onResize();
+        }
     }
 
     renderSlider(views, state) {
@@ -855,14 +870,19 @@ export class DatePicker extends Component {
         ];
         transform(this.slider, `matrix(${trMatrix.join()})`);
 
-        if (this.removeTransitionHandler) {
-            this.removeTransitionHandler();
-        }
+        this.removeTransition();
         this.removeTransitionHandler = afterTransition(this.cellsContainer, {
             property: 'transform',
             duration: TRANSITION_END_TIMEOUT,
             target: this.slider,
         }, () => this.onAnimationDone());
+    }
+
+    removeTransition() {
+        if (this.removeTransitionHandler) {
+            this.removeTransitionHandler();
+        }
+        this.removeTransitionHandler = null;
     }
 
     /** Returns array of heights of all views */
@@ -944,6 +964,9 @@ export class DatePicker extends Component {
             this.height = this.getContainerHeight(this.viewHeights);
             this.cellsContainer.style.height = px(this.height);
 
+            transform(this.slider, '');
+            this.cellsContainer.style.width = '';
+
             this.applyView(views);
             return;
         }
@@ -972,6 +995,8 @@ export class DatePicker extends Component {
             }
             return;
         }
+
+        this.waitingForAnimation = true;
 
         // Zoom out or zoom in animation
         const { doubleView } = state;
@@ -1015,10 +1040,9 @@ export class DatePicker extends Component {
             cellObj = secondCellView.items.find(isRelativeItem);
         }
         if (!cellObj) {
+            this.waitingForAnimation = false;
             return;
         }
-
-        this.waitingForAnimation = true;
 
         const animationTarget = createElement('div', {
             props: {
@@ -1096,9 +1120,7 @@ export class DatePicker extends Component {
 
             this.newView = views;
 
-            if (this.removeTransitionHandler) {
-                this.removeTransitionHandler();
-            }
+            this.removeTransition();
             this.removeTransitionHandler = afterTransition(this.cellsContainer, {
                 property: 'transform',
                 duration: TRANSITION_END_TIMEOUT,
@@ -1144,34 +1166,45 @@ export class DatePicker extends Component {
     }
 
     renderDateView(date, state) {
-        const { viewType, doubleView } = state;
+        const {
+            viewType,
+            doubleView,
+            locales,
+            vertical,
+            components,
+        } = state;
 
         const commonProps = {
             date,
-            locales: this.props.locales,
+            locales,
             doubleView,
-            renderHeader: doubleView && this.props.vertical,
+            renderHeader: doubleView && vertical,
             header: {
                 ...this.headerEvents,
-                onClickTitle: (options) => this.zoomOut({ ...options, isSecondTitle: true }),
+                onClickTitle: (options) => this.zoomOut({
+                    ...options,
+                    secondViewTransition: true,
+                }),
             },
             components: {
-                Header: this.props.components.Header,
-                WeekDaysHeader: this.props.components.WeekDaysHeader,
+                Header: components.Header,
+                WeekDaysHeader: components.WeekDaysHeader,
             },
         };
 
         if (viewType === MONTH_VIEW) {
             return DatePickerMonthView.create({
                 ...commonProps,
-                firstDay: this.props.firstDay,
+                firstDay: state.firstDay,
                 actDate: state.actDate,
-                multiple: this.props.multiple,
-                range: this.props.range,
+                multiple: state.multiple,
+                range: state.range,
                 curRange: state.curRange,
                 disabledDateFilter: state.disabledDateFilter,
                 rangePart: state.rangePart,
-                renderWeekdays: !this.props.vertical,
+                renderWeekdays: !state.vertical,
+                showOtherMonthDays: state.showOtherMonthDays,
+                fixedHeight: state.fixedHeight,
             });
         }
 

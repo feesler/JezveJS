@@ -386,8 +386,17 @@ export class BaseChart extends Component {
         }
 
         return state.dataSets.reduce((res, item) => {
-            const category = item.category ?? null;
-            return res.includes(category) ? res : [...res, category];
+            let category = item.category ?? null;
+            if (res.includes(category)) {
+                return res;
+            }
+
+            const categoryIndex = res.length;
+            if (category === null && !res.includes(categoryIndex)) {
+                category = categoryIndex;
+            }
+
+            return [...res, category];
         }, []);
     }
 
@@ -668,6 +677,7 @@ export class BaseChart extends Component {
             let lastOffset = 0;
             const lblMarginLeft = 10;
             const labelsToRemove = [];
+            let resizeRequested = false;
             let prevLabel = null;
             const toLeft = (
                 !this.isHorizontalScaleNeeded(state, prevState)
@@ -695,9 +705,13 @@ export class BaseChart extends Component {
 
                 // Check last label not overflow chart to prevent
                 // horizontal scroll in fitToWidth mode
-                if (state.fitToWidth && currentOffset > state.chartContentWidth) {
-                    labelsToRemove.push(label);
-                    continue;
+                if (currentOffset > state.chartContentWidth) {
+                    if (state.fitToWidth) {
+                        labelsToRemove.push(label);
+                        continue;
+                    } else {
+                        resizeRequested = true;
+                    }
                 }
 
                 lastOffset = (toLeft) ? labelRect.x : currentOffset;
@@ -724,6 +738,10 @@ export class BaseChart extends Component {
             }
 
             this.labels = labels;
+
+            if (resizeRequested) {
+                setTimeout(() => this.onResize());
+            }
         });
     }
 
@@ -771,7 +789,12 @@ export class BaseChart extends Component {
             return;
         }
 
-        const { showPopupOnClick, pinPopupOnClick } = this.state;
+        const { showPopupOnClick, pinPopupOnClick, activateOnClick } = this.state;
+
+        if (activateOnClick || showPopupOnClick) {
+            this.activateTarget(target, e);
+        }
+
         if (showPopupOnClick) {
             // Reuse pinned popup in case there is no hover popup
             // Popup will be pinned again, so it's possible to animate position of element
@@ -789,10 +812,6 @@ export class BaseChart extends Component {
                 this.pinnedTarget = target.item;
                 this.popup = null;
             }
-        }
-
-        if (this.state.activateOnClick) {
-            this.activateTarget(target, e);
         }
 
         if (isFunction(this.props.onItemClick)) {
@@ -1117,9 +1136,15 @@ export class BaseChart extends Component {
         const categories = [];
 
         state.dataSets.forEach((dataSet, index) => {
-            const category = (state.data.stacked)
+            let category = (state.data.stacked)
                 ? (dataSet.category ?? null)
                 : index;
+
+            const categoryIndex = categories.length;
+            if (category === null && !categories.includes(categoryIndex)) {
+                category = categoryIndex;
+            }
+
             if (!categories.includes(category)) {
                 categories.push(category);
             }
