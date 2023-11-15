@@ -23,11 +23,13 @@ import { CustomDatePickerFooter } from './components/CustomFooter/CustomDatePick
 
 import './DatePickerView.scss';
 
-const formatDateToInput = (date, inputId) => {
+const formatDateToInput = (dates, inputId) => {
     const input = ge(inputId);
-    if (input) {
-        input.value = formatDate(date);
+    if (!input) {
+        return;
     }
+
+    input.value = asArray(dates).map((date) => formatDate(date)).join(' ');
 };
 
 const formatMonthToInput = (date, inputId) => {
@@ -88,6 +90,7 @@ class DatePickerView extends DemoView {
         this.initFillWidth();
         this.initPopup();
         this.initPosition();
+        this.initHideOnSelect();
         this.initCustomFooter();
         this.initMultiple();
         this.initRangeSelect();
@@ -212,6 +215,33 @@ class DatePickerView extends DemoView {
         });
     }
 
+    initHideOnSelect() {
+        const id = 'hideOnSelectDateInp';
+        let datePicker = null;
+
+        const inpGroup = DateInputGroup.create({
+            id: 'dpHideOnSelectGroup',
+            inputId: id,
+            buttonId: 'showHideOnSelectBtn',
+            onButtonClick: () => datePicker?.toggle(),
+        });
+
+        datePicker = DatePicker.create({
+            relparent: inpGroup.elem,
+            hideOnSelect: true,
+            onDateSelect: (date) => formatDateToInput(date, id),
+        });
+
+        this.addSection({
+            id: 'hideOnSelect',
+            title: '\'hideOnSelect\' option',
+            content: [
+                inpGroup.elem,
+                datePicker.elem,
+            ],
+        });
+    }
+
     initCustomFooter() {
         const inputId = 'customFooterInp';
         let datePicker = null;
@@ -232,10 +262,7 @@ class DatePickerView extends DemoView {
             components: {
                 Footer: CustomDatePickerFooter,
             },
-            onDateSelect: (date) => {
-                formatDateToInput(date, inputId);
-                datePicker.hide();
-            },
+            onDateSelect: (date) => formatDateToInput(date, inputId),
         });
 
         this.addSection({

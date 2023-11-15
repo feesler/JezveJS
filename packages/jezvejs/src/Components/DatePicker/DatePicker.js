@@ -82,6 +82,7 @@ const defaultProps = {
     mode: 'date', // possible values: 'date', 'month', 'year'
     date: new Date(),
     inline: false,
+    hideOnSelect: false,
     multiple: false,
     range: false,
     columnGap: 8,
@@ -608,6 +609,10 @@ export class DatePicker extends Component {
 
         if (this.props.range) {
             this.onRangeSelect(date);
+        }
+
+        if (this.props.hideOnSelect) {
+            this.hide();
         }
     }
 
