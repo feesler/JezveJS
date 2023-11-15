@@ -44,7 +44,7 @@ class PaginatorView extends DemoView {
             content: Paginator.create({
                 id: 'styledPaginator',
                 className: 'styled',
-                pagesCount: 10,
+                pagesCount: 6,
                 onChange: () => { },
             }).elem,
         });

@@ -152,7 +152,7 @@ export class Paginator extends Component {
         const res = [];
 
         // 1 2 3 4 5
-        if (state.pagesCount <= state.breakLimit) {
+        if (state.pagesCount <= state.breakLimit + 1) {
             for (let i = 1; i <= state.pagesCount; i += 1) {
                 res.push({ page: i, active: (i === state.pageNum) });
             }
