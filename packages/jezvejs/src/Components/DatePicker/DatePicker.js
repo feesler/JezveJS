@@ -1,5 +1,5 @@
 import '../../css/common.scss';
-import { asArray, isDate, isFunction } from '@jezvejs/types';
+import { isDate, isFunction } from '@jezvejs/types';
 import {
     ge,
     re,
@@ -10,20 +10,15 @@ import {
     getClassName,
     setEvents,
 } from '@jezvejs/dom';
-import {
-    isSameDate,
-    isSameYearMonth,
-} from '@jezvejs/datetime';
-import {
-    px,
-    minmax,
-} from '../../js/common.js';
+import { isSameYearMonth } from '@jezvejs/datetime';
+import { px, minmax } from '../../js/common.js';
 import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
 import { Component } from '../../js/Component.js';
 
 // Components
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { Slidable } from '../Slidable/Slidable.js';
+import { createStore } from '../Store/Store.js';
 
 // Local components
 import { DatePickerHeader } from './components/Header/Header.js';
@@ -39,10 +34,10 @@ import {
     MONTH_VIEW,
     YEAR_VIEW,
     YEARRANGE_VIEW,
-    includesDate,
     getScreenWidth,
     getComponentHeight,
 } from './utils.js';
+import { actions, reducer } from './reducer.js';
 import './DatePicker.scss';
 
 /* CSS classes */
@@ -122,30 +117,10 @@ export class DatePicker extends Component {
             },
         });
 
-        const { mode } = this.props;
-        if (!(mode in viewTypesMap)) {
-            throw new Error('Invalid mode');
-        }
-
         this.headerEvents = {
             onClickTitle: (options) => this.zoomOut(options),
             onClickPrev: () => this.navigateToPrev(),
             onClickNext: () => this.navigateToNext(),
-        };
-
-        this.state = {
-            mode,
-            visible: this.props.inline,
-            viewType: viewTypesMap[mode],
-            date: isDate(this.props.date) ? this.props.date : new Date(),
-            curRange: { start: null, end: null },
-            selRange: { start: null, end: null },
-            rangePart: this.props.rangePart,
-            disabledDateFilter: this.props.disabledDateFilter,
-            actDate: null,
-            transition: null,
-            doubleView: this.doubleView,
-            secondViewTransition: false,
         };
 
         this.waitingForAnimation = false;
@@ -163,7 +138,32 @@ export class DatePicker extends Component {
 
         this.emptyClickHandler = () => this.hide();
 
+        this.store = createStore(reducer, {
+            initialState: this.getInitialState(),
+        });
+
         this.init();
+        this.postInit();
+    }
+
+    getInitialState() {
+        const { mode } = this.props;
+        if (!(mode in viewTypesMap)) {
+            throw new Error('Invalid mode');
+        }
+
+        return {
+            ...this.props,
+            visible: !!this.props.inline,
+            viewType: viewTypesMap[mode],
+            date: isDate(this.props.date) ? this.props.date : new Date(),
+            curRange: { start: null, end: null },
+            selRange: { start: null, end: null },
+            actDate: null,
+            transition: null,
+            doubleView: this.doubleView,
+            secondViewTransition: false,
+        };
     }
 
     init() {
@@ -240,12 +240,18 @@ export class DatePicker extends Component {
             onDragEnd: (...args) => this.onDragEnd(...args),
             onWheel: (e) => this.onWheel(e),
         });
+    }
 
+    postInit() {
         this.observeSliderSize();
         this.setHandlers();
-
         this.setClassNames();
-        this.render(this.state);
+        this.subscribeToStore(this.store);
+    }
+
+    /** Returns current state object */
+    get state() {
+        return this.store.getState();
     }
 
     get doubleView() {
@@ -307,12 +313,10 @@ export class DatePicker extends Component {
 
         this.setDefaultContentPosition();
 
-        this.setState({
-            ...this.state,
+        this.store.dispatch(actions.resize({
             doubleView: this.doubleView,
             date: this.currView.date,
-            secondViewTransition: false,
-        });
+        }));
     }
 
     sendShowEvents(value = true) {
@@ -388,7 +392,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.setState({ ...this.state, visible });
+        this.store.dispatch(actions.show(visible));
         this.sendShowEvents(visible);
     }
 
@@ -428,11 +432,11 @@ export class DatePicker extends Component {
         }
 
         // Cells
-        let usingSecondView = false;
+        let secondViewTransition = false;
         let item = this.currView.items.find((i) => i.elem === e.target);
         if (!item && this.doubleView) {
             item = this.secondView.items.find((i) => i.elem === e.target);
-            usingSecondView = !!item;
+            secondViewTransition = !!item;
         }
 
         if (!item) {
@@ -449,17 +453,17 @@ export class DatePicker extends Component {
             ) {
                 this.onDayClick(item.date);
             } else {
-                this.zoomIn(item.date, usingSecondView);
+                this.zoomIn({ date: item.date, secondViewTransition });
             }
         }
     }
 
-    navigateTo(state) {
+    navigateTo(action) {
         if (this.waitingForAnimation) {
             return;
         }
 
-        this.setState({ ...this.state, ...state });
+        this.store.dispatch(action);
 
         if (!this.props.animated) {
             this.onStateReady();
@@ -471,11 +475,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        if (this.state.rangePart === rangePart) {
-            return;
-        }
-
-        this.setState({ ...this.state, rangePart });
+        this.store.dispatch(actions.setRangePart(rangePart));
     }
 
     onStateReady() {
@@ -483,53 +483,42 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            transition: null,
+        this.store.dispatch(actions.setReadyState({
             date: this.currView.date,
-            secondViewTransition: false,
-        });
+        }));
     }
 
-    zoomIn(date, secondViewTransition = false) {
+    zoomIn({ date, secondViewTransition = false }) {
         const { viewType } = this.state;
         if (viewType !== YEAR_VIEW && viewType !== YEARRANGE_VIEW) {
             return;
         }
 
-        this.navigateTo({
+        this.navigateTo(actions.zoomIn({
             date,
             viewType: (viewType === YEAR_VIEW) ? MONTH_VIEW : YEAR_VIEW,
             transition: 'zoomIn',
             secondViewTransition,
-        });
+        }));
     }
 
-    zoomOut(options = {}) {
+    zoomOut({ secondViewTransition = false }) {
         const { viewType } = this.state;
         if (viewType !== MONTH_VIEW && viewType !== YEAR_VIEW) {
             return;
         }
 
-        this.navigateTo({
-            viewType: (viewType === MONTH_VIEW) ? YEAR_VIEW : YEARRANGE_VIEW,
-            transition: 'zoomOut',
-            secondViewTransition: !!options?.isSecondTitle,
-        });
+        this.navigateTo(actions.zoomOut({
+            secondViewTransition,
+        }));
     }
 
     navigateToPrev() {
-        this.navigateTo({
-            date: getPrevViewDate(this.state.date, this.state.viewType),
-            transition: 'slideToPrevious',
-        });
+        this.navigateTo(actions.navigateToPrev());
     }
 
     navigateToNext() {
-        this.navigateTo({
-            date: getNextViewDate(this.state.date, this.state.viewType),
-            transition: 'slideToNext',
-        });
+        this.navigateTo(actions.navigateToNext());
     }
 
     /**
@@ -541,11 +530,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            viewType: MONTH_VIEW,
-            date,
-        });
+        this.store.dispatch(actions.showMonth(date));
     }
 
     /**
@@ -557,11 +542,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            viewType: YEAR_VIEW,
-            date,
-        });
+        this.store.dispatch(actions.showYear(date));
     }
 
     /**
@@ -573,11 +554,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            viewType: YEARRANGE_VIEW,
-            date,
-        });
+        this.store.dispatch(actions.showYearRange(date));
     }
 
     /** Day cell click inner callback */
@@ -586,22 +563,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        if (this.props.multiple) {
-            const selectedDates = asArray(this.state.actDate);
-            const selected = includesDate(selectedDates, date);
-
-            this.setState({
-                ...this.state,
-                actDate: (selected)
-                    ? selectedDates.filter((item) => !isSameDate(item, date))
-                    : [...selectedDates, date],
-            });
-        } else {
-            this.setState({
-                ...this.state,
-                actDate: date,
-            });
-        }
+        this.store.dispatch(actions.selectDay(date));
 
         if (isFunction(this.props.onDateSelect)) {
             this.props.onDateSelect(this.state.actDate);
@@ -624,14 +586,7 @@ export class DatePicker extends Component {
 
         const { start } = this.state.selRange;
         if (!start) {
-            this.setState({
-                ...this.state,
-                curRange: { start: null, end: null },
-                selRange: {
-                    start: date,
-                    end: null,
-                },
-            });
+            this.store.dispatch(actions.startRangeSelect(date));
         } else {
             this.setSelection(start, date, false);
 
@@ -651,31 +606,11 @@ export class DatePicker extends Component {
             return;
         }
 
-        if (!isDate(startDate)) {
-            return;
-        }
-
-        const date = startDate.getTime();
-        const newState = {
-            ...this.state,
-        };
-        if (navigateToFirst) {
-            newState.viewType = MONTH_VIEW;
-            newState.date = new Date(date);
-        }
-
-        if (isDate(endDate)) {
-            const dateTo = endDate.getTime();
-            newState.curRange = {
-                start: new Date(Math.min(date, dateTo)),
-                end: new Date(Math.max(date, dateTo)),
-            };
-            newState.selRange = { start: null, end: null };
-        } else {
-            newState.actDate = new Date(date);
-        }
-
-        this.setState(newState);
+        this.store.dispatch(actions.setSelection({
+            startDate,
+            endDate,
+            navigateToFirst,
+        }));
     }
 
     /** Clears selected items range */
@@ -684,12 +619,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.setState({
-            ...this.state,
-            curRange: { start: null, end: null },
-            selRange: { start: null, end: null },
-            actDate: null,
-        });
+        this.store.dispatch(actions.clearSelection());
     }
 
     setDisabledDateFilter(disabledDateFilter) {
@@ -697,11 +627,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        if (this.state.disabledDateFilter === disabledDateFilter) {
-            return;
-        }
-
-        this.setState({ ...this.state, disabledDateFilter });
+        this.store.dispatch(actions.setDisabledDateFilter(disabledDateFilter));
     }
 
     setContentPosition(position) {
@@ -1240,36 +1166,45 @@ export class DatePicker extends Component {
     }
 
     renderDateView(date, state) {
-        const { viewType, doubleView } = state;
+        const {
+            viewType,
+            doubleView,
+            locales,
+            vertical,
+            components,
+        } = state;
 
         const commonProps = {
             date,
-            locales: this.props.locales,
+            locales,
             doubleView,
-            renderHeader: doubleView && this.props.vertical,
+            renderHeader: doubleView && vertical,
             header: {
                 ...this.headerEvents,
-                onClickTitle: (options) => this.zoomOut({ ...options, isSecondTitle: true }),
+                onClickTitle: (options) => this.zoomOut({
+                    ...options,
+                    secondViewTransition: true,
+                }),
             },
             components: {
-                Header: this.props.components.Header,
-                WeekDaysHeader: this.props.components.WeekDaysHeader,
+                Header: components.Header,
+                WeekDaysHeader: components.WeekDaysHeader,
             },
         };
 
         if (viewType === MONTH_VIEW) {
             return DatePickerMonthView.create({
                 ...commonProps,
-                firstDay: this.props.firstDay,
+                firstDay: state.firstDay,
                 actDate: state.actDate,
-                multiple: this.props.multiple,
-                range: this.props.range,
+                multiple: state.multiple,
+                range: state.range,
                 curRange: state.curRange,
                 disabledDateFilter: state.disabledDateFilter,
                 rangePart: state.rangePart,
-                renderWeekdays: !this.props.vertical,
-                showOtherMonthDays: this.props.showOtherMonthDays,
-                fixedHeight: this.props.fixedHeight,
+                renderWeekdays: !state.vertical,
+                showOtherMonthDays: state.showOtherMonthDays,
+                fixedHeight: state.fixedHeight,
             });
         }
 

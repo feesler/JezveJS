@@ -71,7 +71,7 @@ export class DatePickerHeader extends Component {
         const isSecondTitle = this.state.doubleView && this.secondTitleEl?.contains(e.target);
         if (isTitle || isSecondTitle) {
             if (isFunction(this.props.onClickTitle)) {
-                this.props.onClickTitle({ e, isSecondTitle });
+                this.props.onClickTitle({ e, secondViewTransition: isSecondTitle });
             }
             return;
         }
