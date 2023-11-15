@@ -89,6 +89,11 @@
 }
 
 /* Slider */
+.dp__view {
+  position: relative;
+  overflow: hidden;
+}
+
 .dp__slider {
   display: flex;
   align-items: flex-start;
@@ -138,19 +143,6 @@
       top: -50%;
     }
   }
-}
-
-/* Container of view cells */
-.dp__view-container {
-  display: grid;
-  justify-items: center;
-  flex-shrink: 0;
-  max-width: 100%;
-  min-width: var(--dp-min-width);
-  width: var(--dp-width);
-  transform: none;
-  transition-delay: 0s;
-  transform-origin: 0 0;
 }
 
 /* Zoom-in and zoom-out animations container */

@@ -1,8 +1,14 @@
-/* Date picker view */
-.dp__view {
+/* Container of view cells */
+.dp__view-container {
   display: grid;
-  position: relative;
-  overflow: hidden;
+  justify-items: center;
+  flex-shrink: 0;
+  max-width: 100%;
+  min-width: var(--dp-min-width);
+  width: var(--dp-width);
+  transform: none;
+  transition-delay: 0s;
+  transform-origin: 0 0;
 }
 
 /* Common class for all kind of cells */
