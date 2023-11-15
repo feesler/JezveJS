@@ -6,9 +6,9 @@ import {
     setEvents,
     afterTransition,
 } from '@jezvejs/dom';
-import { px } from '../../js/common.js';
-import { Component } from '../../js/Component.js';
-import '../../css/common.scss';
+import { px } from '../../common.js';
+import { Component } from '../../Component.js';
+import '../../common.scss';
 import './Collapsible.scss';
 
 /* CSS classes */

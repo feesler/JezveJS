@@ -1,7 +1,7 @@
 import { test } from 'jezve-test';
 import { assert } from '@jezvejs/assert';
 
-import { deepMeet, minmax } from '../../packages/jezvejs/src/js/common.js';
+import { deepMeet, minmax } from '../../packages/jezvejs/src/common.js';
 import { fixFloat, trimDecimalPlaces } from '../../packages/utils/number/src/index.js';
 import {
     colorToInt,

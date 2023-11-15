@@ -1,5 +1,5 @@
 import { getOffset } from '@jezvejs/dom';
-import { minmax, px } from '../../../js/common.js';
+import { minmax, px } from '../../../common.js';
 import { DragAvatar } from '../../DragnDrop/DragAvatar.js';
 import { DragMaster } from '../../DragnDrop/DragMaster.js';
 

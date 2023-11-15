@@ -1,6 +1,6 @@
 import { createElement } from '@jezvejs/dom';
 import { getWeekDays, getWeekdayShort } from '@jezvejs/datetime';
-import { Component } from '../../../../js/Component.js';
+import { Component } from '../../../../Component.js';
 import './WeekDaysHeader.scss';
 
 /* CSS classes */

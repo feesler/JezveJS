@@ -52,7 +52,7 @@ export default {
     target: 'browserslist',
     context: resolve(currentDir, '../demo/src'),
     entry: {
-        polyfills: '../../packages/jezvejs/src/js/polyfill/index.js',
+        polyfills: '../../packages/jezvejs/src/polyfill/index.js',
 
         ...Object.fromEntries(entryPoints.map((name) => ([
             name, `./Views/${name}/${name}.js`,

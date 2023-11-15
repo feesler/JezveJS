@@ -11,15 +11,15 @@ import {
 import {
     debounce,
     minmax,
-} from '../../js/common.js';
-import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
-import { Component } from '../../js/Component.js';
+} from '../../common.js';
+import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
+import { Component } from '../../Component.js';
 
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 
 import { defaultProps } from './defaultProps.js';
-import '../../css/common.scss';
+import '../../common.scss';
 import './BaseChart.scss';
 
 /* CSS classes */

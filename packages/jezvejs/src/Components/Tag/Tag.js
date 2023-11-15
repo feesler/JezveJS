@@ -4,7 +4,7 @@ import {
     enable,
     re,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
+import { Component } from '../../Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';
 import './Tag.scss';
 

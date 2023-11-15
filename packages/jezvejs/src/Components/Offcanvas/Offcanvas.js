@@ -8,9 +8,9 @@ import {
     isVisible,
     afterTransition,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
+import { Component } from '../../Component.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
-import '../../css/common.scss';
+import '../../common.scss';
 import './Offcanvas.scss';
 
 /* CSS classes */

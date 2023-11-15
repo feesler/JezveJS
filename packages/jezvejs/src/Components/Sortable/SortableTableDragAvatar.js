@@ -1,5 +1,5 @@
 import { getOffset } from '@jezvejs/dom';
-import { px } from '../../js/common.js';
+import { px } from '../../common.js';
 import { SortableDragAvatar } from './SortableDragAvatar.js';
 
 // Sortable table drag avatar

@@ -1,4 +1,4 @@
-import '../../css/common.scss';
+import '../../common.scss';
 import { isDate, isFunction } from '@jezvejs/types';
 import {
     ge,
@@ -11,9 +11,9 @@ import {
     setEvents,
 } from '@jezvejs/dom';
 import { isSameYearMonth } from '@jezvejs/datetime';
-import { px, minmax } from '../../js/common.js';
-import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
-import { Component } from '../../js/Component.js';
+import { px, minmax } from '../../common.js';
+import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
+import { Component } from '../../Component.js';
 
 // Components
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';

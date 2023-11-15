@@ -6,8 +6,8 @@ import {
     re,
     removeChilds,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
-import '../../css/common.scss';
+import { Component } from '../../Component.js';
+import '../../common.scss';
 import './Switch.scss';
 
 /* CSS classes */

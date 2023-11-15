@@ -4,7 +4,7 @@ import {
     enable,
     setEvents,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
+import { Component } from '../../Component.js';
 
 import { MenuList } from './components/List/MenuList.js';
 import { MenuItem } from './components/ListItem/MenuItem.js';

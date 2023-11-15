@@ -15,8 +15,8 @@ import {
     isNumberString,
     trimDecimalPlaces,
 } from '@jezvejs/number';
-import { Component } from '../../js/Component.js';
-import '../../css/common.scss';
+import { Component } from '../../Component.js';
+import '../../common.scss';
 
 const inputProps = {
     inputMode: 'decimal',

@@ -1,5 +1,5 @@
 import { isDate } from '@jezvejs/types';
-import { Component } from '../../../../js/Component.js';
+import { Component } from '../../../../Component.js';
 import {
     getHeaderTitle,
     getNextViewDate,

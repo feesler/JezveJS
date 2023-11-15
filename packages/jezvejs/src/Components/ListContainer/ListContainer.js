@@ -6,7 +6,7 @@ import {
     removeChilds,
     insertAfter,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
+import { Component } from '../../Component.js';
 
 const defaultProps = {
     tagName: 'div',

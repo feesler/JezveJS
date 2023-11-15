@@ -3,13 +3,13 @@ import {
     createSVGElement,
     setEvents,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
+import { Component } from '../../Component.js';
 import {
     hexColor,
     svgValue,
     circularArc,
 } from './utils.js';
-import '../../css/common.scss';
+import '../../common.scss';
 import './PieChart.scss';
 
 /** CSS classes */
