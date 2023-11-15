@@ -677,6 +677,7 @@ export class BaseChart extends Component {
             let lastOffset = 0;
             const lblMarginLeft = 10;
             const labelsToRemove = [];
+            let resizeRequested = false;
             let prevLabel = null;
             const toLeft = (
                 !this.isHorizontalScaleNeeded(state, prevState)
@@ -704,9 +705,13 @@ export class BaseChart extends Component {
 
                 // Check last label not overflow chart to prevent
                 // horizontal scroll in fitToWidth mode
-                if (state.fitToWidth && currentOffset > state.chartContentWidth) {
-                    labelsToRemove.push(label);
-                    continue;
+                if (currentOffset > state.chartContentWidth) {
+                    if (state.fitToWidth) {
+                        labelsToRemove.push(label);
+                        continue;
+                    } else {
+                        resizeRequested = true;
+                    }
                 }
 
                 lastOffset = (toLeft) ? labelRect.x : currentOffset;
@@ -733,6 +738,10 @@ export class BaseChart extends Component {
             }
 
             this.labels = labels;
+
+            if (resizeRequested) {
+                setTimeout(() => this.onResize());
+            }
         });
     }
 
