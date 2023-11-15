@@ -34,6 +34,10 @@
   stroke: var(--linechart-active-item-border);
 }
 
+.linechart__path.chart__item_active {
+  stroke: var(--linechart-active-item-border);
+}
+
 /* Animation */
 .chart_animated {
   .linechart__item,

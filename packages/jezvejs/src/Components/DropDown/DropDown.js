@@ -13,9 +13,9 @@ import {
 import {
     px,
     debounce,
-} from '../../js/common.js';
-import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
-import { Component } from '../../js/Component.js';
+} from '../../common.js';
+import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
+import { Component } from '../../Component.js';
 
 import { MenuCheckbox } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
@@ -68,7 +68,7 @@ import {
     isAvailableItem,
     reducer,
 } from './reducer.js';
-import '../../css/common.scss';
+import '../../common.scss';
 import './DropDown.scss';
 
 export {

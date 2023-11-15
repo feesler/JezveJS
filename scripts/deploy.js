@@ -19,22 +19,64 @@ const config = {
     port: process.env.SFTP_PORT,
 };
 
+const { APP_DIR } = process.env;
+const DEPLOY_DIR = `${APP_DIR}-deploy`;
+const BACKUP_DIR = `${APP_DIR}-backup`;
+
 const client = new Client();
 const src = join(currentDir, '..', 'dist');
 const dest = process.env.DEPLOY_PATH;
-const removeDir = `${dest}/demo`;
+
+const destPath = (...parts) => (
+    `${dest}/${parts.join('/')}`
+);
+
+const removeByType = async (path, type) => {
+    if (type === 'd') {
+        await client.rmdir(path, true);
+    } else if (type === '-') {
+        await client.delete(path, true);
+    }
+};
+
+const removeIfExists = async (path) => {
+    const type = await client.exists(path);
+    if (type !== false) {
+        console.log(`Removing ${path}`);
+    }
+
+    return removeByType(path, type);
+};
 
 let res = 1;
 let progress = null;
+let backupPath = null;
+const appPath = destPath(APP_DIR);
+const deployPath = destPath(DEPLOY_DIR);
+
+const restoreBackup = async () => {
+    if (!backupPath) {
+        return;
+    }
+    // Rename current app directory back to deploy
+    await client.rename(appPath, deployPath);
+    // Rename backup directory to back app
+    await client.rename(backupPath, appPath);
+};
+
+const onError = async (e) => {
+    console.log('Upload error: ', e.message);
+    await restoreBackup();
+
+    progress?.interrupt(`Upload error: ${e.message}`);
+};
 
 try {
-    console.log(`Deploy from: ${src} to: ${dest}`);
-
     // Obtain total count of files
     const files = await readdir(src, { withFileTypes: true, recursive: true });
     const total = files.reduce((prev, file) => (prev + (file.isFile() ? 1 : 0)), 1);
 
-    progress = new ProgressBar(':bar :percent :file', {
+    progress = new ProgressBar('[:bar] :percent :file', {
         total,
         width: 20,
         complete: '█',
@@ -48,20 +90,34 @@ try {
         });
     });
 
-    // Remove destination directory before upload
-    const dirExists = await client.exists(removeDir);
-    if (dirExists) {
-        await client.rmdir(removeDir, true);
-    }
+    // Prepare empty deploy directory
+    await removeIfExists(deployPath);
+    await client.mkdir(deployPath, true);
 
-    await client.uploadDir(src, dest);
+    // Upload to deploy directory
+    console.log(`Deploy from: ${src} to: ${deployPath}`);
+    await client.uploadDir(src, deployPath);
     progress.tick({
         file: 'Done',
     });
 
+    // Rename current app directory to backup if available
+    const appDirType = await client.exists(appPath);
+    if (appDirType === 'd') {
+        backupPath = destPath(BACKUP_DIR);
+        await removeIfExists(backupPath);
+        await client.rename(appPath, backupPath);
+    }
+
+    // Rename deploy directory to app
+    await client.rename(deployPath, appPath);
+
+    // Remove backup directory
+    await removeIfExists(backupPath);
+
     res = 0;
 } catch (e) {
-    progress?.interrupt(`Upload error: ${e.message}`);
+    onError(e);
 } finally {
     client.end();
     process.exit(res);

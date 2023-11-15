@@ -1,5 +1,5 @@
 import { createElement } from '@jezvejs/dom';
-import { Component } from '../../../../js/Component.js';
+import { Component } from '../../../../Component.js';
 
 import './MenuGroupHeader.scss';
 

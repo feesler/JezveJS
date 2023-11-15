@@ -1,7 +1,7 @@
 import { asArray } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
-import '../../css/common.scss';
+import { Component } from '../../Component.js';
+import '../../common.scss';
 import './InputGroup.scss';
 
 /** CSS classes */

@@ -1,5 +1,5 @@
 import { isFunction, asArray } from '@jezvejs/types';
-import '../../css/common.scss';
+import '../../common.scss';
 import {
     createElement,
     setEvents,
@@ -11,7 +11,7 @@ import {
     insertBefore,
     getClassName,
 } from '@jezvejs/dom';
-import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
+import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
 
 import { Menu } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';

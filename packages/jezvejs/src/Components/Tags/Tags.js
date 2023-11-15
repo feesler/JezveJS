@@ -3,7 +3,7 @@ import {
     enable,
     getClassNames,
 } from '@jezvejs/dom';
-import { deepMeet } from '../../js/common.js';
+import { deepMeet } from '../../common.js';
 import { SortableListContainer } from '../SortableListContainer/SortableListContainer.js';
 import { Tag } from '../Tag/Tag.js';
 import './Tags.scss';

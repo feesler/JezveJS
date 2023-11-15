@@ -6,7 +6,7 @@ import {
 import * as Actions from '../actions/Paginator.js';
 
 export const paginatorTests = async () => {
-    const pageUrl = `${baseUrl()}demo/paginator.html`;
+    const pageUrl = `${baseUrl()}paginator.html`;
     await goTo(pageUrl);
 
     setBlock('Paginator component', 1);

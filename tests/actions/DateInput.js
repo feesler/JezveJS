@@ -12,7 +12,7 @@ const checkNavigation = async () => {
         return;
     }
 
-    const pageUrl = `${baseUrl()}demo/dateinput.html`;
+    const pageUrl = `${baseUrl()}dateinput.html`;
     await goTo(pageUrl);
     assert.instanceOf(App.view, DateInputView);
 };

@@ -1,10 +1,10 @@
 import { isFunction } from '@jezvejs/types';
-import '../../css/common.scss';
+import '../../common.scss';
 import {
     createElement,
     enable,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
+import { Component } from '../../Component.js';
 import { LinkMenu } from '../LinkMenu/LinkMenu.js';
 import { ListContainer } from '../ListContainer/ListContainer.js';
 import { TabContentItem } from './TabContentItem.js';

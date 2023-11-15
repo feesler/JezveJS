@@ -1,5 +1,5 @@
 import { re, getOffset } from '@jezvejs/dom';
-import { px } from '../../js/common.js';
+import { px } from '../../common.js';
 import { DragAvatar } from '../DragnDrop/DragAvatar.js';
 
 /* eslint no-unused-vars: "warn" */

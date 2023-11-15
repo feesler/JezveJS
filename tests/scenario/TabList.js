@@ -6,7 +6,7 @@ import {
 import * as Actions from '../actions/TabList.js';
 
 export const tabListTests = async () => {
-    const pageUrl = `${baseUrl()}demo/tablist.html`;
+    const pageUrl = `${baseUrl()}tablist.html`;
     await goTo(pageUrl);
 
     setBlock('TabList component', 1);

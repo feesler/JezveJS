@@ -10,6 +10,7 @@ const BAR_CLASS = 'histogram__bar';
 const CATEGORY_INDEX_CLASS = 'histogram_category-ind-';
 const CATEGORY_CLASS = 'histogram_category-';
 const COLUMN_CLASS = 'histogram_column-';
+const ACTIVE_ITEM_CLASS = 'chart__item_active';
 
 /** Default properties */
 const defaultProps = {
@@ -132,6 +133,7 @@ export class Histogram extends BaseChart {
         category = null,
         columnIndex = 0,
         categoryIndex = 0,
+        active = false,
         valueOffset = 0,
         groupName = null,
     }, state) {
@@ -158,6 +160,7 @@ export class Histogram extends BaseChart {
             columnIndex,
             category,
             categoryIndex,
+            active,
             groupName,
         };
 
@@ -186,6 +189,10 @@ export class Histogram extends BaseChart {
                 const categoryClass = `${CATEGORY_CLASS}${category}`;
                 classNames.push(categoryClass);
             }
+        }
+
+        if (active) {
+            classNames.push(ACTIVE_ITEM_CLASS);
         }
 
         item.elem = createSVGElement('rect', {
@@ -222,6 +229,7 @@ export class Histogram extends BaseChart {
         const stackedCategories = this.getStackedCategories(state);
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
+        const activeCategory = state.activeCategory?.toString() ?? null;
 
         const flatItems = this.items.flat();
         const newItems = [];
@@ -256,7 +264,12 @@ export class Histogram extends BaseChart {
                     categoryIndex,
                 });
 
-                if (!item) {
+                const active = (
+                    (!!category && category.toString() === activeCategory)
+                    || (categoryIndex.toString() === activeCategory)
+                );
+
+                if (!item || (item.active !== active)) {
                     item = this.createItem({
                         value,
                         width: state.columnWidth,
@@ -264,6 +277,7 @@ export class Histogram extends BaseChart {
                         columnIndex,
                         category,
                         categoryIndex,
+                        active,
                         valueOffset,
                         groupName,
                     }, state);

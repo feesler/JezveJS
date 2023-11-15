@@ -1,4 +1,4 @@
-import { minmax } from '../../js/common.js';
+import { minmax } from '../../common.js';
 
 export const valueToPosition = (value, minValue, maxValue, maxPos) => (
     Math.ceil(maxPos * Math.abs((value - minValue) / (minValue - maxValue)))

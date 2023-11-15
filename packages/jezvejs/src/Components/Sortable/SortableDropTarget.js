@@ -9,7 +9,7 @@ import {
 import {
     hasFlag,
     px,
-} from '../../js/common.js';
+} from '../../common.js';
 import { DropTarget } from '../DragnDrop/DropTarget.js';
 import { SortableDragAvatar } from './SortableDragAvatar.js';
 

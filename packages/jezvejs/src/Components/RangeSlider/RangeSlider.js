@@ -4,8 +4,8 @@ import {
     setEvents,
     enable,
 } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
-import { minmax, px } from '../../js/common.js';
+import { Component } from '../../Component.js';
+import { minmax, px } from '../../common.js';
 
 import { RangeSliderDragZone } from './components/RangeSliderDragZone.js';
 import { RangeSliderDropTarget } from './components/RangeSliderDropTarget.js';

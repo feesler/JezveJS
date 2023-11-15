@@ -9,7 +9,7 @@ export default {
     context: resolve(currentDir, '../packages/jezvejs/'),
     entry: {
         index: './index.js',
-        polyfills: './src/js/polyfill/index.js',
+        polyfills: './src/polyfill/index.js',
         BaseChart: './src/Components/BaseChart/BaseChart.js',
         Button: './src/Components/Button/Button.js',
         ChartGrid: './src/Components/ChartGrid/ChartGrid.js',

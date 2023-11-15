@@ -39,9 +39,13 @@ section {
   b,
   span {
     position: relative;
-    left: -10px;
+    left: -5px;
     color: #000000;
   }
+}
+
+.list-item_active-category {
+  font-weight: 500;
 }
 
 @for $i from 1 through length($colors) {

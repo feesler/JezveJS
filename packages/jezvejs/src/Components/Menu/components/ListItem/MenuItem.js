@@ -4,7 +4,7 @@ import {
     enable,
     getClassName,
 } from '@jezvejs/dom';
-import { Component } from '../../../../js/Component.js';
+import { Component } from '../../../../Component.js';
 import { Icon } from '../../../Icon/Icon.js';
 import { isCheckbox } from '../../helpers.js';
 

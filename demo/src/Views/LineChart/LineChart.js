@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import { isFunction } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { LineChart } from 'jezvejs/LineChart';
 
@@ -160,26 +161,52 @@ const renderMultiColumnPopup = (target) => {
     return createElement('ul', {
         props: { className: 'custom-chart-popup__list' },
         children: target.group.map(
-            (item) => createElement('li', {
-                children: createElement('span', { props: { textContent: item.value } }),
+            (item, index) => createElement('li', {
+                props: {
+                    className: `list-item_category-${item.categoryIndex + 1}`,
+                },
+                children: createElement(((target.index === index) ? 'b' : 'span'), {
+                    props: { textContent: item.value },
+                }),
             }),
         ),
     });
 };
 
-const renderCustomLegend = (categories) => {
+const renderCustomLegend = (categories, state, options = {}) => {
     if (!Array.isArray(categories) || categories.length === 0) {
         return null;
     }
 
+    const {
+        onClick = null,
+    } = options;
+    const events = {};
+
+    if (isFunction(onClick)) {
+        events.click = onClick;
+    }
+
+    const ITEM_CLASS = 'list-item_category list-item_category-';
+    const ACTIVE_ITEM_CLASS = 'list-item_category list-item_active-category list-item_category-';
+    const activeCategory = state.activeCategory?.toString() ?? null;
+
     return createElement('ul', {
         props: { className: 'chart__legend-list' },
-        children: categories.map((_, index) => createElement('li', {
+        events,
+        children: categories.map((category) => createElement('li', {
             props: {
-                className: `list-item_category-${index + 1}`,
+                className: (
+                    (category?.toString() === activeCategory)
+                        ? `${ACTIVE_ITEM_CLASS}${category + 1}`
+                        : `${ITEM_CLASS}${category + 1}`
+                ),
+                dataset: {
+                    category,
+                },
             },
             children: createElement('span', {
-                props: { textContent: `Category ${index + 1}` },
+                props: { textContent: `Category ${category + 1}` },
             }),
         })),
     });
@@ -391,12 +418,26 @@ class LineChartView extends DemoView {
             renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
-            renderLegend: renderCustomLegend,
+            renderLegend: (categories, state) => renderCustomLegend(categories, state, {
+                onClick: (e) => {
+                    const listItem = e.target.closest('.list-item_category');
+                    if (!listItem) {
+                        return;
+                    }
+
+                    const { category } = listItem.dataset;
+                    const activeCategory = chart.activeCategory?.toString() ?? null;
+                    const isActive = (category?.toString() === activeCategory);
+
+                    chart.setActiveCategory((isActive) ? null : category);
+                },
+            }),
         });
 
         this.addSection({
             id: 'stacked',
             title: 'Stacked + Custom legend',
+            description: 'Data categories are activated by click on legend items.',
             content: chartContainer('linechart_stacked', chart),
         });
     }

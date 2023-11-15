@@ -71,9 +71,6 @@ export async function route(env, url) {
     if (part === 'jezvejs') {
         part = parts.shift()?.toLowerCase();
     }
-    if (part === 'demo') {
-        part = parts.shift()?.toLowerCase();
-    }
 
     if (typeof part !== 'string' || part.length === 0) {
         return routeMap.index;

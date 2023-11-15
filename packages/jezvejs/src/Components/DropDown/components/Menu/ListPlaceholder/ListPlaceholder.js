@@ -1,6 +1,6 @@
 import { asArray } from '@jezvejs/types';
 import { createElement, getClassName } from '@jezvejs/dom';
-import { Component } from '../../../../../js/Component.js';
+import { Component } from '../../../../../Component.js';
 import './ListPlaceholder.scss';
 
 /* CSS classes */

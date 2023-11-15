@@ -6,7 +6,7 @@ import {
 import * as Actions from '../actions/PopupMenu.js';
 
 export const popupMenuTests = async () => {
-    const pageUrl = `${baseUrl()}demo/popupmenu.html`;
+    const pageUrl = `${baseUrl()}popupmenu.html`;
     await goTo(pageUrl);
 
     setBlock('PopupMenu component', 1);

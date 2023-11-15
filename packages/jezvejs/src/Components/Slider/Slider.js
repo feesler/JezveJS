@@ -7,9 +7,9 @@ import {
 import {
     px,
     minmax,
-} from '../../js/common.js';
-import '../../css/common.scss';
-import { Component } from '../../js/Component.js';
+} from '../../common.js';
+import '../../common.scss';
+import { Component } from '../../Component.js';
 import { Slidable } from '../Slidable/Slidable.js';
 import './Slider.scss';
 

@@ -16,7 +16,7 @@ export default {
     target: ['web', 'es5'],
     context: resolve(currentDir, '..'),
     entry: {
-        polyfills: './packages/jezvejs/src/js/polyfill/index.js',
+        polyfills: './packages/jezvejs/src/polyfill/index.js',
 
         TestsView: './demo/src/Views/Tests/TestsView.js',
         testsMain: './tests/index.js',

@@ -1,5 +1,5 @@
 import { createElement, removeChilds, addChilds } from '@jezvejs/dom';
-import { Component } from '../../js/Component.js';
+import { Component } from '../../Component.js';
 import './TabList.scss';
 
 /* CSS classes */

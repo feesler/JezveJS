@@ -3,7 +3,7 @@ import {
     computedStyle,
     transform,
 } from '@jezvejs/dom';
-import { px } from '../../js/common.js';
+import { px } from '../../common.js';
 
 export class PopupPosition {
     static windowScrollDistance = 0;

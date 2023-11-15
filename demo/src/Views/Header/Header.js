@@ -30,7 +30,7 @@ class HeaderView extends DemoView {
         const logoLink = createElement('a', {
             props: {
                 className: 'nav-header__logo',
-                href: `${baseURL}demo/index.html`,
+                href: baseURL.toString(),
                 textContent: 'Header component',
             },
         });

@@ -8,12 +8,12 @@ import {
     createElement,
     addChilds,
 } from '@jezvejs/dom';
-import { setEmptyClick, removeEmptyClick } from '../../js/emptyClick.js';
-import { Component } from '../../js/Component.js';
+import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
+import { Component } from '../../Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';
 import { ScrollLock } from '../ScrollLock/ScrollLock.js';
 
-import '../../css/common.scss';
+import '../../common.scss';
 import './Popup.scss';
 
 /* CSS classes */

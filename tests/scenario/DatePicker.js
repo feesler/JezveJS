@@ -7,7 +7,7 @@ import * as Actions from '../actions/DatePicker.js';
 import { App } from '../app.js';
 
 export const datePickerTests = async () => {
-    const pageUrl = `${baseUrl()}demo/datepicker.html`;
+    const pageUrl = `${baseUrl()}datepicker.html`;
     await goTo(pageUrl);
 
     setBlock('Date Picker component', 1);
