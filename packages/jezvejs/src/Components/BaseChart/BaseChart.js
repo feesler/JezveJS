@@ -771,7 +771,12 @@ export class BaseChart extends Component {
             return;
         }
 
-        const { showPopupOnClick, pinPopupOnClick } = this.state;
+        const { showPopupOnClick, pinPopupOnClick, activateOnClick } = this.state;
+
+        if (activateOnClick || showPopupOnClick) {
+            this.activateTarget(target, e);
+        }
+
         if (showPopupOnClick) {
             // Reuse pinned popup in case there is no hover popup
             // Popup will be pinned again, so it's possible to animate position of element
@@ -789,10 +794,6 @@ export class BaseChart extends Component {
                 this.pinnedTarget = target.item;
                 this.popup = null;
             }
-        }
-
-        if (this.state.activateOnClick) {
-            this.activateTarget(target, e);
         }
 
         if (isFunction(this.props.onItemClick)) {
