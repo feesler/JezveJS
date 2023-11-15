@@ -5,6 +5,7 @@ import {
     getClassName,
 } from '@jezvejs/dom';
 import { Component } from '../../../../js/Component.js';
+import './Header.scss';
 
 /* CSS classes */
 const HEADER_CLASS = 'dp__header';

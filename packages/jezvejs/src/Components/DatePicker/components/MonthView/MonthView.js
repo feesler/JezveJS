@@ -12,14 +12,9 @@ import {
     isSameDate,
     getDaysInMonth,
 } from '@jezvejs/datetime';
-import { Component } from '../../../../js/Component.js';
-import {
-    getHeaderTitle,
-    getNextViewDate,
-    getPrevViewDate,
-    includesDate,
-    MONTH_VIEW,
-} from '../../utils.js';
+import { includesDate, MONTH_VIEW } from '../../utils.js';
+import { DatePickerBaseView } from '../BaseView/BaseView.js';
+import './MonthView.scss';
 
 /* CSS classes */
 const VIEW_CONTAINER_CLASS = 'dp__view-container dp__month-view';
@@ -51,7 +46,10 @@ const defaultProps = {
     },
 };
 
-export class DatePickerMonthView extends Component {
+/**
+ * Month view component
+ */
+export class DatePickerMonthView extends DatePickerBaseView {
     constructor(props = {}) {
         super({
             ...defaultProps,
@@ -61,42 +59,10 @@ export class DatePickerMonthView extends Component {
                 ...(props?.components ?? {}),
             },
         });
-
-        const { date, locales } = this.props;
-        if (!isDate(date)) {
-            throw new Error('Invalid date');
-        }
-
-        this.type = MONTH_VIEW;
-        this.items = [];
-
-        this.state = {
-            ...this.props,
-            title: getHeaderTitle({
-                viewType: this.type,
-                date,
-                locales,
-            }),
-            nav: {
-                prev: getPrevViewDate(date, this.type),
-                next: getNextViewDate(date, this.type),
-            },
-        };
-
-        this.init();
-        this.render(this.state);
     }
 
-    get date() {
-        return this.state.date;
-    }
-
-    get title() {
-        return this.state.title;
-    }
-
-    get nav() {
-        return this.state.nav;
+    get type() {
+        return MONTH_VIEW;
     }
 
     init() {
@@ -109,14 +75,7 @@ export class DatePickerMonthView extends Component {
         this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
 
         // month header
-        const { Header } = this.props.components;
-        if (this.props.renderHeader && Header) {
-            this.header = Header.create({
-                ...(this.props.header ?? {}),
-                title: this.state.title,
-            });
-            this.elem.append(this.header.elem);
-        }
+        this.createHeader();
 
         // week days header
         const firstMonthDay = new Date(rYear, rMonth, 1);

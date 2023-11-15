@@ -1,0 +1,26 @@
+/* Year range view */
+.dp__year-range-view {
+  grid-template-columns: repeat(4, 1fr);
+
+  .dp__header {
+    grid-column: 1 / 5;
+  }
+}
+
+.dp__year-range-view__cell {
+  width: 100%;
+  padding: 0.25rem;
+  text-transform: capitalize;
+  font-weight: normal;
+  font-size: 1.125rem;
+  line-height: 2.5rem;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .dp__year-range-view__cell:hover {
+    background-color: var(--dp-hover-bg-color);
+    color: var(--dp-hover-color);
+    border-color: var(--dp-hover-border-color);
+  }
+}
