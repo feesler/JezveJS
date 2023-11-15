@@ -355,6 +355,7 @@ class DatePickerView extends DemoView {
         this.addSection({
             id: 'doubleView',
             title: '\'doubleView\' option',
+            description: 'Shows two views if screen width at least 724px.',
             content: [
                 inpGroup.elem,
                 datePicker.elem,

@@ -62,7 +62,7 @@ const BOTTOM_TO_CLASS = 'bottom_to';
 
 const TRANSITION_END_TIMEOUT = 500;
 const SWIPE_THRESHOLD = 0.1;
-const MIN_DOUBLE_VIEW_SCREEN_WIDTH = 768;
+const MIN_DOUBLE_VIEW_SCREEN_WIDTH = 724;
 
 const viewTypesMap = {
     date: MONTH_VIEW,
