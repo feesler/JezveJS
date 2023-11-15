@@ -59,8 +59,8 @@ export default {
         ]))),
     },
     output: {
-        filename: 'demo/js/[name].[fullhash].js',
-        assetModuleFilename: 'demo/assets/[name][ext]',
+        filename: 'js/[name].[fullhash].js',
+        assetModuleFilename: 'assets/[name][ext]',
         path: resolve(currentDir, '../dist'),
         clean: true,
         library: {
@@ -107,7 +107,7 @@ export default {
     plugins: [
         ...entryPoints.map((name) => (new HtmlWebpackPlugin({
             template: `./Views/${name}/${name.toLowerCase()}.html`,
-            filename: `demo/${name.toLowerCase()}.html`,
+            filename: `${name.toLowerCase()}.html`,
             chunks: ['polyfills', name],
             ...htmlCommonOptions,
         }))),

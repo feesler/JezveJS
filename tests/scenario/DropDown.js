@@ -9,7 +9,7 @@ import * as Actions from '../actions/DropDown.js';
 import { App } from '../app.js';
 
 export const dropDownTests = async () => {
-    const pageUrl = `${baseUrl()}demo/dropdown.html`;
+    const pageUrl = `${baseUrl()}dropdown.html`;
     await goTo(pageUrl);
 
     setBlock('Drop Down component', 1);

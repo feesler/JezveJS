@@ -12,7 +12,7 @@ const checkNavigation = async () => {
         return;
     }
 
-    const pageUrl = `${baseUrl()}demo/decimalinput.html`;
+    const pageUrl = `${baseUrl()}decimalinput.html`;
     await goTo(pageUrl);
     assert.instanceOf(App.view, DecimalInputView);
 };

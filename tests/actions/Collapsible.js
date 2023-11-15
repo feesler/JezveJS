@@ -12,7 +12,7 @@ const checkNavigation = async () => {
         return;
     }
 
-    const pageUrl = `${baseUrl()}demo/collapsible.html`;
+    const pageUrl = `${baseUrl()}collapsible.html`;
     await goTo(pageUrl);
     assert.instanceOf(App.view, CollapsibleView);
 };

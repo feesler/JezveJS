@@ -19,7 +19,7 @@ const run = async () => {
 
     if (isBrowser) {
         const baseURL = await environment.baseUrl();
-        environment.goTo(`${baseURL}/demo/`);
+        environment.goTo(baseURL);
     }
 };
 

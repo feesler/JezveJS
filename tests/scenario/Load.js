@@ -33,7 +33,7 @@ const views = {
 };
 
 const loadView = async (view) => test(`${views[view]} view`, async () => {
-    await goTo(`${baseUrl()}demo/${view}.html`);
+    await goTo(`${baseUrl()}${view}.html`);
     return true;
 });
 

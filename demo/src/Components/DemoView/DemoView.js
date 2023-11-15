@@ -50,7 +50,7 @@ export class DemoView extends View {
         const logoLink = createElement('a', {
             props: {
                 className: 'nav-header__logo',
-                href: `${baseURL}demo/index.html`,
+                href: baseURL.toString(),
                 textContent: 'JezveJS',
             },
         });
