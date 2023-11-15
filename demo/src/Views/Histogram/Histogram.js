@@ -592,6 +592,7 @@ class HistogramView extends DemoView {
         this.addSection({
             id: 'stacked',
             title: 'Stacked + Custom legend',
+            description: 'Data categories are activated by click on legend items.',
             content: chartContainer('stacked-histogram', histogram),
         });
     }

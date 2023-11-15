@@ -161,8 +161,13 @@ const renderMultiColumnPopup = (target) => {
     return createElement('ul', {
         props: { className: 'custom-chart-popup__list' },
         children: target.group.map(
-            (item) => createElement('li', {
-                children: createElement('span', { props: { textContent: item.value } }),
+            (item, index) => createElement('li', {
+                props: {
+                    className: `list-item_category-${item.categoryIndex + 1}`,
+                },
+                children: createElement(((target.index === index) ? 'b' : 'span'), {
+                    props: { textContent: item.value },
+                }),
             }),
         ),
     });
@@ -432,6 +437,7 @@ class LineChartView extends DemoView {
         this.addSection({
             id: 'stacked',
             title: 'Stacked + Custom legend',
+            description: 'Data categories are activated by click on legend items.',
             content: chartContainer('linechart_stacked', chart),
         });
     }
