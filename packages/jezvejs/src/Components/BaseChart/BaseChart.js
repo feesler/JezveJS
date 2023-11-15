@@ -386,8 +386,17 @@ export class BaseChart extends Component {
         }
 
         return state.dataSets.reduce((res, item) => {
-            const category = item.category ?? null;
-            return res.includes(category) ? res : [...res, category];
+            let category = item.category ?? null;
+            if (res.includes(category)) {
+                return res;
+            }
+
+            const categoryIndex = res.length;
+            if (category === null && !res.includes(categoryIndex)) {
+                category = categoryIndex;
+            }
+
+            return [...res, category];
         }, []);
     }
 
@@ -1118,9 +1127,15 @@ export class BaseChart extends Component {
         const categories = [];
 
         state.dataSets.forEach((dataSet, index) => {
-            const category = (state.data.stacked)
+            let category = (state.data.stacked)
                 ? (dataSet.category ?? null)
                 : index;
+
+            const categoryIndex = categories.length;
+            if (category === null && !categories.includes(categoryIndex)) {
+                category = categoryIndex;
+            }
+
             if (!categories.includes(category)) {
                 categories.push(category);
             }
