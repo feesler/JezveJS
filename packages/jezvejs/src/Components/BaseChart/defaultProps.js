@@ -37,6 +37,7 @@ export const defaultProps = {
     renderPopup: null,
     // Callbacks
     onScroll: null,
+    onResize: null,
     onItemClick: null,
     onItemOver: null,
     onItemOut: null,

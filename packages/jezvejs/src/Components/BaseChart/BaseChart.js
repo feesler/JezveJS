@@ -1076,6 +1076,10 @@ export class BaseChart extends Component {
         if (this.scrollFunc) {
             this.scrollFunc();
         }
+
+        if (isFunction(this.props.onResize)) {
+            this.props.onResize();
+        }
     }
 
     /** Create items with default scale */
