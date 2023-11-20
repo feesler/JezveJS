@@ -304,7 +304,7 @@ export class BaseChart extends Component {
     }
 
     setColumnWidth(value) {
-        const width = parseInt(value, 10);
+        const width = parseFloat(value, 10);
         if (Number.isNaN(width) || width < 1 || this.state.columnWidth === width) {
             return;
         }
@@ -319,7 +319,7 @@ export class BaseChart extends Component {
     }
 
     setGroupsGap(value) {
-        const gap = parseInt(value, 10);
+        const gap = parseFloat(value, 10);
         if (Number.isNaN(gap) || this.state.groupsGap === gap) {
             return;
         }
