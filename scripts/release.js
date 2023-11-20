@@ -36,7 +36,7 @@ const isMainPackage = (packageName === MAIN_PACKAGE);
 
 const run = async () => {
     await runCommand('all');
-    await runCommand(`version -- ${newVersion} -w ${packageName}`);
+    await runCommand(`p-version -- ${newVersion} -w ${packageName}`);
     await runCommand(`p-install -- -w ${packageName}`);
     await runCommand('p-update -- --save');
 
