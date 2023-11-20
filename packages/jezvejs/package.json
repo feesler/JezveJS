@@ -21,6 +21,7 @@
     "license": "ISC",
     "dependencies": {
         "@babel/runtime": "^7.23.2",
+        "@jezvejs/assert": "^0.1.1",
         "@jezvejs/datetime": "^0.1.0",
         "@jezvejs/dom": "^0.1.1",
         "@jezvejs/number": "^0.1.0",
