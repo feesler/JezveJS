@@ -61,12 +61,14 @@
     border-color: var(--rs-area-border-color);
     border-radius: var(--rs-area-border-radius);
     background: var(--rs-background);
+    cursor: pointer;
   }
 
   .range-slider__selected-area {
     position: absolute;
     opacity: var(--rs-selected-opacity);
     background: var(--rs-selected-background);
+    cursor: move;
   }
 
   .range-slider__before-area {
@@ -74,6 +76,7 @@
     box-sizing: content-box;
     border-color: var(--rs-before-border-color);
     background: var(--rs-before-background);
+    cursor: pointer;
   }
 
   .range-slider__after-area {
@@ -81,6 +84,7 @@
     box-sizing: content-box;
     border-color: var(--rs-after-border-color);
     background: var(--rs-after-background);
+    cursor: pointer;
   }
 
   .range-slider__slider {
@@ -131,6 +135,7 @@
       top: var(--rs-slider-offset);
       width: var(--rs-slider-length);
       height: var(--rs-slider-size);
+      cursor: ew-resize;
     }
   }
 
@@ -173,6 +178,7 @@
       left: var(--rs-slider-offset);
       width: var(--rs-slider-size);
       height: var(--rs-slider-length);
+      cursor: ns-resize;
     }
   }
 }
