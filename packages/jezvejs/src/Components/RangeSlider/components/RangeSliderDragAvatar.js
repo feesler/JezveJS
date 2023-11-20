@@ -56,8 +56,10 @@ export class RangeSliderDragAvatar extends DragAvatar {
         const { axis } = this.dragZone;
         if (axis === 'x') {
             this.elem.style.left = px(this.origLeft);
-        } else if (axis === 'y') {
+        } else {
             this.elem.style.top = px(this.origTop);
         }
+
+        this.dragZone.onDragCancel();
     }
 }

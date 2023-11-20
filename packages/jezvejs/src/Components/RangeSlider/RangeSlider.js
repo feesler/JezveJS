@@ -61,6 +61,7 @@ export class RangeSlider extends Component {
         this.state = {
             ...this.props,
             maxPos: 0,
+            originalValue: null,
         };
 
         if (this.props.range) {
@@ -134,6 +135,8 @@ export class RangeSlider extends Component {
         RangeSliderDragZone.create({
             elem: slider,
             axis: this.props.axis,
+            onDragStart: (...args) => this.onDragStart(...args),
+            onDragCancel: (...args) => this.onDragCancel(...args),
             onChange,
         });
     }
@@ -220,6 +223,38 @@ export class RangeSlider extends Component {
 
     onResize() {
         this.setState({ ...this.state, maxPos: this.getMaxPos() });
+    }
+
+    onDragStart() {
+        this.setState({
+            ...this.state,
+            originalValue: this.value,
+        });
+    }
+
+    onDragCancel() {
+        const { originalValue } = this.state;
+        if (originalValue === null) {
+            return;
+        }
+
+        if (this.props.range) {
+            const { start, end } = originalValue;
+            this.setState({
+                ...this.state,
+                start,
+                end,
+                originalValue: null,
+            });
+        } else {
+            this.setState({
+                ...this.state,
+                value: originalValue,
+                originalValue: null,
+            });
+        }
+
+        this.notifyChanged();
     }
 
     onPosChange(pos) {
