@@ -13,7 +13,8 @@
 
   /* Slider */
   --rs-slider-size: 1rem;
-  --rs-slider-offset: 0;
+  --rs-slider-length: var(--rs-slider-size);
+  --rs-slider-offset: calc((var(--rs-area-size) - var(--rs-slider-size)) / 2);
   --rs-slider-border-style: none;
   --rs-slider-border-width: 0;
   --rs-slider-border-color: transparent;
@@ -84,8 +85,6 @@
 
   .range-slider__slider {
     position: absolute;
-    width: var(--rs-slider-size);
-    height: var(--rs-slider-size);
     border-width: var(--rs-slider-border-width);
     border-style: var(--rs-slider-border-style);
     border-color: var(--rs-slider-border-color);
@@ -130,6 +129,8 @@
 
     .range-slider__slider {
       top: var(--rs-slider-offset);
+      width: var(--rs-slider-length);
+      height: var(--rs-slider-size);
     }
   }
 
@@ -170,6 +171,8 @@
 
     .range-slider__slider {
       left: var(--rs-slider-offset);
+      width: var(--rs-slider-size);
+      height: var(--rs-slider-length);
     }
   }
 }
