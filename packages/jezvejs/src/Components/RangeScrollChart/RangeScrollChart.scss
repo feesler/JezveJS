@@ -1,7 +1,7 @@
 .range-scroll-chart {
   --rschart-outside-areas-background: #88888888;
-  --rschart-slider-size: 1rem;
-  --rschart-slider-length: 2rem;
+  --rschart-slider-size: 2rem;
+  --rschart-slider-length: 1rem;
   --rschart-slider-background: #000000;
   --rschart-slider-border-width: 0;
   --rschart-slider-border-style: none;
@@ -9,6 +9,10 @@
 
   display: flex;
   flex-flow: column nowrap;
+
+  .chart__scroller {
+    overflow-x: scroll;
+  }
 
   .range-scroll-chart__slider-container {
     --rs-max-length: 100%;
@@ -21,6 +25,10 @@
 .chart.range-scroll-chart__nav-chart {
   .chart__container {
     position: relative;
+  }
+
+  .chart__scroller {
+    overflow-x: hidden;
   }
 }
 

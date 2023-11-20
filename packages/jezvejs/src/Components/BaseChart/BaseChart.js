@@ -624,7 +624,7 @@ export class BaseChart extends Component {
         const labelsWidth = Math.ceil(labelRect.width) + 10;
 
         this.labelsContainer.setAttribute('width', labelsWidth);
-        this.labelsContainer.setAttribute('height', state.height + 20);
+        this.labelsContainer.setAttribute('height', state.height);
     }
 
     getXAxisLabelRenderer(state = this.state) {
