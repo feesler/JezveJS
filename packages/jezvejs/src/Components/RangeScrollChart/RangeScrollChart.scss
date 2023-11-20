@@ -1,0 +1,37 @@
+.range-scroll-chart {
+  --rschart-outside-areas-background: #88888888;
+
+  display: flex;
+  flex-flow: column nowrap;
+
+  .range-scroll-chart__slider-container {
+    --rs-max-length: 100%;
+
+    position: relative;
+  }
+}
+
+/* Navigation chart */
+.chart.range-scroll-chart__nav-chart {
+  .chart__container {
+    position: relative;
+  }
+}
+
+/* Range slider */
+.range-slider.range-scroll-chart__range-slider {
+  --rs-before-background: var(--rschart-outside-areas-background);
+  --rs-after-background: var(--rschart-outside-areas-background);
+  --rs-selected-opacity: 0;
+  --rs-background: none;
+  --rs-area-size: 100%;
+  --rs-slider-offset: calc((var(--rs-area-size) - var(--rs-slider-size)) / 2);
+
+  position: absolute;
+  width: 100%;
+  max-width: 100%;
+
+  .range-slider__area {
+    max-width: 100%;
+  }
+}

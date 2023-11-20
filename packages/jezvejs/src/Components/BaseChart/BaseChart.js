@@ -164,14 +164,14 @@ export class BaseChart extends Component {
             },
         });
 
+        this.scrollerContainer = createElement('div', {
+            props: { className: CONTAINER_CLASS },
+            children: this.chartScroller,
+        });
+
         this.chartContainer = createElement('div', {
             props: { className: HORIZONTAL_CONTAINER_CLASS },
-            children: [
-                createElement('div', {
-                    props: { className: CONTAINER_CLASS },
-                    children: this.chartScroller,
-                }),
-            ],
+            children: this.scrollerContainer,
         });
 
         const { yAxis } = this.state;

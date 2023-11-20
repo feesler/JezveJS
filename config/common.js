@@ -43,6 +43,7 @@ export default {
         PopupPosition: './src/Components/PopupPosition/PopupPosition.js',
         Progress: './src/Components/Progress/Progress.js',
         Radio: './src/Components/Radio/Radio.js',
+        RangeScrollChart: './src/Components/RangeScrollChart/RangeScrollChart.js',
         RangeSlider: './src/Components/RangeSlider/RangeSlider.js',
         ScrollLock: './src/Components/ScrollLock/ScrollLock.js',
         Slidable: './src/Components/Slidable/Slidable.js',
