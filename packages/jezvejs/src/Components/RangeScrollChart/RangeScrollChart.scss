@@ -1,5 +1,11 @@
 .range-scroll-chart {
   --rschart-outside-areas-background: #88888888;
+  --rschart-slider-size: 1rem;
+  --rschart-slider-length: 2rem;
+  --rschart-slider-background: #000000;
+  --rschart-slider-border-width: 0;
+  --rschart-slider-border-style: none;
+  --rschart-slider-border-color: #000000;
 
   display: flex;
   flex-flow: column nowrap;
@@ -25,6 +31,12 @@
   --rs-selected-opacity: 0;
   --rs-background: none;
   --rs-area-size: 100%;
+  --rs-slider-border-width: var(--rschart-slider-border-width);
+  --rs-slider-border-style: var(--rschart-slider-border-style);
+  --rs-slider-border-color: var(--rschart-slider-border-color);
+  --rs-slider-background: var(--rschart-slider-background);
+  --rs-slider-size: var(--rschart-slider-size);
+  --rs-slider-length: var(--rschart-slider-length);
   --rs-slider-offset: calc((var(--rs-area-size) - var(--rs-slider-size)) / 2);
 
   position: absolute;
