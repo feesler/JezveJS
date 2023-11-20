@@ -130,6 +130,7 @@ export class BaseChart extends Component {
             chartWidth: 0,
             chartHeight: 0,
             scrollLeft: 0,
+            scrollWidth: 0,
             blockTouch: false,
             animateNow: false,
         };
@@ -163,14 +164,14 @@ export class BaseChart extends Component {
             },
         });
 
+        this.scrollerContainer = createElement('div', {
+            props: { className: CONTAINER_CLASS },
+            children: this.chartScroller,
+        });
+
         this.chartContainer = createElement('div', {
             props: { className: HORIZONTAL_CONTAINER_CLASS },
-            children: [
-                createElement('div', {
-                    props: { className: CONTAINER_CLASS },
-                    children: this.chartScroller,
-                }),
-            ],
+            children: this.scrollerContainer,
         });
 
         const { yAxis } = this.state;
@@ -304,7 +305,7 @@ export class BaseChart extends Component {
     }
 
     setColumnWidth(value) {
-        const width = parseInt(value, 10);
+        const width = parseFloat(value, 10);
         if (Number.isNaN(width) || width < 1 || this.state.columnWidth === width) {
             return;
         }
@@ -319,7 +320,7 @@ export class BaseChart extends Component {
     }
 
     setGroupsGap(value) {
-        const gap = parseInt(value, 10);
+        const gap = parseFloat(value, 10);
         if (Number.isNaN(gap) || this.state.groupsGap === gap) {
             return;
         }
@@ -503,6 +504,8 @@ export class BaseChart extends Component {
         const newState = {
             ...state,
             chartContentWidth: contentWidth,
+            scrollLeft: this.chartScroller.scrollLeft,
+            scrollWidth: this.chartScroller.scrollWidth,
         };
 
         newState.containerWidth = this.elem.offsetWidth;
@@ -1031,6 +1034,7 @@ export class BaseChart extends Component {
             ...this.state,
             animateNow: false,
             scrollLeft: this.chartScroller.scrollLeft,
+            scrollWidth: this.chartScroller.scrollWidth,
         });
 
         if (this.scaleFunc) {
@@ -1067,6 +1071,7 @@ export class BaseChart extends Component {
             ...newState,
             animateNow: false,
             scrollLeft: this.chartScroller.scrollLeft,
+            scrollWidth: this.chartScroller.scrollWidth,
         });
 
         if (this.scaleFunc) {
@@ -1075,6 +1080,10 @@ export class BaseChart extends Component {
 
         if (this.scrollFunc) {
             this.scrollFunc();
+        }
+
+        if (isFunction(this.props.onResize)) {
+            this.props.onResize();
         }
     }
 
@@ -1195,6 +1204,7 @@ export class BaseChart extends Component {
             && state.chartContentWidth === prevState.chartContentWidth
             && state.containerWidth === prevState.containerWidth
             && state.scrollLeft === prevState.scrollLeft
+            && state.scrollWidth === prevState.scrollWidth
             && state.animateNow === prevState.animateNow
             && state.activeCategory === prevState.activeCategory
         ) {
@@ -1225,6 +1235,8 @@ export class BaseChart extends Component {
         const animated = state.autoScale && state.animate && state.animateNow;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
+
+        this.chartScroller.scrollLeft = state.scrollLeft;
 
         this.drawVLabels(state);
         this.renderItems(state, prevState);

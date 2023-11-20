@@ -18,12 +18,18 @@
 
   /* Slider  */
   --rs-slider-size: 1.5rem;
-  --rs-slider-color: #ff9f20;
+  --rs-slider-background: #ff9f20;
   --rs-slider-border-style: solid;
   --rs-slider-border-width: 2px;
   --rs-slider-border-color: #ffffff;
   --rs-slider-border-radius: 100vh;
   --rs-slider-offset: calc((var(--rs-area-size) - var(--rs-slider-size)) / 2);
+
+  /* Before area */
+  --rs-before-background: #2ac710;
+
+  /* After area */
+  --rs-after-background: #1082c7;
 
   /* Hover state */
   --rs-hover-background: #9e31ec;

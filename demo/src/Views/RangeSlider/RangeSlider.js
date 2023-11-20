@@ -35,6 +35,8 @@ class RangeSliderView extends DemoView {
         this.initDefault();
         this.initYAxis();
         this.initStyled();
+        this.initBeforeArea();
+        this.initAfterArea();
         this.initStep();
         this.initRange();
         this.initDisabled();
@@ -109,6 +111,46 @@ class RangeSliderView extends DemoView {
             id: 'styled',
             title: 'Styled',
             content: createContainer('styledContainer', [
+                rangeSlider.elem,
+                valueElem,
+            ]),
+        });
+    }
+
+    initBeforeArea() {
+        const valueElem = createValueElement();
+        const rangeSlider = RangeSlider.create({
+            className: 'styled',
+            beforeArea: true,
+            onChange: () => valueElem.renderValue(rangeSlider),
+        });
+
+        valueElem.renderValue(rangeSlider);
+
+        this.addSection({
+            id: 'beforeArea',
+            title: '\'beforeArea\' option',
+            content: createContainer('beforeAreaContainer', [
+                rangeSlider.elem,
+                valueElem,
+            ]),
+        });
+    }
+
+    initAfterArea() {
+        const valueElem = createValueElement();
+        const rangeSlider = RangeSlider.create({
+            className: 'styled',
+            afterArea: true,
+            onChange: () => valueElem.renderValue(rangeSlider),
+        });
+
+        valueElem.renderValue(rangeSlider);
+
+        this.addSection({
+            id: 'afterArea',
+            title: '\'afterArea\' option',
+            content: createContainer('afterAreaContainer', [
                 rangeSlider.elem,
                 valueElem,
             ]),

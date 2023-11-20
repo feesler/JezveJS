@@ -9,6 +9,8 @@ const defalutProps = {
     touchMoveTimeout: 0,
     axis: 'x', // possible values: 'x' or 'y'
     onChange: null,
+    onDragStart: null,
+    onDragCancel: null,
 };
 
 /**
@@ -30,9 +32,28 @@ export class RangeSliderDragZone extends DragZone {
         return this.props.axis;
     }
 
+    onDragStart(downX, downY, event) {
+        const avatar = super.onDragStart(downX, downY, event);
+        if (!avatar) {
+            return avatar;
+        }
+
+        if (isFunction(this.props.onDragStart)) {
+            this.props.onDragStart(downX, downY, event);
+        }
+
+        return avatar;
+    }
+
     onPosChange(pos) {
         if (isFunction(this.props.onChange)) {
             this.props.onChange(pos);
+        }
+    }
+
+    onDragCancel() {
+        if (isFunction(this.props.onDragCancel)) {
+            this.props.onDragCancel();
         }
     }
 

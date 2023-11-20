@@ -24,6 +24,8 @@ const Y_AXIS_CLASS = 'range-slider_y-axis';
 const SLIDER_CLASS = 'range-slider__slider';
 const SLIDER_AREA_CLASS = 'range-slider__area';
 const SELECTED_AREA_CLASS = 'range-slider__selected-area';
+const BEFORE_AREA_CLASS = 'range-slider__before-area';
+const AFTER_AREA_CLASS = 'range-slider__after-area';
 
 const defaultProps = {
     id: undefined,
@@ -37,9 +39,13 @@ const defaultProps = {
     max: 100,
     step: 1,
     range: false,
+    beforeArea: false,
+    afterArea: false,
     onFocus: null,
     onBlur: null,
+    onBeforeChange: null,
     onChange: null,
+    onScroll: null,
 };
 
 /**
@@ -61,6 +67,7 @@ export class RangeSlider extends Component {
         this.state = {
             ...this.props,
             maxPos: 0,
+            originalValue: null,
         };
 
         if (this.props.range) {
@@ -92,6 +99,16 @@ export class RangeSlider extends Component {
             : this.state.value;
     }
 
+    /** Returns current start value of range mode component or null for single value mode */
+    get start() {
+        return (this.props.range) ? this.state.start : null;
+    }
+
+    /** Returns current end value of range mode component or null for single value mode */
+    get end() {
+        return (this.props.range) ? this.state.end : null;
+    }
+
     /** Returns disabled state of component */
     get disabled() {
         return this.state.disabled;
@@ -106,10 +123,20 @@ export class RangeSlider extends Component {
 
         this.sliderArea = createElement('div', { props: { className: SLIDER_AREA_CLASS } });
 
+        if (this.props.beforeArea) {
+            this.beforeArea = createElement('div', { props: { className: BEFORE_AREA_CLASS } });
+        }
+
+        if (this.props.afterArea) {
+            this.afterArea = createElement('div', { props: { className: AFTER_AREA_CLASS } });
+        }
+
         this.elem = createElement('div', {
             props: { className: CONTAINER_CLASS },
             children: [
                 this.sliderArea,
+                this.beforeArea,
+                this.afterArea,
                 this.selectedArea,
                 this.slider,
                 this.endSlider,
@@ -134,6 +161,8 @@ export class RangeSlider extends Component {
         RangeSliderDragZone.create({
             elem: slider,
             axis: this.props.axis,
+            onDragStart: (...args) => this.onDragStart(...args),
+            onDragCancel: (...args) => this.onDragCancel(...args),
             onChange,
         });
     }
@@ -166,13 +195,27 @@ export class RangeSlider extends Component {
             : (offset.height - rect.height);
     }
 
+    getStartValue(state = this.state) {
+        return (this.props.range) ? state.start : state.value;
+    }
+
+    getEndValue(state = this.state) {
+        return (this.props.range) ? state.end : state.value;
+    }
+
     positionToValue(pos) {
         const value = positionToValue(pos, this.state.min, this.state.max, this.getMaxPos());
         return stepValue(value, this.state.step, this.precision);
     }
 
     onClick(e) {
-        if (e.target !== this.sliderArea) {
+        const availTargets = [
+            this.sliderArea,
+            this.beforeArea,
+            this.afterArea,
+        ];
+
+        if (e.target && !availTargets.includes(e.target)) {
             return;
         }
 
@@ -180,10 +223,11 @@ export class RangeSlider extends Component {
         const { axis } = this.props;
 
         const rect = this.slider.getBoundingClientRect();
+        const offset = this.elem.getBoundingClientRect();
         if (axis === 'x') {
-            pos = e.offsetX - (rect.width / 2);
+            pos = (e.clientX - offset.left) - (rect.width / 2);
         } else if (axis === 'y') {
-            pos = e.offsetY - (rect.height / 2);
+            pos = (e.clientY - offset.top) - (rect.height / 2);
         }
 
         if (pos !== null) {
@@ -192,7 +236,7 @@ export class RangeSlider extends Component {
             if (this.props.range) {
                 const { start, end } = this.state;
                 if (value < start) {
-                    this.onPosChange(pos);
+                    this.onStartPosChange(pos);
                 } else if (value > end) {
                     this.onEndPosChange(pos);
                 }
@@ -222,16 +266,85 @@ export class RangeSlider extends Component {
         this.setState({ ...this.state, maxPos: this.getMaxPos() });
     }
 
-    onPosChange(pos) {
-        const value = this.positionToValue(pos);
+    onDragStart() {
+        this.setState({
+            ...this.state,
+            originalValue: this.value,
+        });
+    }
+
+    onDragCancel() {
+        const { originalValue } = this.state;
+        if (originalValue === null) {
+            return;
+        }
+
         if (this.props.range) {
-            const start = Math.min(this.state.end, value);
-            this.setState({ ...this.state, start });
+            const { start, end } = originalValue;
+            this.setState({
+                ...this.state,
+                start,
+                end,
+                originalValue: null,
+            });
         } else {
-            this.setState({ ...this.state, value });
+            this.setState({
+                ...this.state,
+                value: originalValue,
+                originalValue: null,
+            });
         }
 
         this.notifyChanged();
+    }
+
+    onPosChange(pos) {
+        if (this.props.range) {
+            this.onStartPosChange(pos);
+            return;
+        }
+
+        const newValue = this.positionToValue(pos);
+        const value = this.beforeChange(newValue);
+        if (this.state.value === value) {
+            return;
+        }
+
+        this.setState({ ...this.state, value });
+
+        this.notifyChanged();
+    }
+
+    changeRange(range, scroll = false) {
+        const { start, end } = range;
+        if (
+            this.state.start === start
+            && this.state.end === end
+        ) {
+            return;
+        }
+
+        this.setState({ ...this.state, start, end });
+
+        if (scroll) {
+            this.notifyScroll();
+        }
+        this.notifyChanged();
+    }
+
+    onStartPosChange(pos) {
+        if (!this.props.range) {
+            return;
+        }
+
+        const value = this.positionToValue(pos);
+        const newRange = {
+            start: Math.min(this.state.end, value),
+            end: this.state.end,
+        };
+
+        const range = this.beforeChange(newRange, 'start');
+        this.changeRange(range);
     }
 
     onEndPosChange(pos) {
@@ -240,9 +353,13 @@ export class RangeSlider extends Component {
         }
 
         const value = this.positionToValue(pos);
-        const end = Math.max(this.state.start, value);
-        this.setState({ ...this.state, end });
-        this.notifyChanged();
+        const newRange = {
+            start: this.state.start,
+            end: Math.max(this.state.start, value),
+        };
+
+        const range = this.beforeChange(newRange, 'end');
+        this.changeRange(range);
     }
 
     onScroll(pos) {
@@ -253,27 +370,27 @@ export class RangeSlider extends Component {
         const value = this.positionToValue(pos);
         const size = Math.abs(this.state.end - this.state.start);
         const start = minmax(this.state.min, this.state.max - size, value);
-        const end = start + size;
+        const end = minmax(this.state.min + size, this.state.max, start + size);
 
-        this.setState({ ...this.state, start, end });
-        this.notifyChanged();
+        this.changeRange({ start, end }, true);
+    }
+
+    beforeChange(value, changeType = 'value') {
+        return isFunction(this.props.onBeforeChange)
+            ? this.props.onBeforeChange(value, changeType)
+            : value;
     }
 
     notifyChanged() {
-        if (!isFunction(this.props.onChange)) {
-            return;
+        if (isFunction(this.props.onChange)) {
+            this.props.onChange(this.value);
         }
-
-        this.props.onChange(this.value);
     }
 
-    notifyRangeChanged() {
-        if (!this.props.range || !isFunction(this.props.onChange)) {
-            return;
+    notifyScroll() {
+        if (isFunction(this.props.onScroll)) {
+            this.props.onScroll(this.value);
         }
-
-        const { start, end } = this.state;
-        this.props.onChange({ start, end });
     }
 
     /** Enables/disabled component */
@@ -294,9 +411,8 @@ export class RangeSlider extends Component {
     }
 
     renderSlider(state, prevState) {
-        const value = (this.props.range) ? state.start : state.value;
-        const prevValue = (this.props.range) ? prevState.start : prevState.value;
-
+        const value = this.getStartValue(state);
+        const prevValue = this.getStartValue(prevState);
         if (
             value === prevValue
             && state.maxPos === prevState.maxPos
@@ -326,15 +442,27 @@ export class RangeSlider extends Component {
             return;
         }
 
-        const { style } = slider;
-        const { axis } = this.props;
         const maxPos = this.getMaxPos(slider);
         const pos = valueToPosition(value, state.min, state.max, maxPos);
 
-        if (axis === 'x') {
-            style.left = px(pos);
-        } else if (axis === 'y') {
-            style.top = px(pos);
+        this.setAreaPosition(slider, pos);
+    }
+
+    setAreaPosition(area, position) {
+        const { style } = area;
+        if (this.props.axis === 'x') {
+            style.left = px(position);
+        } else {
+            style.top = px(position);
+        }
+    }
+
+    setAreaSize(area, size) {
+        const { style } = area;
+        if (this.props.axis === 'x') {
+            style.width = px(size);
+        } else {
+            style.height = px(size);
         }
     }
 
@@ -351,18 +479,49 @@ export class RangeSlider extends Component {
             return;
         }
 
-        const { axis } = this.props;
         const startPos = this.valueToPosition(state.start, state);
         const endPos = this.valueToPosition(state.end, state);
         const size = Math.abs(endPos - startPos);
 
-        if (axis === 'x') {
-            this.selectedArea.style.left = px(startPos);
-            this.selectedArea.style.width = px(size);
-        } else if (axis === 'y') {
-            this.selectedArea.style.top = px(startPos);
-            this.selectedArea.style.height = px(size);
+        this.setAreaPosition(this.selectedArea, startPos);
+        this.setAreaSize(this.selectedArea, size);
+    }
+
+    renderBeforeArea(state, prevState) {
+        if (!this.beforeArea) {
+            return;
         }
+
+        const value = this.getStartValue(state);
+        if (
+            value === this.getStartValue(prevState)
+            && state.maxPos === prevState.maxPos
+        ) {
+            return;
+        }
+
+        const startPos = this.valueToPosition(value, state);
+
+        this.setAreaSize(this.beforeArea, startPos);
+    }
+
+    renderAfterArea(state, prevState) {
+        if (!this.afterArea) {
+            return;
+        }
+
+        const value = this.getEndValue(state);
+        if (
+            value === this.getEndValue(prevState)
+            && state.maxPos === prevState.maxPos
+        ) {
+            return;
+        }
+
+        const endPos = this.valueToPosition(value, state);
+        const size = Math.abs(state.maxPos - endPos);
+
+        this.setAreaSize(this.afterArea, size);
     }
 
     valueToPosition(value, state = this.state) {
@@ -390,5 +549,7 @@ export class RangeSlider extends Component {
         this.renderSlider(state, prevState);
         this.renderEndSlider(state, prevState);
         this.renderSelectedRange(state, prevState);
+        this.renderBeforeArea(state, prevState);
+        this.renderAfterArea(state, prevState);
     }
 }
