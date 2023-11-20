@@ -13,14 +13,28 @@ export const positionToValue = (pos, minValue, maxValue, maxPos) => (
 );
 
 export const getStepPrecision = (step) => {
-    const exp = Math.floor(Math.log10(step));
+    if (!Number.isFinite(step) || step === 0) {
+        return null;
+    }
+
+    const absStep = Math.abs(step);
+    const fractional = absStep - Math.floor(absStep);
+    if (fractional === 0) {
+        return 1;
+    }
+
+    const exp = Math.floor(Math.log10(fractional));
     return (exp < 0) ? -exp : 1;
 };
 
 export const roundToPrecision = (value, prec) => (
-    parseFloat(value.toFixed(prec))
+    Number.isFinite(prec)
+        ? parseFloat(value.toFixed(prec))
+        : value
 );
 
 export const stepValue = (value, step, prec) => (
-    roundToPrecision(Math.round(value / step) * step, prec)
+    Number.isFinite(prec)
+        ? roundToPrecision(Math.round(value / step) * step, prec)
+        : value
 );

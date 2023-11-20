@@ -39,7 +39,9 @@ const defaultProps = {
     range: false,
     onFocus: null,
     onBlur: null,
+    onBeforeChange: null,
     onChange: null,
+    onScroll: null,
 };
 
 /**
@@ -91,6 +93,16 @@ export class RangeSlider extends Component {
         return (this.props.range)
             ? { start: this.state.start, end: this.state.end }
             : this.state.value;
+    }
+
+    /** Returns current start value of range mode component or null for single value mode */
+    get start() {
+        return (this.props.range) ? this.state.start : null;
+    }
+
+    /** Returns current end value of range mode component or null for single value mode */
+    get end() {
+        return (this.props.range) ? this.state.end : null;
     }
 
     /** Returns disabled state of component */
@@ -195,7 +207,7 @@ export class RangeSlider extends Component {
             if (this.props.range) {
                 const { start, end } = this.state;
                 if (value < start) {
-                    this.onPosChange(pos);
+                    this.onStartPosChange(pos);
                 } else if (value > end) {
                     this.onEndPosChange(pos);
                 }
@@ -258,13 +270,33 @@ export class RangeSlider extends Component {
     }
 
     onPosChange(pos) {
-        const value = this.positionToValue(pos);
         if (this.props.range) {
-            const start = Math.min(this.state.end, value);
-            this.setState({ ...this.state, start });
-        } else {
-            this.setState({ ...this.state, value });
+            this.onStartPosChange(pos);
+            return;
         }
+
+        const value = this.positionToValue(pos);
+        this.setState({
+            ...this.state,
+            value: this.beforeChange(value),
+        });
+
+        this.notifyChanged();
+    }
+
+    onStartPosChange(pos) {
+        if (!this.props.range) {
+            return;
+        }
+
+        const value = this.positionToValue(pos);
+        const newRange = {
+            start: Math.min(this.state.end, value),
+            end: this.state.end,
+        };
+
+        const { start, end } = this.beforeChange(newRange, 'start');
+        this.setState({ ...this.state, start, end });
 
         this.notifyChanged();
     }
@@ -275,8 +307,14 @@ export class RangeSlider extends Component {
         }
 
         const value = this.positionToValue(pos);
-        const end = Math.max(this.state.start, value);
-        this.setState({ ...this.state, end });
+        const newRange = {
+            start: this.state.start,
+            end: Math.max(this.state.start, value),
+        };
+
+        const { start, end } = this.beforeChange(newRange, 'end');
+        this.setState({ ...this.state, start, end });
+
         this.notifyChanged();
     }
 
@@ -288,27 +326,29 @@ export class RangeSlider extends Component {
         const value = this.positionToValue(pos);
         const size = Math.abs(this.state.end - this.state.start);
         const start = minmax(this.state.min, this.state.max - size, value);
-        const end = start + size;
+        const end = minmax(this.state.min + size, this.state.max, start + size);
 
         this.setState({ ...this.state, start, end });
+        this.notifyScroll();
         this.notifyChanged();
     }
 
-    notifyChanged() {
-        if (!isFunction(this.props.onChange)) {
-            return;
-        }
-
-        this.props.onChange(this.value);
+    beforeChange(value, changeType = 'value') {
+        return isFunction(this.props.onBeforeChange)
+            ? this.props.onBeforeChange(value, changeType)
+            : value;
     }
 
-    notifyRangeChanged() {
-        if (!this.props.range || !isFunction(this.props.onChange)) {
-            return;
+    notifyChanged() {
+        if (isFunction(this.props.onChange)) {
+            this.props.onChange(this.value);
         }
+    }
 
-        const { start, end } = this.state;
-        this.props.onChange({ start, end });
+    notifyScroll() {
+        if (isFunction(this.props.onScroll)) {
+            this.props.onScroll(this.value);
+        }
     }
 
     /** Enables/disabled component */
