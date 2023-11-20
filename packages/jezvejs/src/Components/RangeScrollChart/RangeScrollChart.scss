@@ -10,6 +10,10 @@
   display: flex;
   flex-flow: column nowrap;
 
+  .chart__scroller {
+    overflow-x: scroll;
+  }
+
   .range-scroll-chart__slider-container {
     --rs-max-length: 100%;
 
@@ -21,6 +25,10 @@
 .chart.range-scroll-chart__nav-chart {
   .chart__container {
     position: relative;
+  }
+
+  .chart__scroller {
+    overflow-x: hidden;
   }
 }
 
