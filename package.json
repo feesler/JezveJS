@@ -15,6 +15,10 @@
     "homepage": "https://github.com/feesler/JezveJS#readme",
     "scripts": {
         "test": "node ./tests/index.js",
+        "p-install": "npm install",
+        "p-update": "npm update",
+        "p-publish": "npm publish",
+        "p-version": "npm version",
         "all": "npm-run-all lint build test",
         "lint": "npm-run-all --parallel lint-src lint-style lint-tests",
         "lint-src": "eslint --quiet ./packages/jezvejs/src/**/*.js ./packages/utils/**/*.js ./demo/src/**/*.js",
