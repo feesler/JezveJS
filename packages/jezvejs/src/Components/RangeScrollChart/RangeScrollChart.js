@@ -192,13 +192,14 @@ export class RangeScrollChart extends Component {
             maxColumnWidth,
         } = this.mainChart.state;
 
+        const valuesExtended = groupsCount + 4;
         const expContentWidth = scrollerWidth / Math.abs(start - end);
-        const expColumnWidth = (expContentWidth / groupsCount) - groupsGap;
-        if (expColumnWidth <= maxColumnWidth) {
+        const expColumnWidth = expContentWidth / valuesExtended;
+        if (expColumnWidth - groupsGap <= maxColumnWidth) {
             return value;
         }
 
-        const fixedContentWidth = (maxColumnWidth + groupsGap) * groupsCount;
+        const fixedContentWidth = (maxColumnWidth + groupsGap) * valuesExtended;
         const delta = (scrollerWidth / fixedContentWidth);
         return (changeType === 'start')
             ? { start: end - delta, end }
@@ -215,18 +216,28 @@ export class RangeScrollChart extends Component {
         const {
             scrollerWidth,
             groupsCount,
-            groupsGap,
             maxColumnWidth,
         } = this.mainChart.state;
-
+        let { groupsGap } = this.mainChart.state;
+        const valuesExtended = groupsCount + 4;
         const contentWidth = scrollerWidth / Math.abs(start - end);
-        let columnWidth = (contentWidth / groupsCount) - groupsGap;
-        if (columnWidth > maxColumnWidth) {
+        let columnWidth = contentWidth / valuesExtended;
+
+        // Check new column width not exceeds value of 'maxColumnWidth' property
+        if (columnWidth - groupsGap > maxColumnWidth) {
             ({ start, end } = this.onBeforeSliderChange(value, changeType));
             columnWidth = maxColumnWidth;
         }
 
+        if (columnWidth > 10) {
+            groupsGap = columnWidth / 5;
+            columnWidth -= groupsGap;
+        } else {
+            groupsGap = 0;
+        }
+
         this.mainChart.setColumnWidth(columnWidth);
+        this.mainChart.setGroupsGap(groupsGap);
 
         const { scrollWidth } = this.mainChart.state;
         const scrollLeft = start * scrollWidth;
