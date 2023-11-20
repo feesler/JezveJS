@@ -1,10 +1,10 @@
 import { getOffset } from '@jezvejs/dom';
-import { minmax, px } from '../../../common.js';
+import { minmax } from '../../../common.js';
 import { DragAvatar } from '../../DragnDrop/DragAvatar.js';
 import { DragMaster } from '../../DragnDrop/DragMaster.js';
 
 /**
- * Drag original element only by x axis
+ * Drag original element only by selected axis
  */
 export class RangeSliderDragAvatar extends DragAvatar {
     initFromEvent(downX, downY) {
@@ -16,13 +16,12 @@ export class RangeSliderDragAvatar extends DragAvatar {
         this.offset = this.dragZoneElem.offsetParent.getBoundingClientRect();
 
         const offset = getOffset(this.dragZoneElem);
-        const { axis } = this.dragZone;
-        if (axis === 'x') {
+        if (this.dragZone.axis === 'x') {
             this.shiftX = downX - offset.left;
-            this.origLeft = elem.offsetLeft;
-        } else if (axis === 'y') {
+            this.maxPos = Math.round(this.offset.width - this.rect.width);
+        } else {
             this.shiftY = downY - offset.top;
-            this.origTop = elem.offsetTop;
+            this.maxPos = Math.round(this.offset.height - this.rect.height);
         }
 
         return true;
@@ -35,31 +34,14 @@ export class RangeSliderDragAvatar extends DragAvatar {
     onDragMove(e) {
         const client = DragMaster.getEventClientCoordinates(e);
         this.currentTargetElem = this.dragZoneElem;
-        const { axis } = this.dragZone;
-        let pos;
-        let maxPos;
+        const pos = (this.dragZone.axis === 'x')
+            ? (client.x - this.offset.left - this.shiftX)
+            : (client.y - this.offset.top - this.shiftY);
 
-        if (axis === 'x') {
-            const x = client.x - this.offset.left - this.shiftX;
-            maxPos = Math.round(this.offset.width - this.rect.width);
-            pos = minmax(0, maxPos, x);
-        } else if (axis === 'y') {
-            const y = client.y - this.offset.top - this.shiftY;
-            maxPos = Math.round(this.offset.height - this.rect.height);
-            pos = minmax(0, maxPos, y);
-        }
-
-        this.dragZone.onPosChange(pos, maxPos);
+        this.dragZone.onPosChange(minmax(0, this.maxPos, pos));
     }
 
     onDragCancel() {
-        const { axis } = this.dragZone;
-        if (axis === 'x') {
-            this.elem.style.left = px(this.origLeft);
-        } else {
-            this.elem.style.top = px(this.origTop);
-        }
-
         this.dragZone.onDragCancel();
     }
 }
