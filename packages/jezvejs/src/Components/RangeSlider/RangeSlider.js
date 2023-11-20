@@ -304,12 +304,31 @@ export class RangeSlider extends Component {
             return;
         }
 
-        const value = this.positionToValue(pos);
-        this.setState({
-            ...this.state,
-            value: this.beforeChange(value),
-        });
+        const newValue = this.positionToValue(pos);
+        const value = this.beforeChange(newValue);
+        if (this.state.value === value) {
+            return;
+        }
 
+        this.setState({ ...this.state, value });
+
+        this.notifyChanged();
+    }
+
+    changeRange(range, scroll = false) {
+        const { start, end } = range;
+        if (
+            this.state.start === start
+            && this.state.end === end
+        ) {
+            return;
+        }
+
+        this.setState({ ...this.state, start, end });
+
+        if (scroll) {
+            this.notifyScroll();
+        }
         this.notifyChanged();
     }
 
@@ -324,10 +343,8 @@ export class RangeSlider extends Component {
             end: this.state.end,
         };
 
-        const { start, end } = this.beforeChange(newRange, 'start');
-        this.setState({ ...this.state, start, end });
-
-        this.notifyChanged();
+        const range = this.beforeChange(newRange, 'start');
+        this.changeRange(range);
     }
 
     onEndPosChange(pos) {
@@ -341,10 +358,8 @@ export class RangeSlider extends Component {
             end: Math.max(this.state.start, value),
         };
 
-        const { start, end } = this.beforeChange(newRange, 'end');
-        this.setState({ ...this.state, start, end });
-
-        this.notifyChanged();
+        const range = this.beforeChange(newRange, 'end');
+        this.changeRange(range);
     }
 
     onScroll(pos) {
@@ -357,9 +372,7 @@ export class RangeSlider extends Component {
         const start = minmax(this.state.min, this.state.max - size, value);
         const end = minmax(this.state.min + size, this.state.max, start + size);
 
-        this.setState({ ...this.state, start, end });
-        this.notifyScroll();
-        this.notifyChanged();
+        this.changeRange({ start, end }, true);
     }
 
     beforeChange(value, changeType = 'value') {
