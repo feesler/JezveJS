@@ -130,6 +130,7 @@ export class BaseChart extends Component {
             chartWidth: 0,
             chartHeight: 0,
             scrollLeft: 0,
+            scrollWidth: 0,
             blockTouch: false,
             animateNow: false,
         };
@@ -503,6 +504,8 @@ export class BaseChart extends Component {
         const newState = {
             ...state,
             chartContentWidth: contentWidth,
+            scrollLeft: this.chartScroller.scrollLeft,
+            scrollWidth: this.chartScroller.scrollWidth,
         };
 
         newState.containerWidth = this.elem.offsetWidth;
@@ -1031,6 +1034,7 @@ export class BaseChart extends Component {
             ...this.state,
             animateNow: false,
             scrollLeft: this.chartScroller.scrollLeft,
+            scrollWidth: this.chartScroller.scrollWidth,
         });
 
         if (this.scaleFunc) {
@@ -1067,6 +1071,7 @@ export class BaseChart extends Component {
             ...newState,
             animateNow: false,
             scrollLeft: this.chartScroller.scrollLeft,
+            scrollWidth: this.chartScroller.scrollWidth,
         });
 
         if (this.scaleFunc) {
@@ -1199,6 +1204,7 @@ export class BaseChart extends Component {
             && state.chartContentWidth === prevState.chartContentWidth
             && state.containerWidth === prevState.containerWidth
             && state.scrollLeft === prevState.scrollLeft
+            && state.scrollWidth === prevState.scrollWidth
             && state.animateNow === prevState.animateNow
             && state.activeCategory === prevState.activeCategory
         ) {
@@ -1229,6 +1235,8 @@ export class BaseChart extends Component {
         const animated = state.autoScale && state.animate && state.animateNow;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
+
+        this.chartScroller.scrollLeft = state.scrollLeft;
 
         this.drawVLabels(state);
         this.renderItems(state, prevState);
