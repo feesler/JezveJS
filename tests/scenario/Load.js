@@ -25,6 +25,7 @@ const views = {
     piechart: 'PieChart',
     popup: 'Popup',
     progress: 'Progress',
+    rangescrollchart: 'RangeScrollChart',
     rangeslider: 'RangeSlider',
     slider: 'Slider',
     switch: 'Switch',

@@ -2,7 +2,6 @@ import 'jezvejs/style';
 import { isFunction } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { Histogram } from 'jezvejs/Histogram';
-import { RangeScrollChart } from 'jezvejs/RangeScrollChart';
 
 import { createButtons, createControls } from '../../Application/utils.js';
 
@@ -356,7 +355,6 @@ class HistogramView extends DemoView {
         this.columnWidthAndGap();
         this.fitToWidth();
         this.maxColumnWidth();
-        this.rangeSelector();
 
         this.leftYAxis();
         this.noYAxis();
@@ -437,27 +435,6 @@ class HistogramView extends DemoView {
             id: 'maxColumnWidth',
             title: '\'maxColumnWidth\' option',
             content: chartContainer('maxColumnWidthChart', histogram),
-        });
-    }
-
-    rangeSelector() {
-        const logsField = LogsField.create();
-
-        const rangeSelectorChart = RangeScrollChart.create({
-            logsField,
-            mainChart: {
-                data: chartData,
-                maxColumnWidth: 40,
-            },
-        });
-
-        this.addSection({
-            id: 'rangeSelector',
-            title: 'Range selector',
-            content: [
-                chartContainer('rangeSelectorChart', rangeSelectorChart),
-                logsField.elem,
-            ],
         });
     }
 
