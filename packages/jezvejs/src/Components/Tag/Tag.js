@@ -2,7 +2,6 @@ import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
-    re,
 } from '@jezvejs/dom';
 import { Component } from '../../Component.js';
 import { CloseButton } from '../CloseButton/CloseButton.js';
@@ -131,7 +130,7 @@ export class Tag extends Component {
 
             this.closeButton.enable(!state.disabled);
         } else {
-            re(this.closeButton);
+            this.closeButton?.elem?.remove();
             this.closeButton = null;
         }
     }

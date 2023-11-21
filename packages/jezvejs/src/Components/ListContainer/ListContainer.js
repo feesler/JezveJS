@@ -2,9 +2,6 @@ import { isFunction, asArray } from '@jezvejs/types';
 import {
     createElement,
     setEvents,
-    re,
-    removeChilds,
-    insertAfter,
 } from '@jezvejs/dom';
 import { Component } from '../../Component.js';
 
@@ -384,7 +381,7 @@ export class ListContainer extends Component {
         const emptyList = this.isEmptyList(state);
         const emptyBefore = this.isEmptyList(prevState);
         if ((emptyList || emptyBefore) && emptyList !== emptyBefore) {
-            removeChilds(this.elem);
+            this.elem.replaceChildren();
             this.placeholder = null;
             this.listItems = [];
         }
@@ -425,7 +422,7 @@ export class ListContainer extends Component {
 
             if (insertNode) {
                 if (lastItem) {
-                    insertAfter(listItem.elem, lastItem.elem);
+                    lastItem.elem.after(listItem.elem);
                 } else {
                     this.elem.prepend(listItem.elem);
                 }
@@ -440,7 +437,7 @@ export class ListContainer extends Component {
         const childElems = Array.from(this.elem.children);
         childElems.forEach((elem) => {
             if (!listElems.includes(elem)) {
-                re(elem);
+                elem?.remove();
             }
         });
 

@@ -1,6 +1,6 @@
 {
     "name": "@jezvejs/dom",
-    "version": "0.1.1",
+    "version": "1.0.0",
     "description": "Collection of simple DOM utilities",
     "type": "module",
     "module": "./src/index.js",

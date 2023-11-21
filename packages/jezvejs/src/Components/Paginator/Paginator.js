@@ -1,8 +1,6 @@
 import { isFunction } from '@jezvejs/types';
 import {
-    addChilds,
     createSVGElement,
-    removeChilds,
     setEvents,
     createElement,
     getClassName,
@@ -281,7 +279,6 @@ export class Paginator extends Component {
         const items = this.getItems(state);
         const elems = items.map((item) => this.renderItem(item));
 
-        removeChilds(this.elem);
-        addChilds(this.elem, elems);
+        this.elem.replaceChildren(...elems);
     }
 }

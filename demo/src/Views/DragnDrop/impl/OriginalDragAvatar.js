@@ -1,5 +1,5 @@
 import { px } from 'jezvejs';
-import { re, getOffset } from '@jezvejs/dom';
+import { getOffset } from '@jezvejs/dom';
 import { DragAvatar } from 'jezvejs/DragnDrop';
 
 /**
@@ -31,7 +31,7 @@ export class OriginalDragAvatar extends DragAvatar {
     }
 
     destroy() {
-        re(this.elem);
+        this.elem?.remove();
     }
 
     onDragCancel() {

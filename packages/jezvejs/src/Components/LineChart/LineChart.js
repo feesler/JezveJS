@@ -213,7 +213,7 @@ export class LineChart extends BaseChart {
         const flatNewItems = newItems.flat();
         flatItems.forEach((item) => {
             if (!flatNewItems.includes(item)) {
-                item.elem?.remove();
+                item?.elem?.remove();
             }
         });
 

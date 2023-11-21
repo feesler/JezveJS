@@ -1,8 +1,6 @@
-import { isFunction } from '@jezvejs/types';
+import { asArray, isFunction } from '@jezvejs/types';
 import {
     createElement,
-    removeChilds,
-    addChilds,
     setEvents,
     afterTransition,
 } from '@jezvejs/dom';
@@ -80,31 +78,11 @@ export class Collapsible extends Component {
     }
 
     setHeader(header) {
-        removeChilds(this.headerContainer);
-
-        if (!header) {
-            return;
-        }
-
-        if (typeof header === 'string') {
-            this.headerContainer.textContent = header;
-        } else {
-            addChilds(this.headerContainer, header);
-        }
+        this.headerContainer.replaceChildren(...asArray(header));
     }
 
     setContent(content) {
-        removeChilds(this.contentContainer);
-
-        if (!content) {
-            return;
-        }
-
-        if (typeof content === 'string') {
-            this.contentContainer.textContent = content;
-        } else {
-            addChilds(this.contentContainer, content);
-        }
+        this.contentContainer.replaceChildren(...asArray(content));
     }
 
     /** Collapse content */
