@@ -36,6 +36,7 @@ export const navigationMenuSections = [{
     items: [
         { id: 'histogram', title: 'Histogram', url: 'histogram.html' },
         { id: 'lineChart', title: 'Line chart', url: 'linechart.html' },
+        { id: 'rangescrollchart', title: 'Range scroll chart', url: 'rangescrollchart.html' },
         { id: 'pieChart', title: 'Pie chart', url: 'piechart.html' },
         { id: 'chartGrid', title: 'Chart grid tests', url: 'chartgrid.html' },
     ],

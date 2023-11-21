@@ -36,6 +36,7 @@ const routeMap = {
     popup: AppView,
     popupmenu: PopupMenuView,
     progress: AppView,
+    rangescrollchart: AppView,
     rangeslider: AppView,
     slider: AppView,
     switch: AppView,

@@ -40,6 +40,7 @@ const entryPoints = [
     'Popup',
     'PopupMenu',
     'Progress',
+    'RangeScrollChart',
     'RangeSlider',
     'Slider',
     'Switch',

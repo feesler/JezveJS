@@ -2,7 +2,6 @@ import 'jezvejs/style';
 import { isFunction } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { LineChart } from 'jezvejs/LineChart';
-import { RangeScrollChart } from 'jezvejs/RangeScrollChart';
 
 import { createButtons, createControls } from '../../Application/utils.js';
 
@@ -225,7 +224,6 @@ class LineChartView extends DemoView {
     onStart() {
         this.columnWidthAndGap();
         this.fitToWidth();
-        this.rangeSelector();
 
         this.leftYAxis();
         this.noYAxis();
@@ -288,24 +286,6 @@ class LineChartView extends DemoView {
             id: 'fitToWidth',
             title: '\'fitToWidth\' option',
             content: chartContainer('linechart_fittowidth', chart),
-        });
-    }
-
-    rangeSelector() {
-        const rangeSelectorChart = RangeScrollChart.create({
-            type: 'linechart',
-            mainChart: {
-                data: chartData,
-                maxColumnWidth: 40,
-            },
-        });
-
-        this.addSection({
-            id: 'rangeSelector',
-            title: 'Range selector',
-            content: [
-                chartContainer('rangeSelectorChart', rangeSelectorChart),
-            ],
         });
     }
 
