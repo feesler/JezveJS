@@ -177,16 +177,6 @@ export const createSVGElement = (tagName, options = {}) => {
     return elem;
 };
 
-/** Remove specified element from DOM and return it */
-export const re = (target) => {
-    const elem = (typeof target === 'string') ? ge(target) : target;
-    if (elem?.parentNode) {
-        return elem.parentNode.removeChild(elem);
-    }
-
-    return null;
-};
-
 /** Returns splitted and filtered array of class names */
 export const getClassNames = (...args) => (
     args.flat(256)
@@ -396,56 +386,6 @@ export const selectByValue = (selectObj, selValue, selBool) => {
     return false;
 };
 /* eslint-enable no-param-reassign */
-
-/** Insert element before specified */
-export const insertBefore = (elem, refElem) => {
-    if (!refElem || !refElem.parentNode) {
-        return null;
-    }
-
-    return refElem.parentNode.insertBefore(elem, refElem);
-};
-
-/** Insert one DOM element after specified */
-export const insertAfter = (elem, refElem) => {
-    const parent = refElem.parentNode;
-    const next = refElem.nextSibling;
-
-    if (next) {
-        return parent.insertBefore(elem, next);
-    }
-
-    return parent.appendChild(elem);
-};
-
-/** Insert element as first child */
-export const prependChild = (parent, elem) => {
-    if (!elem || !parent) {
-        return;
-    }
-
-    const elems = asArray(elem);
-    const fe = parent.firstChild;
-    if (fe) {
-        elems.reduce((prev, el) => {
-            insertBefore(el, prev);
-            return el;
-        }, fe);
-    } else {
-        elems.forEach((el) => parent.appendChild(el));
-    }
-};
-
-/** Remove all child nodes of specified element */
-export const removeChilds = (elem) => {
-    if (!elem) {
-        return;
-    }
-
-    while (elem.childNodes.length > 0) {
-        elem.removeChild(elem.childNodes[0]);
-    }
-};
 
 /** Calculate offset of element by sum of offsets of parents */
 export const getOffsetSum = (elem) => {

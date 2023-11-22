@@ -1,9 +1,5 @@
-import {
-    addChilds,
-    createElement,
-    getClassName,
-    removeChilds,
-} from '@jezvejs/dom';
+import { asArray } from '@jezvejs/types';
+import { createElement, getClassName } from '@jezvejs/dom';
 import { Component } from '../../Component.js';
 
 import './Header.scss';
@@ -54,8 +50,7 @@ export class Header extends Component {
         }
 
         if (state.content !== prevState?.content) {
-            removeChilds(this.elem);
-            addChilds(this.elem, state.content);
+            this.elem.replaceChildren(...asArray(state.content));
         }
     }
 }

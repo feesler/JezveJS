@@ -3,12 +3,8 @@ import '../../common.scss';
 import {
     createElement,
     setEvents,
-    re,
     removeEvents,
     show,
-    removeChilds,
-    insertAfter,
-    insertBefore,
     getClassName,
 } from '@jezvejs/dom';
 import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
@@ -175,8 +171,8 @@ export class PopupMenu extends Menu {
         }
 
         if (this.containerElem) {
-            insertBefore(this.hostElem, this.containerElem);
-            re(this.containerElem);
+            this.containerElem.before(this.hostElem);
+            this.containerElem.remove();
             this.containerElem = null;
         }
 
@@ -184,7 +180,7 @@ export class PopupMenu extends Menu {
 
         show(this.elem, false);
         PopupPosition.reset(this.elem);
-        re(this.elem);
+        this.elem.remove();
     }
 
     attachTo(elem) {
@@ -211,7 +207,7 @@ export class PopupMenu extends Menu {
             props: { className: MENU_CLASS },
         });
 
-        insertAfter(this.containerElem, this.hostElem);
+        this.hostElem.after(this.containerElem);
         this.containerElem.append(this.hostElem, this.elem);
     }
 
@@ -223,11 +219,7 @@ export class PopupMenu extends Menu {
     }
 
     setContent(content) {
-        removeChilds(this.elem);
-        if (!content) {
-            return;
-        }
-        this.elem.append(...asArray(content));
+        this.elem.replaceChildren(...asArray(content));
     }
 
     showMenu() {

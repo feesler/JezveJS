@@ -1,10 +1,8 @@
-import { isFunction, isObject } from '@jezvejs/types';
+import { asArray, isFunction, isObject } from '@jezvejs/types';
 import {
     createSVGElement,
     show,
     getOffset,
-    re,
-    removeChilds,
     createElement,
     setAttributes,
 } from '@jezvejs/dom';
@@ -737,7 +735,7 @@ export class BaseChart extends Component {
             // Remove overflow labels
             for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
                 const label = labelsToRemove[ind];
-                label.elem.remove();
+                label?.elem?.remove();
 
                 const labelsIndex = labels.indexOf(label);
                 if (labelsIndex !== -1) {
@@ -749,7 +747,7 @@ export class BaseChart extends Component {
             for (let ind = 0; ind < this.labels.length; ind += 1) {
                 const label = this.labels[ind];
                 if (!labels.includes(label)) {
-                    label.elem.remove();
+                    label?.elem?.remove();
                 }
             }
 
@@ -822,7 +820,7 @@ export class BaseChart extends Component {
 
             if (pinPopupOnClick) {
                 if (this.pinnedPopup !== this.popup) {
-                    re(this.pinnedPopup);
+                    this.pinnedPopup?.remove();
                 }
                 this.pinnedPopup = this.popup;
                 this.pinnedTarget = target.item;
@@ -977,12 +975,7 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (typeof content === 'string') {
-            this.popup.textContent = content;
-        } else {
-            removeChilds(this.popup);
-            this.popup.append(content);
-        }
+        this.popup.replaceChildren(...asArray(content));
 
         PopupPosition.calculate({
             elem: this.popup,
@@ -1176,7 +1169,7 @@ export class BaseChart extends Component {
     }
 
     renderLegend(state) {
-        re(this.legend);
+        this.legend?.remove();
         if (!state.showLegend) {
             this.legend = null;
             return;

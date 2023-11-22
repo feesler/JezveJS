@@ -1,11 +1,9 @@
-import { isFunction } from '@jezvejs/types';
+import { asArray, isFunction } from '@jezvejs/types';
 import {
     createSVGElement,
     setEvents,
     enable,
-    removeChilds,
     createElement,
-    re,
 } from '@jezvejs/dom';
 import { Component } from '../../Component.js';
 import '../../common.scss';
@@ -141,7 +139,7 @@ export class Checkbox extends Component {
         }
         // Remove label element if value is empty
         if (!value && this.label) {
-            re(this.label);
+            this.label.remove();
             this.label = null;
             return;
         }
@@ -151,12 +149,7 @@ export class Checkbox extends Component {
             this.elem.append(this.label);
         }
 
-        if (typeof value === 'string') {
-            this.label.textContent = value;
-        } else if (value instanceof Element) {
-            removeChilds(this.label);
-            this.label.append(value);
-        }
+        this.label.replaceChildren(...asArray(value));
     }
 
     /** Set checked state */

@@ -1,8 +1,6 @@
-import { isFunction } from '@jezvejs/types';
+import { asArray, isFunction } from '@jezvejs/types';
 import {
     createElement,
-    re,
-    removeChilds,
     show,
     reflow,
     isVisible,
@@ -79,13 +77,11 @@ export class Offcanvas extends Component {
     }
 
     setContent(content) {
-        removeChilds(this.contentElem);
-        if (typeof content === 'string') {
-            this.contentElem.textContent = content;
-        } else {
+        if (content instanceof Element) {
             show(content, true);
-            this.contentElem.append(content);
         }
+
+        this.contentElem.replaceChildren(...asArray(content));
     }
 
     onAnimationDone() {
@@ -177,7 +173,7 @@ export class Offcanvas extends Component {
             this.elem.after(this.backgroundElem);
             reflow(this.backgroundElem);
         } else if (!showBackground && showBefore) {
-            re(this.backgroundElem);
+            this.backgroundElem?.remove();
         }
 
         this.backgroundElem?.classList.toggle('closed', state.closed);

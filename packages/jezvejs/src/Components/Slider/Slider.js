@@ -1,7 +1,6 @@
 import { asArray } from '@jezvejs/types';
 import {
     createElement,
-    re,
     afterTransition,
 } from '@jezvejs/dom';
 import {
@@ -245,7 +244,7 @@ export class Slider extends Component {
         }
 
         const itemToRemove = this.items[index];
-        re(itemToRemove?.elem);
+        itemToRemove?.elem?.remove();
 
         this.position = Math.max(this.position, -this.contentSize + this.clientSize);
         this.slideIndex = Math.round(-this.position / this.clientSize);

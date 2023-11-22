@@ -1,9 +1,6 @@
 import { isFunction, asArray } from '@jezvejs/types';
 import {
     createElement,
-    re,
-    insertAfter,
-    prependChild,
     isVisible,
     getCursorPos,
     setEvents,
@@ -411,15 +408,14 @@ export class DropDown extends Component {
             this.selectElem = this.hostElem;
 
             if (this.selectElem.parentNode) {
-                insertAfter(this.elem, this.selectElem);
+                this.selectElem.after(this.elem);
             }
         } else {
             if (this.hostElem.parentNode) {
-                insertAfter(this.elem, this.hostElem);
-                this.inputElem = re(this.hostElem);
-            } else {
-                this.inputElem = this.hostElem;
+                this.hostElem.after(this.elem);
+                this.hostElem.remove();
             }
+            this.inputElem = this.hostElem;
 
             this.createSelect();
         }
@@ -431,7 +427,7 @@ export class DropDown extends Component {
     /** Attach DropDown to specified element */
     attachToElement() {
         this.elem = createElement('div', { props: { className: ATTACHED_CLASS } });
-        insertAfter(this.elem, this.hostElem);
+        this.hostElem.after(this.elem);
         this.elem.append(this.hostElem);
 
         this.createSelect();
@@ -1538,7 +1534,7 @@ export class DropDown extends Component {
         const optgroup = createElement('optgroup', {
             props: { hidden: true, disabled: true },
         });
-        prependChild(elem, optgroup);
+        elem.prepend(optgroup);
     }
 
     /**

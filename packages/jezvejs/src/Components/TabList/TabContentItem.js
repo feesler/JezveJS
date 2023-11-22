@@ -1,4 +1,5 @@
-import { createElement, removeChilds, addChilds } from '@jezvejs/dom';
+import { asArray } from '@jezvejs/types';
+import { createElement } from '@jezvejs/dom';
 import { Component } from '../../Component.js';
 import './TabList.scss';
 
@@ -53,8 +54,7 @@ export class TabContentItem extends Component {
         }
 
         if (state.content !== prevState?.content) {
-            removeChilds(this.elem);
-            addChilds(this.elem, state.content);
+            this.elem.replaceChildren(...asArray(state.content));
         }
 
         this.elem.dataset.id = state.id;

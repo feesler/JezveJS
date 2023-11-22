@@ -1,4 +1,4 @@
-import { re, getOffset } from '@jezvejs/dom';
+import { getOffset } from '@jezvejs/dom';
 import { px } from '../../common.js';
 import { DragAvatar } from '../DragnDrop/DragAvatar.js';
 
@@ -40,7 +40,7 @@ export class SortableDragAvatar extends DragAvatar {
     }
 
     destroy() {
-        re(this.elem);
+        this.elem?.remove();
 
         this.dragZoneElem.classList.remove(this.dragZone.getPlaceholder());
     }

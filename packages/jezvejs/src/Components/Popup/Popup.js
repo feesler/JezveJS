@@ -1,12 +1,8 @@
-import { isFunction } from '@jezvejs/types';
+import { asArray, isFunction } from '@jezvejs/types';
 import {
     ge,
-    re,
-    insertAfter,
     show,
-    removeChilds,
     createElement,
-    addChilds,
 } from '@jezvejs/dom';
 import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
 import { Component } from '../../Component.js';
@@ -96,7 +92,7 @@ export class Popup extends Component {
     }
 
     destroy() {
-        re(this.elem);
+        this.elem?.remove();
         this.elem = null;
     }
 
@@ -179,7 +175,7 @@ export class Popup extends Component {
         }
 
         if (!state.title) {
-            re(this.titleElem);
+            this.titleElem?.remove();
             this.titleElem = null;
             return;
         }
@@ -189,12 +185,7 @@ export class Popup extends Component {
             this.headerElem.prepend(this.titleElem);
         }
 
-        removeChilds(this.titleElem);
-        if (typeof state.title === 'string') {
-            this.titleElem.textContent = state.title;
-        } else {
-            addChilds(this.titleElem, state.title);
-        }
+        this.titleElem.replaceChildren(...asArray(state.title));
     }
 
     renderCloseButton(state, prevState) {
@@ -203,7 +194,7 @@ export class Popup extends Component {
         }
 
         if (!state.closeButton) {
-            re(this.closeBtn?.elem);
+            this.closeBtn?.elem?.remove();
             this.closeBtn = null;
             return;
         }
@@ -226,25 +217,24 @@ export class Popup extends Component {
         }
 
         if (!state.content) {
-            re(this.contentElem);
+            this.contentElem?.remove();
             this.contentElem = null;
         }
 
         if (!this.contentElem) {
             this.contentElem = createElement('div', { props: { className: MESSAGE_CLASS } });
             if (this.headerElem) {
-                insertAfter(this.contentElem, this.headerElem);
+                this.headerElem.after(this.contentElem);
             } else {
                 this.container.prepend(this.contentElem);
             }
         }
 
-        removeChilds(this.contentElem);
         if (typeof state.content === 'string') {
             const preparedContent = state.content.replaceAll(/\r?\n/g, '<br>');
             this.contentElem.innerHTML = preparedContent;
         } else {
-            addChilds(this.contentElem, state.content);
+            this.contentElem.replaceChildren(...asArray(state.content));
         }
     }
 
@@ -254,7 +244,7 @@ export class Popup extends Component {
         }
 
         if (!state.footer) {
-            re(this.footerElem);
+            this.footerElem?.remove();
             this.footerElem = null;
             return;
         }
@@ -264,12 +254,7 @@ export class Popup extends Component {
             this.container.append(this.footerElem);
         }
 
-        removeChilds(this.footerElem);
-        if (typeof state.footer === 'string') {
-            this.footerElem.textContent = state.footer;
-        } else {
-            addChilds(this.footerElem, state.footer);
-        }
+        this.footerElem.replaceChildren(...asArray(state.footer));
     }
 
     render(state, prevState = {}) {

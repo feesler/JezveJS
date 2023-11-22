@@ -2,7 +2,6 @@ import '../../common.scss';
 import { isDate, isFunction } from '@jezvejs/types';
 import {
     ge,
-    re,
     show,
     transform,
     createElement,
@@ -766,10 +765,10 @@ export class DatePicker extends Component {
             const { prev, next, second } = this.newView;
 
             if (this.currView === prev) {
-                re(this.prevView.elem);
+                this.prevView?.elem?.remove();
                 this.slider.append(next.elem);
             } else if (this.currView === next || this.currView === second) {
-                re(this.nextView.elem);
+                this.nextView?.elem?.remove();
                 this.slider.prepend(prev.elem);
             } else {
                 this.renderSlider(this.newView, this.state);

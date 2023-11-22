@@ -1,8 +1,6 @@
 import { isFunction, asArray } from '@jezvejs/types';
 import {
     comparePosition,
-    insertAfter,
-    insertBefore,
     afterTransition,
     transform,
 } from '@jezvejs/dom';
@@ -114,16 +112,16 @@ export class SortableDropTarget extends DropTarget {
             const pos = avatar.getSortPosition();
             // swap drag zone with drop target
             if (dragZoneBeforeTarget) {
-                insertAfter(dragInfo.dragZoneElem, this.targetElem);
+                this.targetElem.after(dragInfo.dragZoneElem);
             } else if (dragZoneAfterTarget) {
-                insertBefore(dragInfo.dragZoneElem, this.targetElem);
+                this.targetElem.before(dragInfo.dragZoneElem);
             }
 
             if (this.targetElem !== pos.prev && this.targetElem !== pos.next) {
                 if (pos.prev) {
-                    insertAfter(this.targetElem, pos.prev);
+                    pos.prev.after(this.targetElem);
                 } else {
-                    insertBefore(this.targetElem, pos.next);
+                    pos.next.before(this.targetElem);
                 }
             }
         } else if (
@@ -144,10 +142,10 @@ export class SortableDropTarget extends DropTarget {
                     const rect = parentItem.getBoundingClientRect();
                     if (event.clientY >= rect.bottom) {
                         collapsingElem = this.createCollapsingElement(dragInfo.dragZoneElem);
-                        insertAfter(dragInfo.dragZoneElem, parentItem);
+                        parentItem.after(dragInfo.dragZoneElem);
                     } else if (event.clientY <= rect.top) {
                         collapsingElem = this.createCollapsingElement(dragInfo.dragZoneElem);
-                        insertBefore(dragInfo.dragZoneElem, parentItem);
+                        parentItem.before(dragInfo.dragZoneElem);
                     }
                 }
             } else if (!this.targetElem.dragZone) {
@@ -158,7 +156,7 @@ export class SortableDropTarget extends DropTarget {
                     }
                 } else {
                     collapsingElem = this.createCollapsingElement(dragInfo.dragZoneElem);
-                    insertBefore(dragInfo.dragZoneElem, this.targetElem);
+                    this.targetElem.before(dragInfo.dragZoneElem);
                 }
             }
         } else if (
@@ -173,11 +171,11 @@ export class SortableDropTarget extends DropTarget {
         } else if (dragZoneBeforeTarget && !dragZoneContainsTarget) {
             /* drag zone element is before new drop target */
             animateElems = this.getMovingItems(dragInfo.dragZoneElem, this.targetElem);
-            insertAfter(dragInfo.dragZoneElem, this.targetElem);
+            this.targetElem.after(dragInfo.dragZoneElem);
         } else if (dragZoneAfterTarget && !dragZoneContainsTarget) {
             /* drag zone element is after new drop target */
             animateElems = this.getMovingItems(dragInfo.dragZoneElem, this.targetElem);
-            insertBefore(dragInfo.dragZoneElem, this.targetElem);
+            this.targetElem.before(dragInfo.dragZoneElem);
         }
 
         if (animateElems?.length > 0) {
@@ -206,10 +204,12 @@ export class SortableDropTarget extends DropTarget {
         const property = (this.props.vertical) ? 'height' : 'width';
         const sizeProp = (this.props.vertical) ? 'offsetHeight' : 'offsetWidth';
 
-        const animated = asArray(items).map((elem) => ({
-            elem,
-            size: elem[sizeProp],
-        }));
+        const animated = asArray(items)
+            .filter((elem) => !!elem)
+            .map((elem) => ({
+                elem,
+                size: elem[sizeProp],
+            }));
 
         animated.forEach((item) => {
             const { elem } = item;
@@ -242,7 +242,7 @@ export class SortableDropTarget extends DropTarget {
     }
 
     requestCollapsingAnimation(items) {
-        const animated = asArray(items);
+        const animated = asArray(items).filter((elem) => !!elem);
         const property = (this.props.vertical) ? 'height' : 'width';
         const sizeProp = (this.props.vertical) ? 'offsetHeight' : 'offsetWidth';
 
@@ -389,9 +389,9 @@ export class SortableDropTarget extends DropTarget {
 
         const { initialPos, dragZoneElem } = avatarInfo;
         if (initialPos.prev) {
-            insertAfter(dragZoneElem, initialPos.prev);
+            initialPos.prev.after(dragZoneElem);
         } else {
-            insertBefore(dragZoneElem, initialPos.next);
+            initialPos.next.before(dragZoneElem);
         }
     }
 }
