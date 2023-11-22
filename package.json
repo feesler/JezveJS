@@ -32,7 +32,7 @@
         "build-src": "npx webpack --progress -c ./config/common.js -c ./config/prod.js -m",
         "build-src-dev": "npx webpack --progress -c ./config/common.js -c ./config/dev.js -m",
         "build-tests": "npx webpack --progress -c ./config/tests.js",
-        "serve": "npx webpack serve -c ./config/demo.js -c ./config/dev.js -m",
+        "start": "npx webpack serve -c ./config/demo.js -c ./config/dev.js -m",
         "commit-version": "node ./scripts/commit-version.js",
         "release": "node ./scripts/release.js"
     },
