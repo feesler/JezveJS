@@ -1,6 +1,6 @@
 {
     "name": "@jezvejs/number",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Collection of simple decimal number utilities",
     "type": "module",
     "module": "./src/index.js",
