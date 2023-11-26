@@ -37,7 +37,7 @@ export const getLocaleDateFormat = (params = {}) => {
             res.yearLength = part.value.length;
             index += 1;
         }
-        if (part.type === 'literal') {
+        if (part.type === 'literal' && res.separator === null) {
             res.separator = part.value;
         }
     });
