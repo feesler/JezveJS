@@ -998,7 +998,16 @@ export class Menu extends Component {
     }
 
     renderListScroll(state, prevState) {
-        if (state.listScroll !== prevState?.listScroll) {
+        if (state.listScroll === prevState?.listScroll) {
+            return;
+        }
+
+        const { scrollHeight, clientHeight } = this.list.elem;
+        const maxScroll = Math.max(0, scrollHeight - clientHeight);
+        if (
+            state.listScroll >= 0
+            && state.listScroll <= maxScroll
+        ) {
             this.list.elem.scrollTop = state.listScroll;
         }
     }
