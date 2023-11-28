@@ -1229,13 +1229,14 @@ export class BaseChart extends Component {
             return;
         }
 
-        const { scrollWidth, scrollerWidth } = state;
+        const { scrollWidth, scrollerWidth, scrollLeft } = state;
         const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
+
         if (
-            state.scrollLeft >= 0
-            && state.scrollLeft <= maxScroll
+            scrollLeft >= 0
+            && scrollLeft <= maxScroll
         ) {
-            this.chartScroller.scrollLeft = state.scrollLeft;
+            this.chartScroller.scrollLeft = scrollLeft;
         }
     }
 
