@@ -41,6 +41,7 @@ const defaultProps = {
     range: false,
     beforeArea: false,
     afterArea: false,
+    scrollOnClickOutsideRange: false,
     onFocus: null,
     onBlur: null,
     onBeforeChange: null,
@@ -234,11 +235,25 @@ export class RangeSlider extends Component {
             const value = this.positionToValue(pos);
 
             if (this.props.range) {
-                const { start, end } = this.state;
+                const { start, end, maxPos } = this.state;
+                const delta = Math.abs(end - start) * 0.9;
+
                 if (value < start) {
-                    this.onStartPosChange(pos);
+                    if (this.props.scrollOnClickOutsideRange) {
+                        const newValue = this.valueToPosition(start - delta);
+                        const newPos = Math.max(0, newValue);
+                        this.onScroll(newPos);
+                    } else {
+                        this.onStartPosChange(pos);
+                    }
                 } else if (value > end) {
-                    this.onEndPosChange(pos);
+                    if (this.props.scrollOnClickOutsideRange) {
+                        const newValue = this.valueToPosition(start + delta);
+                        const newPos = Math.min(maxPos, newValue);
+                        this.onScroll(newPos);
+                    } else {
+                        this.onEndPosChange(pos);
+                    }
                 }
             } else {
                 this.onPosChange(pos);
