@@ -6,6 +6,7 @@
   --rschart-slider-border-width: 0;
   --rschart-slider-border-style: none;
   --rschart-slider-border-color: #000000;
+  --rschart-navigation-margin: 0 0.5rem;
 
   display: flex;
   flex-flow: column nowrap;
@@ -28,6 +29,9 @@
   }
 
   .chart__scroller {
+    width: auto;
+    max-width: 100%;
+    margin: var(--rschart-navigation-margin);
     overflow-x: hidden;
   }
 }

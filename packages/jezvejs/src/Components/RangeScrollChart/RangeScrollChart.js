@@ -141,9 +141,8 @@ export class RangeScrollChart extends Component {
             scrollerWidth,
         } = this.mainChart.state;
         let { groupsGap } = this.mainChart.state;
-        const valuesExtended = groupsCount + 4;
         const contentWidth = scrollerWidth / Math.abs(start - end);
-        let columnWidth = contentWidth / valuesExtended;
+        let columnWidth = contentWidth / groupsCount;
 
         // Check new column width not exceeds value of 'maxColumnWidth' property
         if (columnWidth - groupsGap > maxColumnWidth) {
@@ -174,25 +173,49 @@ export class RangeScrollChart extends Component {
             scrollerWidth,
         } = this.mainChart.state;
 
+        const delta = Math.abs(this.state.end - this.state.start);
+        const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
+
+        let start;
+        let end;
+        if (scrollLeft < 0) {
+            start = 0;
+            end = delta;
+        } else if (scrollLeft > maxScroll) {
+            start = 1 - delta;
+            end = 1;
+        } else {
+            start = getSliderStart({ scrollLeft, scrollWidth });
+            end = getSliderEnd({ scrollLeft, scrollWidth, scrollerWidth });
+        }
+
         this.setState({
             ...this.state,
             scrollLeft,
-            start: getSliderStart({ scrollLeft, scrollWidth }),
-            end: getSliderEnd({ scrollLeft, scrollWidth, scrollerWidth }),
+            start,
+            end,
         });
     }
 
     onSliderScroll(value) {
-        const { start, end } = value;
+        let { start, end } = value;
         if (this.state.start === start && this.state.end === end) {
             return;
+        }
+
+        if (start < 0) {
+            end -= start;
+            start = 0;
+        } else if (end > 1) {
+            start -= end - 1;
+            end = 1;
         }
 
         this.setState({
             ...this.state,
             start,
             end,
-            scrollLeft: start * this.mainChart.state.scrollWidth,
+            scrollLeft: value.start * this.mainChart.state.scrollWidth,
             chartScrollRequested: true,
         });
     }
@@ -210,14 +233,13 @@ export class RangeScrollChart extends Component {
             maxColumnWidth,
         } = this.mainChart.state;
 
-        const valuesExtended = groupsCount + 4;
         const expContentWidth = scrollerWidth / Math.abs(start - end);
-        const expColumnWidth = expContentWidth / valuesExtended;
+        const expColumnWidth = expContentWidth / groupsCount;
         if (expColumnWidth - groupsGap <= maxColumnWidth) {
             return value;
         }
 
-        const fixedContentWidth = (maxColumnWidth + groupsGap) * valuesExtended;
+        const fixedContentWidth = (maxColumnWidth + groupsGap) * groupsCount;
         const delta = (scrollerWidth / fixedContentWidth);
         return (changeType === 'start')
             ? { start: end - delta, end }
@@ -237,9 +259,8 @@ export class RangeScrollChart extends Component {
             maxColumnWidth,
         } = this.mainChart.state;
         let { groupsGap } = this.mainChart.state;
-        const valuesExtended = groupsCount + 4;
         const contentWidth = scrollerWidth / Math.abs(start - end);
-        let columnWidth = contentWidth / valuesExtended;
+        let columnWidth = contentWidth / groupsCount;
 
         // Check new column width not exceeds value of 'maxColumnWidth' property
         if (columnWidth - groupsGap > maxColumnWidth) {

@@ -1224,12 +1224,27 @@ export class BaseChart extends Component {
         this.createHLabels(state, prevState);
     }
 
+    renderScroll(state, prevState) {
+        if (state.scrollLeft === prevState?.scrollLeft) {
+            return;
+        }
+
+        const { scrollWidth, scrollerWidth } = state;
+        const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
+        if (
+            state.scrollLeft >= 0
+            && state.scrollLeft <= maxScroll
+        ) {
+            this.chartScroller.scrollLeft = state.scrollLeft;
+        }
+    }
+
     render(state, prevState = {}) {
         const animated = state.autoScale && state.animate && state.animateNow;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
 
-        this.chartScroller.scrollLeft = state.scrollLeft;
+        this.renderScroll(state, prevState);
 
         this.drawVLabels(state);
         this.renderItems(state, prevState);
