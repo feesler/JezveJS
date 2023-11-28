@@ -2,8 +2,10 @@ import 'jezvejs/style';
 import { ge } from '@jezvejs/dom';
 import { Paginator } from 'jezvejs/Paginator';
 
+import { createButtons } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import './PaginatorView.scss';
 
 /**
@@ -38,15 +40,47 @@ class PaginatorView extends DemoView {
     }
 
     initStyled() {
+        const paginator2 = Paginator.create({
+            id: 'styledPaginator2',
+            className: 'styled',
+            breakLimit: 3,
+            pagesCount: 12,
+            onChange: () => { },
+        });
+
+        const items = [{
+            id: 'decreasePagesBtn',
+            title: '-',
+            onClick: () => {
+                paginator2.setState((state) => ({
+                    ...state,
+                    pagesCount: Math.max(0, state.pagesCount - 1),
+                }));
+            },
+        }, {
+            id: 'increasePagesBtn',
+            title: '+',
+            onClick: () => {
+                paginator2.setState((state) => ({
+                    ...state,
+                    pagesCount: state.pagesCount + 1,
+                }));
+            },
+        }];
+
         this.addSection({
             id: 'styled',
             title: 'Styled',
-            content: Paginator.create({
-                id: 'styledPaginator',
-                className: 'styled',
-                pagesCount: 6,
-                onChange: () => { },
-            }).elem,
+            content: [
+                Paginator.create({
+                    id: 'styledPaginator',
+                    className: 'styled',
+                    pagesCount: 6,
+                    onChange: () => { },
+                }).elem,
+                paginator2.elem,
+                createButtons(items),
+            ],
         });
     }
 

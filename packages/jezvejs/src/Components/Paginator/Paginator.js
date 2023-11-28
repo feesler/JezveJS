@@ -42,7 +42,12 @@ export class Paginator extends Component {
             ...props,
         });
 
-        this.state = { ...this.props };
+        const { groupLimit, breakLimit } = this.props;
+
+        this.state = {
+            ...this.props,
+            breakLimit: Math.max(groupLimit + 1, breakLimit),
+        };
 
         if (this.elem) {
             this.parse();
@@ -169,7 +174,7 @@ export class Paginator extends Component {
             return res;
         }
 
-        //  1 ... 14 15 16 ... 18
+        //  1 ... 13 14 15 ... 18
         if (state.pageNum <= state.pagesCount - state.breakLimit + 1) {
             res.push({ page: 1, active: false });
             res.push({ ellipsis: true });
