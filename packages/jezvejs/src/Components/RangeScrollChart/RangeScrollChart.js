@@ -61,6 +61,8 @@ export class RangeScrollChart extends Component {
             start: 0,
             end: 1,
             scrollLeft: 0,
+            columnWidth: 0,
+            groupsGap: 0,
             chartScrollRequested: false,
         };
 
@@ -157,8 +159,11 @@ export class RangeScrollChart extends Component {
             groupsGap = 0;
         }
 
-        this.mainChart.setColumnWidth(columnWidth);
-        this.mainChart.setGroupsGap(groupsGap);
+        this.setState({
+            ...this.state,
+            columnWidth,
+            groupsGap,
+        });
     }
 
     onChartScroll() {
@@ -176,14 +181,12 @@ export class RangeScrollChart extends Component {
         const delta = Math.abs(this.state.end - this.state.start);
         const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
 
-        let start;
-        let end;
+        let start = 0;
+        let end = 1;
         if (scrollLeft < 0) {
-            start = 0;
             end = delta;
         } else if (scrollLeft > maxScroll) {
             start = 1 - delta;
-            end = 1;
         } else {
             start = getSliderStart({ scrollLeft, scrollWidth });
             end = getSliderEnd({ scrollLeft, scrollWidth, scrollerWidth });
@@ -275,9 +278,6 @@ export class RangeScrollChart extends Component {
             groupsGap = 0;
         }
 
-        this.mainChart.setColumnWidth(columnWidth);
-        this.mainChart.setGroupsGap(groupsGap);
-
         const { scrollWidth } = this.mainChart.state;
         const scrollLeft = start * scrollWidth;
         this.setState({
@@ -285,21 +285,27 @@ export class RangeScrollChart extends Component {
             start,
             end,
             scrollLeft,
+            columnWidth,
+            groupsGap,
             chartScrollRequested: this.state.scrollLeft !== scrollLeft,
         });
     }
 
     renderMainChart(state, prevState) {
         if (
-            state.scrollLeft === prevState?.scrollLeft
+            (state.columnWidth !== prevState?.columnWidth)
+            || (state.groupsGap !== prevState?.groupsGap)
         ) {
-            return;
+            this.mainChart.setColumnWidth(state.columnWidth);
+            this.mainChart.setGroupsGap(state.groupsGap);
         }
 
-        this.mainChart.setState((histogramState) => ({
-            ...histogramState,
-            scrollLeft: state.scrollLeft,
-        }));
+        if (state.scrollLeft !== prevState?.scrollLeft) {
+            this.mainChart.setState((chartState) => ({
+                ...chartState,
+                scrollLeft: state.scrollLeft,
+            }));
+        }
     }
 
     renderSlider(state, prevState) {
