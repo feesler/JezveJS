@@ -519,20 +519,19 @@ export class BaseChart extends Component {
             return state;
         }
 
-        const valuesExtended = state.groupsCount + 2;
+        const groupOuterWidth = this.chartScroller.offsetWidth / state.groupsCount;
+        const groupsGap = groupOuterWidth / 5;
+        const groupWidth = groupOuterWidth - groupsGap;
+        const columnWidth = Math.min(
+            state.maxColumnWidth,
+            groupWidth / state.columnsInGroup,
+        );
+
         const newState = {
             ...state,
-            columnWidth: Math.min(
-                state.maxColumnWidth,
-                this.chartScroller.offsetWidth / valuesExtended,
-            ),
+            columnWidth,
+            groupsGap,
         };
-        if (newState.columnWidth > 10) {
-            newState.groupsGap = newState.columnWidth / 5;
-            newState.columnWidth -= newState.groupsGap;
-        } else {
-            newState.groupsGap = 0;
-        }
 
         return newState;
     }
