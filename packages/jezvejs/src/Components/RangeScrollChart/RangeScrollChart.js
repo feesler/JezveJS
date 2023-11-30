@@ -1,7 +1,7 @@
 import { assert } from '@jezvejs/assert';
 import { createElement } from '@jezvejs/dom';
 
-import { minmax } from '../../common.js';
+import { minmax, px } from '../../common.js';
 import { Component } from '../../Component.js';
 
 import { Histogram } from '../Histogram/Histogram.js';
@@ -29,6 +29,7 @@ const chartTypesMap = {
 const defaultProps = {
     logField: null,
     type: 'histogram', // available values: 'histogram' and 'linechart'
+    hideScrollBar: true,
     mainChart: {
         height: 300,
         resizeTimeout: 0,
@@ -72,6 +73,7 @@ export class RangeScrollChart extends Component {
             scrollLeft: 0,
             columnWidth: 0,
             groupsGap: 0,
+            scrollBarSize: 0,
             chartScrollRequested: false,
         };
 
@@ -147,6 +149,9 @@ export class RangeScrollChart extends Component {
             return;
         }
 
+        const { chartScroller } = this.mainChart;
+        const scrollBarSize = chartScroller.offsetHeight - chartScroller.clientHeight;
+
         let { start, end } = this.state;
         const {
             groupsCount,
@@ -170,6 +175,7 @@ export class RangeScrollChart extends Component {
             ...this.state,
             columnWidth,
             groupsGap,
+            scrollBarSize,
         });
     }
 
@@ -322,6 +328,14 @@ export class RangeScrollChart extends Component {
                 ...chartState,
                 scrollLeft: state.scrollLeft,
             }));
+        }
+
+        if (
+            (state.scrollBarSize !== prevState?.scrollBarSize)
+            || (state.hideScrollBar !== prevState?.hideScrollBar)
+        ) {
+            const { style } = this.mainChart.scrollerContainer;
+            style.marginBottom = (state.hideScrollBar) ? px(-state.scrollBarSize) : '';
         }
     }
 

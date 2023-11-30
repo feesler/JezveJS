@@ -11,6 +11,14 @@
   display: flex;
   flex-flow: column nowrap;
 
+  .chart {
+    position: relative;
+  }
+
+  .chart__horizontal {
+    overflow: hidden;
+  }
+
   .chart__scroller {
     overflow-x: scroll;
   }
