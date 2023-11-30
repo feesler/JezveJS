@@ -4,41 +4,28 @@ import { createElement } from '@jezvejs/dom';
 import { Histogram } from 'jezvejs/Histogram';
 
 import { createButtons, createControls } from '../../Application/utils.js';
+import {
+    chartData,
+    chartData2,
+    chartData3,
+    chartMultiData,
+    chartNegMultiData,
+    chartStackedData,
+    emptyData,
+    singleNegData,
+    posData,
+    negData,
+    negPosData,
+    chartShortMultiData,
+} from '../../assets/data/index.js';
+import { largeData } from '../../assets/data/largeData.js';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
-import largeData from './largeData.json';
 import './HistogramView.scss';
-
-const chartData = {
-    values: [
-        30, 25639, 30, 1653.72, 10496, 974, 195, 30, 845, 890, 1165, 30, 4990, 2750,
-        741, 893.48, 30, 132, 1250, 1009, 231, 774, 1230, 1018, 3444.86, 30, 3700, 598,
-        100, 30, 630, 30, 30, 30, 150, 12787.9, 12787.9, 30, 214, 248, 416, 738.4, 791,
-        493, 510, 585, 4938, 775, 30, 619.4, 335, 1759, 1987.7, 875, 3289.44, 928.73,
-        100, 3831, 3245.9, 2929.55, 2789.94, 279.23, 3718.37, 2005.78, 2266.39,
-        2871.38, 100, 100, 930.76, 642.22, 1303.06, 3197.15, 100,
-    ],
-    series: [
-        '01.01.2013', '27.01.2013', '04.02.2013', '10.02.2013', '16.02.2013',
-        '16.02.2013', '20.02.2013', '04.03.2013', '17.03.2013', '18.03.2013',
-        '18.03.2013', '01.04.2013', '09.04.2013', '17.04.2013', '18.04.2013',
-        '18.04.2013', '06.05.2013', '10.05.2013', '12.05.2013', '13.05.2013',
-        '13.05.2013', '13.05.2013', '17.05.2013', '19.05.2013', '28.05.2013',
-        '03.06.2013', '08.06.2013', '12.06.2013', '16.06.2013', '01.07.2013',
-        '25.07.2013', '05.08.2013', '12.09.2013', '19.10.2013', '30.10.2013',
-        '05.11.2013', '09.11.2013', '09.11.2013', '10.11.2013', '15.11.2013',
-        '15.11.2013', '15.11.2013', '17.11.2013', '19.11.2013', '19.11.2013',
-        '19.11.2013', '01.12.2013', '03.12.2013', '04.12.2013', '04.12.2013',
-        '08.12.2013', '08.12.2013', '15.12.2013', '16.12.2013', '18.12.2013',
-        '19.12.2013', '19.12.2013', '19.12.2013', '19.12.2013', '19.12.2013',
-        '20.12.2013', '20.12.2013', '20.12.2013', '20.12.2013', '20.12.2013',
-        '20.12.2013', '23.12.2013', '23.12.2013', '23.12.2013', '23.12.2013',
-        '23.12.2013', '23.12.2013', '23.12.2013',
-    ],
-};
 
 const maxColumnWidthData = {
     values: [
@@ -47,92 +34,6 @@ const maxColumnWidthData = {
     series: [
         '01.01.2013', '27.01.2013', '04.02.2013',
     ],
-};
-
-const chartData2 = {
-    values: [
-        1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200,
-        2000, 2001, 2002, 2005, 2050, 2200, 2000, 2001, 2002, 2005, 2050, 2200,
-        10000, 10001, 10002, 10005, 10050, 10200, 10000, 10001, 10002, 10005, 10050, 10200,
-    ],
-    series: [
-        '1000', '1000', '1000', '1000', '1000',
-        '1000', '1000', '1000', '1000', '1000',
-        '1000', '1000', '2000', '2000', '2000',
-        '2000', '2000', '2000', '2000', '2000',
-        '2000', '2000', '2000', '2000', '10000',
-        '10000', '10000', '10000', '10000', '10000',
-        '10000', '10000', '10000', '10000', '10000',
-        '10000/10000',
-    ],
-};
-
-const chartData3 = {
-    values: [{
-        data: [100, 10.1, 100.2, 10.5, 50, 1200, 99, 57.4, 10.02, 100.5, 10.50, 37],
-    }, {
-        data: [200, 200.1, 20.02, 200.5, 114, 220, 200, 201, 20, 45.7, 99.1, 100],
-    }],
-    series: [
-        '09.22', '09.22', '09.22', '09.22', '09.22',
-        '09.22', '09.22', '09.22', '09.22', '09.22',
-        '09.22', '09.22',
-    ],
-};
-
-const chartMultiData = {
-    values: [{
-        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
-        category: 'cat1',
-        group: 1,
-    }, {
-        data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
-        category: 'cat1',
-        group: 2,
-    }, {
-        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
-        category: 'cat1',
-        group: 3,
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-};
-
-const chartNegMultiData = {
-    values: [{
-        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
-    }, {
-        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
-    }, {
-        data: [-553, -200, -5500, 0, -58, -347, -1302, -12, -780, -5600, -460, -150, -2000, -2000],
-    }, {
-        data: [-50, -200, -550, -100, -850, -1220, -1302, -900, -780, -1800, -2210, -2500, -2100],
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-    stacked: true,
-};
-
-const chartStackedData = {
-    values: [{
-        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
-    }, {
-        data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
-    }, {
-        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-    stacked: true,
 };
 
 const chartGroupedData = {
@@ -208,34 +109,9 @@ const legendCategoriesData = {
     ],
 };
 
-const emptyData = {
-    values: [],
-    series: [],
-};
-
-const singleNegData = {
-    values: [-12000],
-    series: ['x'],
-};
-
-const posData = {
-    values: [180, 150, 100],
-    series: ['x1', 'x1', 'x1'],
-};
-
-const negData = {
-    values: [-180, -80, -100],
-    series: ['x1', 'x1', 'x1'],
-};
-
-const negPosData = {
-    values: [-450, 210, 200, -250, 100],
-    series: ['x1', 'x1', 'x1', 'x1', 'x1'],
-};
-
 const chartContainer = (id, chart) => createElement('div', {
     props: { id, className: 'std_chart_wrap' },
-    children: chart.elem,
+    children: chart?.elem,
 });
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
@@ -356,14 +232,13 @@ class HistogramView extends DemoView {
         this.fitToWidth();
         this.maxColumnWidth();
 
-        this.leftYAxis();
-        this.noYAxis();
-        this.topXAxis();
-        this.noXAxis();
+        this.chartAxes();
+        this.xAxisGrid();
 
         this.autoScale();
         this.callbacks();
         this.multiColumn();
+        this.alignColumns();
         this.stacked();
         this.stackedNegative();
         this.stackedGrouped();
@@ -438,59 +313,81 @@ class HistogramView extends DemoView {
         });
     }
 
-    leftYAxis() {
-        const histogram = Histogram.create({
-            data: chartData2,
-            yAxis: 'left',
-            className: 'histogram_left_yaxis',
-        });
+    chartAxes() {
+        const container = chartContainer('chartAxes');
+        const currentAxes = {
+            x: 'bottom',
+            y: 'right',
+        };
+
+        const xAxisMap = {
+            top: 'Top',
+            bottom: 'Bottom',
+            none: 'None',
+        };
+
+        const yAxisMap = {
+            left: 'Left',
+            right: 'Right',
+            none: 'None',
+        };
+
+        const createChart = (xAxis, yAxis) => {
+            currentAxes.x = xAxis;
+            currentAxes.y = yAxis;
+
+            const chart = Histogram.create({
+                data: chartData2,
+                xAxis,
+                yAxis,
+            });
+
+            container.replaceChildren(chart.elem);
+        };
+
+        const createRadioFieldset = (isX) => (
+            RadioFieldset.create({
+                title: (isX) ? 'X-Axis' : 'Y-Axis',
+                radioName: (isX) ? 'xAxis' : 'yAxis',
+                items: Object.entries((isX) ? xAxisMap : yAxisMap).map(([value, label]) => ({
+                    value,
+                    label,
+                    checked: (currentAxes[(isX) ? 'x' : 'y'] === value),
+                })),
+                onChange: (value) => (
+                    (isX)
+                        ? createChart(value, currentAxes.y)
+                        : createChart(currentAxes.x, value)
+                ),
+            }).elem
+        );
+
+        createChart(currentAxes.x, currentAxes.y);
 
         this.addSection({
-            id: 'leftYAxis',
-            title: '\'yAxis\' option: left',
-            content: chartContainer('chart_left_yaxis', histogram),
+            id: 'axes',
+            title: '\'xAxis\' and \'yAxis\' options',
+            content: [
+                container,
+                createControls([
+                    createRadioFieldset(true),
+                    createRadioFieldset(false),
+                ]),
+            ],
         });
     }
 
-    noYAxis() {
-        const histogram = Histogram.create({
-            data: chartData2,
-            yAxis: 'none',
-            className: 'histogram_no_yaxis',
+    xAxisGrid() {
+        const chart = Histogram.create({
+            data: chartData,
+            xAxisGrid: true,
+            className: 'x-axis-grid-chart',
         });
 
         this.addSection({
-            id: 'noYAxis',
-            title: '\'yAxis\' option: none',
-            content: chartContainer('chart_no_yaxis', histogram),
-        });
-    }
-
-    topXAxis() {
-        const histogram = Histogram.create({
-            data: chartData2,
-            xAxis: 'top',
-            className: 'histogram_top_xaxis',
-        });
-
-        this.addSection({
-            id: 'topXAxis',
-            title: '\'xAxis\' option: top',
-            content: chartContainer('chart_top_xaxis', histogram),
-        });
-    }
-
-    noXAxis() {
-        const histogram = Histogram.create({
-            data: chartData2,
-            xAxis: 'none',
-            className: 'histogram_no_xaxis',
-        });
-
-        this.addSection({
-            id: 'noXAxis',
-            title: '\'xAxis\' option: none',
-            content: chartContainer('chart_no_xaxis', histogram),
+            id: 'xAxisGrid',
+            title: '\'xAxisGrid\' option',
+            content: chartContainer('xAxisGridChart', chart),
         });
     }
 
@@ -558,6 +455,53 @@ class HistogramView extends DemoView {
             title: 'Multi column + Legend',
             description: ' + \'showPopupOnHover\' and \'activateOnHover\' options',
             content: chartContainer('chart_multicolumn', histogram),
+        });
+    }
+
+    alignColumns() {
+        const initialProps = {
+            data: chartShortMultiData,
+            maxColumnWidth: 40,
+            fitToWidth: true,
+            xAxisGrid: true,
+            alignColumns: 'right',
+            showPopupOnClick: true,
+            activateOnClick: true,
+            showPopupOnHover: true,
+            activateOnHover: true,
+        };
+
+        const chart = Histogram.create(initialProps);
+
+        const alignMap = {
+            left: 'Left',
+            right: 'Right',
+            center: 'Center',
+        };
+
+        const alignFieldset = RadioFieldset.create({
+            title: 'Align columns',
+            radioName: 'align',
+            items: Object.entries(alignMap).map(([value, label]) => ({
+                value,
+                label,
+                checked: (initialProps.alignColumns === value),
+            })),
+            onChange: (alignColumns) => (
+                chart.setState((chartState) => ({
+                    ...chartState,
+                    alignColumns,
+                }))
+            ),
+        });
+
+        this.addSection({
+            id: 'alignColumns',
+            title: '\'alignColumns\' option',
+            content: [
+                chartContainer('alignColumnsChart', chart),
+                createControls(alignFieldset.elem),
+            ],
         });
     }
 

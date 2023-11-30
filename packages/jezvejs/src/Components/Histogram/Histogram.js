@@ -126,6 +126,25 @@ export class Histogram extends BaseChart {
         return item.groupIndex * groupWidth + item.columnIndex * columnWidth;
     }
 
+    getAlignedX(options = {}) {
+        const {
+            item = null,
+            groupWidth = 0,
+            columnWidth = 0,
+            alignColumns = 'left',
+            groupsGap = 0,
+        } = options;
+
+        let x = this.getX(item, groupWidth, columnWidth);
+        if (alignColumns === 'right') {
+            x += groupsGap;
+        } else if (alignColumns === 'center') {
+            x += groupsGap / 2;
+        }
+
+        return x;
+    }
+
     createItem({
         value,
         width,
@@ -168,7 +187,13 @@ export class Histogram extends BaseChart {
             item.y += state.hLabelsHeight;
         }
 
-        item.x = this.getX(item, groupWidth, columnWidth);
+        item.x = this.getAlignedX({
+            item,
+            groupWidth,
+            columnWidth,
+            alignColumns: state.alignColumns,
+            groupsGap: state.groupsGap,
+        });
 
         if (
             Number.isNaN(item.x)
@@ -374,7 +399,14 @@ export class Histogram extends BaseChart {
         const columnWidth = this.getColumnOuterWidth(state);
 
         this.items.flat().forEach((item) => {
-            const newX = this.getX(item, groupWidth, columnWidth);
+            const newX = this.getAlignedX({
+                item,
+                groupWidth,
+                columnWidth,
+                alignColumns: state.alignColumns,
+                groupsGap: state.groupsGap,
+            });
+
             this.setItemHorizontalPos(item, newX, state.columnWidth);
         });
     }
