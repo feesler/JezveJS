@@ -102,15 +102,23 @@
 }
 
 /* Horizontal slider */
-.dp__horizontal .dp__slider {
-  flex-flow: row nowrap;
-  left: -100%;
+.dp__horizontal {
+  touch-action: pan-y;
+
+  .dp__slider {
+    flex-flow: row nowrap;
+    left: -100%;
+  }
 }
 
 /* Vertical slider */
-.dp__vertical .dp__slider {
-  flex-flow: column nowrap;
-  top: -100%;
+.dp__vertical {
+  touch-action: pan-x;
+
+  .dp__slider {
+    flex-flow: column nowrap;
+    top: -100%;
+  }
 }
 
 /* Double views */
@@ -186,6 +194,10 @@
 }
 
 /* Animation */
+.dp__animated {
+  touch-action: none;
+}
+
 .dp__animated-view,
 .dp__animated-view > .dp__layered-view,
 .dp__animated-view .dp__slider {
