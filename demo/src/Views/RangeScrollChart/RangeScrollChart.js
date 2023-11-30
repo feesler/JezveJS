@@ -121,6 +121,9 @@ class RangeScrollChartView extends DemoView {
                 maxColumnWidth: 40,
                 showPopupOnClick: true,
             },
+            navigationChart: {
+                showLegend: true,
+            },
         });
 
         this.addSection({
