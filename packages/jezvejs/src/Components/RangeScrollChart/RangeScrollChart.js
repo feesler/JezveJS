@@ -157,12 +157,14 @@ export class RangeScrollChart extends Component {
             groupsCount,
             maxColumnWidth,
             scrollerWidth,
+            columnsInGroup,
         } = this.mainChart.state;
         let { groupsGap } = this.mainChart.state;
         const contentWidth = scrollerWidth / Math.abs(start - end);
         const groupOuterWidth = contentWidth / groupsCount;
         groupsGap = groupOuterWidth / 5;
-        let columnWidth = groupOuterWidth - groupsGap;
+        const groupWidth = groupOuterWidth - groupsGap;
+        let columnWidth = groupWidth / columnsInGroup;
 
         // Check new column width not exceeds value of 'maxColumnWidth' property
         if (columnWidth > maxColumnWidth) {
@@ -256,9 +258,11 @@ export class RangeScrollChart extends Component {
             groupsCount,
             groupsGap,
             maxColumnWidth,
+            columnsInGroup,
         } = this.mainChart.state;
 
-        const maxContentWidth = (maxColumnWidth + groupsGap) * groupsCount;
+        const maxGroupWidth = maxColumnWidth * columnsInGroup;
+        const maxContentWidth = (maxGroupWidth + groupsGap) * groupsCount;
         const minDelta = (scrollerWidth / maxContentWidth);
         const currentDelta = Math.abs(start - end);
 
@@ -282,12 +286,13 @@ export class RangeScrollChart extends Component {
             scrollerWidth,
             groupsCount,
             maxColumnWidth,
+            columnsInGroup,
         } = this.mainChart.state;
         let { groupsGap } = this.mainChart.state;
         const contentWidth = scrollerWidth / Math.abs(start - end);
         const groupOuterWidth = contentWidth / groupsCount;
-        groupsGap = groupOuterWidth / 5;
-        let columnWidth = groupOuterWidth - groupsGap;
+        const groupWidth = groupOuterWidth - groupsGap;
+        let columnWidth = groupWidth / columnsInGroup;
 
         // Check new column width not exceeds value of 'maxColumnWidth' property
         if (columnWidth > maxColumnWidth) {
