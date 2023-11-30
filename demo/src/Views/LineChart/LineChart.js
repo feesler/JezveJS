@@ -7,6 +7,7 @@ import { createButtons, createControls } from '../../Application/utils.js';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
 import largeData from '../Histogram/largeData.json';
@@ -149,7 +150,7 @@ const negPosData = {
 
 const chartContainer = (id, chart) => createElement('div', {
     props: { id, className: 'std_chart_wrap' },
-    children: chart.elem,
+    children: chart?.elem,
 });
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
@@ -225,10 +226,7 @@ class LineChartView extends DemoView {
         this.columnWidthAndGap();
         this.fitToWidth();
 
-        this.leftYAxis();
-        this.noYAxis();
-        this.topXAxis();
-        this.noXAxis();
+        this.chartAxes();
 
         this.autoScale();
         this.callbacks();
@@ -289,59 +287,67 @@ class LineChartView extends DemoView {
         });
     }
 
-    leftYAxis() {
-        const chart = LineChart.create({
-            data: chartData2,
-            yAxis: 'left',
-            className: 'linechart_left_yaxis',
-        });
+    chartAxes() {
+        const container = chartContainer('chartAxes');
+        const currentAxes = {
+            x: 'bottom',
+            y: 'right',
+        };
+
+        const xAxisMap = {
+            top: 'Top',
+            bottom: 'Bottom',
+            none: 'None',
+        };
+
+        const yAxisMap = {
+            left: 'Left',
+            right: 'Right',
+            none: 'None',
+        };
+
+        const createChart = (xAxis, yAxis) => {
+            currentAxes.x = xAxis;
+            currentAxes.y = yAxis;
+
+            const chart = LineChart.create({
+                data: chartData2,
+                xAxis,
+                yAxis,
+            });
+
+            container.replaceChildren(chart.elem);
+        };
+
+        const createRadioFieldset = (isX) => (
+            RadioFieldset.create({
+                title: (isX) ? 'X-Axis' : 'Y-Axis',
+                radioName: (isX) ? 'xAxis' : 'yAxis',
+                items: Object.entries((isX) ? xAxisMap : yAxisMap).map(([value, label]) => ({
+                    value,
+                    label,
+                    checked: (currentAxes[(isX) ? 'x' : 'y'] === value),
+                })),
+                onChange: (value) => (
+                    (isX)
+                        ? createChart(value, currentAxes.y)
+                        : createChart(currentAxes.x, value)
+                ),
+            }).elem
+        );
+
+        createChart(currentAxes.x, currentAxes.y);
 
         this.addSection({
-            id: 'leftYAxis',
-            title: '\'yAxis\' option: left',
-            content: chartContainer('linechart_left_yaxis', chart),
-        });
-    }
-
-    noYAxis() {
-        const chart = LineChart.create({
-            data: chartData2,
-            yAxis: 'none',
-            className: 'linechart_no_yaxis',
-        });
-
-        this.addSection({
-            id: 'noYAxis',
-            title: '\'yAxis\' option: none',
-            content: chartContainer('linechart_no_yaxis', chart),
-        });
-    }
-
-    topXAxis() {
-        const chart = LineChart.create({
-            data: chartData2,
-            xAxis: 'top',
-            className: 'linechart_top_xaxis',
-        });
-
-        this.addSection({
-            id: 'topXAxis',
-            title: '\'xAxis\' option: top',
-            content: chartContainer('linechart_top_xaxis', chart),
-        });
-    }
-
-    noXAxis() {
-        const chart = LineChart.create({
-            data: chartData2,
-            xAxis: 'none',
-            className: 'linechart_no_xaxis',
-        });
-
-        this.addSection({
-            id: 'noXAxis',
-            title: '\'xAxis\' option: none',
-            content: chartContainer('linechart_no_xaxis', chart),
+            id: 'axes',
+            title: '\'xAxis\' and \'yAxis\' options',
+            content: [
+                container,
+                createControls([
+                    createRadioFieldset(true),
+                    createRadioFieldset(false),
+                ]),
+            ],
         });
     }
 
