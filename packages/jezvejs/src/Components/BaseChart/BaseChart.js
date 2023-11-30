@@ -1226,8 +1226,8 @@ export class BaseChart extends Component {
             return;
         }
 
-        const { scrollWidth, scrollerWidth, scrollLeft } = state;
-        const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
+        const { chartContentWidth, scrollerWidth, scrollLeft } = state;
+        const maxScroll = Math.max(0, chartContentWidth - scrollerWidth);
 
         if (
             scrollLeft >= 0

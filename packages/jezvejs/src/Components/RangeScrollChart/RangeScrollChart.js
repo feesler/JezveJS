@@ -1,7 +1,9 @@
 import { assert } from '@jezvejs/assert';
 import { createElement } from '@jezvejs/dom';
 
+import { minmax } from '../../common.js';
 import { Component } from '../../Component.js';
+
 import { Histogram } from '../Histogram/Histogram.js';
 import { LineChart } from '../LineChart/LineChart.js';
 import { RangeSlider } from '../RangeSlider/RangeSlider.js';
@@ -83,6 +85,7 @@ export class RangeScrollChart extends Component {
         // Main chart
         this.mainChart = this.createChart({
             ...mainChart,
+            allowLastXAxisLabelOverflow: false,
             onResize: () => this.onChartResize(),
             onScroll: () => this.onChartScroll(),
         });
@@ -152,19 +155,15 @@ export class RangeScrollChart extends Component {
         } = this.mainChart.state;
         let { groupsGap } = this.mainChart.state;
         const contentWidth = scrollerWidth / Math.abs(start - end);
-        let columnWidth = contentWidth / groupsCount;
+        const groupOuterWidth = contentWidth / groupsCount;
+        groupsGap = groupOuterWidth / 5;
+        let columnWidth = groupOuterWidth - groupsGap;
 
         // Check new column width not exceeds value of 'maxColumnWidth' property
-        if (columnWidth - groupsGap > maxColumnWidth) {
+        if (columnWidth > maxColumnWidth) {
             ({ start, end } = this.onBeforeSliderChange({ start, end }, 'resize'));
             columnWidth = maxColumnWidth;
-        }
-
-        if (columnWidth > 10) {
-            groupsGap = columnWidth / 5;
-            columnWidth -= groupsGap;
-        } else {
-            groupsGap = 0;
+            groupsGap = columnWidth / 4;
         }
 
         this.setState({
@@ -185,6 +184,9 @@ export class RangeScrollChart extends Component {
             scrollWidth,
             scrollerWidth,
         } = this.mainChart.state;
+        if (this.state.scrollLeft === scrollLeft) {
+            return;
+        }
 
         const delta = Math.abs(this.state.end - this.state.start);
         const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
@@ -224,14 +226,15 @@ export class RangeScrollChart extends Component {
             end = 1;
         }
 
-        const { scrollWidth, scrollerWidth } = this.mainChart.state;
-        const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
+        const { chartContentWidth, scrollerWidth } = this.mainChart.state;
+        const maxScroll = Math.max(0, chartContentWidth - scrollerWidth);
+        const scrollLeft = Math.min(maxScroll, start * chartContentWidth);
 
         this.setState({
             ...this.state,
             start,
             end,
-            scrollLeft: Math.min(maxScroll, start * scrollWidth),
+            scrollLeft,
             chartScrollRequested: true,
         });
     }
@@ -276,23 +279,24 @@ export class RangeScrollChart extends Component {
         } = this.mainChart.state;
         let { groupsGap } = this.mainChart.state;
         const contentWidth = scrollerWidth / Math.abs(start - end);
-        let columnWidth = contentWidth / groupsCount;
+        const groupOuterWidth = contentWidth / groupsCount;
+        groupsGap = groupOuterWidth / 5;
+        let columnWidth = groupOuterWidth - groupsGap;
 
         // Check new column width not exceeds value of 'maxColumnWidth' property
-        if (columnWidth - groupsGap > maxColumnWidth) {
+        if (columnWidth > maxColumnWidth) {
             ({ start, end } = this.onBeforeSliderChange(value, changeType));
             columnWidth = maxColumnWidth;
+            groupsGap = columnWidth / 4;
         }
 
-        if (columnWidth > 10) {
-            groupsGap = columnWidth / 5;
-            columnWidth -= groupsGap;
-        } else {
-            groupsGap = 0;
+        if (this.state.start === start && this.state.end === end) {
+            return;
         }
 
-        const { scrollWidth } = this.mainChart.state;
-        const scrollLeft = start * scrollWidth;
+        const maxScroll = Math.max(0, contentWidth - scrollerWidth);
+        const scrollLeft = minmax(0, maxScroll, start * contentWidth);
+
         this.setState({
             ...this.state,
             start,
