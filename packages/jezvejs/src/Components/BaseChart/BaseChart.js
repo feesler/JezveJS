@@ -76,6 +76,8 @@ export class BaseChart extends Component {
         this.gridGroup = null;
         this.vertLabelsGroup = null;
         this.labels = [];
+        this.xAxisGridLines = [];
+        this.xAxisGridGroup = null;
         this.xAxisLabelsGroup = null;
         this.scrollRequested = false;
         this.contentOffset = null;
@@ -483,6 +485,63 @@ export class BaseChart extends Component {
 
         this.content.prepend(gridGroup);
         this.gridGroup = gridGroup;
+
+        // Render x-Axis grid
+        this.xAxisGridGroup?.remove();
+        this.xAxisGridGroup = null;
+
+        if (!state.xAxisGrid) {
+            this.xAxisGridLines = [];
+            return;
+        }
+
+        const xAxisGridLines = [];
+        const xAxisGridGroup = createSVGElement('g');
+        const groupOuterWidth = this.getGroupOuterWidth(state);
+        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
+        const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
+
+        for (let i = 0; i < visibleGroups; i += 1) {
+            const groupIndex = firstGroupIndex + i;
+            const value = state.data.series[groupIndex];
+            if (typeof value === 'undefined') {
+                break;
+            }
+
+            const prevValue = state.data.series[groupIndex - 1] ?? null;
+            if (value === prevValue) {
+                continue;
+            }
+
+            let gridLine = this.xAxisGridLines.find((item) => item?.groupIndex === groupIndex);
+            if (gridLine) {
+                gridLine.reused = true;
+            } else {
+                const curX = groupIndex * groupOuterWidth;
+                const rX = this.formatCoord(Math.round(curX) + 0.5);
+                const y0 = this.formatCoord(state.grid.yFirst);
+                const y1 = this.formatCoord(state.grid.yLast);
+                const linePath = `M${rX},${y0}L${rX},${y1}`;
+
+                gridLine = {
+                    reused: false,
+                    groupIndex,
+                    elem: createSVGElement('path', {
+                        attrs: {
+                            class: 'chart__grid-line',
+                            d: linePath,
+                        },
+                    }),
+                };
+            }
+
+            xAxisGridGroup.append(gridLine.elem);
+            xAxisGridLines.push(gridLine);
+        }
+
+        this.xAxisGridLines = xAxisGridLines;
+        this.xAxisGridGroup = xAxisGridGroup;
+        this.content.prepend(this.xAxisGridGroup);
     }
 
     /** Return array of values */
@@ -1220,6 +1279,24 @@ export class BaseChart extends Component {
         this.createHLabels(state, prevState);
     }
 
+    renderGrid(state, prevState) {
+        if (
+            !this.isHorizontalScaleNeeded(state, prevState)
+            && state.chartContentWidth === prevState.chartContentWidth
+            && state.containerWidth === prevState.containerWidth
+            && state.scrollLeft === prevState.scrollLeft
+            && state.grid === prevState.grid
+            && state.xAxis === prevState.xAxis
+            && state.chartWidth === prevState.chartWidth
+            && state.hLabelsHeight === prevState.hLabelsHeight
+            && state.xAxisGrid === prevState.xAxisGrid
+        ) {
+            return;
+        }
+
+        this.drawGrid(state);
+    }
+
     renderScroll(state, prevState) {
         if (state.scrollLeft === prevState?.scrollLeft) {
             return;
@@ -1258,7 +1335,7 @@ export class BaseChart extends Component {
             this.content.setAttribute('height', state.height);
         }
 
-        this.drawGrid(state);
+        this.renderGrid(state, prevState);
 
         this.renderLegend(state);
     }

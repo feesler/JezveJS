@@ -114,6 +114,7 @@ class LineChartView extends DemoView {
         this.fitToWidth();
 
         this.chartAxes();
+        this.xAxisGrid();
 
         this.autoScale();
         this.callbacks();
@@ -235,6 +236,20 @@ class LineChartView extends DemoView {
                     createRadioFieldset(false),
                 ]),
             ],
+        });
+    }
+
+    xAxisGrid() {
+        const chart = LineChart.create({
+            data: chartData,
+            xAxisGrid: true,
+            className: 'x-axis-grid-chart',
+        });
+
+        this.addSection({
+            id: 'xAxisGrid',
+            title: '\'xAxisGrid\' option',
+            content: chartContainer('xAxisGridChart', chart),
         });
     }
 

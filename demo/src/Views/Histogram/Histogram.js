@@ -232,6 +232,7 @@ class HistogramView extends DemoView {
         this.maxColumnWidth();
 
         this.chartAxes();
+        this.xAxisGrid();
 
         this.autoScale();
         this.callbacks();
@@ -371,6 +372,20 @@ class HistogramView extends DemoView {
                     createRadioFieldset(false),
                 ]),
             ],
+        });
+    }
+
+    xAxisGrid() {
+        const chart = Histogram.create({
+            data: chartData,
+            xAxisGrid: true,
+            className: 'x-axis-grid-chart',
+        });
+
+        this.addSection({
+            id: 'xAxisGrid',
+            title: '\'xAxisGrid\' option',
+            content: chartContainer('xAxisGridChart', chart),
         });
     }
 

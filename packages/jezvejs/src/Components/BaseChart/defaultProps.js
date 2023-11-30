@@ -12,6 +12,7 @@ export const defaultProps = {
     gridValuesMargin: 0.1,
     minGridStep: 30,
     maxGridStep: 60,
+    xAxisGrid: false,
     // Render properties
     fitToWidth: false,
     allowLastXAxisLabelOverflow: true,
