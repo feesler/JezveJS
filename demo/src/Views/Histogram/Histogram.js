@@ -16,6 +16,7 @@ import {
     posData,
     negData,
     negPosData,
+    chartShortMultiData,
 } from '../../assets/data/index.js';
 import { largeData } from '../../assets/data/largeData.js';
 
@@ -237,6 +238,7 @@ class HistogramView extends DemoView {
         this.autoScale();
         this.callbacks();
         this.multiColumn();
+        this.alignColumns();
         this.stacked();
         this.stackedNegative();
         this.stackedGrouped();
@@ -453,6 +455,53 @@ class HistogramView extends DemoView {
             title: 'Multi column + Legend',
             description: ' + \'showPopupOnHover\' and \'activateOnHover\' options',
             content: chartContainer('chart_multicolumn', histogram),
+        });
+    }
+
+    alignColumns() {
+        const initialProps = {
+            data: chartShortMultiData,
+            maxColumnWidth: 40,
+            fitToWidth: true,
+            xAxisGrid: true,
+            alignColumns: 'right',
+            showPopupOnClick: true,
+            activateOnClick: true,
+            showPopupOnHover: true,
+            activateOnHover: true,
+        };
+
+        const chart = Histogram.create(initialProps);
+
+        const alignMap = {
+            left: 'Left',
+            right: 'Right',
+            center: 'Center',
+        };
+
+        const alignFieldset = RadioFieldset.create({
+            title: 'Align columns',
+            radioName: 'align',
+            items: Object.entries(alignMap).map(([value, label]) => ({
+                value,
+                label,
+                checked: (initialProps.alignColumns === value),
+            })),
+            onChange: (alignColumns) => (
+                chart.setState((chartState) => ({
+                    ...chartState,
+                    alignColumns,
+                }))
+            ),
+        });
+
+        this.addSection({
+            id: 'alignColumns',
+            title: '\'alignColumns\' option',
+            content: [
+                chartContainer('alignColumnsChart', chart),
+                createControls(alignFieldset.elem),
+            ],
         });
     }
 

@@ -517,23 +517,28 @@ export class BaseChart extends Component {
             if (gridLine) {
                 gridLine.reused = true;
             } else {
-                const curX = groupIndex * groupOuterWidth;
-                const rX = this.formatCoord(Math.round(curX) + 0.5);
-                const y0 = this.formatCoord(state.grid.yFirst);
-                const y1 = this.formatCoord(state.grid.yLast);
-                const linePath = `M${rX},${y0}L${rX},${y1}`;
-
                 gridLine = {
                     reused: false,
                     groupIndex,
                     elem: createSVGElement('path', {
                         attrs: {
                             class: 'chart__grid-line',
-                            d: linePath,
                         },
                     }),
                 };
             }
+
+            const curX = groupIndex * groupOuterWidth;
+            let rX = Math.round(curX);
+            rX += (rX > curX) ? -0.5 : 0.5;
+            rX = this.formatCoord(rX);
+
+            const y0 = this.formatCoord(state.grid.yFirst);
+            const y1 = this.formatCoord(state.grid.yLast);
+
+            setAttributes(gridLine.elem, {
+                d: `M${rX},${y0}L${rX},${y1}`,
+            });
 
             xAxisGridGroup.append(gridLine.elem);
             xAxisGridLines.push(gridLine);
@@ -1162,6 +1167,7 @@ export class BaseChart extends Component {
             || state.columnWidth !== prevState?.columnWidth
             || state.groupsGap !== prevState?.groupsGap
             || state.fitToWidth !== prevState?.fitToWidth
+            || state.alignColumns !== prevState?.alignColumns
         );
     }
 

@@ -85,8 +85,25 @@ export class LineChart extends BaseChart {
         return res;
     }
 
-    getX(index, groupWidth) {
-        return index * groupWidth + groupWidth / 2;
+    getX(groupIndex, groupWidth) {
+        return groupIndex * groupWidth;
+    }
+
+    getAlignedX(options = {}) {
+        const {
+            groupIndex = 0,
+            groupWidth = 0,
+            alignColumns = 'left',
+        } = options;
+
+        let x = this.getX(groupIndex, groupWidth);
+        if (alignColumns === 'right') {
+            x += groupWidth;
+        } else if (alignColumns === 'center') {
+            x += groupWidth / 2;
+        }
+
+        return x;
     }
 
     createItem({
@@ -97,7 +114,7 @@ export class LineChart extends BaseChart {
         active = false,
         valueOffset = 0,
     }, state) {
-        const { grid, xAxis } = state;
+        const { grid, xAxis, alignColumns } = state;
         const fixedValue = value ?? 0;
         const fixedOffset = valueOffset ?? 0;
         const groupWidth = this.getGroupOuterWidth(state);
@@ -110,7 +127,11 @@ export class LineChart extends BaseChart {
             categoryIndex,
             active,
             point: {
-                x: this.getX(groupIndex, groupWidth),
+                x: this.getAlignedX({
+                    groupIndex,
+                    groupWidth,
+                    alignColumns,
+                }),
                 y: grid.getY(fixedValue + fixedOffset),
             },
         };
@@ -243,7 +264,11 @@ export class LineChart extends BaseChart {
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const groupWidth = this.getGroupOuterWidth(state);
         const coords = values.map((value, index) => ({
-            x: (firstGroupIndex + index) * groupWidth + groupWidth / 2,
+            x: this.getAlignedX({
+                groupIndex: firstGroupIndex + index,
+                groupWidth,
+                alignColumns: state.alignColumns,
+            }),
             y: value,
         }));
 
@@ -396,7 +421,11 @@ export class LineChart extends BaseChart {
         const groupWidth = this.getGroupOuterWidth(state);
 
         this.items.flat().forEach((item) => {
-            const newX = this.getX(item.groupIndex, groupWidth);
+            const newX = this.getAlignedX({
+                groupIndex: item.groupIndex,
+                groupWidth,
+                alignColumns: state.alignColumns,
+            });
             this.setItemHorizontalPos(item, newX);
         });
 

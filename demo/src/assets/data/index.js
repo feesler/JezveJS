@@ -78,6 +78,25 @@ export const chartMultiData = {
     ],
 };
 
+export const chartShortMultiData = {
+    values: [{
+        data: [1000, 1001, 1002],
+        category: 'cat1',
+        group: 1,
+    }, {
+        data: [553, 200, 5500],
+        category: 'cat1',
+        group: 2,
+    }, {
+        data: [50, 200, 550],
+        category: 'cat1',
+        group: 3,
+    }],
+    series: [
+        '10.22', '11.22', '12.22',
+    ],
+};
+
 export const chartNegMultiData = {
     values: [{
         data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],

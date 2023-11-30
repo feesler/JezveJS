@@ -6,6 +6,7 @@ export const defaultProps = {
     maxColumnWidth: 38,
     groupsGap: 10,
     marginTop: 10,
+    alignColumns: 'left', // available values: 'left', 'right' and 'center'
     // Grid behavior
     visibilityOffset: 1,
     scaleAroundAxis: true,

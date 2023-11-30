@@ -16,6 +16,7 @@ import {
     posData,
     negData,
     negPosData,
+    chartShortMultiData,
 } from '../../assets/data/index.js';
 import { largeData } from '../../assets/data/largeData.js';
 
@@ -119,6 +120,7 @@ class LineChartView extends DemoView {
         this.autoScale();
         this.callbacks();
         this.multiple();
+        this.alignColumns();
         this.stacked();
         this.stackedNegative();
         // Different data tests
@@ -315,6 +317,53 @@ class LineChartView extends DemoView {
             id: 'multipleSeries',
             title: 'Multiple series',
             content: chartContainer('linechart_multiple', chart),
+        });
+    }
+
+    alignColumns() {
+        const initialProps = {
+            data: chartShortMultiData,
+            maxColumnWidth: 40,
+            fitToWidth: true,
+            xAxisGrid: true,
+            alignColumns: 'right',
+            showPopupOnClick: true,
+            activateOnClick: true,
+            showPopupOnHover: true,
+            activateOnHover: true,
+        };
+
+        const chart = LineChart.create(initialProps);
+
+        const alignMap = {
+            left: 'Left',
+            right: 'Right',
+            center: 'Center',
+        };
+
+        const alignFieldset = RadioFieldset.create({
+            title: 'Align columns',
+            radioName: 'align',
+            items: Object.entries(alignMap).map(([value, label]) => ({
+                value,
+                label,
+                checked: (initialProps.alignColumns === value),
+            })),
+            onChange: (alignColumns) => (
+                chart.setState((chartState) => ({
+                    ...chartState,
+                    alignColumns,
+                }))
+            ),
+        });
+
+        this.addSection({
+            id: 'alignColumns',
+            title: '\'alignColumns\' option',
+            content: [
+                chartContainer('alignColumnsChart', chart),
+                createControls(alignFieldset.elem),
+            ],
         });
     }
 
