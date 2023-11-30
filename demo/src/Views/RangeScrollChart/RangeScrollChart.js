@@ -35,6 +35,27 @@ const chartData = {
     ],
 };
 
+const chartMultiData = {
+    values: [{
+        data: [1000, 1001, 1002, 1005, 1050, 1200, 1000, 1001, 1002, 1005, 1050, 1200],
+        category: 'cat1',
+        group: 1,
+    }, {
+        data: [553, 200, 5500, 0, 58, 347, 1302, 12, 780, 5600, 460, 150, 2000, 2000],
+        category: 'cat1',
+        group: 2,
+    }, {
+        data: [50, 200, 550, 100, 850, 1220, 1302, 900, 780, 1800, 2210, 2500, 2100, 2200],
+        category: 'cat1',
+        group: 3,
+    }],
+    series: [
+        '10.22', '10.22', '10.22', '10.22', '11.22',
+        '11.22', '11.22', '11.22', '12.22', '12.22',
+        '12.22', '12.22',
+    ],
+};
+
 const chartContainer = (id, chart) => createElement('div', {
     props: { id, className: 'std_chart_wrap' },
     children: chart.elem,
@@ -50,13 +71,13 @@ class RangeScrollChartView extends DemoView {
     onStart() {
         this.histogram();
         this.lineChart();
+        this.multiColumn();
     }
 
     histogram() {
         const logsField = LogsField.create();
 
         const rangeSelectorChart = RangeScrollChart.create({
-            logsField,
             type: 'histogram',
             mainChart: {
                 data: chartData,
@@ -88,6 +109,28 @@ class RangeScrollChartView extends DemoView {
             title: 'LineChart',
             content: [
                 chartContainer('linechartChart', rangeSelectorChart),
+            ],
+        });
+    }
+
+    multiColumn() {
+        const rangeSelectorChart = RangeScrollChart.create({
+            type: 'histogram',
+            mainChart: {
+                data: chartMultiData,
+                maxColumnWidth: 40,
+                showPopupOnClick: true,
+            },
+            navigationChart: {
+                showLegend: true,
+            },
+        });
+
+        this.addSection({
+            id: 'multiColumn',
+            title: 'Multi column',
+            content: [
+                chartContainer('multiColumnChart', rangeSelectorChart),
             ],
         });
     }

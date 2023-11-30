@@ -519,20 +519,19 @@ export class BaseChart extends Component {
             return state;
         }
 
-        const valuesExtended = state.groupsCount + 2;
+        const groupOuterWidth = this.chartScroller.offsetWidth / state.groupsCount;
+        const groupsGap = groupOuterWidth / 5;
+        const groupWidth = groupOuterWidth - groupsGap;
+        const columnWidth = Math.min(
+            state.maxColumnWidth,
+            groupWidth / state.columnsInGroup,
+        );
+
         const newState = {
             ...state,
-            columnWidth: Math.min(
-                state.maxColumnWidth,
-                this.chartScroller.offsetWidth / valuesExtended,
-            ),
+            columnWidth,
+            groupsGap,
         };
-        if (newState.columnWidth > 10) {
-            newState.groupsGap = newState.columnWidth / 5;
-            newState.columnWidth -= newState.groupsGap;
-        } else {
-            newState.groupsGap = 0;
-        }
 
         return newState;
     }
@@ -687,76 +686,73 @@ export class BaseChart extends Component {
             labels.push(label);
         }
 
-        requestAnimationFrame(() => {
-            let lastOffset = 0;
-            const lblMarginLeft = 10;
-            const labelsToRemove = [];
-            let resizeRequested = false;
-            let prevLabel = null;
-            const toLeft = (
-                !this.isHorizontalScaleNeeded(state, prevState)
-                && prevState.scrollLeft > 0
-                && state.scrollLeft < prevState.scrollLeft
-            );
+        let lastOffset = 0;
+        const lblMarginLeft = 10;
+        const labelsToRemove = [];
+        let resizeRequested = false;
+        let prevLabel = null;
+        const toLeft = (
+            !this.isHorizontalScaleNeeded(state, prevState)
+            && prevState.scrollLeft > 0
+            && state.scrollLeft < prevState.scrollLeft
+        );
 
-            for (let ind = 0; ind < labels.length; ind += 1) {
-                const index = (toLeft) ? (labels.length - ind - 1) : ind;
-                const label = labels[index];
-                const labelRect = label.elem.getBBox();
-                const currentOffset = Math.ceil(labelRect.x + labelRect.width);
+        for (let ind = 0; ind < labels.length; ind += 1) {
+            const index = (toLeft) ? (labels.length - ind - 1) : ind;
+            const label = labels[index];
+            const labelRect = label.elem.getBBox();
+            const currentOffset = Math.ceil(labelRect.x + labelRect.width);
 
-                const overflow = (toLeft)
-                    ? (currentOffset + lblMarginLeft > lastOffset)
-                    : (labelRect.x < lastOffset + lblMarginLeft);
+            const overflow = (toLeft)
+                ? (currentOffset + lblMarginLeft > lastOffset)
+                : (labelRect.x < lastOffset + lblMarginLeft);
 
-                // Check current label not intersects previous one
-                if (lastOffset > 0 && overflow) {
-                    labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
-                    if (prevLabel?.reused || !label.reused) {
-                        continue;
-                    }
+            // Check current label not intersects previous one
+            if (lastOffset > 0 && overflow) {
+                labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
+                if (prevLabel?.reused || !label.reused) {
+                    continue;
                 }
-
-                // Check last label not overflow chart to prevent
-                // horizontal scroll in fitToWidth mode
-                if (currentOffset > state.chartContentWidth) {
-                    if (state.fitToWidth) {
-                        labelsToRemove.push(label);
-                        continue;
-                    } else {
-                        resizeRequested = true;
-                    }
-                }
-
-                lastOffset = (toLeft) ? labelRect.x : currentOffset;
-                prevLabel = label;
             }
 
-            // Remove overflow labels
-            for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
-                const label = labelsToRemove[ind];
+            // Check last label not overflow chart to prevent
+            // horizontal scroll in fitToWidth mode
+            if (currentOffset > state.chartContentWidth) {
+                resizeRequested = !state.fitToWidth;
+                if (state.fitToWidth || !state.allowLastXAxisLabelOverflow) {
+                    labelsToRemove.push(label);
+                    continue;
+                }
+            }
+
+            lastOffset = (toLeft) ? labelRect.x : currentOffset;
+            prevLabel = label;
+        }
+
+        // Remove overflow labels
+        for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
+            const label = labelsToRemove[ind];
+            label?.elem?.remove();
+
+            const labelsIndex = labels.indexOf(label);
+            if (labelsIndex !== -1) {
+                labels.splice(labelsIndex, 1);
+            }
+        }
+
+        // Remove labels not included to new state
+        for (let ind = 0; ind < this.labels.length; ind += 1) {
+            const label = this.labels[ind];
+            if (!labels.includes(label)) {
                 label?.elem?.remove();
-
-                const labelsIndex = labels.indexOf(label);
-                if (labelsIndex !== -1) {
-                    labels.splice(labelsIndex, 1);
-                }
             }
+        }
 
-            // Remove labels not included to new state
-            for (let ind = 0; ind < this.labels.length; ind += 1) {
-                const label = this.labels[ind];
-                if (!labels.includes(label)) {
-                    label?.elem?.remove();
-                }
-            }
+        this.labels = labels;
 
-            this.labels = labels;
-
-            if (resizeRequested) {
-                setTimeout(() => this.onResize());
-            }
-        });
+        if (resizeRequested) {
+            setTimeout(() => this.onResize());
+        }
     }
 
     /** Returns series value for specified items group */
@@ -961,13 +957,13 @@ export class BaseChart extends Component {
         removeEmptyClick(this.emptyClickHandler);
         if (!this.popup) {
             this.popup = createElement('div', { props: { className: POPUP_CLASS } });
-            this.chartContainer.append(this.popup);
+            this.elem.append(this.popup);
         }
 
         this.popup.classList.toggle(ANIMATE_POPUP_CLASS, this.state.animatePopup);
         show(this.popup, true);
 
-        this.chartContainer.style.position = 'relative';
+        this.elem.style.position = 'relative';
 
         const content = this.renderPopupContent(target);
         show(this.popup, (content !== null));
@@ -1229,13 +1225,14 @@ export class BaseChart extends Component {
             return;
         }
 
-        const { scrollWidth, scrollerWidth } = state;
-        const maxScroll = Math.max(0, scrollWidth - scrollerWidth);
+        const { chartContentWidth, scrollerWidth, scrollLeft } = state;
+        const maxScroll = Math.max(0, chartContentWidth - scrollerWidth);
+
         if (
-            state.scrollLeft >= 0
-            && state.scrollLeft <= maxScroll
+            scrollLeft >= 0
+            && scrollLeft <= maxScroll
         ) {
-            this.chartScroller.scrollLeft = state.scrollLeft;
+            this.chartScroller.scrollLeft = scrollLeft;
         }
     }
 

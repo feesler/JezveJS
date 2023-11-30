@@ -39,6 +39,7 @@ class RangeSliderView extends DemoView {
         this.initAfterArea();
         this.initStep();
         this.initRange();
+        this.initScrollRange();
         this.initDisabled();
     }
 
@@ -200,6 +201,36 @@ class RangeSliderView extends DemoView {
             title: 'Range',
             content: [
                 createContainer('rangeContainer', [
+                    rangeSlider.elem,
+                    valueElem,
+                ]),
+                logsField.elem,
+            ],
+        });
+    }
+
+    initScrollRange() {
+        const logsField = LogsField.create();
+        const valueElem = createValueElement();
+
+        const rangeSlider = RangeSlider.create({
+            range: true,
+            className: 'styled',
+            scrollOnClickOutsideRange: true,
+            onChange: ({ start, end }) => {
+                logsField.write(`onChange start: ${start}, end: ${end}`);
+                valueElem.renderValue(rangeSlider);
+            },
+        });
+
+        valueElem.renderValue(rangeSlider);
+
+        this.addSection({
+            id: 'scrollRange',
+            title: 'Scroll range',
+            description: '\'scrollOnClickOutsideRange\' option is enabled.',
+            content: [
+                createContainer('scrollRangeContainer', [
                     rangeSlider.elem,
                     valueElem,
                 ]),

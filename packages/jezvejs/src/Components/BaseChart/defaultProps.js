@@ -14,6 +14,7 @@ export const defaultProps = {
     maxGridStep: 60,
     // Render properties
     fitToWidth: false,
+    allowLastXAxisLabelOverflow: true,
     scrollToEnd: false,
     autoScale: false,
     animate: false,
