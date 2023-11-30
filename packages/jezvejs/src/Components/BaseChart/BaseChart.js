@@ -687,76 +687,74 @@ export class BaseChart extends Component {
             labels.push(label);
         }
 
-        requestAnimationFrame(() => {
-            let lastOffset = 0;
-            const lblMarginLeft = 10;
-            const labelsToRemove = [];
-            let resizeRequested = false;
-            let prevLabel = null;
-            const toLeft = (
-                !this.isHorizontalScaleNeeded(state, prevState)
-                && prevState.scrollLeft > 0
-                && state.scrollLeft < prevState.scrollLeft
-            );
+        let lastOffset = 0;
+        const lblMarginLeft = 10;
+        const labelsToRemove = [];
+        let resizeRequested = false;
+        let prevLabel = null;
+        const toLeft = (
+            !this.isHorizontalScaleNeeded(state, prevState)
+            && prevState.scrollLeft > 0
+            && state.scrollLeft < prevState.scrollLeft
+        );
 
-            for (let ind = 0; ind < labels.length; ind += 1) {
-                const index = (toLeft) ? (labels.length - ind - 1) : ind;
-                const label = labels[index];
-                const labelRect = label.elem.getBBox();
-                const currentOffset = Math.ceil(labelRect.x + labelRect.width);
+        for (let ind = 0; ind < labels.length; ind += 1) {
+            const index = (toLeft) ? (labels.length - ind - 1) : ind;
+            const label = labels[index];
+            const labelRect = label.elem.getBBox();
+            const currentOffset = Math.ceil(labelRect.x + labelRect.width);
 
-                const overflow = (toLeft)
-                    ? (currentOffset + lblMarginLeft > lastOffset)
-                    : (labelRect.x < lastOffset + lblMarginLeft);
+            const overflow = (toLeft)
+                ? (currentOffset + lblMarginLeft > lastOffset)
+                : (labelRect.x < lastOffset + lblMarginLeft);
 
-                // Check current label not intersects previous one
-                if (lastOffset > 0 && overflow) {
-                    labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
-                    if (prevLabel?.reused || !label.reused) {
-                        continue;
-                    }
+            // Check current label not intersects previous one
+            if (lastOffset > 0 && overflow) {
+                labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
+                if (prevLabel?.reused || !label.reused) {
+                    continue;
                 }
-
-                // Check last label not overflow chart to prevent
-                // horizontal scroll in fitToWidth mode
-                if (currentOffset > state.chartContentWidth) {
-                    if (state.fitToWidth) {
-                        labelsToRemove.push(label);
-                        continue;
-                    } else {
-                        resizeRequested = true;
-                    }
-                }
-
-                lastOffset = (toLeft) ? labelRect.x : currentOffset;
-                prevLabel = label;
             }
 
-            // Remove overflow labels
-            for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
-                const label = labelsToRemove[ind];
+            // Check last label not overflow chart to prevent
+            // horizontal scroll in fitToWidth mode
+            if (currentOffset > state.chartContentWidth) {
+                if (state.fitToWidth) {
+                    labelsToRemove.push(label);
+                    continue;
+                } else {
+                    resizeRequested = true;
+                }
+            }
+
+            lastOffset = (toLeft) ? labelRect.x : currentOffset;
+            prevLabel = label;
+        }
+
+        // Remove overflow labels
+        for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
+            const label = labelsToRemove[ind];
+            label?.elem?.remove();
+
+            const labelsIndex = labels.indexOf(label);
+            if (labelsIndex !== -1) {
+                labels.splice(labelsIndex, 1);
+            }
+        }
+
+        // Remove labels not included to new state
+        for (let ind = 0; ind < this.labels.length; ind += 1) {
+            const label = this.labels[ind];
+            if (!labels.includes(label)) {
                 label?.elem?.remove();
-
-                const labelsIndex = labels.indexOf(label);
-                if (labelsIndex !== -1) {
-                    labels.splice(labelsIndex, 1);
-                }
             }
+        }
 
-            // Remove labels not included to new state
-            for (let ind = 0; ind < this.labels.length; ind += 1) {
-                const label = this.labels[ind];
-                if (!labels.includes(label)) {
-                    label?.elem?.remove();
-                }
-            }
+        this.labels = labels;
 
-            this.labels = labels;
-
-            if (resizeRequested) {
-                setTimeout(() => this.onResize());
-            }
-        });
+        if (resizeRequested) {
+            setTimeout(() => this.onResize());
+        }
     }
 
     /** Returns series value for specified items group */
