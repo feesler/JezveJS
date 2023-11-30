@@ -719,11 +719,10 @@ export class BaseChart extends Component {
             // Check last label not overflow chart to prevent
             // horizontal scroll in fitToWidth mode
             if (currentOffset > state.chartContentWidth) {
-                if (state.fitToWidth) {
+                resizeRequested = !state.fitToWidth;
+                if (state.fitToWidth || !state.allowLastXAxisLabelOverflow) {
                     labelsToRemove.push(label);
                     continue;
-                } else {
-                    resizeRequested = true;
                 }
             }
 
