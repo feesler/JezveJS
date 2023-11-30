@@ -958,13 +958,13 @@ export class BaseChart extends Component {
         removeEmptyClick(this.emptyClickHandler);
         if (!this.popup) {
             this.popup = createElement('div', { props: { className: POPUP_CLASS } });
-            this.chartContainer.append(this.popup);
+            this.elem.append(this.popup);
         }
 
         this.popup.classList.toggle(ANIMATE_POPUP_CLASS, this.state.animatePopup);
         show(this.popup, true);
 
-        this.chartContainer.style.position = 'relative';
+        this.elem.style.position = 'relative';
 
         const content = this.renderPopupContent(target);
         show(this.popup, (content !== null));
