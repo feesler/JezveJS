@@ -1,70 +1,17 @@
 import { isFunction } from '@jezvejs/types';
-import {
-    computedStyle,
-    transform,
-} from '@jezvejs/dom';
+import { transform } from '@jezvejs/dom';
 import { px } from '../../common.js';
+
+import {
+    getScreenHeight,
+    getWindowScrollTop,
+    getFixedParent,
+    isAbsoluteParent,
+    getScrollParent,
+} from './helpers.js';
 
 export class PopupPosition {
     static windowScrollDistance = 0;
-
-    /** Find parent element without offsetParent and check it has position: fixed */
-    static getFixedParent(elem) {
-        let parent = elem?.parentNode;
-        while (parent.offsetParent) {
-            parent = parent.offsetParent;
-        }
-
-        const style = computedStyle(parent);
-        const isFixed = style?.position === 'fixed';
-        return (isFixed) ? parent : null;
-    }
-
-    /** Returns true is offset parent of element has position: absolute */
-    static isAbsoluteParent(elem) {
-        const parent = elem?.offsetParent;
-        if (!parent) {
-            return false;
-        }
-
-        const style = computedStyle(parent);
-        return style?.position === 'absolute';
-    }
-
-    static getScrollParent(elem) {
-        let node = elem?.parentNode;
-        while (node && node.nodeType !== 9) {
-            const style = computedStyle(node);
-            const overflow = style?.overflowY ?? 'visible';
-            const isScrollable = !overflow.startsWith('visible') && !overflow.startsWith('hidden');
-            if (isScrollable && node.scrollHeight > node.clientHeight) {
-                return node;
-            }
-
-            node = node.parentNode;
-        }
-
-        return document.scrollingElement || document.body;
-    }
-
-    /**
-     * Returns height of visualViewport if possible
-     * Otherwise returns clientHeight of document
-     */
-    static getScreenHeight() {
-        const { clientHeight } = document.documentElement;
-        if (!window.visualViewport) {
-            return clientHeight;
-        }
-
-        return window.visualViewport.height;
-    }
-
-    static getWindowScrollTop() {
-        const { body } = document;
-        const { scrollTop } = document.documentElement;
-        return window.pageYOffset || scrollTop || body.scrollTop;
-    }
 
     static notifyScrollDone(callback) {
         if (isFunction(callback)) {
@@ -95,14 +42,14 @@ export class PopupPosition {
 
         const { style } = elem;
         const html = document.documentElement;
-        const screenHeight = this.getScreenHeight();
-        const screenTop = this.getWindowScrollTop();
+        const screenHeight = getScreenHeight();
+        const screenTop = getWindowScrollTop();
         const screenBottom = screenTop + screenHeight;
-        const fixedParent = this.getFixedParent(elem);
-        const absoluteParent = this.isAbsoluteParent(elem);
+        const fixedParent = getFixedParent(elem);
+        const absoluteParent = isAbsoluteParent(elem);
         const fixedElement = !elem.offsetParent;
 
-        const scrollParent = fixedParent || this.getScrollParent(elem);
+        const scrollParent = fixedParent || getScrollParent(elem);
         const { scrollTop } = scrollParent;
         const scrollAvailable = scrollParent.scrollHeight >= scrollParent.clientHeight;
 
