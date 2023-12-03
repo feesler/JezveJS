@@ -3,10 +3,11 @@ import { createElement, enable } from '@jezvejs/dom';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 
+import { createContainer } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import './PopupMenuView.scss';
-import { createContainer } from '../../Application/utils.js';
 
 const renderListItem = (id) => (
     createElement('div', {
@@ -46,7 +47,7 @@ const getDefaultItems = (logsField) => ([{
 }]);
 
 /**
- * PopupMenu component demio view
+ * PopupMenu component demo view
  */
 class PopupMenuView extends DemoView {
     /**

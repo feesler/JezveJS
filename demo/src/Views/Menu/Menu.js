@@ -94,7 +94,7 @@ const initItems = (title, count, startFrom = 1) => {
 };
 
 /**
- * Menu component demio view
+ * Menu component demo view
  */
 class MenuView extends DemoView {
     /**
