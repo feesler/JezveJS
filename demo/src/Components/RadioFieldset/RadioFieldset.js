@@ -5,6 +5,7 @@ import { Radio } from 'jezvejs/Radio';
 import './RadioFieldset.scss';
 import { createElement } from '@jezvejs/dom';
 
+const FORM_CLASS = 'radio-form';
 const FIELDSET_CLASS = 'radio-fieldset';
 
 const defaultProps = {
@@ -44,12 +45,17 @@ export class RadioFieldset extends Component {
             }).elem
         ));
 
-        this.elem = createElement('fieldset', {
+        this.fieldset = createElement('fieldset', {
             props: { className: FIELDSET_CLASS },
             children: [
                 this.legendElem,
                 ...this.radios,
             ],
+        });
+
+        this.elem = createElement('form', {
+            props: { className: FORM_CLASS },
+            children: this.fieldset,
         });
     }
 }

@@ -3,10 +3,11 @@ import { createElement, enable } from '@jezvejs/dom';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 
+import { createContainer } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import './PopupMenuView.scss';
-import { createContainer } from '../../Application/utils.js';
 
 const renderListItem = (id) => (
     createElement('div', {
@@ -46,7 +47,7 @@ const getDefaultItems = (logsField) => ([{
 }]);
 
 /**
- * PopupMenu component demio view
+ * PopupMenu component demo view
  */
 class PopupMenuView extends DemoView {
     /**
@@ -108,7 +109,7 @@ class PopupMenuView extends DemoView {
         this.addSection({
             id: 'toggleOnClick',
             title: '\'toggleOnClick\' option',
-            description: 'With disabled \'toggleOnClick\' option menu will not be opened/closed by click on host element.',
+            description: 'With disabled \'toggleOnClick\' option default handler toggling menu by click will not be added to the host element.',
             content: [
                 createContainer('toggleOnClickContainer', btn.elem),
                 logsField.elem,
@@ -273,6 +274,7 @@ class PopupMenuView extends DemoView {
         this.addSection({
             id: 'list',
             title: 'Attach to list item',
+            description: 'Popup menu should be opened on click by menu button of disabled list item.',
             content: list,
         });
     }

@@ -1,9 +1,20 @@
-/* Radios fieldset */
+/* Radio form */
+.radio-form {
+  display: inline-flex;
+  flex-flow: column nowrap;
+  margin-right: 2rem;
+
+  legend {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* Radio fieldset */
 .radio-fieldset {
   display: inline-flex;
   flex-flow: column nowrap;
   gap: 0.5rem 1rem;
-  margin-right: 2rem;
 
   legend {
     font-weight: 500;

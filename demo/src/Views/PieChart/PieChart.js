@@ -53,8 +53,8 @@ class PieChartView extends DemoView {
     }
 
     initOffset() {
-        const hovtitle = createElement('div', {
-            props: { id: 'hovtitle', className: 'info-bottom' },
+        const selectedInfo = createElement('div', {
+            props: { id: 'selectedInfo', className: 'info-bottom' },
         });
 
         let data = [
@@ -75,14 +75,15 @@ class PieChartView extends DemoView {
             radius: 100,
             offset: 10,
             onItemOver: ({ sector }) => {
-                hovtitle.textContent = sector.title;
+                selectedInfo.textContent = sector.title;
             },
             onItemOut: () => {
-                hovtitle.textContent = '';
+                selectedInfo.textContent = '';
             },
             onItemClick: ({ sector }) => {
                 data = toggleSectorOffset(data, sector);
                 chart.setData(data);
+                selectedInfo.textContent = sector.title;
             },
         });
 
@@ -91,14 +92,14 @@ class PieChartView extends DemoView {
             title: 'Title and offset sector',
             content: [
                 chartContainer('offsetPChart', chart.elem),
-                hovtitle,
+                selectedInfo,
             ],
         });
     }
 
     initInnerRadius() {
-        const hovtitle = createElement('div', {
-            props: { id: 'hovtitle-inner', className: 'info-inner' },
+        const selectedInfo = createElement('div', {
+            props: { id: 'selectedInfo-inner', className: 'info-inner' },
         });
 
         let data = [
@@ -122,10 +123,10 @@ class PieChartView extends DemoView {
             innerRadius: 70,
             offset: 10,
             onItemOver: ({ sector }) => {
-                hovtitle.textContent = sector.title;
+                selectedInfo.textContent = sector.title;
             },
             onItemOut: () => {
-                hovtitle.textContent = '';
+                selectedInfo.textContent = '';
             },
             onItemClick: ({ sector }) => {
                 data = toggleSectorOffset(data, sector);
@@ -138,7 +139,7 @@ class PieChartView extends DemoView {
             title: '\'innerRadius\' option',
             content: chartContainer('innerPChart', [
                 chart.elem,
-                hovtitle,
+                selectedInfo,
             ]),
         });
     }

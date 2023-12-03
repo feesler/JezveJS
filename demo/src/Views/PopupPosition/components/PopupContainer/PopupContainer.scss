@@ -1,0 +1,18 @@
+.popup-container {
+  position: absolute;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+  z-index: 9999;
+  overflow-y: auto;
+}
+
+.popup-header {
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+}
+
+.popup-list-item {
+  padding: 0 1rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+}

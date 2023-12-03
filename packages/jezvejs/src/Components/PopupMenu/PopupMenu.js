@@ -140,6 +140,11 @@ export class PopupMenu extends Menu {
         if (this.ignoreScroll) {
             return;
         }
+
+        if (!e.target.contains(this.elem)) {
+            return;
+        }
+
         // Ignore scroll of menu itself
         const listElem = (isFunction(e.target.closest)) ? e.target.closest(LIST_SELECTOR) : null;
         if (listElem === this.elem) {

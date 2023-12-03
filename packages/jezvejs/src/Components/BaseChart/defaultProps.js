@@ -38,6 +38,7 @@ export const defaultProps = {
     showPopupOnHover: false,
     animatePopup: false,
     renderPopup: null,
+    popupPosition: 'right',
     // Callbacks
     onScroll: null,
     onResize: null,

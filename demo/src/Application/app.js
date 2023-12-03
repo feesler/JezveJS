@@ -18,6 +18,7 @@ export const navigationMenuSections = [{
         { id: 'emptyClickUtil', title: 'Empty click', url: 'emptyclick.html' },
         { id: 'debug', title: 'Debug', url: 'debug.html' },
         { id: 'dragndropUtil', title: 'Drag\'n\'Drop and Sortable', url: 'dragndrop.html' },
+        { id: 'popupPositionUtil', title: 'PopupPosition', url: 'popupposition.html' },
     ],
 }, {
     id: 'inputComponents',

@@ -39,6 +39,7 @@ const entryPoints = [
     'PieChart',
     'Popup',
     'PopupMenu',
+    'PopupPosition',
     'Progress',
     'RangeScrollChart',
     'RangeSlider',
