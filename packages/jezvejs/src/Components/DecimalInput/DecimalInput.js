@@ -35,6 +35,8 @@ const defaultProps = {
     form: undefined,
     placeholder: undefined,
     value: undefined,
+    min: null,
+    max: null,
     digits: undefined,
     onInput: null,
     allowNegative: true,
@@ -175,6 +177,14 @@ export class DecimalInput extends Component {
 
         const float = parseFloat(fixed);
         if (!this.state.allowNegative && (float < 0 || fixed.startsWith('-'))) {
+            return false;
+        }
+
+        const { min, max } = this.state;
+        if (
+            (typeof min === 'number' && float < min)
+            || (typeof max === 'number' && float > max)
+        ) {
             return false;
         }
 

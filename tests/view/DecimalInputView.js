@@ -18,6 +18,7 @@ import { AppView } from './AppView.js';
 const inputSelectors = {
     defaultInput: '#decInput',
     digitsLimitInput: '#decInputDigits',
+    minMaxDecInput: '#minMaxDecInput',
     integerInput: '#decInputInteger',
     dynamicLimitInput: '#decInputChange',
     positiveInput: '#decInputPositive',

@@ -17,6 +17,7 @@ class DecimalInputView extends DemoView {
     onStart() {
         this.initDefault();
         this.initDigitsLimit();
+        this.initMinMax();
         this.initInteger();
         this.initChangeProps();
         this.initOnlyPositive();
@@ -85,6 +86,22 @@ class DecimalInputView extends DemoView {
             id: 'limit',
             title: 'Limit digits',
             content: input,
+        });
+    }
+
+    initMinMax() {
+        this.addSection({
+            id: 'minMax',
+            title: '\'min\' and \'max\' options',
+            description: 'Current limit: from -10 to 10',
+            content: [
+                DecimalInput.create({
+                    id: 'minMaxDecInput',
+                    min: -10,
+                    max: 10,
+                    className: 'input',
+                }).elem,
+            ],
         });
     }
 

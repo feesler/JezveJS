@@ -32,6 +32,17 @@ const typeToEmpty = async () => {
     await Actions.inputToEmpty('defaultInput', '.01', '.01');
     await Actions.inputToEmpty('defaultInput', '.012', '.012');
 
+    await Actions.inputToEmpty('minMaxDecInput', '1', '1');
+    await Actions.inputToEmpty('minMaxDecInput', '10', '10');
+    await Actions.inputToEmpty('minMaxDecInput', '10.', '10.');
+    await Actions.inputToEmpty('minMaxDecInput', '10.0', '10.0');
+    await Actions.inputToEmpty('minMaxDecInput', '100', '10');
+    await Actions.inputToEmpty('minMaxDecInput', '-1', '-1');
+    await Actions.inputToEmpty('minMaxDecInput', '-10', '-10');
+    await Actions.inputToEmpty('minMaxDecInput', '-10.', '-10.');
+    await Actions.inputToEmpty('minMaxDecInput', '-10.0', '-10.0');
+    await Actions.inputToEmpty('minMaxDecInput', '-100', '-10');
+
     await Actions.inputToEmpty('digitsLimitInput', '1.012', '1.012');
     await Actions.inputToEmpty('digitsLimitInput', '1.0123', '1.012');
     await Actions.inputToEmpty('digitsLimitInput', '1.01234', '1.012');
@@ -105,6 +116,11 @@ const typeInvalidToEmpty = async () => {
     await Actions.inputToEmpty('defaultInput', '0.0x', '0.0');
     await Actions.inputToEmpty('defaultInput', '0.01x', '0.01');
 
+    await Actions.inputToEmpty('minMaxDecInput', 'x', '');
+    await Actions.inputToEmpty('minMaxDecInput', '1x', '1');
+    await Actions.inputToEmpty('minMaxDecInput', '1.x', '1.');
+    await Actions.inputToEmpty('minMaxDecInput', '10x', '10');
+
     await Actions.inputToEmpty('digitsLimitInput', 'x', '');
     await Actions.inputToEmpty('digitsLimitInput', '1x', '1');
     await Actions.inputToEmpty('digitsLimitInput', '1.x', '1.');
@@ -172,6 +188,9 @@ const pasteToEmpty = async () => {
     await Actions.pasteToEmpty('defaultInput', '.01', '.01');
     await Actions.pasteToEmpty('defaultInput', '.012', '.012');
 
+    await Actions.pasteToEmpty('digitsLimitInput', '10', '10');
+    await Actions.pasteToEmpty('digitsLimitInput', '-10', '-10');
+
     await Actions.pasteToEmpty('digitsLimitInput', '1.', '1.');
     await Actions.pasteToEmpty('digitsLimitInput', '1.01', '1.01');
     await Actions.pasteToEmpty('digitsLimitInput', '1.012', '1.012');
@@ -204,6 +223,11 @@ const pasteInvalidToEmpty = async () => {
     await Actions.pasteToEmpty('defaultInput', '--1', '');
     await Actions.pasteToEmpty('defaultInput', '0.1.2', '');
     await Actions.pasteToEmpty('defaultInput', '0..1', '');
+
+    await Actions.pasteToEmpty('minMaxDecInput', 'x', '');
+    await Actions.pasteToEmpty('minMaxDecInput', '10x', '');
+    await Actions.pasteToEmpty('minMaxDecInput', '100', '');
+    await Actions.pasteToEmpty('minMaxDecInput', '-100', '');
 
     await Actions.pasteToEmpty('digitsLimitInput', 'x', '');
     await Actions.pasteToEmpty('digitsLimitInput', '1x', '');
