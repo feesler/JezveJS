@@ -19,10 +19,22 @@ export class PopupPosition {
         }
     }
 
-    static getInitialTopPosition(context) {
-        const { offset, reference, elem } = context;
+    static isTop(context) {
+        return (
+            (context.position === 'top' && !context.flip)
+            || (context.position === 'bottom' && context.flip)
+        );
+    }
 
-        let res = (context.flip)
+    static getInitialTopPosition(context) {
+        const {
+            offset,
+            reference,
+            elem,
+        } = context;
+
+        const isTop = this.isTop(context);
+        let res = (isTop)
             ? (reference.top - offset.top - context.height - context.margin)
             : (reference.bottom - offset.top + context.margin);
 
@@ -43,6 +55,7 @@ export class PopupPosition {
             elem,
             refElem,
             update = false,
+            position = 'bottom',
             margin = 0,
             screenPadding = 0,
             bottomSafeArea = 70,
@@ -64,6 +77,7 @@ export class PopupPosition {
         const context = {
             elem,
             refElem,
+            position,
             margin,
             screenPadding,
             screen: {
@@ -74,6 +88,8 @@ export class PopupPosition {
             fixedParent: getFixedParent(elem),
             absoluteParent: isAbsoluteParent(elem),
             fixedElement: !elem.offsetParent,
+            height: elem.offsetHeight,
+            flip: false,
         };
 
         const { screen } = context;
@@ -142,7 +158,6 @@ export class PopupPosition {
             bottom: windowScrollHeight - windowScrollBottom,
         };
 
-        context.height = elem.offsetHeight;
         context.bottom = reference.bottom + margin + context.height + context.bottomSafe;
 
         // Check element taller than screen
@@ -161,12 +176,25 @@ export class PopupPosition {
         context.overflowBottom = context.bottom - screen.height;
         context.overflowTop = -context.top;
 
+        // Check element flip is required
         context.flip = (
             allowFlip
-            && context.overflowBottom > 0
             && (
-                (context.overflowBottom > context.overflowTop)
-                && (dist.top > context.overflowTop)
+                (
+                    position === 'bottom'
+                    && context.overflowBottom > 0
+                    && (
+                        (context.overflowBottom > context.overflowTop)
+                        && (dist.top > context.overflowTop)
+                    )
+                ) || (
+                    position === 'top'
+                    && context.overflowTop > 0
+                    && (
+                        (context.overflowTop > context.overflowBottom)
+                        && (dist.bottom > context.overflowBottom)
+                    )
+                )
             )
         );
 
@@ -174,10 +202,12 @@ export class PopupPosition {
             initialTop = this.getInitialTopPosition(context);
         }
 
-        const elemOverflow = (context.flip) ? context.overflowTop : context.overflowBottom;
-        const refOverflow = (context.flip) ? refOverflowBottom : refOverflowTop;
+        const isTop = this.isTop(context);
+
+        const elemOverflow = (isTop) ? context.overflowTop : context.overflowBottom;
+        const refOverflow = (isTop) ? refOverflowBottom : refOverflowTop;
         const isRefOverflow = elemOverflow < 0 && refOverflow > 1;
-        const topToBottom = context.flip !== isRefOverflow;
+        const topToBottom = isTop !== isRefOverflow;
         const direction = (topToBottom) ? -1 : 1;
 
         let overflow = (isRefOverflow) ? refOverflow : elemOverflow;
@@ -204,14 +234,14 @@ export class PopupPosition {
             if (context.fixedParent && Math.abs(this.windowScrollDistance) > 0) {
                 window.scrollTo(window.scrollX, newWindowScrollY);
             } else if (context.absoluteParent && scrollAbsolute) {
-                elem.scrollIntoView(context.flip);
+                elem.scrollIntoView(isTop);
             }
         }
         // Decrease height of element if overflow is not cleared
         if (overflow > 1 && allowResize) {
             context.height -= overflow;
             style.maxHeight = px(context.height);
-            if (context.flip) {
+            if (isTop) {
                 initialTop += overflow;
             }
         }

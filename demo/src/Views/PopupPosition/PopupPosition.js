@@ -21,6 +21,7 @@ class PopupPositionView extends DemoView {
      */
     onStart() {
         this.initDefault();
+        this.initPosition();
         this.initAllowFlip();
         this.initNoScroll();
         this.initNoResize();
@@ -92,6 +93,22 @@ class PopupPositionView extends DemoView {
                 useRefWidth: true,
                 scrollOnOverflow: true,
                 allowResize: true,
+                allowFlip: false,
+            },
+        });
+    }
+
+    initPosition() {
+        this.initCommonSection({
+            id: 'position',
+            title: '\'position\' option',
+            description: 'Available values: \'bottom\' and \'top\'.',
+            positionProps: {
+                margin: 10,
+                screenPadding: 10,
+                position: 'top',
+                scrollOnOverflow: true,
+                allowResize: false,
                 allowFlip: false,
             },
         });
