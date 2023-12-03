@@ -1040,6 +1040,7 @@ export class BaseChart extends Component {
         PopupPosition.calculate({
             elem: this.popup,
             refElem: target.item.elem,
+            position: this.state.popupPosition,
             margin: 5,
             screenPadding: 5,
             useRefWidth: false,
