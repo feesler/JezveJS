@@ -268,7 +268,13 @@ export class DragMaster {
             }
         }
 
-        this.avatar = this.dragZone.onDragStart(this.downX, this.downY, e);
+        const dragStartParams = {
+            downX: this.downX,
+            downY: this.downY,
+            e,
+        };
+
+        this.avatar = this.dragZone.onDragStart(dragStartParams);
         if (!this.avatar) {
             this.cleanUp();
         }
@@ -337,9 +343,9 @@ export class DragMaster {
     finishDrag(e, cancel = false) {
         if (this.avatar) {
             if (!cancel && this.dropTarget) {
-                this.dropTarget.onDragEnd(this.avatar, e);
+                this.dropTarget.onDragEnd({ avatar: this.avatar, e });
             } else {
-                this.avatar.onDragCancel(e);
+                this.avatar.onDragCancel({ e });
             }
         }
 

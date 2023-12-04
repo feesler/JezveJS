@@ -32,14 +32,14 @@ export class RangeSliderDragZone extends DragZone {
         return this.props.axis;
     }
 
-    onDragStart(downX, downY, event) {
-        const avatar = super.onDragStart(downX, downY, event);
+    onDragStart(params) {
+        const avatar = super.onDragStart(params);
         if (!avatar) {
             return avatar;
         }
 
         if (isFunction(this.props.onDragStart)) {
-            this.props.onDragStart(downX, downY, event);
+            this.props.onDragStart({ ...params, avatar });
         }
 
         return avatar;

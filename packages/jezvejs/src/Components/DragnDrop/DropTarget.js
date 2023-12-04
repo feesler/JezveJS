@@ -52,11 +52,13 @@ export class DropTarget {
      * Drag end event handler
      * Should get avatar.getDragInfo() and check possibility of drop
      * Call avatar.onDragEnd() or avatar.onDragCancel()
-     * After all process this._targetElem must be nulled
-     * @param {DragAvatar} avatar - drag avatar object
-     * @param {Event} e - event object
+     * After all process this.targetElem must be nulled
+     * @param {Object} params - drag end event object
+     * @param {DragAvatar} params.avatar - drag avatar object
+     * @param {Event} params.e - event object
      */
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar } = params;
         this.hideHoverIndication(avatar);
         this.targetElem = null;
     }

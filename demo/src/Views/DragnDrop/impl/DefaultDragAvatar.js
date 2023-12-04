@@ -7,7 +7,7 @@ import { DragAvatar } from 'jezvejs/DragnDrop';
  */
 export class DefaultDragAvatar extends DragAvatar {
     /* eslint-disable-next-line no-unused-vars */
-    initFromEvent(downX, downY, e) {
+    initFromEvent({ downX, downY }) {
         this.dragZoneElem = this.dragZone.getElement();
         const elem = this.dragZoneElem.cloneNode(true);
         this.elem = elem;

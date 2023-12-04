@@ -17,9 +17,10 @@ export class SliderDropTarget extends DropTarget {
         });
     }
 
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar, ...rest } = params;
         if (!this.targetElem || !(avatar instanceof SliderDragAvatar)) {
-            avatar.onDragCancel(e);
+            avatar.onDragCancel(rest);
             return;
         }
 

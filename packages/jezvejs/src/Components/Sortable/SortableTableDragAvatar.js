@@ -4,7 +4,7 @@ import { SortableDragAvatar } from './SortableDragAvatar.js';
 
 // Sortable table drag avatar
 export class SortableTableDragAvatar extends SortableDragAvatar {
-    initFromEvent(downX, downY, e) {
+    initFromEvent({ downX, downY, e }) {
         this.dragZoneElem = this.dragZone.findDragZoneItem(e.target);
         if (!this.dragZoneElem) {
             return false;

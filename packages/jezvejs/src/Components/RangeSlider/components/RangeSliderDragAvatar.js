@@ -7,7 +7,7 @@ import { DragMaster } from '../../DragnDrop/DragMaster.js';
  * Drag original element only by selected axis
  */
 export class RangeSliderDragAvatar extends DragAvatar {
-    initFromEvent(downX, downY) {
+    initFromEvent({ downX, downY }) {
         this.dragZoneElem = this.dragZone.getElement();
         const elem = this.dragZoneElem;
         this.elem = elem;

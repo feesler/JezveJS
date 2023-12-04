@@ -5,7 +5,7 @@ import { DragAvatar } from '../../DragnDrop/DragAvatar.js';
  * Slider drag avatar
  */
 export class SliderDragAvatar extends DragAvatar {
-    initFromEvent(x, y, e) {
+    initFromEvent({ downX, downY, e }) {
         const { allowMouse, allowTouch } = this.dragZone;
         const isTouch = !!e.touches;
         if (
@@ -27,7 +27,7 @@ export class SliderDragAvatar extends DragAvatar {
             top: this.dragZoneElem.offsetTop,
         };
 
-        this.startPoint = { x, y };
+        this.startPoint = { x: downX, y: downY };
         this.moved = false;
         this.shiftX = coord.x - this.offset.left;
         this.shiftY = coord.y - this.offset.top;

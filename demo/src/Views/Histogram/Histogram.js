@@ -446,7 +446,7 @@ class HistogramView extends DemoView {
             autoScale: true,
             showPopupOnHover: true,
             activateOnHover: true,
-            renderPopup: renderMultiColumnPopup,
+            renderPopup: renderCategoriesPopup,
             showLegend: true,
         });
 

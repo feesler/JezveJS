@@ -162,8 +162,8 @@ export class RangeSlider extends Component {
         RangeSliderDragZone.create({
             elem: slider,
             axis: this.props.axis,
-            onDragStart: (...args) => this.onDragStart(...args),
-            onDragCancel: (...args) => this.onDragCancel(...args),
+            onDragStart: (params) => this.onDragStart(params),
+            onDragCancel: (params) => this.onDragCancel(params),
             onChange,
         });
     }

@@ -5,9 +5,10 @@ import { XAxisDragAvatar } from './XAxisDragAvatar.js';
  * X axis drop target
  */
 export class XAxisDropTarget extends DropTarget {
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar, ...rest } = params;
         if (!this.targetElem || !(avatar instanceof XAxisDragAvatar)) {
-            avatar.onDragCancel(e);
+            avatar.onDragCancel(rest);
             return;
         }
 
