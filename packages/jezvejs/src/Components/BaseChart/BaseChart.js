@@ -840,12 +840,13 @@ export class BaseChart extends Component {
         const groupOuterWidth = this.getGroupOuterWidth();
 
         const x = e.clientX - this.contentOffset.left + this.state.scrollLeft;
-        const index = Math.floor(x / groupOuterWidth) - firstGroupIndex;
-        if (index < 0 || index >= this.items.length) {
+        const index = Math.floor(x / groupOuterWidth);
+        const relIndex = index - firstGroupIndex;
+        if (relIndex < 0 || relIndex >= this.items.length) {
             return { x, item: null, index: -1 };
         }
 
-        const item = this.items[index];
+        const item = this.items[relIndex];
         return {
             x,
             item,
