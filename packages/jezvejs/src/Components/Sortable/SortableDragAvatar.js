@@ -6,7 +6,7 @@ import { DragAvatar } from '../DragnDrop/DragAvatar.js';
 
 // Sortable drag avatar
 export class SortableDragAvatar extends DragAvatar {
-    initFromEvent(downX, downY, e) {
+    initFromEvent({ downX, downY, e }) {
         // Overwrite drag zone here to find exact item to manipulate
         this.dragZoneElem = this.dragZone.findDragZoneItem(e.target);
         if (!this.dragZoneElem) {
@@ -45,9 +45,9 @@ export class SortableDragAvatar extends DragAvatar {
         this.dragZoneElem.classList.remove(this.dragZone.getPlaceholder());
     }
 
-    onDragCancel(e) {
+    onDragCancel(params) {
         if (this.dropTarget) {
-            this.dropTarget.onDragCancel(this, e);
+            this.dropTarget.onDragCancel({ ...params, avatar: this });
         }
 
         this.destroy();

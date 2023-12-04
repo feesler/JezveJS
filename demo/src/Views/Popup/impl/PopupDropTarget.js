@@ -9,15 +9,16 @@ import { PopupDragAvatar } from './PopupDragAvatar.js';
  */
 /* eslint-disable-next-line no-unused-vars */
 export class PopupDropTarget extends DropTarget {
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar, ...rest } = params;
         if (!this.targetElem || !(avatar instanceof PopupDragAvatar)) {
-            avatar.onDragCancel(e);
+            avatar.onDragCancel(rest);
             return;
         }
 
         this.hideHoverIndication();
 
-        const avatarInfo = avatar.getDragInfo(e);
+        const avatarInfo = avatar.getDragInfo(params.e);
         avatar.onDragEnd();
 
         const elemToMove = avatarInfo.dragZoneElem;
@@ -25,8 +26,8 @@ export class PopupDropTarget extends DropTarget {
 
         const offset = getOffset(this.elem);
 
-        elemToMove.style.left = px(e.pageX - avatarInfo.mouseShift.x - offset.left);
-        elemToMove.style.top = px(e.pageY - avatarInfo.mouseShift.y - offset.top);
+        elemToMove.style.left = px(params.e.pageX - avatarInfo.mouseShift.x - offset.left);
+        elemToMove.style.top = px(params.e.pageY - avatarInfo.mouseShift.y - offset.top);
 
         this.elem.appendChild(elemToMove);
         elemToMove.classList.remove('dragging');

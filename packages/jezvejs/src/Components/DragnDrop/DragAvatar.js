@@ -31,11 +31,12 @@ export class DragAvatar {
 
     /**
      * Initialize drag element and set up position
-     * @param {Number} downX - x coordinate of mouse down point
-     * @param {Number} downY - y coordinate of mouse down point
-     * @param {Event} e - event object
+     * @param {Object} params - x coordinate of mouse down point
+     * @param {Number} params.downX - x coordinate of mouse down point
+     * @param {Number} params.downY - y coordinate of mouse down point
+     * @param {Event} params.e - event object
      */
-    initFromEvent(downX, downY, e) { }
+    initFromEvent() { }
 
     /** Return drag information object for DropTarget */
     getDragInfo() {
@@ -99,7 +100,7 @@ export class DragAvatar {
     }
 
     /** Drop cancel handler */
-    onDragCancel(e) { }
+    onDragCancel() { }
 
     /** Success drop handler */
     onDragEnd() { }

@@ -338,28 +338,29 @@ export class SortableDropTarget extends DropTarget {
         });
     }
 
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar, ...rest } = params;
         if (!this.targetElem || !(avatar instanceof SortableDragAvatar)) {
-            avatar.onDragCancel(e);
+            avatar.onDragCancel(rest);
             return;
         }
 
         this.hideHoverIndication();
 
-        this.applySort(avatar, e);
+        this.applySort(params);
 
         this.targetElem = null;
     }
 
-    onDragCancel(avatar, e) {
-        if (e?.type === 'keydown') {
-            this.cancelSort(avatar, e);
+    onDragCancel(params) {
+        if (params?.e?.type === 'keydown') {
+            this.cancelSort(params);
         } else {
-            this.applySort(avatar, e);
+            this.applySort(params);
         }
     }
 
-    applySort(avatar, e) {
+    applySort({ avatar, e }) {
         const avatarInfo = avatar.getDragInfo(e);
         avatar.onDragEnd();
 
@@ -383,7 +384,7 @@ export class SortableDropTarget extends DropTarget {
         });
     }
 
-    cancelSort(avatar, e) {
+    cancelSort({ avatar, e }) {
         const avatarInfo = avatar.getDragInfo(e);
         avatar.onDragEnd();
 

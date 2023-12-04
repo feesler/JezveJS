@@ -46,14 +46,14 @@ export class SortableDragZone extends DragZone {
 
     // Drag start handler
     // Return avatar object or false
-    onDragStart(...args) {
-        const avatar = super.onDragStart(...args);
+    onDragStart(params) {
+        const avatar = super.onDragStart(params);
         if (!avatar) {
             return false;
         }
 
         if (isFunction(this.props.onDragStart)) {
-            this.props.onDragStart(avatar.dragZoneElem);
+            this.props.onDragStart({ ...params, avatar });
         }
 
         return avatar;

@@ -5,14 +5,15 @@ import { DefaultDragAvatar } from './DefaultDragAvatar.js';
  * Default drop target
  */
 export class DefaultDropTarget extends DropTarget {
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar, ...rest } = params;
         if (!this.targetElem || !(avatar instanceof DefaultDragAvatar)) {
-            avatar.onDragCancel();
+            avatar.onDragCancel(rest);
             return;
         }
 
         this.hideHoverIndication();
-        const avatarInfo = avatar.getDragInfo(e);
+        const avatarInfo = avatar.getDragInfo(params.e);
         avatar.onDragEnd();
 
         const elemToMove = avatarInfo.dragZoneElem;

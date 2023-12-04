@@ -8,15 +8,16 @@ import { OriginalDragAvatar } from './OriginalDragAvatar.js';
  * Accept only OriginalDragAvatar
  */
 export class OriginalDropTarget extends DropTarget {
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar, ...rest } = params;
         if (!this.targetElem || !(avatar instanceof OriginalDragAvatar)) {
-            avatar.onDragCancel(e);
+            avatar.onDragCancel(rest);
             return;
         }
 
         this.hideHoverIndication();
 
-        const avatarInfo = avatar.getDragInfo(e);
+        const avatarInfo = avatar.getDragInfo(params.e);
         avatar.onDragEnd();
 
         const elemToMove = avatarInfo.dragZoneElem;
@@ -25,7 +26,7 @@ export class OriginalDropTarget extends DropTarget {
 
         const offset = getOffset(this.elem);
 
-        const page = DragMaster.getEventPageCoordinates(e);
+        const page = DragMaster.getEventPageCoordinates(params.e);
         elemToMove.style.left = px(page.x - avatarInfo.mouseShift.x - offset.left);
         elemToMove.style.top = px(page.y - avatarInfo.mouseShift.y - offset.top);
 

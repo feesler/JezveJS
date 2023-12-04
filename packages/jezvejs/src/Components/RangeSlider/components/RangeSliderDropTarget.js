@@ -5,9 +5,10 @@ import { RangeSliderDragAvatar } from './RangeSliderDragAvatar.js';
  * X axis drop target
  */
 export class RangeSliderDropTarget extends DropTarget {
-    onDragEnd(avatar, e) {
+    onDragEnd(params) {
+        const { avatar, ...rest } = params;
         if (!this.targetElem || !(avatar instanceof RangeSliderDragAvatar)) {
-            avatar.onDragCancel(e);
+            avatar.onDragCancel(rest);
             return;
         }
 

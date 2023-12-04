@@ -6,7 +6,7 @@ import { DragAvatar, DragMaster } from 'jezvejs/DragnDrop';
  * Drag original element only by x axis
  */
 export class XAxisDragAvatar extends DragAvatar {
-    initFromEvent(downX) {
+    initFromEvent({ downX }) {
         this.dragZoneElem = this.dragZone.getElement();
         const elem = this.dragZoneElem;
         this.elem = elem;

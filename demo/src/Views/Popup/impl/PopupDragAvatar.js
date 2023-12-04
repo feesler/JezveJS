@@ -8,7 +8,7 @@ import { DragAvatar } from 'jezvejs/DragnDrop';
  */
 export class PopupDragAvatar extends DragAvatar {
     /* eslint-disable-next-line no-unused-vars */
-    initFromEvent(downX, downY, e) {
+    initFromEvent({ downX, downY }) {
         this.dragZoneElem = this.dragZone.getElement();
         const elem = this.dragZoneElem;
         this.elem = elem;

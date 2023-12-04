@@ -56,13 +56,14 @@ export class DragZone {
     /**
      * Drag start handler
      * Return avatar object or false
-     * @param {Number} downX - x coordinate of mouse down point
-     * @param {Number} downY - y coordinate of mouse down point
-     * @param {Event} event - event object
+     * @param {Object} params - x coordinate of mouse down point
+     * @param {Number} params.downX - x coordinate of mouse down point
+     * @param {Number} params.downY - y coordinate of mouse down point
+     * @param {Event} params.e - event object
      */
-    onDragStart(downX, downY, event) {
+    onDragStart(params) {
         const avatar = this.makeAvatar();
-        if (avatar && !avatar.initFromEvent(downX, downY, event)) {
+        if (avatar && !avatar.initFromEvent(params)) {
             return false;
         }
 
