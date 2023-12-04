@@ -166,6 +166,10 @@ export class DecimalInput extends Component {
 
     /** Validate specified value */
     isValidValue(value) {
+        if (value === '') {
+            return true;
+        }
+
         const fixed = fixFloat(value);
         if (!isNumberString(fixed)) {
             return false;
