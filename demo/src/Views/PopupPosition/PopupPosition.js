@@ -41,26 +41,28 @@ class PopupPositionView extends DemoView {
             positionProps = {},
         } = context;
 
-        PopupPosition.calculate({
+        const res = context;
+        res.position = PopupPosition.create({
             elem: popup.elem,
             refElem: button.elem,
             ...positionProps,
             onScrollDone: () => logsField?.write('onScrollDone()'),
         });
 
-        this.listenWindowEvents(context);
+        this.listenWindowEvents(res);
     }
 
     updatePosition(context) {
         const {
-            popup,
-            button,
+            position,
             positionProps = {},
         } = context;
 
-        PopupPosition.calculate({
-            elem: popup.elem,
-            refElem: button.elem,
+        if (!position) {
+            return;
+        }
+
+        position.update({
             ...positionProps,
             scrollOnOverflow: false,
             allowResize: false,
@@ -69,10 +71,10 @@ class PopupPositionView extends DemoView {
     }
 
     resetPosition(context) {
-        const { popup } = context;
+        const { popup, position } = context;
 
         popup.hide();
-        PopupPosition.reset(popup.elem);
+        position.reset();
         this.stopWindowEvents(context);
     }
 

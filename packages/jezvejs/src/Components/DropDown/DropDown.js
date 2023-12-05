@@ -1886,6 +1886,7 @@ export class DropDown extends Component {
     updateListPosition() {
         if (
             !this.state.visible
+            || !this.popupPosition
             || isVisible(this.selectElem, true)
         ) {
             return;
@@ -1896,17 +1897,10 @@ export class DropDown extends Component {
             return;
         }
 
-        PopupPosition.calculate({
-            update: true,
-            elem: this.menu.elem,
-            refElem: this.elem,
-            margin: LIST_MARGIN,
-            screenPadding: SCREEN_PADDING,
-            useRefWidth: true,
+        this.popupPosition.update({
             minRefHeight: this.getMinRefHeight(),
             scrollOnOverflow: false,
             allowResize: false,
-            allowFlip: false,
         });
     }
 
@@ -1952,7 +1946,9 @@ export class DropDown extends Component {
                 this.elem.style.height = '';
             }
 
-            PopupPosition.reset(this.menu.elem);
+            this.popupPosition?.reset();
+            this.popupPosition = null;
+
             setTimeout(() => this.stopWindowEvents());
             return;
         }
@@ -1967,7 +1963,7 @@ export class DropDown extends Component {
         const editable = this.isEditable(state);
         const allowScrollAndResize = !state.isTouch || !editable;
 
-        PopupPosition.calculate({
+        this.popupPosition = PopupPosition.create({
             elem: this.menu.elem,
             refElem: this.elem,
             margin: LIST_MARGIN,

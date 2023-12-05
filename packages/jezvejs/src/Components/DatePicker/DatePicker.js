@@ -344,7 +344,7 @@ export class DatePicker extends Component {
 
         // check position of control in window and place it to be visible
         if (value) {
-            PopupPosition.calculate({
+            this.popupPosition = PopupPosition.create({
                 elem: this.wrapper,
                 refElem: this.relativeParent,
                 margin: this.props.popupMargin,
@@ -354,7 +354,8 @@ export class DatePicker extends Component {
                 allowFlip: false,
             });
         } else {
-            PopupPosition.reset(this.wrapper);
+            this.popupPosition?.reset();
+            this.popupPosition = null;
 
             this.waitingForAnimation = false;
 
