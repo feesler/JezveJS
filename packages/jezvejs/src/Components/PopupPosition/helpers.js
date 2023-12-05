@@ -41,6 +41,19 @@ export const getScrollParent = (elem) => {
 };
 
 /**
+ * Returns width of visualViewport if possible
+ * Otherwise returns clientHeight of document
+ */
+export const getScreenWidth = () => {
+    const { clientWidth } = document.documentElement;
+    if (!window.visualViewport) {
+        return clientWidth;
+    }
+
+    return window.visualViewport.width;
+};
+
+/**
  * Returns height of visualViewport if possible
  * Otherwise returns clientHeight of document
  */

@@ -3,7 +3,9 @@ import { transform } from '@jezvejs/dom';
 import { px } from '../../common.js';
 
 import {
+    getScreenWidth,
     getScreenHeight,
+    getWindowScrollLeft,
     getWindowScrollTop,
     getFixedParent,
     isAbsoluteParent,
@@ -18,7 +20,6 @@ import {
     isLeft,
     isBottom,
     isRight,
-    getWindowScrollLeft,
 } from './helpers.js';
 
 export class PopupPosition {
@@ -68,7 +69,7 @@ export class PopupPosition {
             screen: {
                 left: getWindowScrollLeft(),
                 top: getWindowScrollTop(),
-                width: html.clientWidth,
+                width: getScreenWidth(),
                 height: getScreenHeight(),
             },
             reference: refElem.getBoundingClientRect(),
@@ -93,10 +94,10 @@ export class PopupPosition {
 
         context.scrollParentBox = (scrollParent && !context.fixedElement)
             ? context.scrollParent.getBoundingClientRect()
-            : { top: 0, left: 0, height: screen.height };
+            : { ...screen };
 
         context.offset = (context.fixedElement)
-            ? { top: 0, left: 0, height: screen.height }
+            ? { ...screen }
             : elem.offsetParent.getBoundingClientRect();
 
         const { reference, offset } = context;
@@ -116,10 +117,15 @@ export class PopupPosition {
             ? scrollParent.scrollHeight
             : screen.bottom;
 
+        const windowScrollLeft = (context.fixedParent) ? context.scrollLeft : screen.left;
         const windowScrollTop = (context.fixedParent) ? context.scrollTop : screen.top;
+        const windowScrollWidth = (context.fixedParent)
+            ? context.scrollWidth
+            : html.scrollWidth;
         const windowScrollHeight = (context.fixedParent)
             ? context.scrollHeight
             : html.scrollHeight;
+        const windowScrollRight = windowScrollLeft + screen.width;
         const windowScrollBottom = windowScrollTop + screen.height;
 
         const refScrollParentHeight = Math.min(
@@ -145,6 +151,8 @@ export class PopupPosition {
             ),
         };
         const windowDist = {
+            left: windowScrollLeft,
+            right: windowScrollWidth - windowScrollRight,
             top: windowScrollTop,
             bottom: windowScrollHeight - windowScrollBottom,
         };
@@ -205,16 +213,16 @@ export class PopupPosition {
             }
 
             // Scroll window if overflow is not cleared yet
-            this.windowScrollDistance = 0;
+            let windowScrollDistance = 0;
             if (overflow > 1) {
                 const maxWindowDistance = (topToBottom) ? windowDist.top : windowDist.bottom;
-                this.windowScrollDistance = Math.min(overflow, maxWindowDistance) * direction;
-                overflow -= Math.abs(this.windowScrollDistance);
+                windowScrollDistance = Math.min(overflow, maxWindowDistance) * direction;
+                overflow -= Math.abs(windowScrollDistance);
             }
-            const newWindowScrollY = window.scrollY + this.windowScrollDistance;
+            const newWindowScrollY = window.scrollY + windowScrollDistance;
 
             scrollParent.scrollTop = newScrollTop;
-            if (Math.abs(this.windowScrollDistance) > 0) {
+            if (Math.abs(windowScrollDistance) > 0) {
                 window.scrollTo(window.scrollX, newWindowScrollY);
             }
         }
@@ -325,18 +333,18 @@ export class PopupPosition {
                 }
 
                 // Scroll window if overflow is not cleared yet
-                this.windowHScrollDistance = 0;
+                let windowHScrollDistance = 0;
                 if (hOverflow > 1) {
-                    const maxWindowHorDistance = (leftToRight) ? windowDist.top : windowDist.bottom;
-                    this.windowHScrollDistance = (
-                        Math.min(hOverflow, maxWindowHorDistance) * horDirection
+                    const maxWindowDistance = (leftToRight) ? windowDist.left : windowDist.right;
+                    windowHScrollDistance = (
+                        Math.min(hOverflow, maxWindowDistance) * horDirection
                     );
-                    hOverflow -= Math.abs(this.windowHScrollDistance);
+                    hOverflow -= Math.abs(windowHScrollDistance);
                 }
-                const newWindowScrollX = window.scrollX + this.windowHScrollDistance;
+                const newWindowScrollX = window.scrollX + windowHScrollDistance;
 
                 scrollParent.scrollLeft = newScrollLeft;
-                if (Math.abs(this.windowHScrollDistance) > 0) {
+                if (Math.abs(windowHScrollDistance) > 0) {
                     window.scrollTo(newWindowScrollX, window.scrollY);
                 }
             }
@@ -353,9 +361,9 @@ export class PopupPosition {
             }
 
             let left = relLeft + reference.width - context.width;
-            overflow = offset.left + left;
-            if (overflow < 0) {
-                left -= overflow;
+            const hOverflow = offset.left + left;
+            if (hOverflow < 0) {
+                left -= hOverflow;
             }
 
             style.left = px(Math.max(left, context.minLeft));
