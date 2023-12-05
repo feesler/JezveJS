@@ -233,17 +233,24 @@ export class DragMaster {
 
     /** Search for drag zone object */
     findDragZone(target) {
-        let elem = target;
+        if (!target) {
+            return null;
+        }
 
-        while (elem !== document && !elem.dragZone) {
+        let elem = target;
+        while (elem && elem !== document && !elem.dragZone) {
             elem = elem.parentNode;
         }
 
-        return elem.dragZone;
+        return elem?.dragZone ?? null;
     }
 
     /** Try to find drop target under mouse cursor */
     findDropTarget() {
+        if (!this.avatar) {
+            return null;
+        }
+
         let elem = this.avatar.getTargetElem();
         while (elem !== document && !elem.dropTarget) {
             elem = elem.parentNode;
@@ -253,7 +260,7 @@ export class DragMaster {
     }
 
     initAvatar(e) {
-        if (this.avatar) {
+        if (this.avatar || !this.dragZone) {
             return;
         }
 
