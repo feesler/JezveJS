@@ -1846,7 +1846,9 @@ export class DropDown extends Component {
             ))
             : [];
         const menuShown = state.visible !== prevState.visible && state.visible;
-        const filterChanged = state.inputString !== prevState.inputString;
+        const currentFilter = state.inputString ?? '';
+        const previousFilter = prevState.inputString ?? '';
+        const filterChanged = currentFilter !== previousFilter;
 
         this.menu.setState((menuState) => ({
             ...menuState,
