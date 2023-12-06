@@ -252,11 +252,11 @@ export class DragMaster {
         }
 
         let elem = this.avatar.getTargetElem();
-        while (elem !== document && !elem.dropTarget) {
+        while (elem && elem !== document && !elem.dropTarget) {
             elem = elem.parentNode;
         }
 
-        return elem.dropTarget ?? null;
+        return elem?.dropTarget ?? null;
     }
 
     initAvatar(e) {
