@@ -19,7 +19,12 @@ export class BlueBox extends Component {
         });
         this.elem = createElement('div', {
             props: { className: 'bluebox' },
-            children: [title, CloseButton.create().elem],
+            children: [
+                title,
+                CloseButton.create({
+                    tabIndex: -1,
+                }).elem,
+            ],
         });
 
         this.setUserProps();

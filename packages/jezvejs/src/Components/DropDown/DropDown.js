@@ -126,7 +126,6 @@ const SCREEN_PADDING = 5;
 const LIST_MARGIN = 5;
 const ATTACH_REF_HEIGHT = 5;
 
-const IGNORE_SCROLL_TIMEOUT = 1;
 const SHOW_LIST_SCROLL_TIMEOUT = 100;
 const INPUT_FOCUS_TIMEOUT = 100;
 
@@ -315,7 +314,6 @@ export class DropDown extends Component {
             actSelItemIndex: -1,
             menuId: this.generateMenuId(),
             isTouch: false,
-            ignoreScroll: false,
             listeningWindow: false,
             waitForScroll: false,
             renderTime: Date.now(),
@@ -532,6 +530,7 @@ export class DropDown extends Component {
             multiple,
             defaultItemType: (multiple) ? 'checkbox' : 'button',
             tabThrough: false,
+            tabIndex: null,
             getItemById: (id) => this.getItem(id),
             getPlaceholderProps: (state) => this.renderNotFound(state),
             onItemClick: (id) => this.onListItemClick(id),
@@ -569,14 +568,6 @@ export class DropDown extends Component {
         } else {
             this.elem.append(this.menu.elem);
         }
-    }
-
-    startScrollIgnore() {
-        this.store.dispatch(actions.startScrollIgnore());
-    }
-
-    stopScrollIgnore() {
-        this.store.dispatch(actions.stopScrollIgnore());
     }
 
     startScrollWaiting() {
@@ -632,22 +623,34 @@ export class DropDown extends Component {
             return;
         }
 
-        if (this.state.waitForScroll) {
-            this.showListHandler();
-            return;
-        }
-
         this.updateListPosition();
     }
 
     /** viewPort 'resize' event handler */
     onViewportResize() {
+        this.updateListPosition();
+    }
+
+    /** Handles window 'scroll' and viewport 'resize' events */
+    onUpdatePosition() {
         if (this.state.waitForScroll) {
             this.showListHandler();
-            return;
+            return false;
         }
 
-        this.updateListPosition();
+        if (
+            !this.state.visible
+            || isVisible(this.selectElem, true)
+        ) {
+            return false;
+        }
+
+        if (this.isFullScreen()) {
+            this.setFullScreenContainerHeight();
+            return false;
+        }
+
+        return true;
     }
 
     /** List item 'click' event handler */
@@ -1227,7 +1230,16 @@ export class DropDown extends Component {
         const editable = this.isEditable(state);
 
         this.selectElem.setAttribute('tabindex', (nativeSelectVisible) ? 0 : -1);
-        this.elem.setAttribute('tabindex', (nativeSelectVisible || editable) ? -1 : 0);
+        const disableContainerTab = (
+            nativeSelectVisible
+            || (editable && !this.props.listAttach)
+            || state.active
+        );
+
+        const tabIndex = (disableContainerTab)
+            ? -1
+            : 0;
+        this.elem.setAttribute('tabindex', tabIndex);
     }
 
     /** Enable or disable component */
@@ -1737,7 +1749,7 @@ export class DropDown extends Component {
 
     /** Set active state for specified list item */
     setActive(itemId) {
-        if (this.state.ignoreScroll) {
+        if (this.renderInProgress) {
             return;
         }
 
@@ -1884,24 +1896,10 @@ export class DropDown extends Component {
     }
 
     updateListPosition() {
-        if (
-            !this.state.visible
-            || !this.popupPosition
-            || isVisible(this.selectElem, true)
-        ) {
-            return;
+        const updateRequired = this.onUpdatePosition();
+        if (updateRequired) {
+            this.popupPosition.updatePosition();
         }
-
-        if (this.isFullScreen()) {
-            this.setFullScreenContainerHeight();
-            return;
-        }
-
-        this.popupPosition.update({
-            minRefHeight: this.getMinRefHeight(),
-            scrollOnOverflow: false,
-            allowResize: false,
-        });
     }
 
     getMinRefHeight() {
@@ -1915,7 +1913,6 @@ export class DropDown extends Component {
     }
 
     onScrollDone() {
-        setTimeout(() => this.stopScrollIgnore(), IGNORE_SCROLL_TIMEOUT);
         this.listenWindowEvents();
     }
 
@@ -1959,7 +1956,6 @@ export class DropDown extends Component {
             return;
         }
 
-        this.startScrollIgnore(state);
         const editable = this.isEditable(state);
         const allowScrollAndResize = !state.isTouch || !editable;
 
@@ -1973,7 +1969,14 @@ export class DropDown extends Component {
             scrollOnOverflow: allowScrollAndResize,
             allowResize: allowScrollAndResize,
             allowFlip: false,
+            updateProps: () => ({
+                minRefHeight: this.getMinRefHeight(),
+                scrollOnOverflow: false,
+                allowResize: false,
+            }),
             onScrollDone: () => this.onScrollDone(),
+            onWindowScroll: (e) => this.onUpdatePosition(e),
+            onViewportResize: (e) => this.onUpdatePosition(e),
         });
     }
 

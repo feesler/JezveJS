@@ -137,7 +137,10 @@ export class PopupMenu extends Menu {
     }
 
     onScroll(e) {
-        if (this.ignoreScroll) {
+        if (
+            this.ignoreScroll
+            || !this.props.hideOnScroll
+        ) {
             return;
         }
 
@@ -243,6 +246,9 @@ export class PopupMenu extends Menu {
             margin: LIST_MARGIN,
             screenPadding: SCREEN_PADDING,
             allowResize: this.props.hideOnScroll,
+            updateProps: {
+                scrollOnOverflow: false,
+            },
             onScrollDone: () => this.onScrollDone(),
         });
 

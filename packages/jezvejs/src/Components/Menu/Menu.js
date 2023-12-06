@@ -76,6 +76,7 @@ const defaultProps = {
     onItemClick: null,
     onGroupHeaderClick: null,
     tabThrough: true,
+    tabIndex: 0,
     loopNavigation: true,
     multiple: false,
     iconAlign: 'left', // available value: 'left', 'right'
@@ -1029,7 +1030,13 @@ export class Menu extends Component {
         this.renderInProgress = true;
 
         enable(this.elem, !state.disabled);
-        this.elem.tabIndex = (state.tabThrough) ? -1 : 0;
+
+        const tabIndex = (state.tabThrough) ? -1 : (state.tabIndex ?? null);
+        if (state.disabled || tabIndex === null) {
+            this.elem.removeAttribute('tabindex');
+        } else {
+            this.elem.setAttribute('tabindex', tabIndex);
+        }
 
         this.renderHeader(state, prevState);
         this.renderList(state, prevState);
