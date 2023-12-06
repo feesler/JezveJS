@@ -157,14 +157,6 @@ const renderAddMessage = (state) => {
 
 // Reducers
 const slice = createSlice({
-    startScrollIgnore: (state) => (
-        (!state.ignoreScroll) ? { ...state, ignoreScroll: true } : state
-    ),
-
-    stopScrollIgnore: (state) => (
-        (state.ignoreScroll) ? { ...state, ignoreScroll: false } : state
-    ),
-
     startScrollWaiting: (state) => (
         (!state.waitForScroll) ? { ...state, waitForScroll: true } : state
     ),

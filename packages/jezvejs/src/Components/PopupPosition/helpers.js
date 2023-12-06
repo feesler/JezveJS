@@ -1,5 +1,10 @@
 import { computedStyle } from '@jezvejs/dom';
 
+export const topPositions = ['top', 'top-start', 'top-end'];
+export const bottomPositions = ['bottom', 'bottom-start', 'bottom-end'];
+export const leftPositions = ['left', 'left-start', 'left-end'];
+export const rightPositions = ['right', 'right-start', 'right-end'];
+
 /** Find parent element without offsetParent and check it has position: fixed */
 export const getFixedParent = (elem) => {
     let parent = elem?.parentNode;
@@ -41,6 +46,19 @@ export const getScrollParent = (elem) => {
 };
 
 /**
+ * Returns width of visualViewport if possible
+ * Otherwise returns clientHeight of document
+ */
+export const getScreenWidth = () => {
+    const { clientWidth } = document.documentElement;
+    if (!window.visualViewport) {
+        return clientWidth;
+    }
+
+    return window.visualViewport.width;
+};
+
+/**
  * Returns height of visualViewport if possible
  * Otherwise returns clientHeight of document
  */
@@ -72,133 +90,330 @@ export const getWindowScrollTop = () => {
 };
 
 /**
- * Returns true if the element is positioned vertically
- * @param {object} context
+ * Returns position and size object for available viewport
+ */
+export const getScreenRect = () => {
+    const res = {
+        left: getWindowScrollLeft(),
+        top: getWindowScrollTop(),
+        width: getScreenWidth(),
+        height: getScreenHeight(),
+    };
+    res.bottom = res.top + res.height;
+    res.right = res.left + res.width;
+
+    return res;
+};
+
+/**
+ * Returns true if the element is positioned to the top of reference
+ * @param {object} state
  * @returns {boolean}
  */
-export const isVertical = (context) => (
-    context.position === 'top' || context.position === 'bottom'
+export const isTopPosition = (state) => (
+    topPositions.includes(state.position)
+);
+
+/**
+ * Returns true if the element is positioned to the bottom of reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isBottomPosition = (state) => (
+    bottomPositions.includes(state.position)
+);
+
+/**
+ * Returns true if the element is positioned to the left of reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isLeftPosition = (state) => (
+    leftPositions.includes(state.position)
+);
+
+/**
+ * Returns true if the element is positioned to the right of reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isRightPosition = (state) => (
+    rightPositions.includes(state.position)
+);
+
+/**
+ * Returns true if the element is positioned vertically
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVertical = (state) => (
+    isTopPosition(state) || isBottomPosition(state)
 );
 
 /**
  * Returns true if the element is positioned horizontally
- * @param {object} context
+ * @param {object} state
  * @returns {boolean}
  */
-export const isHorizontal = (context) => (
-    context.position === 'left' || context.position === 'right'
+export const isHorizontal = (state) => (
+    isLeftPosition(state) || isRightPosition(state)
 );
 
 /**
  * Returns true if the element is positioned above the reference
- * @param {object} context
+ * @param {object} state
  * @returns {boolean}
  */
-export const isTop = (context) => (
-    (context.position === 'top' && !context.flip)
-    || (context.position === 'bottom' && context.flip)
+export const isTop = (state) => (
+    (isTopPosition(state) && !state.flip)
+    || (isBottomPosition(state) && state.flip)
 );
 
 /**
  * Returns true if the element is positioned below the reference
- * @param {object} context
+ * @param {object} state
  * @returns {boolean}
  */
-export const isBottom = (context) => (
-    (context.position === 'bottom' && !context.flip)
-    || (context.position === 'top' && context.flip)
+export const isBottom = (state) => (
+    (isBottomPosition(state) && !state.flip)
+    || (isTopPosition(state) && state.flip)
 );
 
 /**
  * Returns true if the element is positioned to the left of the reference
- * @param {object} context
+ * @param {object} state
  * @returns {boolean}
  */
-export const isLeft = (context) => (
-    (context.position === 'left' && !context.flip)
-    || (context.position === 'right' && context.flip)
+export const isLeft = (state) => (
+    (isLeftPosition(state) && !state.flip)
+    || (isRightPosition(state) && state.flip)
 );
 
 /**
  * Returns true if the element is positioned to the right of the reference
- * @param {object} context
+ * @param {object} state
  * @returns {boolean}
  */
-export const isRight = (context) => (
-    (context.position === 'right' && !context.flip)
-    || (context.position === 'left' && context.flip)
+export const isRight = (state) => (
+    (isRightPosition(state) && !state.flip)
+    || (isLeftPosition(state) && state.flip)
+);
+
+/**
+ * Returns true if the element is vertically positioned to the start of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVerticalStartPosition = (state) => (
+    (state.position === 'left-start' || state.position === 'right-start')
+);
+
+/**
+ * Returns true if the element is vertically positioned to the center of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVerticalCenterPosition = (state) => (
+    (state.position === 'left' || state.position === 'right')
+);
+
+/**
+ * Returns true if the element is vertically positioned to the end of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVerticalEndPosition = (state) => (
+    (state.position === 'left-end' || state.position === 'right-end')
+);
+
+/**
+ * Returns true if the element is vertically positioned to the start of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVerticalStart = (state) => (
+    (isVerticalStartPosition(state) && !state.crossFlip)
+    || (isVerticalEndPosition(state) && state.crossFlip)
+);
+
+/**
+ * Returns true if the element is vertically positioned to the end of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVerticalEnd = (state) => (
+    (isVerticalEndPosition(state) && !state.crossFlip)
+    || (isVerticalStartPosition(state) && state.crossFlip)
+);
+
+/**
+ * Returns true if the element is horizontally positioned to the start of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isHorizontalStartPosition = (state) => (
+    (state.position === 'top-start' || state.position === 'bottom-start')
+);
+
+/**
+ * Returns true if the element is horizontally positioned to the center of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isHorizontalCenterPosition = (state) => (
+    (state.position === 'top' || state.position === 'bottom')
+);
+
+/**
+ * Returns true if the element is horizontally positioned to the end of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isHorizontalEndPosition = (state) => (
+    (state.position === 'top-end' || state.position === 'bottom-end')
+);
+
+/**
+ * Returns true if the element is horizontally positioned to the start of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isHorizontalStart = (state) => (
+    (isHorizontalStartPosition(state) && !state.crossFlip)
+    || (isHorizontalEndPosition(state) && state.crossFlip)
+);
+
+/**
+ * Returns true if the element is horizontally positioned to the end of the reference
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isHorizontalEnd = (state) => (
+    (isHorizontalEndPosition(state) && !state.crossFlip)
+    || (isHorizontalStartPosition(state) && state.crossFlip)
 );
 
 /**
  * Returns true if element should be flipped vertically
- * @param {object} context
+ * @param {object} state
  * @returns {boolean}
  */
-export const isVecticalFlip = (context) => (
-    context.allowFlip && (
+export const isVerticalFlip = (state) => (
+    state.allowFlip && (
         (
-            context.position === 'bottom'
-            && context.overflowBottom > 0
-            && (context.overflowBottom > context.overflowTop)
-            && (context.dist.top > context.overflowTop)
+            isBottomPosition(state)
+            && (state.overflowBottom > 0)
+            && (state.overflowBottom > state.overflowTop)
+            && (state.dist.top > state.overflowTop)
         ) || (
-            context.position === 'top'
-            && (context.overflowTop > 0)
-            && (context.overflowTop > context.overflowBottom)
-            && (context.dist.bottom > context.overflowBottom)
+            isTopPosition(state)
+            && (state.overflowTop > 0)
+            && (state.overflowTop > state.overflowBottom)
+            && (state.dist.bottom > state.overflowBottom)
         )
     )
 );
 
 /**
  * Returns true if element should be flipped horizontally
- * @param {object} context
+ * @param {object} state
  * @returns {boolean}
  */
-export const isHorizontalFlip = (context) => (
-    context.allowFlip && (
+export const isHorizontalFlip = (state) => (
+    state.allowFlip && (
         (
-            context.position === 'right'
-            && (context.overflowRight > 0)
-            && (context.overflowRight > context.overflowLeft)
-            && (context.dist.left > context.overflowLeft)
+            isRightPosition(state)
+            && (state.overflowRight > 0)
+            && (state.overflowRight > state.overflowLeft)
+            && (state.dist.left > state.overflowLeft)
         ) || (
-            context.position === 'left'
-            && (context.overflowLeft > 0)
-            && (context.overflowLeft > context.overflowRight)
-            && (context.dist.right > context.overflowRight)
+            isLeftPosition(state)
+            && (state.overflowLeft > 0)
+            && (state.overflowLeft > state.overflowRight)
+            && (state.dist.right > state.overflowRight)
+        )
+    )
+);
+
+/**
+ * Returns true if element should be flipped vertically around cross axis
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVerticalCrossFlip = (state) => (
+    state.allowFlip && (
+        (
+            isVerticalStartPosition(state)
+            && (state.overflowBottom > 0)
+            && (state.overflowBottom > state.overflowTop)
+            && (state.dist.top > state.overflowTop)
+        ) || (
+            isVerticalEndPosition(state)
+            && (state.overflowTop > 0)
+            && (state.overflowTop > state.overflowBottom)
+            && (state.dist.bottom > state.overflowBottom)
+        )
+    )
+);
+
+/**
+ * Returns true if element should be flipped horizontally around cross axis
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isHorizontalCrossFlip = (state) => (
+    state.allowFlip && (
+        (
+            isHorizontalStartPosition(state)
+            && (state.overflowRight > 0)
+            && (state.overflowRight > state.overflowLeft)
+            && (state.dist.left > state.overflowLeft)
+        ) || (
+            isHorizontalEndPosition(state)
+            && (state.overflowLeft > 0)
+            && (state.overflowLeft > state.overflowRight)
+            && (state.dist.right > state.overflowRight)
         )
     )
 );
 
 /**
  * Returns initial vertical position of the element
- * @param {object} context
+ * @param {object} state
  * @returns {number}
  */
-export const getInitialTopPosition = (context) => {
+export const getInitialTopPosition = (state) => {
     const {
         offset,
         reference,
         elem,
-    } = context;
+        current,
+    } = state;
 
     let res = 0;
 
-    if (isTop(context)) {
-        res = reference.top - offset.top - context.height - context.margin;
-    } else if (isBottom(context)) {
-        res = reference.bottom - offset.top + context.margin;
-    } else if (isLeft(context) || isRight(context)) {
-        res = reference.top - offset.top + (reference.height - context.height) / 2;
+    if (isTop(state)) {
+        res = reference.top - offset.top - current.height - state.margin;
+    } else if (isBottom(state)) {
+        res = reference.bottom - offset.top + state.margin;
+    } else if (isLeft(state) || isRight(state)) {
+        if (isVerticalCenterPosition(state)) {
+            res = reference.top - offset.top + (reference.height - current.height) / 2;
+        }
+        if (isVerticalStart(state)) {
+            res = reference.top - offset.top;
+        }
+        if (isVerticalEnd(state)) {
+            res = reference.top - offset.top - current.height + reference.height;
+        }
     }
 
     if (
-        context.fixedParent
-        && context.fixedParent === elem.offsetParent
-        && !context.fixedElement
+        state.fixedParent
+        && state.fixedParent === elem.offsetParent
+        && !state.fixedElement
     ) {
-        res += context.scrollTop;
+        res += state.scrollTop;
     }
 
     return res;
@@ -206,24 +421,65 @@ export const getInitialTopPosition = (context) => {
 
 /**
  * Returns initial horizontal position of the element
- * @param {object} context
+ * @param {object} state
  * @returns {number}
  */
-export const getInitialLeftPosition = (context) => {
+export const getInitialLeftPosition = (state) => {
     const {
         offset,
         reference,
-    } = context;
+        current,
+    } = state;
 
     let res = 0;
 
-    if (isLeft(context)) {
-        res = reference.left - offset.left - context.width - context.margin;
-    } else if (isRight(context)) {
-        res = reference.right - offset.left + context.margin;
-    } else if (isTop(context) || isBottom(context)) {
-        res = reference.left - offset.left;
+    if (isLeft(state)) {
+        res = reference.left - offset.left - current.width - state.margin;
+    } else if (isRight(state)) {
+        res = reference.right - offset.left + state.margin;
+    } else if (isTop(state) || isBottom(state)) {
+        if (isHorizontalCenterPosition(state)) {
+            res = reference.left - offset.left + (reference.width - current.width) / 2;
+        }
+        if (isHorizontalStart(state)) {
+            res = reference.left - offset.left;
+        }
+        if (isHorizontalEnd(state)) {
+            res = reference.left - offset.left - current.width + reference.width;
+        }
     }
 
     return res;
+};
+
+/**
+ * Returns vertical overflow of element
+ * @param {object} state
+ * @returns {number}
+ */
+export const getElementVerticalOverflow = (state) => {
+    if (isTop(state)) {
+        return state.overflowTop;
+    }
+    if (isBottom(state)) {
+        return state.overflowBottom;
+    }
+
+    return 0;
+};
+
+/**
+ * Returns horozontal overflow of element
+ * @param {object} state
+ * @returns {number}
+ */
+export const getElementHorizontalOverflow = (state) => {
+    if (isLeft(state)) {
+        return state.overflowLeft;
+    }
+    if (isRight(state)) {
+        return state.overflowRight;
+    }
+
+    return 0;
 };

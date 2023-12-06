@@ -1005,7 +1005,8 @@ export class BaseChart extends Component {
 
     hidePopup() {
         show(this.popup, false);
-        PopupPosition.reset(this.popup);
+        this.popupPosition?.reset();
+        this.popupPosition = null;
 
         if (this.state.pinPopupOnClick) {
             show(this.pinnedPopup, false);
@@ -1038,7 +1039,7 @@ export class BaseChart extends Component {
 
         this.popup.replaceChildren(...asArray(content));
 
-        PopupPosition.calculate({
+        this.popupPosition = PopupPosition.calculate({
             elem: this.popup,
             refElem: target.item.elem,
             position: this.state.popupPosition,

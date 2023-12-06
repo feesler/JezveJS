@@ -338,13 +338,15 @@ export class DatePicker extends Component {
             return;
         }
 
-        if (this.width === 0 || this.height === 0) {
+        if (value && (this.width === 0 || this.height === 0)) {
             this.onResize();
+            setTimeout(() => this.showView());
+            return;
         }
 
         // check position of control in window and place it to be visible
         if (value) {
-            PopupPosition.calculate({
+            this.popupPosition = PopupPosition.create({
                 elem: this.wrapper,
                 refElem: this.relativeParent,
                 margin: this.props.popupMargin,
@@ -352,9 +354,13 @@ export class DatePicker extends Component {
                 scrollOnOverflow: true,
                 allowResize: false,
                 allowFlip: false,
+                updateProps: {
+                    scrollOnOverflow: false,
+                },
             });
         } else {
-            PopupPosition.reset(this.wrapper);
+            this.popupPosition?.reset();
+            this.popupPosition = null;
 
             this.waitingForAnimation = false;
 

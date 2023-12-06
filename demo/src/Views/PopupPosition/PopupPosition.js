@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { createElement, removeEvents, setEvents } from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
 import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupPosition } from 'jezvejs/PopupPosition';
 
@@ -41,76 +41,27 @@ class PopupPositionView extends DemoView {
             positionProps = {},
         } = context;
 
-        PopupPosition.calculate({
+        const res = context;
+        if (res.position) {
+            res.position.reset();
+        }
+        res.position = PopupPosition.create({
             elem: popup.elem,
             refElem: button.elem,
             ...positionProps,
             onScrollDone: () => logsField?.write('onScrollDone()'),
         });
-
-        this.listenWindowEvents(context);
     }
 
     updatePosition(context) {
-        const {
-            popup,
-            button,
-            positionProps = {},
-        } = context;
-
-        PopupPosition.calculate({
-            elem: popup.elem,
-            refElem: button.elem,
-            ...positionProps,
-            scrollOnOverflow: false,
-            allowResize: false,
-            update: true,
-        });
+        const { position } = context;
+        position?.updatePosition();
     }
 
     resetPosition(context) {
-        const { popup } = context;
-
+        const { popup, position } = context;
         popup.hide();
-        PopupPosition.reset(popup.elem);
-        this.stopWindowEvents(context);
-    }
-
-    listenWindowEvents(context) {
-        if (context.listeningWindow) {
-            return;
-        }
-
-        context.listeningWindow = true;
-        setEvents(window.visualViewport, context.viewportEvents);
-        setEvents(window, context.windowEvents);
-    }
-
-    stopWindowEvents(context) {
-        if (!context.listeningWindow) {
-            return;
-        }
-
-        context.listeningWindow = false;
-        removeEvents(window.visualViewport, context.viewportEvents);
-        removeEvents(window, context.windowEvents);
-    }
-
-    onViewportResize({ context }) {
-        this.updatePosition(context);
-    }
-
-    onWindowScroll({ e, context }) {
-        if (
-            context.popup?.elem
-            && !e.target.contains(context.popup.elem)
-            && context.button?.elem
-            && !e.target.contains(context.button.elem)
-        ) {
-            return;
-        }
-
-        this.updatePosition(context);
+        position.reset();
     }
 
     renderContainer(context) {
@@ -155,15 +106,6 @@ class PopupPositionView extends DemoView {
             popup: PopupContainer.create(),
             positionProps,
             ...rest,
-            viewportEvents: {
-                resize: (e) => this.onViewportResize({ e, context }),
-            },
-            windowEvents: {
-                scroll: {
-                    listener: (e) => this.onWindowScroll({ e, context }),
-                    options: { passive: true, capture: true },
-                },
-            },
         };
 
         context.button = MenuButton.create({
@@ -234,23 +176,31 @@ class PopupPositionView extends DemoView {
             onChange: (align) => {
                 context.buttonAlign = align;
                 this.renderContainer(context);
-                this.updatePosition(context);
+                this.calculatePosition(context);
             },
         });
 
-        const positionMap = {
-            top: 'Top',
-            bottom: 'Bottom',
-            left: 'Left',
-            right: 'Right',
-        };
+        const positions = [
+            'top',
+            'top-start',
+            'top-end',
+            'bottom',
+            'bottom-start',
+            'bottom-end',
+            'left',
+            'left-start',
+            'left-end',
+            'right',
+            'right-start',
+            'right-end',
+        ];
 
         const alignFieldset = RadioFieldset.create({
             title: 'Position',
             radioName: 'position',
-            items: Object.entries(positionMap).map(([value, label]) => ({
+            items: positions.map((value) => ({
                 value,
-                label,
+                label: value,
                 checked: (context.positionProps.position === value),
             })),
             onChange: (position) => {
@@ -301,6 +251,10 @@ class PopupPositionView extends DemoView {
                 scrollOnOverflow: true,
                 allowResize: true,
                 allowFlip: false,
+                updateProps: {
+                    scrollOnOverflow: false,
+                    allowResize: false,
+                },
             },
         });
     }
@@ -317,6 +271,10 @@ class PopupPositionView extends DemoView {
                 allowResize: false,
                 allowFlip: false,
                 position: 'bottom',
+                updateProps: {
+                    scrollOnOverflow: false,
+                    allowResize: false,
+                },
             },
         });
     }
@@ -333,6 +291,10 @@ class PopupPositionView extends DemoView {
                 allowResize: true,
                 allowFlip: true,
                 position: 'bottom',
+                updateProps: {
+                    scrollOnOverflow: false,
+                    allowResize: false,
+                },
             },
         });
     }
@@ -348,6 +310,10 @@ class PopupPositionView extends DemoView {
                 scrollOnOverflow: false,
                 allowResize: true,
                 allowFlip: false,
+                updateProps: {
+                    scrollOnOverflow: false,
+                    allowResize: false,
+                },
             },
         });
     }
@@ -363,6 +329,10 @@ class PopupPositionView extends DemoView {
                 scrollOnOverflow: false,
                 allowResize: false,
                 allowFlip: false,
+                updateProps: {
+                    scrollOnOverflow: false,
+                    allowResize: false,
+                },
             },
         });
     }

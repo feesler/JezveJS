@@ -137,7 +137,10 @@ export class PopupMenu extends Menu {
     }
 
     onScroll(e) {
-        if (this.ignoreScroll) {
+        if (
+            this.ignoreScroll
+            || !this.props.hideOnScroll
+        ) {
             return;
         }
 
@@ -184,7 +187,9 @@ export class PopupMenu extends Menu {
         this.hostElem = null;
 
         show(this.elem, false);
-        PopupPosition.reset(this.elem);
+        this.popupPosition?.reset();
+        this.popupPosition = null;
+
         this.elem.remove();
     }
 
@@ -235,12 +240,15 @@ export class PopupMenu extends Menu {
         }
 
         this.ignoreScroll = true;
-        PopupPosition.calculate({
+        this.popupPosition = PopupPosition.create({
             elem: this.elem,
             refElem: this.hostElem,
             margin: LIST_MARGIN,
             screenPadding: SCREEN_PADDING,
             allowResize: this.props.hideOnScroll,
+            updateProps: {
+                scrollOnOverflow: false,
+            },
             onScrollDone: () => this.onScrollDone(),
         });
 
@@ -260,7 +268,8 @@ export class PopupMenu extends Menu {
         this.setActive(null);
 
         show(this.elem, false);
-        PopupPosition.reset(this.elem);
+        this.popupPosition?.reset();
+        this.popupPosition = null;
 
         PopupMenu.activeInstance = null;
         this.removeHandlers();
