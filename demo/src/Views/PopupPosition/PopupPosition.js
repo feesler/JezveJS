@@ -42,6 +42,9 @@ class PopupPositionView extends DemoView {
         } = context;
 
         const res = context;
+        if (res.position) {
+            res.position.reset();
+        }
         res.position = PopupPosition.create({
             elem: popup.elem,
             refElem: button.elem,
@@ -173,23 +176,31 @@ class PopupPositionView extends DemoView {
             onChange: (align) => {
                 context.buttonAlign = align;
                 this.renderContainer(context);
-                this.updatePosition(context);
+                this.calculatePosition(context);
             },
         });
 
-        const positionMap = {
-            top: 'Top',
-            bottom: 'Bottom',
-            left: 'Left',
-            right: 'Right',
-        };
+        const positions = [
+            'top',
+            'top-start',
+            'top-end',
+            'bottom',
+            'bottom-start',
+            'bottom-end',
+            'left',
+            'left-start',
+            'left-end',
+            'right',
+            'right-start',
+            'right-end',
+        ];
 
         const alignFieldset = RadioFieldset.create({
             title: 'Position',
             radioName: 'position',
-            items: Object.entries(positionMap).map(([value, label]) => ({
+            items: positions.map((value) => ({
                 value,
-                label,
+                label: value,
                 checked: (context.positionProps.position === value),
             })),
             onChange: (position) => {

@@ -1,8 +1,8 @@
 /* Radio form */
 .radio-form {
-  display: inline-flex;
-  flex-flow: column nowrap;
+  display: block;
   margin-right: 2rem;
+  margin-bottom: 1rem;
 
   legend {
     font-weight: 500;
@@ -12,8 +12,8 @@
 
 /* Radio fieldset */
 .radio-fieldset {
-  display: inline-flex;
-  flex-flow: column nowrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
   gap: 0.5rem 1rem;
 
   legend {
