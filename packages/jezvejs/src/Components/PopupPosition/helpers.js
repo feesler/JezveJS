@@ -8,7 +8,7 @@ export const rightPositions = ['right', 'right-start', 'right-end'];
 /** Find parent element without offsetParent and check it has position: fixed */
 export const getFixedParent = (elem) => {
     let parent = elem?.parentNode;
-    while (parent.offsetParent) {
+    while (parent?.offsetParent) {
         parent = parent.offsetParent;
     }
 
