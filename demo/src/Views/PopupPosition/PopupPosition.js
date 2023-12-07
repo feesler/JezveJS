@@ -9,7 +9,9 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 
+import { PositionField } from './components/PositionField/PositionField.js';
 import { PopupContainer } from './components/PopupContainer/PopupContainer.js';
+
 import './PopupPositionView.scss';
 
 /* CSS classes */
@@ -182,29 +184,8 @@ class PopupPositionView extends DemoView {
             },
         });
 
-        const positions = [
-            'top',
-            'top-start',
-            'top-end',
-            'bottom',
-            'bottom-start',
-            'bottom-end',
-            'left',
-            'left-start',
-            'left-end',
-            'right',
-            'right-start',
-            'right-end',
-        ];
-
-        const alignFieldset = RadioFieldset.create({
-            title: 'Position',
-            radioName: 'position',
-            items: positions.map((value) => ({
-                value,
-                label: value,
-                checked: (context.positionProps.position === value),
-            })),
+        const alignFieldset = PositionField.create({
+            value: context.positionProps.position,
             onChange: (position) => {
                 context.positionProps.position = position;
                 if (context.popup.isVisible()) {
