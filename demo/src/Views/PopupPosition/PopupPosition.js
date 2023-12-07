@@ -1,9 +1,10 @@
 import 'jezvejs/style';
 import { createElement } from '@jezvejs/dom';
 import { MenuButton } from 'jezvejs/MenuButton';
+import { Popup } from 'jezvejs/Popup';
 import { PopupPosition } from 'jezvejs/PopupPosition';
 
-import { createControls } from '../../Application/utils.js';
+import { createButtons, createControls } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
@@ -31,6 +32,7 @@ class PopupPositionView extends DemoView {
         this.initAllowFlip();
         this.initNoScroll();
         this.initNoResize();
+        this.initFixedParent();
     }
 
     calculatePosition(context) {
@@ -334,6 +336,63 @@ class PopupPositionView extends DemoView {
                     allowResize: false,
                 },
             },
+        });
+    }
+
+    createPopup(context) {
+        if (this.popup) {
+            return;
+        }
+
+        context.container = createElement('div', {
+            props: { className: CENTERED_CONTAINER_CLASS },
+            children: [
+                context.button.elem,
+                context.popup.elem,
+            ],
+        });
+
+        this.popup = Popup.create({
+            id: 'popup',
+            title: 'Popup',
+            content: context.container,
+            closeButton: true,
+        });
+    }
+
+    showPopup(context) {
+        this.createPopup(context);
+
+        this.popup.show();
+    }
+
+    initFixedParent() {
+        const context = this.createPopupContext({
+            positionProps: {
+                margin: 10,
+                screenPadding: 10,
+                scrollOnOverflow: true,
+                allowResize: false,
+                allowFlip: false,
+                updateProps: {
+                    scrollOnOverflow: false,
+                    allowResize: false,
+                },
+            },
+        });
+
+        this.addSection({
+            id: 'fixedParent',
+            title: 'Fixed parent',
+            content: [
+                createButtons({
+                    id: 'popupBtn',
+                    title: 'Show popup',
+                    className: 'action-btn',
+                    onClick: () => this.showPopup(context),
+                }),
+                context.logsField.elem,
+            ],
         });
     }
 }
