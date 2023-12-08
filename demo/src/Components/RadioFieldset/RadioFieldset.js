@@ -7,6 +7,7 @@ import { createElement } from '@jezvejs/dom';
 
 const FORM_CLASS = 'radio-form';
 const FIELDSET_CLASS = 'radio-fieldset';
+const CONTENT_CLASS = 'radio-fieldset__content';
 
 const defaultProps = {
     title: null,
@@ -39,17 +40,23 @@ export class RadioFieldset extends Component {
                 label: item.label,
                 name: radioName,
                 checked: item.checked ?? false,
+                className: item.className,
                 onChange: () => (
                     this.props?.onChange?.(item.value)
                 ),
             }).elem
         ));
 
+        this.contentContainer = createElement('div', {
+            props: { className: CONTENT_CLASS },
+            children: this.radios,
+        });
+
         this.fieldset = createElement('fieldset', {
             props: { className: FIELDSET_CLASS },
             children: [
                 this.legendElem,
-                ...this.radios,
+                this.contentContainer,
             ],
         });
 
@@ -57,5 +64,7 @@ export class RadioFieldset extends Component {
             props: { className: FORM_CLASS },
             children: this.fieldset,
         });
+
+        this.setClassNames();
     }
 }

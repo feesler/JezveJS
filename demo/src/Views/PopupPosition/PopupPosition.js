@@ -9,7 +9,9 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 
+import { PositionField } from './components/PositionField/PositionField.js';
 import { PopupContainer } from './components/PopupContainer/PopupContainer.js';
+
 import './PopupPositionView.scss';
 
 /* CSS classes */
@@ -182,29 +184,8 @@ class PopupPositionView extends DemoView {
             },
         });
 
-        const positions = [
-            'top',
-            'top-start',
-            'top-end',
-            'bottom',
-            'bottom-start',
-            'bottom-end',
-            'left',
-            'left-start',
-            'left-end',
-            'right',
-            'right-start',
-            'right-end',
-        ];
-
-        const alignFieldset = RadioFieldset.create({
-            title: 'Position',
-            radioName: 'position',
-            items: positions.map((value) => ({
-                value,
-                label: value,
-                checked: (context.positionProps.position === value),
-            })),
+        const alignFieldset = PositionField.create({
+            value: context.positionProps.position,
             onChange: (position) => {
                 context.positionProps.position = position;
                 if (context.popup.isVisible()) {
@@ -345,17 +326,36 @@ class PopupPositionView extends DemoView {
         }
 
         context.container = createElement('div', {
-            props: { className: CENTERED_CONTAINER_CLASS },
+            props: { className: REF_CONTAINER_CLASS },
             children: [
                 context.button.elem,
                 context.popup.elem,
             ],
         });
+        context.scroller = createElement('div', {
+            props: { className: REF_SCROLLER_CLASS },
+            children: context.container,
+        });
+
+        const alignFieldset = PositionField.create({
+            value: context.positionProps.position,
+            onChange: (position) => {
+                context.positionProps.position = position;
+                if (context.popup.isVisible()) {
+                    this.calculatePosition(context);
+                }
+            },
+        });
 
         this.popup = Popup.create({
             id: 'popup',
             title: 'Popup',
-            content: context.container,
+            content: [
+                context.scroller,
+                createControls([
+                    alignFieldset.elem,
+                ]),
+            ],
             closeButton: true,
         });
     }
@@ -364,11 +364,14 @@ class PopupPositionView extends DemoView {
         this.createPopup(context);
 
         this.popup.show();
+        this.renderContainer(context);
     }
 
     initFixedParent() {
         const context = this.createPopupContext({
+            buttonAlign: 'center',
             positionProps: {
+                position: 'bottom-start',
                 margin: 10,
                 screenPadding: 10,
                 scrollOnOverflow: true,
