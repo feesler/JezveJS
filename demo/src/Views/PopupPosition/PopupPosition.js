@@ -252,11 +252,12 @@ class PopupPositionView extends DemoView {
                 useRefWidth: true,
                 scrollOnOverflow: true,
                 allowResize: false,
-                allowFlip: false,
+                allowFlip: true,
                 position: 'bottom',
                 updateProps: {
                     scrollOnOverflow: false,
                     allowResize: false,
+                    allowFlip: true,
                 },
             },
         });
@@ -265,14 +266,14 @@ class PopupPositionView extends DemoView {
     initAllowFlip() {
         this.initPositionSection({
             id: 'allowFlip',
-            title: '\'allowFlip\' option',
-            description: 'Set \'allowFlip\' option to true to enable flipping popup element if not enough space.',
+            title: 'Disable flipping',
+            description: 'Set \'allowFlip\' option to false to disable flipping popup element if not enough space.',
             positionProps: {
                 margin: 10,
                 screenPadding: 10,
                 scrollOnOverflow: true,
                 allowResize: true,
-                allowFlip: true,
+                allowFlip: false,
                 position: 'bottom',
                 updateProps: {
                     scrollOnOverflow: false,

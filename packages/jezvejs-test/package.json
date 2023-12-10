@@ -1,6 +1,6 @@
 {
     "name": "jezvejs-test",
-    "version": "1.14.3",
+    "version": "1.14.4",
     "description": "JezveJS library test components",
     "type": "module",
     "module": "index.js",
@@ -28,6 +28,6 @@
         "@jezvejs/types": "^1.0.0"
     },
     "devDependencies": {
-        "jezve-test": "^2.0.1"
+        "jezve-test": "^2.0.3"
     }
 }

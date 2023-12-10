@@ -192,10 +192,13 @@ export class DecimalInput extends Component {
             return false;
         }
 
-        if (typeof this.state.digits !== 'undefined') {
+        const { digits } = this.state;
+        if (typeof digits === 'number') {
             const length = getDecimalPlaces(value);
-            const allowedLength = getAllowedDecimalPlaces(this.state.digits);
-            return length <= allowedLength;
+            const allowedLength = getAllowedDecimalPlaces(digits);
+            if (length > allowedLength) {
+                return false;
+            }
         }
 
         return true;
@@ -211,8 +214,6 @@ export class DecimalInput extends Component {
             e.preventDefault();
             e.stopPropagation();
         }
-
-        return res;
     }
 
     /** 'input' event handler */

@@ -3,6 +3,7 @@ import {
     asyncMap,
     click,
     queryAll,
+    waitForFunction,
 } from 'jezve-test';
 import { assert } from '@jezvejs/assert';
 import { PopupMenu } from 'jezvejs-test';
@@ -31,7 +32,7 @@ export class PopupMenuView extends AppView {
     constructor(...args) {
         super(...args);
 
-        this.listMenuInex = -1;
+        this.listMenuIndex = -1;
     }
 
     async parseContent() {
@@ -104,8 +105,8 @@ export class PopupMenuView extends AppView {
             const menuModel = model[key];
 
             if (key === 'list') {
-                menuModel.visible = (this.listMenuInex === index) ? !menuModel.visible : true;
-                this.listMenuInex = index;
+                menuModel.visible = (this.listMenuIndex === index) ? !menuModel.visible : true;
+                this.listMenuIndex = index;
             } else {
                 menuModel.visible = false;
             }
@@ -175,6 +176,10 @@ export class PopupMenuView extends AppView {
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.listContainer.menuButtons[index]));
+        await waitForFunction(async () => {
+            await this.parse();
+            return this.model.list.visible === expected.list.visible;
+        });
 
         return this.checkState(expected);
     }
