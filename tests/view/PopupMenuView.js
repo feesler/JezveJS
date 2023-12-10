@@ -31,7 +31,7 @@ export class PopupMenuView extends AppView {
     constructor(...args) {
         super(...args);
 
-        this.listMenuInex = -1;
+        this.listMenuIndex = -1;
     }
 
     async parseContent() {
@@ -104,8 +104,8 @@ export class PopupMenuView extends AppView {
             const menuModel = model[key];
 
             if (key === 'list') {
-                menuModel.visible = (this.listMenuInex === index) ? !menuModel.visible : true;
-                this.listMenuInex = index;
+                menuModel.visible = (this.listMenuIndex === index) ? !menuModel.visible : true;
+                this.listMenuIndex = index;
             } else {
                 menuModel.visible = false;
             }
