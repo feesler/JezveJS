@@ -3,6 +3,7 @@ import {
     asyncMap,
     click,
     queryAll,
+    waitForFunction,
 } from 'jezve-test';
 import { assert } from '@jezvejs/assert';
 import { PopupMenu } from 'jezvejs-test';
@@ -175,6 +176,10 @@ export class PopupMenuView extends AppView {
         const expected = this.getExpectedState();
 
         await this.performAction(() => click(this.content.listContainer.menuButtons[index]));
+        await waitForFunction(async () => {
+            await this.parse();
+            return this.model.list.visible === expected.list.visible;
+        });
 
         return this.checkState(expected);
     }
