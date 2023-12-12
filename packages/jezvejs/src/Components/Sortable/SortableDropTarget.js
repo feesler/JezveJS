@@ -120,7 +120,7 @@ export class SortableDropTarget extends DropTarget {
             if (this.targetElem !== pos.prev && this.targetElem !== pos.next) {
                 if (pos.prev) {
                     pos.prev.after(this.targetElem);
-                } else {
+                } else if (pos.next) {
                     pos.next.before(this.targetElem);
                 }
             }
