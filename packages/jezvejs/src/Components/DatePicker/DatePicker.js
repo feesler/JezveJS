@@ -690,7 +690,7 @@ export class DatePicker extends Component {
             res -= this.getSlideSize(slide) + gap;
         }
 
-        if (this.doubleView && this.props.vertical) {
+        if (index === 0 && this.doubleView && this.props.vertical) {
             res -= this.viewHeights.header;
         }
 
