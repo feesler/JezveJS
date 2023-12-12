@@ -20,3 +20,9 @@
   border: 1px solid var(--dp-bg-color);
   background-color: var(--dp-bg-color);
 }
+
+/* Focused state */
+.dp__cell:focus-visible {
+  box-shadow: var(--dp-focus-shadow);
+  z-index: 2;
+}

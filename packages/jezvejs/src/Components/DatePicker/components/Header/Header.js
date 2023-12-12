@@ -21,6 +21,7 @@ const defaultProps = {
     title: null,
     secondTitle: null,
     doubleView: false,
+    focusable: false,
     onClickTitle: null,
     onClickPrev: null,
     onClickNext: null,
@@ -43,15 +44,30 @@ export class DatePickerHeader extends Component {
     }
 
     init() {
-        this.navPrevElem = createElement('div', {
-            props: { className: HEADER_NAV_CLASS },
+        const { focusable } = this.props;
+        const tagName = (focusable) ? 'button' : 'div';
+        const type = (focusable) ? 'button' : undefined;
+
+        this.navPrevElem = createElement(tagName, {
+            props: {
+                type,
+                className: HEADER_NAV_CLASS,
+            },
             children: this.renderNavIcon(),
         });
-        this.titleEl = createElement('div', {
-            props: { className: HEADER_TITLE_CLASS },
+
+        this.titleEl = createElement(tagName, {
+            props: {
+                type,
+                className: HEADER_TITLE_CLASS,
+            },
         });
-        this.navNextElem = createElement('div', {
-            props: { className: getClassName(HEADER_NAV_CLASS, HEADER_NEXT_NAV_CLASS) },
+
+        this.navNextElem = createElement(tagName, {
+            props: {
+                type,
+                className: getClassName(HEADER_NAV_CLASS, HEADER_NEXT_NAV_CLASS),
+            },
             children: this.renderNavIcon(),
         });
 
@@ -132,8 +148,13 @@ export class DatePickerHeader extends Component {
             const titlePlaceholder = createElement('div', {
                 props: { className: HEADER_TITLE_PLACEHOLDER_CLASS },
             });
-            this.secondTitleEl = createElement('div', {
-                props: { className: HEADER_TITLE_CLASS },
+
+            const tagName = (this.props.focusable) ? 'button' : 'div';
+            this.secondTitleEl = createElement(tagName, {
+                props: {
+                    type: (this.props.focusable) ? 'button' : undefined,
+                    className: HEADER_TITLE_CLASS,
+                },
             });
             children.push(titlePlaceholder, this.secondTitleEl);
         }

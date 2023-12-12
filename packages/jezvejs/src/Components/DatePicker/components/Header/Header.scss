@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  background-color: var(--dp-bg-color);
 }
 
 .dp__header_title {
@@ -24,6 +25,8 @@
 }
 
 .dp__header_nav {
+  border-radius: 100vh;
+
   .dp__header_nav-icon {
     height: 32px;
     width: 32px;
@@ -42,6 +45,12 @@
   .dp__header-placeholder + .dp__header_title {
     display: none;
   }
+}
+
+/* Focused state */
+.dp__header_item:focus-visible {
+  box-shadow: var(--dp-focus-shadow);
+  z-index: 2;
 }
 
 @media (min-width: 724px) {
