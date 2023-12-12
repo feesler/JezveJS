@@ -40,6 +40,10 @@ const getDefaultItems = (logsField) => ([{
     id: 'separator1',
     type: 'separator',
 }, {
+    id: 'separator2',
+    type: 'separator',
+    hidden: true,
+}, {
     id: 'checkboxItem',
     type: 'checkbox',
     title: 'Checkbox item',
