@@ -24,11 +24,16 @@ export class MenuSeparator extends Component {
 
         this.state = { ...this.props };
 
-        this.elem = createElement('div', { props: { className: SEPARATOR_CLASS } });
+        this.init();
+        this.render(this.state);
     }
 
     get id() {
         return this.state.id;
+    }
+
+    init() {
+        this.elem = createElement('div', { props: { className: SEPARATOR_CLASS } });
     }
 
     render(state) {
