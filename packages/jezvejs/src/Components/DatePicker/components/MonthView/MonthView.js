@@ -40,6 +40,7 @@ const defaultProps = {
     showOtherMonthDays: true,
     fixedHeight: false,
     header: null,
+    focusable: false,
     components: {
         Header: null,
         WeekDaysHeader: null,
@@ -122,16 +123,7 @@ export class DatePickerMonthView extends DatePickerBaseView {
                 const isOtherMonth = !isSameYearMonth(date, weekday);
                 const isToday = isSameDate(weekday, today) && (!doubleView || !isOtherMonth);
                 const itemDate = weekday.getDate();
-                const item = {
-                    date: weekday,
-                    isOtherMonth,
-                    isToday,
-                    elem: createElement('div', {
-                        props: {
-                            className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
-                        },
-                    }),
-                };
+                const item = this.createItem(weekday, { isOtherMonth, isToday });
 
                 if (showOtherMonthDays || !isOtherMonth) {
                     item.elem.textContent = itemDate;
@@ -164,6 +156,24 @@ export class DatePickerMonthView extends DatePickerBaseView {
                 : null;
             weeks += 1;
         } while (week);
+    }
+
+    createItem(date, options = {}) {
+        const { isOtherMonth, isToday } = options;
+        const { focusable } = this.props;
+        const tagName = (focusable) ? 'button' : 'div';
+
+        return {
+            date,
+            isOtherMonth,
+            isToday,
+            elem: createElement(tagName, {
+                props: {
+                    type: (focusable) ? 'button' : undefined,
+                    className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
+                },
+            }),
+        };
     }
 
     /**

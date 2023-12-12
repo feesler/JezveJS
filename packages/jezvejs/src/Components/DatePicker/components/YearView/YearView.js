@@ -12,6 +12,7 @@ const YEAR_CELL_CLASS = 'dp__year-view__cell';
 const defaultProps = {
     renderHeader: false,
     header: null,
+    focusable: false,
     components: {
         Header: null,
     },
@@ -48,18 +49,26 @@ export class DatePickerYearView extends DatePickerBaseView {
         // months of current year
         for (let i = 0; i < MONTHS_COUNT; i += 1) {
             const monthDate = new Date(rYear, i, 1);
-            const item = {
-                date: monthDate,
-                elem: createElement('div', {
-                    props: {
-                        className: getClassName(CELL_CLASS, YEAR_CELL_CLASS),
-                        textContent: getShortMonthName(monthDate, this.props.locales),
-                    },
-                }),
-            };
+            const item = this.createItem(monthDate);
 
             this.items.push(item);
             this.elem.append(item.elem);
         }
+    }
+
+    createItem(date) {
+        const { locales, focusable } = this.props;
+        const tagName = (focusable) ? 'button' : 'div';
+
+        return {
+            date,
+            elem: createElement(tagName, {
+                props: {
+                    type: (focusable) ? 'button' : undefined,
+                    className: getClassName(CELL_CLASS, YEAR_CELL_CLASS),
+                    textContent: getShortMonthName(date, locales),
+                },
+            }),
+        };
     }
 }

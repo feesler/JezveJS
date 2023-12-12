@@ -12,6 +12,7 @@ const YEARRANGE_CELL_CLASS = 'dp__year-range-view__cell';
 const defaultProps = {
     renderHeader: false,
     header: null,
+    focusable: false,
     components: {
         Header: null,
     },
@@ -49,15 +50,7 @@ export class DatePickerYearRangeView extends DatePickerBaseView {
         // years of current range
         for (let i = 0; i < YEAR_RANGE_LENGTH + 2; i += 1) {
             const yearDate = new Date(startYear + i, 0, 1);
-            const item = {
-                date: yearDate,
-                elem: createElement('div', {
-                    props: {
-                        className: getClassName(CELL_CLASS, YEARRANGE_CELL_CLASS),
-                        textContent: yearDate.getFullYear(),
-                    },
-                }),
-            };
+            const item = this.createItem(yearDate);
 
             if (i === 0 || i === YEAR_RANGE_LENGTH + 1) {
                 item.elem.classList.add(OTHER_CELL_CLASS);
@@ -66,5 +59,21 @@ export class DatePickerYearRangeView extends DatePickerBaseView {
             this.items.push(item);
             this.elem.append(item.elem);
         }
+    }
+
+    createItem(date) {
+        const { focusable } = this.props;
+        const tagName = (focusable) ? 'button' : 'div';
+
+        return {
+            date,
+            elem: createElement(tagName, {
+                props: {
+                    type: (focusable) ? 'button' : undefined,
+                    className: getClassName(CELL_CLASS, YEARRANGE_CELL_CLASS),
+                    textContent: date.getFullYear(),
+                },
+            }),
+        };
     }
 }
