@@ -24,6 +24,8 @@ const inputAttrs = {
     autocorrect: 'off',
 };
 
+const dateParts = ['day', 'month', 'year'];
+
 const defaultProps = {
     guideChar: '_',
     locales: [],
@@ -167,55 +169,65 @@ export class DateInput extends Component {
         const parts = formatter.formatToParts();
 
         this.separator = null;
+        this.formatParts = [];
         let currentPos = 0;
         let order = 0;
         parts.forEach(({ type, value }) => {
+            const part = {
+                type,
+                start: currentPos,
+                length: (type === 'day' || type === 'month') ? 2 : value.length,
+            };
+            part.end = part.start + part.length;
+            currentPos += part.length;
+
             if (type === 'day') {
-                this.dayRange = { start: currentPos, length: 2, order };
-                this.dayRange.end = this.dayRange.start + this.dayRange.length;
-                currentPos += this.dayRange.length;
+                this.dayRange = { ...part, order };
                 order += 1;
             }
             if (type === 'month') {
-                this.monthRange = { start: currentPos, length: 2, order };
-                this.monthRange.end = this.monthRange.start + this.monthRange.length;
-                currentPos += this.monthRange.length;
+                this.monthRange = { ...part, order };
                 order += 1;
             }
             if (type === 'year') {
-                this.yearRange = { start: currentPos, length: value.length, order };
-                this.yearRange.end = this.yearRange.start + this.yearRange.length;
-                currentPos += this.yearRange.length;
+                this.yearRange = { ...part, order };
                 order += 1;
             }
             if (type === 'literal') {
                 if (!this.separator) {
                     this.separator = value;
                 }
-                currentPos += value.length;
+                part.value = value;
             }
+
+            this.formatParts.push(part);
         });
 
         if (!this.separator) {
             this.separator = DEFAULT_SEPARATOR;
         }
 
-        const yearLength = this.yearRange.end - this.yearRange.start;
         this.formatMask = this.formatDateString({
             day: 'dd',
             month: 'mm',
-            year: ''.padStart(yearLength, 'y'),
+            year: ''.padStart(this.yearRange.length, 'y'),
         });
     }
 
-    formatDateString({ day, month, year }) {
-        const groups = [
-            [day, this.dayRange.start],
-            [month, this.monthRange.start],
-            [year, this.yearRange.start],
-        ].sort((a, b) => a[1] - b[1]);
+    formatDatePart(part, state) {
+        if (part.type === 'literal') {
+            return part.value;
+        }
 
-        return groups.map((group) => group[0]).join(this.separator);
+        return (dateParts.includes(part.type))
+            ? state[part.type]
+            : '';
+    }
+
+    formatDateString(state) {
+        return this.formatParts.map((part) => (
+            this.formatDatePart(part, state)
+        )).join('');
     }
 
     /**
@@ -267,6 +279,24 @@ export class DateInput extends Component {
         }
 
         return null;
+    }
+
+    /**
+     * Returns string value for specified range
+     *
+     * @param {string} content - content string
+     * @param {object} range - range object
+     * @returns {string}
+     */
+    getContentRange(content, range) {
+        if (typeof content !== 'string') {
+            throw new Error('Invalid content');
+        }
+        if (!range) {
+            throw new Error('Invalid range');
+        }
+
+        return content.substring(range.start, range.end);
     }
 
     fixCursorPos(pos) {
@@ -579,14 +609,9 @@ export class DateInput extends Component {
             };
         }
 
-        const expectedParts = content.split(this.separator);
-        if (expectedParts.length !== 3) {
-            return this.state;
-        }
-
-        let expectedDay = expectedParts[this.dayRange.order];
-        let expectedMonth = expectedParts[this.monthRange.order];
-        const expectedYear = expectedParts[this.yearRange.order];
+        let expectedDay = this.getContentRange(content, this.dayRange);
+        let expectedMonth = this.getContentRange(content, this.monthRange);
+        const expectedYear = this.getContentRange(content, this.yearRange);
 
         const search = new RegExp(`${this.props.guideChar}`, 'g');
 

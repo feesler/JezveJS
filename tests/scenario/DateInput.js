@@ -13,12 +13,12 @@ const typeToEmpty = async () => {
     await Actions.inputToEmpty('usLocaleInput', '112203', '11/22/03');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputToEmpty('koLocaleInput', '0', '0_. __. __');
-    await Actions.inputToEmpty('koLocaleInput', '03', '03. __. __');
-    await Actions.inputToEmpty('koLocaleInput', '031', '03. 1_. __');
-    await Actions.inputToEmpty('koLocaleInput', '0311', '03. 11. __');
-    await Actions.inputToEmpty('koLocaleInput', '03112', '03. 11. 2_');
-    await Actions.inputToEmpty('koLocaleInput', '031122', '03. 11. 22');
+    await Actions.inputToEmpty('koLocaleInput', '0', '0_. __. __.');
+    await Actions.inputToEmpty('koLocaleInput', '03', '03. __. __.');
+    await Actions.inputToEmpty('koLocaleInput', '031', '03. 1_. __.');
+    await Actions.inputToEmpty('koLocaleInput', '0311', '03. 11. __.');
+    await Actions.inputToEmpty('koLocaleInput', '03112', '03. 11. 2_.');
+    await Actions.inputToEmpty('koLocaleInput', '031122', '03. 11. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.inputToEmpty('ruLocaleInput', '2', '2_.__.____');
@@ -60,17 +60,17 @@ const typeInvalidToEmpty = async () => {
     setBlock('ko-KR locale', 2);
     // Year
     await Actions.inputToEmpty('koLocaleInput', 'x', '');
-    await Actions.inputToEmpty('koLocaleInput', '1x', '1_. __. __');
+    await Actions.inputToEmpty('koLocaleInput', '1x', '1_. __. __.');
     // Month
-    await Actions.inputToEmpty('koLocaleInput', '33x', '33. __. __');
-    await Actions.inputToEmpty('koLocaleInput', '3313', '33. 1_. __');
-    await Actions.inputToEmpty('koLocaleInput', '331x', '33. 1_. __');
-    await Actions.inputToEmpty('koLocaleInput', '330x', '33. 0_. __');
+    await Actions.inputToEmpty('koLocaleInput', '33x', '33. __. __.');
+    await Actions.inputToEmpty('koLocaleInput', '3313', '33. 1_. __.');
+    await Actions.inputToEmpty('koLocaleInput', '331x', '33. 1_. __.');
+    await Actions.inputToEmpty('koLocaleInput', '330x', '33. 0_. __.');
     // Day
-    await Actions.inputToEmpty('koLocaleInput', '334x', '33. 04. __');
-    await Actions.inputToEmpty('koLocaleInput', '33438', '33. 04. 3_');
-    await Actions.inputToEmpty('koLocaleInput', '3343x', '33. 04. 3_');
-    await Actions.inputToEmpty('koLocaleInput', '3340x', '33. 04. 0_');
+    await Actions.inputToEmpty('koLocaleInput', '334x', '33. 04. __.');
+    await Actions.inputToEmpty('koLocaleInput', '33438', '33. 04. 3_.');
+    await Actions.inputToEmpty('koLocaleInput', '3343x', '33. 04. 3_.');
+    await Actions.inputToEmpty('koLocaleInput', '3340x', '33. 04. 0_.');
 
     setBlock('ru-RU locale', 2);
     // Day
@@ -119,17 +119,17 @@ const pasteToEmpty = async () => {
     await Actions.pasteToEmpty('usLocaleInput', '04050', '04/05/0_');
 
     setBlock('ko-KR locale', 2);
-    await Actions.pasteToEmpty('koLocaleInput', '03', '03. __. __');
-    await Actions.pasteToEmpty('koLocaleInput', '0311', '03. 11. __');
-    await Actions.pasteToEmpty('koLocaleInput', '031122', '03. 11. 22');
-    await Actions.pasteToEmpty('koLocaleInput', '03.', '03. __. __');
-    await Actions.pasteToEmpty('koLocaleInput', '03. ', '03. __. __');
-    await Actions.pasteToEmpty('koLocaleInput', '03. 1', '03. 1_. __');
-    await Actions.pasteToEmpty('koLocaleInput', '03. 11', '03. 11. __');
-    await Actions.pasteToEmpty('koLocaleInput', '03. 11. ', '03. 11. __');
-    await Actions.pasteToEmpty('koLocaleInput', '03. 11. 22', '03. 11. 22');
-    await Actions.pasteToEmpty('koLocaleInput', '034', '03. 04. __');
-    await Actions.pasteToEmpty('koLocaleInput', '03045', '03. 04. 05');
+    await Actions.pasteToEmpty('koLocaleInput', '03', '03. __. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '0311', '03. 11. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '031122', '03. 11. 22.');
+    await Actions.pasteToEmpty('koLocaleInput', '03.', '03. __. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '03. ', '03. __. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 1', '03. 1_. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 11', '03. 11. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 11. ', '03. 11. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '03. 11. 22', '03. 11. 22.');
+    await Actions.pasteToEmpty('koLocaleInput', '034', '03. 04. __.');
+    await Actions.pasteToEmpty('koLocaleInput', '03045', '03. 04. 05.');
 
     setBlock('ru-RU locale', 2);
     await Actions.pasteToEmpty('ruLocaleInput', '22', '22.__.____');
@@ -200,20 +200,20 @@ const backspaceKey = async () => {
     await Actions.backspaceFromPos('usLocaleInput', '__/_2/33', 0, '__/_2/33');
 
     setBlock('ko-KR locale', 2);
-    await Actions.backspaceFromPos('koLocaleInput', '33. 11. 22', 10, '33. 11. 2_');
-    await Actions.backspaceFromPos('koLocaleInput', '33. 11. 2_', 9, '33. 11. __');
-    await Actions.backspaceFromPos('koLocaleInput', '33. 11. __', 8, '33. 1_. __');
-    await Actions.backspaceFromPos('koLocaleInput', '33. 11. __', 6, '33. 1_. __');
-    await Actions.backspaceFromPos('koLocaleInput', '33. 1_. __', 5, '33. __. __');
-    await Actions.backspaceFromPos('koLocaleInput', '33. __. __', 4, '3_. __. __');
-    await Actions.backspaceFromPos('koLocaleInput', '33. __. __', 2, '3_. __. __');
+    await Actions.backspaceFromPos('koLocaleInput', '33. 11. 22', 10, '33. 11. 2_.');
+    await Actions.backspaceFromPos('koLocaleInput', '33. 11. 2_', 9, '33. 11. __.');
+    await Actions.backspaceFromPos('koLocaleInput', '33. 11. __', 8, '33. 1_. __.');
+    await Actions.backspaceFromPos('koLocaleInput', '33. 11. __', 6, '33. 1_. __.');
+    await Actions.backspaceFromPos('koLocaleInput', '33. 1_. __', 5, '33. __. __.');
+    await Actions.backspaceFromPos('koLocaleInput', '33. __. __', 4, '3_. __. __.');
+    await Actions.backspaceFromPos('koLocaleInput', '33. __. __', 2, '3_. __. __.');
     await Actions.backspaceFromPos('koLocaleInput', '3_. __. __', 1, '');
     await Actions.backspaceFromPos('koLocaleInput', '', 0, '');
 
-    await Actions.backspaceFromPos('koLocaleInput', '33. 11. 22', 5, '33. _1. 22');
-    await Actions.backspaceFromPos('koLocaleInput', '33. _1. 22', 4, '3_. _1. 22');
-    await Actions.backspaceFromPos('koLocaleInput', '3_. _1. 22', 1, '__. _1. 22');
-    await Actions.backspaceFromPos('koLocaleInput', '__. _1. 22', 0, '__. _1. 22');
+    await Actions.backspaceFromPos('koLocaleInput', '33. 11. 22', 5, '33. _1. 22.');
+    await Actions.backspaceFromPos('koLocaleInput', '33. _1. 22', 4, '3_. _1. 22.');
+    await Actions.backspaceFromPos('koLocaleInput', '3_. _1. 22', 1, '__. _1. 22.');
+    await Actions.backspaceFromPos('koLocaleInput', '__. _1. 22', 0, '__. _1. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.backspaceFromPos('ruLocaleInput', '22.11.3333', 10, '22.11.333_');
@@ -258,10 +258,10 @@ const deleteKey = async () => {
     await Actions.deleteFromPos('usLocaleInput', '11/22/33', 0, '_1/22/33');
 
     setBlock('ko-KR locale', 2);
-    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 8, '33. 11. _2');
-    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 6, '33. 11. _2');
-    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 4, '33. _1. 22');
-    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 0, '_3. 11. 22');
+    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 8, '33. 11. _2.');
+    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 6, '33. 11. _2.');
+    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 4, '33. _1. 22.');
+    await Actions.deleteFromPos('koLocaleInput', '33. 11. 22', 0, '_3. 11. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.deleteFromPos('ruLocaleInput', '22.11.3333', 6, '22.11._333');
@@ -287,20 +287,20 @@ const inputFromPos = async () => {
     await Actions.inputFromPos('usLocaleInput', '01/02/0_', 7, '/', '01/02/0_');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 2, '1', '33. 1_. 22');
-    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 3, '1', '33. 1_. 22');
-    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, '1', '33. 1_. 22');
-    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, '7', '33. 07. 22');
-    await Actions.inputFromPos('koLocaleInput', '33. 1_. 22', 5, '1', '33. 11. 22');
-    await Actions.inputFromPos('koLocaleInput', '33. 1_. __', 5, '.', '33. 01. __');
-    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 6, '.', '33. 01. __');
-    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 6, ' ', '33. 01. __');
-    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 7, '.', '33. 01. __');
-    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 7, ' ', '33. 01. __');
-    await Actions.inputFromPos('koLocaleInput', '33. 01. 2_', 9, '.', '33. 01. 02');
-    await Actions.inputFromPos('koLocaleInput', '33. 01. 2_', 9, ' ', '33. 01. 02');
-    await Actions.inputFromPos('koLocaleInput', '3_. __. __', 1, '.', '3_. __. __');
-    await Actions.inputFromPos('koLocaleInput', '3_. __. __', 1, ' ', '3_. __. __');
+    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 2, '1', '33. 1_. 22.');
+    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 3, '1', '33. 1_. 22.');
+    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, '1', '33. 1_. 22.');
+    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, '7', '33. 07. 22.');
+    await Actions.inputFromPos('koLocaleInput', '33. 1_. 22', 5, '1', '33. 11. 22.');
+    await Actions.inputFromPos('koLocaleInput', '33. 1_. __', 5, '.', '33. 01. __.');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 6, '.', '33. 01. __.');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 6, ' ', '33. 01. __.');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 7, '.', '33. 01. __.');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. __', 7, ' ', '33. 01. __.');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. 2_', 9, '.', '33. 01. 02.');
+    await Actions.inputFromPos('koLocaleInput', '33. 01. 2_', 9, ' ', '33. 01. 02.');
+    await Actions.inputFromPos('koLocaleInput', '3_. __. __', 1, '.', '3_. __. __.');
+    await Actions.inputFromPos('koLocaleInput', '3_. __. __', 1, ' ', '3_. __. __.');
 
     setBlock('ru-RU locale', 2);
     await Actions.inputFromPos('ruLocaleInput', '22.__.3333', 3, '1', '22.1_.3333');
@@ -326,8 +326,8 @@ const inputInvalidFromPos = async () => {
     await Actions.inputFromPos('usLocaleInput', '1_/22/33', 1, '5', '1_/22/33');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, 'x', '33. __. 22');
-    await Actions.inputFromPos('koLocaleInput', '33. 1_. 22', 5, '5', '33. 1_. 22');
+    await Actions.inputFromPos('koLocaleInput', '33. __. 22', 4, 'x', '33. __. 22.');
+    await Actions.inputFromPos('koLocaleInput', '33. 1_. 22', 5, '5', '33. 1_. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.inputFromPos('ruLocaleInput', '22.__.3333', 3, 'x', '22.__.3333');
@@ -346,12 +346,12 @@ const inputToSelection = async () => {
     await Actions.inputToSelection('usLocaleInput', '11/22/33', 0, 7, '2', '02/__/_3');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 5, 9, '1', '33. 11. _2');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 0, 9, '3', '3_. __. _2');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 5, 9, '1', '33. 11. _2.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 0, 9, '3', '3_. __. _2.');
 
     setBlock('ru-RU locale', 2);
     await Actions.inputToSelection('ruLocaleInput', '22.11.3333', 1, 4, '2', '22._1.3333');
@@ -370,8 +370,8 @@ const inputInvalidToSelection = async () => {
     await Actions.inputToSelection('usLocaleInput', '11/22/33', 1, 4, '5', '11/22/33');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 5, 9, 'x', '33. 11. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 5, 9, '5', '33. 11. 22');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 5, 9, 'x', '33. 11. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 5, 9, '5', '33. 11. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.inputToSelection('ruLocaleInput', '22.11.3333', 1, 4, 'x', '22.11.3333');
@@ -390,13 +390,13 @@ const pasteToSelection = async () => {
     await Actions.pasteToSelection('usLocaleInput', '11/22/33', 0, 7, '2', '02/__/_3');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22');
-    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, '1', '33. 11. _2');
-    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 9, '3', '3_. __. _2');
-    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 10, '30. 1', '30. 1_. __');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22.');
+    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, '1', '33. 11. _2.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 9, '3', '3_. __. _2.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 10, '30. 1', '30. 1_. __.');
 
     setBlock('ru-RU locale', 2);
     await Actions.pasteToSelection('ruLocaleInput', '22.11.3333', 1, 4, '2', '22._1.3333');
@@ -418,8 +418,8 @@ const pasteInvalidToSelection = async () => {
     await Actions.pasteToSelection('usLocaleInput', '11/22/33', 1, 4, '5', '11/22/33');
 
     setBlock('ko-KR locale', 2);
-    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, 'x', '33. 11. 22');
-    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, '5', '33. 11. 22');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, 'x', '33. 11. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, '5', '33. 11. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.pasteToSelection('ruLocaleInput', '22.11.3333', 1, 4, 'x', '22.11.3333');
@@ -438,15 +438,15 @@ const pasteFromPos = async () => {
     await Actions.pasteFromPos('usLocaleInput', '11/2_/33', 4, '2', '11/22/33');
 
     setBlock('ko-KR locale', 2);
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '1', '33. 1_. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 3, '1', '33. 1_. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, '1', '33. 1_. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, '7', '33. 07. 22');
-    await Actions.pasteFromPos('koLocaleInput', '3_. __. 22', 1, '3. 1', '33. 1_. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '. 1', '33. 1_. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '. ', '33. __. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, ' ', '33. __. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. 1_. 22', 5, '1', '33. 11. 22');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '1', '33. 1_. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 3, '1', '33. 1_. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, '1', '33. 1_. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, '7', '33. 07. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '3_. __. 22', 1, '3. 1', '33. 1_. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '. 1', '33. 1_. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, '. ', '33. __. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 2, ' ', '33. __. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. 1_. 22', 5, '1', '33. 11. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.pasteFromPos('ruLocaleInput', '22.__.3333', 3, '1', '22.1_.3333');
@@ -465,8 +465,8 @@ const pasteInvalidFromPos = async () => {
     await Actions.pasteFromPos('usLocaleInput', '1_/22/33', 1, '5', '1_/22/33');
 
     setBlock('ko-KR locale', 2);
-    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, 'x', '33. __. 22');
-    await Actions.pasteFromPos('koLocaleInput', '33. 1_. 22', 5, '5', '33. 1_. 22');
+    await Actions.pasteFromPos('koLocaleInput', '33. __. 22', 4, 'x', '33. __. 22.');
+    await Actions.pasteFromPos('koLocaleInput', '33. 1_. 22', 5, '5', '33. 1_. 22.');
 
     setBlock('ru-RU locale', 2);
     await Actions.pasteFromPos('ruLocaleInput', '22.__.3333', 3, 'x', '22.__.3333');
@@ -485,7 +485,7 @@ const backspaceSelection = async () => {
     await Actions.backspaceSelection('usLocaleInput', '11/22/33', 0, 8, '');
 
     setBlock('ko-KR locale', 2);
-    await Actions.backspaceSelection('koLocaleInput', '33. 11. 22', 5, 9, '33. 1_. _2');
+    await Actions.backspaceSelection('koLocaleInput', '33. 11. 22', 5, 9, '33. 1_. _2.');
     await Actions.backspaceSelection('koLocaleInput', '33. 11. 22', 0, 10, '');
 
     setBlock('ru-RU locale', 2);
@@ -505,7 +505,7 @@ const deleteSelection = async () => {
     await Actions.deleteSelection('usLocaleInput', '11/22/33', 0, 8, '');
 
     setBlock('ko-KR locale', 2);
-    await Actions.deleteSelection('koLocaleInput', '33. 11. 22', 5, 9, '33. 1_. _2');
+    await Actions.deleteSelection('koLocaleInput', '33. 11. 22', 5, 9, '33. 1_. _2.');
     await Actions.deleteSelection('koLocaleInput', '33. 11. 22', 0, 10, '');
 
     setBlock('ru-RU locale', 2);
@@ -525,7 +525,7 @@ const cutSelection = async () => {
     await Actions.cutSelection('usLocaleInput', '11/22/33', 0, 8, '');
 
     setBlock('ko-KR locale', 2);
-    await Actions.cutSelection('koLocaleInput', '33. 11. 22', 5, 9, '33. 1_. _2');
+    await Actions.cutSelection('koLocaleInput', '33. 11. 22', 5, 9, '33. 1_. _2.');
     await Actions.cutSelection('koLocaleInput', '33. 11. 22', 0, 10, '');
 
     setBlock('ru-RU locale', 2);
