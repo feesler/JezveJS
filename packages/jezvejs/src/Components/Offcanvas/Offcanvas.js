@@ -1,4 +1,4 @@
-import { asArray, isFunction } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     createElement,
     show,
@@ -87,17 +87,10 @@ export class Offcanvas extends Component {
     onAnimationDone() {
         this.setState({ ...this.state, transitionInProgress: false });
 
-        if (this.state.closed) {
-            if (isFunction(this.props.onClosed)) {
-                this.props.onClosed();
-            }
-        } else if (isFunction(this.props.onOpened)) {
-            this.props.onOpened();
-        }
+        const eventName = (this.state.closed) ? 'onClosed' : 'onOpened';
+        this.notifyEvent(eventName);
 
-        if (isFunction(this.props.onToggle)) {
-            this.props.onToggle(this.state.closed);
-        }
+        this.notifyEvent('onToggle', this.state.closed);
     }
 
     waitForAnimation() {

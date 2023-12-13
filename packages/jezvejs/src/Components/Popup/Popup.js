@@ -1,4 +1,4 @@
-import { asArray, isFunction } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     ge,
     show,
@@ -140,9 +140,7 @@ export class Popup extends Component {
     close() {
         this.hide();
 
-        if (isFunction(this.props.onClose)) {
-            this.props.onClose();
-        }
+        this.notifyEvent('onClose');
     }
 
     setTitle(title) {

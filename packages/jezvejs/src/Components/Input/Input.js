@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     setEvents,
@@ -103,27 +102,19 @@ export class Input extends Component {
     }
 
     onFocus(e) {
-        if (isFunction(this.props.onFocus)) {
-            this.props.onFocus(e);
-        }
+        this.notifyEvent('onFocus', e);
     }
 
     onBlur(e) {
-        if (isFunction(this.props.onBlur)) {
-            this.props.onBlur(e);
-        }
+        this.notifyEvent('onBlur', e);
     }
 
     onInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
+        this.notifyEvent('onInput', e);
     }
 
     onChange(e) {
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(e);
-        }
+        this.notifyEvent('onChange', e);
     }
 
     /** Enables/disabled component */

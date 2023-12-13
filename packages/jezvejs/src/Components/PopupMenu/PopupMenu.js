@@ -274,9 +274,7 @@ export class PopupMenu extends Menu {
         PopupMenu.activeInstance = null;
         this.removeHandlers();
 
-        if (isFunction(this.props.onClose)) {
-            this.props.onClose();
-        }
+        this.notifyEvent('onClose');
     }
 
     toggleMenu(e) {

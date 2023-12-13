@@ -1105,9 +1105,7 @@ export class BaseChart extends Component {
             this.hidePopup();
         }
 
-        if (isFunction(this.props.onScroll)) {
-            this.props.onScroll();
-        }
+        this.notifyEvent('onScroll');
     }
 
     /** Chart scroller resize observer handler */
@@ -1138,9 +1136,7 @@ export class BaseChart extends Component {
             this.scrollFunc();
         }
 
-        if (isFunction(this.props.onResize)) {
-            this.props.onResize();
-        }
+        this.notifyEvent('onResize');
     }
 
     /** Create items with default scale */

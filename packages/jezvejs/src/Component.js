@@ -127,6 +127,34 @@ export class Component {
         });
     }
 
+    /**
+     * Returns handler function for specified event name or null if handler not found
+     * Event is any function in the props of component
+     *
+     * @param {string} name - event name
+     * @returns {Function|null}
+     */
+    getEventHandler(name) {
+        if (typeof name !== 'string' || name === '') {
+            throw new Error('Invalid event name');
+        }
+
+        const handler = this.props[name];
+        return isFunction(handler) ? handler : null;
+    }
+
+    /**
+     * Calls handler function if exists for specified event name and returns result
+     * Handler function is called with list of arguments if specified
+     *
+     * @param {string} name - event name
+     * @param  {...any} args
+     */
+    notifyEvent(name, ...args) {
+        const handler = this.getEventHandler(name);
+        return handler?.(...args) ?? null;
+    }
+
     /** Subscribes view to store updates */
     subscribeToStore(store) {
         if (!store) {

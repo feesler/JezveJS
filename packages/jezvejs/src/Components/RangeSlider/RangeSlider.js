@@ -260,21 +260,15 @@ export class RangeSlider extends Component {
             }
         }
 
-        if (isFunction(this.props.onClick)) {
-            this.props.onClick(e);
-        }
+        this.notifyEvent('onClick', e);
     }
 
     onFocus(e) {
-        if (isFunction(this.props.onFocus)) {
-            this.props.onFocus(e);
-        }
+        this.notifyEvent('onFocus', e);
     }
 
     onBlur(e) {
-        if (isFunction(this.props.onBlur)) {
-            this.props.onBlur(e);
-        }
+        this.notifyEvent('onBlur', e);
     }
 
     onResize() {
@@ -397,15 +391,11 @@ export class RangeSlider extends Component {
     }
 
     notifyChanged() {
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(this.value);
-        }
+        this.notifyEvent('onChange', this.value);
     }
 
     notifyScroll() {
-        if (isFunction(this.props.onScroll)) {
-            this.props.onScroll(this.value);
-        }
+        this.notifyEvent('onScroll', this.value);
     }
 
     /** Enables/disabled component */

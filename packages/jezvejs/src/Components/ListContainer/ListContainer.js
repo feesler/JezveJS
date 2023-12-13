@@ -156,9 +156,7 @@ export class ListContainer extends Component {
         }
 
         if (item.type === 'placeholder') {
-            if (isFunction(this.props.onPlaceholderClick)) {
-                this.props.onPlaceholderClick(e);
-            }
+            this.notifyEvent('onPlaceholderClick', e);
             return;
         }
 
@@ -166,9 +164,7 @@ export class ListContainer extends Component {
             return;
         }
 
-        if (isFunction(this.props.onItemClick)) {
-            this.props.onItemClick(item.id, e);
-        }
+        this.notifyEvent('onItemClick', item.id, e);
     }
 
     /**

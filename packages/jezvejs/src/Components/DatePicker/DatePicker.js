@@ -1,5 +1,5 @@
 import '../../common.scss';
-import { isDate, isFunction } from '@jezvejs/types';
+import { isDate } from '@jezvejs/types';
 import {
     ge,
     show,
@@ -470,12 +470,8 @@ export class DatePicker extends Component {
     }
 
     sendShowEvents(value = true) {
-        if (value && isFunction(this.props.onShow)) {
-            this.props.onShow();
-        }
-        if (!value && isFunction(this.props.onHide)) {
-            this.props.onHide();
-        }
+        const eventName = (value) ? 'onShow' : 'onHide';
+        this.notifyEvent(eventName);
     }
 
     /**
@@ -751,9 +747,7 @@ export class DatePicker extends Component {
 
         this.store.dispatch(actions.selectDay(date));
 
-        if (isFunction(this.props.onDateSelect)) {
-            this.props.onDateSelect(this.state.actDate);
-        }
+        this.notifyEvent('onDateSelect', this.state.actDate);
 
         if (this.props.range) {
             this.onRangeSelect(date);
@@ -776,9 +770,7 @@ export class DatePicker extends Component {
         } else {
             this.setSelection(start, date, false);
 
-            if (isFunction(this.props.onRangeSelect)) {
-                this.props.onRangeSelect(this.state.curRange);
-            }
+            this.notifyEvent('onRangeSelect', this.state.curRange);
         }
     }
 

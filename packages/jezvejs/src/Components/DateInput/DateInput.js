@@ -1,4 +1,4 @@
-import { isNumber, isFunction } from '@jezvejs/types';
+import { isNumber } from '@jezvejs/types';
 import {
     setEvents,
     getCursorPos,
@@ -148,9 +148,7 @@ export class DateInput extends Component {
 
     /** 'input' event handler */
     handleInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
+        this.notifyEvent('onInput', e);
     }
 
     handleValue(value) {

@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import { Component } from 'jezvejs';
 import { createElement } from '@jezvejs/dom';
 import { generateId } from '../../Application/utils.js';
@@ -76,17 +75,13 @@ export class RangeInputField extends Component {
     onInput(e) {
         this.setState({ ...this.state, value: e.target.value });
 
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e.target.value);
-        }
+        this.notifyEvent('onInput', e.target.value);
     }
 
     onChange(e) {
         this.setState({ ...this.state, value: e.target.value });
 
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(e.target.value);
-        }
+        this.notifyEvent('onChange', e.target.value);
     }
 
     render(state) {
