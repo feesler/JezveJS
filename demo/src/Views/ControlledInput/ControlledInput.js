@@ -1,5 +1,6 @@
 import 'jezvejs/style';
 import { createElement } from '@jezvejs/dom';
+import { Button } from 'jezvejs/Button';
 import { ControlledInput } from 'jezvejs/ControlledInput';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
@@ -16,6 +17,7 @@ class ControlledInputView extends DemoView {
     onStart() {
         this.initDigitsOnly();
         this.initLettersOnly();
+        this.initDisabled();
     }
 
     initDigitsOnly() {
@@ -70,6 +72,34 @@ class ControlledInputView extends DemoView {
             id: 'lettersOnly',
             title: 'Letters only',
             content: [container, logsField.elem],
+        });
+    }
+
+    initDisabled() {
+        const disabledInp = ControlledInput.create({
+            value: '-5678.90',
+            disabled: true,
+            isValidValue: (value) => /^-?\d*\.?\d*$/.test(value),
+        });
+
+        const toggleEnableBtn = Button.create({
+            id: 'toggleEnableBtn',
+            className: 'action-btn',
+            title: 'Enable',
+            onClick: () => {
+                const { disabled } = disabledInp;
+                toggleEnableBtn.setTitle((disabled) ? 'Disable' : 'Enable');
+                disabledInp.enable(disabled);
+            },
+        });
+
+        this.addSection({
+            id: 'disabled',
+            title: 'Disabled component',
+            content: [
+                createElement('div', { children: disabledInp.elem }),
+                createControls(toggleEnableBtn.elem),
+            ],
         });
     }
 }

@@ -175,9 +175,7 @@ export class ControlledInput extends Input {
     }
 
     render(state) {
-        if (!state) {
-            throw new Error('Invalid state');
-        }
+        super.render(state);
 
         this.skipValidation = true;
         this.elem.value = this.renderValue(state);
