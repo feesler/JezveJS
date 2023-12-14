@@ -10,15 +10,9 @@ import {
 import { ControlledInput } from '../ControlledInput/ControlledInput.js';
 
 const defaultProps = {
-    id: undefined,
-    name: undefined,
-    form: undefined,
-    placeholder: undefined,
-    value: undefined,
     min: null,
     max: null,
     digits: undefined,
-    onInput: null,
     allowNegative: true,
     allowMultipleLeadingZeros: false,
 };
@@ -27,10 +21,6 @@ const defaultProps = {
  * Decimal value input component
  */
 export class DecimalInput extends ControlledInput {
-    static userProps = {
-        elem: ['id', 'name', 'form', 'placeholder', 'value'],
-    };
-
     constructor(props = {}) {
         super({
             ...defaultProps,

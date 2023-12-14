@@ -12,17 +12,10 @@ const dateParts = ['day', 'month', 'year'];
 const defaultProps = {
     guideChar: '_',
     locales: [],
-    id: undefined,
-    name: undefined,
-    form: undefined,
-    placeholder: undefined,
-    tabIndex: undefined,
-    onInput: null,
 };
 
 /**
- * Decimal value input
- * @param {Object} props
+ * Date input component
  */
 export class DateInput extends ControlledInput {
     constructor(props = {}) {
@@ -53,8 +46,7 @@ export class DateInput extends ControlledInput {
             ...this.emptyState,
         };
 
-        const value = this.props.value ?? this.value ?? '';
-        this.state = this.handleExpectedContent(value);
+        this.state = this.handleExpectedContent(this.props.value);
 
         super.init();
 
