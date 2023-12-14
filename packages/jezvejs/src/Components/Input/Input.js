@@ -40,6 +40,8 @@ export class Input extends Component {
             ...props,
         });
 
+        this.props.value = this.props.value ?? this.value ?? '';
+
         this.state = { ...this.props };
 
         this.init();
