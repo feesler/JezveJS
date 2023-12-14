@@ -79,7 +79,7 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.23.6",
-        "@jezvejs/datetime": "^1.0.2",
+        "@jezvejs/datetime": "^1.1.0",
         "@jezvejs/types": "^1.0.0",
         "core-js": "^3.34.0",
         "whatwg-fetch": "^3.6.20"

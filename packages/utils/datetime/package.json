@@ -1,6 +1,6 @@
 {
     "name": "@jezvejs/datetime",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "Collection of simple date and time utilities",
     "type": "module",
     "module": "./src/index.js",
