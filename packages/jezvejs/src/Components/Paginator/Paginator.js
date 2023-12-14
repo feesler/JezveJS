@@ -54,12 +54,12 @@ export class Paginator extends Component {
         } else {
             this.init();
         }
+
+        this.postInit();
     }
 
     init() {
         this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
-
-        this.postInit();
     }
 
     parse() {
@@ -87,8 +87,6 @@ export class Paginator extends Component {
             }
             this.state.pagesCount = page;
         });
-
-        this.postInit();
     }
 
     postInit() {
@@ -125,13 +123,16 @@ export class Paginator extends Component {
         this.setPage(page);
     }
 
-    setPage(page) {
-        if (this.state.pageNum === page) {
+    setPage(pageNum) {
+        if (
+            (this.state.pageNum === pageNum)
+            || (pageNum < 1)
+            || (pageNum > this.state.pagesCount)
+        ) {
             return;
         }
 
-        this.state.pageNum = page;
-        this.render(this.state);
+        this.setState({ ...this.state, pageNum });
     }
 
     setPagesCount(pagesCount) {
@@ -139,16 +140,20 @@ export class Paginator extends Component {
             return;
         }
 
-        this.state.pagesCount = pagesCount;
-        if (this.state.pageNum > pagesCount) {
-            this.state.pageNum = 1;
-        }
-        this.render(this.state);
+        this.setState({
+            ...this.state,
+            pagesCount,
+            pageNum: (this.state.pageNum > pagesCount) ? 1 : this.state.pageNum,
+        });
     }
 
-    setURL(url) {
-        this.state.url = url.toString();
-        this.render(this.state);
+    setURL(value) {
+        const url = value.toString();
+        if (this.state.url === url) {
+            return;
+        }
+
+        this.setState({ ...this.state, url });
     }
 
     getPageItems(state) {
@@ -278,6 +283,24 @@ export class Paginator extends Component {
             props: { className: getClassName(ITEM_CLASS, ARROW_CLASS, arrowNavClass) },
             children: arrowIcon,
         });
+    }
+
+    onStateChange(state, prevState) {
+        if (
+            state.pagesCount === prevState?.pagesCount
+            && state.pageNum === prevState?.pageNum
+        ) {
+            return state;
+        }
+
+        const pageNum = (state.pageNum < 1 || state.pageNum > state.pagesCount)
+            ? 1
+            : state.pageNum;
+
+        return {
+            ...state,
+            pageNum,
+        };
     }
 
     render(state) {
