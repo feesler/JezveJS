@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import { getClassName } from '@jezvejs/dom';
 import { deepMeet } from '../../../../../common.js';
 import { Menu } from '../../../../Menu/Menu.js';
@@ -62,15 +61,11 @@ export class DropDownMenu extends Menu {
     }
 
     onInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
+        this.notifyEvent('onInput', e);
     }
 
     setActive(itemId) {
-        if (isFunction(this.props.onItemActivate)) {
-            this.props.onItemActivate(itemId);
-        }
+        this.notifyEvent('onItemActivate', itemId);
     }
 
     getItemProps(item, state) {

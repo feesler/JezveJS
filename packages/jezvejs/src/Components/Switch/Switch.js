@@ -1,4 +1,4 @@
-import { asArray, isFunction } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     setEvents,
     createElement,
@@ -110,9 +110,7 @@ export class Switch extends Component {
     }
 
     onChange() {
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(this.checked);
-        }
+        this.notifyEvent('onChange', this.checked);
     }
 
     /** Set label content */

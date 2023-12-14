@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     createSVGElement,
@@ -86,23 +85,17 @@ export class DatePickerHeader extends Component {
         const isTitle = this.titleEl.contains(e.target);
         const isSecondTitle = this.state.doubleView && this.secondTitleEl?.contains(e.target);
         if (isTitle || isSecondTitle) {
-            if (isFunction(this.props.onClickTitle)) {
-                this.props.onClickTitle({ e, secondViewTransition: isSecondTitle });
-            }
+            this.notifyEvent('onClickTitle', { e, secondViewTransition: isSecondTitle });
             return;
         }
 
         if (this.navPrevElem.contains(e.target)) {
-            if (isFunction(this.props.onClickPrev)) {
-                this.props.onClickPrev({ e });
-            }
+            this.notifyEvent('onClickPrev', { e });
             return;
         }
 
         if (this.navNextElem.contains(e.target)) {
-            if (isFunction(this.props.onClickNext)) {
-                this.props.onClickNext({ e });
-            }
+            this.notifyEvent('onClickNext', { e });
         }
     }
 

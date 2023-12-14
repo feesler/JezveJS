@@ -1,4 +1,4 @@
-import { isFunction, isObject, asArray } from '@jezvejs/types';
+import { isObject, asArray } from '@jezvejs/types';
 import {
     createSVGElement,
     setEvents,
@@ -127,35 +127,25 @@ export class PieChart extends Component {
 
     /** Sector item 'click' event handler */
     onItemClick(e, sector) {
-        if (!isFunction(this.props.onItemClick)) {
-            return;
-        }
-
-        this.props.onItemClick({ sector, event: e });
+        this.notifyEvent('onItemClick', { sector, event: e });
     }
 
     /** Sector item 'mouseover' event handler */
     onItemOver(e, sector) {
-        if (
-            this.state.blockTouch
-            || !isFunction(this.props.onItemOver)
-        ) {
+        if (this.state.blockTouch) {
             return;
         }
 
-        this.props.onItemOver({ sector, event: e });
+        this.notifyEvent('onItemOver', { sector, event: e });
     }
 
     /** Sector item 'mouseout' from bar event handler */
     onItemOut(e, sector) {
-        if (
-            this.state.blockTouch
-            || !isFunction(this.props.onItemOut)
-        ) {
+        if (this.state.blockTouch) {
             return;
         }
 
-        this.props.onItemOut({ sector, event: e });
+        this.notifyEvent('onItemOut', { sector, event: e });
     }
 
     /** Calculate sum of array values */

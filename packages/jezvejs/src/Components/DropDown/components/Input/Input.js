@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import {
     createElement,
     enable,
@@ -128,9 +127,7 @@ export class DropDownInput extends Component {
 
     /** 'input' event handler  */
     onInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
+        this.notifyEvent('onInput', e);
     }
 
     render(state, prevState = {}) {

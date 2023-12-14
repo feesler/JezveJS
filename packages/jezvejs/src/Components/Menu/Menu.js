@@ -465,9 +465,7 @@ export class Menu extends Component {
 
         this.toggleSelectItem(id);
 
-        if (isFunction(this.props.onItemClick)) {
-            this.props.onItemClick(strId, e);
-        }
+        this.notifyEvent('onItemClick', strId, e);
 
         if (isFunction(item.onClick)) {
             item.onClick(id, e);
@@ -483,9 +481,7 @@ export class Menu extends Component {
     onPlaceholderClick(e) {
         e.stopPropagation();
 
-        if (isFunction(this.props.onPlaceholderClick)) {
-            this.props.onPlaceholderClick();
-        }
+        this.notifyEvent('onPlaceholderClick', e);
     }
 
     /** Group header 'click' event handler */
@@ -495,9 +491,7 @@ export class Menu extends Component {
             return;
         }
 
-        if (isFunction(this.props.onGroupHeaderClick)) {
-            this.props.onGroupHeaderClick(id, e);
-        }
+        this.notifyEvent('onGroupHeaderClick', id, e);
     }
 
     /** 'scroll' event handler */

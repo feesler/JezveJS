@@ -1,6 +1,6 @@
 {
     "name": "jezvejs",
-    "version": "2.17.0",
+    "version": "2.18.0",
     "type": "module",
     "module": "index.js",
     "files": [
@@ -27,7 +27,7 @@
         "@jezvejs/number": "^1.0.0",
         "@jezvejs/types": "^1.0.0",
         "core-js": "^3.34.0",
-        "whatwg-fetch": "^3.6.19"
+        "whatwg-fetch": "^3.6.20"
     },
     "main": "index.js",
     "exports": {

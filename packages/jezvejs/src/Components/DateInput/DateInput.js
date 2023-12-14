@@ -1,28 +1,13 @@
-import { isNumber, isFunction } from '@jezvejs/types';
+import { isNumber } from '@jezvejs/types';
 import {
-    setEvents,
     getCursorPos,
     setCursorPos,
-    removeEvents,
-    createElement,
-    setProps,
-    setAttributes,
 } from '@jezvejs/dom';
-import { Component } from '../../Component.js';
-import '../../common.scss';
+import { ControlledInput } from '../ControlledInput/ControlledInput.js';
 
 const DEFAULT_SEPARATOR = '.';
 
-const inputProps = {
-    inputMode: 'decimal',
-    autocomplete: 'off',
-    autocapitalize: 'none',
-    spellcheck: false,
-};
-
-const inputAttrs = {
-    autocorrect: 'off',
-};
+const dateParts = ['day', 'month', 'year'];
 
 const defaultProps = {
     guideChar: '_',
@@ -39,26 +24,18 @@ const defaultProps = {
  * Decimal value input
  * @param {Object} props
  */
-export class DateInput extends Component {
-    static userProps = {
-        elem: ['id', 'name', 'form', 'placeholder', 'tabIndex'],
-    };
-
+export class DateInput extends ControlledInput {
     constructor(props = {}) {
         super({
             ...defaultProps,
             ...props,
+            inputMode: 'decimal',
         });
-
-        this.init();
     }
 
     init() {
-        if (!this.elem) {
-            this.elem = createElement('input', { props: { type: 'text' } });
-        }
-
         this.getDateFormat();
+        this.props.placeholder = this.props.placeholder ?? this.formatMask;
 
         const { dayRange, monthRange, yearRange } = this;
         this.maxLength = (
@@ -76,65 +53,13 @@ export class DateInput extends Component {
             ...this.emptyState,
         };
 
-        setProps(this.elem, inputProps);
-        setAttributes(this.elem, inputAttrs);
-        this.props.placeholder = this.props.placeholder ?? this.formatMask;
-        this.setUserProps();
+        const value = this.props.value ?? this.value ?? '';
+        this.state = this.handleExpectedContent(value);
 
-        this.beforeInputHandler = (e) => this.validateInput(e);
-        this.eventHandlers = {
-            keypress: this.beforeInputHandler,
-            paste: this.beforeInputHandler,
-            beforeinput: this.beforeInputHandler,
-            input: (e) => this.handleInput(e),
-        };
-        setEvents(this.elem, this.eventHandlers);
-        this.observeInputValue();
-        this.setClassNames();
+        super.init();
 
-        this.handleValue(this.value);
-        this.render(this.state);
         // Remove focus after getCursorPos() calls
         this.elem.blur();
-    }
-
-    /** Component destructor: free resources */
-    destroy() {
-        if (this.eventHandlers) {
-            removeEvents(this.elem, this.eventHandlers);
-            this.eventHandlers = null;
-        }
-        this.beforeInputHandler = null;
-    }
-
-    get value() {
-        return (this.elem) ? this.elem.value : null;
-    }
-
-    set value(val) {
-        if (this.elem) {
-            this.elem.value = val;
-        }
-    }
-
-    /** Define setter for 'value' property of input to prevent invalid values */
-    observeInputValue() {
-        const self = this;
-        const elementPrototype = Object.getPrototypeOf(this.elem);
-        const descriptor = Object.getOwnPropertyDescriptor(elementPrototype, 'value');
-
-        Object.defineProperty(this.elem, 'value', {
-            get() {
-                return descriptor.get.call(this);
-            },
-            set(value) {
-                if (value === this.value) {
-                    return;
-                }
-
-                descriptor.set.call(this, self.handleValue(value));
-            },
-        });
     }
 
     dispatchInputEvent() {
@@ -144,13 +69,6 @@ export class DateInput extends Component {
         });
 
         this.elem.dispatchEvent(event);
-    }
-
-    /** 'input' event handler */
-    handleInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
     }
 
     handleValue(value) {
@@ -169,55 +87,65 @@ export class DateInput extends Component {
         const parts = formatter.formatToParts();
 
         this.separator = null;
+        this.formatParts = [];
         let currentPos = 0;
         let order = 0;
         parts.forEach(({ type, value }) => {
+            const part = {
+                type,
+                start: currentPos,
+                length: (type === 'day' || type === 'month') ? 2 : value.length,
+            };
+            part.end = part.start + part.length;
+            currentPos += part.length;
+
             if (type === 'day') {
-                this.dayRange = { start: currentPos, length: 2, order };
-                this.dayRange.end = this.dayRange.start + this.dayRange.length;
-                currentPos += this.dayRange.length;
+                this.dayRange = { ...part, order };
                 order += 1;
             }
             if (type === 'month') {
-                this.monthRange = { start: currentPos, length: 2, order };
-                this.monthRange.end = this.monthRange.start + this.monthRange.length;
-                currentPos += this.monthRange.length;
+                this.monthRange = { ...part, order };
                 order += 1;
             }
             if (type === 'year') {
-                this.yearRange = { start: currentPos, length: value.length, order };
-                this.yearRange.end = this.yearRange.start + this.yearRange.length;
-                currentPos += this.yearRange.length;
+                this.yearRange = { ...part, order };
                 order += 1;
             }
             if (type === 'literal') {
                 if (!this.separator) {
                     this.separator = value;
                 }
-                currentPos += value.length;
+                part.value = value;
             }
+
+            this.formatParts.push(part);
         });
 
         if (!this.separator) {
             this.separator = DEFAULT_SEPARATOR;
         }
 
-        const yearLength = this.yearRange.end - this.yearRange.start;
         this.formatMask = this.formatDateString({
             day: 'dd',
             month: 'mm',
-            year: ''.padStart(yearLength, 'y'),
+            year: ''.padStart(this.yearRange.length, 'y'),
         });
     }
 
-    formatDateString({ day, month, year }) {
-        const groups = [
-            [day, this.dayRange.start],
-            [month, this.monthRange.start],
-            [year, this.yearRange.start],
-        ].sort((a, b) => a[1] - b[1]);
+    formatDatePart(part, state) {
+        if (part.type === 'literal') {
+            return part.value;
+        }
 
-        return groups.map((group) => group[0]).join(this.separator);
+        return (dateParts.includes(part.type))
+            ? state[part.type]
+            : '';
+    }
+
+    formatDateString(state) {
+        return this.formatParts.map((part) => (
+            this.formatDatePart(part, state)
+        )).join('');
     }
 
     /**
@@ -269,6 +197,24 @@ export class DateInput extends Component {
         }
 
         return null;
+    }
+
+    /**
+     * Returns string value for specified range
+     *
+     * @param {string} content - content string
+     * @param {object} range - range object
+     * @returns {string}
+     */
+    getContentRange(content, range) {
+        if (typeof content !== 'string') {
+            throw new Error('Invalid content');
+        }
+        if (!range) {
+            throw new Error('Invalid range');
+        }
+
+        return content.substring(range.start, range.end);
     }
 
     fixCursorPos(pos) {
@@ -415,21 +361,6 @@ export class DateInput extends Component {
         }
 
         return res;
-    }
-
-    /** Obtain from event input data to be inserted */
-    getInputContent(e) {
-        if (e.type === 'paste') {
-            return (e.clipboardData || window.clipboardData).getData('text');
-        }
-        if (e.type === 'beforeinput') {
-            return e.data;
-        }
-        if (e.type === 'keypress' && e.keyCode !== 13) {
-            return e.key;
-        }
-
-        return null;
     }
 
     deleteSelection() {
@@ -581,14 +512,9 @@ export class DateInput extends Component {
             };
         }
 
-        const expectedParts = content.split(this.separator);
-        if (expectedParts.length !== 3) {
-            return this.state;
-        }
-
-        let expectedDay = expectedParts[this.dayRange.order];
-        let expectedMonth = expectedParts[this.monthRange.order];
-        const expectedYear = expectedParts[this.yearRange.order];
+        let expectedDay = this.getContentRange(content, this.dayRange);
+        let expectedMonth = this.getContentRange(content, this.monthRange);
+        const expectedYear = this.getContentRange(content, this.yearRange);
 
         const search = new RegExp(`${this.props.guideChar}`, 'g');
 
@@ -684,9 +610,7 @@ export class DateInput extends Component {
 
     /** Render component */
     render(state) {
-        this.skipValidation = true;
-        this.elem.value = this.renderValue(state);
-        this.skipValidation = false;
+        super.render(state);
 
         setCursorPos(this.elem, this.cursorPos);
     }

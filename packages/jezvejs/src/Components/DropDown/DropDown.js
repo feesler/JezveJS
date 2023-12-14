@@ -1005,9 +1005,7 @@ export class DropDown extends Component {
             this.filter(e.target.value);
         }
 
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
+        this.notifyEvent('onInput', e);
 
         this.setRenderTime();
     }

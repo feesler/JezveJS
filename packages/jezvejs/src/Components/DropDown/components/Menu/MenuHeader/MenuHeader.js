@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import { Component } from '../../../../../Component.js';
 import { getSelectedItems } from '../../../utils.js';
 
@@ -60,9 +59,7 @@ export class DropDownMenuHeader extends Component {
      * @param {KeyboardEvent} e event object
      */
     onInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
+        this.notifyEvent('onInput', e);
     }
 
     render(state) {

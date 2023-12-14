@@ -1,5 +1,4 @@
 import { Component } from 'jezvejs';
-import { isFunction } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import './CustomDatePickerFooter.scss';
@@ -40,9 +39,7 @@ export class CustomDatePickerFooter extends Component {
     }
 
     onSubmit(e) {
-        if (isFunction(this.props.onSubmit)) {
-            this.props.onSubmit(e);
-        }
+        this.notifyEvent('onSubmit', e);
     }
 
     render(state) {

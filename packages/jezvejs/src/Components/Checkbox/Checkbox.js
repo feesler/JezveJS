@@ -1,4 +1,4 @@
-import { asArray, isFunction } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     createSVGElement,
     setEvents,
@@ -127,9 +127,7 @@ export class Checkbox extends Component {
     }
 
     onChange() {
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(this.checked);
-        }
+        this.notifyEvent('onChange', this.checked);
     }
 
     /** Set label content */

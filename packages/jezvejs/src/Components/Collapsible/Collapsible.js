@@ -1,4 +1,4 @@
-import { asArray, isFunction } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     createElement,
     setEvents,
@@ -70,9 +70,7 @@ export class Collapsible extends Component {
             return state;
         }
 
-        if (isFunction(this.props.onStateChange)) {
-            this.props.onStateChange(state.expanded);
-        }
+        this.notifyEvent('onStateChange', state.expanded);
 
         return state;
     }

@@ -1,4 +1,4 @@
-import { isFunction, asArray } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     createElement,
     setEvents,
@@ -159,9 +159,7 @@ export class Button extends Component {
             return;
         }
 
-        if (isFunction(this.props.onClick)) {
-            this.props.onClick(e);
-        }
+        this.notifyEvent('onClick', e);
     }
 
     /** Enables/disabled component */

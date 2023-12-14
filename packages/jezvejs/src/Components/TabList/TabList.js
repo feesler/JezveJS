@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import '../../common.scss';
 import {
     createElement,
@@ -108,9 +107,7 @@ export class TabList extends Component {
             selectedId: itemToSelect?.id?.toString() ?? null,
         });
 
-        if (isFunction(this.props.onChange)) {
-            this.props.onChange(itemToSelect);
-        }
+        this.notifyEvent('onChange', itemToSelect);
     }
 
     getItem(id) {

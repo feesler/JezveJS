@@ -1,4 +1,3 @@
-import { isFunction } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { Component } from '../../../../../Component.js';
 import { getSelectedItems } from '../../../utils.js';
@@ -122,23 +121,17 @@ export class DropDownComboBox extends Component {
 
     /** Text input 'input' event handler  */
     onInput(e) {
-        if (isFunction(this.props.onInput)) {
-            this.props.onInput(e);
-        }
+        this.notifyEvent('onInput', e);
     }
 
     /** Multiple selection element 'click' event handler */
     onDeleteSelectedItem(e) {
-        if (isFunction(this.props.onDeleteSelectedItem)) {
-            this.props.onDeleteSelectedItem(e);
-        }
+        this.notifyEvent('onDeleteSelectedItem', e);
     }
 
     /** Clear selection button 'click' event handler */
     onClearSelection(e) {
-        if (isFunction(this.props.onClearSelection)) {
-            this.props.onClearSelection(e);
-        }
+        this.notifyEvent('onClearSelection', e);
     }
 
     /** Returns selection item by id */

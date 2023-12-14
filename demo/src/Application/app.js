@@ -27,6 +27,7 @@ export const navigationMenuSections = [{
     items: [
         { id: 'input', title: 'Input', url: 'input.html' },
         { id: 'inputGroup', title: 'Input group', url: 'inputgroup.html' },
+        { id: 'controlledInput', title: 'Controlled input', url: 'controlledinput.html' },
         { id: 'decimalInput', title: 'Decimal input', url: 'decimalinput.html' },
         { id: 'dateInput', title: 'Date input', url: 'dateinput.html' },
     ],
