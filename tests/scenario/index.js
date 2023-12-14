@@ -7,6 +7,7 @@ import { assert } from '@jezvejs/assert';
 import { commonTests } from './common.js';
 import { assertTests } from './assert.js';
 import { collapsibleTests } from './Collapsible.js';
+import { controlledInputTests } from './ControlledInput.js';
 import { decimalInputTests } from './DecimalInput.js';
 import { datePickerTests } from './DatePicker.js';
 import { dropDownTests } from './DropDown.js';
@@ -22,6 +23,7 @@ const storiesMap = {
     assert: assertTests,
     store: storeTests,
     collapsible: collapsibleTests,
+    controlledInput: controlledInputTests,
     decimalInput: decimalInputTests,
     dateInput: dateInputTests,
     dropDown: dropDownTests,

@@ -16,6 +16,7 @@ export default {
         Checkbox: './src/Components/Checkbox/Checkbox.js',
         CloseButton: './src/Components/CloseButton/CloseButton.js',
         Collapsible: './src/Components/Collapsible/Collapsible.js',
+        ControlledInput: './src/Components/ControlledInput/ControlledInput.js',
         DateInput: './src/Components/DateInput/DateInput.js',
         DatePicker: './src/Components/DatePicker/DatePicker.js',
         Debug: './src/Components/Debug/Debug.js',

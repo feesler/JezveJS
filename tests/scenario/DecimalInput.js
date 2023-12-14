@@ -595,6 +595,8 @@ const cutSelection = async () => {
 export const decimalInputTests = async () => {
     setBlock('DecimalInput component', 1);
 
+    await Actions.checkNavigation();
+
     await typeToEmpty();
     await typeInvalidToEmpty();
     await pasteToEmpty();

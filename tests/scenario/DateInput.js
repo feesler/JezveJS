@@ -540,6 +540,8 @@ const cutSelection = async () => {
 export const dateInputTests = async () => {
     setBlock('DateInput component', 1);
 
+    await Actions.checkNavigation();
+
     await typeToEmpty();
     await typeInvalidToEmpty();
     await pasteToEmpty();

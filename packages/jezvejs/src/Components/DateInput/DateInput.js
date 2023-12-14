@@ -1,28 +1,11 @@
 import { isNumber } from '@jezvejs/types';
 import {
-    setEvents,
     getCursorPos,
     setCursorPos,
-    removeEvents,
-    createElement,
-    setProps,
-    setAttributes,
 } from '@jezvejs/dom';
-import { Component } from '../../Component.js';
-import '../../common.scss';
+import { ControlledInput } from '../ControlledInput/ControlledInput.js';
 
 const DEFAULT_SEPARATOR = '.';
-
-const inputProps = {
-    inputMode: 'decimal',
-    autocomplete: 'off',
-    autocapitalize: 'none',
-    spellcheck: false,
-};
-
-const inputAttrs = {
-    autocorrect: 'off',
-};
 
 const dateParts = ['day', 'month', 'year'];
 
@@ -41,26 +24,18 @@ const defaultProps = {
  * Decimal value input
  * @param {Object} props
  */
-export class DateInput extends Component {
-    static userProps = {
-        elem: ['id', 'name', 'form', 'placeholder', 'tabIndex'],
-    };
-
+export class DateInput extends ControlledInput {
     constructor(props = {}) {
         super({
             ...defaultProps,
             ...props,
+            inputMode: 'decimal',
         });
-
-        this.init();
     }
 
     init() {
-        if (!this.elem) {
-            this.elem = createElement('input', { props: { type: 'text' } });
-        }
-
         this.getDateFormat();
+        this.props.placeholder = this.props.placeholder ?? this.formatMask;
 
         const { dayRange, monthRange, yearRange } = this;
         this.maxLength = (
@@ -78,65 +53,13 @@ export class DateInput extends Component {
             ...this.emptyState,
         };
 
-        setProps(this.elem, inputProps);
-        setAttributes(this.elem, inputAttrs);
-        this.props.placeholder = this.props.placeholder ?? this.formatMask;
-        this.setUserProps();
+        const value = this.props.value ?? this.value ?? '';
+        this.state = this.handleExpectedContent(value);
 
-        this.beforeInputHandler = (e) => this.validateInput(e);
-        this.eventHandlers = {
-            keypress: this.beforeInputHandler,
-            paste: this.beforeInputHandler,
-            beforeinput: this.beforeInputHandler,
-            input: (e) => this.handleInput(e),
-        };
-        setEvents(this.elem, this.eventHandlers);
-        this.observeInputValue();
-        this.setClassNames();
+        super.init();
 
-        this.handleValue(this.value);
-        this.render(this.state);
         // Remove focus after getCursorPos() calls
         this.elem.blur();
-    }
-
-    /** Component destructor: free resources */
-    destroy() {
-        if (this.eventHandlers) {
-            removeEvents(this.elem, this.eventHandlers);
-            this.eventHandlers = null;
-        }
-        this.beforeInputHandler = null;
-    }
-
-    get value() {
-        return (this.elem) ? this.elem.value : null;
-    }
-
-    set value(val) {
-        if (this.elem) {
-            this.elem.value = val;
-        }
-    }
-
-    /** Define setter for 'value' property of input to prevent invalid values */
-    observeInputValue() {
-        const self = this;
-        const elementPrototype = Object.getPrototypeOf(this.elem);
-        const descriptor = Object.getOwnPropertyDescriptor(elementPrototype, 'value');
-
-        Object.defineProperty(this.elem, 'value', {
-            get() {
-                return descriptor.get.call(this);
-            },
-            set(value) {
-                if (value === this.value) {
-                    return;
-                }
-
-                descriptor.set.call(this, self.handleValue(value));
-            },
-        });
     }
 
     dispatchInputEvent() {
@@ -146,11 +69,6 @@ export class DateInput extends Component {
         });
 
         this.elem.dispatchEvent(event);
-    }
-
-    /** 'input' event handler */
-    handleInput(e) {
-        this.notifyEvent('onInput', e);
     }
 
     handleValue(value) {
@@ -445,21 +363,6 @@ export class DateInput extends Component {
         return res;
     }
 
-    /** Obtain from event input data to be inserted */
-    getInputContent(e) {
-        if (e.type === 'paste') {
-            return (e.clipboardData || window.clipboardData).getData('text');
-        }
-        if (e.type === 'beforeinput') {
-            return e.data;
-        }
-        if (e.type === 'keypress' && e.keyCode !== 13) {
-            return e.key;
-        }
-
-        return null;
-    }
-
     deleteSelection() {
         const range = getCursorPos(this.elem);
         const origValue = this.elem.value;
@@ -707,9 +610,7 @@ export class DateInput extends Component {
 
     /** Render component */
     render(state) {
-        this.skipValidation = true;
-        this.elem.value = this.renderValue(state);
-        this.skipValidation = false;
+        super.render(state);
 
         setCursorPos(this.elem, this.cursorPos);
     }

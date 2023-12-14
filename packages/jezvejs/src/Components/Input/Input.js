@@ -4,6 +4,7 @@ import {
     enable,
 } from '@jezvejs/dom';
 import { Component } from '../../Component.js';
+import '../../common.scss';
 import './Input.scss';
 
 /* CSS classes */
@@ -14,6 +15,7 @@ const defaultProps = {
     name: undefined,
     form: undefined,
     tabIndex: undefined,
+    inputMode: undefined,
     placeholder: '',
     type: 'text',
     disabled: false,
@@ -29,7 +31,7 @@ const defaultProps = {
  */
 export class Input extends Component {
     static userProps = {
-        elem: ['id', 'type', 'name', 'form', 'tabIndex', 'value', 'placeholder'],
+        elem: ['id', 'type', 'name', 'form', 'tabIndex', 'value', 'inputMode', 'placeholder'],
     };
 
     constructor(props) {
@@ -40,11 +42,8 @@ export class Input extends Component {
 
         this.state = { ...this.props };
 
-        if (this.elem) {
-            this.parse();
-        } else {
-            this.init();
-        }
+        this.init();
+        this.postInit();
     }
 
     /** Returns id of root element of component */
@@ -70,19 +69,11 @@ export class Input extends Component {
     }
 
     init() {
-        this.elem = createElement('input', {
-            props: { className: INPUT_CLASS },
-        });
-
-        this.postInit();
-    }
-
-    parse() {
         if (!this.elem) {
-            throw new Error('Invalid element specified');
+            this.elem = createElement('input', {
+                props: { className: INPUT_CLASS },
+            });
         }
-
-        this.postInit();
     }
 
     postInit() {
