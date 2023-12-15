@@ -115,73 +115,56 @@ export class PopupMenuView extends AppView {
 
     async toggleDefault() {
         this.onToggleMenu('default');
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.defaultBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.defaultBtn.elem));
     }
 
     async openToggleOnClick() {
         if (!this.model.toggleOnClick.visible) {
             this.onToggleMenu('toggleOnClick');
         }
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.toggleOnClickBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.toggleOnClickBtn.elem));
     }
 
     async closeToggleOnClick() {
         assert(this.model.toggleOnClick.visible, 'Menu not visible');
 
         this.onToggleMenu('toggleOnClick');
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.toggleOnClickTitle.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.toggleOnClickTitle.elem));
     }
 
     async toggleHideOnSelect() {
         this.onToggleMenu('hideOnSelect');
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.hideOnSelectBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.hideOnSelectBtn.elem));
     }
 
     async toggleAbsPosition() {
         this.onToggleMenu('absPosition');
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.attachTarget.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.attachTarget.elem));
     }
 
     async toggleClipping() {
         this.onToggleMenu('clipping');
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.clippingBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.clippingBtn.elem));
     }
 
     async toggleListMenu(index) {
         this.onToggleListMenu(index);
-        const expected = this.getExpectedState();
+        const expectedVisibility = this.model.list.visible;
 
-        await this.performAction(() => click(this.content.listContainer.menuButtons[index]));
-        await waitForFunction(async () => {
-            await this.parse();
-            return this.model.list.visible === expected.list.visible;
+        return this.runTestAction(async () => {
+            await click(this.content.listContainer.menuButtons[index]);
+
+            await waitForFunction(async () => {
+                await this.parse();
+                return this.model.list.visible === expectedVisibility;
+            });
         });
-
-        return this.checkState(expected);
     }
 
     async toggleMenu(name, ...args) {

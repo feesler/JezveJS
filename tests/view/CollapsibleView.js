@@ -82,72 +82,62 @@ export class CollapsibleView extends AppView {
     }
 
     async toggleById(id) {
-        const component = this.getComponentById(id);
-
         const componentModel = this.model[id];
         const collapsedExpected = (toggleableList.includes(id))
             ? !componentModel.collapsed
             : componentModel.collapsed;
         this.model[id].collapsed = collapsedExpected;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => component.toggle());
-        await waitForFunction(async () => {
-            await this.parse();
+        return this.runTestAction(async () => {
+            const component = this.getComponentById(id);
+            await component.toggle();
 
-            const collapsible = this.getComponentById(id);
-            return (
-                collapsible.collapsed === collapsedExpected
-                && !collapsible.animationInProgress
-            );
+            await waitForFunction(async () => {
+                await this.parse();
+
+                const collapsible = this.getComponentById(id);
+                return (
+                    collapsible.collapsed === collapsedExpected
+                    && !collapsible.animationInProgress
+                );
+            });
         });
-
-        return this.checkState(expected);
     }
 
     async toggleDisabled() {
         const collapsedExpected = !this.model.toggleOnClick.collapsed;
         this.model.toggleOnClick.collapsed = collapsedExpected;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.toggleDisabledBtn.elem));
-        await waitForFunction(async () => {
-            await this.parse();
+        return this.runTestAction(async () => {
+            await click(this.content.toggleDisabledBtn.elem);
 
-            const collapsible = this.getComponentById('toggleOnClick');
-            return (
-                collapsible.collapsed === collapsedExpected
-                && !collapsible.animationInProgress
-            );
+            await waitForFunction(async () => {
+                await this.parse();
+
+                const collapsible = this.getComponentById('toggleOnClick');
+                return (
+                    collapsible.collapsed === collapsedExpected
+                    && !collapsible.animationInProgress
+                );
+            });
         });
-
-        return this.checkState(expected);
     }
 
     async expand() {
         this.model.methods.collapsed = false;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.expandBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.expandBtn.elem));
     }
 
     async collapse() {
         this.model.methods.collapsed = true;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.collapseBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.collapseBtn.elem));
     }
 
     async toggle() {
         this.model.methods.collapsed = !this.model.methods.collapsed;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.toggleBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.toggleBtn.elem));
     }
 }

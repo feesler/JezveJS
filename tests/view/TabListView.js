@@ -102,11 +102,7 @@ export class TabListView extends AppView {
             active: (item.id === selectedId),
         }));
 
-        const expected = this.getExpectedState();
-
-        await this.performAction(() => component.selectTabById(id));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => component.selectTabById(id));
     }
 
     async toggleShowItem() {
@@ -117,11 +113,8 @@ export class TabListView extends AppView {
                 ? { ...item, hidden: !item.hidden }
                 : item
         ));
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.toggleShowItemBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.toggleShowItemBtn.elem));
     }
 
     async toggleEnableItem() {
@@ -132,11 +125,8 @@ export class TabListView extends AppView {
                 ? { ...item, disabled: !item.disabled }
                 : item
         ));
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.toggleEnableItemBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.toggleEnableItemBtn.elem));
     }
 
     async toggleEnable() {
@@ -147,10 +137,7 @@ export class TabListView extends AppView {
             ...item,
             disabled: !disabled,
         }));
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => click(this.content.toggleEnableBtn.elem));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => click(this.content.toggleEnableBtn.elem));
     }
 }

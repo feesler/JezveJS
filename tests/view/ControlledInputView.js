@@ -82,20 +82,16 @@ export class ControlledInputView extends AppView {
         const component = this.getComponentById(id);
 
         this.model[id].value = expectedValue;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => input(component.elem, value));
-
-        return this.checkState(expected);
+        return this.runTestAction(() => input(component.elem, value));
     }
 
     async inputFromPos(id, initialValue, pos, value, expectedValue) {
         const component = this.getComponentById(id);
 
         this.model[id].value = expectedValue;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             if (component.value !== initialValue) {
                 await evaluate((el, val) => {
                     /* eslint-disable-next-line no-param-reassign */
@@ -106,17 +102,14 @@ export class ControlledInputView extends AppView {
             await setCursorPos(component.elem, pos);
             return typeText(component.elem, value);
         });
-
-        return this.checkState(expected);
     }
 
     async inputToSelection(id, initialValue, startPos, endPos, value, expectedValue) {
         const component = this.getComponentById(id);
 
         this.model[id].value = expectedValue;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             if (component.value !== initialValue) {
                 await evaluate((el, val) => {
                     /* eslint-disable-next-line no-param-reassign */
@@ -127,8 +120,6 @@ export class ControlledInputView extends AppView {
             await setSelection(component.elem, startPos, endPos);
             return typeText(component.elem, value);
         });
-
-        return this.checkState(expected);
     }
 
     async pasteToEmpty(id, value, expectedValue) {
@@ -136,9 +127,8 @@ export class ControlledInputView extends AppView {
 
         this.model[id].value = expectedValue;
         this.model.testValueInput.value = value;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             await evaluate((el, val) => {
                 /* eslint-disable-next-line no-param-reassign */
                 el.value = val;
@@ -149,8 +139,6 @@ export class ControlledInputView extends AppView {
             await input(component.elem, '');
             return pasteText();
         });
-
-        return this.checkState(expected);
     }
 
     async pasteFromPos(id, initialValue, pos, value, expectedValue) {
@@ -158,9 +146,8 @@ export class ControlledInputView extends AppView {
 
         this.model[id].value = expectedValue;
         this.model.testValueInput.value = value;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             await evaluate((el, val) => {
                 /* eslint-disable-next-line no-param-reassign */
                 el.value = val;
@@ -178,8 +165,6 @@ export class ControlledInputView extends AppView {
             await setCursorPos(component.elem, pos);
             return pasteText();
         });
-
-        return this.checkState(expected);
     }
 
     async pasteToSelection(id, initialValue, startPos, endPos, value, expectedValue) {
@@ -187,9 +172,8 @@ export class ControlledInputView extends AppView {
 
         this.model[id].value = expectedValue;
         this.model.testValueInput.value = value;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             await evaluate((el, val) => {
                 /* eslint-disable-next-line no-param-reassign */
                 el.value = val;
@@ -207,17 +191,14 @@ export class ControlledInputView extends AppView {
             await setSelection(component.elem, startPos, endPos);
             return pasteText();
         });
-
-        return this.checkState(expected);
     }
 
     async cutSelection(id, initialValue, startPos, endPos, expectedValue) {
         const component = this.getComponentById(id);
 
         this.model[id].value = expectedValue;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             if (component.value !== initialValue) {
                 await evaluate((el, val) => {
                     /* eslint-disable-next-line no-param-reassign */
@@ -228,17 +209,14 @@ export class ControlledInputView extends AppView {
             await setSelection(component.elem, startPos, endPos);
             return cutText();
         });
-
-        return this.checkState(expected);
     }
 
     async pressKeyFromPos(id, initialValue, pos, key, expectedValue) {
         const component = this.getComponentById(id);
 
         this.model[id].value = expectedValue;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             if (component.value !== initialValue) {
                 await evaluate((el, val) => {
                     /* eslint-disable-next-line no-param-reassign */
@@ -249,8 +227,6 @@ export class ControlledInputView extends AppView {
             await setCursorPos(component.elem, pos);
             return pressKey(key);
         });
-
-        return this.checkState(expected);
     }
 
     async backspaceFromPos(id, initialValue, pos, expected) {
@@ -265,9 +241,8 @@ export class ControlledInputView extends AppView {
         const component = this.getComponentById(id);
 
         this.model[id].value = expectedValue;
-        const expected = this.getExpectedState();
 
-        await this.performAction(async () => {
+        return this.runTestAction(async () => {
             if (component.value !== initialValue) {
                 await evaluate((el, val) => {
                     /* eslint-disable-next-line no-param-reassign */
@@ -278,8 +253,6 @@ export class ControlledInputView extends AppView {
             await setSelection(component.elem, startPos, endPos);
             return pressKey(key);
         });
-
-        return this.checkState(expected);
     }
 
     async backspaceSelection(id, initialValue, startPos, endPos, expected) {
