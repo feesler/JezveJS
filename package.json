@@ -56,7 +56,7 @@
         "eslint": "^7.32.0",
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-import-resolver-webpack": "^0.13.8",
-        "eslint-plugin-import": "^2.29.0",
+        "eslint-plugin-import": "^2.29.1",
         "html-webpack-plugin": "^5.5.4",
         "jezve-test": "^2.0.3",
         "jezvejs-test": "^1.14.4",
