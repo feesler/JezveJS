@@ -145,17 +145,18 @@ export class Histogram extends BaseChart {
         return x;
     }
 
-    createItem({
-        value,
-        width,
-        groupIndex,
-        category = null,
-        columnIndex = 0,
-        categoryIndex = 0,
-        active = false,
-        valueOffset = 0,
-        groupName = null,
-    }, state) {
+    createItem(data, state) {
+        const {
+            value,
+            width,
+            groupIndex,
+            category = null,
+            columnIndex = 0,
+            categoryIndex = 0,
+            active = false,
+            valueOffset = 0,
+            groupName = null,
+        } = data;
         const { grid, xAxis } = state;
         const fixedValue = value ?? 0;
         if (fixedValue === 0) {
@@ -294,7 +295,7 @@ export class Histogram extends BaseChart {
                     || (categoryIndex.toString() === activeCategory)
                 );
 
-                if (!item || (item.active !== active)) {
+                if (!item) {
                     item = this.createItem({
                         value,
                         width: state.columnWidth,
@@ -307,6 +308,9 @@ export class Histogram extends BaseChart {
                         groupName,
                     }, state);
                 }
+                item.active = active;
+                item.elem.classList.toggle(ACTIVE_ITEM_CLASS, active);
+
                 group.push(item);
 
                 if (!state.data.stacked) {

@@ -106,14 +106,15 @@ export class LineChart extends BaseChart {
         return x;
     }
 
-    createItem({
-        value,
-        groupIndex,
-        category = null,
-        categoryIndex = 0,
-        active = false,
-        valueOffset = 0,
-    }, state) {
+    createItem(data, state) {
+        const {
+            value,
+            groupIndex,
+            category = null,
+            categoryIndex = 0,
+            active = false,
+            valueOffset = 0,
+        } = data;
         const { grid, xAxis, alignColumns } = state;
         const fixedValue = value ?? 0;
         const fixedOffset = valueOffset ?? 0;
@@ -211,7 +212,7 @@ export class LineChart extends BaseChart {
                     categoryIndex,
                 });
 
-                if (!item || (item.active !== active)) {
+                if (!item) {
                     item = this.createItem({
                         value,
                         groupIndex,
@@ -221,6 +222,9 @@ export class LineChart extends BaseChart {
                         valueOffset,
                     }, state);
                 }
+                item.active = active;
+                item.elem.classList.toggle(ACTIVE_ITEM_CLASS, active);
+
                 group.push(item);
 
                 if (state.data.stacked) {
