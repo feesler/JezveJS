@@ -9,14 +9,15 @@
 
 /* LineChart circle item */
 .linechart__item {
+  display: block;
   fill: var(--linechart-item-fill);
   stroke: var(--linechart-item-border);
   stroke-width: 1.5;
-  display: none;
+  opacity: 0;
 }
 
 .linechart__nodes .linechart__item {
-  display: block;
+  opacity: 1;
 }
 
 /* LineChart line path */
@@ -29,7 +30,7 @@
 
 /* Active items */
 .chart__item_active.linechart__item {
-  display: block;
+  opacity: 1;
   fill: var(--linechart-active-item-fill);
   stroke: var(--linechart-active-item-border);
 }
