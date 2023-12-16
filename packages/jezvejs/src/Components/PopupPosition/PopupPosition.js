@@ -163,7 +163,6 @@ export class PopupPosition {
             ...options,
             screen,
             current,
-            reference: refElem.getBoundingClientRect(),
             fixedParent: getFixedParent(elem),
             absoluteParent: isAbsoluteParent(elem),
             fixedElement: !elem.offsetParent,
@@ -171,6 +170,11 @@ export class PopupPosition {
             crossFlip: false,
             isInitial: false,
         };
+
+        if (isInitial) {
+            this.state.reference = refElem.getBoundingClientRect();
+        }
+
         const { state } = this;
         const {
             reference,
@@ -375,7 +379,10 @@ export class PopupPosition {
             }
         }
 
-        state.reference = state.refElem.getBoundingClientRect();
+        const refRect = state.refElem.getBoundingClientRect();
+        if (refRect.width > 0 || refRect.height > 0) {
+            state.reference = refRect;
+        }
         current.top = getInitialTopPosition(state);
 
         // Decrease height of element if overflow is not cleared
@@ -482,7 +489,10 @@ export class PopupPosition {
                 window.scrollTo(newWindowScrollX, window.scrollY);
             }
 
-            state.reference = state.refElem.getBoundingClientRect();
+            const refRect = state.refElem.getBoundingClientRect();
+            if (refRect.width > 0 || refRect.height > 0) {
+                state.reference = refRect;
+            }
             current.left = getInitialLeftPosition(state);
             this.renderPosition();
         }
