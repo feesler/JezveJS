@@ -69,6 +69,6 @@ export class CollapsibleGroupsMenu extends Menu {
             return;
         }
 
-        this.store.dispatch(actions.toggleGroup(strId));
+        this.dispatch(actions.toggleGroup(strId));
     }
 }

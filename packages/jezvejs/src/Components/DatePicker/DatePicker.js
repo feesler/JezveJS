@@ -463,7 +463,7 @@ export class DatePicker extends Component {
 
         this.setDefaultContentPosition();
 
-        this.store.dispatch(actions.resize({
+        this.dispatch(actions.resize({
             doubleView: this.doubleView,
             date: this.currView.date,
         }));
@@ -547,7 +547,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.show(visible));
+        this.dispatch(actions.show(visible));
         this.sendShowEvents(visible);
     }
 
@@ -635,7 +635,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(action);
+        this.dispatch(action);
 
         if (!this.props.animated) {
             this.onStateReady();
@@ -647,7 +647,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.setRangePart(rangePart));
+        this.dispatch(actions.setRangePart(rangePart));
     }
 
     onStateReady() {
@@ -665,7 +665,7 @@ export class DatePicker extends Component {
             this.focusIndex = -1;
         }
 
-        this.store.dispatch(actions.setReadyState({
+        this.dispatch(actions.setReadyState({
             date: this.currView.date,
         }));
     }
@@ -712,7 +712,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.showMonth(date));
+        this.dispatch(actions.showMonth(date));
     }
 
     /**
@@ -724,7 +724,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.showYear(date));
+        this.dispatch(actions.showYear(date));
     }
 
     /**
@@ -736,7 +736,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.showYearRange(date));
+        this.dispatch(actions.showYearRange(date));
     }
 
     /** Day cell click inner callback */
@@ -745,7 +745,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.selectDay(date));
+        this.dispatch(actions.selectDay(date));
 
         this.notifyEvent('onDateSelect', this.state.actDate);
 
@@ -766,7 +766,7 @@ export class DatePicker extends Component {
 
         const { start } = this.state.selRange;
         if (!start) {
-            this.store.dispatch(actions.startRangeSelect(date));
+            this.dispatch(actions.startRangeSelect(date));
         } else {
             this.setSelection(start, date, false);
 
@@ -784,7 +784,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.setSelection({
+        this.dispatch(actions.setSelection({
             startDate,
             endDate,
             navigateToFirst,
@@ -797,7 +797,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.clearSelection());
+        this.dispatch(actions.clearSelection());
     }
 
     setDisabledDateFilter(disabledDateFilter) {
@@ -805,7 +805,7 @@ export class DatePicker extends Component {
             return;
         }
 
-        this.store.dispatch(actions.setDisabledDateFilter(disabledDateFilter));
+        this.dispatch(actions.setDisabledDateFilter(disabledDateFilter));
     }
 
     setContentPosition(position) {

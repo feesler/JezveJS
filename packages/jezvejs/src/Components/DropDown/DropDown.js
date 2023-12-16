@@ -288,7 +288,7 @@ export class DropDown extends Component {
         this.postInit();
 
         if (this.props.data) {
-            this.store.dispatch(actions.append(this.props.data));
+            this.dispatch(actions.append(this.props.data));
         }
     }
 
@@ -571,11 +571,11 @@ export class DropDown extends Component {
     }
 
     startScrollWaiting() {
-        this.store.dispatch(actions.startScrollWaiting());
+        this.dispatch(actions.startScrollWaiting());
     }
 
     stopScrollWaiting() {
-        this.store.dispatch(actions.stopScrollWaiting());
+        this.dispatch(actions.stopScrollWaiting());
         this.updateListPosition();
     }
 
@@ -588,7 +588,7 @@ export class DropDown extends Component {
         setEvents(window.visualViewport, this.viewportEvents);
         setEvents(window, this.windowEvents);
 
-        this.store.dispatch(actions.startWindowListening());
+        this.dispatch(actions.startWindowListening());
     }
 
     /* Removes window and viewport event handlers */
@@ -600,7 +600,7 @@ export class DropDown extends Component {
         removeEvents(window.visualViewport, this.viewportEvents);
         removeEvents(window, this.windowEvents);
 
-        this.store.dispatch(actions.stopWindowListening());
+        this.dispatch(actions.stopWindowListening());
     }
 
     /** Add focus/blur event handlers to root element of component */
@@ -974,7 +974,7 @@ export class DropDown extends Component {
     /** 'click' event handler */
     onClick(e) {
         if (e.type === 'touchstart') {
-            this.store.dispatch(actions.confirmTouch());
+            this.dispatch(actions.confirmTouch());
             return;
         }
 
@@ -996,7 +996,7 @@ export class DropDown extends Component {
     }
 
     setRenderTime() {
-        this.store.dispatch(actions.setRenderTime());
+        this.dispatch(actions.setRenderTime());
     }
 
     /** Handler for 'input' event of text field  */
@@ -1016,7 +1016,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.deselectAll());
+        this.dispatch(actions.deselectAll());
         this.sendChangeEvent();
 
         if (this.props.enableFilter) {
@@ -1092,7 +1092,7 @@ export class DropDown extends Component {
     }
 
     removeCreatableMenuItem() {
-        this.store.dispatch(actions.removeCreatableMenuItem());
+        this.dispatch(actions.removeCreatableMenuItem());
     }
 
     /* List items methods */
@@ -1199,7 +1199,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.toggleShowMenu());
+        this.dispatch(actions.toggleShowMenu());
 
         if (val) {
             setEmptyClick(
@@ -1246,7 +1246,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.toggleEnable());
+        this.dispatch(actions.toggleEnable());
     }
 
     /** Show drop down list if hidden or hide if visible */
@@ -1278,7 +1278,7 @@ export class DropDown extends Component {
         }
 
         this.removeCreatableMenuItem();
-        this.store.dispatch(actions.toggleActivate());
+        this.dispatch(actions.toggleActivate());
     }
 
     activateInput() {
@@ -1286,7 +1286,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.activateInput());
+        this.dispatch(actions.activateInput());
     }
 
     getInput() {
@@ -1389,7 +1389,7 @@ export class DropDown extends Component {
             this.props.onChange(data);
         }
 
-        this.store.dispatch(actions.changeEventSent());
+        this.dispatch(actions.changeEventSent());
     }
 
     /** Toggle item selected status */
@@ -1414,7 +1414,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.selectItem(strId));
+        this.dispatch(actions.selectItem(strId));
     }
 
     /** Deselect specified item */
@@ -1429,7 +1429,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.deselectItem(strId));
+        this.dispatch(actions.deselectItem(strId));
     }
 
     /** Sets items selection */
@@ -1439,12 +1439,12 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.setSelection(itemIds));
+        this.dispatch(actions.setSelection(itemIds));
     }
 
     /** Sets changed flag */
     setChanged() {
-        this.store.dispatch(actions.setChanged());
+        this.dispatch(actions.setChanged());
     }
 
     /** Return index of selected item contains specified element */
@@ -1481,7 +1481,7 @@ export class DropDown extends Component {
             }
         }
 
-        this.store.dispatch(actions.activateSelectionItem(index));
+        this.dispatch(actions.activateSelectionItem(index));
 
         if (this.state.actSelItemIndex === -1) {
             setTimeout(() => {
@@ -1506,7 +1506,7 @@ export class DropDown extends Component {
 
     /** Show all list items */
     showAllItems(resetInput = true) {
-        this.store.dispatch(actions.showAllItems(resetInput));
+        this.dispatch(actions.showAllItems(resetInput));
     }
 
     /** Show only items containing specified string */
@@ -1520,7 +1520,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.filter(inputString));
+        this.dispatch(actions.filter(inputString));
     }
 
     /**
@@ -1635,7 +1635,7 @@ export class DropDown extends Component {
      * @param {Object|Object[]} items
      */
     append(items) {
-        this.store.dispatch(actions.append(items));
+        this.dispatch(actions.append(items));
     }
 
     /** Returns option element */
@@ -1679,7 +1679,7 @@ export class DropDown extends Component {
      * @param {Object} props
      */
     addItem(props) {
-        this.store.dispatch(actions.addItem(props));
+        this.dispatch(actions.addItem(props));
     }
 
     /** Returns new item object */
@@ -1692,7 +1692,7 @@ export class DropDown extends Component {
      * @param {Object} options
      */
     addGroup(options) {
-        this.store.dispatch(actions.addGroup(options));
+        this.dispatch(actions.addGroup(options));
     }
 
     generateMenuId() {
@@ -1736,13 +1736,13 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.removeItem(strId));
+        this.dispatch(actions.removeItem(strId));
     }
 
     /** Remove all items */
     removeAll() {
         this.removeCreatableMenuItem();
-        this.store.dispatch(actions.removeAllItems());
+        this.dispatch(actions.removeAllItems());
     }
 
     /** Set active state for specified list item */
@@ -1761,7 +1761,7 @@ export class DropDown extends Component {
         }
 
         const strId = itemToActivate?.id?.toString() ?? null;
-        this.store.dispatch(actions.setActive(strId));
+        this.dispatch(actions.setActive(strId));
     }
 
     /** Enable/disable list item by id */
@@ -1773,7 +1773,7 @@ export class DropDown extends Component {
             return;
         }
 
-        this.store.dispatch(actions.toggleEnableItem(strId));
+        this.dispatch(actions.toggleEnableItem(strId));
     }
 
     getGroupItems(group, state = this.state) {
