@@ -242,7 +242,7 @@ export class Menu extends Component {
             return;
         }
 
-        this.store.dispatch(actions.toggleEnable());
+        this.dispatch(actions.toggleEnable());
     }
 
     showItem(id, value = true) {
@@ -254,7 +254,7 @@ export class Menu extends Component {
         const action = (value)
             ? actions.showItem(strId)
             : actions.hideItem(strId);
-        this.store.dispatch(action);
+        this.dispatch(action);
     }
 
     hideItem(id) {
@@ -270,7 +270,7 @@ export class Menu extends Component {
         const action = (value)
             ? actions.enableItem(strId)
             : actions.disableItem(strId);
-        this.store.dispatch(action);
+        this.dispatch(action);
     }
 
     /**
@@ -646,7 +646,7 @@ export class Menu extends Component {
      */
     onTouchStart(e) {
         if (e.touches) {
-            this.store.dispatch(actions.ignoreTouch());
+            this.dispatch(actions.ignoreTouch());
         }
     }
 
@@ -760,7 +760,7 @@ export class Menu extends Component {
      */
     setActive(id) {
         const strId = id?.toString() ?? null;
-        this.store.dispatch(actions.activateItem(strId));
+        this.dispatch(actions.activateItem(strId));
     }
 
     /**
@@ -769,7 +769,7 @@ export class Menu extends Component {
      */
     setSelection(selectedItems) {
         const items = asArray(selectedItems).map((value) => value.toString());
-        this.store.dispatch(actions.setSelection(items));
+        this.dispatch(actions.setSelection(items));
     }
 
     /**
@@ -777,7 +777,7 @@ export class Menu extends Component {
      * @param {boolean} value
      */
     selectAll(value = true) {
-        this.store.dispatch(actions.selectAll(!!value));
+        this.dispatch(actions.selectAll(!!value));
     }
 
     /**
@@ -812,7 +812,7 @@ export class Menu extends Component {
      */
     addItem(props) {
         const item = this.createItem(props);
-        this.store.dispatch(actions.addItem(item));
+        this.dispatch(actions.addItem(item));
     }
 
     /**
@@ -821,7 +821,7 @@ export class Menu extends Component {
      */
     append(items) {
         const newItems = this.createItems(items);
-        this.store.dispatch(actions.append(newItems));
+        this.dispatch(actions.append(newItems));
     }
 
     /**
@@ -830,7 +830,7 @@ export class Menu extends Component {
      */
     setItems(items) {
         const newItems = this.createItems(items);
-        this.store.dispatch(actions.setItems(newItems));
+        this.dispatch(actions.setItems(newItems));
     }
 
     toggleSelectItem(id) {
@@ -843,7 +843,7 @@ export class Menu extends Component {
             return;
         }
 
-        this.store.dispatch(actions.toggleSelectItem(strId));
+        this.dispatch(actions.toggleSelectItem(strId));
     }
 
     /** Scroll list element until specified list item be fully visible */
@@ -877,7 +877,7 @@ export class Menu extends Component {
 
     setListScroll(listScroll) {
         if (this.state.listScroll !== listScroll) {
-            this.store.dispatch(actions.setListScroll(listScroll));
+            this.dispatch(actions.setListScroll(listScroll));
         }
     }
 
@@ -890,10 +890,10 @@ export class Menu extends Component {
             clearTimeout(this.state.scrollTimeout);
         }
 
-        this.store.dispatch(actions.requestListScroll({
+        this.dispatch(actions.requestListScroll({
             listScroll,
             scrollTimeout: setTimeout(() => {
-                this.store.dispatch(actions.unblockScroll());
+                this.dispatch(actions.unblockScroll());
             }, SCROLL_TO_ITEM_TIMEOUT),
         }));
     }
@@ -907,7 +907,7 @@ export class Menu extends Component {
             clearTimeout(this.state.scrollTimeout);
         }
 
-        this.store.dispatch(actions.unblockScroll());
+        this.dispatch(actions.unblockScroll());
     }
 
     renderHeader(state, prevState) {

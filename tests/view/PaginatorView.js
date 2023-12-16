@@ -88,11 +88,8 @@ export class PaginatorView extends AppView {
         assert(!paginator.isFirstPage(), 'Already on first page');
 
         this.model[name].page = 1;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => paginator.goToFirstPage());
-
-        return this.checkState(expected);
+        return this.runTestAction(() => paginator.goToFirstPage());
     }
 
     async goToLastPage(name) {
@@ -102,11 +99,8 @@ export class PaginatorView extends AppView {
         assert(!paginator.isLastPage(), 'Already on last page');
 
         this.model[name].page = this.model[name].pages;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => paginator.goToLastPage());
-
-        return this.checkState(expected);
+        return this.runTestAction(() => paginator.goToLastPage());
     }
 
     async goToNextPage(name) {
@@ -116,11 +110,8 @@ export class PaginatorView extends AppView {
         assert(!paginator.isLastPage(), 'Already on last page');
 
         this.model[name].page += 1;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => paginator.goToNextPage());
-
-        return this.checkState(expected);
+        return this.runTestAction(() => paginator.goToNextPage());
     }
 
     async goToPrevPage(name) {
@@ -130,10 +121,7 @@ export class PaginatorView extends AppView {
         assert(!paginator.isFirstPage(), 'Already on first page');
 
         this.model[name].page -= 1;
-        const expected = this.getExpectedState();
 
-        await this.performAction(() => paginator.goToPrevPage());
-
-        return this.checkState(expected);
+        return this.runTestAction(() => paginator.goToPrevPage());
     }
 }

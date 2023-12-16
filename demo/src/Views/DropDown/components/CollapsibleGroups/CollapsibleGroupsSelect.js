@@ -85,6 +85,6 @@ export class CollapsibleGroupsSelect extends DropDown {
             return;
         }
 
-        this.store.dispatch(actions.toggleGroup(strId));
+        this.dispatch(actions.toggleGroup(strId));
     }
 }

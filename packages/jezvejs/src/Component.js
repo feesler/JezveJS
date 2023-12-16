@@ -166,6 +166,8 @@ export class Component {
                 this.render(state, prevState);
             }
         });
+
+        this.dispatch = store.storeAPI.dispatch;
     }
 
     /** Update state of component and render changes */

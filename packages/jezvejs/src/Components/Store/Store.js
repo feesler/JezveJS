@@ -17,7 +17,7 @@ export class Store {
         this.listeners = [];
         this.sendInitialState = sendInitialState;
 
-        this.asyncOptions = {
+        this.storeAPI = {
             dispatch: (action) => this.dispatch(action),
             getState: () => this.getState(),
         };
@@ -29,7 +29,7 @@ export class Store {
 
     dispatch(action) {
         if (isFunction(action)) {
-            action(this.asyncOptions);
+            action(this.storeAPI);
             return;
         }
 
