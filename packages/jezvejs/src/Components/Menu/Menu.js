@@ -975,8 +975,8 @@ export class Menu extends Component {
             }
 
             if (
-                (checkbox && list.checkboxSide === 'left')
-                || (item.icon && list.iconAlign === 'left')
+                (checkbox && (list.checkboxSide === 'left' || item.checkboxSide === 'left'))
+                || (item.icon && (list.iconAlign === 'left' || item.iconAlign === 'left'))
             ) {
                 beforeContent = true;
             } else {
