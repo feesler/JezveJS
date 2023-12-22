@@ -185,6 +185,7 @@ export class PopupPosition {
         current.top = getInitialTopPosition(this.state);
         this.renderPosition();
 
+        this.handleMaxSize();
         this.handleVerticalPosition();
         this.handleHorizontalPosition();
 
@@ -352,6 +353,35 @@ export class PopupPosition {
         };
     }
 
+    handleMaxSize() {
+        const {
+            screen,
+            margin,
+            offset,
+            screenPadding,
+            minRefHeight,
+            current,
+        } = this.state;
+        const { style } = this.state.elem;
+
+        // Check element is taller than screen
+        const minHeight = minRefHeight + margin + screenPadding + current.height;
+        if (minHeight > screen.height && this.state.allowResize) {
+            current.height = screen.height - minRefHeight - screenPadding - margin;
+            style.maxHeight = px(current.height);
+        }
+
+        this.state.maxWidth = screen.width - (screenPadding * 2);
+        this.state.minLeft = screenPadding - offset.left;
+
+        // Check element is wider than screen
+        if (this.state.width >= this.state.maxWidth) {
+            style.width = px(this.state.maxWidth);
+            current.left = this.state.minLeft;
+            this.renderPosition();
+        }
+    }
+
     handleVerticalPosition() {
         const { state } = this;
         const {
@@ -360,17 +390,9 @@ export class PopupPosition {
             margin,
             screenPadding,
             reference,
-            minRefHeight,
             current,
         } = state;
         const { style } = state.elem;
-
-        // Check element is taller than screen
-        const minHeight = minRefHeight + margin + screenPadding + current.height;
-        if (minHeight > screen.height && state.allowResize) {
-            current.height = screen.height - minRefHeight - screenPadding - margin;
-            style.maxHeight = px(current.height);
-        }
 
         const top = isVertical(state)
             ? (reference.top - current.height - margin)
@@ -454,7 +476,6 @@ export class PopupPosition {
         const {
             screen,
             scrollParent,
-            offset,
             margin,
             screenPadding,
             windowDist,
@@ -462,22 +483,10 @@ export class PopupPosition {
             current,
         } = state;
         const { style } = state.elem;
-        const html = document.documentElement;
 
         if (state.useRefWidth) {
             style.minWidth = px(reference.width);
             style.width = '';
-        }
-
-        state.maxWidth = html.clientWidth - (screenPadding * 2);
-        state.minLeft = screenPadding - offset.left;
-
-        // Check element is wider than screen
-        if (state.width >= state.maxWidth) {
-            style.width = px(state.maxWidth);
-            current.left = state.minLeft;
-            this.renderPosition();
-            return;
         }
 
         current.left = getInitialLeftPosition(state);
