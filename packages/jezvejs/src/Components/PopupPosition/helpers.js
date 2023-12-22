@@ -302,14 +302,14 @@ export const isVerticalFlip = (state) => (
     state.allowFlip && (
         (
             isBottomPosition(state)
-            && (state.overflowBottom > 0)
-            && (state.overflowBottom > state.overflowTop)
-            && (state.dist.top > state.overflowTop)
+            && (state.vertOverflowBottom > 0)
+            && (state.vertOverflowBottom > state.vertOverflowTop)
+            && (state.dist.top > state.vertOverflowTop)
         ) || (
             isTopPosition(state)
-            && (state.overflowTop > 0)
-            && (state.overflowTop > state.overflowBottom)
-            && (state.dist.bottom > state.overflowBottom)
+            && (state.vertOverflowTop > 0)
+            && (state.vertOverflowTop > state.vertOverflowBottom)
+            && (state.dist.bottom > state.vertOverflowBottom)
         )
     )
 );
@@ -323,14 +323,14 @@ export const isHorizontalFlip = (state) => (
     state.allowFlip && (
         (
             isRightPosition(state)
-            && (state.overflowRight > 0)
-            && (state.overflowRight > state.overflowLeft)
-            && (state.dist.left > state.overflowLeft)
+            && (state.horOverflowRight > 0)
+            && (state.horOverflowRight > state.horOverflowLeft)
+            && (state.dist.left > state.horOverflowLeft)
         ) || (
             isLeftPosition(state)
-            && (state.overflowLeft > 0)
-            && (state.overflowLeft > state.overflowRight)
-            && (state.dist.right > state.overflowRight)
+            && (state.horOverflowLeft > 0)
+            && (state.horOverflowLeft > state.horOverflowRight)
+            && (state.dist.right > state.horOverflowRight)
         )
     )
 );
@@ -344,14 +344,14 @@ export const isVerticalCrossFlip = (state) => (
     state.allowFlip && (
         (
             isVerticalStartPosition(state)
-            && (state.overflowBottom > 0)
-            && (state.overflowBottom > state.overflowTop)
-            && (state.dist.top > state.overflowTop)
+            && (state.horOverflowBottom > 0)
+            && (state.horOverflowBottom > state.horOverflowTop)
+            && (state.dist.top > state.horOverflowTop)
         ) || (
             isVerticalEndPosition(state)
-            && (state.overflowTop > 0)
-            && (state.overflowTop > state.overflowBottom)
-            && (state.dist.bottom > state.overflowBottom)
+            && (state.horOverflowTop > 0)
+            && (state.horOverflowTop > state.horOverflowBottom)
+            && (state.dist.bottom > state.horOverflowBottom)
         )
     )
 );
@@ -365,17 +365,103 @@ export const isHorizontalCrossFlip = (state) => (
     state.allowFlip && (
         (
             isHorizontalStartPosition(state)
-            && (state.overflowRight > 0)
-            && (state.overflowRight > state.overflowLeft)
-            && (state.dist.left > state.overflowLeft)
+            && (state.vertOverflowRight > 0)
+            && (state.vertOverflowRight > state.vertOverflowLeft)
+            && (state.dist.left > state.vertOverflowLeft)
         ) || (
             isHorizontalEndPosition(state)
-            && (state.overflowLeft > 0)
-            && (state.overflowLeft > state.overflowRight)
-            && (state.dist.right > state.overflowRight)
+            && (state.vertOverflowLeft > 0)
+            && (state.vertOverflowLeft > state.vertOverflowRight)
+            && (state.dist.right > state.vertOverflowRight)
         )
     )
 );
+
+/**
+ * Returns minimal horizontal overflow
+ * @param {object} state
+ * @returns {number}
+ */
+export const minHorOverflow = (state) => (
+    Math.min(state.horOverflowLeft, state.horOverflowRight)
+);
+
+/**
+ * Returns minimal vertical overflow
+ * @param {object} state
+ * @returns {number}
+ */
+export const minVertOverflow = (state) => (
+    Math.min(state.vertOverflowTop, state.vertOverflowBottom)
+);
+
+/**
+ * Returns true if main axis should be changed from vertical to horizontal
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isVerticalToHorizontalAxisChange = (state) => (
+    state.allowChangeAxis
+    && isVertical(state)
+    && (state.vertOverflowTop > 0)
+    && (state.vertOverflowBottom > 0)
+    && (minHorOverflow(state) < minVertOverflow(state))
+);
+
+/**
+ * Returns true if main axis should be changed from horizontal to vertical
+ * @param {object} state
+ * @returns {boolean}
+ */
+export const isHorizontalToVerticalAxisChange = (state) => (
+    state.allowChangeAxis
+    && isHorizontal(state)
+    && (state.horOverflowLeft > 0)
+    && (state.horOverflowRight > 0)
+    && (minVertOverflow(state) < minHorOverflow(state))
+);
+
+/**
+ * Changes main axis from vertical to horizontal and returns new position
+ * @param {object} state
+ * @returns {string}
+ */
+export const changeAxisToHorizontal = (state) => {
+    const toRight = (state.horOverflowLeft > state.horOverflowRight);
+
+    if (isHorizontalCenterPosition(state)) {
+        return (toRight) ? 'right' : 'left';
+    }
+    if (isHorizontalStartPosition(state)) {
+        return (toRight) ? 'right-start' : 'left-start';
+    }
+    if (isHorizontalEndPosition(state)) {
+        return (toRight) ? 'right-end' : 'left-end';
+    }
+
+    return state.position;
+};
+
+/**
+ * Changes main axis from horizontal to vertical and returns new position
+ * @param {object} state
+ * @returns {string}
+ */
+export const changeAxisToVertical = (state) => {
+    const toBottom = (state.vertOverflowTop > state.vertOverflowBottom);
+
+    if (isVerticalCenterPosition(state)) {
+        return (toBottom) ? 'bottom' : 'top';
+    }
+    if (isVerticalStartPosition(state)) {
+        return (toBottom) ? 'bottom-start' : 'top-start';
+    }
+    if (isVerticalEndPosition(state)) {
+        return (toBottom) ? 'bottom-end' : 'top-end';
+    }
+
+    return state.position;
+};
 
 /**
  * Returns initial vertical position of the element
@@ -459,13 +545,19 @@ export const getInitialLeftPosition = (state) => {
  */
 export const getElementVerticalOverflow = (state) => {
     if (isTop(state)) {
-        return state.overflowTop;
+        return state.vertOverflowTop;
     }
     if (isBottom(state)) {
-        return state.overflowBottom;
+        return state.vertOverflowBottom;
+    }
+    if (isVerticalEnd(state)) {
+        return state.horOverflowTop;
+    }
+    if (isVerticalStart(state)) {
+        return state.horOverflowBottom;
     }
 
-    return 0;
+    return Math.max(0, state.horOverflowTop, state.horOverflowBottom);
 };
 
 /**
@@ -475,11 +567,57 @@ export const getElementVerticalOverflow = (state) => {
  */
 export const getElementHorizontalOverflow = (state) => {
     if (isLeft(state)) {
-        return state.overflowLeft;
+        return state.horOverflowLeft;
     }
     if (isRight(state)) {
-        return state.overflowRight;
+        return state.horOverflowRight;
+    }
+    if (isHorizontalEnd(state)) {
+        return state.vertOverflowLeft;
+    }
+    if (isHorizontalStart(state)) {
+        return state.vertOverflowRight;
     }
 
-    return 0;
+    return Math.max(0, state.vertOverflowLeft, state.vertOverflowRight);
 };
+
+/**
+ * Returns left overflow for specified position and state
+ * @param {number} left
+ * @param {object} state
+ * @returns {number}
+ */
+export const getLeftOverflow = (left, state) => (
+    -(left - state.screenPadding)
+);
+
+/**
+ * Returns right overflow for specified position and state
+ * @param {number} right
+ * @param {object} state
+ * @returns {number}
+ */
+export const getRightOverflow = (right, state) => (
+    right - state.screen.width + state.screenPadding
+);
+
+/**
+ * Returns top overflow for specified position and state
+ * @param {number} top
+ * @param {object} state
+ * @returns {number}
+ */
+export const getTopOverflow = (top, state) => (
+    -(top - state.screenPadding)
+);
+
+/**
+ * Returns bottom overflow for specified position and state
+ * @param {number} bottom
+ * @param {object} state
+ * @returns {number}
+ */
+export const getBottomOverflow = (bottom, state) => (
+    bottom - state.screen.height + state.bottomSafe
+);

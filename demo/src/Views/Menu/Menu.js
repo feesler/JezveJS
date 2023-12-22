@@ -32,6 +32,7 @@ const defaultItems = [{
     id: 'checkboxItem',
     type: 'checkbox',
     title: 'Checkbox item',
+    selected: true,
 }];
 
 const horizontalItems = [{
@@ -154,6 +155,9 @@ class MenuView extends DemoView {
     }
 
     initIconsAlign() {
+        const items = structuredClone(defaultItems);
+        items[2].iconAlign = 'left';
+
         this.addSection({
             id: 'iconsAlign',
             title: 'Icons alignment',
@@ -163,13 +167,22 @@ class MenuView extends DemoView {
                     id: 'iconsAlignMenu',
                     iconAlign: 'right',
                     multiple: true,
-                    items: structuredClone(defaultItems),
+                    items,
                 }).elem,
             ),
         });
     }
 
     initCheckboxAlign() {
+        const items = structuredClone(defaultItems);
+        items.push({
+            id: 'leftCheckboxItem',
+            type: 'checkbox',
+            title: 'Checkbox item',
+            checkboxSide: 'left',
+            selected: true,
+        });
+
         this.addSection({
             id: 'checkboxAlign',
             title: 'Checkbox alignment',
@@ -179,7 +192,7 @@ class MenuView extends DemoView {
                     id: 'checkboxAlignMenu',
                     checkboxSide: 'right',
                     multiple: true,
-                    items: structuredClone(defaultItems),
+                    items,
                 }).elem,
             ),
         });

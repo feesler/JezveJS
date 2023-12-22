@@ -11,6 +11,7 @@ import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
 
 import { Menu } from '../Menu/Menu.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
+
 import './PopupMenu.scss';
 
 /* CSS classes */
@@ -28,6 +29,8 @@ const defaultProps = {
     toggleOnClick: true,
     hideOnScroll: true,
     hideOnSelect: true,
+    position: 'bottom-start',
+    allowChangeAxis: true,
     ignoreScrollTimeout: 500,
     fixed: true,
     content: null,
@@ -58,6 +61,7 @@ export class PopupMenu extends Menu {
         this.hostElem = null;
         this.containerElem = null;
         this.ignoreScroll = false;
+        this.childMenu = null;
 
         this.emptyClickHandler = () => this.hideMenu();
         this.windowEvents = {
@@ -107,6 +111,26 @@ export class PopupMenu extends Menu {
         }
     }
 
+    createChildMenu(id, menu) {
+        const item = this.getItemById(id);
+        if (item.type === 'group') {
+            return;
+        }
+
+        const listItem = this.list.getListItemById(id);
+        if (!listItem?.elem) {
+            return;
+        }
+
+        this.detachChild();
+
+        this.childMenu = (menu?.elem)
+            ? menu
+            : PopupMenu.create(menu);
+        this.childMenu.parent = this;
+        this.childMenu.attachAndShow(listItem.elem);
+    }
+
     /**
      * 'keydown' event on handler
      * @param {KeyboardEvent} e - event object
@@ -124,16 +148,26 @@ export class PopupMenu extends Menu {
     onItemClick(id, e) {
         super.onItemClick(id, e);
 
+        this.handleHideOnSelect(id);
+    }
+
+    handleHideOnSelect(id = null) {
         if (!this.props.hideOnSelect) {
             return;
         }
 
-        const item = this.getItemById(id);
-        if (item.type === 'group') {
-            return;
+        if (id !== null) {
+            const item = this.getItemById(id);
+            if (item.type === 'group' || item.submenuParent) {
+                return;
+            }
         }
 
         this.hideMenu();
+
+        if (this.parent) {
+            this.parent.handleHideOnSelect();
+        }
     }
 
     onScroll(e) {
@@ -166,11 +200,19 @@ export class PopupMenu extends Menu {
         return !this.elem.hasAttribute('hidden');
     }
 
+    detachChild() {
+        if (this.childMenu) {
+            this.childMenu.detach();
+            this.childMenu = null;
+        }
+    }
+
     detach() {
         if (!this.hostElem) {
             return;
         }
 
+        this.detachChild();
         this.setActive(null);
 
         this.removeHandlers();
@@ -246,13 +288,19 @@ export class PopupMenu extends Menu {
             margin: LIST_MARGIN,
             screenPadding: SCREEN_PADDING,
             allowResize: this.props.hideOnScroll,
+            position: this.props.position,
+            allowChangeAxis: this.props.allowChangeAxis,
             updateProps: {
                 scrollOnOverflow: false,
             },
             onScrollDone: () => this.onScrollDone(),
         });
 
-        if (PopupMenu.activeInstance && PopupMenu.activeInstance !== this) {
+        if (
+            PopupMenu.activeInstance
+            && PopupMenu.activeInstance !== this
+            && !PopupMenu.activeInstance.elem.contains(this.hostElem)
+        ) {
             PopupMenu.hideActive();
         }
         PopupMenu.activeInstance = this;
@@ -264,6 +312,8 @@ export class PopupMenu extends Menu {
         if (!this.isMenuVisible()) {
             return;
         }
+
+        this.detachChild();
 
         this.setActive(null);
 

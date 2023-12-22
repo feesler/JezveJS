@@ -21,6 +21,18 @@ import {
     isVerticalCrossFlip,
     isVertical,
     isHorizontal,
+    isVerticalCenterPosition,
+    isHorizontalCenterPosition,
+    getLeftOverflow,
+    getRightOverflow,
+    getTopOverflow,
+    getBottomOverflow,
+    isVerticalToHorizontalAxisChange,
+    isHorizontalToVerticalAxisChange,
+    changeAxisToVertical,
+    changeAxisToHorizontal,
+    isVerticalEnd,
+    isHorizontalEnd,
 } from './helpers.js';
 
 const defaultProps = {
@@ -33,6 +45,7 @@ const defaultProps = {
     bottomSafeArea: 70,
     useRefWidth: false,
     allowFlip: true,
+    allowChangeAxis: false,
     scrollOnOverflow: true,
     allowResize: true,
     minRefHeight: 20,
@@ -70,6 +83,7 @@ export class PopupPosition {
         };
 
         this.state = {
+            current: {},
             isInitial: true,
             listeningWindow: false,
         };
@@ -147,125 +161,21 @@ export class PopupPosition {
 
     /** Calculates vertical and horizontal offsets and size of popup element */
     update(options = {}) {
-        const { elem, refElem } = this.props;
-
-        const html = document.documentElement;
-        const screen = getScreenRect();
         const { isInitial } = this.state;
-
-        const current = {
-            width: elem.offsetWidth,
-            height: elem.offsetHeight,
-        };
 
         this.state = {
             ...this.state,
             ...options,
-            screen,
-            current,
-            reference: refElem.getBoundingClientRect(),
-            fixedParent: getFixedParent(elem),
-            absoluteParent: isAbsoluteParent(elem),
-            fixedElement: !elem.offsetParent,
-            flip: false,
-            crossFlip: false,
-            isInitial: false,
-        };
-        const { state } = this;
-        const {
-            reference,
-            minRefHeight,
-            screenPadding,
-        } = state;
-
-        const scrollParent = state.fixedParent || getScrollParent(elem);
-        state.scrollLeft = scrollParent.scrollLeft;
-        state.scrollTop = scrollParent.scrollTop;
-        state.horScrollAvailable = scrollParent.scrollWidth >= scrollParent.clientWidth;
-        state.vertScrollAvailable = scrollParent.scrollHeight >= scrollParent.clientHeight;
-        state.scrollParent = scrollParent;
-
-        state.scrollParentBox = (scrollParent && !state.fixedElement)
-            ? state.scrollParent.getBoundingClientRect()
-            : { ...screen, left: 0, top: 0 };
-
-        state.offset = (state.fixedElement)
-            ? { ...screen, left: 0, top: 0 }
-            : elem.offsetParent.getBoundingClientRect();
-
-        state.bottomSafe = (screen.height - html.clientHeight > 50)
-            ? state.bottomSafeArea
-            : screenPadding;
-
-        state.scrollWidth = (state.horScrollAvailable)
-            ? scrollParent.scrollWidth
-            : screen.right;
-        state.scrollHeight = (state.vertScrollAvailable)
-            ? scrollParent.scrollHeight
-            : screen.bottom;
-
-        const windowScrollLeft = (state.fixedParent) ? state.scrollLeft : screen.left;
-        const windowScrollTop = (state.fixedParent) ? state.scrollTop : screen.top;
-        const windowScrollWidth = (state.fixedParent)
-            ? state.scrollWidth
-            : html.scrollWidth;
-        const windowScrollHeight = (state.fixedParent)
-            ? state.scrollHeight
-            : html.scrollHeight;
-        const windowScrollRight = windowScrollLeft + screen.width;
-        const windowScrollBottom = windowScrollTop + screen.height;
-
-        const refScrollParentLeft = Math.max(0, state.scrollParentBox.left);
-        const refScrollParentTop = Math.max(0, state.scrollParentBox.top);
-        const refScrollParentWidth = Math.min(
-            screen.width,
-            state.scrollParentBox.width,
-        );
-        const refScrollParentHeight = Math.min(
-            screen.height,
-            state.scrollParentBox.height,
-        );
-
-        state.scrollRight = state.scrollLeft + refScrollParentWidth;
-        state.scrollBottom = state.scrollTop + refScrollParentHeight;
-
-        state.refScroll = {
-            left: reference.left - refScrollParentLeft,
-            top: reference.top - refScrollParentTop,
         };
 
-        const screenTopDist = refScrollParentHeight - state.refScroll.top;
-        const screenBottomDist = reference.bottom - refScrollParentTop;
-        const screenLeftDist = refScrollParentWidth - state.refScroll.left;
-        const screenRightDist = reference.right - refScrollParentLeft;
-
-        // Maximum scroll distance inside scroll parent:
-        //  top: scroll from top to bottom (decrease scrollTop)
-        //  left: scroll from left to right (decrease scrollLeft)
-        //  bottom: scroll from bottom to top (increase scrollTop)
-        //  right: scroll from right to left (increase scrollLeft)
-        state.dist = {
-            left: Math.min(screenLeftDist, state.scrollLeft),
-            top: Math.min(screenTopDist - minRefHeight, state.scrollTop),
-            bottom: Math.min(
-                screenBottomDist - minRefHeight,
-                state.scrollHeight - state.scrollBottom,
-            ),
-            right: Math.min(
-                screenRightDist,
-                state.scrollWidth - state.scrollRight,
-            ),
-        };
-        state.windowDist = {
-            left: windowScrollLeft,
-            right: windowScrollWidth - windowScrollRight,
-            top: windowScrollTop,
-            bottom: windowScrollHeight - windowScrollBottom,
-        };
-
-        current.left = getInitialLeftPosition(state);
-        current.top = getInitialTopPosition(state);
+        this.calculate();
         this.renderPosition();
+        this.calculate();
+
+        this.handleMaxSize();
+        this.calculateOverflow();
+        this.handleFlip();
+        this.handleAxisChange();
 
         this.handleVerticalPosition();
         this.handleHorizontalPosition();
@@ -276,6 +186,84 @@ export class PopupPosition {
                 this.notifyScrollDone();
             });
         }
+    }
+
+    calculate() {
+        const { elem } = this.props;
+        const { isInitial } = this.state;
+
+        this.state = {
+            ...this.state,
+            screen: getScreenRect(),
+            fixedParent: getFixedParent(elem),
+            absoluteParent: isAbsoluteParent(elem),
+            fixedElement: !elem.offsetParent,
+            flip: false,
+            crossFlip: false,
+            isInitial: false,
+        };
+
+        this.state.current.width = elem.offsetWidth;
+        this.state.current.height = elem.offsetHeight;
+
+        this.getRefClientRect(isInitial);
+        this.getOffsetParentRect();
+        this.getScrollParentRect();
+        this.getBottomSafe();
+
+        this.calculateRefScroll();
+        this.calculateScroll();
+
+        this.calculateMaxScrollDistance();
+        this.calculateMaxWindowScrollDistance();
+
+        this.state.current.left = getInitialLeftPosition(this.state);
+        this.state.current.top = getInitialTopPosition(this.state);
+    }
+
+    recalculate() {
+        this.state.current.left = getInitialLeftPosition(this.state);
+        this.state.current.top = getInitialTopPosition(this.state);
+        this.renderPosition();
+        this.calculate();
+        this.calculateOverflow();
+    }
+
+    getRefClientRect(isInitial = false) {
+        const { state } = this;
+        const refRect = state.refElem.getBoundingClientRect();
+
+        if (isInitial || (refRect.width > 0 || refRect.height > 0)) {
+            state.reference = refRect;
+        }
+    }
+
+    getOffsetParentRect() {
+        const { state } = this;
+
+        state.offset = (state.fixedElement)
+            ? { ...state.screen, left: 0, top: 0 }
+            : state.elem.offsetParent.getBoundingClientRect();
+    }
+
+    getScrollParentRect() {
+        const { state } = this;
+
+        const scrollParent = state.fixedParent || getScrollParent(this.props.elem);
+        state.scrollParent = scrollParent;
+
+        state.scrollParentBox = (scrollParent && !state.fixedElement)
+            ? state.scrollParent.getBoundingClientRect()
+            : { ...state.screen, left: 0, top: 0 };
+    }
+
+    getBottomSafe() {
+        const { state } = this;
+        const html = document.documentElement;
+
+        state.bottomSafe = (state.screen.height - html.clientHeight > 50)
+            ? state.bottomSafeArea
+            : state.screenPadding;
     }
 
     renderPosition() {
@@ -293,42 +281,233 @@ export class PopupPosition {
         transform(state.elem, `translate(${px(left)}, ${px(top)})`);
     }
 
+    calculateRefScroll() {
+        const { state } = this;
+        const {
+            screen,
+            scrollParentBox,
+            reference,
+        } = state;
+
+        state.refScrollParent = {
+            left: Math.max(0, scrollParentBox.left),
+            top: Math.max(0, scrollParentBox.top),
+            width: Math.min(screen.width, scrollParentBox.width),
+            height: Math.min(screen.height, scrollParentBox.height),
+        };
+
+        state.refScroll = {
+            left: reference.left - state.refScrollParent.left,
+            top: reference.top - state.refScrollParent.top,
+        };
+    }
+
+    calculateScroll() {
+        const { state } = this;
+        const {
+            scrollParent,
+            screen,
+            refScrollParent,
+        } = state;
+
+        state.scrollLeft = scrollParent.scrollLeft;
+        state.scrollTop = scrollParent.scrollTop;
+        state.horScrollAvailable = scrollParent.scrollWidth >= scrollParent.clientWidth;
+        state.vertScrollAvailable = scrollParent.scrollHeight >= scrollParent.clientHeight;
+
+        state.scrollWidth = (state.horScrollAvailable)
+            ? scrollParent.scrollWidth
+            : screen.right;
+        state.scrollHeight = (state.vertScrollAvailable)
+            ? scrollParent.scrollHeight
+            : screen.bottom;
+        state.scrollRight = state.scrollLeft + refScrollParent.width;
+        state.scrollBottom = state.scrollTop + refScrollParent.height;
+    }
+
+    /**
+     * Calculates maximum scroll distance inside scroll parent:
+     *    top: scroll from top to bottom (decrease scrollTop)
+     *    left: scroll from left to right (decrease scrollLeft)
+     *    bottom: scroll from bottom to top (increase scrollTop)
+     *    right: scroll from right to left (increase scrollLeft)
+     */
+    calculateMaxScrollDistance() {
+        const {
+            refScroll,
+            minRefHeight,
+            refScrollParent,
+            reference,
+        } = this.state;
+
+        const screenTopDist = refScrollParent.height - refScroll.top;
+        const screenBottomDist = reference.bottom - refScrollParent.top;
+        const screenLeftDist = refScrollParent.width - refScroll.left;
+        const screenRightDist = reference.right - refScrollParent.left;
+
+        this.state.dist = {
+            left: Math.min(screenLeftDist, this.state.scrollLeft),
+            top: Math.min(screenTopDist - minRefHeight, this.state.scrollTop),
+            bottom: Math.min(
+                screenBottomDist - minRefHeight,
+                this.state.scrollHeight - this.state.scrollBottom,
+            ),
+            right: Math.min(
+                screenRightDist,
+                this.state.scrollWidth - this.state.scrollRight,
+            ),
+        };
+    }
+
+    calculateMaxWindowScrollDistance() {
+        const {
+            screen,
+            fixedParent,
+        } = this.state;
+        const html = document.documentElement;
+
+        const left = (fixedParent) ? this.state.scrollLeft : screen.left;
+        const top = (fixedParent) ? this.state.scrollTop : screen.top;
+        const width = (fixedParent)
+            ? this.state.scrollWidth
+            : html.scrollWidth;
+        const height = (fixedParent)
+            ? this.state.scrollHeight
+            : html.scrollHeight;
+        const right = left + screen.width;
+        const bottom = top + screen.height;
+
+        this.state.windowDist = {
+            left,
+            right: width - right,
+            top,
+            bottom: height - bottom,
+        };
+    }
+
+    handleMaxSize() {
+        const {
+            screen,
+            margin,
+            offset,
+            screenPadding,
+            minRefHeight,
+            current,
+            reference,
+        } = this.state;
+        const { style } = this.state.elem;
+
+        // Check element is taller than screen
+        const minHeight = minRefHeight + margin + screenPadding + current.height;
+        if (minHeight > screen.height && this.state.allowResize) {
+            current.height = screen.height - minRefHeight - screenPadding - margin;
+            style.maxHeight = px(current.height);
+        }
+
+        this.state.maxWidth = screen.width - (screenPadding * 2);
+        this.state.minLeft = screenPadding - offset.left;
+
+        // Check element is wider than screen
+        if (this.state.width >= this.state.maxWidth) {
+            style.width = px(this.state.maxWidth);
+            current.left = this.state.minLeft;
+            this.renderPosition();
+        }
+
+        if (this.state.useRefWidth) {
+            style.minWidth = px(reference.width);
+            style.width = '';
+            current.left = getInitialLeftPosition(this.state);
+            this.renderPosition();
+        }
+    }
+
+    calculateOverflow() {
+        this.calculateVerticalOverflow();
+        this.calculateHorizontalOverflow();
+    }
+
+    calculateVerticalOverflow() {
+        const { state } = this;
+        const { reference, current } = state;
+        const isVertCenter = isVerticalCenterPosition(state);
+
+        const vertTop = reference.top - current.height - state.margin;
+        const horTop = (isVertCenter)
+            ? (reference.top - (current.height - reference.height) / 2)
+            : (reference.top - current.height + reference.height);
+        const vertBottom = reference.bottom + state.margin + current.height;
+        const horBottom = (isVertCenter)
+            ? (reference.bottom + (current.height - reference.height) / 2)
+            : (reference.top + current.height);
+
+        state.vertOverflowTop = getTopOverflow(vertTop, state);
+        state.vertOverflowBottom = getBottomOverflow(vertBottom, state);
+
+        state.horOverflowTop = getTopOverflow(horTop, state);
+        state.horOverflowBottom = getBottomOverflow(horBottom, state);
+    }
+
+    calculateHorizontalOverflow() {
+        const { state } = this;
+        const { reference, current } = state;
+        const isHorCenter = isHorizontalCenterPosition(state);
+
+        const horLeft = reference.left - current.width - state.margin;
+        const vertLeft = (isHorCenter)
+            ? (reference.left - (current.width - reference.width) / 2)
+            : (reference.right - current.width);
+        const horRight = reference.right + state.margin + current.width;
+        const vertRight = (isHorCenter)
+            ? (reference.right + (current.width - reference.width) / 2)
+            : (reference.left + current.width);
+
+        state.horOverflowLeft = getLeftOverflow(horLeft, state);
+        state.horOverflowRight = getRightOverflow(horRight, state);
+
+        state.vertOverflowLeft = getLeftOverflow(vertLeft, state);
+        state.vertOverflowRight = getRightOverflow(vertRight, state);
+    }
+
+    handleFlip() {
+        const { state } = this;
+        state.flip = isVerticalFlip(state) || isHorizontalFlip(state);
+        state.crossFlip = isVerticalCrossFlip(state) || isHorizontalCrossFlip(state);
+
+        this.state.current.left = getInitialLeftPosition(this.state);
+        this.state.current.top = getInitialTopPosition(this.state);
+        this.renderPosition();
+    }
+
+    handleAxisChange() {
+        const { state } = this;
+        if (state.flip) {
+            return;
+        }
+
+        const vertToHor = isVerticalToHorizontalAxisChange(state);
+        const horToVert = isHorizontalToVerticalAxisChange(state);
+
+        if (vertToHor) {
+            state.position = changeAxisToHorizontal(state);
+        } else if (horToVert) {
+            state.position = changeAxisToVertical(state);
+        }
+
+        if (vertToHor || horToVert) {
+            this.recalculate();
+        }
+    }
+
     handleVerticalPosition() {
         const { state } = this;
         const {
             screen,
             scrollParent,
-            margin,
-            screenPadding,
             reference,
-            minRefHeight,
             current,
         } = state;
         const { style } = state.elem;
-
-        // Check element is taller than screen
-        const minHeight = minRefHeight + margin + screenPadding + current.height;
-        if (minHeight > screen.height && state.allowResize) {
-            current.height = screen.height - minRefHeight - screenPadding - margin;
-            style.maxHeight = px(current.height);
-        }
-
-        const top = isVertical(state)
-            ? (reference.top - current.height - margin)
-            : (reference.top - current.height + reference.height);
-
-        const bottom = isVertical(state)
-            ? (reference.bottom + margin + current.height)
-            : (reference.top + current.height);
-
-        state.overflowBottom = bottom - screen.height + state.bottomSafe;
-        state.overflowTop = -(top - screenPadding);
-
-        // Check element flip is required
-        state.flip = isVerticalFlip(state);
-        state.crossFlip = isVerticalCrossFlip(state);
-        current.top = getInitialTopPosition(state);
-        this.renderPosition();
 
         const isTopPosition = isTop(state);
         const isBottomPosition = isBottom(state);
@@ -344,9 +523,12 @@ export class PopupPosition {
         }
 
         const isRefOverflow = elemVertOverflow < 0 && refVertOverflow > 1;
-        const topToBottom = isTopPosition !== isRefOverflow;
-        const direction = (topToBottom) ? -1 : 1;
 
+        const topToBottom = isVertical(state)
+            ? (isTopPosition !== isRefOverflow)
+            : (isVerticalEnd(state));
+
+        const direction = (topToBottom) ? -1 : 1;
         let overflow = (isRefOverflow) ? refVertOverflow : elemVertOverflow;
         if (overflow > 1 && state.vertScrollAvailable && state.scrollOnOverflow) {
             const maxDistance = (topToBottom) ? state.dist.top : state.dist.bottom;
@@ -375,7 +557,7 @@ export class PopupPosition {
             }
         }
 
-        state.reference = state.refElem.getBoundingClientRect();
+        this.getRefClientRect();
         current.top = getInitialTopPosition(state);
 
         // Decrease height of element if overflow is not cleared
@@ -395,54 +577,15 @@ export class PopupPosition {
         const {
             screen,
             scrollParent,
-            offset,
-            margin,
-            screenPadding,
             windowDist,
             reference,
             current,
         } = state;
-        const { style } = state.elem;
-        const html = document.documentElement;
 
-        if (state.useRefWidth) {
-            style.minWidth = px(reference.width);
-            style.width = '';
-        }
-
-        state.maxWidth = html.clientWidth - (screenPadding * 2);
-        state.minLeft = screenPadding - offset.left;
-
-        // Check element is wider than screen
-        if (state.width >= state.maxWidth) {
-            style.width = px(state.maxWidth);
-            current.left = state.minLeft;
-            this.renderPosition();
-            return;
-        }
-
-        current.left = getInitialLeftPosition(state);
-
-        const left = isHorizontal(state)
-            ? (reference.left - current.width - margin)
-            : (reference.right - current.width);
-
-        const right = isHorizontal(state)
-            ? (reference.right + margin + current.width)
-            : (reference.left + current.width);
-
-        state.overflowRight = right - screen.width + screenPadding;
-        state.overflowLeft = -(left - screenPadding);
-
-        state.flip = isHorizontalFlip(state);
-        state.crossFlip = isHorizontalCrossFlip(state);
-        current.left = getInitialLeftPosition(state);
-        this.renderPosition();
-
-        const isLeftPosition = isLeft(state);
-        const isRightPosition = isRight(state);
-        const elemHorOverflow = getElementHorizontalOverflow(state);
-        const refOverflowLeft = -state.refScroll.left;
+        const isLeftPosition = isLeft(this.state);
+        const isRightPosition = isRight(this.state);
+        const elemHorOverflow = getElementHorizontalOverflow(this.state);
+        const refOverflowLeft = -this.state.refScroll.left;
         const refOverflowRight = reference.right - screen.width;
 
         let refHorOverflow = 0;
@@ -453,9 +596,11 @@ export class PopupPosition {
         }
 
         const isRefHorOverflow = elemHorOverflow < 0 && refHorOverflow > 1;
-        const leftToRight = isLeftPosition !== isRefHorOverflow;
-        const horDirection = (leftToRight) ? -1 : 1;
+        const leftToRight = isHorizontal(state)
+            ? (isLeftPosition !== isRefHorOverflow)
+            : (isHorizontalEnd(state));
 
+        const horDirection = (leftToRight) ? -1 : 1;
         let hOverflow = (isRefHorOverflow) ? refHorOverflow : elemHorOverflow;
         if (hOverflow > 1 && state.horScrollAvailable && state.scrollOnOverflow) {
             const maxDistance = (leftToRight) ? state.dist.left : state.dist.right;
@@ -482,7 +627,7 @@ export class PopupPosition {
                 window.scrollTo(newWindowScrollX, window.scrollY);
             }
 
-            state.reference = state.refElem.getBoundingClientRect();
+            this.getRefClientRect();
             current.left = getInitialLeftPosition(state);
             this.renderPosition();
         }

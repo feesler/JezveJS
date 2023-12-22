@@ -10,6 +10,7 @@ const POPUP_ITEM_CLASS = 'popup-list-item';
 
 const defaultProps = {
     header: 'Popup content',
+    itemsPrefix: 'Item',
     itemsCount: 5,
 };
 
@@ -29,7 +30,8 @@ export class PopupContainer extends Component {
     init() {
         const listItems = [];
         for (let i = 1; i <= this.props.itemsCount; i += 1) {
-            const item = this.createListItem(`Item ${i}`);
+            const title = `${this.props.itemsPrefix} ${i}`;
+            const item = this.createListItem(title);
             listItems.push(item);
         }
 

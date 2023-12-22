@@ -61,6 +61,7 @@ class PopupMenuView extends DemoView {
         this.initDefault();
         this.initToggleOnClick();
         this.initHideOnSelect();
+        this.initNested();
         this.initAttached();
         this.initClipping();
         this.initList();
@@ -143,6 +144,126 @@ class PopupMenuView extends DemoView {
             id: 'hideOnSelect',
             title: '\'hideOnSelect\' option',
             description: 'With disabled \'hideOnSelect\' option popup will stay open after selecting the menu item.',
+            content: [
+                container,
+                logsField.elem,
+            ],
+        });
+    }
+
+    get1stLevelChildMenu(logsField) {
+        const menu = PopupMenu.create({
+            id: 'childMenu1stLevel',
+            multiple: true,
+            position: 'right-start',
+            preventNavigation: true,
+            onItemClick: (id) => {
+                logsField.write(`Item '${id}' clicked`);
+            },
+            items: [{
+                id: 'item1',
+                icon: 'select',
+                title: 'Child item 1',
+            }, {
+                id: 'item2',
+                icon: 'search',
+                title: 'Child item 2',
+            }, {
+                id: 'item3',
+                title: 'Child item 3',
+            }, {
+                id: 'separator1',
+                type: 'separator',
+            }, {
+                id: 'item4',
+                title: 'Child item 4',
+                icon: 'glyph',
+                iconAlign: 'right',
+                submenuParent: true,
+                onClick: () => {
+                    const childMenuProps = this.get2ndLevelChildMenuProps(logsField);
+                    menu.createChildMenu('item4', childMenuProps);
+                },
+            }],
+        });
+
+        return menu;
+    }
+
+    get2ndLevelChildMenuProps(logsField) {
+        return {
+            id: 'childMenu2ndLevel',
+            multiple: true,
+            position: 'right-start',
+            preventNavigation: true,
+            onItemClick: (id) => {
+                logsField.write(`Item '${id}' clicked`);
+            },
+            items: [{
+                id: 'item1',
+                icon: 'select',
+                title: 'Child item 1',
+            }, {
+                id: 'item2',
+                icon: 'search',
+                title: 'Child item 2',
+            }, {
+                id: 'item3',
+                title: 'Child item 3',
+            }, {
+                id: 'separator1',
+                type: 'separator',
+            }, {
+                id: 'item4',
+                title: 'Child item 4',
+            }],
+        };
+    }
+
+    initNested() {
+        const logsField = LogsField.create();
+        const btn = MenuButton.create();
+        const container = createElement('div', {
+            props: { id: 'nestedContainer' },
+            children: btn.elem,
+        });
+
+        const items = getDefaultItems(logsField);
+        items.push({
+            id: 'nestedParentItem1',
+            title: 'Nested menu 1',
+            icon: 'glyph',
+            iconAlign: 'right',
+            submenuParent: true,
+        }, {
+            id: 'nestedParentItem2',
+            title: 'Nested menu 2',
+            icon: 'glyph',
+            iconAlign: 'right',
+            submenuParent: true,
+        });
+
+        const menu = PopupMenu.create({
+            id: 'nestedParentMenu',
+            attachTo: btn.elem,
+            multiple: true,
+            hideOnSelect: true,
+            preventNavigation: true,
+            items,
+            onItemClick: (id) => {
+                logsField.write(`Item '${id}' clicked`);
+
+                if (id === 'nestedParentItem1') {
+                    menu.createChildMenu(id, this.get1stLevelChildMenu(logsField));
+                } else if (id === 'nestedParentItem2') {
+                    menu.createChildMenu(id, this.get2ndLevelChildMenuProps(logsField));
+                }
+            },
+        });
+
+        this.addSection({
+            id: 'nested',
+            title: 'Nested menus',
             content: [
                 container,
                 logsField.elem,
