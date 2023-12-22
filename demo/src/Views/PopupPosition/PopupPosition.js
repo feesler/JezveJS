@@ -32,6 +32,7 @@ class PopupPositionView extends DemoView {
         this.initDefault();
         this.initPosition();
         this.initAllowFlip();
+        this.initAllowAxisChange();
         this.initNoScroll();
         this.initNoResize();
         this.initFixedParent();
@@ -102,12 +103,13 @@ class PopupPositionView extends DemoView {
     createPopupContext(options) {
         const {
             positionProps = {},
+            popupProps = {},
             ...rest
         } = options;
 
         const context = {
             logsField: LogsField.create(),
-            popup: PopupContainer.create(),
+            popup: PopupContainer.create(popupProps),
             positionProps,
             ...rest,
         };
@@ -124,10 +126,11 @@ class PopupPositionView extends DemoView {
             id,
             title,
             description,
-            positionProps,
+            positionProps = {},
+            popupProps = {},
         } = options;
 
-        const context = this.createPopupContext({ positionProps });
+        const context = this.createPopupContext({ positionProps, popupProps });
 
         context.container = createElement('div', {
             props: { className: CENTERED_CONTAINER_CLASS },
@@ -154,12 +157,14 @@ class PopupPositionView extends DemoView {
             title = null,
             description = null,
             positionProps = {},
+            popupProps = {},
             ...rest
         } = options;
 
         const context = this.createPopupContext({
             buttonAlign: 'center',
             positionProps,
+            popupProps,
             ...rest,
         });
 
@@ -279,6 +284,30 @@ class PopupPositionView extends DemoView {
                     scrollOnOverflow: false,
                     allowResize: false,
                 },
+            },
+        });
+    }
+
+    initAllowAxisChange() {
+        this.initPositionSection({
+            id: 'allowChangeAxis',
+            title: '\'allowChangeAxis\' option',
+            positionProps: {
+                margin: 10,
+                screenPadding: 10,
+                scrollOnOverflow: true,
+                allowResize: false,
+                allowFlip: true,
+                allowChangeAxis: true,
+                position: 'right',
+                updateProps: {
+                    scrollOnOverflow: false,
+                    allowResize: false,
+                },
+            },
+            popupProps: {
+                itemsPrefix: 'Long long long item title',
+                itemsCount: 5,
             },
         });
     }
