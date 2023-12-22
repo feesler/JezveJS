@@ -1039,6 +1039,7 @@ export class BaseChart extends Component {
 
         this.popup.replaceChildren(...asArray(content));
 
+        this.popupPosition?.reset();
         this.popupPosition = PopupPosition.create({
             elem: this.popup,
             refElem: target.item.elem,
@@ -1047,7 +1048,7 @@ export class BaseChart extends Component {
             screenPadding: 5,
             useRefWidth: false,
             minRefHeight: 5,
-            scrollOnOverflow: true,
+            scrollOnOverflow: false,
             allowResize: true,
             allowFlip: true,
             allowChangeAxis: true,

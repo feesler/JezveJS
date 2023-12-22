@@ -1,6 +1,6 @@
 import { isFunction, isObject } from '@jezvejs/types';
 import { removeEvents, setEvents, transform } from '@jezvejs/dom';
-import { px } from '../../common.js';
+import { debounce, minmax, px } from '../../common.js';
 
 import {
     getFixedParent,
@@ -34,6 +34,8 @@ import {
     isVerticalEnd,
     isHorizontalEnd,
 } from './helpers.js';
+
+const UPDATE_TIMEOUT = 75;
 
 const defaultProps = {
     elem: null,
@@ -82,10 +84,14 @@ export class PopupPosition {
             },
         };
 
+        const handler = () => this.updatePosition();
+        this.updateHandler = debounce(handler, UPDATE_TIMEOUT);
+
         this.state = {
             current: {},
             isInitial: true,
             listeningWindow: false,
+            scrollRequested: false,
         };
 
         this.update(this.props);
@@ -128,7 +134,11 @@ export class PopupPosition {
             : true;
 
         if (updateRequired) {
-            this.updatePosition();
+            if (this.state.scrollRequested) {
+                this.updateHandler();
+            } else {
+                this.updatePosition();
+            }
         }
     }
 
@@ -139,7 +149,11 @@ export class PopupPosition {
             : true;
 
         if (updateRequired) {
-            this.updatePosition();
+            if (this.state.scrollRequested) {
+                this.updateHandler();
+            } else {
+                this.updatePosition();
+            }
         }
     }
 
@@ -148,6 +162,8 @@ export class PopupPosition {
             ? this.state.updateProps()
             : this.state.updateProps;
         const props = isObject(updateProps) ? updateProps : {};
+
+        this.state.scrollRequested = false;
 
         this.update(props);
     }
@@ -503,6 +519,7 @@ export class PopupPosition {
         const { state } = this;
         const {
             screen,
+            offset,
             scrollParent,
             reference,
             current,
@@ -551,10 +568,17 @@ export class PopupPosition {
             }
             const newWindowScrollY = window.scrollY + windowScrollDistance;
 
+            this.state.scrollRequested = true;
             scrollParent.scrollTop = newScrollTop;
             if (Math.abs(windowScrollDistance) > 0) {
                 window.scrollTo(window.scrollX, newWindowScrollY);
             }
+        } else if (overflow > 1 && !state.scrollOnOverflow) {
+            const minPos = state.screenPadding - offset.top;
+            const maxPos = screen.height - offset.top - current.height - state.screenPadding;
+            current.top = minmax(minPos, maxPos, current.top);
+            overflow = 0;
+            this.renderPosition();
         }
 
         this.getRefClientRect();
@@ -576,6 +600,7 @@ export class PopupPosition {
         const { state } = this;
         const {
             screen,
+            offset,
             scrollParent,
             windowDist,
             reference,
@@ -622,6 +647,7 @@ export class PopupPosition {
             }
             const newWindowScrollX = window.scrollX + windowHScrollDistance;
 
+            this.state.scrollRequested = true;
             scrollParent.scrollLeft = newScrollLeft;
             if (Math.abs(windowHScrollDistance) > 0) {
                 window.scrollTo(newWindowScrollX, window.scrollY);
@@ -629,6 +655,11 @@ export class PopupPosition {
 
             this.getRefClientRect();
             current.left = getInitialLeftPosition(state);
+            this.renderPosition();
+        } else if (hOverflow > 1 && !state.scrollOnOverflow) {
+            const minPos = state.screenPadding - offset.left;
+            const maxPos = screen.width - offset.left - current.width - state.screenPadding;
+            current.left = minmax(minPos, maxPos, current.left);
             this.renderPosition();
         }
     }
