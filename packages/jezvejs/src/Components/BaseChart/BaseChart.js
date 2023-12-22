@@ -1048,7 +1048,7 @@ export class BaseChart extends Component {
             screenPadding: 5,
             useRefWidth: false,
             minRefHeight: 5,
-            scrollOnOverflow: true,
+            scrollOnOverflow: false,
             allowResize: true,
             allowFlip: true,
             allowChangeAxis: true,

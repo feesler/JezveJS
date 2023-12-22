@@ -1,6 +1,6 @@
 import { isFunction, isObject } from '@jezvejs/types';
 import { removeEvents, setEvents, transform } from '@jezvejs/dom';
-import { debounce, px } from '../../common.js';
+import { debounce, minmax, px } from '../../common.js';
 
 import {
     getFixedParent,
@@ -519,6 +519,7 @@ export class PopupPosition {
         const { state } = this;
         const {
             screen,
+            offset,
             scrollParent,
             reference,
             current,
@@ -572,6 +573,12 @@ export class PopupPosition {
             if (Math.abs(windowScrollDistance) > 0) {
                 window.scrollTo(window.scrollX, newWindowScrollY);
             }
+        } else if (overflow > 1 && !state.scrollOnOverflow) {
+            const minPos = state.screenPadding - offset.top;
+            const maxPos = screen.height - offset.top - current.height - state.screenPadding;
+            current.top = minmax(minPos, maxPos, current.top);
+            overflow = 0;
+            this.renderPosition();
         }
 
         this.getRefClientRect();
@@ -593,6 +600,7 @@ export class PopupPosition {
         const { state } = this;
         const {
             screen,
+            offset,
             scrollParent,
             windowDist,
             reference,
@@ -647,6 +655,11 @@ export class PopupPosition {
 
             this.getRefClientRect();
             current.left = getInitialLeftPosition(state);
+            this.renderPosition();
+        } else if (hOverflow > 1 && !state.scrollOnOverflow) {
+            const minPos = state.screenPadding - offset.left;
+            const maxPos = screen.width - offset.left - current.width - state.screenPadding;
+            current.left = minmax(minPos, maxPos, current.left);
             this.renderPosition();
         }
     }
