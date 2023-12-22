@@ -1050,6 +1050,7 @@ export class BaseChart extends Component {
             scrollOnOverflow: true,
             allowResize: true,
             allowFlip: true,
+            allowChangeAxis: true,
         });
 
         setEmptyClick(this.emptyClickHandler, [
