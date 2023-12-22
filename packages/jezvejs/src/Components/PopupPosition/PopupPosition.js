@@ -1,6 +1,6 @@
 import { isFunction, isObject } from '@jezvejs/types';
 import { removeEvents, setEvents, transform } from '@jezvejs/dom';
-import { px } from '../../common.js';
+import { debounce, px } from '../../common.js';
 
 import {
     getFixedParent,
@@ -34,6 +34,8 @@ import {
     isVerticalEnd,
     isHorizontalEnd,
 } from './helpers.js';
+
+const UPDATE_TIMEOUT = 75;
 
 const defaultProps = {
     elem: null,
@@ -82,10 +84,14 @@ export class PopupPosition {
             },
         };
 
+        const handler = () => this.updatePosition();
+        this.updateHandler = debounce(handler, UPDATE_TIMEOUT);
+
         this.state = {
             current: {},
             isInitial: true,
             listeningWindow: false,
+            scrollRequested: false,
         };
 
         this.update(this.props);
@@ -128,7 +134,11 @@ export class PopupPosition {
             : true;
 
         if (updateRequired) {
-            this.updatePosition();
+            if (this.state.scrollRequested) {
+                this.updateHandler();
+            } else {
+                this.updatePosition();
+            }
         }
     }
 
@@ -139,7 +149,11 @@ export class PopupPosition {
             : true;
 
         if (updateRequired) {
-            this.updatePosition();
+            if (this.state.scrollRequested) {
+                this.updateHandler();
+            } else {
+                this.updatePosition();
+            }
         }
     }
 
@@ -148,6 +162,8 @@ export class PopupPosition {
             ? this.state.updateProps()
             : this.state.updateProps;
         const props = isObject(updateProps) ? updateProps : {};
+
+        this.state.scrollRequested = false;
 
         this.update(props);
     }
@@ -551,6 +567,7 @@ export class PopupPosition {
             }
             const newWindowScrollY = window.scrollY + windowScrollDistance;
 
+            this.state.scrollRequested = true;
             scrollParent.scrollTop = newScrollTop;
             if (Math.abs(windowScrollDistance) > 0) {
                 window.scrollTo(window.scrollX, newWindowScrollY);
@@ -622,6 +639,7 @@ export class PopupPosition {
             }
             const newWindowScrollX = window.scrollX + windowHScrollDistance;
 
+            this.state.scrollRequested = true;
             scrollParent.scrollLeft = newScrollLeft;
             if (Math.abs(windowHScrollDistance) > 0) {
                 window.scrollTo(newWindowScrollX, window.scrollY);
