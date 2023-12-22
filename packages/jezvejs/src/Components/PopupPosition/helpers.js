@@ -302,14 +302,14 @@ export const isVerticalFlip = (state) => (
     state.allowFlip && (
         (
             isBottomPosition(state)
-            && (state.overflowBottom > 0)
-            && (state.overflowBottom > state.overflowTop)
-            && (state.dist.top > state.overflowTop)
+            && (state.vertOverflowBottom > 0)
+            && (state.vertOverflowBottom > state.vertOverflowTop)
+            && (state.dist.top > state.vertOverflowTop)
         ) || (
             isTopPosition(state)
-            && (state.overflowTop > 0)
-            && (state.overflowTop > state.overflowBottom)
-            && (state.dist.bottom > state.overflowBottom)
+            && (state.vertOverflowTop > 0)
+            && (state.vertOverflowTop > state.vertOverflowBottom)
+            && (state.dist.bottom > state.vertOverflowBottom)
         )
     )
 );
@@ -323,14 +323,14 @@ export const isHorizontalFlip = (state) => (
     state.allowFlip && (
         (
             isRightPosition(state)
-            && (state.overflowRight > 0)
-            && (state.overflowRight > state.overflowLeft)
-            && (state.dist.left > state.overflowLeft)
+            && (state.horOverflowRight > 0)
+            && (state.horOverflowRight > state.horOverflowLeft)
+            && (state.dist.left > state.horOverflowLeft)
         ) || (
             isLeftPosition(state)
-            && (state.overflowLeft > 0)
-            && (state.overflowLeft > state.overflowRight)
-            && (state.dist.right > state.overflowRight)
+            && (state.horOverflowLeft > 0)
+            && (state.horOverflowLeft > state.horOverflowRight)
+            && (state.dist.right > state.horOverflowRight)
         )
     )
 );
@@ -344,14 +344,14 @@ export const isVerticalCrossFlip = (state) => (
     state.allowFlip && (
         (
             isVerticalStartPosition(state)
-            && (state.overflowBottom > 0)
-            && (state.overflowBottom > state.overflowTop)
-            && (state.dist.top > state.overflowTop)
+            && (state.horOverflowBottom > 0)
+            && (state.horOverflowBottom > state.horOverflowTop)
+            && (state.dist.top > state.horOverflowTop)
         ) || (
             isVerticalEndPosition(state)
-            && (state.overflowTop > 0)
-            && (state.overflowTop > state.overflowBottom)
-            && (state.dist.bottom > state.overflowBottom)
+            && (state.horOverflowTop > 0)
+            && (state.horOverflowTop > state.horOverflowBottom)
+            && (state.dist.bottom > state.horOverflowBottom)
         )
     )
 );
@@ -365,14 +365,14 @@ export const isHorizontalCrossFlip = (state) => (
     state.allowFlip && (
         (
             isHorizontalStartPosition(state)
-            && (state.overflowRight > 0)
-            && (state.overflowRight > state.overflowLeft)
-            && (state.dist.left > state.overflowLeft)
+            && (state.vertOverflowRight > 0)
+            && (state.vertOverflowRight > state.vertOverflowLeft)
+            && (state.dist.left > state.vertOverflowLeft)
         ) || (
             isHorizontalEndPosition(state)
-            && (state.overflowLeft > 0)
-            && (state.overflowLeft > state.overflowRight)
-            && (state.dist.right > state.overflowRight)
+            && (state.vertOverflowLeft > 0)
+            && (state.vertOverflowLeft > state.vertOverflowRight)
+            && (state.dist.right > state.vertOverflowRight)
         )
     )
 );
@@ -459,13 +459,19 @@ export const getInitialLeftPosition = (state) => {
  */
 export const getElementVerticalOverflow = (state) => {
     if (isTop(state)) {
-        return state.overflowTop;
+        return state.vertOverflowTop;
     }
     if (isBottom(state)) {
-        return state.overflowBottom;
+        return state.vertOverflowBottom;
+    }
+    if (isVerticalEnd(state)) {
+        return state.horOverflowTop;
+    }
+    if (isVerticalStart(state)) {
+        return state.horOverflowBottom;
     }
 
-    return 0;
+    return Math.max(0, state.horOverflowTop, state.horOverflowBottom);
 };
 
 /**
@@ -475,11 +481,17 @@ export const getElementVerticalOverflow = (state) => {
  */
 export const getElementHorizontalOverflow = (state) => {
     if (isLeft(state)) {
-        return state.overflowLeft;
+        return state.horOverflowLeft;
     }
     if (isRight(state)) {
-        return state.overflowRight;
+        return state.horOverflowRight;
+    }
+    if (isHorizontalEnd(state)) {
+        return state.vertOverflowLeft;
+    }
+    if (isHorizontalStart(state)) {
+        return state.vertOverflowRight;
     }
 
-    return 0;
+    return Math.max(0, state.vertOverflowLeft, state.vertOverflowRight);
 };
