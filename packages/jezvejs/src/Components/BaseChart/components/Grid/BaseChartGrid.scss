@@ -1,0 +1,7 @@
+/* Chart grid line */
+.chart__grid-line {
+  stroke-width: var(--chart-grid-stroke-width);
+  fill: none;
+  stroke: var(--chart-grid-color);
+  stroke-dasharray: var(--chart-grid-stroke-dasharray);
+}

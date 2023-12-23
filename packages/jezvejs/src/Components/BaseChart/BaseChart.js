@@ -19,6 +19,8 @@ import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 import { defaultProps } from './defaultProps.js';
 import '../../common.scss';
 import './BaseChart.scss';
+import { formatCoord } from './helpers.js';
+import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
 
 /* CSS classes */
 const CHART_CLASS = 'chart';
@@ -73,11 +75,8 @@ export class BaseChart extends Component {
         this.items = [];
         this.itemsGroup = null;
         this.grid = null;
-        this.gridGroup = null;
         this.vertLabelsGroup = null;
         this.labels = [];
-        this.xAxisGridLines = [];
-        this.xAxisGridGroup = null;
         this.xAxisLabelsGroup = null;
         this.scrollRequested = false;
         this.contentOffset = null;
@@ -415,8 +414,7 @@ export class BaseChart extends Component {
     }
 
     formatCoord(value, asPixels = false) {
-        const fmt = parseFloat(parseFloat(value).toFixed(3)).toString();
-        return (asPixels) ? `${fmt}px` : fmt;
+        return formatCoord(value, asPixels);
     }
 
     /**
@@ -440,113 +438,6 @@ export class BaseChart extends Component {
         grid.calculate(values);
 
         return (grid.steps === 0) ? state.grid : grid;
-    }
-
-    /** Draw grid and return array of grid lines */
-    drawGrid(state) {
-        const { grid, xAxis } = state;
-
-        this.gridGroup?.remove();
-        this.gridGroup = null;
-        if (!grid?.steps) {
-            return;
-        }
-
-        const width = state.chartWidth;
-
-        const gridGroup = createSVGElement('g');
-        let step = 0;
-        let curY = grid.yFirst;
-        if (xAxis === 'top') {
-            curY += state.hLabelsHeight;
-        }
-
-        while (step <= grid.steps) {
-            let rY = Math.round(curY);
-            if (rY > curY) {
-                rY -= 0.5;
-            } else {
-                rY += 0.5;
-            }
-
-            const linePath = `M0,${rY}L${width},${rY}`;
-            const el = createSVGElement('path', {
-                attrs: {
-                    class: 'chart__grid-line',
-                    d: linePath,
-                },
-            });
-
-            gridGroup.append(el);
-
-            curY += grid.yStep;
-            step += 1;
-        }
-
-        this.content.prepend(gridGroup);
-        this.gridGroup = gridGroup;
-
-        // Render x-Axis grid
-        this.xAxisGridGroup?.remove();
-        this.xAxisGridGroup = null;
-
-        if (!state.xAxisGrid) {
-            this.xAxisGridLines = [];
-            return;
-        }
-
-        const xAxisGridLines = [];
-        const xAxisGridGroup = createSVGElement('g');
-        const groupOuterWidth = this.getGroupOuterWidth(state);
-        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
-        const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
-
-        for (let i = 0; i < visibleGroups; i += 1) {
-            const groupIndex = firstGroupIndex + i;
-            const value = state.data.series[groupIndex];
-            if (typeof value === 'undefined') {
-                break;
-            }
-
-            const prevValue = state.data.series[groupIndex - 1] ?? null;
-            if (value === prevValue) {
-                continue;
-            }
-
-            let gridLine = this.xAxisGridLines.find((item) => item?.groupIndex === groupIndex);
-            if (gridLine) {
-                gridLine.reused = true;
-            } else {
-                gridLine = {
-                    reused: false,
-                    groupIndex,
-                    elem: createSVGElement('path', {
-                        attrs: {
-                            class: 'chart__grid-line',
-                        },
-                    }),
-                };
-            }
-
-            const curX = groupIndex * groupOuterWidth;
-            let rX = Math.round(curX);
-            rX += (rX > curX) ? -0.5 : 0.5;
-            rX = this.formatCoord(rX);
-
-            const y0 = this.formatCoord(state.grid.yFirst);
-            const y1 = this.formatCoord(state.grid.yLast);
-
-            setAttributes(gridLine.elem, {
-                d: `M${rX},${y0}L${rX},${y1}`,
-            });
-
-            xAxisGridGroup.append(gridLine.elem);
-            xAxisGridLines.push(gridLine);
-        }
-
-        this.xAxisGridLines = xAxisGridLines;
-        this.xAxisGridGroup = xAxisGridGroup;
-        this.content.prepend(this.xAxisGridGroup);
     }
 
     /** Return array of values */
@@ -1301,7 +1192,26 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.drawGrid(state);
+        if (!state.grid?.steps) {
+            this.chartGrid?.elem?.remove();
+            this.chartGrid = null;
+            return;
+        }
+
+        if (!this.chartGrid) {
+            this.chartGrid = BaseChartGrid.create({
+                ...state,
+                getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
+                getFirstVisibleGroupIndex: (...args) => this.getFirstVisibleGroupIndex(...args),
+                getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
+            });
+            this.content.prepend(this.chartGrid.elem);
+        } else {
+            this.chartGrid.setState((gridState) => ({
+                ...gridState,
+                ...state,
+            }));
+        }
     }
 
     renderScroll(state, prevState) {
