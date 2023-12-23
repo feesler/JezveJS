@@ -4,23 +4,24 @@ import {
     show,
     getOffset,
     createElement,
-    setAttributes,
 } from '@jezvejs/dom';
-import {
-    debounce,
-    minmax,
-} from '../../common.js';
+
+import { debounce, minmax } from '../../common.js';
 import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
 import { Component } from '../../Component.js';
 
+// Global utilities
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 
+// Local components
+import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
+import { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
+
 import { defaultProps } from './defaultProps.js';
+import { formatCoord } from './helpers.js';
 import '../../common.scss';
 import './BaseChart.scss';
-import { formatCoord } from './helpers.js';
-import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
 
 /* CSS classes */
 const CHART_CLASS = 'chart';
@@ -29,8 +30,7 @@ const STACKED_CLASS = 'chart_stacked';
 const CONTAINER_CLASS = 'chart__container';
 const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
-/* x asix / horizontal labels */
-const XAXIS_LABEL_CLASS = 'chart__text chart-xaxis__label';
+
 /* y asix / vertical labels */
 const VLABELS_CLASS = 'chart__vert-labels';
 const VLABELS_CONTAINER_CLASS = 'vertical-legend';
@@ -75,9 +75,8 @@ export class BaseChart extends Component {
         this.items = [];
         this.itemsGroup = null;
         this.grid = null;
+        this.xAxisLabels = null;
         this.vertLabelsGroup = null;
-        this.labels = [];
-        this.xAxisLabelsGroup = null;
         this.scrollRequested = false;
         this.contentOffset = null;
 
@@ -579,137 +578,6 @@ export class BaseChart extends Component {
         this.labelsContainer.setAttribute('height', state.height);
     }
 
-    getXAxisLabelRenderer(state = this.state) {
-        return isFunction(state.renderXAxisLabel)
-            ? state.renderXAxisLabel
-            : (value) => value?.toString();
-    }
-
-    /** Create horizontal labels */
-    createHLabels(state, prevState) {
-        const { xAxis } = state;
-        if (xAxis === 'none') {
-            return;
-        }
-
-        const dyOffset = 5.5;
-        const lblY = (xAxis === 'top')
-            ? (state.hLabelsHeight / 2)
-            : (state.height - (state.hLabelsHeight / 2));
-
-        const groupOuterWidth = this.getGroupOuterWidth(state);
-        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
-        const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
-        const formatFunction = this.getXAxisLabelRenderer(state);
-
-        const labels = [];
-        for (let i = 0; i < visibleGroups; i += 1) {
-            const groupIndex = firstGroupIndex + i;
-            const value = state.data.series[groupIndex];
-            if (typeof value === 'undefined') {
-                break;
-            }
-
-            const prevValue = state.data.series[groupIndex - 1] ?? null;
-            if (value === prevValue) {
-                continue;
-            }
-
-            let label = this.labels.find((item) => item?.groupIndex === groupIndex);
-            if (label) {
-                label.reused = true;
-            } else {
-                label = {
-                    reused: false,
-                    groupIndex,
-                    value,
-                    formattedValue: formatFunction(value),
-                    elem: createSVGElement('text', {
-                        attrs: { class: XAXIS_LABEL_CLASS },
-                    }),
-                };
-
-                label.elem.textContent = label.formattedValue;
-                this.xAxisLabelsGroup.append(label.elem);
-            }
-
-            setAttributes(label.elem, {
-                x: groupIndex * groupOuterWidth,
-                y: lblY + dyOffset,
-            });
-
-            labels.push(label);
-        }
-
-        let lastOffset = 0;
-        const lblMarginLeft = 10;
-        const labelsToRemove = [];
-        let resizeRequested = false;
-        let prevLabel = null;
-        const toLeft = (
-            !this.isHorizontalScaleNeeded(state, prevState)
-            && prevState.scrollLeft > 0
-            && state.scrollLeft < prevState.scrollLeft
-        );
-
-        for (let ind = 0; ind < labels.length; ind += 1) {
-            const index = (toLeft) ? (labels.length - ind - 1) : ind;
-            const label = labels[index];
-            const labelRect = label.elem.getBBox();
-            const currentOffset = Math.ceil(labelRect.x + labelRect.width);
-
-            const overflow = (toLeft)
-                ? (currentOffset + lblMarginLeft > lastOffset)
-                : (labelRect.x < lastOffset + lblMarginLeft);
-
-            // Check current label not intersects previous one
-            if (lastOffset > 0 && overflow) {
-                labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
-                if (prevLabel?.reused || !label.reused) {
-                    continue;
-                }
-            }
-
-            // Check last label not overflow chart to prevent
-            // horizontal scroll in fitToWidth mode
-            if (currentOffset > state.chartContentWidth) {
-                resizeRequested = !state.fitToWidth;
-                if (state.fitToWidth || !state.allowLastXAxisLabelOverflow) {
-                    labelsToRemove.push(label);
-                    continue;
-                }
-            }
-
-            lastOffset = (toLeft) ? labelRect.x : currentOffset;
-            prevLabel = label;
-        }
-
-        // Remove overflow labels
-        for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
-            const label = labelsToRemove[ind];
-            label?.elem?.remove();
-
-            const labelsIndex = labels.indexOf(label);
-            if (labelsIndex !== -1) {
-                labels.splice(labelsIndex, 1);
-            }
-        }
-
-        // Remove labels not included to new state
-        for (let ind = 0; ind < this.labels.length; ind += 1) {
-            const label = this.labels[ind];
-            if (!labels.includes(label)) {
-                label?.elem?.remove();
-            }
-        }
-
-        this.labels = labels;
-
-        if (resizeRequested) {
-            setTimeout(() => this.onResize());
-        }
-    }
-
     /** Returns series value for specified items group */
     getSeriesByIndex(index, state = this.state) {
         if (index === -1) {
@@ -1007,7 +875,7 @@ export class BaseChart extends Component {
         let newState = this.updateColumnWidth(this.state);
 
         // Update width of x axis labels
-        const labelsBox = this.xAxisLabelsGroup?.getBBox();
+        const labelsBox = this.xAxisLabels?.elem?.getBBox();
         newState.lastHLabelOffset = (labelsBox && !newState.fitToWidth)
             ? Math.round(labelsBox.x + labelsBox.width)
             : 0;
@@ -1167,6 +1035,8 @@ export class BaseChart extends Component {
     renderHorizontalLabels(state, prevState) {
         if (
             !this.isHorizontalScaleNeeded(state, prevState)
+            && state.grid === prevState.grid
+            && state.xAxis === prevState.xAxis
             && state.chartContentWidth === prevState.chartContentWidth
             && state.containerWidth === prevState.containerWidth
             && state.scrollLeft === prevState.scrollLeft
@@ -1174,7 +1044,28 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.createHLabels(state, prevState);
+        if (!state.grid?.steps || state.xAxis === 'none') {
+            this.xAxisLabels?.elem?.remove();
+            this.xAxisLabels = null;
+            return;
+        }
+
+        if (!this.xAxisLabels) {
+            this.xAxisLabels = BaseChartXAxisLabels.create({
+                ...state,
+                isHorizontalScaleNeeded: (...args) => this.isHorizontalScaleNeeded(...args),
+                getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
+                getFirstVisibleGroupIndex: (...args) => this.getFirstVisibleGroupIndex(...args),
+                getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
+                onResize: (...args) => this.onResize(...args),
+            });
+            this.content.append(this.xAxisLabels.elem);
+        } else {
+            this.xAxisLabels.setState((labelsState) => ({
+                ...labelsState,
+                ...state,
+            }));
+        }
     }
 
     renderGrid(state, prevState) {
