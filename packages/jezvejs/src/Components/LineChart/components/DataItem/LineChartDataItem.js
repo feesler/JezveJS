@@ -23,6 +23,7 @@ const defaultProps = {
     active: false,
     autoScale: false,
     animate: false,
+    animateNow: false,
 };
 
 /**

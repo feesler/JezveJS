@@ -26,6 +26,7 @@ const defaultProps = {
     groupName: null,
     autoScale: false,
     animate: false,
+    animateNow: false,
     stacked: false,
 };
 
