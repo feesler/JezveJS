@@ -14,12 +14,6 @@ import { Component } from '../../Component.js';
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 
-// Local components
-import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
-import { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
-import { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
-import { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
-
 import { defaultProps } from './defaultProps.js';
 import { formatCoord } from './helpers.js';
 import '../../common.scss';
@@ -47,13 +41,15 @@ const LEGEND_CLASS = 'chart__legend';
  * @param {string|Element} props.elem - base element for component
  */
 export class BaseChart extends Component {
-    constructor(props) {
-        super(props);
-
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
+        });
 
         this.chartContainer = null;
         this.chart = null;
@@ -201,6 +197,15 @@ export class BaseChart extends Component {
     postInit() {
         this.setClassNames();
         this.observeSize();
+    }
+
+    getComponent(name) {
+        const res = this.props.components?.[name] ?? null;
+        if (!res) {
+            throw new Error(`Invalid ${name} component`);
+        }
+
+        return res;
     }
 
     observeSize() {
@@ -851,7 +856,8 @@ export class BaseChart extends Component {
             return null;
         }
 
-        const legend = BaseChartLegend.create({
+        const Legend = this.getComponent('Legend');
+        const legend = Legend.create({
             ...state,
             categories,
         });
@@ -959,7 +965,8 @@ export class BaseChart extends Component {
         }
 
         if (!this.xAxisLabels) {
-            this.xAxisLabels = BaseChartXAxisLabels.create({
+            const XAxisLabels = this.getComponent('XAxisLabels');
+            this.xAxisLabels = XAxisLabels.create({
                 ...state,
                 isHorizontalScaleNeeded: (...args) => this.isHorizontalScaleNeeded(...args),
                 getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
@@ -993,7 +1000,8 @@ export class BaseChart extends Component {
         }
 
         if (!this.yAxisLabels) {
-            this.yAxisLabels = BaseChartYAxisLabels.create({
+            const YAxisLabels = this.getComponent('YAxisLabels');
+            this.yAxisLabels = YAxisLabels.create({
                 ...state,
             });
             this.chartContainer.append(this.yAxisLabels.elem);
@@ -1027,7 +1035,8 @@ export class BaseChart extends Component {
         }
 
         if (!this.chartGrid) {
-            this.chartGrid = BaseChartGrid.create({
+            const Grid = this.getComponent('Grid');
+            this.chartGrid = Grid.create({
                 ...state,
                 getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
                 getFirstVisibleGroupIndex: (...args) => this.getFirstVisibleGroupIndex(...args),

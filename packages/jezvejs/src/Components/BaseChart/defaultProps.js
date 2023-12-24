@@ -1,3 +1,8 @@
+import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
+import { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
+import { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
+import { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
+
 /** Default properties */
 export const defaultProps = {
     // Layout
@@ -51,5 +56,11 @@ export const defaultProps = {
         values: [],
         series: [],
         stacked: false,
+    },
+    components: {
+        Grid: BaseChartGrid,
+        XAxisLabels: BaseChartXAxisLabels,
+        YAxisLabels: BaseChartYAxisLabels,
+        Legend: BaseChartLegend,
     },
 };
