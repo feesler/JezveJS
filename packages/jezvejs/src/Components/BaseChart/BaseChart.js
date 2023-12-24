@@ -985,6 +985,7 @@ export class BaseChart extends Component {
             state.grid === prevState.grid
             && state.yAxis === prevState.yAxis
             && state.containerWidth === prevState.containerWidth
+            && state.yAxisLabelsAlign === prevState.yAxisLabelsAlign
         ) {
             return;
         }

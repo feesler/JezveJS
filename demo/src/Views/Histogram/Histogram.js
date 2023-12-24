@@ -315,9 +315,10 @@ class HistogramView extends DemoView {
 
     chartAxes() {
         const container = chartContainer('chartAxes');
-        const currentAxes = {
-            x: 'bottom',
-            y: 'right',
+        const state = {
+            xAxis: 'bottom',
+            yAxis: 'right',
+            yAxisLabelsAlign: 'left',
         };
 
         const xAxisMap = {
@@ -332,53 +333,75 @@ class HistogramView extends DemoView {
             none: 'None',
         };
 
+        const textAlignMap = {
+            left: 'Left',
+            right: 'Right',
+            center: 'Center',
+        };
+
         let chart = null;
 
         const createChart = (xAxis, yAxis) => {
-            currentAxes.x = xAxis;
-            currentAxes.y = yAxis;
+            state.xAxis = xAxis;
+            state.yAxis = yAxis;
 
             chart = Histogram.create({
                 data: chartData2,
                 xAxis,
                 yAxis,
+                yAxisLabelsAlign: state.yAxisLabelsAlign,
             });
 
             container.replaceChildren(chart.elem);
         };
 
-        const createRadioFieldset = (isX) => (
+        const controls = [
             RadioFieldset.create({
-                title: (isX) ? 'X-Axis' : 'Y-Axis',
-                radioName: (isX) ? 'xAxis' : 'yAxis',
-                items: Object.entries((isX) ? xAxisMap : yAxisMap).map(([value, label]) => ({
+                title: 'X-Axis',
+                radioName: 'xAxis',
+                items: Object.entries(xAxisMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (currentAxes[(isX) ? 'x' : 'y'] === value),
+                    checked: (state.xAxis === value),
+                })),
+                onChange: (value) => createChart(value, state.yAxis),
+            }).elem,
+            RadioFieldset.create({
+                title: 'Y-Axis',
+                radioName: 'yAxis',
+                items: Object.entries(yAxisMap).map(([value, label]) => ({
+                    value,
+                    label,
+                    checked: (state.yAxis === value),
                 })),
                 onChange: (value) => {
-                    if (isX) {
-                        createChart(value, currentAxes.y);
-                        return;
-                    }
-
                     chart?.setState((chartState) => ({ ...chartState, yAxis: value }));
-                    currentAxes.y = value;
+                    state.yAxis = value;
                 },
-            }).elem
-        );
+            }).elem,
+            RadioFieldset.create({
+                title: 'Y-Axis text align',
+                radioName: 'yAxisLabelsAlign',
+                items: Object.entries(textAlignMap).map(([value, label]) => ({
+                    value,
+                    label,
+                    checked: (state.yAxisLabelsAlign === value),
+                })),
+                onChange: (value) => {
+                    chart?.setState((chartState) => ({ ...chartState, yAxisLabelsAlign: value }));
+                    state.yAxisLabelsAlign = value;
+                },
+            }).elem,
+        ];
 
-        createChart(currentAxes.x, currentAxes.y);
+        createChart(state.xAxis, state.yAxis);
 
         this.addSection({
             id: 'axes',
             title: '\'xAxis\' and \'yAxis\' options',
             content: [
                 container,
-                createControls([
-                    createRadioFieldset(true),
-                    createRadioFieldset(false),
-                ]),
+                createControls(controls),
             ],
         });
     }

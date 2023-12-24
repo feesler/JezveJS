@@ -27,6 +27,7 @@ export const defaultProps = {
     activateOnHover: false,
     xAxis: 'bottom', // available values: 'bottom', 'top' and 'none'
     yAxis: 'right', // available values: 'right', 'left' and 'none'
+    yAxisLabelsAlign: 'left', // available values: 'left', 'right' and 'center'
     renderXAxisLabel: null,
     renderYAxisLabel: null,
     showLegend: false,
