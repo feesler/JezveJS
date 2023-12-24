@@ -1,0 +1,7 @@
+/* List for multiple values popup */
+.chart__popup-list {
+  display: flex;
+  flex-flow: column nowrap;
+  list-style-position: inside;
+  list-style-type: disc;
+}

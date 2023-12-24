@@ -1,0 +1,27 @@
+/* LineChart circle item */
+.linechart__item {
+  display: block;
+  fill: var(--linechart-item-fill);
+  stroke: var(--linechart-item-border);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+
+.linechart__nodes .linechart__item {
+  opacity: 1;
+}
+
+/* Active item */
+.chart__item_active.linechart__item {
+  opacity: 1;
+  fill: var(--linechart-active-item-fill);
+  stroke: var(--linechart-active-item-border);
+}
+
+/* Animation */
+.chart_animated {
+  .linechart__item {
+    transition-duration: var(--chart-animation-duration);
+    transition-property: cy;
+  }
+}

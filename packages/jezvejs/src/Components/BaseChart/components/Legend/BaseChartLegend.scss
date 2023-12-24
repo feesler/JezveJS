@@ -1,0 +1,12 @@
+/* Chart legend */
+.chart__legend-list {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  column-gap: 25px;
+  row-gap: 5px;
+  list-style-position: inside;
+  list-style-type: disc;
+}

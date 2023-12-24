@@ -1,25 +1,5 @@
 /* Histogram */
 .histogram {
-  --historgam-bar-color: #20a0ff;
-  --historgam-active-bar-color: #00bfff;
-}
-
-/* Histogram bar item */
-.histogram__bar {
-  fill: var(--historgam-bar-color);
-  fill-opacity: 1;
-  stroke: none;
-}
-
-/* Active items */
-.chart__item_active.histogram__bar {
-  fill: var(--historgam-active-bar-color);
-}
-
-/* Animation */
-.chart_animated {
-  .histogram__bar {
-    transition-property: y, height;
-    transition-duration: var(--chart-animation-duration);
-  }
+  --histogram-bar-color: #20a0ff;
+  --histogram-active-bar-color: #00bfff;
 }

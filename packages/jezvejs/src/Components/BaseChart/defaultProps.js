@@ -1,3 +1,9 @@
+import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
+import { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
+import { BaseChartPopup } from './components/Popup/BaseChartPopup.js';
+import { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
+import { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
+
 /** Default properties */
 export const defaultProps = {
     // Layout
@@ -27,6 +33,7 @@ export const defaultProps = {
     activateOnHover: false,
     xAxis: 'bottom', // available values: 'bottom', 'top' and 'none'
     yAxis: 'right', // available values: 'right', 'left' and 'none'
+    yAxisLabelsAlign: 'left', // available values: 'left', 'right' and 'center'
     renderXAxisLabel: null,
     renderYAxisLabel: null,
     showLegend: false,
@@ -50,5 +57,12 @@ export const defaultProps = {
         values: [],
         series: [],
         stacked: false,
+    },
+    components: {
+        Grid: BaseChartGrid,
+        XAxisLabels: BaseChartXAxisLabels,
+        YAxisLabels: BaseChartYAxisLabels,
+        Legend: BaseChartLegend,
+        ChartPopup: BaseChartPopup,
     },
 };

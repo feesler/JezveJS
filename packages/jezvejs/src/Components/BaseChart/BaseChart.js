@@ -4,21 +4,26 @@ import {
     show,
     getOffset,
     createElement,
-    setAttributes,
 } from '@jezvejs/dom';
-import {
-    debounce,
-    minmax,
-} from '../../common.js';
+
+import { debounce, minmax } from '../../common.js';
 import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
 import { Component } from '../../Component.js';
 
+// Global utilities
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 
 import { defaultProps } from './defaultProps.js';
+import { formatCoord } from './helpers.js';
 import '../../common.scss';
 import './BaseChart.scss';
+
+export { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
+export { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
+export { BaseChartPopup } from './components/Popup/BaseChartPopup.js';
+export { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
+export { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
 
 /* CSS classes */
 const CHART_CLASS = 'chart';
@@ -27,22 +32,14 @@ const STACKED_CLASS = 'chart_stacked';
 const CONTAINER_CLASS = 'chart__container';
 const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
-/* x asix / horizontal labels */
-const XAXIS_LABEL_CLASS = 'chart__text chart-xaxis__label';
-/* y asix / vertical labels */
-const VLABELS_CLASS = 'chart__vert-labels';
-const VLABELS_CONTAINER_CLASS = 'vertical-legend';
-const VLABELS_LEFT_CLASS = 'vertical-legend_left';
 const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
 /* Popup */
 const POPUP_CLASS = 'chart__popup';
 const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
-const POPUP_LIST_CLASS = 'chart__popup-list';
+
 /* Legend */
 const LEGEND_CLASS = 'chart__legend';
-const LEGEND_LIST_CLASS = 'chart__legend-list';
-const LEGEND_LIST_ITEM_CLASS = 'chart__legend-list-item';
 
 /**
  * Base chart class
@@ -50,20 +47,20 @@ const LEGEND_LIST_ITEM_CLASS = 'chart__legend-list-item';
  * @param {string|Element} props.elem - base element for component
  */
 export class BaseChart extends Component {
-    constructor(props) {
-        super(props);
-
-        this.props = {
+    constructor(props = {}) {
+        super({
             ...defaultProps,
-            ...this.props,
-        };
+            ...props,
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
+        });
 
         this.chartContainer = null;
         this.chart = null;
         this.chartScroller = null;
-        this.verticalLabels = null;
         this.content = null;
-        this.labelsContainer = null;
         this.legend = null;
         this.activeTarget = null;
         this.currentTarget = null;
@@ -73,12 +70,9 @@ export class BaseChart extends Component {
         this.items = [];
         this.itemsGroup = null;
         this.grid = null;
-        this.gridGroup = null;
+        this.xAxisLabels = null;
+        this.yAxisLabels = null;
         this.vertLabelsGroup = null;
-        this.labels = [];
-        this.xAxisGridLines = [];
-        this.xAxisGridGroup = null;
-        this.xAxisLabelsGroup = null;
         this.scrollRequested = false;
         this.contentOffset = null;
 
@@ -151,7 +145,6 @@ export class BaseChart extends Component {
 
     /** Initialization of chart */
     init() {
-        this.verticalLabels = createElement('div');
         this.chart = createElement('div');
         this.chartScroller = createElement('div', {
             props: { className: SCROLLER_CLASS },
@@ -174,20 +167,6 @@ export class BaseChart extends Component {
             children: this.scrollerContainer,
         });
 
-        const { yAxis } = this.state;
-        if (yAxis === 'left' || yAxis === 'right') {
-            const yAxisLabelsContainer = createElement('div', {
-                props: { className: VLABELS_CONTAINER_CLASS },
-                children: this.verticalLabels,
-            });
-
-            yAxisLabelsContainer.classList.toggle(VLABELS_LEFT_CLASS, yAxis === 'left');
-
-            this.chartContainer.append(yAxisLabelsContainer);
-        } else if (yAxis !== 'none') {
-            throw new Error('Invalid value of \'yAxis\' property');
-        }
-
         this.elem = createElement('div', {
             props: { className: CHART_CLASS },
             children: this.chartContainer,
@@ -198,15 +177,6 @@ export class BaseChart extends Component {
         if (xAxis === 'top' || xAxis === 'bottom') {
             this.state.chartHeight -= this.state.hLabelsHeight;
         }
-
-        this.labelsContainer = createSVGElement('svg', {
-            attrs: {
-                class: VLABELS_CLASS,
-                width: 10,
-                height: height + 20,
-            },
-        });
-        this.verticalLabels.append(this.labelsContainer);
 
         // Create main chart content
         const events = {
@@ -233,6 +203,15 @@ export class BaseChart extends Component {
     postInit() {
         this.setClassNames();
         this.observeSize();
+    }
+
+    getComponent(name) {
+        const res = this.props.components?.[name] ?? null;
+        if (!res) {
+            throw new Error(`Invalid ${name} component`);
+        }
+
+        return res;
     }
 
     observeSize() {
@@ -415,8 +394,7 @@ export class BaseChart extends Component {
     }
 
     formatCoord(value, asPixels = false) {
-        const fmt = parseFloat(parseFloat(value).toFixed(3)).toString();
-        return (asPixels) ? `${fmt}px` : fmt;
+        return formatCoord(value, asPixels);
     }
 
     /**
@@ -440,113 +418,6 @@ export class BaseChart extends Component {
         grid.calculate(values);
 
         return (grid.steps === 0) ? state.grid : grid;
-    }
-
-    /** Draw grid and return array of grid lines */
-    drawGrid(state) {
-        const { grid, xAxis } = state;
-
-        this.gridGroup?.remove();
-        this.gridGroup = null;
-        if (!grid?.steps) {
-            return;
-        }
-
-        const width = state.chartWidth;
-
-        const gridGroup = createSVGElement('g');
-        let step = 0;
-        let curY = grid.yFirst;
-        if (xAxis === 'top') {
-            curY += state.hLabelsHeight;
-        }
-
-        while (step <= grid.steps) {
-            let rY = Math.round(curY);
-            if (rY > curY) {
-                rY -= 0.5;
-            } else {
-                rY += 0.5;
-            }
-
-            const linePath = `M0,${rY}L${width},${rY}`;
-            const el = createSVGElement('path', {
-                attrs: {
-                    class: 'chart__grid-line',
-                    d: linePath,
-                },
-            });
-
-            gridGroup.append(el);
-
-            curY += grid.yStep;
-            step += 1;
-        }
-
-        this.content.prepend(gridGroup);
-        this.gridGroup = gridGroup;
-
-        // Render x-Axis grid
-        this.xAxisGridGroup?.remove();
-        this.xAxisGridGroup = null;
-
-        if (!state.xAxisGrid) {
-            this.xAxisGridLines = [];
-            return;
-        }
-
-        const xAxisGridLines = [];
-        const xAxisGridGroup = createSVGElement('g');
-        const groupOuterWidth = this.getGroupOuterWidth(state);
-        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
-        const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
-
-        for (let i = 0; i < visibleGroups; i += 1) {
-            const groupIndex = firstGroupIndex + i;
-            const value = state.data.series[groupIndex];
-            if (typeof value === 'undefined') {
-                break;
-            }
-
-            const prevValue = state.data.series[groupIndex - 1] ?? null;
-            if (value === prevValue) {
-                continue;
-            }
-
-            let gridLine = this.xAxisGridLines.find((item) => item?.groupIndex === groupIndex);
-            if (gridLine) {
-                gridLine.reused = true;
-            } else {
-                gridLine = {
-                    reused: false,
-                    groupIndex,
-                    elem: createSVGElement('path', {
-                        attrs: {
-                            class: 'chart__grid-line',
-                        },
-                    }),
-                };
-            }
-
-            const curX = groupIndex * groupOuterWidth;
-            let rX = Math.round(curX);
-            rX += (rX > curX) ? -0.5 : 0.5;
-            rX = this.formatCoord(rX);
-
-            const y0 = this.formatCoord(state.grid.yFirst);
-            const y1 = this.formatCoord(state.grid.yLast);
-
-            setAttributes(gridLine.elem, {
-                d: `M${rX},${y0}L${rX},${y1}`,
-            });
-
-            xAxisGridGroup.append(gridLine.elem);
-            xAxisGridLines.push(gridLine);
-        }
-
-        this.xAxisGridLines = xAxisGridLines;
-        this.xAxisGridGroup = xAxisGridGroup;
-        this.content.prepend(this.xAxisGridGroup);
     }
 
     /** Return array of values */
@@ -631,194 +502,6 @@ export class BaseChart extends Component {
         ));
     }
 
-    /** Draw vertical labels */
-    drawVLabels(state) {
-        const { grid, xAxis, yAxis } = state;
-        if (yAxis === 'none') {
-            return;
-        }
-
-        this.vertLabelsGroup?.remove();
-        this.vertLabelsGroup = null;
-        if (!grid?.steps) {
-            return;
-        }
-
-        const formatFunction = isFunction(state.renderYAxisLabel)
-            ? state.renderYAxisLabel
-            : (value) => value?.toString();
-        const xOffset = 5;
-        const dyOffset = 5.5;
-        let curY = grid.yFirst;
-        if (xAxis === 'top') {
-            curY += state.hLabelsHeight;
-        }
-
-        let val = grid.valueFirst;
-        let step = 0;
-
-        this.vertLabelsGroup = createSVGElement('g');
-
-        while (step <= grid.steps) {
-            const isZero = Math.abs(grid.toPrec(val)) === 0;
-            const tVal = (isZero) ? 0 : grid.toPrecString(val);
-
-            const el = createSVGElement('text', {
-                attrs: {
-                    class: 'chart__text chart-yaxis__label',
-                    x: xOffset,
-                    y: Math.round(curY) + dyOffset,
-                },
-            });
-            el.textContent = formatFunction(tVal);
-
-            this.vertLabelsGroup.append(el);
-
-            val -= grid.valueStep;
-            curY += grid.yStep;
-            step += 1;
-        }
-
-        this.labelsContainer.append(this.vertLabelsGroup);
-
-        const labelRect = this.vertLabelsGroup.getBBox();
-        const labelsWidth = Math.ceil(labelRect.width) + 10;
-
-        this.labelsContainer.setAttribute('width', labelsWidth);
-        this.labelsContainer.setAttribute('height', state.height);
-    }
-
-    getXAxisLabelRenderer(state = this.state) {
-        return isFunction(state.renderXAxisLabel)
-            ? state.renderXAxisLabel
-            : (value) => value?.toString();
-    }
-
-    /** Create horizontal labels */
-    createHLabels(state, prevState) {
-        const { xAxis } = state;
-        if (xAxis === 'none') {
-            return;
-        }
-
-        const dyOffset = 5.5;
-        const lblY = (xAxis === 'top')
-            ? (state.hLabelsHeight / 2)
-            : (state.height - (state.hLabelsHeight / 2));
-
-        const groupOuterWidth = this.getGroupOuterWidth(state);
-        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
-        const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
-        const formatFunction = this.getXAxisLabelRenderer(state);
-
-        const labels = [];
-        for (let i = 0; i < visibleGroups; i += 1) {
-            const groupIndex = firstGroupIndex + i;
-            const value = state.data.series[groupIndex];
-            if (typeof value === 'undefined') {
-                break;
-            }
-
-            const prevValue = state.data.series[groupIndex - 1] ?? null;
-            if (value === prevValue) {
-                continue;
-            }
-
-            let label = this.labels.find((item) => item?.groupIndex === groupIndex);
-            if (label) {
-                label.reused = true;
-            } else {
-                label = {
-                    reused: false,
-                    groupIndex,
-                    value,
-                    formattedValue: formatFunction(value),
-                    elem: createSVGElement('text', {
-                        attrs: { class: XAXIS_LABEL_CLASS },
-                    }),
-                };
-
-                label.elem.textContent = label.formattedValue;
-                this.xAxisLabelsGroup.append(label.elem);
-            }
-
-            setAttributes(label.elem, {
-                x: groupIndex * groupOuterWidth,
-                y: lblY + dyOffset,
-            });
-
-            labels.push(label);
-        }
-
-        let lastOffset = 0;
-        const lblMarginLeft = 10;
-        const labelsToRemove = [];
-        let resizeRequested = false;
-        let prevLabel = null;
-        const toLeft = (
-            !this.isHorizontalScaleNeeded(state, prevState)
-            && prevState.scrollLeft > 0
-            && state.scrollLeft < prevState.scrollLeft
-        );
-
-        for (let ind = 0; ind < labels.length; ind += 1) {
-            const index = (toLeft) ? (labels.length - ind - 1) : ind;
-            const label = labels[index];
-            const labelRect = label.elem.getBBox();
-            const currentOffset = Math.ceil(labelRect.x + labelRect.width);
-
-            const overflow = (toLeft)
-                ? (currentOffset + lblMarginLeft > lastOffset)
-                : (labelRect.x < lastOffset + lblMarginLeft);
-
-            // Check current label not intersects previous one
-            if (lastOffset > 0 && overflow) {
-                labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
-                if (prevLabel?.reused || !label.reused) {
-                    continue;
-                }
-            }
-
-            // Check last label not overflow chart to prevent
-            // horizontal scroll in fitToWidth mode
-            if (currentOffset > state.chartContentWidth) {
-                resizeRequested = !state.fitToWidth;
-                if (state.fitToWidth || !state.allowLastXAxisLabelOverflow) {
-                    labelsToRemove.push(label);
-                    continue;
-                }
-            }
-
-            lastOffset = (toLeft) ? labelRect.x : currentOffset;
-            prevLabel = label;
-        }
-
-        // Remove overflow labels
-        for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
-            const label = labelsToRemove[ind];
-            label?.elem?.remove();
-
-            const labelsIndex = labels.indexOf(label);
-            if (labelsIndex !== -1) {
-                labels.splice(labelsIndex, 1);
-            }
-        }
-
-        // Remove labels not included to new state
-        for (let ind = 0; ind < this.labels.length; ind += 1) {
-            const label = this.labels[ind];
-            if (!labels.includes(label)) {
-                label?.elem?.remove();
-            }
-        }
-
-        this.labels = labels;
-
-        if (resizeRequested) {
-            setTimeout(() => this.onResize());
-        }
-    }
-
     /** Returns series value for specified items group */
     getSeriesByIndex(index, state = this.state) {
         if (index === -1) {
@@ -830,6 +513,11 @@ export class BaseChart extends Component {
         return series[ind];
     }
 
+    getGroupIndexByX(x) {
+        const groupOuterWidth = this.getGroupOuterWidth();
+        return Math.floor(x / groupOuterWidth);
+    }
+
     /** Find item by event object */
     findItemByEvent(e) {
         if (!this.contentOffset) {
@@ -837,10 +525,9 @@ export class BaseChart extends Component {
         }
 
         const firstGroupIndex = this.getFirstVisibleGroupIndex();
-        const groupOuterWidth = this.getGroupOuterWidth();
 
         const x = e.clientX - this.contentOffset.left + this.state.scrollLeft;
-        const index = Math.floor(x / groupOuterWidth);
+        const index = this.getGroupIndexByX(x);
         const relIndex = index - firstGroupIndex;
         if (relIndex < 0 || relIndex >= this.items.length) {
             return { x, item: null, index: -1 };
@@ -982,25 +669,34 @@ export class BaseChart extends Component {
         this.currentTarget = null;
     }
 
-    defaultPopupContent(target) {
-        if (!target.group) {
-            return createElement('span', { props: { textContent: target.item.value } });
+    defaultPopupContent(target, state) {
+        if (!target) {
+            return null;
         }
 
-        return createElement('ul', {
-            props: { className: POPUP_LIST_CLASS },
-            children: target.group.map((item) => createElement('li', {
-                props: { textContent: item.value },
-            })),
-        });
+        if (!this.popupContent) {
+            const ChartPopup = this.getComponent('ChartPopup');
+            this.popupContent = ChartPopup.create({
+                ...state,
+                target,
+            });
+        } else {
+            this.popupContent.setState((popupState) => ({
+                ...popupState,
+                ...state,
+                target,
+            }));
+        }
+
+        return this.popupContent.elem;
     }
 
-    renderPopupContent(target) {
+    renderPopupContent(target, state) {
         if (isFunction(this.props.renderPopup)) {
-            return this.props.renderPopup(target);
+            return this.props.renderPopup(target, state);
         }
 
-        return this.defaultPopupContent(target);
+        return this.defaultPopupContent(target, state);
     }
 
     hidePopup() {
@@ -1031,7 +727,7 @@ export class BaseChart extends Component {
 
         this.elem.style.position = 'relative';
 
-        const content = this.renderPopupContent(target);
+        const content = this.renderPopupContent(target, this.state);
         show(this.popup, (content !== null));
         if (content === null) {
             return;
@@ -1116,7 +812,7 @@ export class BaseChart extends Component {
         let newState = this.updateColumnWidth(this.state);
 
         // Update width of x axis labels
-        const labelsBox = this.xAxisLabelsGroup?.getBBox();
+        const labelsBox = this.xAxisLabels?.elem?.getBBox();
         newState.lastHLabelOffset = (labelsBox && !newState.fitToWidth)
             ? Math.round(labelsBox.x + labelsBox.width)
             : 0;
@@ -1152,10 +848,8 @@ export class BaseChart extends Component {
         this.content.append(this.itemsGroup);
         this.items = [];
 
-        this.xAxisLabelsGroup?.remove();
-        this.xAxisLabelsGroup = createSVGElement('g');
-        this.content.append(this.xAxisLabelsGroup);
-        this.labels = [];
+        this.xAxisLabels?.elem?.remove();
+        this.xAxisLabels = null;
     }
 
     /** Update vertical scale of items */
@@ -1176,20 +870,18 @@ export class BaseChart extends Component {
     updateHorizontalScale() {
     }
 
-    defaultLegendContent(categories) {
+    defaultLegendContent(categories, state) {
         if (!Array.isArray(categories) || categories.length === 0) {
             return null;
         }
 
-        return createElement('ul', {
-            props: { className: LEGEND_LIST_CLASS },
-            children: categories.map((category) => createElement('li', {
-                props: {
-                    className: LEGEND_LIST_ITEM_CLASS,
-                    textContent: category.toString(),
-                },
-            })),
+        const Legend = this.getComponent('Legend');
+        const legend = Legend.create({
+            ...state,
+            categories,
         });
+
+        return legend.elem;
     }
 
     getVisibleCategories(state) {
@@ -1276,6 +968,8 @@ export class BaseChart extends Component {
     renderHorizontalLabels(state, prevState) {
         if (
             !this.isHorizontalScaleNeeded(state, prevState)
+            && state.grid === prevState.grid
+            && state.xAxis === prevState.xAxis
             && state.chartContentWidth === prevState.chartContentWidth
             && state.containerWidth === prevState.containerWidth
             && state.scrollLeft === prevState.scrollLeft
@@ -1283,7 +977,59 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.createHLabels(state, prevState);
+        if (!state.grid?.steps || state.xAxis === 'none') {
+            this.xAxisLabels?.elem?.remove();
+            this.xAxisLabels = null;
+            return;
+        }
+
+        if (!this.xAxisLabels) {
+            const XAxisLabels = this.getComponent('XAxisLabels');
+            this.xAxisLabels = XAxisLabels.create({
+                ...state,
+                isHorizontalScaleNeeded: (...args) => this.isHorizontalScaleNeeded(...args),
+                getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
+                getFirstVisibleGroupIndex: (...args) => this.getFirstVisibleGroupIndex(...args),
+                getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
+                onResize: (...args) => this.onResize(...args),
+            });
+            this.content.append(this.xAxisLabels.elem);
+        } else {
+            this.xAxisLabels.setState((labelsState) => ({
+                ...labelsState,
+                ...state,
+            }));
+        }
+    }
+
+    renderVerticalLabels(state, prevState) {
+        if (
+            state.grid === prevState.grid
+            && state.yAxis === prevState.yAxis
+            && state.containerWidth === prevState.containerWidth
+            && state.yAxisLabelsAlign === prevState.yAxisLabelsAlign
+        ) {
+            return;
+        }
+
+        if (!state.grid?.steps || state.yAxis === 'none') {
+            this.yAxisLabels?.elem?.remove();
+            this.yAxisLabels = null;
+            return;
+        }
+
+        if (!this.yAxisLabels) {
+            const YAxisLabels = this.getComponent('YAxisLabels');
+            this.yAxisLabels = YAxisLabels.create({
+                ...state,
+            });
+            this.chartContainer.append(this.yAxisLabels.elem);
+        }
+
+        this.yAxisLabels.setState((labelsState) => ({
+            ...labelsState,
+            ...state,
+        }));
     }
 
     renderGrid(state, prevState) {
@@ -1301,7 +1047,27 @@ export class BaseChart extends Component {
             return;
         }
 
-        this.drawGrid(state);
+        if (!state.grid?.steps) {
+            this.chartGrid?.elem?.remove();
+            this.chartGrid = null;
+            return;
+        }
+
+        if (!this.chartGrid) {
+            const Grid = this.getComponent('Grid');
+            this.chartGrid = Grid.create({
+                ...state,
+                getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
+                getFirstVisibleGroupIndex: (...args) => this.getFirstVisibleGroupIndex(...args),
+                getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
+            });
+            this.content.prepend(this.chartGrid.elem);
+        } else {
+            this.chartGrid.setState((gridState) => ({
+                ...gridState,
+                ...state,
+            }));
+        }
     }
 
     renderScroll(state, prevState) {
@@ -1327,7 +1093,7 @@ export class BaseChart extends Component {
 
         this.renderScroll(state, prevState);
 
-        this.drawVLabels(state);
+        this.renderVerticalLabels(state, prevState);
         this.renderItems(state, prevState);
         this.renderHorizontalLabels(state, prevState);
 

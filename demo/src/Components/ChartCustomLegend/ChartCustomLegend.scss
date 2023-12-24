@@ -1,0 +1,22 @@
+@use "sass:list";
+
+@use "../../assets/colors/colors";
+
+.chart__legend-list li {
+  b,
+  span {
+    position: relative;
+    left: -5px;
+    color: #000000;
+  }
+}
+
+.list-item_active-category {
+  font-weight: 500;
+}
+
+@for $i from 1 through length(colors.$colors) {
+  .chart__legend-list .list-item_category-#{$i} {
+    color: var(--charts-color-#{$i});
+  }
+}

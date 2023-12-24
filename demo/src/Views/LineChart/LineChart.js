@@ -1,5 +1,4 @@
 import 'jezvejs/style';
-import { isFunction } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { LineChart } from 'jezvejs/LineChart';
 
@@ -20,12 +19,14 @@ import {
 } from '../../assets/data/index.js';
 import { largeData } from '../../assets/data/largeData.js';
 
+import { ChartCustomLegend } from '../../Components/ChartCustomLegend/ChartCustomLegend.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
 import './LineChartView.scss';
+import { ChartMultiColumnPopup } from '../../Components/ChartMultiColumnPopup/ChartMultiColumnPopup.js';
 
 /* eslint-disable max-len */
 const eurData = {
@@ -43,65 +44,6 @@ const chartContainer = (id, chart) => createElement('div', {
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
-
-const renderMultiColumnPopup = (target) => {
-    if (!target.group) {
-        return createElement('span', { props: { textContent: target.item.value } });
-    }
-
-    return createElement('ul', {
-        props: { className: 'custom-chart-popup__list' },
-        children: target.group.map(
-            (item, index) => createElement('li', {
-                props: {
-                    className: `list-item_category-${item.categoryIndex + 1}`,
-                },
-                children: createElement(((target.index === index) ? 'b' : 'span'), {
-                    props: { textContent: item.value },
-                }),
-            }),
-        ),
-    });
-};
-
-const renderCustomLegend = (categories, state, options = {}) => {
-    if (!Array.isArray(categories) || categories.length === 0) {
-        return null;
-    }
-
-    const {
-        onClick = null,
-    } = options;
-    const events = {};
-
-    if (isFunction(onClick)) {
-        events.click = onClick;
-    }
-
-    const ITEM_CLASS = 'list-item_category list-item_category-';
-    const ACTIVE_ITEM_CLASS = 'list-item_category list-item_active-category list-item_category-';
-    const activeCategory = state.activeCategory?.toString() ?? null;
-
-    return createElement('ul', {
-        props: { className: 'chart__legend-list' },
-        events,
-        children: categories.map((category) => createElement('li', {
-            props: {
-                className: (
-                    (category?.toString() === activeCategory)
-                        ? `${ACTIVE_ITEM_CLASS}${category + 1}`
-                        : `${ITEM_CLASS}${category + 1}`
-                ),
-                dataset: {
-                    category,
-                },
-            },
-            children: createElement('span', {
-                props: { textContent: `Category ${category + 1}` },
-            }),
-        })),
-    });
-};
 
 /**
  * LineChart component demo view
@@ -179,9 +121,10 @@ class LineChartView extends DemoView {
 
     chartAxes() {
         const container = chartContainer('chartAxes');
-        const currentAxes = {
-            x: 'bottom',
-            y: 'right',
+        const state = {
+            xAxis: 'bottom',
+            yAxis: 'right',
+            yAxisLabelsAlign: 'left',
         };
 
         const xAxisMap = {
@@ -196,47 +139,75 @@ class LineChartView extends DemoView {
             none: 'None',
         };
 
-        const createChart = (xAxis, yAxis) => {
-            currentAxes.x = xAxis;
-            currentAxes.y = yAxis;
+        const textAlignMap = {
+            left: 'Left',
+            right: 'Right',
+            center: 'Center',
+        };
 
-            const chart = LineChart.create({
+        let chart = null;
+
+        const createChart = (xAxis, yAxis) => {
+            state.xAxis = xAxis;
+            state.yAxis = yAxis;
+
+            chart = LineChart.create({
                 data: chartData2,
                 xAxis,
                 yAxis,
+                yAxisLabelsAlign: state.yAxisLabelsAlign,
             });
 
             container.replaceChildren(chart.elem);
         };
 
-        const createRadioFieldset = (isX) => (
+        const controls = [
             RadioFieldset.create({
-                title: (isX) ? 'X-Axis' : 'Y-Axis',
-                radioName: (isX) ? 'xAxis' : 'yAxis',
-                items: Object.entries((isX) ? xAxisMap : yAxisMap).map(([value, label]) => ({
+                title: 'X-Axis',
+                radioName: 'xAxis',
+                items: Object.entries(xAxisMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (currentAxes[(isX) ? 'x' : 'y'] === value),
+                    checked: (state.xAxis === value),
                 })),
-                onChange: (value) => (
-                    (isX)
-                        ? createChart(value, currentAxes.y)
-                        : createChart(currentAxes.x, value)
-                ),
-            }).elem
-        );
+                onChange: (value) => createChart(value, state.yAxis),
+            }).elem,
+            RadioFieldset.create({
+                title: 'Y-Axis',
+                radioName: 'yAxis',
+                items: Object.entries(yAxisMap).map(([value, label]) => ({
+                    value,
+                    label,
+                    checked: (state.yAxis === value),
+                })),
+                onChange: (value) => {
+                    chart?.setState((chartState) => ({ ...chartState, yAxis: value }));
+                    state.yAxis = value;
+                },
+            }).elem,
+            RadioFieldset.create({
+                title: 'Y-Axis text align',
+                radioName: 'yAxisLabelsAlign',
+                items: Object.entries(textAlignMap).map(([value, label]) => ({
+                    value,
+                    label,
+                    checked: (state.yAxisLabelsAlign === value),
+                })),
+                onChange: (value) => {
+                    chart?.setState((chartState) => ({ ...chartState, yAxisLabelsAlign: value }));
+                    state.yAxisLabelsAlign = value;
+                },
+            }).elem,
+        ];
 
-        createChart(currentAxes.x, currentAxes.y);
+        createChart(state.xAxis, state.yAxis);
 
         this.addSection({
             id: 'axes',
             title: '\'xAxis\' and \'yAxis\' options',
             content: [
                 container,
-                createControls([
-                    createRadioFieldset(true),
-                    createRadioFieldset(false),
-                ]),
+                createControls(controls),
             ],
         });
     }
@@ -308,9 +279,11 @@ class LineChartView extends DemoView {
             marginTop: 35,
             autoScale: true,
             showPopupOnClick: true,
-            renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
+            components: {
+                ChartPopup: ChartMultiColumnPopup,
+            },
         });
 
         this.addSection({
@@ -374,23 +347,14 @@ class LineChartView extends DemoView {
             marginTop: 35,
             autoScale: true,
             showPopupOnClick: true,
-            renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
-            renderLegend: (categories, state) => renderCustomLegend(categories, state, {
-                onClick: (e) => {
-                    const listItem = e.target.closest('.list-item_category');
-                    if (!listItem) {
-                        return;
-                    }
-
-                    const { category } = listItem.dataset;
-                    const activeCategory = chart.activeCategory?.toString() ?? null;
-                    const isActive = (category?.toString() === activeCategory);
-
-                    chart.setActiveCategory((isActive) ? null : category);
-                },
-            }),
+            activateCategoryOnClick: true,
+            setActiveCategory: (...args) => chart.setActiveCategory(...args),
+            components: {
+                Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
+            },
         });
 
         this.addSection({
@@ -410,10 +374,12 @@ class LineChartView extends DemoView {
             showPopupOnClick: true,
             showPopupOnHover: true,
             animatePopup: true,
-            renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
-            renderLegend: renderCustomLegend,
+            components: {
+                Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
+            },
         });
 
         this.addSection({
@@ -494,7 +460,9 @@ class LineChartView extends DemoView {
             data: negPosData,
             autoScale: true,
             showLegend: true,
-            renderLegend: renderCustomLegend,
+            components: {
+                Legend: ChartCustomLegend,
+            },
         });
 
         const items = [{

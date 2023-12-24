@@ -1,9 +1,13 @@
 /* Main container for charts */
 .chart {
-  --chart-grid-color: #808080;
   --chart-text-size: 14px;
   --chart-text-color: #000000;
   --chart-animation-duration: 0.5s;
+
+  /* Grid */
+  --chart-grid-stroke-width: 1;
+  --chart-grid-stroke-dasharray: 4, 3;
+  --chart-grid-color: #808080;
 
   /* Popup */
   --chart-popup-text: #000000;
@@ -34,11 +38,6 @@
   overflow-x: auto;
 }
 
-/* y-axis labels */
-.vertical-legend_left {
-  order: -1;
-}
-
 /* Main content SVG element */
 .chart__content {
   user-select: none;
@@ -62,22 +61,6 @@
   transition: all 0.2s ease;
 }
 
-/* List for multiple values popup */
-.chart__popup-list {
-  display: flex;
-  flex-flow: column nowrap;
-  list-style-position: inside;
-  list-style-type: disc;
-}
-
-/* Chart grid line */
-.chart__grid-line {
-  stroke-width: 1;
-  fill: none;
-  stroke: var(--chart-grid-color);
-  stroke-dasharray: 4, 3;
-}
-
 /* Chart text */
 .chart__text {
   font-family: "Segoe UI", sans-serif;
@@ -90,16 +73,4 @@
 .chart__legend {
   display: flex;
   width: 100%;
-}
-
-.chart__legend-list {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  column-gap: 25px;
-  row-gap: 5px;
-  list-style-position: inside;
-  list-style-type: disc;
 }
