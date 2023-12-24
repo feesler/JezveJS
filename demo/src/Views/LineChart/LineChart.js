@@ -350,6 +350,7 @@ class LineChartView extends DemoView {
             activateOnHover: true,
             showLegend: true,
             activateCategoryOnClick: true,
+            setActiveCategory: (...args) => chart.setActiveCategory(...args),
             components: {
                 Legend: ChartCustomLegend,
                 ChartPopup: ChartMultiColumnPopup,
