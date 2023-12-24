@@ -7,19 +7,6 @@
   --linechart-active-item-border: #00bfff;
 }
 
-/* LineChart circle item */
-.linechart__item {
-  display: block;
-  fill: var(--linechart-item-fill);
-  stroke: var(--linechart-item-border);
-  stroke-width: 1.5;
-  opacity: 0;
-}
-
-.linechart__nodes .linechart__item {
-  opacity: 1;
-}
-
 /* LineChart line path */
 .linechart__path {
   stroke-width: 3;
@@ -28,25 +15,13 @@
   fill: none;
 }
 
-/* Active items */
-.chart__item_active.linechart__item {
-  opacity: 1;
-  fill: var(--linechart-active-item-fill);
-  stroke: var(--linechart-active-item-border);
-}
-
 .linechart__path.chart__item_active {
   stroke: var(--linechart-active-item-border);
 }
 
 /* Animation */
 .chart_animated {
-  .linechart__item,
   .linechart__path {
     transition-duration: var(--chart-animation-duration);
-  }
-
-  .linechart__item {
-    transition-property: cy;
   }
 }

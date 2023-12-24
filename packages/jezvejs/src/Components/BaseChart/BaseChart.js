@@ -513,6 +513,11 @@ export class BaseChart extends Component {
         return series[ind];
     }
 
+    getGroupIndexByX(x) {
+        const groupOuterWidth = this.getGroupOuterWidth();
+        return Math.floor(x / groupOuterWidth);
+    }
+
     /** Find item by event object */
     findItemByEvent(e) {
         if (!this.contentOffset) {
@@ -520,10 +525,9 @@ export class BaseChart extends Component {
         }
 
         const firstGroupIndex = this.getFirstVisibleGroupIndex();
-        const groupOuterWidth = this.getGroupOuterWidth();
 
         const x = e.clientX - this.contentOffset.left + this.state.scrollLeft;
-        const index = Math.floor(x / groupOuterWidth);
+        const index = this.getGroupIndexByX(x);
         const relIndex = index - firstGroupIndex;
         if (relIndex < 0 || relIndex >= this.items.length) {
             return { x, item: null, index: -1 };
