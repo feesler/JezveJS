@@ -1,5 +1,4 @@
 import 'jezvejs/style';
-import { isFunction } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { LineChart } from 'jezvejs/LineChart';
 
@@ -20,6 +19,7 @@ import {
 } from '../../assets/data/index.js';
 import { largeData } from '../../assets/data/largeData.js';
 
+import { ChartCustomLegend } from '../../Components/ChartCustomLegend/ChartCustomLegend.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
@@ -61,45 +61,6 @@ const renderMultiColumnPopup = (target) => {
                 }),
             }),
         ),
-    });
-};
-
-const renderCustomLegend = (categories, state, options = {}) => {
-    if (!Array.isArray(categories) || categories.length === 0) {
-        return null;
-    }
-
-    const {
-        onClick = null,
-    } = options;
-    const events = {};
-
-    if (isFunction(onClick)) {
-        events.click = onClick;
-    }
-
-    const ITEM_CLASS = 'list-item_category list-item_category-';
-    const ACTIVE_ITEM_CLASS = 'list-item_category list-item_active-category list-item_category-';
-    const activeCategory = state.activeCategory?.toString() ?? null;
-
-    return createElement('ul', {
-        props: { className: 'chart__legend-list' },
-        events,
-        children: categories.map((category) => createElement('li', {
-            props: {
-                className: (
-                    (category?.toString() === activeCategory)
-                        ? `${ACTIVE_ITEM_CLASS}${category + 1}`
-                        : `${ITEM_CLASS}${category + 1}`
-                ),
-                dataset: {
-                    category,
-                },
-            },
-            children: createElement('span', {
-                props: { textContent: `Category ${category + 1}` },
-            }),
-        })),
     });
 };
 
@@ -406,20 +367,10 @@ class LineChartView extends DemoView {
             renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
-            renderLegend: (categories, state) => renderCustomLegend(categories, state, {
-                onClick: (e) => {
-                    const listItem = e.target.closest('.list-item_category');
-                    if (!listItem) {
-                        return;
-                    }
-
-                    const { category } = listItem.dataset;
-                    const activeCategory = chart.activeCategory?.toString() ?? null;
-                    const isActive = (category?.toString() === activeCategory);
-
-                    chart.setActiveCategory((isActive) ? null : category);
-                },
-            }),
+            activateCategoryOnClick: true,
+            components: {
+                Legend: ChartCustomLegend,
+            },
         });
 
         this.addSection({
@@ -442,7 +393,9 @@ class LineChartView extends DemoView {
             renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
-            renderLegend: renderCustomLegend,
+            components: {
+                Legend: ChartCustomLegend,
+            },
         });
 
         this.addSection({
@@ -523,7 +476,9 @@ class LineChartView extends DemoView {
             data: negPosData,
             autoScale: true,
             showLegend: true,
-            renderLegend: renderCustomLegend,
+            components: {
+                Legend: ChartCustomLegend,
+            },
         });
 
         const items = [{
