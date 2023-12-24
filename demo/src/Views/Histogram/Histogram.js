@@ -332,11 +332,13 @@ class HistogramView extends DemoView {
             none: 'None',
         };
 
+        let chart = null;
+
         const createChart = (xAxis, yAxis) => {
             currentAxes.x = xAxis;
             currentAxes.y = yAxis;
 
-            const chart = Histogram.create({
+            chart = Histogram.create({
                 data: chartData2,
                 xAxis,
                 yAxis,
@@ -354,11 +356,15 @@ class HistogramView extends DemoView {
                     label,
                     checked: (currentAxes[(isX) ? 'x' : 'y'] === value),
                 })),
-                onChange: (value) => (
-                    (isX)
-                        ? createChart(value, currentAxes.y)
-                        : createChart(currentAxes.x, value)
-                ),
+                onChange: (value) => {
+                    if (isX) {
+                        createChart(value, currentAxes.y);
+                        return;
+                    }
+
+                    chart?.setState((chartState) => ({ ...chartState, yAxis: value }));
+                    currentAxes.y = value;
+                },
             }).elem
         );
 

@@ -17,6 +17,7 @@ import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 // Local components
 import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
 import { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
+import { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
 
 import { defaultProps } from './defaultProps.js';
 import { formatCoord } from './helpers.js';
@@ -30,11 +31,6 @@ const STACKED_CLASS = 'chart_stacked';
 const CONTAINER_CLASS = 'chart__container';
 const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
-
-/* y asix / vertical labels */
-const VLABELS_CLASS = 'chart__vert-labels';
-const VLABELS_CONTAINER_CLASS = 'vertical-legend';
-const VLABELS_LEFT_CLASS = 'vertical-legend_left';
 const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
 /* Popup */
@@ -63,9 +59,7 @@ export class BaseChart extends Component {
         this.chartContainer = null;
         this.chart = null;
         this.chartScroller = null;
-        this.verticalLabels = null;
         this.content = null;
-        this.labelsContainer = null;
         this.legend = null;
         this.activeTarget = null;
         this.currentTarget = null;
@@ -76,6 +70,7 @@ export class BaseChart extends Component {
         this.itemsGroup = null;
         this.grid = null;
         this.xAxisLabels = null;
+        this.yAxisLabels = null;
         this.vertLabelsGroup = null;
         this.scrollRequested = false;
         this.contentOffset = null;
@@ -149,7 +144,6 @@ export class BaseChart extends Component {
 
     /** Initialization of chart */
     init() {
-        this.verticalLabels = createElement('div');
         this.chart = createElement('div');
         this.chartScroller = createElement('div', {
             props: { className: SCROLLER_CLASS },
@@ -172,20 +166,6 @@ export class BaseChart extends Component {
             children: this.scrollerContainer,
         });
 
-        const { yAxis } = this.state;
-        if (yAxis === 'left' || yAxis === 'right') {
-            const yAxisLabelsContainer = createElement('div', {
-                props: { className: VLABELS_CONTAINER_CLASS },
-                children: this.verticalLabels,
-            });
-
-            yAxisLabelsContainer.classList.toggle(VLABELS_LEFT_CLASS, yAxis === 'left');
-
-            this.chartContainer.append(yAxisLabelsContainer);
-        } else if (yAxis !== 'none') {
-            throw new Error('Invalid value of \'yAxis\' property');
-        }
-
         this.elem = createElement('div', {
             props: { className: CHART_CLASS },
             children: this.chartContainer,
@@ -196,15 +176,6 @@ export class BaseChart extends Component {
         if (xAxis === 'top' || xAxis === 'bottom') {
             this.state.chartHeight -= this.state.hLabelsHeight;
         }
-
-        this.labelsContainer = createSVGElement('svg', {
-            attrs: {
-                class: VLABELS_CLASS,
-                width: 10,
-                height: height + 20,
-            },
-        });
-        this.verticalLabels.append(this.labelsContainer);
 
         // Create main chart content
         const events = {
@@ -519,63 +490,6 @@ export class BaseChart extends Component {
             && item[0].groupIndex >= firstItem
             && item[0].groupIndex <= lastItem
         ));
-    }
-
-    /** Draw vertical labels */
-    drawVLabels(state) {
-        const { grid, xAxis, yAxis } = state;
-        if (yAxis === 'none') {
-            return;
-        }
-
-        this.vertLabelsGroup?.remove();
-        this.vertLabelsGroup = null;
-        if (!grid?.steps) {
-            return;
-        }
-
-        const formatFunction = isFunction(state.renderYAxisLabel)
-            ? state.renderYAxisLabel
-            : (value) => value?.toString();
-        const xOffset = 5;
-        const dyOffset = 5.5;
-        let curY = grid.yFirst;
-        if (xAxis === 'top') {
-            curY += state.hLabelsHeight;
-        }
-
-        let val = grid.valueFirst;
-        let step = 0;
-
-        this.vertLabelsGroup = createSVGElement('g');
-
-        while (step <= grid.steps) {
-            const isZero = Math.abs(grid.toPrec(val)) === 0;
-            const tVal = (isZero) ? 0 : grid.toPrecString(val);
-
-            const el = createSVGElement('text', {
-                attrs: {
-                    class: 'chart__text chart-yaxis__label',
-                    x: xOffset,
-                    y: Math.round(curY) + dyOffset,
-                },
-            });
-            el.textContent = formatFunction(tVal);
-
-            this.vertLabelsGroup.append(el);
-
-            val -= grid.valueStep;
-            curY += grid.yStep;
-            step += 1;
-        }
-
-        this.labelsContainer.append(this.vertLabelsGroup);
-
-        const labelRect = this.vertLabelsGroup.getBBox();
-        const labelsWidth = Math.ceil(labelRect.width) + 10;
-
-        this.labelsContainer.setAttribute('width', labelsWidth);
-        this.labelsContainer.setAttribute('height', state.height);
     }
 
     /** Returns series value for specified items group */
@@ -1068,6 +982,34 @@ export class BaseChart extends Component {
         }
     }
 
+    renderVerticalLabels(state, prevState) {
+        if (
+            state.grid === prevState.grid
+            && state.yAxis === prevState.yAxis
+            && state.containerWidth === prevState.containerWidth
+        ) {
+            return;
+        }
+
+        if (!state.grid?.steps || state.yAxis === 'none') {
+            this.yAxisLabels?.elem?.remove();
+            this.yAxisLabels = null;
+            return;
+        }
+
+        if (!this.yAxisLabels) {
+            this.yAxisLabels = BaseChartYAxisLabels.create({
+                ...state,
+            });
+            this.chartContainer.append(this.yAxisLabels.elem);
+        }
+
+        this.yAxisLabels.setState((labelsState) => ({
+            ...labelsState,
+            ...state,
+        }));
+    }
+
     renderGrid(state, prevState) {
         if (
             !this.isHorizontalScaleNeeded(state, prevState)
@@ -1128,7 +1070,7 @@ export class BaseChart extends Component {
 
         this.renderScroll(state, prevState);
 
-        this.drawVLabels(state);
+        this.renderVerticalLabels(state, prevState);
         this.renderItems(state, prevState);
         this.renderHorizontalLabels(state, prevState);
 
