@@ -16,6 +16,7 @@ import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 
 // Local components
 import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
+import { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
 import { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
 import { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
 
@@ -39,8 +40,6 @@ const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
 const POPUP_LIST_CLASS = 'chart__popup-list';
 /* Legend */
 const LEGEND_CLASS = 'chart__legend';
-const LEGEND_LIST_CLASS = 'chart__legend-list';
-const LEGEND_LIST_ITEM_CLASS = 'chart__legend-list-item';
 
 /**
  * Base chart class
@@ -847,20 +846,17 @@ export class BaseChart extends Component {
     updateHorizontalScale() {
     }
 
-    defaultLegendContent(categories) {
+    defaultLegendContent(categories, state) {
         if (!Array.isArray(categories) || categories.length === 0) {
             return null;
         }
 
-        return createElement('ul', {
-            props: { className: LEGEND_LIST_CLASS },
-            children: categories.map((category) => createElement('li', {
-                props: {
-                    className: LEGEND_LIST_ITEM_CLASS,
-                    textContent: category.toString(),
-                },
-            })),
+        const legend = BaseChartLegend.create({
+            ...state,
+            categories,
         });
+
+        return legend.elem;
     }
 
     getVisibleCategories(state) {
