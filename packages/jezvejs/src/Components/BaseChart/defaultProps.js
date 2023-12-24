@@ -1,5 +1,6 @@
 import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
 import { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
+import { BaseChartPopup } from './components/Popup/BaseChartPopup.js';
 import { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
 import { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
 
@@ -62,5 +63,6 @@ export const defaultProps = {
         XAxisLabels: BaseChartXAxisLabels,
         YAxisLabels: BaseChartYAxisLabels,
         Legend: BaseChartLegend,
+        ChartPopup: BaseChartPopup,
     },
 };

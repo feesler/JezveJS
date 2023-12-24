@@ -19,7 +19,9 @@ import {
 } from '../../assets/data/index.js';
 import { largeData } from '../../assets/data/largeData.js';
 
+import { ChartCategoriesPopup } from '../../Components/ChartCategoriesPopup/ChartCategoriesPopup.js';
 import { ChartCustomLegend } from '../../Components/ChartCustomLegend/ChartCustomLegend.js';
+import { ChartMultiColumnPopup } from '../../Components/ChartMultiColumnPopup/ChartMultiColumnPopup.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
@@ -116,70 +118,6 @@ const chartContainer = (id, chart) => createElement('div', {
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
-
-const renderMultiColumnPopup = (target) => {
-    if (!target.group) {
-        return createElement('span', { props: { textContent: target.item.value } });
-    }
-
-    return createElement('ul', {
-        props: { className: 'custom-chart-popup__list' },
-        children: target.group.map(
-            (item, index) => createElement('li', {
-                props: {
-                    className: `list-item_category-${item.categoryIndex + 1}`,
-                },
-                children: createElement(((target.index === index) ? 'b' : 'span'), {
-                    props: { textContent: item.value },
-                }),
-            }),
-        ),
-    });
-};
-
-const renderCategoriesPopup = (target) => {
-    if (!target.group) {
-        return createElement('span', { props: { textContent: target.item.value } });
-    }
-
-    const listItems = [];
-    target.group.forEach((item, index) => {
-        if (
-            item.columnIndex !== target.item.columnIndex
-            || item.value === 0
-        ) {
-            return;
-        }
-
-        const listItem = createElement('li', {
-            props: {
-                className: `list-item_category-${item.categoryIndex + 1}`,
-            },
-            children: createElement(((target.index === index) ? 'b' : 'span'), {
-                props: { textContent: `Long data category name ${index + 1}: ${item.value}` },
-            }),
-        });
-        listItems.push(listItem);
-    });
-
-    if (listItems.length === 0) {
-        return null;
-    }
-
-    const list = createElement('ul', {
-        props: { className: 'custom-chart-popup__list' },
-        children: listItems,
-    });
-
-    return createElement('div', {
-        props: { className: 'custom-chart-popup' },
-        children: [
-            createElement('b', { props: { textContent: target.item.groupName } }),
-            createElement('div', { props: { textContent: target.series } }),
-            list,
-        ],
-    });
-};
 
 /**
  * Histogram component demo view
@@ -436,8 +374,10 @@ class HistogramView extends DemoView {
             autoScale: true,
             showPopupOnHover: true,
             activateOnHover: true,
-            renderPopup: renderCategoriesPopup,
             showLegend: true,
+            components: {
+                ChartPopup: ChartCategoriesPopup,
+            },
         });
 
         this.addSection({
@@ -504,12 +444,12 @@ class HistogramView extends DemoView {
             showPopupOnClick: true,
             activateOnClick: true,
             activateOnHover: true,
-            renderPopup: renderMultiColumnPopup,
             showLegend: true,
             activateCategoryOnClick: true,
             setActiveCategory: (...args) => histogram.setActiveCategory(...args),
             components: {
                 Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
             },
         });
 
@@ -530,10 +470,10 @@ class HistogramView extends DemoView {
             showPopupOnClick: true,
             activateOnClick: true,
             activateOnHover: true,
-            renderPopup: renderMultiColumnPopup,
             showLegend: true,
             components: {
                 Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
             },
         });
 
@@ -558,10 +498,10 @@ class HistogramView extends DemoView {
             activateOnHover: true,
             animatePopup: true,
             pinPopupOnClick: true,
-            renderPopup: renderMultiColumnPopup,
             showLegend: true,
             components: {
                 Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
             },
         });
 
@@ -586,12 +526,12 @@ class HistogramView extends DemoView {
             showPopupOnHover: true,
             animatePopup: true,
             pinPopupOnClick: true,
-            renderPopup: renderCategoriesPopup,
             activateOnClick: true,
             activateOnHover: true,
             showLegend: true,
             components: {
                 Legend: ChartCustomLegend,
+                ChartPopup: ChartCategoriesPopup,
             },
         });
 
@@ -616,13 +556,13 @@ class HistogramView extends DemoView {
             showPopupOnHover: true,
             animatePopup: true,
             pinPopupOnClick: true,
-            renderPopup: renderMultiColumnPopup,
             activateOnClick: true,
             activateOnHover: true,
             showLegend: true,
             onlyVisibleCategoriesLegend: true,
             components: {
                 Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
             },
         });
 

@@ -26,6 +26,7 @@ import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
 import './LineChartView.scss';
+import { ChartMultiColumnPopup } from '../../Components/ChartMultiColumnPopup/ChartMultiColumnPopup.js';
 
 /* eslint-disable max-len */
 const eurData = {
@@ -43,26 +44,6 @@ const chartContainer = (id, chart) => createElement('div', {
 
 const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
-
-const renderMultiColumnPopup = (target) => {
-    if (!target.group) {
-        return createElement('span', { props: { textContent: target.item.value } });
-    }
-
-    return createElement('ul', {
-        props: { className: 'custom-chart-popup__list' },
-        children: target.group.map(
-            (item, index) => createElement('li', {
-                props: {
-                    className: `list-item_category-${item.categoryIndex + 1}`,
-                },
-                children: createElement(((target.index === index) ? 'b' : 'span'), {
-                    props: { textContent: item.value },
-                }),
-            }),
-        ),
-    });
-};
 
 /**
  * LineChart component demo view
@@ -298,9 +279,11 @@ class LineChartView extends DemoView {
             marginTop: 35,
             autoScale: true,
             showPopupOnClick: true,
-            renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
+            components: {
+                ChartPopup: ChartMultiColumnPopup,
+            },
         });
 
         this.addSection({
@@ -364,12 +347,12 @@ class LineChartView extends DemoView {
             marginTop: 35,
             autoScale: true,
             showPopupOnClick: true,
-            renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
             activateCategoryOnClick: true,
             components: {
                 Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
             },
         });
 
@@ -390,11 +373,11 @@ class LineChartView extends DemoView {
             showPopupOnClick: true,
             showPopupOnHover: true,
             animatePopup: true,
-            renderPopup: renderMultiColumnPopup,
             activateOnHover: true,
             showLegend: true,
             components: {
                 Legend: ChartCustomLegend,
+                ChartPopup: ChartMultiColumnPopup,
             },
         });
 

@@ -2,7 +2,14 @@
 
 @use "../../assets/colors/colors";
 
-.chart__legend-list li {
+.custom-chart-popup__list {
+  display: flex;
+  flex-flow: column nowrap;
+  list-style-position: inside;
+  list-style-type: disc;
+}
+
+.custom-chart-popup__list li {
   b,
   span {
     position: relative;
@@ -11,12 +18,8 @@
   }
 }
 
-.list-item_active-category {
-  font-weight: 500;
-}
-
 @for $i from 1 through length(colors.$colors) {
-  .chart__legend-list .list-item_category-#{$i} {
+  .custom-chart-popup__list .list-item_category-#{$i} {
     color: var(--charts-color-#{$i});
   }
 }

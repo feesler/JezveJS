@@ -61,14 +61,6 @@
   transition: all 0.2s ease;
 }
 
-/* List for multiple values popup */
-.chart__popup-list {
-  display: flex;
-  flex-flow: column nowrap;
-  list-style-position: inside;
-  list-style-type: disc;
-}
-
 /* Chart text */
 .chart__text {
   font-family: "Segoe UI", sans-serif;

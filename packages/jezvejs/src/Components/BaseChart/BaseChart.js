@@ -19,6 +19,12 @@ import { formatCoord } from './helpers.js';
 import '../../common.scss';
 import './BaseChart.scss';
 
+export { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
+export { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
+export { BaseChartPopup } from './components/Popup/BaseChartPopup.js';
+export { BaseChartXAxisLabels } from './components/xAxisLabels/BaseChartXAxisLabels.js';
+export { BaseChartYAxisLabels } from './components/yAxisLabels/BaseChartYAxisLabels.js';
+
 /* CSS classes */
 const CHART_CLASS = 'chart';
 const HORIZONTAL_CONTAINER_CLASS = 'chart__horizontal';
@@ -31,7 +37,7 @@ const ANIMATE_CLASS = 'chart_animated';
 /* Popup */
 const POPUP_CLASS = 'chart__popup';
 const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
-const POPUP_LIST_CLASS = 'chart__popup-list';
+
 /* Legend */
 const LEGEND_CLASS = 'chart__legend';
 
@@ -659,25 +665,34 @@ export class BaseChart extends Component {
         this.currentTarget = null;
     }
 
-    defaultPopupContent(target) {
-        if (!target.group) {
-            return createElement('span', { props: { textContent: target.item.value } });
+    defaultPopupContent(target, state) {
+        if (!target) {
+            return null;
         }
 
-        return createElement('ul', {
-            props: { className: POPUP_LIST_CLASS },
-            children: target.group.map((item) => createElement('li', {
-                props: { textContent: item.value },
-            })),
-        });
+        if (!this.popupContent) {
+            const ChartPopup = this.getComponent('ChartPopup');
+            this.popupContent = ChartPopup.create({
+                ...state,
+                target,
+            });
+        } else {
+            this.popupContent.setState((popupState) => ({
+                ...popupState,
+                ...state,
+                target,
+            }));
+        }
+
+        return this.popupContent.elem;
     }
 
-    renderPopupContent(target) {
+    renderPopupContent(target, state) {
         if (isFunction(this.props.renderPopup)) {
-            return this.props.renderPopup(target);
+            return this.props.renderPopup(target, state);
         }
 
-        return this.defaultPopupContent(target);
+        return this.defaultPopupContent(target, state);
     }
 
     hidePopup() {
@@ -708,7 +723,7 @@ export class BaseChart extends Component {
 
         this.elem.style.position = 'relative';
 
-        const content = this.renderPopupContent(target);
+        const content = this.renderPopupContent(target, this.state);
         show(this.popup, (content !== null));
         if (content === null) {
             return;
