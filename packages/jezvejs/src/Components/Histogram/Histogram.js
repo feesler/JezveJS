@@ -1,20 +1,22 @@
 import { asArray } from '@jezvejs/types';
-import { afterTransition, createSVGElement } from '@jezvejs/dom';
+import { afterTransition } from '@jezvejs/dom';
+
 import { BaseChart } from '../BaseChart/BaseChart.js';
 import { findItem } from '../BaseChart/helpers.js';
+
+import { HistogramDataItem } from './components/DataItem/HistogramDataItem.js';
+
 import './Histogram.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'histogram';
-const BAR_CLASS = 'histogram__bar';
-const CATEGORY_INDEX_CLASS = 'histogram_category-ind-';
-const CATEGORY_CLASS = 'histogram_category-';
-const COLUMN_CLASS = 'histogram_column-';
-const ACTIVE_ITEM_CLASS = 'chart__item_active';
 
 /** Default properties */
 const defaultProps = {
     columnGap: 0,
+    components: {
+        DataItem: HistogramDataItem,
+    },
 };
 
 /**
@@ -30,6 +32,10 @@ export class Histogram extends BaseChart {
             visibilityOffset: 1,
             scaleAroundAxis: true,
             className: [CONTAINER_CLASS, ...asArray(props.className)],
+            components: {
+                ...defaultProps.components,
+                ...(props?.components ?? {}),
+            },
         });
     }
 
@@ -43,15 +49,6 @@ export class Histogram extends BaseChart {
 
     getGroupOuterWidth(state = this.state) {
         return this.getGroupWidth(state) + state.groupsGap;
-    }
-
-    getItemBBox(item) {
-        return {
-            x: item.x,
-            y: item.y,
-            width: item.width,
-            height: item.height,
-        };
     }
 
     /** Find item by event object */
@@ -146,90 +143,45 @@ export class Histogram extends BaseChart {
     }
 
     createItem(data, state) {
-        const {
-            value,
-            width,
-            groupIndex,
-            category = null,
-            columnIndex = 0,
-            categoryIndex = 0,
-            active = false,
-            valueOffset = 0,
-            groupName = null,
-        } = data;
-        const { grid, xAxis } = state;
-        const fixedValue = value ?? 0;
-        if (fixedValue === 0) {
+        const value = data?.value ?? 0;
+        if (value === 0) {
             return null;
         }
 
-        const fixedOffset = valueOffset ?? 0;
-        const y0 = grid.getY(fixedOffset);
-        const y1 = grid.getY(fixedValue + fixedOffset);
+        const { grid } = state;
+        const valueOffset = data?.valueOffset ?? 0;
+        const y0 = grid.getY(valueOffset);
+        const y1 = grid.getY(value + valueOffset);
         const height = grid.roundToPrecision(Math.abs(y0 - y1), 1);
         const groupWidth = this.getGroupOuterWidth(state);
         const columnWidth = this.getColumnOuterWidth(state);
 
-        const item = {
-            value: fixedValue,
-            valueOffset: fixedOffset,
+        const itemProps = {
+            ...data,
+            value,
+            valueOffset,
             y: Math.min(y0, y1),
-            width,
+            width: state.columnWidth,
             height,
-            groupIndex,
-            columnIndex,
-            category,
-            categoryIndex,
-            active,
-            groupName,
+            autoScale: state.autoScale,
+            animate: state.animate,
+            stacked: state.data?.stacked ?? false,
         };
 
-        if (xAxis === 'top') {
-            item.y += state.hLabelsHeight;
+        if (state.xAxis === 'top') {
+            itemProps.y += state.hLabelsHeight;
         }
 
-        item.x = this.getAlignedX({
-            item,
+        itemProps.x = this.getAlignedX({
+            item: itemProps,
             groupWidth,
             columnWidth,
             alignColumns: state.alignColumns,
             groupsGap: state.groupsGap,
         });
 
-        if (
-            Number.isNaN(item.x)
-            || Number.isNaN(item.y)
-            || Number.isNaN(item.width)
-            || Number.isNaN(item.height)
-        ) {
-            throw new Error('Invalid values');
-        }
-
-        const columnClass = `${COLUMN_CLASS}${columnIndex + 1}`;
-        const classNames = [BAR_CLASS, columnClass];
-        if (state.data.stacked) {
-            const categoryIndexClass = `${CATEGORY_INDEX_CLASS}${categoryIndex + 1}`;
-            classNames.push(categoryIndexClass);
-
-            if (category !== null) {
-                const categoryClass = `${CATEGORY_CLASS}${category}`;
-                classNames.push(categoryClass);
-            }
-        }
-
-        if (active) {
-            classNames.push(ACTIVE_ITEM_CLASS);
-        }
-
-        item.elem = createSVGElement('rect', {
-            attrs: {
-                class: classNames.join(' '),
-                x: item.x,
-                y: item.y,
-                width: item.width,
-                height: item.height,
-            },
-        });
+        const DataItem = this.getComponent('DataItem');
+        const item = DataItem.create(itemProps);
 
         this.itemsGroup.append(item.elem);
 
@@ -295,21 +247,26 @@ export class Histogram extends BaseChart {
                     || (categoryIndex.toString() === activeCategory)
                 );
 
+                const itemProps = {
+                    value,
+                    groupIndex,
+                    columnIndex,
+                    category,
+                    categoryIndex,
+                    active,
+                    valueOffset,
+                    groupName,
+                    animateNow: state.animateNow,
+                };
+
                 if (!item) {
-                    item = this.createItem({
-                        value,
-                        width: state.columnWidth,
-                        groupIndex,
-                        columnIndex,
-                        category,
-                        categoryIndex,
-                        active,
-                        valueOffset,
-                        groupName,
-                    }, state);
+                    item = this.createItem(itemProps, state);
+                } else {
+                    item.setState((itemState) => ({
+                        ...itemState,
+                        ...itemProps,
+                    }));
                 }
-                item.active = active;
-                item.elem.classList.toggle(ACTIVE_ITEM_CLASS, active);
 
                 group.push(item);
 
@@ -336,24 +293,6 @@ export class Histogram extends BaseChart {
         this.items = newItems;
     }
 
-    /** Set vertical position and height of item */
-    setItemVerticalPos(item, y, height, state) {
-        const bar = item;
-        if (bar.y === y && bar.height === height) {
-            return;
-        }
-
-        bar.y = y;
-        bar.height = height;
-        if (state.autoScale && state.animate) {
-            bar.elem.style.y = this.formatCoord(bar.y, true);
-            bar.elem.style.height = this.formatCoord(bar.height, true);
-        } else {
-            bar.elem.setAttribute('y', bar.y);
-            bar.elem.setAttribute('height', bar.height);
-        }
-    }
-
     /** Update scale of items */
     updateItemsScale(items, state) {
         if (!Array.isArray(items)) {
@@ -367,7 +306,7 @@ export class Histogram extends BaseChart {
             const newY = Math.min(y0, y1);
             const height = grid.roundToPrecision(Math.abs(y0 - y1), 1);
 
-            this.setItemVerticalPos(item, newY, height, state);
+            item.setVerticalPos(newY, height);
         });
 
         if (state.animateNow) {
@@ -384,19 +323,6 @@ export class Histogram extends BaseChart {
         );
     }
 
-    /** Set vertical position and height of item */
-    setItemHorizontalPos(item, x, width) {
-        const bar = item;
-        if (bar.x === x && bar.width === width) {
-            return;
-        }
-
-        bar.x = x;
-        bar.width = width;
-        bar.elem.setAttribute('x', bar.x);
-        bar.elem.setAttribute('width', bar.width);
-    }
-
     /** Update horizontal scale of items */
     updateHorizontalScale(state) {
         const groupWidth = this.getGroupOuterWidth(state);
@@ -411,7 +337,7 @@ export class Histogram extends BaseChart {
                 groupsGap: state.groupsGap,
             });
 
-            this.setItemHorizontalPos(item, newX, state.columnWidth);
+            item.setHorizontalPos(newX, state.columnWidth);
         });
     }
 }

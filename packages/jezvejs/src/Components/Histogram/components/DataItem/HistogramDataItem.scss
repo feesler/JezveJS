@@ -1,0 +1,19 @@
+/* Histogram bar item */
+.histogram__bar {
+  fill: var(--histogram-bar-color);
+  fill-opacity: 1;
+  stroke: none;
+}
+
+/* Active items */
+.chart__item_active.histogram__bar {
+  fill: var(--histogram-active-bar-color);
+}
+
+/* Animation */
+.chart_animated {
+  .histogram__bar {
+    transition-property: y, height;
+    transition-duration: var(--chart-animation-duration);
+  }
+}
