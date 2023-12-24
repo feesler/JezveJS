@@ -1,17 +1,15 @@
 import { asArray } from '@jezvejs/types';
-import { createSVGElement, getClassName } from '@jezvejs/dom';
+import { createSVGElement } from '@jezvejs/dom';
 import { BaseChart } from '../BaseChart/BaseChart.js';
-import { findItem } from '../BaseChart/helpers.js';
+import { findItem, formatCoord } from '../BaseChart/helpers.js';
 
 import { LineChartDataItem } from './components/DataItem/LineChartDataItem.js';
+import { LineChartDataPath } from './components/DataPath/LineChartDataPath.js';
 import './LineChart.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'linechart';
 const SHOW_NODES_CLASS = 'linechart__nodes';
-const PATH_CLASS = 'linechart__path';
-const CATEGORY_CLASS = 'linechart_category-';
-const CATEGORY_INDEX_CLASS = 'linechart_category-ind-';
 
 /** Default properties */
 const defaultProps = {
@@ -19,6 +17,7 @@ const defaultProps = {
     nodeCircleRadius: 4,
     components: {
         DataItem: LineChartDataItem,
+        DataPath: LineChartDataPath,
     },
 };
 
@@ -229,8 +228,8 @@ export class LineChart extends BaseChart {
 
     formatPath(points) {
         const coords = points.map((point) => {
-            const x = this.formatCoord(point.x);
-            const y = this.formatCoord(point.y);
+            const x = formatCoord(point.x);
+            const y = formatCoord(point.y);
             return `${x}, ${y}`;
         });
 
@@ -239,15 +238,9 @@ export class LineChart extends BaseChart {
 
     /** Draw path currently saved at nodes */
     drawPath(data, state) {
-        const {
-            values,
-            categoryIndex = 0,
-            category = null,
-        } = data;
-
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const groupWidth = this.getGroupOuterWidth(state);
-        const coords = values.map((value, index) => ({
+        const coords = asArray(data?.values).map((value, index) => ({
             x: this.getAlignedX({
                 groupIndex: firstGroupIndex + index,
                 groupWidth,
@@ -256,64 +249,28 @@ export class LineChart extends BaseChart {
             y: value,
         }));
 
-        const isAnimated = state.autoScale && state.animate && state.animateNow;
-        const shape = this.formatPath(coords);
+        const pathProps = {
+            ...data,
+            shape: this.formatPath(coords),
+            autoScale: state.autoScale,
+            animate: state.animate,
+            animateNow: state.animateNow,
+        };
 
         let path = null;
-        if (this.paths && this.paths[categoryIndex]) {
-            path = this.paths[categoryIndex];
+        if (this.paths && this.paths[data.categoryIndex]) {
+            path = this.paths[data.categoryIndex];
+            path.setState((pathState) => ({ ...pathState, ...pathProps }));
         } else {
-            const categoryIndexClass = `${CATEGORY_INDEX_CLASS}${categoryIndex + 1}`;
-            const classNames = [PATH_CLASS, categoryIndexClass];
-            if (category !== null) {
-                const categoryClass = `${CATEGORY_CLASS}${category}`;
-                classNames.push(categoryClass);
-            }
-
-            path = {
-                elem: createSVGElement('path', {
-                    attrs: {
-                        class: getClassName(classNames),
-                    },
-                }),
-            };
+            const DataPath = this.getComponent('DataPath');
+            path = DataPath.create({
+                ...pathProps,
+                onAnimationDone: () => this.onAnimationDone(),
+            });
 
             this.pathsGroup.append(path.elem);
-            this.paths[categoryIndex] = path;
+            this.paths[data.categoryIndex] = path;
         }
-
-        if (isAnimated) {
-            if (!path.animateElem) {
-                path.animateElem = createSVGElement('animate', {
-                    attrs: {
-                        attributeType: 'XML',
-                        attributeName: 'd',
-                        dur: '0.5s',
-                        begin: 'indefinite',
-                        fill: 'freeze',
-                        repeatCount: '1',
-                        calcMode: 'linear',
-                    },
-                    events: {
-                        endEvent: () => this.onAnimationDone(),
-                    },
-                });
-            }
-
-            if (shape !== path.shape) {
-                path.animateElem.setAttribute('from', path.shape);
-                path.animateElem.setAttribute('to', shape);
-            }
-
-            path.elem.append(path.animateElem);
-            path.animateElem.beginElement();
-        } else {
-            path.animateElem?.remove();
-            path.animateElem = null;
-
-            path.elem.setAttribute('d', shape);
-        }
-        path.shape = shape;
     }
 
     getCategoryItems(categoryIndex = 0) {
