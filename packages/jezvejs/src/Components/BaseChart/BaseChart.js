@@ -825,10 +825,8 @@ export class BaseChart extends Component {
         this.content.append(this.itemsGroup);
         this.items = [];
 
-        this.xAxisLabelsGroup?.remove();
-        this.xAxisLabelsGroup = createSVGElement('g');
-        this.content.append(this.xAxisLabelsGroup);
-        this.labels = [];
+        this.xAxisLabels?.elem?.remove();
+        this.xAxisLabels = null;
     }
 
     /** Update vertical scale of items */
