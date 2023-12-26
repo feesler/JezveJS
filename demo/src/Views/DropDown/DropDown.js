@@ -52,23 +52,9 @@ const toggleEnable = (e, dropDown) => {
     button.textContent = (dropDown.disabled) ? 'Enable' : 'Disable';
 };
 
-const formatObject = (value) => {
-    let entries;
-
-    if (Array.isArray(value)) {
-        entries = value.map((entry) => formatObject(entry));
-
-        return `[${entries.join(', ')}]`;
-    }
-
-    if (isObject(value)) {
-        entries = Object.keys(value).map((key) => `${key}: ${value[key]}`);
-
-        return `{ ${entries.join(', ')} }`;
-    }
-
-    return value.toString();
-};
+const formatObject = (value) => (
+    JSON.stringify(value) ?? 'undefined'
+);
 
 /**
  * DropDown component demo view
