@@ -1,6 +1,9 @@
+import { ChartGrid } from 'jezvejs/ChartGrid';
 import { setBlock } from 'jezve-test';
-import * as Actions from '../actions/common.js';
+
 import { App } from '../app.js';
+
+import * as Actions from '../actions/common.js';
 
 const deepMeetTests = async () => {
     setBlock('deepMeet() function', 1);
@@ -269,6 +272,40 @@ const colorTests = async () => {
     await hslToRGBTests();
 };
 
+const chartGridTests = async () => {
+    const exponentTestsData = [
+        { value: 0, expected: 1 },
+        { value: 1, expected: 1 },
+        { value: 10, expected: 10 },
+        { value: 15, expected: 10 },
+        { value: 150, expected: 100 },
+        { value: 1000, expected: 1000 },
+        { value: 5000, expected: 1000 },
+        { value: 500500, expected: 100000 },
+        { value: -1, expected: 1 },
+        { value: -10, expected: 10 },
+        { value: 0.1, expected: 0.1 },
+        { value: 0.9, expected: 0.1 },
+        { value: 0.01, expected: 0.01 },
+        { value: 0.015, expected: 0.01 },
+        { value: 0.001, expected: 0.001 },
+        { value: 0.0019, expected: 0.001 },
+        { value: 0.009, expected: 0.001 },
+        { value: 0.0009, expected: 0.0001 },
+        { value: 0.00001, expected: 0.00001 },
+        { value: 0.000009, expected: 0.000001 },
+    ];
+
+    const grid = new ChartGrid({
+        height: 200,
+        margin: 10,
+    });
+
+    await App.scenario.runner.runGroup((data) => (
+        Actions.chartGridTest(grid, data.value, data.expected)
+    ), exponentTestsData);
+};
+
 export const commonTests = async () => {
     setBlock('Common', 1);
 
@@ -277,4 +314,5 @@ export const commonTests = async () => {
     await fixFloatTests();
     await trimDecimalTests();
     await colorTests();
+    await chartGridTests();
 };

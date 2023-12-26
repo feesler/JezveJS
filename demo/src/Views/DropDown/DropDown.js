@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { isObject, asArray } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     ge,
     show,

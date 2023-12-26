@@ -1,47 +1,10 @@
 import 'jezvejs/style';
 import { createElement } from '@jezvejs/dom';
-import { assert } from '@jezvejs/assert';
-import { ChartGrid } from 'jezvejs/ChartGrid';
 import { Histogram } from 'jezvejs/Histogram';
 import { LineChart } from 'jezvejs/LineChart';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './ChartGridView.scss';
-
-const runTests = () => {
-    const exponentTestsData = [
-        { value: 0, expected: 1 },
-        { value: 1, expected: 1 },
-        { value: 10, expected: 10 },
-        { value: 15, expected: 10 },
-        { value: 150, expected: 100 },
-        { value: 1000, expected: 1000 },
-        { value: 5000, expected: 1000 },
-        { value: 500500, expected: 100000 },
-        { value: -1, expected: 1 },
-        { value: -10, expected: 10 },
-        { value: 0.1, expected: 0.1 },
-        { value: 0.9, expected: 0.1 },
-        { value: 0.01, expected: 0.01 },
-        { value: 0.015, expected: 0.01 },
-        { value: 0.001, expected: 0.001 },
-        { value: 0.0019, expected: 0.001 },
-        { value: 0.009, expected: 0.001 },
-        { value: 0.0009, expected: 0.0001 },
-        { value: 0.00001, expected: 0.00001 },
-        { value: 0.000009, expected: 0.000001 },
-    ];
-
-    const grid = new ChartGrid({
-        height: 200,
-        margin: 10,
-    });
-
-    exponentTestsData.forEach((data) => {
-        const res = grid.getExp(data.value);
-        assert.equal(res.exponent, data.expected);
-    });
-};
 
 /**
  * ChartGrid utility demo view
@@ -52,7 +15,6 @@ class ChartGridView extends DemoView {
      */
     onStart() {
         this.setMainHeading('ChartGrid');
-        runTests();
 
         this.initHistogram();
         this.initLineChart();
