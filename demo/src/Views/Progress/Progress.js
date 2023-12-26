@@ -16,6 +16,8 @@ class ProgressView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Progress and Spinner');
+
         this.addSectionsGroup({ title: 'Progress' });
 
         this.initDefaultProgress();

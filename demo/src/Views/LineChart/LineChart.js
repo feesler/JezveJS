@@ -53,6 +53,8 @@ class LineChartView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('LineChart');
+
         this.columnWidthAndGap();
         this.fitToWidth();
 

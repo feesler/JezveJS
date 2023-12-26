@@ -16,6 +16,8 @@ class WeekDaySelectView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('WeekDaySelect');
+
         this.initDefault();
         this.initStyled();
         this.initMultiSelect();

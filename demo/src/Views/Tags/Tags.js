@@ -33,6 +33,8 @@ class TagsView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Tags');
+
         this.initDefault();
         this.initStyled();
         this.initActive();

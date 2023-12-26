@@ -29,6 +29,8 @@ class PopupPositionView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('PopupPosition');
+
         this.initDefault();
         this.initPosition();
         this.initAllowFlip();

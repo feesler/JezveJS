@@ -43,11 +43,15 @@ const runTests = () => {
     });
 };
 
+/**
+ * ChartGrid utility demo view
+ */
 class ChartGridView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
+        this.setMainHeading('ChartGrid');
         runTests();
 
         this.initHistogram();

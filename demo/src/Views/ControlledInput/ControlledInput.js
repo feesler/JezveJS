@@ -15,6 +15,8 @@ class ControlledInputView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('ControlledInput');
+
         this.initDigitsOnly();
         this.initLettersOnly();
         this.initDisabled();

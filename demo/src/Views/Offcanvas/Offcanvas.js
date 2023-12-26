@@ -1,11 +1,23 @@
 import 'jezvejs/style';
-import { ge, setEvents } from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
+import { Button } from 'jezvejs/Button';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
-import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
+
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import './OffcanvasView.scss';
+
+const createListContent = (props = {}) => (
+    createElement('ul', {
+        props,
+        children: [1, 2, 3, 4, 5].map((item) => (
+            createElement('li', { props: { textContent: `Item ${item}` } })
+        )),
+    })
+);
 
 /**
  * Offcanvas component demo view
@@ -15,6 +27,8 @@ class OffcanvasView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Offcanvas');
+
         this.initDefault();
         this.initRight();
         this.initTop();
@@ -26,13 +40,29 @@ class OffcanvasView extends DemoView {
     initDefault() {
         const logsField = LogsField.create();
 
-        const offcanvas = Offcanvas.create({
-            content: ge('defaultContent'),
+        let offcanvas = null;
+
+        const content = createElement('div', {
+            props: {
+                id: 'defaultContent',
+                className: 'offcanvas-nav',
+            },
+            children: [
+                Button.create({
+                    id: 'toggleTopBtn',
+                    className: 'action-btn',
+                    title: 'Toggle',
+                    onClick: () => offcanvas?.toggle(),
+                }).elem,
+                createListContent(),
+            ],
+        });
+
+        offcanvas = Offcanvas.create({
+            content,
             onOpened: () => logsField.write('Opened'),
             onClosed: () => logsField.write('Closed'),
         });
-
-        setEvents(ge('toggleTopBtn'), { click: () => offcanvas.toggle() });
 
         this.addSection({
             id: 'default',
@@ -51,7 +81,10 @@ class OffcanvasView extends DemoView {
 
     initRight() {
         const offcanvas = Offcanvas.create({
-            content: ge('rightContent'),
+            content: createListContent({
+                id: 'rightContent',
+                className: 'offcanvas-nav',
+            }),
             placement: 'right',
         });
 
@@ -69,7 +102,10 @@ class OffcanvasView extends DemoView {
 
     initTop() {
         const offcanvas = Offcanvas.create({
-            content: ge('topContent'),
+            content: createListContent({
+                id: 'topContent',
+                className: 'offcanvas-horizontal-nav',
+            }),
             placement: 'top',
         });
 
@@ -87,7 +123,10 @@ class OffcanvasView extends DemoView {
 
     initBottom() {
         const offcanvas = Offcanvas.create({
-            content: ge('bottomContent'),
+            content: createListContent({
+                id: 'bottomContent',
+                className: 'offcanvas-horizontal-nav',
+            }),
             placement: 'bottom',
         });
 
@@ -104,8 +143,16 @@ class OffcanvasView extends DemoView {
     }
 
     initResponsive() {
+        const content = createElement('div', {
+            props: { id: 'responsiveContent' },
+            children: [
+                createElement('h3', { props: { textContent: 'Responsive' } }),
+                createListContent({ className: 'offcanvas-nav' }),
+            ],
+        });
+
         const offcanvas = Offcanvas.create({
-            content: ge('responsiveContent'),
+            content,
             className: 'offcanvas-responsive',
         });
 
@@ -122,9 +169,17 @@ class OffcanvasView extends DemoView {
     }
 
     initUseScrollLock() {
+        const content = createElement('div', {
+            props: { id: 'useScrollLockContent' },
+            children: [
+                createElement('h3', { props: { textContent: '\'useScrollLock\' option' } }),
+                createListContent({ className: 'offcanvas-nav' }),
+            ],
+        });
+
         const offcanvas = Offcanvas.create({
             useScrollLock: false,
-            content: ge('useScrollLockContent'),
+            content,
         });
 
         this.addSection({

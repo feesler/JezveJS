@@ -4,6 +4,13 @@ import { MenuButton } from 'jezvejs/MenuButton';
 import { PopupMenu } from 'jezvejs/PopupMenu';
 
 import { createContainer } from '../../Application/utils.js';
+
+// Icons
+import { SelectIcon } from '../../assets/icons/SelectIcon.js';
+import { SearchIcon } from '../../assets/icons/SearchIcon.js';
+import { GlyphIcon } from '../../assets/icons/GlyphIcon.js';
+
+// Common components
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
@@ -24,14 +31,14 @@ const renderListItem = (id) => (
 
 const getDefaultItems = (logsField) => ([{
     id: 'selectBtnItem',
-    icon: 'select',
+    icon: SelectIcon(),
     title: 'Button item',
     onClick: () => logsField.write('Button item clicked'),
 }, {
     id: 'linkItem',
     type: 'link',
     title: 'Link item',
-    icon: 'search',
+    icon: SearchIcon(),
     url: '#',
 }, {
     id: 'noIconItem',
@@ -58,6 +65,8 @@ class PopupMenuView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('PopupMenu');
+
         this.initDefault();
         this.initToggleOnClick();
         this.initHideOnSelect();
@@ -162,11 +171,11 @@ class PopupMenuView extends DemoView {
             },
             items: [{
                 id: 'item1',
-                icon: 'select',
+                icon: SelectIcon(),
                 title: 'Child item 1',
             }, {
                 id: 'item2',
-                icon: 'search',
+                icon: SearchIcon(),
                 title: 'Child item 2',
             }, {
                 id: 'item3',
@@ -177,7 +186,7 @@ class PopupMenuView extends DemoView {
             }, {
                 id: 'item4',
                 title: 'Child item 4',
-                icon: 'glyph',
+                icon: GlyphIcon(),
                 iconAlign: 'right',
                 submenuParent: true,
                 onClick: () => {
@@ -201,11 +210,11 @@ class PopupMenuView extends DemoView {
             },
             items: [{
                 id: 'item1',
-                icon: 'select',
+                icon: SelectIcon(),
                 title: 'Child item 1',
             }, {
                 id: 'item2',
-                icon: 'search',
+                icon: SearchIcon(),
                 title: 'Child item 2',
             }, {
                 id: 'item3',
@@ -232,13 +241,13 @@ class PopupMenuView extends DemoView {
         items.push({
             id: 'nestedParentItem1',
             title: 'Nested menu 1',
-            icon: 'glyph',
+            icon: GlyphIcon(),
             iconAlign: 'right',
             submenuParent: true,
         }, {
             id: 'nestedParentItem2',
             title: 'Nested menu 2',
-            icon: 'glyph',
+            icon: GlyphIcon(),
             iconAlign: 'right',
             submenuParent: true,
         });
@@ -278,7 +287,7 @@ class PopupMenuView extends DemoView {
             fixed: false,
             items: [{
                 id: 'selectModeBtn',
-                icon: 'select',
+                icon: SelectIcon(),
                 title: 'Select',
             }, {
                 id: 'separator1',
@@ -316,11 +325,11 @@ class PopupMenuView extends DemoView {
             attachTo: btn.elem,
             items: [{
                 id: 'item1',
-                icon: 'select',
+                icon: SelectIcon(),
                 title: 'Item 1',
             }, {
                 id: 'item2',
-                icon: 'search',
+                icon: SearchIcon(),
                 title: 'Item 2',
             }, {
                 id: 'item3',
@@ -349,7 +358,7 @@ class PopupMenuView extends DemoView {
 
         menu.setItems([{
             id: 'selectModeBtn',
-            icon: 'select',
+            icon: SelectIcon(),
             title: 'Select',
         }, {
             id: 'separator1',

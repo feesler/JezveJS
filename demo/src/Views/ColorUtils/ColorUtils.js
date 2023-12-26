@@ -21,6 +21,8 @@ import './ColorUtilsView.scss';
  */
 class ColorUtilsView extends DemoView {
     onStart() {
+        this.setMainHeading('Color utils');
+
         this.initGenerator();
     }
 

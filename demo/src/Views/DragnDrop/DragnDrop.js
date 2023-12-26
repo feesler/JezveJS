@@ -1,22 +1,29 @@
 import 'jezvejs/style';
 import { asArray } from '@jezvejs/types';
-import {
-    ge,
-    createElement,
-} from '@jezvejs/dom';
+import { ge, createElement } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 import { Sortable } from 'jezvejs/Sortable';
 import { SortableListContainer } from 'jezvejs/SortableListContainer';
 
+// Common components
 import { DemoView } from '../../Components/DemoView/DemoView.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
+
+// Common icons
+import { HeaderMenuIcon } from '../../assets/icons/HeaderMenuIcon.js';
+
+// Local components
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import { ListItem } from './impl/ListItem.js';
 import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
 import { XAxisDragZone } from './impl/XAxisDragZone.js';
-import { LogsField } from '../../Components/LogsField/LogsField.js';
+
+// Local icons
+import { TileCardIcon } from './impl/TileCardIcon.js';
+
 import './DragnDropView.scss';
 
 const logTo = (target, value) => {
@@ -31,7 +38,7 @@ const logTo = (target, value) => {
 const renderTileIcon = () => createElement('span', {
     props: { className: 'sortable-tile__icon-container' },
     children: Icon.create({
-        icon: 'tile-purse',
+        icon: TileCardIcon(),
         className: 'sortable-tile__icon',
     }).elem,
 });
@@ -188,6 +195,8 @@ class DragAndDropView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Drag and Drop');
+
         this.initOriginalAvatar();
         this.initClonedAvatar();
 
@@ -682,12 +691,12 @@ class DragAndDropView extends DemoView {
 
         const dragIcon1 = Button.create({
             type: 'static',
-            icon: 'dragHandle',
+            icon: HeaderMenuIcon(),
             className: 'drag-handle-btn',
         });
         const dragIcon2 = Button.create({
             type: 'static',
-            icon: 'dragHandle',
+            icon: HeaderMenuIcon(),
             className: 'drag-handle-btn red',
         });
 

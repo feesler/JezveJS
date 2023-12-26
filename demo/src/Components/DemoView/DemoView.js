@@ -90,7 +90,22 @@ export class DemoView extends View {
      * Initializes content container
      */
     initContainer() {
-        this.container = document.querySelector('.content-container');
+        this.pageContentWrapper = document.querySelector('.page-content-wrap');
+
+        this.container = createElement('div', {
+            props: { className: 'content-container' },
+        });
+        this.pageContentWrapper.append(this.container);
+    }
+
+    setMainHeading(title) {
+        this.mainHeader = createElement('h1', {
+            props: { textContent: title },
+        });
+
+        this.pageContentWrapper.prepend(this.mainHeader);
+
+        document.title = `JezveJS | ${title}`;
     }
 
     /**
@@ -103,8 +118,11 @@ export class DemoView extends View {
 
         this.tocMenu = TableOfContents.create();
 
-        const mainHeader = document.querySelector('.page-content-wrap h1');
-        mainHeader.after(this.tocMenu.elem);
+        if (this.mainHeader) {
+            this.mainHeader.after(this.tocMenu.elem);
+        } else {
+            this.pageContentWrapper.prepend(this.tocMenu.elem);
+        }
     }
 
     addSectionsGroup(options = {}) {

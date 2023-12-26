@@ -15,6 +15,8 @@ class DateInputView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('DateInput');
+
         this.initDefault();
         this.initPlaceholder();
         this.initCreate();

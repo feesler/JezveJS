@@ -22,6 +22,8 @@ class RangeScrollChartView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('RangeScrollChart');
+
         this.histogram();
         this.lineChart();
         this.multiColumn();

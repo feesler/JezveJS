@@ -1,6 +1,5 @@
 import 'jezvejs/style';
 import {
-    ge,
     createElement,
     getClassName,
     enable,
@@ -9,8 +8,13 @@ import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 import { InputGroup } from 'jezvejs/InputGroup';
 
+// Icons
+import { SmallCloseIcon } from '../../assets/icons/SmallCloseIcon.js';
+import { SearchIcon } from '../../assets/icons/SearchIcon.js';
+
 import { createContainer, createControls } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
+
 import './InputGroupView.scss';
 
 const createInput = (props = {}) => (
@@ -59,13 +63,14 @@ class InputGroupView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('InputGroup');
+
         this.text();
         this.buttons();
         this.multipleInputs();
         this.innerButtons();
         this.inputOuter();
         this.disabled();
-        this.parse();
     }
 
     text() {
@@ -195,7 +200,7 @@ class InputGroupView extends DemoView {
                         className: 'stretch-input',
                         placeholder: 'Start',
                     }),
-                    createInnerButton({ icon: 'close-icon' }),
+                    createInnerButton({ icon: SmallCloseIcon() }),
                     createButton('.00'),
                 ],
             }).elem,
@@ -210,16 +215,16 @@ class InputGroupView extends DemoView {
                 InputGroup.create({
                     className: 'input-group__input-outer',
                     children: [
-                        createInnerButton({ icon: 'search', className: 'search-btn' }),
+                        createInnerButton({ icon: SearchIcon(), className: 'search-btn' }),
                         createInput({ className: 'stretch-input' }),
-                        createInnerButton({ icon: 'close-icon' }),
+                        createInnerButton({ icon: SmallCloseIcon() }),
                     ],
                 }).elem,
                 InputGroup.create({
                     children: [
                         createOuterContainer([
                             createInput({ className: 'stretch-input' }),
-                            createInnerButton({ icon: 'close-icon' }),
+                            createInnerButton({ icon: SmallCloseIcon() }),
                         ]),
                         createButton('.00'),
                     ],
@@ -227,8 +232,8 @@ class InputGroupView extends DemoView {
                 InputGroup.create({
                     children: [
                         createOuterContainer([
-                            createInnerButton({ icon: 'search', className: 'search-btn' }),
-                            createInnerButton({ icon: 'close-icon' }),
+                            createInnerButton({ icon: SearchIcon(), className: 'search-btn' }),
+                            createInnerButton({ icon: SmallCloseIcon() }),
                             createInput({ className: 'stretch-input' }),
                         ]),
                         createButton('.00'),
@@ -240,12 +245,12 @@ class InputGroupView extends DemoView {
 
     disabled() {
         const searchButton = createInnerButton({
-            icon: 'search',
+            icon: SearchIcon(),
             className: 'search-btn',
             enabled: false,
         });
         const input = createInput({ className: 'stretch-input', disabled: true });
-        const closeBtn = createInnerButton({ icon: 'close-icon', enabled: false });
+        const closeBtn = createInnerButton({ icon: SmallCloseIcon(), enabled: false });
 
         const inputGroup = InputGroup.create({
             className: 'input-group__input-outer',
@@ -276,16 +281,6 @@ class InputGroupView extends DemoView {
             content: [
                 createContainer('disabledContainer', inputGroup.elem),
                 createControls(toggleEnableBtn.elem),
-            ],
-        });
-    }
-
-    parse() {
-        this.addSection({
-            id: 'parse',
-            title: 'Parse component from DOM',
-            content: [
-                InputGroup.fromElement(ge('parseTarget')).elem,
             ],
         });
     }
