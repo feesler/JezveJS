@@ -3,19 +3,10 @@ import { createElement } from '@jezvejs/dom';
 import { setEmptyClick, removeEmptyClick } from 'jezvejs';
 import { Button } from 'jezvejs/Button';
 
+import { createContainer, createListContent } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 
 import './EmptyClickView.scss';
-import { createContainer } from '../../Application/utils.js';
-
-const createListContent = (props = {}) => (
-    createElement('ul', {
-        props,
-        children: [1, 2, 3, 4, 5].map((item) => (
-            createElement('li', { props: { textContent: `Item ${item}` } })
-        )),
-    })
-);
 
 /**
  * setEmptyClick() and removeEmptyClick() demo view

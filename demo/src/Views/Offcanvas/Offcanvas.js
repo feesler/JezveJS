@@ -3,21 +3,12 @@ import { createElement } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { Offcanvas } from 'jezvejs/Offcanvas';
 
-import { createButtons } from '../../Application/utils.js';
+import { createButtons, createListContent } from '../../Application/utils.js';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 import './OffcanvasView.scss';
-
-const createListContent = (props = {}) => (
-    createElement('ul', {
-        props,
-        children: [1, 2, 3, 4, 5].map((item) => (
-            createElement('li', { props: { textContent: `Item ${item}` } })
-        )),
-    })
-);
 
 /**
  * Offcanvas component demo view

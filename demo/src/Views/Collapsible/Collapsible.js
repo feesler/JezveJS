@@ -8,7 +8,7 @@ import { DeleteIcon } from '../../assets/icons/DeleteIcon.js';
 import { ToggleIcon } from '../../assets/icons/ToggleIcon.js';
 import { UpdateIcon } from '../../assets/icons/UpdateIcon.js';
 
-import { createButtons } from '../../Application/utils.js';
+import { createButtons, createListContent } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 
 import './CollapsibleView.scss';
@@ -31,15 +31,6 @@ const createContent = (content) => createElement('div', {
     },
     children: (typeof content !== 'string') ? content : null,
 });
-
-const createListContent = (props = {}) => (
-    createElement('ul', {
-        props,
-        children: [1, 2, 3, 4].map((item) => (
-            createElement('li', { props: { textContent: `Item ${item}` } })
-        )),
-    })
-);
 
 /**
  * Collapsible component demo view

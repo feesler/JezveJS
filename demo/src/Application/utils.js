@@ -40,6 +40,15 @@ export const generateId = () => {
     }
 };
 
+export const createListContent = ({ itemsCount = 5, ...props } = {}) => (
+    createElement('ul', {
+        props,
+        children: Array(itemsCount).fill(0).map((_, index) => (
+            createElement('li', { props: { textContent: `Item ${index}` } })
+        )),
+    })
+);
+
 export const getDefaultOptionProps = (index) => ({
     value: index.toString(),
     textContent: `Item ${index}`,
