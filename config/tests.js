@@ -50,7 +50,7 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'demo/src/Views/Tests/index.html',
+            template: 'demo/src/Components/DemoView/template.html',
             filename: 'index.html',
             chunks: ['polyfills', 'TestsView', 'testsMain'],
             minify: htmlMinifyOptions,
