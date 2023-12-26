@@ -1,37 +1,35 @@
 import 'jezvejs/style';
 import { asArray } from '@jezvejs/types';
-import {
-    ge,
-    createElement,
-} from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 import { Sortable } from 'jezvejs/Sortable';
 import { SortableListContainer } from 'jezvejs/SortableListContainer';
 
+// Common components
 import { DemoView } from '../../Components/DemoView/DemoView.js';
+import { LogsField } from '../../Components/LogsField/LogsField.js';
+
+// Common icons
+import { HeaderMenuIcon } from '../../assets/icons/HeaderMenuIcon.js';
+
+// Local components
 import { DefaultDragZone } from './impl/DefaultDragZone.js';
 import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
 import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
 import { ListItem } from './impl/ListItem.js';
 import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
 import { XAxisDragZone } from './impl/XAxisDragZone.js';
-import { LogsField } from '../../Components/LogsField/LogsField.js';
+
+// Local icons
+import { TileCardIcon } from './impl/TileCardIcon.js';
+
 import './DragnDropView.scss';
-
-const logTo = (target, value) => {
-    const elem = (typeof target === 'string') ? ge(target) : target;
-    if (!elem) {
-        return;
-    }
-
-    elem.value += `${value}\r\n`;
-};
 
 const renderTileIcon = () => createElement('span', {
     props: { className: 'sortable-tile__icon-container' },
     children: Icon.create({
-        icon: 'tile-purse',
+        icon: TileCardIcon(),
         className: 'sortable-tile__icon',
     }).elem,
 });
@@ -65,28 +63,6 @@ const renderListItem = (title = 'Item') => createElement('div', {
     props: { className: 'list_item' },
     children: createElement('span', { props: { textContent: title } }),
 });
-
-// Exchangable lists
-const onExchange = (info) => {
-    const exchangeLog = ge('exchangeLog');
-
-    if (!info.elem) {
-        logTo(exchangeLog, 'Missing source item');
-        return;
-    }
-    if (!info.targetElem) {
-        logTo(exchangeLog, 'Missing destination item');
-        return;
-    }
-
-    const isContainer = info.targetElem.matches('.list-area');
-
-    const srcId = getItemIdByElem(info.elem);
-    const destId = (isContainer) ? null : getItemIdByElem(info.targetElem);
-    const destParent = (isContainer) ? info.targetElem : info.targetElem.parentNode;
-
-    logTo(exchangeLog, `srcId: ${srcId}; destId: ${destId}; parent: ${destParent.id}`);
-};
 
 const renderDestListItem = (title = 'Item', isPlaceholder = false) => createElement('div', {
     props: { className: `list_item ${isPlaceholder ? 'list_item_placeholder' : 'list_item_2'}` },
@@ -188,6 +164,8 @@ class DragAndDropView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Drag and Drop');
+
         this.initOriginalAvatar();
         this.initClonedAvatar();
 
@@ -195,7 +173,7 @@ class DragAndDropView extends DemoView {
 
         this.initSortable();
         this.initSortableList();
-        this.initExchangable();
+        this.initExchangeable();
         this.initCustomGroups();
 
         this.initTree();
@@ -367,7 +345,28 @@ class DragAndDropView extends DemoView {
         });
     }
 
-    initExchangable() {
+    onExchange(info, logField) {
+        if (!info.elem) {
+            logField.write('Missing source item');
+            return;
+        }
+        if (!info.targetElem) {
+            logField.write('Missing destination item');
+            return;
+        }
+
+        const isContainer = info.targetElem.matches('.list-area');
+
+        const srcId = getItemIdByElem(info.elem);
+        const destId = (isContainer) ? null : getItemIdByElem(info.targetElem);
+        const destParent = (isContainer) ? info.targetElem : info.targetElem.parentNode;
+
+        logField.write(`srcId: ${srcId}; destId: ${destId}; parent: ${destParent.id}`);
+    }
+
+    initExchangeable() {
+        const logsField = LogsField.create();
+
         const listExch1 = createElement('div', { props: { className: 'list-area' } });
         const listExch2 = createElement('div', { props: { className: 'list-area' } });
 
@@ -381,7 +380,7 @@ class DragAndDropView extends DemoView {
 
         Sortable.create({
             elem: listExch1,
-            onSort: onExchange,
+            onSort: (info) => this.onExchange(info, logsField),
             selector: '.list_item',
             placeholderClass: 'list_item_placeholder',
             dragClass: true,
@@ -392,7 +391,7 @@ class DragAndDropView extends DemoView {
         });
         Sortable.create({
             elem: listExch2,
-            onSort: onExchange,
+            onSort: (info) => this.onExchange(info, logsField),
             selector: '.list_item',
             placeholderClass: 'list_item_placeholder',
             dragClass: 'list_item_drag',
@@ -404,13 +403,16 @@ class DragAndDropView extends DemoView {
 
         this.addSection({
             id: 'exchange',
-            title: 'Exchangable list',
+            title: 'Exchangeable list',
             description: `Example of usage of same group identifier.
                         Left list uses default dragClass option (.drag). Right list use own dragClass.`,
-            content: createElement('div', {
-                props: { className: 'exch-lists-container' },
-                children: [listExch1, listExch2],
-            }),
+            content: [
+                createElement('div', {
+                    props: { className: 'exch-lists-container' },
+                    children: [listExch1, listExch2],
+                }),
+                logsField.elem,
+            ],
         });
     }
 
@@ -682,12 +684,12 @@ class DragAndDropView extends DemoView {
 
         const dragIcon1 = Button.create({
             type: 'static',
-            icon: 'dragHandle',
+            icon: HeaderMenuIcon(),
             className: 'drag-handle-btn',
         });
         const dragIcon2 = Button.create({
             type: 'static',
-            icon: 'dragHandle',
+            icon: HeaderMenuIcon(),
             className: 'drag-handle-btn red',
         });
 

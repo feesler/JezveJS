@@ -173,10 +173,6 @@ export class Button extends Component {
 
     /** Set icon */
     setIcon(icon) {
-        if (icon && typeof icon !== 'string') {
-            throw new Error('Invalid icon specified');
-        }
-
         if (this.state.icon === icon) {
             return;
         }

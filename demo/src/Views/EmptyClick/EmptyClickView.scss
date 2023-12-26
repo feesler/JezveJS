@@ -1,29 +1,28 @@
-#except {
-  display: block;
-  position: absolute;
+.excluded-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 150px;
   height: 150px;
-  color: #ffffff;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  color: #ffffff9e;
   background-color: #2a7200;
-  top: 150px;
-  left: 20px;
-}
-
-#container {
-  position: absolute;
-  top: 150px;
-  left: 200px;
+  font-size: 1.5rem;
 }
 
 .test-menu {
   position: absolute;
   display: none;
   flex-flow: column nowrap;
+  margin: 0.5rem 0;
+  min-width: 100px;
   list-style: none;
   border: 1px solid #000000;
+  background-color: #ffffff;
 
   li {
-    padding: 5px;
+    padding: 0.5rem;
     white-space: nowrap;
   }
 }

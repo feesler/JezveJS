@@ -1,10 +1,12 @@
 import 'jezvejs/style';
-import { ge } from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
 import { Switch } from 'jezvejs/Switch';
 
-import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createForm, createButtons } from '../../Application/utils.js';
+
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import './SwitchView.scss';
 
 /**
@@ -15,6 +17,8 @@ class SwitchView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Switch');
+
         this.initParsed();
         this.initDynamic();
         this.initLarge();
@@ -23,7 +27,23 @@ class SwitchView extends DemoView {
     initParsed() {
         const logsField = LogsField.create();
 
-        const defaultSwitch = Switch.fromElement(ge('defaultSwitch'), {
+        const elem = createElement('label', {
+            props: {
+                id: 'defaultSwitch',
+                className: 'switch',
+            },
+            children: [
+                createElement('input', { props: { type: 'checkbox', checked: true } }),
+                createElement('div', {
+                    props: { className: 'switch-slider' },
+                }),
+                createElement('span', {
+                    props: { className: 'switch__label', textContent: 'Enable something' },
+                }),
+            ],
+        });
+
+        const defaultSwitch = Switch.fromElement(elem, {
             onChange: (checked) => logsField.write(`Parsed Switch change. checked: ${checked}`),
         });
 

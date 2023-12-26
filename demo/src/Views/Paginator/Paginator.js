@@ -1,5 +1,5 @@
 import 'jezvejs/style';
-import { ge } from '@jezvejs/dom';
+import { createElement, getClassName } from '@jezvejs/dom';
 import { Paginator } from 'jezvejs/Paginator';
 
 import { createButtons } from '../../Application/utils.js';
@@ -7,6 +7,20 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 import './PaginatorView.scss';
+
+const createPageItem = ({ page = null, active = false, arrow = false }) => (
+    createElement((active || arrow) ? 'span' : 'a', {
+        props: {
+            className: getClassName(
+                'paginator-item',
+                (active) ? 'paginator-item__active' : '',
+                (arrow) ? 'paginator-arrow' : '',
+            ),
+            textContent: (page && !arrow) ? page.toString() : '',
+            dataset: (page) ? { page: page.toString() } : {},
+        },
+    })
+);
 
 /**
  * Paginator component demo view
@@ -16,6 +30,8 @@ class PaginatorView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Paginator');
+
         this.initSimple();
         this.initStyled();
         this.initArrows();
@@ -156,10 +172,34 @@ class PaginatorView extends DemoView {
     }
 
     initPrerendered() {
+        const elem = createElement('div', {
+            props: { id: 'prerenderedPaginator', className: 'paginator styled' },
+            children: [
+                createElement('span', {
+                    props: {
+                        className: 'paginator-item paginator-arrow',
+                        disabled: true,
+                    },
+                }),
+                createPageItem({ page: 1, active: true }),
+                createPageItem({ page: 2 }),
+                createPageItem({ page: 3 }),
+                createPageItem({ page: 4 }),
+                createElement('span', {
+                    props: {
+                        className: 'paginator-item',
+                        textContent: '...',
+                    },
+                }),
+                createPageItem({ page: 100 }),
+                createPageItem({ page: 2, arrow: true }),
+            ],
+        });
+
         this.addSection({
             id: 'parse',
             title: 'Parse component',
-            content: Paginator.fromElement(ge('prerenderedPaginator'), {
+            content: Paginator.fromElement(elem, {
                 url: null,
                 breakLimit: 4,
                 onChange: () => { },

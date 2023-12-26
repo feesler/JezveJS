@@ -22,6 +22,8 @@ class HeaderView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Header');
+
         this.initDefault();
     }
 

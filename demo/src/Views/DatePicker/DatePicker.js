@@ -85,6 +85,8 @@ class DatePickerView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('DatePicker');
+
         this.initStatic();
         this.initFixedHeight();
         this.initFillWidth();

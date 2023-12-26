@@ -27,6 +27,8 @@ class PieChartView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('PieChart');
+
         this.initSmall();
         this.initOffset();
         this.initInnerRadius();

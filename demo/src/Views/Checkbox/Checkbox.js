@@ -1,12 +1,16 @@
 import 'jezvejs/style';
-import { createElement, ge } from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
 import { Checkbox } from 'jezvejs/Checkbox';
-import { Icon } from 'jezvejs/Icon';
 import { Radio } from 'jezvejs/Radio';
 
-import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createButtons } from '../../Application/utils.js';
+
+import { CheckIcon } from '../../assets/icons/CheckIcon.js';
+import { SmallCloseIcon } from '../../assets/icons/SmallCloseIcon.js';
+
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import './CheckboxView.scss';
 
 /**
@@ -17,6 +21,8 @@ class CheckboxView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Checkbox and Radio');
+
         this.addSectionsGroup({ title: 'Checkbox' });
         this.initParsed();
         this.initIcon();
@@ -40,14 +46,50 @@ class CheckboxView extends DemoView {
     }
 
     initParsed() {
-        const checkboxes = ['defaultCheckboxNoLabel', 'circleCheckboxLabel'];
+        const checkboxes = [
+            createElement('label', {
+                props: {
+                    id: 'defaultCheckboxNoLabel',
+                    className: 'checkbox',
+                },
+                children: [
+                    createElement('input', { props: { type: 'checkbox', checked: true } }),
+                    createElement('span', {
+                        props: { className: 'checkbox__check' },
+                        children: CheckIcon({ class: 'checkbox__icon' }),
+                    }),
+                ],
+            }),
+            createElement('label', {
+                props: {
+                    id: 'circleCheckboxLabel',
+                    className: 'checkbox',
+                },
+                children: [
+                    createElement('input', { props: { type: 'checkbox', checked: true } }),
+                    createElement('span', {
+                        props: { className: 'checkbox__check' },
+                        children: CheckIcon({ class: 'checkbox__icon' }),
+                    }),
+                    createElement('span', {
+                        props: { className: 'checkbox__label' },
+                        children: createElement('a', {
+                            props: {
+                                href: '#',
+                                textContent: 'Custom label content',
+                            },
+                        }),
+                    }),
+                ],
+            }),
+        ];
 
         this.addSection({
             id: 'checkboxParse',
             title: 'Parse component from DOM',
             content: createElement('div', {
                 children: checkboxes.map((item) => (
-                    Checkbox.fromElement(ge(item), {
+                    Checkbox.fromElement(item, {
                         onChange: (checked) => this.addEventLog(`Checkbox '${item}' changed. checked: ${checked}`),
                     }).elem
                 )),
@@ -61,7 +103,7 @@ class CheckboxView extends DemoView {
             title: 'Custom icon',
             content: Checkbox.create({
                 checked: true,
-                checkIcon: Icon.create({ icon: 'close-icon', className: 'checkbox__icon' }).elem,
+                checkIcon: SmallCloseIcon({ class: 'checkbox__icon' }),
             }).elem,
         });
     }
@@ -141,14 +183,40 @@ class CheckboxView extends DemoView {
 
     initParsedRadio() {
         const ids = [1, 2, 3, 4];
+        const radioName = 'radio1';
+
+        const radios = ids.map((item) => (
+            createElement('label', {
+                props: {
+                    id: `defaultRadio${item}`,
+                    className: 'radio',
+                },
+                children: [
+                    createElement('input', {
+                        props: {
+                            type: 'radio',
+                            name: radioName,
+                            value: item,
+                        },
+                    }),
+                    createElement('span', { props: { className: 'radio__check' } }),
+                    createElement('span', {
+                        props: {
+                            className: 'radio__label',
+                            textContent: `Value ${item}`,
+                        },
+                    }),
+                ],
+            })
+        ));
 
         this.addSection({
             id: 'radioParse',
             title: 'Parse component from DOM',
             content: createElement('form', {
                 props: { className: 'radio-group' },
-                children: ids.map((item) => (
-                    Radio.fromElement(ge(`defaultRadio${item}`), {
+                children: radios.map((item) => (
+                    Radio.fromElement(item, {
                         onChange: (checked) => this.addEventLog(`Parsed Radio ${item} change. checked: ${checked}`),
                     }).elem
                 )),

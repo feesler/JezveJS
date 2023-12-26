@@ -97,3 +97,15 @@ export const hslToRGBTest = async (value, result) => {
         return true;
     });
 };
+
+export const chartGridTest = (grid, value, result) => {
+    test(`ChartGrid.getExp(${formatObject(value)})`, () => {
+        const funcResult = grid.getExp(value);
+
+        const expected = formatObject(result);
+        const res = formatObject(funcResult);
+        assert.equal(funcResult.exponent, result, `Unexpected result: ${res}. ${expected} is expected.`);
+
+        return true;
+    });
+};

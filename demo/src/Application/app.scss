@@ -169,7 +169,7 @@ section {
 }
 
 @media (min-width: 992px) {
-  main {
+  .page-content-wrap {
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: 4fr 1fr;

@@ -1,8 +1,7 @@
 import 'jezvejs/style';
-import { isObject, asArray } from '@jezvejs/types';
+import { asArray } from '@jezvejs/types';
 import {
     ge,
-    setEvents,
     show,
     enable,
     isVisible,
@@ -13,14 +12,26 @@ import { DropDown } from 'jezvejs/DropDown';
 import { Popup } from 'jezvejs/Popup';
 import { Tags } from 'jezvejs/Tags';
 
+import {
+    createButtons,
+    createControls,
+    createOptGroup,
+    createOption,
+    createOptions,
+    createSelect,
+    getDefaultOptionProps,
+} from '../../Application/utils.js';
+
+// Common components
 import { DemoView } from '../../Components/DemoView/DemoView.js';
-import { createButtons, createControls } from '../../Application/utils.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
+// Local components
 import { BlueBox } from './components/BlueBox/BlueBox.js';
 import { CustomListItem } from './components/CustomListItem/CustomListItem.js';
 import { CustomSelectionItem } from './components/CustomSelectionItem/CustomSelectionItem.js';
 import { CollapsibleGroupsSelect } from './components/CollapsibleGroups/CollapsibleGroupsSelect.js';
+
 import './DropDownView.scss';
 
 const initItems = (title, count, startFrom = 1) => {
@@ -41,23 +52,9 @@ const toggleEnable = (e, dropDown) => {
     button.textContent = (dropDown.disabled) ? 'Enable' : 'Disable';
 };
 
-const formatObject = (value) => {
-    let entries;
-
-    if (Array.isArray(value)) {
-        entries = value.map((entry) => formatObject(entry));
-
-        return `[${entries.join(', ')}]`;
-    }
-
-    if (isObject(value)) {
-        entries = Object.keys(value).map((key) => `${key}: ${value[key]}`);
-
-        return `{ ${entries.join(', ')} }`;
-    }
-
-    return value.toString();
-};
+const formatObject = (value) => (
+    JSON.stringify(value) ?? 'undefined'
+);
 
 /**
  * DropDown component demo view
@@ -67,6 +64,8 @@ class DropDownView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('DropDown');
+
         this.inline();
         this.fullWidth();
         this.callbacks();
@@ -214,11 +213,21 @@ class DropDownView extends DemoView {
     }
 
     parseSingleNoSelection() {
+        const selectElem = createSelect({
+            id: 'sel0',
+            getOptionProps: (index) => ({
+                ...getDefaultOptionProps(index),
+                textContent: (index === 2)
+                    ? 'Long item test Lorem ipsum dolor sit amet'
+                    : `Item ${index}`,
+            }),
+        });
+
         this.addSection({
             id: 'parse',
             title: 'Parse select without selection',
             content: DropDown.create({
-                elem: 'sel0',
+                elem: selectElem,
                 className: 'dd_form',
                 placeholder: 'Select item 5',
             }).elem,
@@ -226,11 +235,19 @@ class DropDownView extends DemoView {
     }
 
     parseSingleWithSelection() {
+        const selectElem = createSelect({
+            id: 'sel',
+            getOptionProps: (index) => ({
+                ...getDefaultOptionProps(index),
+                selected: (index === 3),
+            }),
+        });
+
         this.addSection({
             id: 'selected',
             title: 'Parse select with selected option',
             content: DropDown.create({
-                elem: 'sel',
+                elem: selectElem,
                 className: 'dd_form',
                 placeholder: 'Select item 5',
             }).elem,
@@ -239,11 +256,19 @@ class DropDownView extends DemoView {
 
     // Disabled options support
     parseDisabledOptions() {
+        const selectElem = createSelect({
+            id: 'disabledopt',
+            getOptionProps: (index) => ({
+                ...getDefaultOptionProps(index),
+                disabled: (index === 3 || index === 5),
+            }),
+        });
+
         this.addSection({
             id: 'disabledOption',
             title: 'Disabled option',
             content: DropDown.create({
-                elem: 'disabledopt',
+                elem: selectElem,
                 className: 'dd_form',
             }).elem,
         });
@@ -251,11 +276,46 @@ class DropDownView extends DemoView {
 
     // Option groups support
     parseOptGroups() {
+        const selectElem = createSelect({
+            id: 'optgroupssel',
+            content: [
+                createOption(1),
+                createOptGroup({
+                    startFrom: 2,
+                    itemsCount: 2,
+                    getOptionProps: (index) => ({
+                        ...getDefaultOptionProps(index),
+                        disabled: (index === 3),
+                    }),
+                }),
+                createOption(4),
+                createOptGroup({ content: [] }),
+                createOptGroup({
+                    label: 'Correct',
+                    startFrom: 5,
+                    itemsCount: 3,
+                    getOptionProps: (index) => ({
+                        ...getDefaultOptionProps(index),
+                        selected: (index === 5),
+                    }),
+                }),
+                createOption(8),
+                createOptGroup({
+                    label: 'Empty',
+                    content: [],
+                }),
+                ...createOptions({
+                    startFrom: 9,
+                    itemsCount: 3,
+                }),
+            ],
+        });
+
         this.addSection({
             id: 'groups',
             title: 'Option groups',
             content: DropDown.create({
-                elem: 'optgroupssel',
+                elem: selectElem,
                 className: 'dd_form',
             }).elem,
         });
@@ -356,6 +416,8 @@ class DropDownView extends DemoView {
 
     // Clipping test
     clippingTest() {
+        const selectElem = createSelect({ id: 'clipped' });
+
         this.addSection({
             id: 'clipping',
             title: 'Clipping test',
@@ -366,7 +428,7 @@ class DropDownView extends DemoView {
                     props: { className: 'clipper' },
                     children: [
                         DropDown.create({
-                            elem: 'clipped',
+                            elem: selectElem,
                             static: true,
                         }).elem,
                         DropDown.create({
@@ -382,8 +444,17 @@ class DropDownView extends DemoView {
     parseMultipleSelect() {
         const logsField = LogsField.create();
 
+        const selectElem = createSelect({
+            id: 'selinp5',
+            multiple: true,
+            getOptionProps: (index) => ({
+                ...getDefaultOptionProps(index),
+                selected: (index > 0 && index < 4),
+            }),
+        });
+
         const dropDown = DropDown.create({
-            elem: 'selinp5',
+            elem: selectElem,
             className: 'dd_stretch',
             placeholder: 'Multi select control',
             onItemSelect(selection) {
@@ -443,8 +514,17 @@ class DropDownView extends DemoView {
 
     // Disabled single select drop down
     parseDisabledSingleSelect() {
+        const selectElem = createSelect({
+            id: 'selinp7single',
+            disabled: true,
+            getOptionProps: (index) => ({
+                ...getDefaultOptionProps(index),
+                selected: (index === 3),
+            }),
+        });
+
         const dropDown = DropDown.create({
-            elem: 'selinp7single',
+            elem: selectElem,
             className: 'dd_stretch',
             disabled: true,
             placeholder: 'Multi select control',
@@ -467,8 +547,18 @@ class DropDownView extends DemoView {
 
     // Disabled multiple select drop down
     parseDisabledMultiSelect() {
+        const selectElem = createSelect({
+            id: 'selinp7',
+            disabled: true,
+            multiple: true,
+            getOptionProps: (index) => ({
+                ...getDefaultOptionProps(index),
+                selected: (index === 3),
+            }),
+        });
+
         const dropDown = DropDown.create({
-            elem: 'selinp7',
+            elem: selectElem,
             className: 'dd_stretch',
             disabled: true,
             placeholder: 'Multi select control',
@@ -796,8 +886,18 @@ class DropDownView extends DemoView {
     customRender() {
         const logsField = LogsField.create();
 
+        const selectElem = createSelect({
+            id: 'selinp10',
+            itemsCount: 11,
+            multiple: true,
+            getOptionProps: (index) => ({
+                ...getDefaultOptionProps(index),
+                selected: (index === 4 || index === 5),
+            }),
+        });
+
         const dropDown = DropDown.create({
-            elem: 'selinp10',
+            elem: selectElem,
             className: 'dd__custom dd_stretch',
             placeholder: 'Multi select control',
             multiple: true,
@@ -877,7 +977,7 @@ class DropDownView extends DemoView {
             id: 'useNativeSelect',
             title: 'Parse with useNativeSelect option',
             content: DropDown.create({
-                elem: 'selinp11single',
+                elem: createSelect({ id: 'selinp11single' }),
                 placeholder: 'Use native select',
                 className: 'dd_form',
                 useNativeSelect: true,
@@ -904,7 +1004,7 @@ class DropDownView extends DemoView {
             id: 'useNativeMultiple',
             title: 'useNativeSelect option with multiple select',
             content: DropDown.create({
-                elem: 'selinp11',
+                elem: createSelect({ id: 'selinp11', multiple: true }),
                 placeholder: 'Use native select',
                 className: 'dd_form',
                 useNativeSelect: true,
@@ -917,7 +1017,7 @@ class DropDownView extends DemoView {
             id: 'fullScreen',
             title: 'fullScreen option',
             content: DropDown.create({
-                elem: 'selinp12',
+                elem: createSelect({ id: 'selinp12', multiple: true, itemsCount: 15 }),
                 placeholder: 'Full screen',
                 className: 'dd_form',
                 fullScreen: true,
@@ -953,7 +1053,6 @@ class DropDownView extends DemoView {
         const controls = createButtons([{
             id: 'addBtn',
             title: 'Add item',
-            className: 'action-btn',
             onClick: () => {
                 const itemId = dropDown.items.length + 1;
                 dropDown.addItem({
@@ -964,7 +1063,6 @@ class DropDownView extends DemoView {
         }, {
             id: 'addDisBtn',
             title: 'Add disabled item',
-            className: 'action-btn',
             onClick: () => {
                 const itemId = dropDown.items.length + 1;
                 dropDown.addItem({
@@ -976,7 +1074,6 @@ class DropDownView extends DemoView {
         }, {
             id: 'addHiddenBtn',
             title: 'Add hidden item',
-            className: 'action-btn',
             onClick: () => {
                 const itemId = dropDown.items.length + 1;
                 dropDown.addItem({
@@ -989,7 +1086,6 @@ class DropDownView extends DemoView {
         }, {
             id: 'delBtn',
             title: 'Remove last item',
-            className: 'action-btn',
             onClick: () => {
                 const itemsCount = dropDown.items.length;
                 if (!itemsCount) {
@@ -1002,7 +1098,6 @@ class DropDownView extends DemoView {
         }, {
             id: 'delAllBtn',
             title: 'Remove all items',
-            className: 'action-btn',
             onClick: () => dropDown.removeAll(),
         }]);
 
@@ -1064,20 +1159,81 @@ class DropDownView extends DemoView {
             : 'Scroll inside content';
     }
 
-    createPopup() {
-        if (this.popup) {
-            return;
-        }
-
+    createPopupContent() {
         const dropDown = DropDown.create({
             enableFilter: true,
             placeholder: 'Select item',
             className: 'dd_form',
             data: initItems('Popup item', 50),
         });
-        ge('popupDropDownContainer').append(dropDown.elem);
 
-        const popupContent = ge('popupContent');
+        const scrollContainer = createElement('div', {
+            props: { className: 'popup-scroll-container' },
+            children: [
+                createElement('div', {
+                    props: {
+                        id: 'topPlaceholder',
+                        className: 'popup-scroll-placeholder',
+                        textContent: 'Scroll',
+                    },
+                }),
+                createElement('div', {
+                    props: { id: 'popupDropDownContainer' },
+                    children: dropDown.elem,
+                }),
+                createElement('div', {
+                    props: {
+                        id: 'bottomPlaceholder',
+                        className: 'popup-scroll-placeholder',
+                        textContent: 'Scroll',
+                    },
+                    attrs: { hidden: '' },
+                }),
+            ],
+        });
+
+        const controls = createButtons([{
+            title: 'Top',
+            onClick: () => this.onPopupAction('top'),
+        }, {
+            title: 'Center',
+            onClick: () => this.onPopupAction('center'),
+        }, {
+            title: 'Bottom',
+            onClick: () => this.onPopupAction('bottom'),
+        }, {
+            id: 'scrollPopupMessageBtn',
+            title: 'Scroll only content',
+            onClick: () => this.onPopupAction('scroll'),
+        }, {
+            id: 'popupSizeBtn',
+            title: 'Scroll inside content',
+            onClick: () => this.onPopupAction('size'),
+        }, {
+            id: 'togglePlaceholderBtn',
+            title: 'Show bottom placeholder',
+            onClick: () => this.onPopupAction('placeholder'),
+        }, {
+            title: 'Change relative parent',
+            onClick: () => this.onPopupAction('relparent'),
+        }]);
+
+        return createElement('div', {
+            props: { id: 'popupContent' },
+            children: [
+                scrollContainer,
+                controls,
+            ],
+        });
+    }
+
+    createPopup() {
+        if (this.popup) {
+            return;
+        }
+
+        const popupContent = this.createPopupContent();
+
         this.popup = Popup.create({
             id: 'dropDownPopup',
             title: 'Popup',
@@ -1085,10 +1241,6 @@ class DropDownView extends DemoView {
             closeButton: true,
         });
         show(popupContent, true);
-
-        setEvents(ge('popupControls'), {
-            click: (e) => this.onPopupAction(e?.target?.dataset?.action),
-        });
     }
 
     showPopup() {
@@ -1105,7 +1257,6 @@ class DropDownView extends DemoView {
             content: createButtons({
                 id: 'popupBtn',
                 title: 'Show popup',
-                className: 'action-btn',
                 onClick: () => this.showPopup(),
             }),
         });

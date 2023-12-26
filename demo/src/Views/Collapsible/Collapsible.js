@@ -1,14 +1,16 @@
 import 'jezvejs/style';
-import {
-    ge,
-    setEvents,
-    createElement,
-} from '@jezvejs/dom';
+import { setEvents, createElement } from '@jezvejs/dom';
 import { Collapsible } from 'jezvejs/Collapsible';
 import { Icon } from 'jezvejs/Icon';
 
+// Icons
+import { DeleteIcon } from '../../assets/icons/DeleteIcon.js';
+import { ToggleIcon } from '../../assets/icons/ToggleIcon.js';
+import { UpdateIcon } from '../../assets/icons/UpdateIcon.js';
+
+import { createButtons, createListContent } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
-import { createButtons } from '../../Application/utils.js';
+
 import './CollapsibleView.scss';
 
 const CUSTOM_BTN_CLASS = 'custom-header-btn';
@@ -38,6 +40,8 @@ class CollapsibleView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Collapsible');
+
         this.initSimple();
         this.initStyled();
         this.initAnimated();
@@ -61,8 +65,10 @@ class CollapsibleView extends DemoView {
     }
 
     initStyled() {
+        const styledContent = createListContent({ id: 'styledContent' });
+
         const collapse = Collapsible.create({
-            content: createContent(ge('styledContent')),
+            content: createContent(styledContent),
             className: 'styled',
             onStateChange: (expanded) => collapse.setHeader(expanded ? 'Hide' : 'Show'),
         });
@@ -75,8 +81,7 @@ class CollapsibleView extends DemoView {
     }
 
     initAnimated() {
-        const content = ge('styledContent').cloneNode(true);
-        content.id = 'animatedContent';
+        const content = createListContent({ id: 'animatedContent' });
 
         const collapse = Collapsible.create({
             content: createContent(content),
@@ -99,8 +104,8 @@ class CollapsibleView extends DemoView {
                 textContent: 'Hover/focus to see controls',
             },
         });
-        const updateBtn = createButton('update');
-        const delBtn = createButton('del');
+        const updateBtn = createButton(UpdateIcon());
+        const delBtn = createButton(DeleteIcon());
 
         const collapse = Collapsible.create({
             header: [titleContainer, updateBtn, delBtn],
@@ -129,7 +134,7 @@ class CollapsibleView extends DemoView {
         });
         const toggleBtn = createElement('button', {
             props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
-            children: Icon.create({ icon: 'toggle-ext', className: CUSTOM_ICON_CLASS }).elem,
+            children: ToggleIcon({ class: CUSTOM_ICON_CLASS }),
         });
 
         const collapse = Collapsible.create({

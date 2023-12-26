@@ -39,3 +39,106 @@ export const generateId = () => {
         }
     }
 };
+
+export const createListContent = ({ itemsCount = 5, ...props } = {}) => (
+    createElement('ul', {
+        props,
+        children: Array(itemsCount).fill(0).map((_, index) => (
+            createElement('li', { props: { textContent: `Item ${index}` } })
+        )),
+    })
+);
+
+export const getDefaultOptionProps = (index) => ({
+    value: index.toString(),
+    textContent: `Item ${index}`,
+    selected: false,
+    disabled: false,
+});
+
+export const createOption = (index, options = {}) => {
+    const {
+        getOptionProps = getDefaultOptionProps,
+    } = options;
+    const {
+        disabled = false,
+        attrs = {},
+        events = {},
+        ...props
+    } = getOptionProps(index);
+
+    if (disabled) {
+        attrs.disabled = '';
+    }
+
+    return createElement('option', { props, attrs, events });
+};
+
+export const createOptions = (options = {}) => {
+    const {
+        startFrom = 1,
+        itemsCount = 5,
+        getOptionProps = getDefaultOptionProps,
+    } = options;
+
+    const res = [];
+
+    for (let ind = startFrom; ind < startFrom + itemsCount; ind += 1) {
+        const option = createOption(ind, { getOptionProps });
+        res.push(option);
+    }
+
+    return res;
+};
+
+export const createSelect = (options = {}) => {
+    const {
+        content = null,
+        disabled = false,
+        startFrom = 1,
+        itemsCount = 5,
+        getOptionProps = getDefaultOptionProps,
+        attrs = {},
+        events = {},
+        ...props
+    } = options;
+
+    if (disabled) {
+        attrs.disabled = '';
+    }
+
+    const contentProps = { startFrom, itemsCount, getOptionProps };
+
+    return createElement('select', {
+        props,
+        attrs,
+        events,
+        children: content ?? createOptions(contentProps),
+    });
+};
+
+export const createOptGroup = (options = {}) => {
+    const {
+        content = null,
+        disabled = false,
+        startFrom = 1,
+        itemsCount = 5,
+        getOptionProps = getDefaultOptionProps,
+        attrs = {},
+        events = {},
+        ...props
+    } = options;
+
+    if (disabled) {
+        attrs.disabled = '';
+    }
+
+    const contentProps = { startFrom, itemsCount, getOptionProps };
+
+    return createElement('optgroup', {
+        props,
+        attrs,
+        events,
+        children: content ?? createOptions(contentProps),
+    });
+};

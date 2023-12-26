@@ -32,6 +32,8 @@ class RangeSliderView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('RangeSlider');
+
         this.initDefault();
         this.initYAxis();
         this.initStyled();

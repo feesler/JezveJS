@@ -66,11 +66,6 @@ export default {
         assetModuleFilename: 'assets/[name][ext]',
         path: resolve(currentDir, '../dist'),
         clean: true,
-        library: {
-            name: 'jezvejs',
-            type: 'umd',
-            umdNamedDefine: true,
-        },
     },
     module: {
         rules: [
@@ -109,7 +104,8 @@ export default {
     },
     plugins: [
         ...entryPoints.map((name) => (new HtmlWebpackPlugin({
-            template: `./Views/${name}/${name.toLowerCase()}.html`,
+            title: name,
+            template: './Components/DemoView/template.html',
             filename: `${name.toLowerCase()}.html`,
             chunks: ['polyfills', name],
             ...htmlCommonOptions,

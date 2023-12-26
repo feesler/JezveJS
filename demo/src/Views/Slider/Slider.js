@@ -44,6 +44,8 @@ class SliderView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Slider');
+
         this.initDefaultSlider();
         this.initVerticalSlider();
         this.initMouseSlider();

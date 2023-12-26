@@ -2,6 +2,11 @@ import 'jezvejs/style';
 import { Button } from 'jezvejs/Button';
 import { LinkMenu } from 'jezvejs/LinkMenu';
 
+// Icons
+import { DeleteIcon } from '../../assets/icons/DeleteIcon.js';
+import { PlusIcon } from '../../assets/icons/PlusIcon.js';
+import { UpdateIcon } from '../../assets/icons/UpdateIcon.js';
+
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 
@@ -15,6 +20,8 @@ class LinkMenuView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('LinkMenu');
+
         this.initDynamicSingle();
         this.initDynamicMultiple();
         this.initButtonsType();
@@ -34,9 +41,9 @@ class LinkMenuView extends DemoView {
                     useURLParam: true,
                     preventNavigation: true,
                     items: [
-                        { icon: 'plus', title: 'Create', id: 'create' },
-                        { icon: 'update', title: 'Update', id: 'update' },
-                        { icon: 'del', title: 'Delete', id: 'delete' },
+                        { icon: PlusIcon(), title: 'Create', id: 'create' },
+                        { icon: UpdateIcon(), title: 'Update', id: 'update' },
+                        { icon: DeleteIcon(), title: 'Delete', id: 'delete' },
                     ],
                 }).elem,
             ),

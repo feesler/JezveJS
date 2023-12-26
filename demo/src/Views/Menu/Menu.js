@@ -1,8 +1,12 @@
 import 'jezvejs/style';
 import { Menu } from 'jezvejs/Menu';
 
-import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer } from '../../Application/utils.js';
+
+import { SearchIcon } from '../../assets/icons/SearchIcon.js';
+import { SelectIcon } from '../../assets/icons/SelectIcon.js';
+
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 import { CheckboxGroupsMenu } from './components/CheckboxGroups/CheckboxGroupsMenu.js';
@@ -12,9 +16,9 @@ import { CustomMenuFooter } from './components/CustomFooter/CustomMenuFooter.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/LoadingPlaceholder.js';
 import './MenuView.scss';
 
-const defaultItems = [{
+const getDefaultItems = () => ([{
     id: 'selectBtnItem',
-    icon: 'select',
+    icon: SelectIcon(),
     title: 'Button item',
 }, {
     id: 'separator1',
@@ -23,7 +27,7 @@ const defaultItems = [{
     id: 'linkItem',
     type: 'link',
     title: 'Link item',
-    icon: 'search',
+    icon: SearchIcon(),
     url: '#123',
 }, {
     id: 'noIconItem',
@@ -33,7 +37,7 @@ const defaultItems = [{
     type: 'checkbox',
     title: 'Checkbox item',
     selected: true,
-}];
+}]);
 
 const horizontalItems = [{
     id: 'selectBtnItem',
@@ -102,6 +106,8 @@ class MenuView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Menu');
+
         this.initDefault();
         this.initHorizontal();
         this.initIconsAlign();
@@ -119,7 +125,7 @@ class MenuView extends DemoView {
     initDefault() {
         const logsField = LogsField.create();
 
-        const items = structuredClone(defaultItems);
+        const items = getDefaultItems();
         items[0].onClick = () => logsField.write('Button item clicked');
 
         const menu = Menu.create({
@@ -155,7 +161,7 @@ class MenuView extends DemoView {
     }
 
     initIconsAlign() {
-        const items = structuredClone(defaultItems);
+        const items = getDefaultItems();
         items[2].iconAlign = 'left';
 
         this.addSection({
@@ -174,7 +180,7 @@ class MenuView extends DemoView {
     }
 
     initCheckboxAlign() {
-        const items = structuredClone(defaultItems);
+        const items = getDefaultItems();
         items.push({
             id: 'leftCheckboxItem',
             type: 'checkbox',
@@ -356,7 +362,7 @@ class MenuView extends DemoView {
     initDisabledItem() {
         const logsField = LogsField.create();
 
-        const items = structuredClone(defaultItems);
+        const items = getDefaultItems();
         items[2].disabled = true;
 
         const menu = Menu.create({

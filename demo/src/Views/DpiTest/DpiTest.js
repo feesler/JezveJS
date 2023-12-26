@@ -1,19 +1,46 @@
 import 'jezvejs/style';
-import { ge, getRealDPI } from '@jezvejs/dom';
+import { createElement, getClassName, getRealDPI } from '@jezvejs/dom';
 
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './DpiTestView.scss';
 
+/**
+ * getRealDPI() function demo view
+ */
 class DpiTestView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
-        const realDPI = getRealDPI();
-        const testpic = ge('testpic');
+        this.setMainHeading('DPI test');
 
-        testpic.classList.add((realDPI > 1) ? 'pic-double' : 'pic-single');
-        ge('status').textContent = `Real DPI: ${realDPI}`;
+        this.initDefault();
+    }
+
+    initDefault() {
+        const realDPI = getRealDPI();
+
+        this.addSection({
+            id: 'default',
+            title: 'Default settings',
+            content: [
+                createElement('div', {
+                    props: {
+                        id: 'testpic',
+                        className: getClassName(
+                            'pic',
+                            (realDPI > 1) ? 'pic-double' : 'pic-single',
+                        ),
+                    },
+                }),
+                createElement('div', {
+                    props: {
+                        id: 'status',
+                        textContent: `Real DPI: ${realDPI}`,
+                    },
+                }),
+            ],
+        });
     }
 }
 

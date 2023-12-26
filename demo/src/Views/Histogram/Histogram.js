@@ -127,6 +127,8 @@ class HistogramView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Histogram');
+
         this.columnWidthAndGap();
         this.fitToWidth();
         this.maxColumnWidth();

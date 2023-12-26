@@ -16,6 +16,8 @@ class InputView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Input');
+
         this.initDefault();
         this.initPlaceholder();
         this.initFullWidth();

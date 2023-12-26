@@ -1,19 +1,33 @@
 import 'jezvejs/style';
-import { createElement, ge } from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
 import { CloseButton } from 'jezvejs/CloseButton';
 import { Button } from 'jezvejs/Button';
 import { Icon } from 'jezvejs/Icon';
 
-import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createControls } from '../../Application/utils.js';
+
+// Icons
+import { PlusIcon } from '../../assets/icons/PlusIcon.js';
+import { UpdateIcon } from '../../assets/icons/UpdateIcon.js';
+import { DeleteIcon } from '../../assets/icons/DeleteIcon.js';
+import { CalendarIcon } from '../../assets/icons/CalendarIcon.js';
+
+// Common components
+import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
+
 import './ButtonView.scss';
 
+/**
+ * Button component demo view
+ */
 class ButtonView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
+        this.setMainHeading('Button');
+
         this.initParsed();
         this.initDynamicButton();
         this.initDynamicLink();
@@ -31,12 +45,68 @@ class ButtonView extends DemoView {
     }
 
     initParsed() {
-        const inputBtn = Button.fromElement(ge('inputBtn'));
+        // Parse INPUT element
+        const inputElem = createElement('input', {
+            props: {
+                id: 'inputBtn',
+                className: 'btn',
+                type: 'button',
+                value: 'Input',
+            },
+        });
+
+        const inputBtn = Button.fromElement(inputElem);
         inputBtn.setTitle('Input button');
 
-        const createBtn = Button.fromElement(ge('createBtn'));
-        const updateBtn = Button.fromElement(ge('updateBtn'));
-        const deleteBtn = Button.fromElement(ge('deleteBtn'));
+        // Parse BUTTON element
+        const createBtnElem = createElement('button', {
+            props: {
+                id: 'createBtn',
+                className: 'btn',
+                type: 'button',
+            },
+            children: [
+                PlusIcon({ class: 'btn__icon' }),
+                createElement('span', {
+                    props: {
+                        className: 'btn__content',
+                        textContent: 'Create',
+                    },
+                }),
+            ],
+        });
+        const createBtn = Button.fromElement(createBtnElem);
+
+        // Check icon update after parse
+        const updateBtnElem = createElement('button', {
+            props: {
+                id: 'updateBtn',
+                className: 'btn',
+                type: 'button',
+                textContent: 'Update',
+            },
+        });
+        const updateBtn = Button.fromElement(updateBtnElem);
+        updateBtn.setIcon(UpdateIcon());
+
+        // Parse DIV element
+        const deleteBtnElem = createElement('button', {
+            props: {
+                id: 'deleteBtn',
+                className: 'btn',
+                type: 'button',
+            },
+            children: [
+                DeleteIcon({ class: 'btn__icon' }),
+                createElement('span', {
+                    props: {
+                        className: 'btn__content',
+                        textContent: 'Delete',
+                    },
+                }),
+            ],
+        });
+        const deleteBtn = Button.fromElement(deleteBtnElem);
 
         const container = createElement('div', {
             props: { className: 'buttons-list' },
@@ -61,14 +131,14 @@ class ButtonView extends DemoView {
         const dynamicBtn = Button.create({
             title: 'Icon button',
             tooltip: 'Custom tooltip',
-            icon: 'update',
+            icon: UpdateIcon(),
             className: 'circle-icon',
             onClick: () => logsField?.write('Update button clicked'),
         });
 
         const noTitleBtn = Button.create({
             type: 'submit',
-            icon: 'del',
+            icon: DeleteIcon(),
             tooltip: 'No title button',
             className: 'circle-icon',
             onClick: () => logsField?.write('Del button clicked'),
@@ -90,7 +160,7 @@ class ButtonView extends DemoView {
         const btn = Button.create({
             type: 'link',
             title: 'Icon link',
-            icon: 'del',
+            icon: DeleteIcon(),
         });
 
         this.addSection({
@@ -104,7 +174,7 @@ class ButtonView extends DemoView {
         const btn = Button.create({
             type: 'static',
             title: 'Static button',
-            icon: 'del',
+            icon: DeleteIcon(),
         });
 
         this.addSection({
@@ -129,7 +199,7 @@ class ButtonView extends DemoView {
 
     initIconAlign() {
         const btn = Button.create({
-            icon: 'del',
+            icon: DeleteIcon(),
             iconAlign: 'right',
             title: 'Border',
             className: 'btn-border',
@@ -145,7 +215,7 @@ class ButtonView extends DemoView {
 
     initCustomContent() {
         const icon = Icon.create({
-            icon: 'del',
+            icon: DeleteIcon(),
             className: 'btn__icon',
         });
         const btn = Button.create({
@@ -162,7 +232,7 @@ class ButtonView extends DemoView {
     initBackground() {
         const btn = Button.create({
             title: 'Button title',
-            icon: 'calendar-icon',
+            icon: CalendarIcon(),
             className: 'bg-btn',
         });
 
@@ -176,7 +246,7 @@ class ButtonView extends DemoView {
     initFullWidth() {
         const btn = Button.create({
             title: 'Button title',
-            icon: 'calendar-icon',
+            icon: CalendarIcon(),
             className: 'bg-btn',
         });
 
@@ -210,7 +280,7 @@ class ButtonView extends DemoView {
 
     initNoTitle() {
         const btn = Button.create({
-            icon: 'calendar-icon',
+            icon: CalendarIcon(),
         });
 
         const container = createElement('div', {
@@ -244,7 +314,7 @@ class ButtonView extends DemoView {
 
     initDisabled() {
         const btnTitle = 'Disabled button';
-        const btnIcon = 'plus';
+        const btnIcon = PlusIcon();
 
         const disabledBtn = Button.create({
             title: btnTitle,
@@ -255,7 +325,7 @@ class ButtonView extends DemoView {
             type: 'link',
             url: '#',
             title: 'Disabled link',
-            icon: 'update',
+            icon: UpdateIcon(),
             enabled: false,
         });
 
@@ -286,7 +356,7 @@ class ButtonView extends DemoView {
         });
 
         const toggleIconBtn = Button.create({
-            title: 'Remove link',
+            title: 'Remove icon',
             className: 'action-btn',
             onClick: () => {
                 const { icon } = disabledBtn.state;

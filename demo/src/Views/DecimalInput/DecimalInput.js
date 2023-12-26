@@ -8,13 +8,15 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createControls } from '../../Application/utils.js';
 
 /**
- * DatePicker component demo view
+ * DecimalInput component demo view
  */
 class DecimalInputView extends DemoView {
     /**
      * View initialization
      */
     onStart() {
+        this.setMainHeading('DecimalInput');
+
         this.initDefault();
         this.initDigitsLimit();
         this.initMinMax();

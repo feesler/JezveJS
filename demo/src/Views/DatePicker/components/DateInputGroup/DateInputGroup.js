@@ -3,6 +3,8 @@ import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 import { InputGroup } from 'jezvejs/InputGroup';
 
+import { CalendarIcon } from '../../../../assets/icons/CalendarIcon.js';
+
 import './DateInputGroup.scss';
 
 const DATE_INPUT_GROUP_CLASS = 'date-input-group';
@@ -40,7 +42,7 @@ export class DateInputGroup extends InputGroup {
                 Button.create({
                     id: userProps.buttonId,
                     className: 'input-group__btn',
-                    icon: 'calendar-icon',
+                    icon: CalendarIcon(),
                     onClick: (e) => userProps.onButtonClick?.(e),
                 }).elem,
             ],

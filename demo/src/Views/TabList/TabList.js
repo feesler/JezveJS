@@ -67,6 +67,8 @@ class TabListView extends DemoView {
      * View initialization
      */
     onStart() {
+        this.setMainHeading('TabList');
+
         this.initDefault();
         this.initStyled();
         this.initItemParam();
