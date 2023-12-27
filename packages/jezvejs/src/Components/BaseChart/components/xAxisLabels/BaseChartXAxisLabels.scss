@@ -1,4 +1,13 @@
 /* Chart x-axis labels */
+.chart-x-axis-labels {
+  position: relative;
+  height: 1.5rem;
+}
+
+.chart-x-axis-labels_top {
+  order: -1;
+}
+
 .chart__text.chart-x-axis__label {
   --chart-x-axis-font-family: "Segoe UI", sans-serif;
   --chart-x-axis-font-size: var(--chart-text-size);
@@ -11,4 +20,6 @@
   font-weight: var(--chart-x-axis-font-weight);
   text-anchor: var(--chart-x-axis-text-anchor);
   fill: var(--chart-x-axis-text-color);
+  position: absolute;
+  white-space: nowrap;
 }

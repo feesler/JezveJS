@@ -96,9 +96,6 @@ export class BaseChartYAxisLabels extends Component {
         const formatFunction = this.getLabelRenderer(state);
 
         let curY = grid.yFirst;
-        if (state.xAxis === 'top') {
-            curY += state.hLabelsHeight;
-        }
         const firstY = curY;
         let lastY = curY;
 

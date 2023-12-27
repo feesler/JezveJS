@@ -1,9 +1,14 @@
 import { isFunction } from '@jezvejs/types';
-import { createSVGElement, setAttributes } from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
+
 import { Component } from '../../../../Component.js';
+import { px } from '../../../../common.js';
+
 import './BaseChartXAxisLabels.scss';
 
 /* CSS classes */
+const CONTAINER_CLASS = 'chart-x-axis-labels';
+const TOP_PLACEMENT_CLASS = 'chart-x-axis-labels_top';
 const LABEL_CLASS = 'chart__text chart-x-axis__label';
 
 const availablePositions = ['bottom', 'top', 'none'];
@@ -57,7 +62,9 @@ export class BaseChartXAxisLabels extends Component {
     }
 
     init() {
-        this.elem = createSVGElement('g');
+        this.elem = createElement('div', {
+            props: { className: CONTAINER_CLASS },
+        });
     }
 
     isHorizontalScaleNeeded(state, prevState) {
@@ -102,14 +109,13 @@ export class BaseChartXAxisLabels extends Component {
         }
 
         const dyOffset = 5.5;
-        const lblY = (xAxis === 'top')
-            ? (state.hLabelsHeight / 2)
-            : (state.height - (state.hLabelsHeight / 2));
 
         const groupOuterWidth = this.getGroupOuterWidth(state);
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
         const formatFunction = this.getLabelRenderer(state);
+
+        this.elem.classList.toggle(TOP_PLACEMENT_CLASS, (xAxis === 'top'));
 
         const labels = [];
         for (let i = 0; i < visibleGroups; i += 1) {
@@ -133,8 +139,8 @@ export class BaseChartXAxisLabels extends Component {
                     groupIndex,
                     value,
                     formattedValue: formatFunction(value),
-                    elem: createSVGElement('text', {
-                        attrs: { class: LABEL_CLASS },
+                    elem: createElement('span', {
+                        props: { className: LABEL_CLASS },
                     }),
                 };
 
@@ -142,10 +148,8 @@ export class BaseChartXAxisLabels extends Component {
                 this.elem.append(label.elem);
             }
 
-            setAttributes(label.elem, {
-                x: groupIndex * groupOuterWidth,
-                y: lblY + dyOffset,
-            });
+            label.elem.style.left = px(groupIndex * groupOuterWidth);
+            label.elem.style.top = px(dyOffset);
 
             labels.push(label);
         }
@@ -164,7 +168,7 @@ export class BaseChartXAxisLabels extends Component {
         for (let ind = 0; ind < labels.length; ind += 1) {
             const index = (toLeft) ? (labels.length - ind - 1) : ind;
             const label = labels[index];
-            const labelRect = label.elem.getBBox();
+            const labelRect = label.elem.getBoundingClientRect();
             const currentOffset = Math.ceil(labelRect.x + labelRect.width);
 
             const overflow = (toLeft)

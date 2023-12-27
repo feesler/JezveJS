@@ -145,7 +145,10 @@ export class BaseChart extends Component {
 
     /** Initialization of chart */
     init() {
-        this.chart = createElement('div');
+        this.chart = createElement('div', {
+            props: { className: CHART_CLASS },
+        });
+
         this.chartScroller = createElement('div', {
             props: { className: SCROLLER_CLASS },
             children: this.chart,
@@ -172,11 +175,8 @@ export class BaseChart extends Component {
             children: this.chartContainer,
         });
 
-        const { height, marginTop, xAxis } = this.state;
+        const { height, marginTop } = this.state;
         this.state.chartHeight = height - marginTop;
-        if (xAxis === 'top' || xAxis === 'bottom') {
-            this.state.chartHeight -= this.state.hLabelsHeight;
-        }
 
         // Create main chart content
         const events = {
@@ -812,7 +812,7 @@ export class BaseChart extends Component {
         let newState = this.updateColumnWidth(this.state);
 
         // Update width of x axis labels
-        const labelsBox = this.xAxisLabels?.elem?.getBBox();
+        const labelsBox = this.xAxisLabels?.elem?.getBoundingClientRect();
         newState.lastHLabelOffset = (labelsBox && !newState.fitToWidth)
             ? Math.round(labelsBox.x + labelsBox.width)
             : 0;
@@ -993,7 +993,7 @@ export class BaseChart extends Component {
                 getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
                 onResize: (...args) => this.onResize(...args),
             });
-            this.content.append(this.xAxisLabels.elem);
+            this.chart.append(this.xAxisLabels.elem);
         } else {
             this.xAxisLabels.setState((labelsState) => ({
                 ...labelsState,

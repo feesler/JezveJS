@@ -69,7 +69,7 @@ export class BaseChartGrid extends Component {
     }
 
     renderYAxisGrid(state) {
-        const { grid, xAxis } = state;
+        const { grid } = state;
 
         if (!grid?.steps || !state.yAxisGrid) {
             this.yAxisGridGroup?.remove();
@@ -83,9 +83,6 @@ export class BaseChartGrid extends Component {
         const yAxisGridLines = [];
         let step = 0;
         let curY = grid.yFirst;
-        if (xAxis === 'top') {
-            curY += state.hLabelsHeight;
-        }
 
         while (step <= grid.steps) {
             let rY = Math.round(curY);
