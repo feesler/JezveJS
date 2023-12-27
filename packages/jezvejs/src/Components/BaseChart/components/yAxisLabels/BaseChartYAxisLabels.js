@@ -1,6 +1,9 @@
 import { isFunction } from '@jezvejs/types';
-import { createElement, createSVGElement, setAttributes } from '@jezvejs/dom';
+import { createElement } from '@jezvejs/dom';
+
 import { Component } from '../../../../Component.js';
+import { px } from '../../../../common.js';
+
 import './BaseChartYAxisLabels.scss';
 
 /* CSS classes */
@@ -10,10 +13,6 @@ const LEFT_POSITION_CLASS = 'chart-y-axis-labels_left';
 const RIGHT_ALIGN_CLASS = 'chart-y-axis-labels_right-align';
 const CENTER_ALIGN_CLASS = 'chart-y-axis-labels_center-align';
 const LABEL_CLASS = 'chart__text chart-y-axis-labels__label';
-
-const WIDTH_PADDING = 10;
-const X_OFFSET = 5;
-const Y_OFFSET = 5.5;
 
 const availablePositions = ['right', 'left', 'none'];
 const availableAlign = ['right', 'left', 'center'];
@@ -36,7 +35,6 @@ export class BaseChartYAxisLabels extends Component {
         });
 
         this.labels = [];
-        this.labelsGroup = null;
 
         this.state = {
             ...this.props,
@@ -47,11 +45,8 @@ export class BaseChartYAxisLabels extends Component {
     }
 
     init() {
-        this.container = createSVGElement('svg', {
-            attrs: {
-                class: CONTENT_CLASS,
-                width: WIDTH_PADDING,
-            },
+        this.container = createElement('div', {
+            props: { className: CONTENT_CLASS },
         });
 
         this.elem = createElement('div', {
@@ -92,10 +87,9 @@ export class BaseChartYAxisLabels extends Component {
         this.elem.classList.toggle(RIGHT_ALIGN_CLASS, isRightAlign);
         this.elem.classList.toggle(CENTER_ALIGN_CLASS, isCenterAlign);
 
-        this.labelsGroup?.remove();
-        this.labelsGroup = null;
         const { grid } = state;
         if (!grid?.steps) {
+            this.container.replaceChildren();
             return;
         }
 
@@ -105,29 +99,31 @@ export class BaseChartYAxisLabels extends Component {
         if (state.xAxis === 'top') {
             curY += state.hLabelsHeight;
         }
+        const firstY = curY;
+        let lastY = curY;
 
         let val = grid.valueFirst;
         let step = 0;
 
         this.labels = [];
-        this.labelsGroup = createSVGElement('g');
+        const elems = [];
 
         while (step <= grid.steps) {
+            lastY = curY;
+
             const isZero = Math.abs(grid.toPrec(val)) === 0;
             const tVal = (isZero) ? 0 : grid.toPrecString(val);
 
             const label = {
-                elem: createSVGElement('text', {
-                    attrs: {
-                        class: LABEL_CLASS,
-                        x: X_OFFSET,
-                        y: Math.round(curY) + Y_OFFSET,
+                elem: createElement('span', {
+                    props: {
+                        className: LABEL_CLASS,
+                        textContent: formatFunction(tVal),
                     },
                 }),
             };
-            label.elem.textContent = formatFunction(tVal);
 
-            this.labelsGroup.append(label.elem);
+            elems.push(label.elem);
             this.labels.push(label);
 
             val -= grid.valueStep;
@@ -135,20 +131,8 @@ export class BaseChartYAxisLabels extends Component {
             step += 1;
         }
 
-        this.container.append(this.labelsGroup);
-
-        const labelRect = this.labelsGroup.getBBox();
-        const labelsWidth = Math.ceil(labelRect.width) + WIDTH_PADDING;
-
-        // Update positions
-        if (isRightAlign || isCenterAlign) {
-            const x = (isRightAlign) ? (labelsWidth - X_OFFSET) : (labelsWidth / 2);
-            for (let ind = 0; ind < this.labels.length; ind += 1) {
-                const label = this.labels[ind];
-                setAttributes(label.elem, { x });
-            }
-        }
-
-        this.container.setAttribute('width', labelsWidth);
+        this.container.replaceChildren(...elems);
+        this.container.style.top = px(firstY);
+        this.container.style.setProperty('--chart-grid-height', px(lastY - firstY));
     }
 }
