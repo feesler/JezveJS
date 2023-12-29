@@ -32,29 +32,13 @@ import { CustomListItem } from './components/CustomListItem/CustomListItem.js';
 import { CustomSelectionItem } from './components/CustomSelectionItem/CustomSelectionItem.js';
 import { CollapsibleGroupsSelect } from './components/CollapsibleGroups/CollapsibleGroupsSelect.js';
 
+import {
+    initItems,
+    toggleEnable,
+    formatObject,
+} from './helpers.js';
+
 import './DropDownView.scss';
-
-const initItems = (title, count, startFrom = 1) => {
-    const res = [];
-
-    for (let ind = startFrom; ind < startFrom + count; ind += 1) {
-        res.push({ id: ind, title: `${title} ${ind}` });
-    }
-
-    return res;
-};
-
-/** Test enable\disable feature */
-const toggleEnable = (e, dropDown) => {
-    const button = e.target;
-
-    dropDown.enable(dropDown.disabled);
-    button.textContent = (dropDown.disabled) ? 'Enable' : 'Disable';
-};
-
-const formatObject = (value) => (
-    JSON.stringify(value) ?? 'undefined'
-);
 
 /**
  * DropDown component demo view

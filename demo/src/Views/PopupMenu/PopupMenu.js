@@ -14,48 +14,12 @@ import { GlyphIcon } from '../../assets/icons/GlyphIcon.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
+import {
+    renderListItem,
+    getDefaultItems,
+} from './helpers.js';
+
 import './PopupMenuView.scss';
-
-const renderListItem = (id) => (
-    createElement('div', {
-        props: {
-            className: 'list-item',
-            dataset: { id },
-        },
-        children: [
-            createElement('span', { props: { textContent: `Item ${id}` } }),
-            MenuButton.create().elem,
-        ],
-    })
-);
-
-const getDefaultItems = (logsField) => ([{
-    id: 'selectBtnItem',
-    icon: SelectIcon(),
-    title: 'Button item',
-    onClick: () => logsField.write('Button item clicked'),
-}, {
-    id: 'linkItem',
-    type: 'link',
-    title: 'Link item',
-    icon: SearchIcon(),
-    url: '#',
-}, {
-    id: 'noIconItem',
-    title: 'No icon item',
-}, {
-    id: 'separator1',
-    type: 'separator',
-}, {
-    id: 'separator2',
-    type: 'separator',
-    hidden: true,
-}, {
-    id: 'checkboxItem',
-    type: 'checkbox',
-    title: 'Checkbox item',
-    onClick: (checked) => logsField.write(`Checkbox item toggled: ${checked}`),
-}]);
 
 /**
  * PopupMenu component demo view

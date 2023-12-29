@@ -1,5 +1,4 @@
 import 'jezvejs/style';
-import { createElement } from '@jezvejs/dom';
 import { Histogram } from 'jezvejs/Histogram';
 
 import { createButtons, createControls } from '../../Application/utils.js';
@@ -27,97 +26,18 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
+import {
+    maxColumnWidthData,
+    chartGroupedData,
+    chartGroupedCategoriesData,
+    legendCategoriesData,
+} from './data.js';
+import {
+    chartContainer,
+    formatDecimalValue,
+    formatAsUSD,
+} from './helpers.js';
 import './HistogramView.scss';
-
-const maxColumnWidthData = {
-    values: [
-        30, 100, 50,
-    ],
-    series: [
-        '01.01.2013', '27.01.2013', '04.02.2013',
-    ],
-};
-
-const chartGroupedData = {
-    values: [{
-        data: [1000, 1001, 1002, 1005, -1050, -1200, 1000, 1001, 1002, -1005, 1050, 1200],
-        group: 'first',
-    }, {
-        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, 2500, -2100, 2200],
-        group: 'first',
-    }, {
-        data: [553, 200, 5500, 0, 58, 347, 1302, -12, -780, 5600, 460, 150, 2000, 2000],
-        group: 'second',
-    }, {
-        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
-        group: 'second',
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-    stacked: true,
-};
-
-const chartGroupedCategoriesData = {
-    values: [{
-        data: [1000, 1001, 1002, 1005, -1050, -1200, 1000, 1001, 1002, -1005, 1050, 1200],
-        group: 'first',
-        category: 'cat1',
-    }, {
-        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, 2500, -2100, 2200],
-        group: 'first',
-        category: 'cat2',
-    }, {
-        data: [553, 200, 5500, 0, 58, 347, 1302, -12, -780, 5600, 460, 150, 2000, 2000],
-        group: 'second',
-        category: 'cat1',
-    }, {
-        data: [50, 200, 550, 0, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
-        group: 'second',
-        category: 'cat2',
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-    stacked: true,
-};
-
-const legendCategoriesData = {
-    values: [{
-        data: [1000, 450, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        group: 'first',
-        category: 'cat1',
-    }, {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0],
-        group: 'second',
-        category: 'cat2',
-    }, {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 560, 890],
-        group: 'third',
-        category: 'cat3',
-    }, {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        group: 'fourth',
-        category: 'cat4',
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-};
-
-const chartContainer = (id, chart) => createElement('div', {
-    props: { id, className: 'std_chart_wrap' },
-    children: chart?.elem,
-});
-
-const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
-const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
 /**
  * Histogram component demo view

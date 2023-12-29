@@ -2,14 +2,12 @@ import 'jezvejs/style';
 import {
     ge,
     createElement,
-    selectedValue,
     setEvents,
 } from '@jezvejs/dom';
-import { Input } from 'jezvejs/Input';
 import { Popup } from 'jezvejs/Popup';
 import { Notification } from 'jezvejs/Notification';
 
-import { createButtons, createSelect } from '../../Application/utils.js';
+import { createButtons } from '../../Application/utils.js';
 
 // Common components
 import { DemoView } from '../../Components/DemoView/DemoView.js';
@@ -19,97 +17,15 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { PopupDragZone } from './impl/PopupDragZone.js';
 import { PopupDropTarget } from './impl/PopupDropTarget.js';
 
+import {
+    createOkBtn,
+    createCancelBtn,
+    createFormContent,
+    createNestedParentContent,
+    createNestedChildContent,
+} from './helpers.js';
+
 import './PopupView.scss';
-
-const createOkBtn = ({ onClick, textContent = 'ok', disabled = false }) => (
-    createElement('button', {
-        props: {
-            className: 'btn action-btn',
-            type: 'button',
-            textContent,
-            disabled,
-        },
-        events: { click: (e) => onClick(e) },
-    })
-);
-
-const createCancelBtn = ({ onClick, textContent = 'cancel', disabled = false }) => (
-    createElement('button', {
-        props: {
-            className: 'btn action-btn',
-            type: 'button',
-            textContent,
-            disabled,
-        },
-        events: { click: (e) => onClick(e) },
-    })
-);
-
-const createInputField = ({ inputId, title }) => (
-    createElement('div', {
-        children: [
-            createElement('label', { htmlFor: inputId, textContent: title }),
-            Input.create({ id: inputId }).elem,
-        ],
-    })
-);
-
-const createSelectField = ({ id, title, ...props }) => (
-    createElement('div', {
-        children: [
-            createElement('label', { htmlFor: id, textContent: title }),
-            createSelect({ id, ...props }),
-        ],
-    })
-);
-
-const createFormContent = () => (
-    createElement('div', {
-        props: { id: 'formTemplate' },
-        children: [
-            createElement('div', {
-                props: { textContent: 'This popup is created from template. Controls and title are added.' },
-            }),
-            createInputField({ title: 'New name', inputId: 'updname' }),
-            createInputField({ title: 'New password', inputId: 'updpass' }),
-        ],
-    })
-);
-
-const createNestedParentContent = () => (
-    createElement('div', {
-        props: { id: 'nestedParentTemplate' },
-        children: [
-            createElement('div', {
-                props: { textContent: 'This popup will launch another popup.' },
-            }),
-            createElement('div', { props: { id: 'valueresult' } }),
-        ],
-    })
-);
-
-const createNestedChildContent = () => (
-    createElement('div', {
-        props: { id: 'nestedChildTemplate' },
-        children: [
-            createElement('div', {
-                props: { textContent: 'This popup is launched from another popup.' },
-            }),
-            createSelectField({
-                id: 'valueselect',
-                title: 'Values:',
-                events: {
-                    change: (e) => {
-                        const resultEl = ge('valueresult');
-                        if (resultEl) {
-                            resultEl.textContent = selectedValue(e.target);
-                        }
-                    },
-                },
-            }),
-        ],
-    })
-);
 
 const placeholderMsg = 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem.';
 
