@@ -107,8 +107,6 @@ export class BaseChartXAxisLabels extends Component {
             return;
         }
 
-        const dyOffset = 5.5;
-
         const groupOuterWidth = this.getGroupOuterWidth(state);
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
@@ -146,7 +144,6 @@ export class BaseChartXAxisLabels extends Component {
             }
 
             label.elem.style.left = px(groupIndex * groupOuterWidth);
-            label.elem.style.top = px(dyOffset);
 
             labels.push(label);
         }
