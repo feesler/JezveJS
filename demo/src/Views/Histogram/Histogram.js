@@ -146,11 +146,6 @@ class HistogramView extends DemoView {
         this.stackedCategories();
         this.legendCategories();
 
-        this.noData();
-        this.singleNegative();
-        this.onlyPositive();
-        this.onlyNegative();
-        this.negativeAndPositive();
         this.setData();
     }
 
@@ -562,74 +557,8 @@ class HistogramView extends DemoView {
         });
     }
 
-    noData() {
-        const histogram = Histogram.create({
-            data: emptyData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'noData',
-            title: 'No data',
-            content: chartContainer('chart_no_data', histogram),
-        });
-    }
-
-    singleNegative() {
-        const histogram = Histogram.create({
-            data: singleNegData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'singleNagative',
-            title: 'Single negative value',
-            content: chartContainer('chart_single_neg', histogram),
-        });
-    }
-
-    onlyPositive() {
-        const histogram = Histogram.create({
-            data: posData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'onlyPositive',
-            title: 'Only positive values',
-            content: chartContainer('chart_pos', histogram),
-        });
-    }
-
-    onlyNegative() {
-        const histogram = Histogram.create({
-            data: negData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'onlyNegative',
-            title: 'Only negative values',
-            content: chartContainer('chart_neg', histogram),
-        });
-    }
-
-    negativeAndPositive() {
-        const histogram = Histogram.create({
-            data: negPosData,
-            elem: 'chart_negpos',
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'negativePositive',
-            title: 'Negative and positive values',
-            content: chartContainer('chart_negpos', histogram),
-        });
-    }
-
     setData() {
-        const histogram = Histogram.create({
+        const chart = Histogram.create({
             data: negPosData,
             elem: 'chart_setdata',
             autoScale: true,
@@ -641,32 +570,48 @@ class HistogramView extends DemoView {
         });
 
         const items = [{
-            id: 'setNoDataBtn',
+            id: 'emptyDataBtn',
             title: 'No data',
-            onClick: () => histogram.setData(emptyData),
+            onClick: () => chart.setData(emptyData),
         }, {
-            id: 'setData1Btn',
-            title: 'Data set 1',
-            onClick: () => histogram.setData(negPosData),
+            id: 'singleNegDataBtn',
+            title: 'Single negative',
+            onClick: () => chart.setData(singleNegData),
         }, {
-            id: 'setData2Btn',
-            title: 'Data set 2',
-            onClick: () => histogram.setData(chartData3),
+            id: 'posDataBtn',
+            title: 'Only positive',
+            onClick: () => chart.setData(posData),
         }, {
-            id: 'setData3Btn',
-            title: 'Data set 3',
-            onClick: () => histogram.setData(chartGroupedCategoriesData),
+            id: 'negDataBtn',
+            title: 'Only negative',
+            onClick: () => chart.setData(negData),
+        }, {
+            id: 'negPosDataBtn',
+            title: 'Negative and positive',
+            onClick: () => chart.setData(negPosData),
+        }, {
+            id: 'multiColumnDataBtn',
+            title: 'Multi column',
+            onClick: () => chart.setData(chartData3),
+        }, {
+            id: 'stackedDataBtn',
+            title: 'Stacked',
+            onClick: () => chart.setData(chartStackedData),
+        }, {
+            id: 'stackedGroupedDataBtn',
+            title: 'Stacked and grouped',
+            onClick: () => chart.setData(chartGroupedCategoriesData),
         }, {
             id: 'largeDataBtn',
             title: 'Large data set',
-            onClick: () => histogram.setData(largeData),
+            onClick: () => chart.setData(largeData),
         }];
 
         this.addSection({
             id: 'setData',
             title: 'Set data',
             content: [
-                chartContainer('chart_setdata', histogram),
+                chartContainer('chart_setdata', chart),
                 createButtons(items),
             ],
         });

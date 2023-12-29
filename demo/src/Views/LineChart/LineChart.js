@@ -20,13 +20,13 @@ import {
 import { largeData } from '../../assets/data/largeData.js';
 
 import { ChartCustomLegend } from '../../Components/ChartCustomLegend/ChartCustomLegend.js';
+import { ChartMultiColumnPopup } from '../../Components/ChartMultiColumnPopup/ChartMultiColumnPopup.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
 import './LineChartView.scss';
-import { ChartMultiColumnPopup } from '../../Components/ChartMultiColumnPopup/ChartMultiColumnPopup.js';
 
 /* eslint-disable max-len */
 const eurData = {
@@ -67,12 +67,7 @@ class LineChartView extends DemoView {
         this.alignColumns();
         this.stacked();
         this.stackedNegative();
-        // Different data tests
-        this.noData();
-        this.singleNegative();
-        this.onlyPositive();
-        this.onlyNegative();
-        this.negativeAndPositive();
+
         this.setData();
     }
 
@@ -377,72 +372,6 @@ class LineChartView extends DemoView {
         });
     }
 
-    noData() {
-        const chart = LineChart.create({
-            data: emptyData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'noData',
-            title: 'No data',
-            content: chartContainer('linechart_no_data', chart),
-        });
-    }
-
-    singleNegative() {
-        const chart = LineChart.create({
-            data: singleNegData,
-            autoScale: true,
-            drawNodeCircles: true,
-        });
-
-        this.addSection({
-            id: 'singleNegative',
-            title: 'Single negative value',
-            content: chartContainer('linechart_single_neg', chart),
-        });
-    }
-
-    onlyPositive() {
-        const chart = LineChart.create({
-            data: posData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'onlyPositive',
-            title: 'Only positive values',
-            content: chartContainer('linechart_pos', chart),
-        });
-    }
-
-    onlyNegative() {
-        const chart = LineChart.create({
-            data: negData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'onlyNegative',
-            title: 'Only negative values',
-            content: chartContainer('linechart_neg', chart),
-        });
-    }
-
-    negativeAndPositive() {
-        const chart = LineChart.create({
-            data: negPosData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'negativePositive',
-            title: 'Negative and positive values',
-            content: chartContainer('linechart_negpos', chart),
-        });
-    }
-
     setData() {
         const chart = LineChart.create({
             data: negPosData,
@@ -454,20 +383,32 @@ class LineChartView extends DemoView {
         });
 
         const items = [{
-            id: 'setNoDataBtn',
+            id: 'emptyDataBtn',
             title: 'No data',
             onClick: () => chart.setData(emptyData),
         }, {
-            id: 'setData1Btn',
-            title: 'Data set 1',
+            id: 'singleNegDataBtn',
+            title: 'Single negative',
+            onClick: () => chart.setData(singleNegData),
+        }, {
+            id: 'posDataBtn',
+            title: 'Only positive',
+            onClick: () => chart.setData(posData),
+        }, {
+            id: 'negDataBtn',
+            title: 'Only negative',
+            onClick: () => chart.setData(negData),
+        }, {
+            id: 'negPosDataBtn',
+            title: 'Negative and positive',
             onClick: () => chart.setData(negPosData),
         }, {
-            id: 'setData2Btn',
-            title: 'Data set 2',
+            id: 'multiColumnDataBtn',
+            title: 'Multi column',
             onClick: () => chart.setData(chartData3),
         }, {
-            id: 'setData3Btn',
-            title: 'Data set 3',
+            id: 'stackedDataBtn',
+            title: 'Stacked',
             onClick: () => chart.setData(chartStackedData),
         }, {
             id: 'largeDataBtn',
