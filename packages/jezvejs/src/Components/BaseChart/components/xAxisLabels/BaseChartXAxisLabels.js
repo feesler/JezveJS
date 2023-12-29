@@ -88,8 +88,8 @@ export class BaseChartXAxisLabels extends Component {
             : (value) => value?.toString();
     }
 
-    onResize() {
-        return this.props.onResize();
+    onResize(...args) {
+        return this.props.onResize(...args);
     }
 
     render(state, prevState = {}) {
@@ -152,6 +152,7 @@ export class BaseChartXAxisLabels extends Component {
         const lblMarginLeft = 10;
         const labelsToRemove = [];
         let resizeRequested = false;
+        let resizeOffset = 0;
         let prevLabel = null;
         const toLeft = (
             !this.isHorizontalScaleNeeded(state, prevState)
@@ -162,12 +163,12 @@ export class BaseChartXAxisLabels extends Component {
         for (let ind = 0; ind < labels.length; ind += 1) {
             const index = (toLeft) ? (labels.length - ind - 1) : ind;
             const label = labels[index];
-            const labelRect = label.elem.getBoundingClientRect();
-            const currentOffset = Math.ceil(labelRect.x + labelRect.width);
+            const labelLeft = label.elem.offsetLeft;
+            const labelRight = labelLeft + label.elem.offsetWidth;
 
             const overflow = (toLeft)
-                ? (currentOffset + lblMarginLeft > lastOffset)
-                : (labelRect.x < lastOffset + lblMarginLeft);
+                ? (labelRight + lblMarginLeft > lastOffset)
+                : (labelLeft < lastOffset + lblMarginLeft);
 
             // Check current label not intersects previous one
             if (lastOffset > 0 && overflow) {
@@ -179,15 +180,16 @@ export class BaseChartXAxisLabels extends Component {
 
             // Check last label not overflow chart to prevent
             // horizontal scroll in fitToWidth mode
-            if (currentOffset - state.chartContentWidth > 1) {
+            if (labelRight - state.chartContentWidth > 1) {
                 resizeRequested = !state.fitToWidth;
+                resizeOffset = labelRight;
                 if (state.fitToWidth || !state.allowLastXAxisLabelOverflow) {
                     labelsToRemove.push(label);
                     continue;
                 }
             }
 
-            lastOffset = (toLeft) ? labelRect.x : currentOffset;
+            lastOffset = (toLeft) ? labelLeft : labelRight;
             prevLabel = label;
         }
 
@@ -213,7 +215,7 @@ export class BaseChartXAxisLabels extends Component {
         this.labels = labels;
 
         if (resizeRequested) {
-            setTimeout(() => this.onResize());
+            setTimeout(() => this.onResize(resizeOffset));
         }
     }
 }

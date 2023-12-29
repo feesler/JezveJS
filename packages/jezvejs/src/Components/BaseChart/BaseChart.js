@@ -809,14 +809,13 @@ export class BaseChart extends Component {
     }
 
     /** Chart scroller resize observer handler */
-    onResize() {
+    onResize(lastHLabelOffset = 0) {
         this.contentOffset = getOffset(this.chartScroller);
         let newState = this.updateColumnWidth(this.state);
 
         // Update width of x axis labels
-        const labelsBox = this.xAxisLabels?.elem?.getBoundingClientRect();
-        newState.lastHLabelOffset = (labelsBox && !newState.fitToWidth)
-            ? Math.round(labelsBox.x + labelsBox.width)
+        newState.lastHLabelOffset = (!newState.fitToWidth)
+            ? Math.ceil(lastHLabelOffset)
             : 0;
 
         newState = this.updateChartWidth(newState);
