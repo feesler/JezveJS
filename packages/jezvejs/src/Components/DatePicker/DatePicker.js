@@ -828,23 +828,23 @@ export class DatePicker extends Component {
             : this.width;
     }
 
-    getSlideHeight(index = 0) {
+    getSlideHeight(index = 0, heights = this.viewHeights) {
         const {
             prev,
             current,
             second,
             next,
-        } = this.viewHeights;
+        } = heights;
 
-        const heights = (this.doubleView)
+        const resHeights = (this.doubleView)
             ? [prev, current, second, next]
             : [prev, current, next];
 
-        return heights[index + 1] ?? 0;
+        return resHeights[index + 1] ?? 0;
     }
 
-    getSlideSize(index = 0) {
-        return (this.props.vertical) ? this.getSlideHeight(index) : this.getSlideWidth();
+    getSlideSize(index = 0, heights = this.viewHeights) {
+        return (this.props.vertical) ? this.getSlideHeight(index, heights) : this.getSlideWidth();
     }
 
     getSlidesGap() {
@@ -855,12 +855,12 @@ export class DatePicker extends Component {
         return (this.props.vertical) ? this.rowGap : this.columnGap;
     }
 
-    getSlidePosition(index) {
+    getSlidePosition(index, heights = this.viewHeights) {
         const gap = this.getSlidesGap();
 
         let res = 0;
         for (let slide = -1; slide < index; slide += 1) {
-            res -= this.getSlideSize(slide) + gap;
+            res -= this.getSlideSize(slide, heights) + gap;
         }
 
         if (this.doubleView && this.props.vertical) {
@@ -1023,7 +1023,7 @@ export class DatePicker extends Component {
      * @param {Number} index - slide position, -1 for previous, 0 for current and 1 for next
      */
     slideTo(index) {
-        const targetPos = this.getSlidePosition(index);
+        const targetPos = this.getSlidePosition(index, this.prevHeights);
         const distance = targetPos - this.position;
         if (distance === 0) {
             return;
@@ -1170,6 +1170,7 @@ export class DatePicker extends Component {
                 ].filter((item) => !!item);
                 this.slider.append(...elems);
 
+                this.prevHeights = this.viewHeights;
                 this.viewHeights = this.getViewsHeights(views);
 
                 this.newView = views;
@@ -1179,6 +1180,7 @@ export class DatePicker extends Component {
                 const newView = (navigateToPrev) ? views.prev : views.next;
                 this.slider.append(newView.elem);
 
+                this.prevHeights = this.viewHeights;
                 this.viewHeights = this.getViewsHeights(views);
 
                 this.newView = views;
