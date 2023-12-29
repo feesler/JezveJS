@@ -1,5 +1,4 @@
 import 'jezvejs/style';
-import { createElement } from '@jezvejs/dom';
 import { Histogram } from 'jezvejs/Histogram';
 
 import { createButtons, createControls } from '../../Application/utils.js';
@@ -27,97 +26,18 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
+import {
+    maxColumnWidthData,
+    chartGroupedData,
+    chartGroupedCategoriesData,
+    legendCategoriesData,
+} from './data.js';
+import {
+    chartContainer,
+    formatDecimalValue,
+    formatAsUSD,
+} from './helpers.js';
 import './HistogramView.scss';
-
-const maxColumnWidthData = {
-    values: [
-        30, 100, 50,
-    ],
-    series: [
-        '01.01.2013', '27.01.2013', '04.02.2013',
-    ],
-};
-
-const chartGroupedData = {
-    values: [{
-        data: [1000, 1001, 1002, 1005, -1050, -1200, 1000, 1001, 1002, -1005, 1050, 1200],
-        group: 'first',
-    }, {
-        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, 2500, -2100, 2200],
-        group: 'first',
-    }, {
-        data: [553, 200, 5500, 0, 58, 347, 1302, -12, -780, 5600, 460, 150, 2000, 2000],
-        group: 'second',
-    }, {
-        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
-        group: 'second',
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-    stacked: true,
-};
-
-const chartGroupedCategoriesData = {
-    values: [{
-        data: [1000, 1001, 1002, 1005, -1050, -1200, 1000, 1001, 1002, -1005, 1050, 1200],
-        group: 'first',
-        category: 'cat1',
-    }, {
-        data: [50, 200, 550, -100, 850, -1220, 1302, 900, -780, 1800, 2210, 2500, -2100, 2200],
-        group: 'first',
-        category: 'cat2',
-    }, {
-        data: [553, 200, 5500, 0, 58, 347, 1302, -12, -780, 5600, 460, 150, 2000, 2000],
-        group: 'second',
-        category: 'cat1',
-    }, {
-        data: [50, 200, 550, 0, 850, -1220, 1302, 900, -780, 1800, 2210, -2500, 2100],
-        group: 'second',
-        category: 'cat2',
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-    stacked: true,
-};
-
-const legendCategoriesData = {
-    values: [{
-        data: [1000, 450, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        group: 'first',
-        category: 'cat1',
-    }, {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 320, 0, 0, 0, 0, 0, 0, 0, 0],
-        group: 'second',
-        category: 'cat2',
-    }, {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 560, 890],
-        group: 'third',
-        category: 'cat3',
-    }, {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        group: 'fourth',
-        category: 'cat4',
-    }],
-    series: [
-        '10.22', '10.22', '10.22', '10.22', '11.22',
-        '11.22', '11.22', '11.22', '12.22', '12.22',
-        '12.22', '12.22',
-    ],
-};
-
-const chartContainer = (id, chart) => createElement('div', {
-    props: { id, className: 'std_chart_wrap' },
-    children: chart?.elem,
-});
-
-const formatDecimalValue = (val) => val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
-const formatAsUSD = (value) => `$ ${formatDecimalValue(value)}`;
 
 /**
  * Histogram component demo view
@@ -146,11 +66,6 @@ class HistogramView extends DemoView {
         this.stackedCategories();
         this.legendCategories();
 
-        this.noData();
-        this.singleNegative();
-        this.onlyPositive();
-        this.onlyNegative();
-        this.negativeAndPositive();
         this.setData();
     }
 
@@ -215,8 +130,7 @@ class HistogramView extends DemoView {
     }
 
     chartAxes() {
-        const container = chartContainer('chartAxes');
-        const state = {
+        const props = {
             xAxis: 'bottom',
             yAxis: 'right',
             yAxisLabelsAlign: 'left',
@@ -240,21 +154,10 @@ class HistogramView extends DemoView {
             center: 'Center',
         };
 
-        let chart = null;
-
-        const createChart = (xAxis, yAxis) => {
-            state.xAxis = xAxis;
-            state.yAxis = yAxis;
-
-            chart = Histogram.create({
-                data: chartData2,
-                xAxis,
-                yAxis,
-                yAxisLabelsAlign: state.yAxisLabelsAlign,
-            });
-
-            container.replaceChildren(chart.elem);
-        };
+        const chart = Histogram.create({
+            ...props,
+            data: chartData2,
+        });
 
         const controls = [
             RadioFieldset.create({
@@ -263,9 +166,11 @@ class HistogramView extends DemoView {
                 items: Object.entries(xAxisMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (state.xAxis === value),
+                    checked: (props.xAxis === value),
                 })),
-                onChange: (value) => createChart(value, state.yAxis),
+                onChange: (xAxis) => {
+                    chart.setState((chartState) => ({ ...chartState, xAxis }));
+                },
             }).elem,
             RadioFieldset.create({
                 title: 'Y-Axis',
@@ -273,11 +178,10 @@ class HistogramView extends DemoView {
                 items: Object.entries(yAxisMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (state.yAxis === value),
+                    checked: (props.yAxis === value),
                 })),
-                onChange: (value) => {
-                    chart?.setState((chartState) => ({ ...chartState, yAxis: value }));
-                    state.yAxis = value;
+                onChange: (yAxis) => {
+                    chart.setState((chartState) => ({ ...chartState, yAxis }));
                 },
             }).elem,
             RadioFieldset.create({
@@ -286,22 +190,19 @@ class HistogramView extends DemoView {
                 items: Object.entries(textAlignMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (state.yAxisLabelsAlign === value),
+                    checked: (props.yAxisLabelsAlign === value),
                 })),
-                onChange: (value) => {
-                    chart?.setState((chartState) => ({ ...chartState, yAxisLabelsAlign: value }));
-                    state.yAxisLabelsAlign = value;
+                onChange: (yAxisLabelsAlign) => {
+                    chart.setState((chartState) => ({ ...chartState, yAxisLabelsAlign }));
                 },
             }).elem,
         ];
-
-        createChart(state.xAxis, state.yAxis);
 
         this.addSection({
             id: 'axes',
             title: '\'xAxis\' and \'yAxis\' options',
             content: [
-                container,
+                chartContainer('chartAxes', chart),
                 createControls(controls),
             ],
         });
@@ -576,74 +477,8 @@ class HistogramView extends DemoView {
         });
     }
 
-    noData() {
-        const histogram = Histogram.create({
-            data: emptyData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'noData',
-            title: 'No data',
-            content: chartContainer('chart_no_data', histogram),
-        });
-    }
-
-    singleNegative() {
-        const histogram = Histogram.create({
-            data: singleNegData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'singleNagative',
-            title: 'Single negative value',
-            content: chartContainer('chart_single_neg', histogram),
-        });
-    }
-
-    onlyPositive() {
-        const histogram = Histogram.create({
-            data: posData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'onlyPositive',
-            title: 'Only positive values',
-            content: chartContainer('chart_pos', histogram),
-        });
-    }
-
-    onlyNegative() {
-        const histogram = Histogram.create({
-            data: negData,
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'onlyNegative',
-            title: 'Only negative values',
-            content: chartContainer('chart_neg', histogram),
-        });
-    }
-
-    negativeAndPositive() {
-        const histogram = Histogram.create({
-            data: negPosData,
-            elem: 'chart_negpos',
-            autoScale: true,
-        });
-
-        this.addSection({
-            id: 'negativePositive',
-            title: 'Negative and positive values',
-            content: chartContainer('chart_negpos', histogram),
-        });
-    }
-
     setData() {
-        const histogram = Histogram.create({
+        const chart = Histogram.create({
             data: negPosData,
             elem: 'chart_setdata',
             autoScale: true,
@@ -655,32 +490,48 @@ class HistogramView extends DemoView {
         });
 
         const items = [{
-            id: 'setNoDataBtn',
+            id: 'emptyDataBtn',
             title: 'No data',
-            onClick: () => histogram.setData(emptyData),
+            onClick: () => chart.setData(emptyData),
         }, {
-            id: 'setData1Btn',
-            title: 'Data set 1',
-            onClick: () => histogram.setData(negPosData),
+            id: 'singleNegDataBtn',
+            title: 'Single negative',
+            onClick: () => chart.setData(singleNegData),
         }, {
-            id: 'setData2Btn',
-            title: 'Data set 2',
-            onClick: () => histogram.setData(chartData3),
+            id: 'posDataBtn',
+            title: 'Only positive',
+            onClick: () => chart.setData(posData),
         }, {
-            id: 'setData3Btn',
-            title: 'Data set 3',
-            onClick: () => histogram.setData(chartGroupedCategoriesData),
+            id: 'negDataBtn',
+            title: 'Only negative',
+            onClick: () => chart.setData(negData),
+        }, {
+            id: 'negPosDataBtn',
+            title: 'Negative and positive',
+            onClick: () => chart.setData(negPosData),
+        }, {
+            id: 'multiColumnDataBtn',
+            title: 'Multi column',
+            onClick: () => chart.setData(chartData3),
+        }, {
+            id: 'stackedDataBtn',
+            title: 'Stacked',
+            onClick: () => chart.setData(chartStackedData),
+        }, {
+            id: 'stackedGroupedDataBtn',
+            title: 'Stacked and grouped',
+            onClick: () => chart.setData(chartGroupedCategoriesData),
         }, {
             id: 'largeDataBtn',
             title: 'Large data set',
-            onClick: () => histogram.setData(largeData),
+            onClick: () => chart.setData(largeData),
         }];
 
         this.addSection({
             id: 'setData',
             title: 'Set data',
             content: [
-                chartContainer('chart_setdata', histogram),
+                chartContainer('chart_setdata', chart),
                 createButtons(items),
             ],
         });

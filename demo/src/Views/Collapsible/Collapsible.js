@@ -1,7 +1,6 @@
 import 'jezvejs/style';
 import { setEvents, createElement } from '@jezvejs/dom';
 import { Collapsible } from 'jezvejs/Collapsible';
-import { Icon } from 'jezvejs/Icon';
 
 // Icons
 import { DeleteIcon } from '../../assets/icons/DeleteIcon.js';
@@ -11,26 +10,13 @@ import { UpdateIcon } from '../../assets/icons/UpdateIcon.js';
 import { createButtons, createListContent } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 
+import {
+    CUSTOM_BTN_CLASS,
+    CUSTOM_ICON_CLASS,
+    createButton,
+    createContent,
+} from './helpers.js';
 import './CollapsibleView.scss';
-
-const CUSTOM_BTN_CLASS = 'custom-header-btn';
-const CUSTOM_ICON_CLASS = 'custom-header-icon';
-
-/** Create button for custom header */
-const createButton = (icon) => createElement('button', {
-    props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
-    children: Icon.create({ icon, className: CUSTOM_ICON_CLASS }).elem,
-    events: { click: (e) => e.stopPropagation() },
-});
-
-/** Returns new content */
-const createContent = (content) => createElement('div', {
-    props: {
-        className: 'collapsible-content-container',
-        textContent: (typeof content === 'string') ? content : '',
-    },
-    children: (typeof content !== 'string') ? content : null,
-});
 
 /**
  * Collapsible component demo view

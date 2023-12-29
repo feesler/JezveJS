@@ -9,6 +9,19 @@
   --chart-grid-stroke-dasharray: 4, 3;
   --chart-grid-color: #808080;
 
+  /* x-axis labels */
+  --chart-x-axis-height: 1.5rem;
+  --chart-x-axis-font-family: "Segoe UI", sans-serif;
+  --chart-x-axis-font-size: var(--chart-text-size);
+  --chart-x-axis-font-weight: 400;
+  --chart-x-axis-text-color: var(--chart-text-color);
+
+  /* y-axis labels */
+  --chart-y-axis-font-family: "Segoe UI", sans-serif;
+  --chart-y-axis-font-size: var(--chart-text-size);
+  --chart-y-axis-font-weight: 400;
+  --chart-y-axis-text-color: var(--chart-text-color);
+
   /* Popup */
   --chart-popup-text: #000000;
   --chart-popup-border: #000000;
@@ -36,6 +49,7 @@
   margin: 0;
   padding: 0;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* Main content SVG element */

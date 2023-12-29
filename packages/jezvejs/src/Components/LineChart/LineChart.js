@@ -132,10 +132,6 @@ export class LineChart extends BaseChart {
             r: state.nodeCircleRadius,
         };
 
-        if (state.xAxis === 'top') {
-            itemProps.cy += state.hLabelsHeight;
-        }
-
         const DataItem = this.getComponent('DataItem');
         const item = DataItem.create(itemProps);
 

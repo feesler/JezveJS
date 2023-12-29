@@ -1,11 +1,6 @@
 import 'jezvejs/style';
-import {
-    createElement,
-    getClassName,
-    enable,
-} from '@jezvejs/dom';
+import { enable } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
-import { Input } from 'jezvejs/Input';
 import { InputGroup } from 'jezvejs/InputGroup';
 
 // Icons
@@ -15,45 +10,14 @@ import { SearchIcon } from '../../assets/icons/SearchIcon.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 import { DemoView } from '../../Components/DemoView/DemoView.js';
 
+import {
+    createInput,
+    createText,
+    createButton,
+    createInnerButton,
+    createOuterContainer,
+} from './helpers.js';
 import './InputGroupView.scss';
-
-const createInput = (props = {}) => (
-    Input.create({
-        ...props,
-        className: getClassName('input-group__input', props.className),
-    }).elem
-);
-
-const createText = (textContent) => createElement('div', {
-    props: {
-        className: 'input-group__text',
-        textContent,
-    },
-});
-
-const createButton = (textContent) => (
-    Button.create({
-        className: 'input-group__btn',
-        title: createElement('div', {
-            props: {
-                className: 'input-group__btn-title',
-                textContent,
-            },
-        }),
-    }).elem
-);
-
-const createInnerButton = (props = {}) => (
-    Button.create({
-        ...props,
-        className: getClassName('input-group__inner-btn', props.className),
-    }).elem
-);
-
-const createOuterContainer = (children) => createElement('div', {
-    props: { className: 'input-group__input-outer' },
-    children,
-});
 
 /**
  * InputGroup component demo view

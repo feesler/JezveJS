@@ -168,10 +168,6 @@ export class Histogram extends BaseChart {
             stacked: state.data?.stacked ?? false,
         };
 
-        if (state.xAxis === 'top') {
-            itemProps.y += state.hLabelsHeight;
-        }
-
         itemProps.x = this.getAlignedX({
             item: itemProps,
             groupWidth,

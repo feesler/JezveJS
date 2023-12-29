@@ -34,6 +34,8 @@ const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
 const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
+const TOP_X_AXIS_CLASS = 'chart_x-axis-top';
+const LEFT_Y_AXIS_CLASS = 'chart_y-axis-left';
 /* Popup */
 const POPUP_CLASS = 'chart__popup';
 const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
@@ -145,7 +147,10 @@ export class BaseChart extends Component {
 
     /** Initialization of chart */
     init() {
-        this.chart = createElement('div');
+        this.chart = createElement('div', {
+            props: { className: CHART_CLASS },
+        });
+
         this.chartScroller = createElement('div', {
             props: { className: SCROLLER_CLASS },
             children: this.chart,
@@ -172,11 +177,8 @@ export class BaseChart extends Component {
             children: this.chartContainer,
         });
 
-        const { height, marginTop, xAxis } = this.state;
+        const { height, marginTop } = this.state;
         this.state.chartHeight = height - marginTop;
-        if (xAxis === 'top' || xAxis === 'bottom') {
-            this.state.chartHeight -= this.state.hLabelsHeight;
-        }
 
         // Create main chart content
         const events = {
@@ -807,14 +809,13 @@ export class BaseChart extends Component {
     }
 
     /** Chart scroller resize observer handler */
-    onResize() {
+    onResize(lastHLabelOffset = 0) {
         this.contentOffset = getOffset(this.chartScroller);
         let newState = this.updateColumnWidth(this.state);
 
         // Update width of x axis labels
-        const labelsBox = this.xAxisLabels?.elem?.getBBox();
-        newState.lastHLabelOffset = (labelsBox && !newState.fitToWidth)
-            ? Math.round(labelsBox.x + labelsBox.width)
+        newState.lastHLabelOffset = (!newState.fitToWidth)
+            ? Math.ceil(lastHLabelOffset)
             : 0;
 
         newState = this.updateChartWidth(newState);
@@ -993,7 +994,7 @@ export class BaseChart extends Component {
                 getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
                 onResize: (...args) => this.onResize(...args),
             });
-            this.content.append(this.xAxisLabels.elem);
+            this.chart.append(this.xAxisLabels.elem);
         } else {
             this.xAxisLabels.setState((labelsState) => ({
                 ...labelsState,
@@ -1090,6 +1091,9 @@ export class BaseChart extends Component {
         const animated = state.autoScale && state.animate && state.animateNow;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
+
+        this.chartContainer.classList.toggle(TOP_X_AXIS_CLASS, (state.xAxis === 'top'));
+        this.chartContainer.classList.toggle(LEFT_Y_AXIS_CLASS, state.yAxis === 'left');
 
         this.renderScroll(state, prevState);
 
