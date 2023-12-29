@@ -172,7 +172,10 @@ class LineChartView extends DemoView {
                     label,
                     checked: (state.xAxis === value),
                 })),
-                onChange: (value) => createChart(value, state.yAxis),
+                onChange: (value) => {
+                    chart?.setState((chartState) => ({ ...chartState, xAxis: value }));
+                    state.xAxis = value;
+                },
             }).elem,
             RadioFieldset.create({
                 title: 'Y-Axis',
