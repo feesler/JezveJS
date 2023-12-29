@@ -1,15 +1,10 @@
 /* Chart y-axis labels */
-.chart-y-axis-labels {
-  --chart-y-axis-font-family: "Segoe UI", sans-serif;
-  --chart-y-axis-font-size: var(--chart-text-size);
-  --chart-y-axis-font-weight: 400;
-  --chart-y-axis-text-color: var(--chart-text-color);
-  --chart-y-axis-text-anchor: start;
+.chart_y-axis-left .chart-y-axis-labels {
+  order: -1;
 }
 
-/* Left position */
-.chart-y-axis-labels_left {
-  order: -1;
+.chart_x-axis-top .chart-y-axis-labels {
+  padding-top: var(--chart-x-axis-height);
 }
 
 /* Content element */

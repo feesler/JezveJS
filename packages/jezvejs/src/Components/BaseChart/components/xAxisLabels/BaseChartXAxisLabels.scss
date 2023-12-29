@@ -1,20 +1,14 @@
 /* Chart x-axis labels */
 .chart-x-axis-labels {
   position: relative;
-  height: 1.5rem;
+  height: var(--chart-x-axis-height);
 }
 
-.chart-x-axis-labels_top {
+.chart_x-axis-top .chart-x-axis-labels {
   order: -1;
 }
 
 .chart__text.chart-x-axis__label {
-  --chart-x-axis-font-family: "Segoe UI", sans-serif;
-  --chart-x-axis-font-size: var(--chart-text-size);
-  --chart-x-axis-font-weight: 400;
-  --chart-x-axis-text-color: var(--chart-text-color);
-  --chart-x-axis-text-anchor: start;
-
   font-family: var(--chart-x-axis-font-family);
   font-size: var(--chart-x-axis-font-size);
   font-weight: var(--chart-x-axis-font-weight);

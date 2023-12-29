@@ -8,7 +8,6 @@ import './BaseChartXAxisLabels.scss';
 
 /* CSS classes */
 const CONTAINER_CLASS = 'chart-x-axis-labels';
-const TOP_PLACEMENT_CLASS = 'chart-x-axis-labels_top';
 const LABEL_CLASS = 'chart__text chart-x-axis__label';
 
 const availablePositions = ['bottom', 'top', 'none'];
@@ -114,8 +113,6 @@ export class BaseChartXAxisLabels extends Component {
         const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
         const formatFunction = this.getLabelRenderer(state);
-
-        this.elem.classList.toggle(TOP_PLACEMENT_CLASS, (xAxis === 'top'));
 
         const labels = [];
         for (let i = 0; i < visibleGroups; i += 1) {

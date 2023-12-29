@@ -34,6 +34,8 @@ const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
 const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
+const TOP_X_AXIS_CLASS = 'chart_x-axis-top';
+const LEFT_Y_AXIS_CLASS = 'chart_y-axis-left';
 /* Popup */
 const POPUP_CLASS = 'chart__popup';
 const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
@@ -1090,6 +1092,9 @@ export class BaseChart extends Component {
         const animated = state.autoScale && state.animate && state.animateNow;
         this.chartContainer.classList.toggle(ANIMATE_CLASS, animated);
         this.chartContainer.classList.toggle(STACKED_CLASS, state.data.stacked);
+
+        this.chartContainer.classList.toggle(TOP_X_AXIS_CLASS, (state.xAxis === 'top'));
+        this.chartContainer.classList.toggle(LEFT_Y_AXIS_CLASS, state.yAxis === 'left');
 
         this.renderScroll(state, prevState);
 

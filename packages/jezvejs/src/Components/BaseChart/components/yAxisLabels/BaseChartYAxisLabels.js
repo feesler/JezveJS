@@ -9,7 +9,6 @@ import './BaseChartYAxisLabels.scss';
 /* CSS classes */
 const CONTAINER_CLASS = 'chart-y-axis-labels';
 const CONTENT_CLASS = 'chart-y-axis-labels__content';
-const LEFT_POSITION_CLASS = 'chart-y-axis-labels_left';
 const RIGHT_ALIGN_CLASS = 'chart-y-axis-labels_right-align';
 const CENTER_ALIGN_CLASS = 'chart-y-axis-labels_center-align';
 const LABEL_CLASS = 'chart__text chart-y-axis-labels__label';
@@ -77,9 +76,6 @@ export class BaseChartYAxisLabels extends Component {
             this.elem?.remove();
             return;
         }
-
-        // yAxis
-        this.elem.classList.toggle(LEFT_POSITION_CLASS, state.yAxis === 'left');
 
         // yAxisLabelsAlign
         const isRightAlign = state.yAxisLabelsAlign === 'right';
