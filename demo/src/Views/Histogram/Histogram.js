@@ -215,8 +215,7 @@ class HistogramView extends DemoView {
     }
 
     chartAxes() {
-        const container = chartContainer('chartAxes');
-        const state = {
+        const props = {
             xAxis: 'bottom',
             yAxis: 'right',
             yAxisLabelsAlign: 'left',
@@ -240,21 +239,10 @@ class HistogramView extends DemoView {
             center: 'Center',
         };
 
-        let chart = null;
-
-        const createChart = (xAxis, yAxis) => {
-            state.xAxis = xAxis;
-            state.yAxis = yAxis;
-
-            chart = Histogram.create({
-                data: chartData2,
-                xAxis,
-                yAxis,
-                yAxisLabelsAlign: state.yAxisLabelsAlign,
-            });
-
-            container.replaceChildren(chart.elem);
-        };
+        const chart = Histogram.create({
+            ...props,
+            data: chartData2,
+        });
 
         const controls = [
             RadioFieldset.create({
@@ -263,11 +251,10 @@ class HistogramView extends DemoView {
                 items: Object.entries(xAxisMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (state.xAxis === value),
+                    checked: (props.xAxis === value),
                 })),
-                onChange: (value) => {
-                    chart?.setState((chartState) => ({ ...chartState, xAxis: value }));
-                    state.xAxis = value;
+                onChange: (xAxis) => {
+                    chart.setState((chartState) => ({ ...chartState, xAxis }));
                 },
             }).elem,
             RadioFieldset.create({
@@ -276,11 +263,10 @@ class HistogramView extends DemoView {
                 items: Object.entries(yAxisMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (state.yAxis === value),
+                    checked: (props.yAxis === value),
                 })),
-                onChange: (value) => {
-                    chart?.setState((chartState) => ({ ...chartState, yAxis: value }));
-                    state.yAxis = value;
+                onChange: (yAxis) => {
+                    chart.setState((chartState) => ({ ...chartState, yAxis }));
                 },
             }).elem,
             RadioFieldset.create({
@@ -289,22 +275,19 @@ class HistogramView extends DemoView {
                 items: Object.entries(textAlignMap).map(([value, label]) => ({
                     value,
                     label,
-                    checked: (state.yAxisLabelsAlign === value),
+                    checked: (props.yAxisLabelsAlign === value),
                 })),
-                onChange: (value) => {
-                    chart?.setState((chartState) => ({ ...chartState, yAxisLabelsAlign: value }));
-                    state.yAxisLabelsAlign = value;
+                onChange: (yAxisLabelsAlign) => {
+                    chart.setState((chartState) => ({ ...chartState, yAxisLabelsAlign }));
                 },
             }).elem,
         ];
-
-        createChart(state.xAxis, state.yAxis);
 
         this.addSection({
             id: 'axes',
             title: '\'xAxis\' and \'yAxis\' options',
             content: [
-                container,
+                chartContainer('chartAxes', chart),
                 createControls(controls),
             ],
         });
