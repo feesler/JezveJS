@@ -3,6 +3,8 @@ import { Button } from 'jezvejs/Button';
 import { Input } from 'jezvejs/Input';
 import { InputGroup } from 'jezvejs/InputGroup';
 
+import { CalendarIcon } from '../../../../assets/icons/CalendarIcon.js';
+
 const defaultProps = {
     startInputId: undefined,
     startButtonId: undefined,
@@ -35,7 +37,7 @@ export class DateRangeInputGroup extends InputGroup {
                 Button.create({
                     id: userProps.startButtonId,
                     className: 'input-group__btn',
-                    icon: 'calendar-icon',
+                    icon: CalendarIcon(),
                     onClick: (e) => userProps.onStartButtonClick?.(e),
                 }).elem,
                 createElement('div', { props: { className: 'input-group__text', textContent: '-' } }),
@@ -47,7 +49,7 @@ export class DateRangeInputGroup extends InputGroup {
                 Button.create({
                     id: userProps.endButtonId,
                     className: 'input-group__btn',
-                    icon: 'calendar-icon',
+                    icon: CalendarIcon(),
                     onClick: (e) => userProps.onEndButtonClick?.(e),
                 }).elem,
             ],

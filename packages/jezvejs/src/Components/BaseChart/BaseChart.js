@@ -578,9 +578,7 @@ export class BaseChart extends Component {
             }
         }
 
-        if (isFunction(this.props.onItemClick)) {
-            this.props.onItemClick({ ...target, event: e });
-        }
+        this.notifyEvent('onItemClick', { ...target, event: e });
     }
 
     /** Activates specified target */
@@ -628,8 +626,8 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (this.currentTarget?.item && isFunction(this.props.onItemOut)) {
-            this.props.onItemOut({ ...this.currentTarget, event: e });
+        if (this.currentTarget?.item) {
+            this.notifyEvent('onItemOut', { ...this.currentTarget, event: e });
         }
 
         this.currentTarget = target;
@@ -653,9 +651,7 @@ export class BaseChart extends Component {
             }
         }
 
-        if (isFunction(this.props.onItemOver)) {
-            this.props.onItemOver({ ...target, event: e });
-        }
+        this.notifyEvent('onItemOver', { ...target, event: e });
     }
 
     /** Chart content 'mouseleave' event handler */
@@ -664,8 +660,8 @@ export class BaseChart extends Component {
             this.deactivateTarget();
         }
 
-        if (this.currentTarget?.item && isFunction(this.props.onItemOut)) {
-            this.props.onItemOut({ ...this.currentTarget, event: e });
+        if (this.currentTarget?.item) {
+            this.notifyEvent('onItemOut', { ...this.currentTarget, event: e });
         }
 
         this.currentTarget = null;
