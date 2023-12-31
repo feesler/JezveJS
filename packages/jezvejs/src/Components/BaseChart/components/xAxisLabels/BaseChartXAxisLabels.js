@@ -50,7 +50,7 @@ export class BaseChartXAxisLabels extends Component {
             throw new Error('Invalid onResize callback');
         }
 
-        this.labels = [];
+        this.labels = null;
 
         this.state = {
             ...this.props,
@@ -112,6 +112,7 @@ export class BaseChartXAxisLabels extends Component {
         const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
         const formatFunction = this.getLabelRenderer(state);
 
+        const prevLabels = this.labels ?? [];
         const labels = [];
         for (let i = 0; i < visibleGroups; i += 1) {
             const groupIndex = firstGroupIndex + i;
@@ -125,7 +126,7 @@ export class BaseChartXAxisLabels extends Component {
                 continue;
             }
 
-            let label = this.labels.find((item) => item?.groupIndex === groupIndex);
+            let label = prevLabels.find((item) => item?.groupIndex === groupIndex);
             if (label) {
                 label.reused = true;
             } else {
@@ -160,62 +161,73 @@ export class BaseChartXAxisLabels extends Component {
             && state.scrollLeft < prevState.scrollLeft
         );
 
-        for (let ind = 0; ind < labels.length; ind += 1) {
-            const index = (toLeft) ? (labels.length - ind - 1) : ind;
-            const label = labels[index];
-            const labelLeft = label.elem.offsetLeft;
-            const labelRight = labelLeft + label.elem.offsetWidth;
+        const updateLabels = () => {
+            for (let ind = 0; ind < labels.length; ind += 1) {
+                const index = (toLeft) ? (labels.length - ind - 1) : ind;
+                const label = labels[index];
+                const labelLeft = label.elem.offsetLeft;
+                const labelRight = labelLeft + label.elem.offsetWidth;
 
-            const overflow = (toLeft)
-                ? (labelRight + lblMarginLeft > lastOffset)
-                : (labelLeft < lastOffset + lblMarginLeft);
+                const overflow = (toLeft)
+                    ? (labelRight + lblMarginLeft > lastOffset)
+                    : (labelLeft < lastOffset + lblMarginLeft);
 
-            // Check current label not intersects previous one
-            if (lastOffset > 0 && overflow) {
-                labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
-                if (prevLabel?.reused || !label.reused) {
-                    continue;
+                // Check current label not intersects previous one
+                if (lastOffset > 0 && overflow) {
+                    labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
+                    if (prevLabel?.reused || !label.reused) {
+                        continue;
+                    }
                 }
-            }
 
-            // Check last label not overflow chart to prevent
-            // horizontal scroll in fitToWidth mode
-            if (labelRight - state.chartContentWidth > 1) {
-                resizeRequested = !state.fitToWidth;
-                resizeOffset = labelRight;
-                if (state.fitToWidth || !state.allowLastXAxisLabelOverflow) {
-                    labelsToRemove.push(label);
-                    continue;
+                // Check last label not overflow chart to prevent
+                // horizontal scroll in fitToWidth mode
+                if (
+                    (labelRight - state.chartContentWidth > 1)
+                    && (labelRight - state.scrollerWidth > 1)
+                ) {
+                    resizeRequested = !state.fitToWidth;
+                    resizeOffset = labelRight;
+                    if (state.fitToWidth || !state.allowLastXAxisLabelOverflow) {
+                        labelsToRemove.push(label);
+                        continue;
+                    }
                 }
+
+                lastOffset = (toLeft) ? labelLeft : labelRight;
+                prevLabel = label;
             }
 
-            lastOffset = (toLeft) ? labelLeft : labelRight;
-            prevLabel = label;
-        }
-
-        // Remove overflow labels
-        for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
-            const label = labelsToRemove[ind];
-            label?.elem?.remove();
-
-            const labelsIndex = labels.indexOf(label);
-            if (labelsIndex !== -1) {
-                labels.splice(labelsIndex, 1);
-            }
-        }
-
-        // Remove labels not included to new state
-        for (let ind = 0; ind < this.labels.length; ind += 1) {
-            const label = this.labels[ind];
-            if (!labels.includes(label)) {
+            // Remove overflow labels
+            for (let ind = 0; ind < labelsToRemove.length; ind += 1) {
+                const label = labelsToRemove[ind];
                 label?.elem?.remove();
+
+                const labelsIndex = labels.indexOf(label);
+                if (labelsIndex !== -1) {
+                    labels.splice(labelsIndex, 1);
+                }
             }
-        }
 
-        this.labels = labels;
+            // Remove labels not included to new state
+            for (let ind = 0; ind < prevLabels.length; ind += 1) {
+                const label = prevLabels[ind];
+                if (!labels.includes(label)) {
+                    label?.elem?.remove();
+                }
+            }
 
-        if (resizeRequested) {
-            setTimeout(() => this.onResize(resizeOffset));
+            this.labels = labels;
+
+            if (resizeRequested) {
+                setTimeout(() => this.onResize(resizeOffset));
+            }
+        };
+
+        if (this.labels) {
+            updateLabels();
+        } else {
+            requestAnimationFrame(() => updateLabels());
         }
     }
 }

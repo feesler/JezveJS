@@ -61,8 +61,11 @@
   --rs-slider-offset: calc((var(--rs-area-size) - var(--rs-slider-size)) / 2);
 
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   max-width: 100%;
+  z-index: 2;
 
   .range-slider__area {
     max-width: 100%;

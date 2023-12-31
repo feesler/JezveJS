@@ -51,6 +51,8 @@ class HistogramView extends DemoView {
 
         this.columnWidthAndGap();
         this.fitToWidth();
+
+        this.horizontalLabels();
         this.maxColumnWidth();
 
         this.chartAxes();
@@ -113,6 +115,22 @@ class HistogramView extends DemoView {
             title: '\'fitToWidth\' option',
             content: chartContainer('chart_fittowidth', histogram),
         });
+    }
+
+    horizontalLabels() {
+        const histogram = Histogram.create({
+            maxColumnWidth: 38,
+            groupsGap: 3,
+        });
+
+        this.addSection({
+            id: 'horizontalLabels',
+            title: 'Horizontal labels test',
+            description: 'x-axis label for the second column should be hidded.',
+            content: chartContainer('horizontalLabelsChart', histogram),
+        });
+
+        histogram.setData(maxColumnWidthData);
     }
 
     maxColumnWidth() {
