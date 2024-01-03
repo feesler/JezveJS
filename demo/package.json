@@ -9,7 +9,7 @@
         "@jezvejs/assert": "^1.0.1",
         "@jezvejs/color": "^1.0.1",
         "@jezvejs/datetime": "^1.1.0",
-        "@jezvejs/dom": "^1.0.1",
+        "@jezvejs/dom": "^1.1.0",
         "@jezvejs/types": "^1.0.0",
         "jezvejs": "^2.21.6"
     }

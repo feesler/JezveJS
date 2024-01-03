@@ -23,7 +23,7 @@
         "@babel/runtime": "^7.23.7",
         "@jezvejs/assert": "^1.0.1",
         "@jezvejs/datetime": "^1.1.0",
-        "@jezvejs/dom": "^1.0.1",
+        "@jezvejs/dom": "^1.1.0",
         "@jezvejs/number": "^1.0.0",
         "@jezvejs/types": "^1.0.0",
         "core-js": "^3.35.0",
