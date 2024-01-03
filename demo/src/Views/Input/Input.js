@@ -29,11 +29,9 @@ class InputView extends DemoView {
         const logsField = LogsField.create();
 
         const input = createElement('input', {
-            props: {
-                id: 'defaultInput',
-                className: 'input',
-                type: 'text',
-            },
+            id: 'defaultInput',
+            className: 'input',
+            type: 'text',
         });
         const container = createElement('div', {
             children: input,

@@ -10,7 +10,7 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './RangeSliderView.scss';
 
 const createValueElement = () => {
-    const res = createElement('div', { props: { className: 'range-slider-value' } });
+    const res = createElement('div', { className: 'range-slider-value' });
 
     res.renderValue = (rangeSlider) => {
         if (rangeSlider.props.range) {

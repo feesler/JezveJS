@@ -118,22 +118,22 @@ export class RangeSlider extends Component {
     init() {
         this.slider = this.createSlider();
         if (this.props.range) {
-            this.selectedArea = createElement('div', { props: { className: SELECTED_AREA_CLASS } });
+            this.selectedArea = createElement('div', { className: SELECTED_AREA_CLASS });
             this.endSlider = this.createSlider();
         }
 
-        this.sliderArea = createElement('div', { props: { className: SLIDER_AREA_CLASS } });
+        this.sliderArea = createElement('div', { className: SLIDER_AREA_CLASS });
 
         if (this.props.beforeArea) {
-            this.beforeArea = createElement('div', { props: { className: BEFORE_AREA_CLASS } });
+            this.beforeArea = createElement('div', { className: BEFORE_AREA_CLASS });
         }
 
         if (this.props.afterArea) {
-            this.afterArea = createElement('div', { props: { className: AFTER_AREA_CLASS } });
+            this.afterArea = createElement('div', { className: AFTER_AREA_CLASS });
         }
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [
                 this.sliderArea,
                 this.beforeArea,
@@ -151,7 +151,7 @@ export class RangeSlider extends Component {
     }
 
     createSlider() {
-        return createElement('div', { props: { className: SLIDER_CLASS } });
+        return createElement('div', { className: SLIDER_CLASS });
     }
 
     initSlider(slider, onChange) {

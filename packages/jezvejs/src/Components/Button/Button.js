@@ -250,7 +250,7 @@ export class Button extends Component {
             return;
         }
 
-        const contentElem = createElement('span', { props: { className: CONTENT_CLASS } });
+        const contentElem = createElement('span', { className: CONTENT_CLASS });
         setContent(contentElem, title);
 
         if (state.iconAlign === 'left') {

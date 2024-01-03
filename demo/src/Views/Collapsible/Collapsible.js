@@ -85,10 +85,8 @@ class CollapsibleView extends DemoView {
 
     initCustomHeader() {
         const titleContainer = createElement('div', {
-            props: {
-                className: 'custom-title',
-                textContent: 'Hover/focus to see controls',
-            },
+            className: 'custom-title',
+            textContent: 'Hover/focus to see controls',
         });
         const updateBtn = createButton(UpdateIcon());
         const delBtn = createButton(DeleteIcon());
@@ -113,13 +111,12 @@ class CollapsibleView extends DemoView {
 
     initDisabledToggle() {
         const titleContainer = createElement('div', {
-            props: {
-                className: 'custom-title',
-                textContent: 'Toggle only by click button',
-            },
+            className: 'custom-title',
+            textContent: 'Toggle only by click button',
         });
         const toggleBtn = createElement('button', {
-            props: { className: `btn ${CUSTOM_BTN_CLASS}`, type: 'button' },
+            className: `btn ${CUSTOM_BTN_CLASS}`,
+            type: 'button',
             children: ToggleIcon({ class: CUSTOM_ICON_CLASS }),
         });
 

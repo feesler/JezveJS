@@ -75,10 +75,10 @@ class DragAndDropView extends DemoView {
 
     initOriginalAvatar() {
         const square = createElement('div', {
-            props: { className: 'square abs_pos_square' },
+            className: 'square abs_pos_square',
         });
         const dropArea = createElement('div', {
-            props: { className: 'section-h200 drag-area' },
+            className: 'section-h200 drag-area',
             children: square,
         });
 
@@ -98,18 +98,18 @@ class DragAndDropView extends DemoView {
 
     initClonedAvatar() {
         const square1 = createElement('div', {
-            props: { className: 'square', textContent: '1' },
+            className: 'square', textContent: '1',
         });
         const square2 = createElement('div', {
-            props: { className: 'square', textContent: '2' },
+            className: 'square', textContent: '2',
         });
 
         const innerDrop1 = createElement('div', {
-            props: { className: 'inner-drop' },
+            className: 'inner-drop',
             children: [square1, square2],
         });
         const innerDrop2 = createElement('div', {
-            props: { className: 'inner-drop' },
+            className: 'inner-drop',
         });
 
         DefaultDragZone.create({ elem: square1 });
@@ -128,10 +128,10 @@ class DragAndDropView extends DemoView {
 
     initXAxisAvatar() {
         const slider = createElement('div', {
-            props: { className: 'x-axis-slider' },
+            className: 'x-axis-slider',
         });
         const dropArea = createElement('div', {
-            props: { className: 'x-axis-area' },
+            className: 'x-axis-area',
             children: slider,
         });
 
@@ -143,7 +143,7 @@ class DragAndDropView extends DemoView {
             title: 'Drag only by X axis',
             description: '\'mouseMoveThreshold\' and \'touchMoveTimeout\' options are set to 0',
             content: createElement('div', {
-                props: { className: 'section-h200' },
+                className: 'section-h200',
                 children: dropArea,
             }),
         });
@@ -151,7 +151,7 @@ class DragAndDropView extends DemoView {
 
     initSortable() {
         const sortableContainer = createElement('div', {
-            props: { className: 'sortable-tiles' },
+            className: 'sortable-tiles',
         });
 
         for (let i = 1; i <= 6; i += 1) {
@@ -250,8 +250,8 @@ class DragAndDropView extends DemoView {
     initExchangeable() {
         const logsField = LogsField.create();
 
-        const listExch1 = createElement('div', { props: { className: 'list-area' } });
-        const listExch2 = createElement('div', { props: { className: 'list-area' } });
+        const listExch1 = createElement('div', { className: 'list-area' });
+        const listExch2 = createElement('div', { className: 'list-area' });
 
         for (let i = 1; i <= 10; i += 1) {
             const srcItem = renderListItem(`Item ${i}`);
@@ -291,7 +291,7 @@ class DragAndDropView extends DemoView {
                         Left list uses default dragClass option (.drag). Right list use own dragClass.`,
             content: [
                 createElement('div', {
-                    props: { className: 'exch-lists-container' },
+                    className: 'exch-lists-container',
                     children: [listExch1, listExch2],
                 }),
                 logsField.elem,
@@ -337,7 +337,7 @@ class DragAndDropView extends DemoView {
     initTree() {
         const logsField = LogsField.create();
 
-        const treeRoot = createElement('div', { props: { className: 'tree' } });
+        const treeRoot = createElement('div', { className: 'tree' });
         for (let i = 1; i <= 4; i += 1) {
             const childItems = (i < 3) ? [1, 2, 3] : [];
             const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
@@ -383,7 +383,7 @@ class DragAndDropView extends DemoView {
     initTreeExchange() {
         const logsField = LogsField.create();
 
-        const treeExch1 = createElement('div', { props: { className: 'tree' } });
+        const treeExch1 = createElement('div', { className: 'tree' });
         for (let i = 1; i <= 4; i += 1) {
             const childItems = (i < 3) ? [1, 2, 3] : [];
             const content = childItems.map((childId) => renderTreeItem(`Item ${i}.${childId}`));
@@ -391,7 +391,7 @@ class DragAndDropView extends DemoView {
             treeExch1.append(item);
         }
 
-        const treeExch2 = createElement('div', { props: { className: 'tree' } });
+        const treeExch2 = createElement('div', { className: 'tree' });
         for (let i = 1; i <= 4; i += 1) {
             const childItems = (i > 3) ? [1, 2] : [];
             const content = childItems.map((childId) => (
@@ -432,7 +432,7 @@ class DragAndDropView extends DemoView {
             title: 'Tree exchange',
             content: [
                 createElement('div', {
-                    props: { className: 'exch-lists-container' },
+                    className: 'exch-lists-container',
                     children: [treeExch1, treeExch2],
                 }),
                 logsField.elem,
@@ -464,7 +464,7 @@ class DragAndDropView extends DemoView {
         const logsField = LogsField.create();
 
         const table = createElement('table', {
-            props: { className: 'sortable_tbl' },
+            className: 'sortable_tbl',
             children: tableData.map((row) => renderTBody(renderTableRow(row))),
         });
 
@@ -490,7 +490,7 @@ class DragAndDropView extends DemoView {
         const logsField = LogsField.create();
 
         const table = createElement('table', {
-            props: { className: 'sortable_tbl' },
+            className: 'sortable_tbl',
             children: renderTBody(tableData.map((row) => renderTableRow(row))),
         });
 
@@ -516,7 +516,7 @@ class DragAndDropView extends DemoView {
         const logsField = LogsField.create();
 
         const table = createElement('table', {
-            props: { className: 'sortable_tbl' },
+            className: 'sortable_tbl',
             children: tableData.map((row) => renderTableRow(row)),
         });
 
@@ -540,8 +540,8 @@ class DragAndDropView extends DemoView {
     /** handles option */
     initHandles() {
         const dragItem1 = createElement('div', {
-            props: { className: 'drag_item' },
-            children: createElement('input', { props: { type: 'text' } }),
+            className: 'drag_item',
+            children: createElement('input', { type: 'text' }),
         });
 
         DefaultDragZone.create({
@@ -550,11 +550,12 @@ class DragAndDropView extends DemoView {
             handles: dragItem1,
         });
 
-        const dragHandle2 = createElement('div', { props: { className: 'drag-handle' } });
+        const dragHandle2 = createElement('div', { className: 'drag-handle' });
         const dragItem2 = createElement('div', {
-            props: { className: 'drag_item', style: { top: '50px' } },
+            className: 'drag_item',
+            style: { top: '50px' },
             children: [
-                createElement('input', { props: { type: 'text' } }),
+                createElement('input', { type: 'text' }),
                 dragHandle2,
             ],
         });
@@ -577,9 +578,10 @@ class DragAndDropView extends DemoView {
         });
 
         const dragItem3 = createElement('div', {
-            props: { className: 'drag_item', style: { top: '100px' } },
+            className: 'drag_item',
+            style: { top: '100px' },
             children: [
-                createElement('input', { props: { type: 'text' } }),
+                createElement('input', { type: 'text' }),
                 dragIcon1.elem,
                 dragIcon2.elem,
             ],
@@ -595,7 +597,7 @@ class DragAndDropView extends DemoView {
         });
 
         const dropArea = createElement('div', {
-            props: { className: 'section-h200 drag-area' },
+            className: 'section-h200 drag-area',
             children: [dragItem1, dragItem2, dragItem3],
         });
 
@@ -610,7 +612,7 @@ class DragAndDropView extends DemoView {
 
     /** Sortable with rootOnlyHandle option */
     initRootOnlyHandle() {
-        const listArea = createElement('div', { props: { className: 'list-area' } });
+        const listArea = createElement('div', { className: 'list-area' });
         for (let i = 1; i <= 10; i += 1) {
             const item = renderListItemWithInput(`Item ${i}`);
             listArea.append(item);
@@ -633,7 +635,7 @@ class DragAndDropView extends DemoView {
 
     /** Sortable with query handles */
     initQueryHandles() {
-        const listArea = createElement('div', { props: { className: 'list-area' } });
+        const listArea = createElement('div', { className: 'list-area' });
         for (let i = 1; i <= 10; i += 1) {
             const item = renderListItemWithHandle(`Item ${i}`);
             listArea.append(item);
@@ -657,7 +659,7 @@ class DragAndDropView extends DemoView {
     /** Sortable with single item */
     initSingleItem() {
         const list1 = createElement('div', {
-            props: { className: 'list-area' },
+            className: 'list-area',
             children: renderListItem('Item 1'),
         });
 
@@ -676,7 +678,7 @@ class DragAndDropView extends DemoView {
         });
 
         const list2 = createElement('div', {
-            props: { className: 'list-area' },
+            className: 'list-area',
             children: renderListItem('Item 1'),
         });
         Sortable.create({

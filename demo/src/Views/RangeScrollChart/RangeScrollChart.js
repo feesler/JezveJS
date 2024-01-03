@@ -10,7 +10,8 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './RangeScrollChartView.scss';
 
 const chartContainer = (id, chart) => createElement('div', {
-    props: { id, className: 'std_chart_wrap' },
+    id,
+    className: 'std_chart_wrap',
     children: chart.elem,
 });
 

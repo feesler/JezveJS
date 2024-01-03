@@ -8,7 +8,8 @@ import { createButtons } from '../../Application/utils.js';
 import './PieChartView.scss';
 
 const chartContainer = (id, elem) => createElement('div', {
-    props: { id, className: 'std_chart_wrap' },
+    id,
+    className: 'std_chart_wrap',
     children: asArray(elem),
 });
 
@@ -56,7 +57,7 @@ class PieChartView extends DemoView {
 
     initOffset() {
         const selectedInfo = createElement('div', {
-            props: { id: 'selectedInfo', className: 'info-bottom' },
+            id: 'selectedInfo', className: 'info-bottom',
         });
 
         let data = [
@@ -101,7 +102,7 @@ class PieChartView extends DemoView {
 
     initInnerRadius() {
         const selectedInfo = createElement('div', {
-            props: { id: 'selectedInfo-inner', className: 'info-inner' },
+            id: 'selectedInfo-inner', className: 'info-inner',
         });
 
         let data = [

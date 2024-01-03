@@ -28,17 +28,15 @@ export class LogsField extends Component {
 
     init() {
         this.textarea = createElement('textarea', {
-            props: { id: this.props.inputId },
+            id: this.props.inputId,
         });
         this.label = createElement('label', {
-            props: {
-                htmlFor: this.props.inputId,
-                textContent: this.props.title,
-            },
+            htmlFor: this.props.inputId,
+            textContent: this.props.title,
         });
 
         this.elem = createElement('div', {
-            props: { className: FIELD_CLASS },
+            className: FIELD_CLASS,
             children: [
                 this.label,
                 this.textarea,

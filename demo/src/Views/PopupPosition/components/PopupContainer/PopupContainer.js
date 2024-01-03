@@ -36,9 +36,7 @@ export class PopupContainer extends Component {
         }
 
         this.elem = createElement('div', {
-            props: {
-                className: POPUP_CONTAINER_CLASS,
-            },
+            className: POPUP_CONTAINER_CLASS,
             children: [
                 this.createHeader(this.props.header),
                 ...listItems,
@@ -50,19 +48,15 @@ export class PopupContainer extends Component {
 
     createHeader(textContent) {
         return createElement('div', {
-            props: {
-                className: POPUP_HEADER_CLASS,
-                textContent,
-            },
+            className: POPUP_HEADER_CLASS,
+            textContent,
         });
     }
 
     createListItem(textContent) {
         return createElement('div', {
-            props: {
-                className: POPUP_ITEM_CLASS,
-                textContent,
-            },
+            className: POPUP_ITEM_CLASS,
+            textContent,
         });
     }
 }

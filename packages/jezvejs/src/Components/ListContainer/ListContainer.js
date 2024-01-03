@@ -211,10 +211,8 @@ export class ListContainer extends Component {
      */
     defaultNoDataMessage(props) {
         return createElement('span', {
-            props: {
-                className: props?.className,
-                textContent: props?.message,
-            },
+            className: props?.className,
+            textContent: props?.message,
         });
     }
 

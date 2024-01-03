@@ -16,7 +16,7 @@ export const tableData = [
 
 export const renderTileIcon = () => (
     createElement('span', {
-        props: { className: 'sortable-tile__icon-container' },
+        className: 'sortable-tile__icon-container',
         children: Icon.create({
             icon: TileCardIcon(),
             className: 'sortable-tile__icon',
@@ -26,13 +26,13 @@ export const renderTileIcon = () => (
 
 export const renderTileTitle = (textContent) => (
     createElement('span', {
-        props: { className: 'sortable-tile__title', textContent },
+        className: 'sortable-tile__title', textContent,
     })
 );
 
 export const renderTile = (textContent, withIcon = false) => (
     createElement('div', {
-        props: { className: 'sortable-tile' },
+        className: 'sortable-tile',
         children: [
             renderTileTitle(textContent),
             (withIcon) ? renderTileIcon() : null,
@@ -42,7 +42,7 @@ export const renderTile = (textContent, withIcon = false) => (
 
 export const renderTilePlaceholder = () => (
     createElement('div', {
-        props: { className: 'sortable-tile sortable-tile_placeholder' },
+        className: 'sortable-tile sortable-tile_placeholder',
     })
 );
 
@@ -57,28 +57,28 @@ export const getItemIdByElem = (elem) => {
 
 export const renderListItem = (title = 'Item') => (
     createElement('div', {
-        props: { className: 'list_item' },
-        children: createElement('span', { props: { textContent: title } }),
+        className: 'list_item',
+        children: createElement('span', { textContent: title }),
     })
 );
 
 export const renderDestListItem = (title = 'Item', isPlaceholder = false) => (
     createElement('div', {
-        props: { className: `list_item ${isPlaceholder ? 'list_item_placeholder' : 'list_item_2'}` },
-        children: createElement('span', { props: { textContent: title } }),
+        className: `list_item ${isPlaceholder ? 'list_item_placeholder' : 'list_item_2'}`,
+        children: createElement('span', { textContent: title }),
     })
 );
 
 export const renderTreeItem = (title, content = [], className = []) => (
     createElement('div', {
-        props: { className: ['tree-item', ...asArray(className)].join(' ') },
+        className: ['tree-item', ...asArray(className)].join(' '),
         children: [
             createElement('div', {
-                props: { className: 'tree-item__title' },
-                children: createElement('span', { props: { textContent: title } }),
+                className: 'tree-item__title',
+                children: createElement('span', { textContent: title }),
             }),
             createElement('div', {
-                props: { className: 'tree-item__content' },
+                className: 'tree-item__content',
                 children: content,
             }),
         ],
@@ -122,7 +122,7 @@ export const renderTableRow = (columns) => (
     createElement('tr', {
         children: asArray(columns).map((textContent) => (
             createElement('td', {
-                children: createElement('div', { props: { textContent } }),
+                children: createElement('div', { textContent }),
             })
         )),
     })
@@ -130,28 +130,28 @@ export const renderTableRow = (columns) => (
 
 export const renderTBody = (children) => (
     createElement('tbody', {
-        props: { className: 'tbl_list_item' },
+        className: 'tbl_list_item',
         children,
     })
 );
 
 export const renderListItemWithInput = (title = 'Item') => (
     createElement('div', {
-        props: { className: 'list_item' },
+        className: 'list_item',
         children: [
-            createElement('span', { props: { textContent: title } }),
-            createElement('input', { props: { type: 'text' } }),
+            createElement('span', { textContent: title }),
+            createElement('input', { type: 'text' }),
         ],
     })
 );
 
 export const renderListItemWithHandle = (title = 'Item') => (
     createElement('div', {
-        props: { className: 'list_item' },
+        className: 'list_item',
         children: [
-            createElement('div', { props: { className: 'drag-handle' } }),
-            createElement('span', { props: { textContent: title } }),
-            createElement('input', { props: { type: 'text' } }),
+            createElement('div', { className: 'drag-handle' }),
+            createElement('span', { textContent: title }),
+            createElement('input', { type: 'text' }),
         ],
     })
 );

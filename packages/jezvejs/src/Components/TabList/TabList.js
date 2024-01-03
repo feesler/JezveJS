@@ -80,7 +80,7 @@ export class TabList extends Component {
         });
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [
                 this.tabs.elem,
                 this.contentList.elem,

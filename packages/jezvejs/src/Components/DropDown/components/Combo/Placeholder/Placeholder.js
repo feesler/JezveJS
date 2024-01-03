@@ -22,7 +22,7 @@ export class DropDownPlaceholder extends Component {
     }
 
     init() {
-        this.elem = createElement('span', { props: { className: PLACEHOLDER_CLASS } });
+        this.elem = createElement('span', { className: PLACEHOLDER_CLASS });
     }
 
     render(state) {

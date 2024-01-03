@@ -28,18 +28,16 @@ export class DropDownCollapsibleMenuGroupHeader extends DropDownGroupHeader {
 
     init() {
         this.titleElem = createElement('span', {
-            props: { className: TITLE_CLASS },
+            className: TITLE_CLASS,
         });
         this.toggleBtn = Icon.create({
             className: TOGGLE_ICON_CLASS,
         });
 
         this.elem = createElement('button', {
-            props: {
-                className: DropDownCollapsibleMenuGroupHeader.className,
-                type: 'button',
-                tabIndex: -1,
-            },
+            className: DropDownCollapsibleMenuGroupHeader.className,
+            type: 'button',
+            tabIndex: -1,
             children: [this.titleElem, this.toggleBtn.elem],
         });
     }

@@ -115,17 +115,25 @@ export const applyElementOptions = (elem, options = {}) => {
         return;
     }
 
-    if (options.props) {
-        setProps(elem, options.props);
+    const {
+        attrs,
+        children,
+        events,
+        ...rest
+    } = options;
+    const props = rest.props ?? rest;
+
+    if (props) {
+        setProps(elem, props);
     }
-    if (options.attrs) {
-        setAttributes(elem, options.attrs);
+    if (attrs) {
+        setAttributes(elem, attrs);
     }
-    if (options.children) {
-        addChilds(elem, options.children);
+    if (children) {
+        addChilds(elem, children);
     }
-    if (options.events) {
-        setEvents(elem, options.events);
+    if (events) {
+        setEvents(elem, events);
     }
 };
 

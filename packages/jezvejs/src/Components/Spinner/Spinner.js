@@ -19,7 +19,7 @@ export class Spinner extends Component {
     }
 
     init() {
-        this.elem = createElement('div', { props: { className: SPINNER_CLASS } });
+        this.elem = createElement('div', { className: SPINNER_CLASS });
         this.setClassNames();
 
         this.render(this.state);

@@ -59,7 +59,7 @@ export class Paginator extends Component {
     }
 
     init() {
-        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
+        this.elem = createElement('div', { className: CONTAINER_CLASS });
     }
 
     parse() {
@@ -239,21 +239,19 @@ export class Paginator extends Component {
 
     renderItem(item) {
         if (item.ellipsis) {
-            return createElement('span', { props: { className: ITEM_CLASS, textContent: '...' } });
+            return createElement('span', { className: ITEM_CLASS, textContent: '...' });
         }
 
         if (item.active && !this.state.allowActiveLink) {
             return createElement('span', {
-                props: {
-                    className: getClassName(ITEM_CLASS, ACTIVE_ITEM_CLASS),
-                    textContent: item.page,
-                },
+                className: getClassName(ITEM_CLASS, ACTIVE_ITEM_CLASS),
+                textContent: item.page,
             });
         }
 
         const res = (item.navigation)
             ? this.renderArrow(item.navigation === 'next')
-            : createElement('a', { props: { className: ITEM_CLASS, textContent: item.page } });
+            : createElement('a', { className: ITEM_CLASS, textContent: item.page });
 
         if (item.page) {
             res.setAttribute('data-page', item.page);
@@ -280,7 +278,7 @@ export class Paginator extends Component {
 
         const arrowNavClass = (isNext) ? ARROW_CLASS_NEXT : ARROW_CLASS_PREV;
         return createElement('a', {
-            props: { className: getClassName(ITEM_CLASS, ARROW_CLASS, arrowNavClass) },
+            className: getClassName(ITEM_CLASS, ARROW_CLASS, arrowNavClass),
             children: arrowIcon,
         });
     }

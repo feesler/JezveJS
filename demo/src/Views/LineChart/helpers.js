@@ -1,7 +1,8 @@
 import { createElement } from '@jezvejs/dom';
 
 export const chartContainer = (id, chart) => createElement('div', {
-    props: { id, className: 'std_chart_wrap' },
+    id,
+    className: 'std_chart_wrap',
     children: chart?.elem,
 });
 

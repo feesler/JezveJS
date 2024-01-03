@@ -31,7 +31,7 @@ export class MenuCheckbox extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: { className: CHECKBOX_CLASS },
+            className: CHECKBOX_CLASS,
             children: Icon.create({
                 icon: this.createCheckIcon(),
                 className: ICON_CLASS,

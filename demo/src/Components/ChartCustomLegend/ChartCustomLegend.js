@@ -36,7 +36,7 @@ export class ChartCustomLegend extends Component {
 
     init() {
         this.elem = createElement('ul', {
-            props: { className: LEGEND_LIST_CLASS },
+            className: LEGEND_LIST_CLASS,
             events: { click: (e) => this.onClick(e) },
         });
     }
@@ -74,18 +74,16 @@ export class ChartCustomLegend extends Component {
         const activeCategory = state.activeCategory?.toString() ?? null;
 
         const items = categories.map((category) => createElement('li', {
-            props: {
-                className: (
-                    (category?.toString() === activeCategory)
-                        ? `${ACTIVE_ITEM_CLASS}${category + 1}`
-                        : `${ITEM_CLASS}${category + 1}`
-                ),
-                dataset: {
-                    category,
-                },
+            className: (
+                (category?.toString() === activeCategory)
+                    ? `${ACTIVE_ITEM_CLASS}${category + 1}`
+                    : `${ITEM_CLASS}${category + 1}`
+            ),
+            dataset: {
+                category,
             },
             children: createElement('span', {
-                props: { textContent: `Category ${category + 1}` },
+                textContent: `Category ${category + 1}`,
             }),
         }));
 

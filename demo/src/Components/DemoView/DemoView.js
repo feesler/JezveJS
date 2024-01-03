@@ -48,18 +48,14 @@ export class DemoView extends View {
 
         const baseURL = App.getBaseURL();
         const logoLink = createElement('a', {
-            props: {
-                className: 'nav-header__logo',
-                href: baseURL.toString(),
-                textContent: 'JezveJS',
-            },
+            className: 'nav-header__logo',
+            href: baseURL.toString(),
+            textContent: 'JezveJS',
         });
 
         const versionLabel = createElement('div', {
-            props: {
-                className: 'nav-header__version',
-                textContent: App.getVersion(),
-            },
+            className: 'nav-header__version',
+            textContent: App.getVersion(),
         });
 
         this.header = Header.create({
@@ -93,14 +89,14 @@ export class DemoView extends View {
         this.pageContentWrapper = document.querySelector('.page-content-wrap');
 
         this.container = createElement('div', {
-            props: { className: 'content-container' },
+            className: 'content-container',
         });
         this.pageContentWrapper.append(this.container);
     }
 
     setMainHeading(title) {
         this.mainHeader = createElement('h1', {
-            props: { textContent: title },
+            textContent: title,
         });
 
         this.pageContentWrapper.prepend(this.mainHeader);
@@ -131,7 +127,7 @@ export class DemoView extends View {
             items = [],
         } = options;
 
-        const header = createElement('h1', { props: { textContent: title } });
+        const header = createElement('h1', { textContent: title });
         this.container.append(header);
 
         this.initTableOfContents();

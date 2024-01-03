@@ -62,7 +62,7 @@ export class BaseChartXAxisLabels extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
         });
     }
 
@@ -136,7 +136,7 @@ export class BaseChartXAxisLabels extends Component {
                     value,
                     formattedValue: formatFunction(value),
                     elem: createElement('span', {
-                        props: { className: LABEL_CLASS },
+                        className: LABEL_CLASS,
                     }),
                 };
 

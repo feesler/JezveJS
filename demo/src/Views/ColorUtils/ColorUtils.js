@@ -27,7 +27,7 @@ class ColorUtilsView extends DemoView {
     }
 
     initGenerator() {
-        const content = createElement('div', { props: { className: 'scrollable-container' } });
+        const content = createElement('div', { className: 'scrollable-container' });
         let hueStepsField = null;
         let lightnessStepsField = null;
 
@@ -79,10 +79,10 @@ class ColorUtilsView extends DemoView {
         const hueStep = MAX_HUE / hueSteps;
         const lightnessStep = MAX_LIGHTNESS / (lightnessSteps + 2);
 
-        const res = createElement('div', { props: { className: 'colors-container' } });
+        const res = createElement('div', { className: 'colors-container' });
 
         for (let j = 1; j <= lightnessSteps; j += 1) {
-            const row = createElement('div', { props: { className: 'colors-row' } });
+            const row = createElement('div', { className: 'colors-row' });
             const hsl = {
                 hue: 0,
                 lightness: (lightnessStep * j),
@@ -104,7 +104,7 @@ class ColorUtilsView extends DemoView {
 
     createColorItem(color) {
         const res = createElement('div', {
-            props: { className: 'color-item' },
+            className: 'color-item',
         });
         res.style.setProperty('--color-item-value', color);
 

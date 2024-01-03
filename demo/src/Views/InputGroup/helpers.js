@@ -11,10 +11,8 @@ export const createInput = (props = {}) => (
 
 export const createText = (textContent) => (
     createElement('div', {
-        props: {
-            className: 'input-group__text',
-            textContent,
-        },
+        className: 'input-group__text',
+        textContent,
     })
 );
 
@@ -22,10 +20,8 @@ export const createButton = (textContent) => (
     Button.create({
         className: 'input-group__btn',
         title: createElement('div', {
-            props: {
-                className: 'input-group__btn-title',
-                textContent,
-            },
+            className: 'input-group__btn-title',
+            textContent,
         }),
     }).elem
 );
@@ -39,7 +35,7 @@ export const createInnerButton = (props = {}) => (
 
 export const createOuterContainer = (children) => (
     createElement('div', {
-        props: { className: 'input-group__input-outer' },
+        className: 'input-group__input-outer',
         children,
     })
 );

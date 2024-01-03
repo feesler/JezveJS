@@ -64,10 +64,10 @@ export class Radio extends Component {
             throw new Error('Name not specified');
         }
 
-        this.input = createElement('input', { props: { type: 'radio' } });
-        this.checkIcon = createElement('span', { props: { className: CHECK_CLASS } });
+        this.input = createElement('input', { type: 'radio' });
+        this.checkIcon = createElement('span', { className: CHECK_CLASS });
         this.elem = createElement('label', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [this.input, this.checkIcon],
         });
 
@@ -131,7 +131,7 @@ export class Radio extends Component {
         }
         // Create label element
         if (value && !this.label) {
-            this.label = createElement('span', { props: { className: LABEL_CLASS } });
+            this.label = createElement('span', { className: LABEL_CLASS });
             this.elem.append(this.label);
         }
 

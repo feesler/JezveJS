@@ -59,10 +59,10 @@ export class Switch extends Component {
     }
 
     init() {
-        this.input = createElement('input', { props: { type: 'checkbox' } });
-        this.slider = createElement('div', { props: { className: SLIDER_CLASS } });
+        this.input = createElement('input', { type: 'checkbox' });
+        this.slider = createElement('div', { className: SLIDER_CLASS });
         this.elem = createElement('label', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [this.input, this.slider],
         });
 
@@ -126,7 +126,7 @@ export class Switch extends Component {
         }
         // Create label element
         if (value && !this.label) {
-            this.label = createElement('span', { props: { className: LABEL_CLASS } });
+            this.label = createElement('span', { className: LABEL_CLASS });
             this.elem.append(this.label);
         }
 

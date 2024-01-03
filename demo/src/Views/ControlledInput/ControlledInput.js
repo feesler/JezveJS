@@ -44,10 +44,8 @@ class ControlledInputView extends DemoView {
                 input.elem,
                 createControls([
                     createElement('input', {
-                        props: {
-                            id: 'testValueInput',
-                            className: 'input',
-                        },
+                        id: 'testValueInput',
+                        className: 'input',
                     }),
                     logsField.elem,
                 ]),

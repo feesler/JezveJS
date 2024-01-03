@@ -148,11 +148,11 @@ export class BaseChart extends Component {
     /** Initialization of chart */
     init() {
         this.chart = createElement('div', {
-            props: { className: CHART_CLASS },
+            className: CHART_CLASS,
         });
 
         this.chartScroller = createElement('div', {
-            props: { className: SCROLLER_CLASS },
+            className: SCROLLER_CLASS,
             children: this.chart,
             events: {
                 scroll: {
@@ -163,17 +163,17 @@ export class BaseChart extends Component {
         });
 
         this.scrollerContainer = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: this.chartScroller,
         });
 
         this.chartContainer = createElement('div', {
-            props: { className: HORIZONTAL_CONTAINER_CLASS },
+            className: HORIZONTAL_CONTAINER_CLASS,
             children: this.scrollerContainer,
         });
 
         this.elem = createElement('div', {
-            props: { className: CHART_CLASS },
+            className: CHART_CLASS,
             children: this.chartContainer,
         });
 
@@ -716,7 +716,7 @@ export class BaseChart extends Component {
 
         removeEmptyClick(this.emptyClickHandler);
         if (!this.popup) {
-            this.popup = createElement('div', { props: { className: POPUP_CLASS } });
+            this.popup = createElement('div', { className: POPUP_CLASS });
             this.elem.append(this.popup);
         }
 
@@ -936,7 +936,7 @@ export class BaseChart extends Component {
 
         if (!this.legend) {
             this.legend = createElement('div', {
-                props: { className: LEGEND_CLASS },
+                className: LEGEND_CLASS,
                 children: asArray(legendContent),
             });
 

@@ -15,18 +15,16 @@ export class ChartMultiColumnPopup extends BaseChartPopup {
         const { target } = state;
 
         if (!target.group) {
-            return createElement('span', { props: { textContent: target.item.value } });
+            return createElement('span', { textContent: target.item.value });
         }
 
         return createElement('ul', {
-            props: { className: POPUP_LIST_CLASS },
+            className: POPUP_LIST_CLASS,
             children: target.group.map((item, index) => (
                 createElement('li', {
-                    props: {
-                        className: `${POPUP_LIST_ITEM_CLASS}${item.categoryIndex + 1}`,
-                    },
+                    className: `${POPUP_LIST_ITEM_CLASS}${item.categoryIndex + 1}`,
                     children: createElement(((target.index === index) ? 'b' : 'span'), {
-                        props: { textContent: item.value },
+                        textContent: item.value,
                     }),
                 })
             )),

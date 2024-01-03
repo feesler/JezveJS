@@ -61,10 +61,10 @@ export class Slider extends Component {
         } = this.props;
 
         this.content = createElement('div', {
-            props: { className: CONTENT_CLASS },
+            className: CONTENT_CLASS,
         });
         this.elem = createElement('div', {
-            props: { className: SLIDER_CLASS },
+            className: SLIDER_CLASS,
             children: this.content,
         });
         this.setContentPosition(0);
@@ -211,12 +211,10 @@ export class Slider extends Component {
         }
 
         const elem = createElement('div', {
-            props: {
-                className: 'slide',
-                style: {
-                    width: px(this.state.width),
-                    height: px(this.state.height),
-                },
+            className: 'slide',
+            style: {
+                width: px(this.state.width),
+                height: px(this.state.height),
             },
             children: content,
         });

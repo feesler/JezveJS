@@ -30,16 +30,14 @@ export class DatePickerWeekDaysHeader extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: { className: HEADER_CLASS },
+            className: HEADER_CLASS,
         });
     }
 
     renderWeekdayItem(item, state) {
         return createElement('div', {
-            props: {
-                className: WEEKDAY_CELL_CLASS,
-                textContent: getWeekdayShort(item.weekday, state.locales),
-            },
+            className: WEEKDAY_CELL_CLASS,
+            textContent: getWeekdayShort(item.weekday, state.locales),
         });
     }
 

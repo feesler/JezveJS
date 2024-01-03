@@ -33,7 +33,7 @@ export class MenuSeparator extends Component {
     }
 
     init() {
-        this.elem = createElement('div', { props: { className: SEPARATOR_CLASS } });
+        this.elem = createElement('div', { className: SEPARATOR_CLASS });
     }
 
     render(state) {

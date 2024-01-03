@@ -72,15 +72,15 @@ export class Checkbox extends Component {
     }
 
     init() {
-        this.input = createElement('input', { props: { type: 'checkbox' } });
+        this.input = createElement('input', { type: 'checkbox' });
 
         const icon = this.props.checkIcon ?? this.createCheckPath();
         this.checkIcon = createElement('span', {
-            props: { className: CHECK_CLASS },
+            className: CHECK_CLASS,
             children: icon,
         });
         this.elem = createElement('label', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [this.input, this.checkIcon],
         });
 
@@ -143,7 +143,7 @@ export class Checkbox extends Component {
         }
         // Create label element
         if (value && !this.label) {
-            this.label = createElement('span', { props: { className: LABEL_CLASS } });
+            this.label = createElement('span', { className: LABEL_CLASS });
             this.elem.append(this.label);
         }
 

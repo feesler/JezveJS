@@ -65,20 +65,20 @@ export class Popup extends Component {
     }
 
     init() {
-        this.headerElem = createElement('div', { props: { className: HEADER_CLASS } });
+        this.headerElem = createElement('div', { className: HEADER_CLASS });
         this.container = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [
                 this.headerElem,
             ],
         });
         this.wrapperElem = createElement('div', {
-            props: { className: WRAPPER_CLASS },
+            className: WRAPPER_CLASS,
             children: this.container,
         });
 
         this.elem = createElement('div', {
-            props: { className: POPUP_CLASS },
+            className: POPUP_CLASS,
             attrs: { hidden: '' },
             children: this.wrapperElem,
         });
@@ -179,7 +179,7 @@ export class Popup extends Component {
         }
 
         if (!this.titleElem) {
-            this.titleElem = createElement('h1', { props: { className: TITLE_CLASS } });
+            this.titleElem = createElement('h1', { className: TITLE_CLASS });
             this.headerElem.prepend(this.titleElem);
         }
 
@@ -220,7 +220,7 @@ export class Popup extends Component {
         }
 
         if (!this.contentElem) {
-            this.contentElem = createElement('div', { props: { className: MESSAGE_CLASS } });
+            this.contentElem = createElement('div', { className: MESSAGE_CLASS });
             if (this.headerElem) {
                 this.headerElem.after(this.contentElem);
             } else {
@@ -248,7 +248,7 @@ export class Popup extends Component {
         }
 
         if (!this.footerElem) {
-            this.footerElem = createElement('div', { props: { className: FOOTER_CLASS } });
+            this.footerElem = createElement('div', { className: FOOTER_CLASS });
             this.container.append(this.footerElem);
         }
 

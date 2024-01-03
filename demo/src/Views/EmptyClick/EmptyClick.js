@@ -25,13 +25,11 @@ class EmptyClickView extends DemoView {
     initSimple() {
         const excludedId = 'except';
 
-        const statusEl = createElement('div', { props: { id: 'status' } });
+        const statusEl = createElement('div', { id: 'status' });
         const excludedEl = createElement('div', {
-            props: {
-                id: excludedId,
-                textContent: 'Not here',
-                className: 'excluded-box',
-            },
+            id: excludedId,
+            textContent: 'Not here',
+            className: 'excluded-box',
         });
 
         let count = 0;

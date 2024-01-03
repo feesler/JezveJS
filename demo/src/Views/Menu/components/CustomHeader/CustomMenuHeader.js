@@ -14,7 +14,7 @@ export class CustomMenuHeader extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: { className: 'custom-header' },
+            className: 'custom-header',
         });
     }
 

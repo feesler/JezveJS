@@ -205,7 +205,8 @@ export class Menu extends Component {
         }
 
         this.elem = createElement('div', {
-            props: { className: MENU_CLASS, tabIndex: 0 },
+            className: MENU_CLASS,
+            tabIndex: 0,
             children,
             events: {
                 scroll: {

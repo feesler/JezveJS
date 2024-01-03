@@ -33,14 +33,14 @@ export class LocalesContainer extends Component {
         const { items, renderItem } = this.props;
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: items.map((item) => (
                 createElement('div', {
-                    props: { className: ITEM_CLASS },
+                    className: ITEM_CLASS,
                     children: [
-                        createElement('h3', { props: { textContent: item.title } }),
+                        createElement('h3', { textContent: item.title }),
                         createElement('div', {
-                            props: { id: item.id },
+                            id: item.id,
                             children: renderItem(item),
                         }),
                     ],

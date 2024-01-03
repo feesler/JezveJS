@@ -47,12 +47,10 @@ class ButtonView extends DemoView {
     initParsed() {
         // Parse INPUT element
         const inputElem = createElement('input', {
-            props: {
-                id: 'inputBtn',
-                className: 'btn',
-                type: 'button',
-                value: 'Input',
-            },
+            id: 'inputBtn',
+            className: 'btn',
+            type: 'button',
+            value: 'Input',
         });
 
         const inputBtn = Button.fromElement(inputElem);
@@ -60,18 +58,14 @@ class ButtonView extends DemoView {
 
         // Parse BUTTON element
         const createBtnElem = createElement('button', {
-            props: {
-                id: 'createBtn',
-                className: 'btn',
-                type: 'button',
-            },
+            id: 'createBtn',
+            className: 'btn',
+            type: 'button',
             children: [
                 PlusIcon({ class: 'btn__icon' }),
                 createElement('span', {
-                    props: {
-                        className: 'btn__content',
-                        textContent: 'Create',
-                    },
+                    className: 'btn__content',
+                    textContent: 'Create',
                 }),
             ],
         });
@@ -79,37 +73,31 @@ class ButtonView extends DemoView {
 
         // Check icon update after parse
         const updateBtnElem = createElement('button', {
-            props: {
-                id: 'updateBtn',
-                className: 'btn',
-                type: 'button',
-                textContent: 'Update',
-            },
+            id: 'updateBtn',
+            className: 'btn',
+            type: 'button',
+            textContent: 'Update',
         });
         const updateBtn = Button.fromElement(updateBtnElem);
         updateBtn.setIcon(UpdateIcon());
 
         // Parse DIV element
         const deleteBtnElem = createElement('button', {
-            props: {
-                id: 'deleteBtn',
-                className: 'btn',
-                type: 'button',
-            },
+            id: 'deleteBtn',
+            className: 'btn',
+            type: 'button',
             children: [
                 DeleteIcon({ class: 'btn__icon' }),
                 createElement('span', {
-                    props: {
-                        className: 'btn__content',
-                        textContent: 'Delete',
-                    },
+                    className: 'btn__content',
+                    textContent: 'Delete',
                 }),
             ],
         });
         const deleteBtn = Button.fromElement(deleteBtnElem);
 
         const container = createElement('div', {
-            props: { className: 'buttons-list' },
+            className: 'buttons-list',
             children: [
                 inputBtn.elem,
                 createBtn.elem,
@@ -145,7 +133,7 @@ class ButtonView extends DemoView {
         });
 
         const container = createElement('div', {
-            props: { className: 'buttons-list' },
+            className: 'buttons-list',
             children: [dynamicBtn.elem, noTitleBtn.elem],
         });
 
@@ -251,7 +239,7 @@ class ButtonView extends DemoView {
         });
 
         const container = createElement('div', {
-            props: { className: 'fullwidth-container' },
+            className: 'fullwidth-container',
             children: btn.elem,
         });
 
@@ -267,7 +255,7 @@ class ButtonView extends DemoView {
         const btnSmall = CloseButton.create();
 
         const container = createElement('div', {
-            props: { className: 'buttons-list' },
+            className: 'buttons-list',
             children: [btn.elem, btnSmall.elem],
         });
 
@@ -284,7 +272,7 @@ class ButtonView extends DemoView {
         });
 
         const container = createElement('div', {
-            props: { className: 'buttons-list' },
+            className: 'buttons-list',
             children: btn.elem,
         });
 
@@ -301,7 +289,7 @@ class ButtonView extends DemoView {
         });
 
         const container = createElement('div', {
-            props: { className: 'buttons-list' },
+            className: 'buttons-list',
             children: [noIconBtn.elem],
         });
 
@@ -330,7 +318,7 @@ class ButtonView extends DemoView {
         });
 
         const container = createElement('div', {
-            props: { className: 'buttons-list' },
+            className: 'buttons-list',
             children: [disabledBtn.elem, disabledLink.elem],
         });
 

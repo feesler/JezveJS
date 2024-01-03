@@ -22,7 +22,7 @@ export class DropDownSingleSelection extends Component {
     }
 
     init() {
-        this.elem = createElement('span', { props: { className: SINGLE_SELECTION_CLASS } });
+        this.elem = createElement('span', { className: SINGLE_SELECTION_CLASS });
     }
 
     render(state) {

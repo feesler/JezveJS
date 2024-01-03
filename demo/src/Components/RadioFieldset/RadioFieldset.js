@@ -30,7 +30,7 @@ export class RadioFieldset extends Component {
         const { title, items, radioName } = this.props;
 
         this.legendElem = createElement('legend', {
-            props: { textContent: title },
+            textContent: title,
         });
 
         this.radios = asArray(items).map((item) => (
@@ -48,12 +48,12 @@ export class RadioFieldset extends Component {
         ));
 
         this.contentContainer = createElement('div', {
-            props: { className: CONTENT_CLASS },
+            className: CONTENT_CLASS,
             children: this.radios,
         });
 
         this.fieldset = createElement('fieldset', {
-            props: { className: FIELDSET_CLASS },
+            className: FIELDSET_CLASS,
             children: [
                 this.legendElem,
                 this.contentContainer,
@@ -61,7 +61,7 @@ export class RadioFieldset extends Component {
         });
 
         this.elem = createElement('form', {
-            props: { className: FORM_CLASS },
+            className: FORM_CLASS,
             children: this.fieldset,
         });
 

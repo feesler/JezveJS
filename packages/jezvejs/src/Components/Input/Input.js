@@ -73,7 +73,7 @@ export class Input extends Component {
     init() {
         if (!this.elem) {
             this.elem = createElement('input', {
-                props: { className: INPUT_CLASS },
+                className: INPUT_CLASS,
             });
         }
     }

@@ -118,12 +118,12 @@ export class RangeScrollChart extends Component {
         this.navigationChart.scrollerContainer.prepend(this.rangeSlider.elem);
 
         this.sliderContainer = createElement('div', {
-            props: { className: SLIDER_CONTAINER_CLASS },
+            className: SLIDER_CONTAINER_CLASS,
             children: this.navigationChart.elem,
         });
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [
                 this.mainChart.elem,
                 this.sliderContainer,

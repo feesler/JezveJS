@@ -50,13 +50,13 @@ export class Offcanvas extends Component {
     }
 
     init() {
-        this.contentElem = createElement('div', { props: { className: CONTENT_CLASS } });
+        this.contentElem = createElement('div', { className: CONTENT_CLASS });
         if (this.props.content) {
             this.setContent(this.props.content);
         }
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [this.contentElem],
         });
         this.elem.classList.toggle(CLOSED_CLASS, !!this.props.closed);
@@ -158,7 +158,7 @@ export class Offcanvas extends Component {
         if (showBackground && !showBefore) {
             if (!this.backgroundElem) {
                 this.backgroundElem = createElement('div', {
-                    props: { className: BACKGROUND_CLASS },
+                    className: BACKGROUND_CLASS,
                     events: { click: () => this.close() },
                 });
             }

@@ -31,7 +31,7 @@ export class BaseChartLegend extends Component {
 
     init() {
         this.elem = createElement('ul', {
-            props: { className: LEGEND_LIST_CLASS },
+            className: LEGEND_LIST_CLASS,
         });
     }
 
@@ -43,10 +43,8 @@ export class BaseChartLegend extends Component {
         const categories = asArray(state.categories);
 
         const items = categories.map((category) => createElement('li', {
-            props: {
-                className: LEGEND_LIST_ITEM_CLASS,
-                textContent: category.toString(),
-            },
+            className: LEGEND_LIST_ITEM_CLASS,
+            textContent: category.toString(),
         }));
 
         this.elem.replaceChildren(...items);

@@ -37,7 +37,7 @@ export class MenuGroupHeader extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: { className: HEADER_CLASS },
+            className: HEADER_CLASS,
         });
     }
 

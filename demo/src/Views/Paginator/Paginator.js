@@ -10,15 +10,13 @@ import './PaginatorView.scss';
 
 const createPageItem = ({ page = null, active = false, arrow = false }) => (
     createElement((active || arrow) ? 'span' : 'a', {
-        props: {
-            className: getClassName(
-                'paginator-item',
-                (active) ? 'paginator-item__active' : '',
-                (arrow) ? 'paginator-arrow' : '',
-            ),
-            textContent: (page && !arrow) ? page.toString() : '',
-            dataset: (page) ? { page: page.toString() } : {},
-        },
+        className: getClassName(
+            'paginator-item',
+            (active) ? 'paginator-item__active' : '',
+            (arrow) ? 'paginator-arrow' : '',
+        ),
+        textContent: (page && !arrow) ? page.toString() : '',
+        dataset: (page) ? { page: page.toString() } : {},
     })
 );
 
@@ -173,23 +171,20 @@ class PaginatorView extends DemoView {
 
     initPrerendered() {
         const elem = createElement('div', {
-            props: { id: 'prerenderedPaginator', className: 'paginator styled' },
+            id: 'prerenderedPaginator',
+            className: 'paginator styled',
             children: [
                 createElement('span', {
-                    props: {
-                        className: 'paginator-item paginator-arrow',
-                        disabled: true,
-                    },
+                    className: 'paginator-item paginator-arrow',
+                    disabled: true,
                 }),
                 createPageItem({ page: 1, active: true }),
                 createPageItem({ page: 2 }),
                 createPageItem({ page: 3 }),
                 createPageItem({ page: 4 }),
                 createElement('span', {
-                    props: {
-                        className: 'paginator-item',
-                        textContent: '...',
-                    },
+                    className: 'paginator-item',
+                    textContent: '...',
                 }),
                 createPageItem({ page: 100 }),
                 createPageItem({ page: 2, arrow: true }),
