@@ -16,7 +16,7 @@ class IndexView extends DemoView {
         const navMenu = this.createNavigationMenu();
 
         this.menuContainer = createElement('div', {
-            props: { className: 'menu-container' },
+            className: 'menu-container',
             children: navMenu.elem,
         });
 
@@ -37,10 +37,10 @@ class IndexView extends DemoView {
 
     createLogoHeader() {
         return createElement('header', {
-            props: { className: 'logo-header' },
+            className: 'logo-header',
             children: [
                 createElement('div', {
-                    props: { className: 'logo-container' },
+                    className: 'logo-container',
                     children: [
                         this.createLogo(),
                         this.createLogoDescription(),
@@ -67,20 +67,18 @@ class IndexView extends DemoView {
 
     createLogoDescription() {
         return createElement('div', {
-            props: { className: 'logo-description' },
+            className: 'logo-description',
             children: [
                 createElement('h1', {
-                    props: { className: 'logo-title' },
+                    className: 'logo-title',
                     children: [
                         'Jezve',
-                        createElement('b', { props: { textContent: 'JS' } }),
+                        createElement('b', { textContent: 'JS' }),
                     ],
                 }),
                 createElement('p', {
-                    props: {
-                        className: 'logo-subtitle',
-                        textContent: 'Vanilla JavaScript library',
-                    },
+                    className: 'logo-subtitle',
+                    textContent: 'Vanilla JavaScript library',
                 }),
             ],
         });
@@ -88,10 +86,8 @@ class IndexView extends DemoView {
 
     createDescription() {
         return createElement('p', {
-            props: {
-                className: 'description',
-                textContent: 'Components and utilities to organize development of pet project.',
-            },
+            className: 'description',
+            textContent: 'Components and utilities to organize development of pet project.',
         });
     }
 }

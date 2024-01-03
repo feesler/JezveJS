@@ -48,30 +48,24 @@ export class DatePickerHeader extends Component {
         const type = (focusable) ? 'button' : undefined;
 
         this.navPrevElem = createElement(tagName, {
-            props: {
-                type,
-                className: HEADER_NAV_CLASS,
-            },
+            type,
+            className: HEADER_NAV_CLASS,
             children: this.renderNavIcon(),
         });
 
         this.titleEl = createElement(tagName, {
-            props: {
-                type,
-                className: HEADER_TITLE_CLASS,
-            },
+            type,
+            className: HEADER_TITLE_CLASS,
         });
 
         this.navNextElem = createElement(tagName, {
-            props: {
-                type,
-                className: getClassName(HEADER_NAV_CLASS, HEADER_NEXT_NAV_CLASS),
-            },
+            type,
+            className: getClassName(HEADER_NAV_CLASS, HEADER_NEXT_NAV_CLASS),
             children: this.renderNavIcon(),
         });
 
         this.elem = createElement('div', {
-            props: { className: HEADER_CLASS },
+            className: HEADER_CLASS,
             events: {
                 click: (e) => this.onClick(e),
             },
@@ -139,15 +133,13 @@ export class DatePickerHeader extends Component {
 
         if (state.doubleView) {
             const titlePlaceholder = createElement('div', {
-                props: { className: HEADER_TITLE_PLACEHOLDER_CLASS },
+                className: HEADER_TITLE_PLACEHOLDER_CLASS,
             });
 
             const tagName = (this.props.focusable) ? 'button' : 'div';
             this.secondTitleEl = createElement(tagName, {
-                props: {
-                    type: (this.props.focusable) ? 'button' : undefined,
-                    className: HEADER_TITLE_CLASS,
-                },
+                type: (this.props.focusable) ? 'button' : undefined,
+                className: HEADER_TITLE_CLASS,
             });
             children.push(titlePlaceholder, this.secondTitleEl);
         }

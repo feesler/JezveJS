@@ -200,10 +200,10 @@ export class DatePicker extends Component {
         }
 
         // Content
-        this.slider = createElement('div', { props: { className: SLIDER_CLASS } });
+        this.slider = createElement('div', { className: SLIDER_CLASS });
 
         this.cellsContainer = createElement('div', {
-            props: { className: VIEW_CLASS },
+            className: VIEW_CLASS,
             children: this.slider,
         });
 
@@ -214,7 +214,7 @@ export class DatePicker extends Component {
         }
 
         this.wrapper = createElement('div', {
-            props: { className: WRAPPER_CLASS },
+            className: WRAPPER_CLASS,
             children: [
                 this.header.elem,
                 this.weekdays?.elem,
@@ -233,7 +233,7 @@ export class DatePicker extends Component {
         }
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: this.wrapper,
         });
         this.elem.classList.toggle(HORIZONTAL_CLASS, !vertical);
@@ -1243,23 +1243,19 @@ export class DatePicker extends Component {
         }
 
         const animationTarget = createElement('div', {
-            props: {
-                className: getClassName(
-                    LAYER_VIEW_CLASS,
-                    (zoomingOut) ? BOTTOM_TO_CLASS : TOP_TO_CLASS,
-                ),
-            },
+            className: getClassName(
+                LAYER_VIEW_CLASS,
+                (zoomingOut) ? BOTTOM_TO_CLASS : TOP_TO_CLASS,
+            ),
             children: [current.elem, second?.elem],
         });
         this.cellsContainer.append(animationTarget);
 
         const animationSource = createElement('div', {
-            props: {
-                className: getClassName(
-                    LAYER_VIEW_CLASS,
-                    (zoomingOut) ? TOP_FROM_CLASS : BOTTOM_FROM_CLASS,
-                ),
-            },
+            className: getClassName(
+                LAYER_VIEW_CLASS,
+                (zoomingOut) ? TOP_FROM_CLASS : BOTTOM_FROM_CLASS,
+            ),
             children: [this.currView.elem, this.secondView?.elem],
         });
         this.cellsContainer.append(animationSource);

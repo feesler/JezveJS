@@ -30,9 +30,7 @@ export class DropDownListPlaceholder extends Component {
 
     init() {
         this.contentElem = createElement('div', {
-            props: {
-                className: getClassName(LIST_PLACEHODLER_CLASS, this.props.className),
-            },
+            className: getClassName(LIST_PLACEHODLER_CLASS, this.props.className),
         });
 
         this.elem = createElement('li', {

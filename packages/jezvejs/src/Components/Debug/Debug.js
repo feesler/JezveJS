@@ -19,24 +19,26 @@ export class Debug extends Component {
     }
 
     init() {
-        this.logElem = createElement('div', { props: { className: 'log' } });
+        this.logElem = createElement('div', { className: 'log' });
 
         this.controls = createElement('div', {
-            props: { className: 'controls' },
+            className: 'controls',
             children: [
                 createElement('input', {
-                    props: { type: 'button', value: 'Clear' },
+                    type: 'button',
+                    value: 'Clear',
                     events: { click: () => this.clear() },
                 }),
                 createElement('input', {
-                    props: { type: 'button', value: 'Close' },
+                    type: 'button',
+                    value: 'Close',
                     events: { click: () => this.close() },
                 }),
             ],
         });
 
         this.elem = createElement('div', {
-            props: { className: 'debug' },
+            className: 'debug',
             children: [this.logElem, this.controls],
         });
 
@@ -60,7 +62,7 @@ export class Debug extends Component {
             return;
         }
 
-        const message = createElement('div', { props: { textContent } });
+        const message = createElement('div', { textContent });
         this.logElem.append(message);
         this.logElem.scrollTop = this.logElem.scrollHeight;
     }
@@ -71,7 +73,8 @@ export class Debug extends Component {
         }
 
         const control = createElement('input', {
-            props: { type: 'button', value: text },
+            type: 'button',
+            value: text,
             events: { click: callback },
         });
         this.controls.append(control);
@@ -79,7 +82,7 @@ export class Debug extends Component {
     }
 
     addInfo(textContent) {
-        const info = createElement('span', { props: { textContent } });
+        const info = createElement('span', { textContent });
         this.controls.append(info);
         return info;
     }

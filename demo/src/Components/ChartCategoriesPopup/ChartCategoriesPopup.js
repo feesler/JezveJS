@@ -16,7 +16,7 @@ export class ChartCategoriesPopup extends BaseChartPopup {
         const { target } = state;
 
         if (!target.group) {
-            return createElement('span', { props: { textContent: target.item.value } });
+            return createElement('span', { textContent: target.item.value });
         }
 
         const listItems = [];
@@ -29,11 +29,9 @@ export class ChartCategoriesPopup extends BaseChartPopup {
             }
 
             const listItem = createElement('li', {
-                props: {
-                    className: `${POPUP_LIST_ITEM_CLASS}${item.categoryIndex + 1}`,
-                },
+                className: `${POPUP_LIST_ITEM_CLASS}${item.categoryIndex + 1}`,
                 children: createElement(((target.index === index) ? 'b' : 'span'), {
-                    props: { textContent: `Long data category name ${index + 1}: ${item.value}` },
+                    textContent: `Long data category name ${index + 1}: ${item.value}`,
                 }),
             });
             listItems.push(listItem);
@@ -44,15 +42,15 @@ export class ChartCategoriesPopup extends BaseChartPopup {
         }
 
         const list = createElement('ul', {
-            props: { className: POPUP_LIST_CLASS },
+            className: POPUP_LIST_CLASS,
             children: listItems,
         });
 
         return createElement('div', {
-            props: { className: POPUP_CLASS },
+            className: POPUP_CLASS,
             children: [
-                createElement('b', { props: { textContent: target.item.groupName } }),
-                createElement('div', { props: { textContent: target.series } }),
+                createElement('b', { textContent: target.item.groupName }),
+                createElement('div', { textContent: target.series }),
                 list,
             ],
         });

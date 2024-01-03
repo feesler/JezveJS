@@ -45,11 +45,11 @@ export class BaseChartYAxisLabels extends Component {
 
     init() {
         this.container = createElement('div', {
-            props: { className: CONTENT_CLASS },
+            className: CONTENT_CLASS,
         });
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: this.container,
         });
     }
@@ -109,10 +109,8 @@ export class BaseChartYAxisLabels extends Component {
 
             const label = {
                 elem: createElement('span', {
-                    props: {
-                        className: LABEL_CLASS,
-                        textContent: formatFunction(tVal),
-                    },
+                    className: LABEL_CLASS,
+                    textContent: formatFunction(tVal),
                 }),
             };
 

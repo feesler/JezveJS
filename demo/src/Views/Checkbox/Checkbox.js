@@ -48,36 +48,30 @@ class CheckboxView extends DemoView {
     initParsed() {
         const checkboxes = [
             createElement('label', {
-                props: {
-                    id: 'defaultCheckboxNoLabel',
-                    className: 'checkbox',
-                },
+                id: 'defaultCheckboxNoLabel',
+                className: 'checkbox',
                 children: [
-                    createElement('input', { props: { type: 'checkbox', checked: true } }),
+                    createElement('input', { type: 'checkbox', checked: true }),
                     createElement('span', {
-                        props: { className: 'checkbox__check' },
+                        className: 'checkbox__check',
                         children: CheckIcon({ class: 'checkbox__icon' }),
                     }),
                 ],
             }),
             createElement('label', {
-                props: {
-                    id: 'circleCheckboxLabel',
-                    className: 'checkbox',
-                },
+                id: 'circleCheckboxLabel',
+                className: 'checkbox',
                 children: [
-                    createElement('input', { props: { type: 'checkbox', checked: true } }),
+                    createElement('input', { type: 'checkbox', checked: true }),
                     createElement('span', {
-                        props: { className: 'checkbox__check' },
+                        className: 'checkbox__check',
                         children: CheckIcon({ class: 'checkbox__icon' }),
                     }),
                     createElement('span', {
-                        props: { className: 'checkbox__label' },
+                        className: 'checkbox__label',
                         children: createElement('a', {
-                            props: {
-                                href: '#',
-                                textContent: 'Custom label content',
-                            },
+                            href: '#',
+                            textContent: 'Custom label content',
                         }),
                     }),
                 ],
@@ -119,7 +113,7 @@ class CheckboxView extends DemoView {
         });
 
         const form = createElement('form', {
-            props: { id: 'dynamicContainer' },
+            id: 'dynamicContainer',
             children: checkbox.elem,
         });
 
@@ -187,24 +181,18 @@ class CheckboxView extends DemoView {
 
         const radios = ids.map((item) => (
             createElement('label', {
-                props: {
-                    id: `defaultRadio${item}`,
-                    className: 'radio',
-                },
+                id: `defaultRadio${item}`,
+                className: 'radio',
                 children: [
                     createElement('input', {
-                        props: {
-                            type: 'radio',
-                            name: radioName,
-                            value: item,
-                        },
+                        type: 'radio',
+                        name: radioName,
+                        value: item,
                     }),
-                    createElement('span', { props: { className: 'radio__check' } }),
+                    createElement('span', { className: 'radio__check' }),
                     createElement('span', {
-                        props: {
-                            className: 'radio__label',
-                            textContent: `Value ${item}`,
-                        },
+                        className: 'radio__label',
+                        textContent: `Value ${item}`,
                     }),
                 ],
             })
@@ -214,7 +202,7 @@ class CheckboxView extends DemoView {
             id: 'radioParse',
             title: 'Parse component from DOM',
             content: createElement('form', {
-                props: { className: 'radio-group' },
+                className: 'radio-group',
                 children: radios.map((item) => (
                     Radio.fromElement(item, {
                         onChange: (checked) => this.addEventLog(`Parsed Radio ${item} change. checked: ${checked}`),
@@ -239,10 +227,8 @@ class CheckboxView extends DemoView {
         const radio3 = radios[2];
 
         const form = createElement('form', {
-            props: {
-                id: 'dynamicRadioContainer',
-                className: 'radio-group',
-            },
+            id: 'dynamicRadioContainer',
+            className: 'radio-group',
             children: radios.map((item) => item.elem),
         });
 

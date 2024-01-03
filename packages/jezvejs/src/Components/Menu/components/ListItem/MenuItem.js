@@ -91,7 +91,7 @@ export class MenuItem extends Component {
         }
 
         this.contentElem = createElement('div', {
-            props: { className: CONTENT_CLASS },
+            className: CONTENT_CLASS,
         });
 
         const elem = createElement(tagName, {
@@ -110,11 +110,11 @@ export class MenuItem extends Component {
     }
 
     createBeforeElement(children) {
-        return createElement('div', { props: { className: BEFORE_CLASS }, children });
+        return createElement('div', { className: BEFORE_CLASS, children });
     }
 
     createAfterElement(children) {
-        return createElement('div', { props: { className: AFTER_CLASS }, children });
+        return createElement('div', { className: AFTER_CLASS, children });
     }
 
     isCheckbox(state = this.state) {

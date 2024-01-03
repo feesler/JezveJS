@@ -45,17 +45,17 @@ export class Collapsible extends Component {
     }
 
     init() {
-        this.headerContainer = createElement('div', { props: { className: HEADER_CLASS } });
+        this.headerContainer = createElement('div', { className: HEADER_CLASS });
         if (this.props.toggleOnClick) {
             setEvents(this.headerContainer, { click: () => this.toggle() });
         }
         this.setHeader(this.props.header);
 
-        this.contentContainer = createElement('div', { props: { className: CONTENT_CLASS } });
+        this.contentContainer = createElement('div', { className: CONTENT_CLASS });
         this.setContent(this.props.content);
 
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: [
                 this.headerContainer,
                 this.contentContainer,

@@ -28,9 +28,7 @@ export class LoadingPlaceholder extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: {
-                className: PLACEHOLDER_CLASS,
-            },
+            className: PLACEHOLDER_CLASS,
         });
     }
 

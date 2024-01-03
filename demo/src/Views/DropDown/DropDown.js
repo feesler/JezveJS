@@ -102,10 +102,10 @@ class DropDownView extends DemoView {
     }
 
     inline() {
-        const input1 = createElement('input', { props: { id: 'selinp', type: 'text' } });
-        const input2 = createElement('input', { props: { id: 'selinp2', type: 'text' } });
+        const input1 = createElement('input', { id: 'selinp', type: 'text' });
+        const input2 = createElement('input', { id: 'selinp2', type: 'text' });
         const container = createElement('div', {
-            props: { className: 'inline-container' },
+            className: 'inline-container',
             children: [input1, input2],
         });
 
@@ -132,9 +132,9 @@ class DropDownView extends DemoView {
     }
 
     fullWidth() {
-        const input = createElement('input', { props: { id: 'selinp3', type: 'text' } });
+        const input = createElement('input', { id: 'selinp3', type: 'text' });
         const container = createElement('div', {
-            props: { className: 'allwidth' },
+            className: 'allwidth',
             children: input,
         });
 
@@ -155,9 +155,9 @@ class DropDownView extends DemoView {
     callbacks() {
         const logsField = LogsField.create();
 
-        const input = createElement('input', { props: { id: 'selinp4', type: 'text' } });
+        const input = createElement('input', { id: 'selinp4', type: 'text' });
         const container = createElement('div', {
-            props: { className: 'allwidth halfwidth' },
+            className: 'allwidth halfwidth',
             children: input,
         });
 
@@ -182,7 +182,7 @@ class DropDownView extends DemoView {
     }
 
     fixedMenu() {
-        const input = createElement('input', { props: { id: 'fixedInp', type: 'text' } });
+        const input = createElement('input', { id: 'fixedInp', type: 'text' });
 
         this.addSection({
             id: 'fixed',
@@ -307,7 +307,7 @@ class DropDownView extends DemoView {
 
     // Dynamic groups create
     dynamicOptGroups() {
-        const input = createElement('input', { props: { id: 'optgroupsdyn', type: 'text' } });
+        const input = createElement('input', { id: 'optgroupsdyn', type: 'text' });
         const dropDown = DropDown.create({
             elem: input,
             className: 'dd_form dd__styled-group',
@@ -370,11 +370,9 @@ class DropDownView extends DemoView {
     // Attach drop down to inline element
     attachToInlineElement() {
         const inlineTarget = createElement('span', {
-            props: {
-                id: 'inlineTarget',
-                className: 'link-inline',
-                textContent: 'click',
-            },
+            id: 'inlineTarget',
+            className: 'link-inline',
+            textContent: 'click',
         });
         const text = createElement('div', {
             children: [
@@ -407,9 +405,9 @@ class DropDownView extends DemoView {
             title: 'Clipping test',
             description: 'Use \'static: true\' to prevent menu clipping.',
             content: createElement('div', {
-                props: { className: 'offset-parent' },
+                className: 'offset-parent',
                 children: createElement('div', {
-                    props: { className: 'clipper' },
+                    className: 'clipper',
                     children: [
                         DropDown.create({
                             elem: selectElem,
@@ -460,7 +458,7 @@ class DropDownView extends DemoView {
     dynamicMultipleSelect() {
         const logsField = LogsField.create();
 
-        const input = createElement('input', { props: { id: 'selinp6', type: 'text' } });
+        const input = createElement('input', { id: 'selinp6', type: 'text' });
         const genDropDown = DropDown.create({
             elem: input,
             className: 'dd_stretch',
@@ -659,7 +657,7 @@ class DropDownView extends DemoView {
 
     // Built-in items filter with multiple select
     groupsSelectFilter() {
-        const input = createElement('input', { props: { id: 'groupFilterInp', type: 'text' } });
+        const input = createElement('input', { id: 'groupFilterInp', type: 'text' });
         const dropDown = DropDown.create({
             elem: input,
             enableFilter: true,
@@ -974,7 +972,7 @@ class DropDownView extends DemoView {
             id: 'createUseNative',
             title: 'Create with useNativeSelect option',
             content: DropDown.create({
-                elem: createElement('input', { props: { id: 'nativeGenerated', type: 'text' } }),
+                elem: createElement('input', { id: 'nativeGenerated', type: 'text' }),
                 placeholder: 'Use native select',
                 useNativeSelect: true,
                 className: 'dd_form',
@@ -1026,7 +1024,7 @@ class DropDownView extends DemoView {
 
     // Dynamic add/remove items
     dynamicAddRemoveItems() {
-        const select = createElement('select', { props: { id: 'dynamicSel' } });
+        const select = createElement('select', { id: 'dynamicSel' });
         const dropDown = DropDown.create({
             elem: select,
             placeholder: 'Dynamic Drop Down',
@@ -1152,25 +1150,21 @@ class DropDownView extends DemoView {
         });
 
         const scrollContainer = createElement('div', {
-            props: { className: 'popup-scroll-container' },
+            className: 'popup-scroll-container',
             children: [
                 createElement('div', {
-                    props: {
-                        id: 'topPlaceholder',
-                        className: 'popup-scroll-placeholder',
-                        textContent: 'Scroll',
-                    },
+                    id: 'topPlaceholder',
+                    className: 'popup-scroll-placeholder',
+                    textContent: 'Scroll',
                 }),
                 createElement('div', {
-                    props: { id: 'popupDropDownContainer' },
+                    id: 'popupDropDownContainer',
                     children: dropDown.elem,
                 }),
                 createElement('div', {
-                    props: {
-                        id: 'bottomPlaceholder',
-                        className: 'popup-scroll-placeholder',
-                        textContent: 'Scroll',
-                    },
+                    id: 'bottomPlaceholder',
+                    className: 'popup-scroll-placeholder',
+                    textContent: 'Scroll',
                     attrs: { hidden: '' },
                 }),
             ],
@@ -1203,7 +1197,7 @@ class DropDownView extends DemoView {
         }]);
 
         return createElement('div', {
-            props: { id: 'popupContent' },
+            id: 'popupContent',
             children: [
                 scrollContainer,
                 controls,

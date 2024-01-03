@@ -40,7 +40,7 @@ export class DateRangeInputGroup extends InputGroup {
                     icon: CalendarIcon(),
                     onClick: (e) => userProps.onStartButtonClick?.(e),
                 }).elem,
-                createElement('div', { props: { className: 'input-group__text', textContent: '-' } }),
+                createElement('div', { className: 'input-group__text', textContent: '-' }),
                 Input.create({
                     id: userProps.endInputId,
                     className: 'input-group__input',

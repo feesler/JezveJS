@@ -23,16 +23,14 @@ class ChartGridView extends DemoView {
     initChartContainer(data) {
         const res = {
             descrElem: createElement('div', {
-                props: {
-                    className: 'test-chart__descr',
-                    textContent: data.values.join(', '),
-                },
+                className: 'test-chart__descr',
+                textContent: data.values.join(', '),
             }),
-            chartElem: createElement('div', { props: { className: 'std_chart_wrap' } }),
+            chartElem: createElement('div', { className: 'std_chart_wrap' }),
         };
 
         res.elem = createElement('div', {
-            props: { className: 'test-chart-container' },
+            className: 'test-chart-container',
             children: [
                 res.descrElem,
                 res.chartElem,
@@ -87,7 +85,7 @@ class ChartGridView extends DemoView {
             id: 'histogram',
             title: 'Histogram',
             content: createElement('div', {
-                props: { className: 'row-section row-wrap' },
+                className: 'row-section row-wrap',
                 children: data.map((item) => this.createHistogram(item).elem),
             }),
         });
@@ -121,7 +119,7 @@ class ChartGridView extends DemoView {
             id: 'linechart',
             title: 'Line Chart',
             content: createElement('div', {
-                props: { className: 'row-section row-wrap' },
+                className: 'row-section row-wrap',
                 children: data.map((item) => this.createLineChart(item).elem),
             }),
         });

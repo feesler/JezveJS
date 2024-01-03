@@ -476,12 +476,12 @@ class PopupView extends DemoView {
             popup.titleState = 2;
 
             const elementTitle = createElement('div', {
-                props: { className: 'element-title' },
+                className: 'element-title',
                 children: [
                     createElement('button', {
-                        props: { className: 'element-title__btn', innerHTML: '&#10004;' },
+                        className: 'element-title__btn', innerHTML: '&#10004;',
                     }),
-                    createElement('span', { props: { textContent: 'Element title' } }),
+                    createElement('span', { textContent: 'Element title' }),
                 ],
             });
 
@@ -557,9 +557,9 @@ class PopupView extends DemoView {
         this.contentUpdatePopup.setContent(
             createElement('div', {
                 children: [
-                    createElement('div', { props: { className: 'template-test__item' } }),
-                    createElement('div', { props: { className: 'template-test__item' } }),
-                    createElement('div', { props: { className: 'template-test__item' } }),
+                    createElement('div', { className: 'template-test__item' }),
+                    createElement('div', { className: 'template-test__item' }),
+                    createElement('div', { className: 'template-test__item' }),
                 ],
             }),
         );

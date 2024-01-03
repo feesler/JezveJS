@@ -44,11 +44,9 @@ export class DemoSection extends Component {
         }
 
         this.headerElem = createElement('header', {
-            props: {
-                id,
-                className: HEADER_CLASS,
-                textContent: title,
-            },
+            id,
+            className: HEADER_CLASS,
+            textContent: title,
         });
         const children = [this.headerElem];
 
@@ -56,27 +54,27 @@ export class DemoSection extends Component {
             const lines = description.split(/[\r\n]+/);
             const descrChilds = [];
             lines.forEach((textContent, index) => {
-                descrChilds.push(createElement('span', { props: { textContent } }));
+                descrChilds.push(createElement('span', { textContent }));
                 if (index < lines.length - 1) {
                     descrChilds.push(createElement('br'));
                 }
             });
 
             this.descrElem = createElement('header', {
-                props: { className: DESCRIPTION_CLASS },
+                className: DESCRIPTION_CLASS,
                 children: descrChilds,
             });
             children.push(this.descrElem);
         }
 
         this.contentElem = createElement('div', {
-            props: { className: CONTENT_CLASS },
+            className: CONTENT_CLASS,
             children: content,
         });
         children.push(this.contentElem);
 
         this.elem = createElement('section', {
-            props: { className: SECTION_CLASS },
+            className: SECTION_CLASS,
             children,
         });
 

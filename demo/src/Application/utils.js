@@ -3,18 +3,18 @@ import { createElement, getClassName } from '@jezvejs/dom';
 import { Button } from 'jezvejs/Button';
 
 export const createContainer = (id, children) => createElement('div', {
-    props: { id },
+    id,
     children,
 });
 
 export const createForm = (id, children) => createElement('form', {
-    props: { id },
+    id,
     children,
 });
 
 export const createControls = (children) => (
     createElement('div', {
-        props: { className: 'section-controls' },
+        className: 'section-controls',
         children,
     })
 );
@@ -44,7 +44,7 @@ export const createListContent = ({ itemsCount = 5, ...props } = {}) => (
     createElement('ul', {
         props,
         children: Array(itemsCount).fill(0).map((_, index) => (
-            createElement('li', { props: { textContent: `Item ${index}` } })
+            createElement('li', { textContent: `Item ${index}` })
         )),
     })
 );

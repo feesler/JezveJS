@@ -149,7 +149,7 @@ class DatePickerView extends DemoView {
             id: 'fullwidth',
             title: 'Fill parent width',
             content: createElement('div', {
-                props: { className: 'width-container' },
+                className: 'width-container',
                 children: [
                     Input.create({ id }).elem,
                     DatePicker.create({
@@ -208,7 +208,7 @@ class DatePickerView extends DemoView {
             id: 'position',
             title: 'Position',
             content: createElement('div', {
-                props: { className: 'right-container' },
+                className: 'right-container',
                 children: [
                     btn.elem,
                     datePicker.elem,
@@ -429,7 +429,7 @@ class DatePickerView extends DemoView {
         });
 
         const cbStatusText = createElement('span', {
-            props: { id: 'cbStatusText', textContent: 'Waiting' },
+            id: 'cbStatusText', textContent: 'Waiting',
         });
 
         datePicker = DatePicker.create({

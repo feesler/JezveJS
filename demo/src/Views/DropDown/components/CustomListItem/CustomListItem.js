@@ -38,7 +38,7 @@ export class CustomListItem extends MenuItem {
         }
 
         this.titleElem = createElement('span', {
-            props: { className: 'dd__custom-list-item_title' },
+            className: 'dd__custom-list-item_title',
         });
 
         this.contentElem.append(this.titleElem);
@@ -52,12 +52,12 @@ export class CustomListItem extends MenuItem {
 
         if (!this.colorElem) {
             this.colorElem = createElement('span', {
-                props: { className: 'dd__custom-list-item_color' },
+                className: 'dd__custom-list-item_color',
             });
 
             if (state.multiple) {
                 this.checkIcon = createElement('span', {
-                    props: { className: 'dd__custom-list-item_check', innerHTML: '&times;' },
+                    className: 'dd__custom-list-item_check', innerHTML: '&times;',
                 });
                 this.colorElem.append(this.checkIcon);
             }

@@ -12,13 +12,11 @@ export class BlueBox extends Component {
         super(props);
 
         const title = createElement('span', {
-            props: {
-                className: 'box__title',
-                textContent: 'click',
-            },
+            className: 'box__title',
+            textContent: 'click',
         });
         this.elem = createElement('div', {
-            props: { className: 'bluebox' },
+            className: 'bluebox',
             children: [
                 title,
                 CloseButton.create({

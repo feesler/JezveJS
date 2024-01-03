@@ -68,10 +68,10 @@ export class Tag extends Component {
     }
 
     init() {
-        this.titleElem = createElement('span', { props: { className: TITLE_CLASS } });
+        this.titleElem = createElement('span', { className: TITLE_CLASS });
 
         this.elem = createElement('span', {
-            props: { className: TAG_CLASS },
+            className: TAG_CLASS,
             children: [this.titleElem],
         });
 

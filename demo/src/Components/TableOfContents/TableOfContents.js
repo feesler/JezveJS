@@ -35,10 +35,10 @@ export class TableOfContents extends Menu {
         } = this.props;
 
         this.labelElem = createElement('label', {
-            props: { htmlFor: togglerId, textContent: title },
+            htmlFor: togglerId, textContent: title,
         });
         this.togglerCheckbox = createElement('input', {
-            props: { id: togglerId, type: 'checkbox', className: TOGGLER_CHECKBOX_CLASS },
+            id: togglerId, type: 'checkbox', className: TOGGLER_CHECKBOX_CLASS,
         });
 
         this.elem.prepend(this.labelElem, this.togglerCheckbox);

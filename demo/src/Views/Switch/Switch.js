@@ -28,17 +28,15 @@ class SwitchView extends DemoView {
         const logsField = LogsField.create();
 
         const elem = createElement('label', {
-            props: {
-                id: 'defaultSwitch',
-                className: 'switch',
-            },
+            id: 'defaultSwitch',
+            className: 'switch',
             children: [
-                createElement('input', { props: { type: 'checkbox', checked: true } }),
+                createElement('input', { type: 'checkbox', checked: true }),
                 createElement('div', {
-                    props: { className: 'switch-slider' },
+                    className: 'switch-slider',
                 }),
                 createElement('span', {
-                    props: { className: 'switch__label', textContent: 'Enable something' },
+                    className: 'switch__label', textContent: 'Enable something',
                 }),
             ],
         });

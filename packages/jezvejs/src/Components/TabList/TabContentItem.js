@@ -45,7 +45,7 @@ export class TabContentItem extends Component {
     }
 
     init() {
-        this.elem = createElement('div', { props: { className: ITEM_CLASS } });
+        this.elem = createElement('div', { className: ITEM_CLASS });
     }
 
     render(state, prevState = {}) {

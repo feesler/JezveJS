@@ -400,7 +400,7 @@ export class DropDown extends Component {
         }
 
         // Create container
-        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
+        this.elem = createElement('div', { className: CONTAINER_CLASS });
 
         if (this.hostElem.tagName === 'SELECT') {
             this.selectElem = this.hostElem;
@@ -424,7 +424,7 @@ export class DropDown extends Component {
 
     /** Attach DropDown to specified element */
     attachToElement() {
-        this.elem = createElement('div', { props: { className: ATTACHED_CLASS } });
+        this.elem = createElement('div', { className: ATTACHED_CLASS });
         this.hostElem.after(this.elem);
         this.elem.append(this.hostElem);
 
@@ -1542,7 +1542,7 @@ export class DropDown extends Component {
         }
 
         const optgroup = createElement('optgroup', {
-            props: { hidden: true, disabled: true },
+            hidden: true, disabled: true,
         });
         elem.prepend(optgroup);
     }
@@ -1641,11 +1641,9 @@ export class DropDown extends Component {
     /** Returns option element */
     createOption(item) {
         const optionProps = {
-            props: {
-                value: item.id,
-                textContent: item.title,
-                selected: item.selected,
-            },
+            value: item.id,
+            textContent: item.title,
+            selected: item.selected,
         };
         if (item.disabled) {
             optionProps.attrs = { disabled: '' };
@@ -1655,7 +1653,7 @@ export class DropDown extends Component {
 
         if (item.hidden) {
             return createElement('div', {
-                props: { className: OPTION_WRAPPER_CLASS },
+                className: OPTION_WRAPPER_CLASS,
                 children: option,
             });
         }
@@ -1665,7 +1663,7 @@ export class DropDown extends Component {
 
     /** Returns option group element */
     createOptGroup(label, disabled = false) {
-        const groupProps = { props: { label } };
+        const groupProps = { label };
         if (disabled) {
             groupProps.attrs = { disabled: '' };
         }

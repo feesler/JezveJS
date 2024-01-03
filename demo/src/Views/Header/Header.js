@@ -10,7 +10,8 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import './HeaderView.scss';
 
 const createHeaderContainer = (id, children) => createElement('div', {
-    props: { id, className: 'header-container' },
+    id,
+    className: 'header-container',
     children,
 });
 
@@ -30,11 +31,9 @@ class HeaderView extends DemoView {
     initDefault() {
         const baseURL = App.getBaseURL();
         const logoLink = createElement('a', {
-            props: {
-                className: 'nav-header__logo',
-                href: baseURL.toString(),
-                textContent: 'Header component',
-            },
+            className: 'nav-header__logo',
+            href: baseURL.toString(),
+            textContent: 'Header component',
         });
 
         const header = Header.create({

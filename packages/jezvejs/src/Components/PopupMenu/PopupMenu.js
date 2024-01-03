@@ -256,7 +256,7 @@ export class PopupMenu extends Menu {
         }
 
         this.containerElem = createElement('div', {
-            props: { className: MENU_CLASS },
+            className: MENU_CLASS,
         });
 
         this.hostElem.after(this.containerElem);

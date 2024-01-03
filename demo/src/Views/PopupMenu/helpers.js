@@ -6,12 +6,10 @@ import { SearchIcon } from '../../assets/icons/SearchIcon.js';
 
 export const renderListItem = (id) => (
     createElement('div', {
-        props: {
-            className: 'list-item',
-            dataset: { id },
-        },
+        className: 'list-item',
+        dataset: { id },
         children: [
-            createElement('span', { props: { textContent: `Item ${id}` } }),
+            createElement('span', { textContent: `Item ${id}` }),
             MenuButton.create().elem,
         ],
     })

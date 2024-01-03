@@ -41,7 +41,7 @@ export class DatePickerYearView extends DatePickerBaseView {
         const { date } = this.state;
         const rYear = date.getFullYear();
 
-        this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
+        this.elem = createElement('div', { className: VIEW_CONTAINER_CLASS });
 
         // year header
         this.createHeader();
@@ -63,11 +63,9 @@ export class DatePickerYearView extends DatePickerBaseView {
         return {
             date,
             elem: createElement(tagName, {
-                props: {
-                    type: (focusable) ? 'button' : undefined,
-                    className: getClassName(CELL_CLASS, YEAR_CELL_CLASS),
-                    textContent: getShortMonthName(date, locales),
-                },
+                type: (focusable) ? 'button' : undefined,
+                className: getClassName(CELL_CLASS, YEAR_CELL_CLASS),
+                textContent: getShortMonthName(date, locales),
             }),
         };
     }

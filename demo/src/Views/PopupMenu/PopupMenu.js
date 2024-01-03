@@ -44,7 +44,7 @@ class PopupMenuView extends DemoView {
         const logsField = LogsField.create();
         const btn = MenuButton.create();
         const container = createElement('div', {
-            props: { id: 'defaultContainer' },
+            id: 'defaultContainer',
             children: btn.elem,
         });
 
@@ -99,7 +99,7 @@ class PopupMenuView extends DemoView {
         const logsField = LogsField.create();
         const btn = MenuButton.create();
         const container = createElement('div', {
-            props: { id: 'hideOnSelectContainer' },
+            id: 'hideOnSelectContainer',
             children: btn.elem,
         });
 
@@ -197,7 +197,7 @@ class PopupMenuView extends DemoView {
         const logsField = LogsField.create();
         const btn = MenuButton.create();
         const container = createElement('div', {
-            props: { id: 'nestedContainer' },
+            id: 'nestedContainer',
             children: btn.elem,
         });
 
@@ -263,7 +263,7 @@ class PopupMenuView extends DemoView {
         });
 
         const attachTarget = createElement('div', {
-            props: { id: 'attachTarget', className: 'block' },
+            id: 'attachTarget', className: 'block',
         });
 
         this.addSection({
@@ -279,7 +279,7 @@ class PopupMenuView extends DemoView {
     initClipping() {
         const btn = MenuButton.create();
         const headerContent = createElement('div', {
-            props: { className: 'nav-header__content' },
+            className: 'nav-header__content',
             children: btn.elem,
         });
         this.header.elem.append(headerContent);
@@ -356,7 +356,8 @@ class PopupMenuView extends DemoView {
         });
 
         const list = createElement('div', {
-            props: { id: 'listContainer', className: 'list' },
+            id: 'listContainer',
+            className: 'list',
             events: { click: (e) => this.onListMenuClick(e, menu) },
         });
 

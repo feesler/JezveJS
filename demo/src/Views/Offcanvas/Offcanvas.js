@@ -34,10 +34,8 @@ class OffcanvasView extends DemoView {
         let offcanvas = null;
 
         const content = createElement('div', {
-            props: {
-                id: 'defaultContent',
-                className: 'offcanvas-nav',
-            },
+            id: 'defaultContent',
+            className: 'offcanvas-nav',
             children: [
                 Button.create({
                     id: 'toggleTopBtn',
@@ -135,9 +133,9 @@ class OffcanvasView extends DemoView {
 
     initResponsive() {
         const content = createElement('div', {
-            props: { id: 'responsiveContent' },
+            id: 'responsiveContent',
             children: [
-                createElement('h3', { props: { textContent: 'Responsive' } }),
+                createElement('h3', { textContent: 'Responsive' }),
                 createListContent({ className: 'offcanvas-nav' }),
             ],
         });
@@ -161,9 +159,9 @@ class OffcanvasView extends DemoView {
 
     initUseScrollLock() {
         const content = createElement('div', {
-            props: { id: 'useScrollLockContent' },
+            id: 'useScrollLockContent',
             children: [
-                createElement('h3', { props: { textContent: '\'useScrollLock\' option' } }),
+                createElement('h3', { textContent: '\'useScrollLock\' option' }),
                 createListContent({ className: 'offcanvas-nav' }),
             ],
         });

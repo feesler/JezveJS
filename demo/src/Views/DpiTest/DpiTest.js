@@ -25,19 +25,15 @@ class DpiTestView extends DemoView {
             title: 'Default settings',
             content: [
                 createElement('div', {
-                    props: {
-                        id: 'testpic',
-                        className: getClassName(
-                            'pic',
-                            (realDPI > 1) ? 'pic-double' : 'pic-single',
-                        ),
-                    },
+                    id: 'testpic',
+                    className: getClassName(
+                        'pic',
+                        (realDPI > 1) ? 'pic-double' : 'pic-single',
+                    ),
                 }),
                 createElement('div', {
-                    props: {
-                        id: 'status',
-                        textContent: `Real DPI: ${realDPI}`,
-                    },
+                    id: 'status',
+                    textContent: `Real DPI: ${realDPI}`,
                 }),
             ],
         });

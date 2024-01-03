@@ -29,16 +29,14 @@ class DecimalInputView extends DemoView {
 
     initDefault() {
         const input = createElement('input', {
-            props: {
-                id: 'decInput',
-                className: 'input',
-            },
+            id: 'decInput',
+            className: 'input',
         });
         DecimalInput.create({ elem: input });
 
-        const formStatusElem = createElement('div', { props: { id: 'formStatus' } });
+        const formStatusElem = createElement('div', { id: 'formStatus' });
         const form = createElement('form', {
-            props: { id: 'decForm' },
+            id: 'decForm',
             children: [
                 input,
                 createElement('input', { attrs: { type: 'submit', hidden: '' } }),
@@ -53,10 +51,8 @@ class DecimalInputView extends DemoView {
 
         const controls = createControls(
             createElement('input', {
-                props: {
-                    id: 'testValueInput',
-                    className: 'input',
-                },
+                id: 'testValueInput',
+                className: 'input',
             }),
         );
 
@@ -73,10 +69,8 @@ class DecimalInputView extends DemoView {
 
     initDigitsLimit() {
         const input = createElement('input', {
-            props: {
-                id: 'decInputDigits',
-                className: 'input',
-            },
+            id: 'decInputDigits',
+            className: 'input',
         });
         const dd = DecimalInput.create({
             elem: input,
@@ -109,10 +103,8 @@ class DecimalInputView extends DemoView {
 
     initInteger() {
         const input = createElement('input', {
-            props: {
-                id: 'decInputInteger',
-                className: 'input',
-            },
+            id: 'decInputInteger',
+            className: 'input',
         });
         DecimalInput.create({
             elem: input,
@@ -128,10 +120,8 @@ class DecimalInputView extends DemoView {
 
     initChangeProps() {
         const input = createElement('input', {
-            props: {
-                id: 'decInputChange',
-                className: 'input',
-            },
+            id: 'decInputChange',
+            className: 'input',
         });
         const dinput = DecimalInput.create({
             elem: input,
@@ -161,10 +151,8 @@ class DecimalInputView extends DemoView {
 
     initOnlyPositive() {
         const input = createElement('input', {
-            props: {
-                id: 'decInputPositive',
-                className: 'input',
-            },
+            id: 'decInputPositive',
+            className: 'input',
         });
         DecimalInput.create({
             elem: input,
@@ -180,10 +168,8 @@ class DecimalInputView extends DemoView {
 
     initLeadingZeros() {
         const input = createElement('input', {
-            props: {
-                id: 'decInputZeros',
-                className: 'input',
-            },
+            id: 'decInputZeros',
+            className: 'input',
         });
         DecimalInput.create({
             elem: input,
@@ -202,10 +188,8 @@ class DecimalInputView extends DemoView {
             id: 'create',
             title: 'Create input element',
             content: createElement('div', {
-                props: {
-                    id: 'createContainer',
-                    className: 'section-content',
-                },
+                id: 'createContainer',
+                className: 'section-content',
                 children: DecimalInput.create({
                     className: 'input',
                 }).elem,

@@ -29,11 +29,11 @@ export class CustomDatePickerFooter extends Component {
         });
 
         this.titleElem = createElement('div', {
-            props: { className: 'custom-footer__title' },
+            className: 'custom-footer__title',
         });
 
         this.elem = createElement('div', {
-            props: { className: 'custom-footer' },
+            className: 'custom-footer',
             children: [this.titleElem, this.button.elem],
         });
     }

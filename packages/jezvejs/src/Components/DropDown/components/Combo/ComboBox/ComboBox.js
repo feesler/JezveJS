@@ -76,7 +76,7 @@ export class DropDownComboBox extends Component {
         });
         this.input.show(this.state.editable);
 
-        const valueContainer = createElement('div', { props: { className: VALUE_CLASS } });
+        const valueContainer = createElement('div', { className: VALUE_CLASS });
         if (this.state.multiple && this.props.showMultipleSelection) {
             const { MultipleSelection, MultiSelectionItem } = this.props.components;
             this.multipleSelection = MultipleSelection.create({
@@ -95,7 +95,7 @@ export class DropDownComboBox extends Component {
 
         valueContainer.append(this.placeholder.elem, this.singleSelection.elem, this.input.elem);
 
-        const controls = createElement('div', { props: { className: CONTROLS_CLASS } });
+        const controls = createElement('div', { className: CONTROLS_CLASS });
 
         if (this.state.multiple && this.props.showClearButton) {
             const { ClearButton } = this.props.components;
@@ -112,7 +112,7 @@ export class DropDownComboBox extends Component {
         }
 
         this.elem = createElement('div', {
-            props: { className: COMBO_CLASS },
+            className: COMBO_CLASS,
             children: [valueContainer, controls],
         });
 

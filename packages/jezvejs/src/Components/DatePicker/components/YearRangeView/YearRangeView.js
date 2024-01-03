@@ -42,7 +42,7 @@ export class DatePickerYearRangeView extends DatePickerBaseView {
         const rYear = date.getFullYear();
         const startYear = rYear - (rYear % 10) - 1;
 
-        this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
+        this.elem = createElement('div', { className: VIEW_CONTAINER_CLASS });
 
         // year range header
         this.createHeader();
@@ -68,11 +68,9 @@ export class DatePickerYearRangeView extends DatePickerBaseView {
         return {
             date,
             elem: createElement(tagName, {
-                props: {
-                    type: (focusable) ? 'button' : undefined,
-                    className: getClassName(CELL_CLASS, YEARRANGE_CELL_CLASS),
-                    textContent: date.getFullYear(),
-                },
+                type: (focusable) ? 'button' : undefined,
+                className: getClassName(CELL_CLASS, YEARRANGE_CELL_CLASS),
+                textContent: date.getFullYear(),
             }),
         };
     }

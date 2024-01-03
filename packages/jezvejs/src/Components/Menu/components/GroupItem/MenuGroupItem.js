@@ -67,7 +67,7 @@ export class MenuGroupItem extends Component {
         this.createList();
 
         this.elem = createElement('div', {
-            props: { className: GROUP_CLASS },
+            className: GROUP_CLASS,
             children: [
                 this.header.elem,
                 this.list.elem,

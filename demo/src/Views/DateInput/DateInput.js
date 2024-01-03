@@ -25,14 +25,12 @@ class DateInputView extends DemoView {
 
     initDefault() {
         const input = createElement('input', {
-            props: {
-                id: 'dateinput',
-                className: 'input',
-                value: '01.02.3456',
-            },
+            id: 'dateinput',
+            className: 'input',
+            value: '01.02.3456',
         });
-        const inputStatusElem = createElement('div', { props: { id: 'inputStatus' } });
-        const formStatusElem = createElement('div', { props: { id: 'formStatus' } });
+        const inputStatusElem = createElement('div', { id: 'inputStatus' });
+        const formStatusElem = createElement('div', { id: 'formStatus' });
 
         const form = createElement('form', {
             children: [
@@ -67,10 +65,8 @@ class DateInputView extends DemoView {
 
     initPlaceholder() {
         const input = createElement('input', {
-            props: {
-                id: 'dateInputPh',
-                className: 'input',
-            },
+            id: 'dateInputPh',
+            className: 'input',
         });
 
         DateInput.create({ elem: input, placeholder: 'Input date' });
@@ -87,10 +83,8 @@ class DateInputView extends DemoView {
             id: 'create',
             title: 'Create input element',
             content: createElement('div', {
-                props: {
-                    id: 'createContainer',
-                    className: 'section-content',
-                },
+                id: 'createContainer',
+                className: 'section-content',
                 children: DateInput.create({
                     className: 'input',
                     placeholder: 'Created input element',
@@ -122,10 +116,8 @@ class DateInputView extends DemoView {
                 }).elem,
                 createControls(
                     createElement('input', {
-                        props: {
-                            id: 'testValueInput',
-                            className: 'input',
-                        },
+                        id: 'testValueInput',
+                        className: 'input',
                     }),
                 ),
             ],

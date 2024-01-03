@@ -25,7 +25,7 @@ export class ListItem extends Component {
 
         this.titleElem = createElement('span');
         this.elem = createElement('div', {
-            props: { className: ITEM_CLASS },
+            className: ITEM_CLASS,
             children: this.titleElem,
         });
 

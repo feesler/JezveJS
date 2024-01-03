@@ -73,7 +73,7 @@ export class DatePickerMonthView extends DatePickerBaseView {
         const rMonth = date.getMonth();
         const rYear = date.getFullYear();
 
-        this.elem = createElement('div', { props: { className: VIEW_CONTAINER_CLASS } });
+        this.elem = createElement('div', { className: VIEW_CONTAINER_CLASS });
 
         // month header
         this.createHeader();
@@ -168,10 +168,8 @@ export class DatePickerMonthView extends DatePickerBaseView {
             isOtherMonth,
             isToday,
             elem: createElement(tagName, {
-                props: {
-                    type: (focusable) ? 'button' : undefined,
-                    className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
-                },
+                type: (focusable) ? 'button' : undefined,
+                className: getClassName(CELL_CLASS, MONTH_CELL_CLASS, DAY_CELL_CLASS),
             }),
         };
     }

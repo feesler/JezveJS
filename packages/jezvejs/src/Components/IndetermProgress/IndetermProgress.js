@@ -32,11 +32,11 @@ export class IndetermProgress extends Component {
     }
 
     init() {
-        this.elem = createElement('div', { props: { className: PROGRESS_CLASS } });
+        this.elem = createElement('div', { className: PROGRESS_CLASS });
 
         this.circles = [];
         for (let i = 0; i < this.props.circlesCount; i += 1) {
-            this.circles.push(createElement('div', { props: { className: CIRCLE_CLASS } }));
+            this.circles.push(createElement('div', { className: CIRCLE_CLASS }));
         }
         this.elem.append(...this.circles);
 

@@ -32,7 +32,7 @@ export class BaseChartPopup extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: { className: POPUP_CONTENT_CLASS },
+            className: POPUP_CONTENT_CLASS,
         });
     }
 
@@ -40,17 +40,15 @@ export class BaseChartPopup extends Component {
         const { target } = state;
 
         if (!target.group) {
-            return createElement('span', { props: { textContent: target.item.value } });
+            return createElement('span', { textContent: target.item.value });
         }
 
         return createElement('ul', {
-            props: { className: POPUP_LIST_CLASS },
+            className: POPUP_LIST_CLASS,
             children: target.group.map((item) => (
                 createElement('li', {
-                    props: {
-                        className: POPUP_LIST_ITEM_CLASS,
-                        textContent: item.value,
-                    },
+                    className: POPUP_LIST_ITEM_CLASS,
+                    textContent: item.value,
                 })
             )),
         });

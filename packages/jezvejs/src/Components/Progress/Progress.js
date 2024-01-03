@@ -31,9 +31,9 @@ export class Progress extends Component {
     }
 
     init() {
-        this.bar = createElement('div', { props: { className: PROGRESS_BAR_CLASS } });
+        this.bar = createElement('div', { className: PROGRESS_BAR_CLASS });
         this.elem = createElement('div', {
-            props: { className: CONTAINER_CLASS },
+            className: CONTAINER_CLASS,
             children: this.bar,
         });
         this.setClassNames();

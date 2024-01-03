@@ -25,7 +25,7 @@ export class InputGroup extends Component {
     }
 
     init() {
-        this.elem = createElement('div', { props: { className: CONTAINER_CLASS } });
+        this.elem = createElement('div', { className: CONTAINER_CLASS });
 
         this.props.children = asArray(this.props.children).filter((item) => !!item);
         if (this.props.children.length > 0) {

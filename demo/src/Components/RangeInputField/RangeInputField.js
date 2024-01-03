@@ -36,30 +36,26 @@ export class RangeInputField extends Component {
 
     init() {
         this.label = createElement('label', {
-            props: {
-                htmlFor: this.props.inputId,
-                textContent: this.props.title,
-            },
+            htmlFor: this.props.inputId,
+            textContent: this.props.title,
         });
 
         this.input = createElement('input', {
-            props: {
-                id: this.props.inputId,
-                type: 'range',
-                min: this.props.min,
-                max: this.props.max,
-                value: this.props.value,
-            },
+            id: this.props.inputId,
+            type: 'range',
+            min: this.props.min,
+            max: this.props.max,
+            value: this.props.value,
             events: {
                 input: (e) => this.onInput(e),
                 change: (e) => this.onChange(e),
             },
         });
 
-        this.valueEl = createElement('span', { props: { textContent: this.props.value } });
+        this.valueEl = createElement('span', { textContent: this.props.value });
 
         this.elem = createElement('div', {
-            props: { className: FIELD_CLASS },
+            className: FIELD_CLASS,
             children: [
                 this.label,
                 createElement('div', {

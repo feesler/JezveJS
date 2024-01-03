@@ -5,24 +5,20 @@ import { createSelect } from '../../Application/utils.js';
 
 export const createOkBtn = ({ onClick, textContent = 'ok', disabled = false }) => (
     createElement('button', {
-        props: {
-            className: 'btn action-btn',
-            type: 'button',
-            textContent,
-            disabled,
-        },
+        className: 'btn action-btn',
+        type: 'button',
+        textContent,
+        disabled,
         events: { click: (e) => onClick(e) },
     })
 );
 
 export const createCancelBtn = ({ onClick, textContent = 'cancel', disabled = false }) => (
     createElement('button', {
-        props: {
-            className: 'btn action-btn',
-            type: 'button',
-            textContent,
-            disabled,
-        },
+        className: 'btn action-btn',
+        type: 'button',
+        textContent,
+        disabled,
         events: { click: (e) => onClick(e) },
     })
 );
@@ -47,10 +43,10 @@ export const createSelectField = ({ id, title, ...props }) => (
 
 export const createFormContent = () => (
     createElement('div', {
-        props: { id: 'formTemplate' },
+        id: 'formTemplate',
         children: [
             createElement('div', {
-                props: { textContent: 'This popup is created from template. Controls and title are added.' },
+                textContent: 'This popup is created from template. Controls and title are added.',
             }),
             createInputField({ title: 'New name', inputId: 'updname' }),
             createInputField({ title: 'New password', inputId: 'updpass' }),
@@ -60,22 +56,22 @@ export const createFormContent = () => (
 
 export const createNestedParentContent = () => (
     createElement('div', {
-        props: { id: 'nestedParentTemplate' },
+        id: 'nestedParentTemplate',
         children: [
             createElement('div', {
-                props: { textContent: 'This popup will launch another popup.' },
+                textContent: 'This popup will launch another popup.',
             }),
-            createElement('div', { props: { id: 'valueresult' } }),
+            createElement('div', { id: 'valueresult' }),
         ],
     })
 );
 
 export const createNestedChildContent = () => (
     createElement('div', {
-        props: { id: 'nestedChildTemplate' },
+        id: 'nestedChildTemplate',
         children: [
             createElement('div', {
-                props: { textContent: 'This popup is launched from another popup.' },
+                textContent: 'This popup is launched from another popup.',
             }),
             createSelectField({
                 id: 'valueselect',

@@ -135,7 +135,7 @@ class PopupPositionView extends DemoView {
         const context = this.createPopupContext({ positionProps, popupProps });
 
         context.container = createElement('div', {
-            props: { className: CENTERED_CONTAINER_CLASS },
+            className: CENTERED_CONTAINER_CLASS,
             children: [
                 context.button.elem,
                 context.popup.elem,
@@ -202,14 +202,14 @@ class PopupPositionView extends DemoView {
         });
 
         context.container = createElement('div', {
-            props: { className: REF_CONTAINER_CLASS },
+            className: REF_CONTAINER_CLASS,
             children: [
                 context.button.elem,
                 context.popup.elem,
             ],
         });
         context.scroller = createElement('div', {
-            props: { className: REF_SCROLLER_CLASS },
+            className: REF_SCROLLER_CLASS,
             children: context.container,
         });
 
@@ -358,14 +358,14 @@ class PopupPositionView extends DemoView {
         }
 
         context.container = createElement('div', {
-            props: { className: REF_CONTAINER_CLASS },
+            className: REF_CONTAINER_CLASS,
             children: [
                 context.button.elem,
                 context.popup.elem,
             ],
         });
         context.scroller = createElement('div', {
-            props: { className: REF_SCROLLER_CLASS },
+            className: REF_SCROLLER_CLASS,
             children: context.container,
         });
 

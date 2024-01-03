@@ -9,13 +9,11 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import './TabListView.scss';
 
 const renderContent = (value) => createElement('div', {
-    props: {
-        textContent: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit aliquam aperiam sapiente libero rerum reiciendis quas est? (${value})`,
-    },
+    textContent: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit aliquam aperiam sapiente libero rerum reiciendis quas est? (${value})`,
 });
 
 const renderListItem = (textContent) => createElement('div', {
-    props: { textContent },
+    textContent,
 });
 
 const renderArrayContent = () => Array(5).fill('Item').map((item, index) => renderListItem(`${item} ${index}`));

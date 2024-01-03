@@ -7,8 +7,9 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { createContainer, createControls } from '../../Application/utils.js';
 import './SliderView.scss';
 
-const createSlideContent = (text) => createElement('div', {
-    props: { className: 'slide-content', textContent: text },
+const createSlideContent = (textContent) => createElement('div', {
+    className: 'slide-content',
+    textContent,
 });
 
 const createSliderControls = (slider) => (

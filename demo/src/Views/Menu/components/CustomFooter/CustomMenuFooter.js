@@ -14,7 +14,7 @@ export class CustomMenuFooter extends Component {
 
     init() {
         this.elem = createElement('div', {
-            props: { className: 'custom-footer' },
+            className: 'custom-footer',
         });
     }
 
