@@ -920,8 +920,8 @@ export class BaseChart extends Component {
     }
 
     renderLegend(state) {
-        this.legend?.remove();
         if (!state.showLegend) {
+            this.legend?.remove();
             this.legend = null;
             return;
         }
@@ -934,12 +934,16 @@ export class BaseChart extends Component {
             ? state.renderLegend(categories, state)
             : this.defaultLegendContent(categories, state);
 
-        this.legend = createElement('div', {
-            props: { className: LEGEND_CLASS },
-            children: legendContent,
-        });
+        if (!this.legend) {
+            this.legend = createElement('div', {
+                props: { className: LEGEND_CLASS },
+                children: asArray(legendContent),
+            });
 
-        this.elem.append(this.legend);
+            this.elem.append(this.legend);
+        } else {
+            this.legend.replaceChildren(...asArray(legendContent));
+        }
     }
 
     renderItems(state, prevState) {
@@ -1110,6 +1114,6 @@ export class BaseChart extends Component {
 
         this.renderGrid(state, prevState);
 
-        this.renderLegend(state);
+        this.renderLegend(state, prevState);
     }
 }
