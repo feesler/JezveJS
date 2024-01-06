@@ -19,6 +19,8 @@ import { formatCoord } from './helpers.js';
 import '../../common.scss';
 import './BaseChart.scss';
 
+export * from './helpers.js';
+export { BaseChartActiveGroup } from './components/ActiveGroup/BaseChartActiveGroup.js';
 export { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
 export { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
 export { BaseChartPopup } from './components/Popup/BaseChartPopup.js';
