@@ -1,3 +1,4 @@
+import { BaseChartActiveGroup } from './components/ActiveGroup/BaseChartActiveGroup.js';
 import { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
 import { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
 import { BaseChartPopup } from './components/Popup/BaseChartPopup.js';
@@ -39,6 +40,8 @@ export const defaultProps = {
     showLegend: false,
     renderLegend: null,
     onlyVisibleCategoriesLegend: false,
+    // Active group
+    showActiveGroup: false,
     // Popup
     showPopupOnClick: false,
     pinPopupOnClick: false,
@@ -64,5 +67,6 @@ export const defaultProps = {
         YAxisLabels: BaseChartYAxisLabels,
         Legend: BaseChartLegend,
         ChartPopup: BaseChartPopup,
+        ActiveGroup: BaseChartActiveGroup,
     },
 };

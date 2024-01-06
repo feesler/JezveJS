@@ -62,6 +62,7 @@ class HistogramView extends DemoView {
         this.callbacks();
         this.multiColumn();
         this.alignColumns();
+        this.activeGroup();
         this.stacked();
         this.stackedNegative();
         this.stackedGrouped();
@@ -352,6 +353,25 @@ class HistogramView extends DemoView {
                 chartContainer('alignColumnsChart', chart),
                 createControls(alignFieldset.elem),
             ],
+        });
+    }
+
+    activeGroup() {
+        const chart = Histogram.create({
+            data: chartData2,
+            height: 320,
+            marginTop: 35,
+            alignColumns: 'center',
+            showActiveGroup: true,
+            autoScale: true,
+            activateOnClick: true,
+            activateOnHover: true,
+        });
+
+        this.addSection({
+            id: 'showActiveGroup',
+            title: '\'showActiveGroup\' option',
+            content: chartContainer('chartActiveGroup', chart),
         });
     }
 
