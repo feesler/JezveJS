@@ -25,6 +25,9 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
+// Local components
+import { CustomLineChartActiveGroup } from './components/CustomActiveGroup/CustomLineChartActiveGroup.js';
+
 // Local data
 import { eurData } from './data.js';
 import {
@@ -55,7 +58,10 @@ class LineChartView extends DemoView {
         this.callbacks();
         this.multiple();
         this.alignColumns();
+
         this.activeGroup();
+        this.customActiveGroup();
+
         this.stacked();
         this.stackedNegative();
 
@@ -330,6 +336,28 @@ class LineChartView extends DemoView {
             id: 'showActiveGroup',
             title: '\'showActiveGroup\' option',
             content: chartContainer('chartActiveGroup', chart),
+        });
+    }
+
+    customActiveGroup() {
+        const chart = LineChart.create({
+            data: chartData2,
+            height: 320,
+            marginTop: 35,
+            alignColumns: 'center',
+            showActiveGroup: true,
+            autoScale: true,
+            activateOnClick: true,
+            activateOnHover: true,
+            components: {
+                ActiveGroup: CustomLineChartActiveGroup,
+            },
+        });
+
+        this.addSection({
+            id: 'customActiveGroup',
+            title: 'Custom ActiveGroup',
+            content: chartContainer('chartCustomActiveGroup', chart),
         });
     }
 
