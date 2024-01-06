@@ -289,7 +289,6 @@ class HistogramView extends DemoView {
     multiColumn() {
         const histogram = Histogram.create({
             data: chartMultiData,
-            elem: 'chart_multicolumn',
             height: 320,
             marginTop: 35,
             autoScale: true,
@@ -498,7 +497,6 @@ class HistogramView extends DemoView {
     setData() {
         const chart = Histogram.create({
             data: negPosData,
-            elem: 'chart_setdata',
             autoScale: true,
             showLegend: true,
             scrollToEnd: true,
