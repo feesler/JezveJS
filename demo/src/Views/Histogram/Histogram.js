@@ -26,6 +26,8 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { RadioFieldset } from '../../Components/RadioFieldset/RadioFieldset.js';
 import { RangeInputField } from '../../Components/RangeInputField/RangeInputField.js';
 
+import { CustomActiveGroup } from './components/CustomActiveGroup/CustomActiveGroup.js';
+
 import {
     maxColumnWidthData,
     chartGroupedData,
@@ -62,6 +64,10 @@ class HistogramView extends DemoView {
         this.callbacks();
         this.multiColumn();
         this.alignColumns();
+
+        this.activeGroup();
+        this.customActiveGroup();
+
         this.stacked();
         this.stackedNegative();
         this.stackedGrouped();
@@ -289,7 +295,6 @@ class HistogramView extends DemoView {
     multiColumn() {
         const histogram = Histogram.create({
             data: chartMultiData,
-            elem: 'chart_multicolumn',
             height: 320,
             marginTop: 35,
             autoScale: true,
@@ -353,6 +358,47 @@ class HistogramView extends DemoView {
                 chartContainer('alignColumnsChart', chart),
                 createControls(alignFieldset.elem),
             ],
+        });
+    }
+
+    activeGroup() {
+        const chart = Histogram.create({
+            data: chartData2,
+            height: 320,
+            marginTop: 35,
+            alignColumns: 'center',
+            showActiveGroup: true,
+            autoScale: true,
+            activateOnClick: true,
+            activateOnHover: true,
+        });
+
+        this.addSection({
+            id: 'showActiveGroup',
+            title: '\'showActiveGroup\' option',
+            content: chartContainer('chartActiveGroup', chart),
+        });
+    }
+
+    customActiveGroup() {
+        const chart = Histogram.create({
+            data: chartData2,
+            height: 320,
+            marginTop: 35,
+            alignColumns: 'center',
+            showActiveGroup: true,
+            autoScale: true,
+            activateOnClick: true,
+            activateOnHover: true,
+            components: {
+                ActiveGroup: CustomActiveGroup,
+            },
+        });
+
+        this.addSection({
+            id: 'customActiveGroup',
+            title: 'Custom ActiveGroup',
+            content: chartContainer('chartCustomActiveGroup', chart),
         });
     }
 
@@ -498,7 +544,6 @@ class HistogramView extends DemoView {
     setData() {
         const chart = Histogram.create({
             data: negPosData,
-            elem: 'chart_setdata',
             autoScale: true,
             showLegend: true,
             scrollToEnd: true,

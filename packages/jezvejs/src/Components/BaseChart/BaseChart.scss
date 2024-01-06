@@ -9,6 +9,10 @@
   --chart-grid-stroke-dasharray: 4, 3;
   --chart-grid-color: #808080;
 
+  /* Active group */
+  --chart-active-group-background: #808080;
+  --chart-active-group-opacity: 0.3;
+
   /* x-axis labels */
   --chart-x-axis-height: 1.5rem;
   --chart-x-axis-font-family: "Segoe UI", sans-serif;

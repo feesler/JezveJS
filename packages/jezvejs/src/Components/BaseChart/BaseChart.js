@@ -19,6 +19,8 @@ import { formatCoord } from './helpers.js';
 import '../../common.scss';
 import './BaseChart.scss';
 
+export * from './helpers.js';
+export { BaseChartActiveGroup } from './components/ActiveGroup/BaseChartActiveGroup.js';
 export { BaseChartGrid } from './components/Grid/BaseChartGrid.js';
 export { BaseChartLegend } from './components/Legend/BaseChartLegend.js';
 export { BaseChartPopup } from './components/Popup/BaseChartPopup.js';
@@ -65,6 +67,7 @@ export class BaseChart extends Component {
         this.content = null;
         this.legend = null;
         this.activeTarget = null;
+        this.activeGroupSelection = null;
         this.currentTarget = null;
         this.popup = null;
         this.pinnedPopup = null;
@@ -582,19 +585,32 @@ export class BaseChart extends Component {
     }
 
     /** Activates specified target */
-    activateTarget(target, e) {
+    activateTarget(target) {
         if (this.activeTarget?.item === target?.item) {
             return;
         }
-        this.deactivateTarget(e);
+
+        if (this.activeTarget) {
+            this.activeTarget.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
+        }
 
         if (!target?.item) {
+            this.activeTarget = null;
             return;
         }
 
         this.activeTarget = target;
 
         target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
+
+        this.setState({
+            ...this.state,
+            activeGroup: {
+                index: target.index,
+                groupIndex: target.groupIndex,
+                series: target.series,
+            },
+        });
     }
 
     /** Deactivates specified target */
@@ -606,6 +622,11 @@ export class BaseChart extends Component {
         }
 
         target.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
+
+        this.setState({
+            ...this.state,
+            activeGroup: null,
+        });
     }
 
     /** Chart content 'touchstart' event handler */
@@ -1071,6 +1092,40 @@ export class BaseChart extends Component {
         }
     }
 
+    renderActiveGroup(state, prevState) {
+        if (
+            state.showActiveGroup === prevState.showActiveGroup
+            && state.activeGroup === prevState.activeGroup
+        ) {
+            return;
+        }
+
+        if (!state.showActiveGroup || !state.activeGroup) {
+            this.activeGroupSelection?.elem?.remove();
+            this.activeGroupSelection = null;
+            return;
+        }
+
+        if (!this.activeGroupSelection) {
+            const { ActiveGroup } = state.components;
+            this.activeGroupSelection = ActiveGroup.create({
+                ...state,
+                getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
+            });
+
+            if (this.chartGrid) {
+                this.chartGrid.elem.after(this.activeGroupSelection.elem);
+            } else {
+                this.content.prepend(this.activeGroupSelection.elem);
+            }
+        } else {
+            this.activeGroupSelection.setState((actState) => ({
+                ...actState,
+                ...state,
+            }));
+        }
+    }
+
     renderScroll(state, prevState) {
         if (state.scrollLeft === prevState?.scrollLeft) {
             return;
@@ -1113,6 +1168,7 @@ export class BaseChart extends Component {
         }
 
         this.renderGrid(state, prevState);
+        this.renderActiveGroup(state, prevState);
 
         this.renderLegend(state, prevState);
     }
