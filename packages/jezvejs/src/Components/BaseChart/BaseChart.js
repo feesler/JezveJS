@@ -1096,6 +1096,8 @@ export class BaseChart extends Component {
         if (
             state.showActiveGroup === prevState.showActiveGroup
             && state.activeGroup === prevState.activeGroup
+            && state.grid === prevState.grid
+            && state.height === prevState.height
         ) {
             return;
         }
