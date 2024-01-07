@@ -58,12 +58,12 @@ export class BaseChartActiveGroup extends Component {
             throw new Error('Invalid state');
         }
 
-        if (!state.activeGroup) {
+        if (!state.activeTarget) {
             return;
         }
 
         const groupWidth = this.getGroupOuterWidth(state);
-        const { groupIndex } = state.activeGroup;
+        const { groupIndex } = state.activeTarget;
 
         setAttributes(this.rect, {
             x: formatCoord(groupIndex * groupWidth),

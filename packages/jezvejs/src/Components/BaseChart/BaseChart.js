@@ -15,7 +15,7 @@ import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
 
 import { defaultProps } from './defaultProps.js';
-import { formatCoord } from './helpers.js';
+import { formatCoord, isSameTarget } from './helpers.js';
 import '../../common.scss';
 import './BaseChart.scss';
 
@@ -34,7 +34,6 @@ const STACKED_CLASS = 'chart_stacked';
 const CONTAINER_CLASS = 'chart__container';
 const SCROLLER_CLASS = 'chart__scroller';
 const CONTENT_CLASS = 'chart__content';
-const ACTIVE_ITEM_CLASS = 'chart__item_active';
 const ANIMATE_CLASS = 'chart_animated';
 const TOP_X_AXIS_CLASS = 'chart_x-axis-top';
 const LEFT_Y_AXIS_CLASS = 'chart_y-axis-left';
@@ -66,7 +65,6 @@ export class BaseChart extends Component {
         this.chartScroller = null;
         this.content = null;
         this.legend = null;
-        this.activeTarget = null;
         this.activeGroupSelection = null;
         this.currentTarget = null;
         this.popup = null;
@@ -120,6 +118,7 @@ export class BaseChart extends Component {
             dataSets: [],
             groupsCount: 0,
             columnsInGroup: 0,
+            activeTarget: null,
             activeCategory: null,
             chartContentWidth: 0,
             lastHLabelOffset: 0,
@@ -586,46 +585,33 @@ export class BaseChart extends Component {
 
     /** Activates specified target */
     activateTarget(target) {
-        if (this.activeTarget?.item === target?.item) {
+        if (isSameTarget(this.state.activeTarget, target)) {
             return;
         }
 
-        if (this.activeTarget) {
-            this.activeTarget.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
-        }
-
-        if (!target?.item) {
-            this.activeTarget = null;
-            return;
-        }
-
-        this.activeTarget = target;
-
-        target.item.elem.classList.add(ACTIVE_ITEM_CLASS);
+        const item = target?.item;
 
         this.setState({
             ...this.state,
-            activeGroup: {
-                index: target.index,
-                groupIndex: target.groupIndex,
-                series: target.series,
-            },
+            activeTarget: (item)
+                ? {
+                    groupIndex: item.groupIndex,
+                    categoryIndex: item.categoryIndex,
+                    columnIndex: item.columnIndex,
+                }
+                : null,
         });
     }
 
     /** Deactivates specified target */
     deactivateTarget() {
-        const target = this.activeTarget;
-        this.activeTarget = null;
-        if (!target?.item) {
+        if (!this.state.activeTarget) {
             return;
         }
 
-        target.item.elem.classList.remove(ACTIVE_ITEM_CLASS);
-
         this.setState({
             ...this.state,
-            activeGroup: null,
+            activeTarget: null,
         });
     }
 
@@ -975,6 +961,7 @@ export class BaseChart extends Component {
             && state.scrollLeft === prevState.scrollLeft
             && state.scrollWidth === prevState.scrollWidth
             && state.animateNow === prevState.animateNow
+            && state.activeTarget === prevState.activeTarget
             && state.activeCategory === prevState.activeCategory
         ) {
             return;
@@ -1095,14 +1082,14 @@ export class BaseChart extends Component {
     renderActiveGroup(state, prevState) {
         if (
             state.showActiveGroup === prevState.showActiveGroup
-            && state.activeGroup === prevState.activeGroup
+            && state.activeTarget === prevState.activeTarget
             && state.grid === prevState.grid
             && state.height === prevState.height
         ) {
             return;
         }
 
-        if (!state.showActiveGroup || !state.activeGroup) {
+        if (!state.showActiveGroup || !state.activeTarget) {
             this.activeGroupSelection?.elem?.remove();
             this.activeGroupSelection = null;
             return;

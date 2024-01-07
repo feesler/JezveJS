@@ -18,6 +18,23 @@ export const findItem = (items, query) => {
 };
 
 /**
+ * Returns true if objects target to the same data items
+ *
+ * @param {object} a
+ * @param {object} b
+ * @returns {boolean}
+ */
+export const isSameTarget = (a, b) => (
+    (a === b) || (
+        !!a
+        && !!b
+        && a.groupIndex === b.groupIndex
+        && a.categoryIndex === b.categoryIndex
+        && a.columnIndex === b.columnIndex
+    )
+);
+
+/**
  * Returns specified value rounded to default precision for SVG
  *
  * @param {number|string} value

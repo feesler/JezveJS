@@ -72,7 +72,9 @@ export class LineChart extends BaseChart {
             index,
             series: result.series,
             group: result.item,
-            groupIndex: result.index,
+            groupIndex: item?.groupIndex,
+            category: item?.category,
+            categoryIndex: item?.categoryIndex,
         };
 
         return res;
@@ -152,7 +154,7 @@ export class LineChart extends BaseChart {
 
     /** Create items with default scale */
     createItems(state) {
-        const { dataSets } = state;
+        const { dataSets, activeTarget } = state;
         if (dataSets.length === 0) {
             return;
         }
@@ -174,6 +176,11 @@ export class LineChart extends BaseChart {
                 const active = (
                     (category?.toString() === activeCategory)
                     || (categoryIndex.toString() === activeCategory)
+                    || (
+                        !!activeTarget
+                        && activeTarget.groupIndex === groupIndex
+                        && activeTarget.categoryIndex === categoryIndex
+                    )
                 );
 
                 let [item] = findItem(flatItems, {

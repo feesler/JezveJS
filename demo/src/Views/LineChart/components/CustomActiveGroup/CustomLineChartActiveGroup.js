@@ -29,7 +29,7 @@ export class CustomLineChartActiveGroup extends BaseChartActiveGroup {
             return 0;
         }
 
-        const { groupIndex } = state.activeGroup;
+        const { groupIndex } = state.activeTarget;
         let value = 0;
         dataSets.forEach((dataSet) => {
             const itemValue = dataSet.data[groupIndex] ?? 0;
@@ -44,13 +44,13 @@ export class CustomLineChartActiveGroup extends BaseChartActiveGroup {
     render(state, prevState = {}) {
         super.render(state, prevState);
 
-        if (!state.activeGroup) {
+        if (!state.activeTarget) {
             return;
         }
 
         const itemPos = this.getItemPosition(state);
         const groupWidth = this.getGroupOuterWidth(state);
-        const { groupIndex } = state.activeGroup;
+        const { groupIndex } = state.activeTarget;
 
         const padding = 10;
         const rX = formatCoord((groupIndex + 0.5) * groupWidth);
