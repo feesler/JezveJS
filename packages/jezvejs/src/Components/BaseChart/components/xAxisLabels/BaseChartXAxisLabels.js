@@ -51,6 +51,7 @@ export class BaseChartXAxisLabels extends Component {
         }
 
         this.labels = null;
+        this.animationFrame = 0;
 
         this.state = {
             ...this.props,
@@ -95,6 +96,10 @@ export class BaseChartXAxisLabels extends Component {
     render(state, prevState = {}) {
         if (!state) {
             throw new Error('Invalid state');
+        }
+
+        if (this.animationFrame) {
+            return;
         }
 
         const { xAxis } = state;
@@ -149,7 +154,7 @@ export class BaseChartXAxisLabels extends Component {
             labels.push(label);
         }
 
-        let lastOffset = 0;
+        let lastOffset = null;
         const lblMarginLeft = 10;
         const labelsToRemove = [];
         let resizeRequested = false;
@@ -173,7 +178,7 @@ export class BaseChartXAxisLabels extends Component {
                     : (labelLeft < lastOffset + lblMarginLeft);
 
                 // Check current label not intersects previous one
-                if (lastOffset > 0 && overflow) {
+                if (lastOffset !== null && overflow) {
                     labelsToRemove.push((!prevLabel.reused && label.reused) ? prevLabel : label);
                     if (prevLabel?.reused || !label.reused) {
                         continue;
@@ -222,12 +227,14 @@ export class BaseChartXAxisLabels extends Component {
             if (resizeRequested) {
                 setTimeout(() => this.onResize(resizeOffset));
             }
+
+            this.animationFrame = 0;
         };
 
         if (this.labels) {
             updateLabels();
         } else {
-            requestAnimationFrame(() => updateLabels());
+            this.animationFrame = requestAnimationFrame(() => updateLabels());
         }
     }
 }
