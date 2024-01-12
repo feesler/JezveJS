@@ -112,7 +112,10 @@ export class Histogram extends BaseChart {
             item,
             index,
             group: result.item,
-            groupIndex: result.index,
+            groupIndex: item?.groupIndex,
+            columnIndex: item?.columnIndex,
+            category: item?.category,
+            categoryIndex: item?.categoryIndex,
             series: result.series,
         };
 
@@ -194,7 +197,7 @@ export class Histogram extends BaseChart {
 
     /** Create items with default scale */
     createItems(state) {
-        const { dataSets } = state;
+        const { dataSets, activeTarget } = state;
         if (dataSets.length === 0) {
             return;
         }
@@ -241,6 +244,12 @@ export class Histogram extends BaseChart {
                 const active = (
                     (!!category && category.toString() === activeCategory)
                     || (categoryIndex.toString() === activeCategory)
+                    || (
+                        !!activeTarget
+                        && activeTarget.groupIndex === groupIndex
+                        && activeTarget.categoryIndex === categoryIndex
+                        && activeTarget.columnIndex === columnIndex
+                    )
                 );
 
                 const itemProps = {
