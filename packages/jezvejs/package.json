@@ -1,6 +1,6 @@
 {
     "name": "jezvejs",
-    "version": "2.22.2",
+    "version": "2.22.3",
     "type": "module",
     "module": "index.js",
     "files": [
@@ -20,7 +20,7 @@
     "author": "Henry Feesler",
     "license": "ISC",
     "dependencies": {
-        "@babel/runtime": "^7.23.7",
+        "@babel/runtime": "^7.23.8",
         "@jezvejs/assert": "^1.0.1",
         "@jezvejs/datetime": "^1.1.0",
         "@jezvejs/dom": "^1.1.0",
