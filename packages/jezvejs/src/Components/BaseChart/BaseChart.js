@@ -458,13 +458,14 @@ export class BaseChart extends Component {
             return state;
         }
 
-        const groupOuterWidth = this.chartScroller.offsetWidth / state.groupsCount;
+        const groupOuterWidth = (state.groupsCount > 0)
+            ? this.chartScroller.offsetWidth / state.groupsCount
+            : 0;
         const groupsGap = groupOuterWidth / 5;
         const groupWidth = groupOuterWidth - groupsGap;
-        const columnWidth = Math.min(
-            state.maxColumnWidth,
-            groupWidth / state.columnsInGroup,
-        );
+        const columnWidth = (state.columnsInGroup > 0)
+            ? Math.min(state.maxColumnWidth, groupWidth / state.columnsInGroup)
+            : 0;
 
         const newState = {
             ...state,
