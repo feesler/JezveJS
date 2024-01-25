@@ -74,6 +74,11 @@
   z-index: 9999;
 }
 
+/* Pinned popup */
+.chart__popup_pinned {
+  z-index: 9998;
+}
+
 /* Animated popup */
 .chart__popup_animated {
   transition: all 0.2s ease;

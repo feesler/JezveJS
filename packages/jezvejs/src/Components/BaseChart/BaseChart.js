@@ -39,6 +39,7 @@ const TOP_X_AXIS_CLASS = 'chart_x-axis-top';
 const LEFT_Y_AXIS_CLASS = 'chart_y-axis-left';
 /* Popup */
 const POPUP_CLASS = 'chart__popup';
+const PINNED_POPUP_CLASS = 'chart__popup_pinned';
 const ANIMATE_POPUP_CLASS = 'chart__popup_animated';
 
 /* Legend */
@@ -69,7 +70,6 @@ export class BaseChart extends Component {
         this.currentTarget = null;
         this.popup = null;
         this.pinnedPopup = null;
-        this.pinnedTarget = null;
         this.items = [];
         this.itemsGroup = null;
         this.grid = null;
@@ -131,6 +131,9 @@ export class BaseChart extends Component {
             scrollWidth: 0,
             blockTouch: false,
             animateNow: false,
+            showPopup: false,
+            popupTarget: null,
+            pinnedTarget: null,
         };
 
         this.init();
@@ -547,6 +550,14 @@ export class BaseChart extends Component {
         };
     }
 
+    findItemByTarget(target) {
+        if (!target) {
+            return null;
+        }
+
+        return this.items.flat().find((item) => isSameTarget(item, target));
+    }
+
     /** Chart content 'click' event handler */
     onClick(e) {
         this.state.blockTouch = false;
@@ -559,48 +570,32 @@ export class BaseChart extends Component {
         const { showPopupOnClick, pinPopupOnClick, activateOnClick } = this.state;
 
         if (activateOnClick || showPopupOnClick) {
-            this.activateTarget(target, e);
+            this.activateTarget(target);
         }
 
-        if (showPopupOnClick) {
-            // Reuse pinned popup in case there is no hover popup
-            // Popup will be pinned again, so it's possible to animate position of element
-            if (!this.popup && pinPopupOnClick && this.pinnedPopup) {
-                this.popup = this.pinnedPopup;
-            }
-
-            this.showPopup(target);
-
-            if (pinPopupOnClick) {
-                if (this.pinnedPopup !== this.popup) {
-                    this.pinnedPopup?.remove();
-                }
-                this.pinnedPopup = this.popup;
-                this.pinnedTarget = target.item;
-                this.popup = null;
-            }
-        }
+        this.setState({
+            ...this.state,
+            popupTarget: (showPopupOnClick && !pinPopupOnClick) ? this.state.activeTarget : null,
+            pinnedTarget: (pinPopupOnClick) ? this.state.activeTarget : null,
+        });
 
         this.notifyEvent('onItemClick', { ...target, event: e });
     }
 
     /** Activates specified target */
     activateTarget(target) {
-        if (isSameTarget(this.state.activeTarget, target)) {
+        if (
+            !target?.item
+            || isSameTarget(this.state.activeTarget, target)
+        ) {
             return;
         }
 
-        const item = target?.item;
+        const { item, ...targetProps } = target;
 
         this.setState({
             ...this.state,
-            activeTarget: (item)
-                ? {
-                    groupIndex: item.groupIndex,
-                    categoryIndex: item.categoryIndex,
-                    columnIndex: item.columnIndex,
-                }
-                : null,
+            activeTarget: { item: item.state, ...targetProps },
         });
     }
 
@@ -641,7 +636,7 @@ export class BaseChart extends Component {
         this.currentTarget = target;
 
         if (this.state.activateOnHover) {
-            this.activateTarget(target, e);
+            this.activateTarget(target);
         }
 
         if (!target?.item) {
@@ -649,14 +644,10 @@ export class BaseChart extends Component {
         }
 
         if (this.state.showPopupOnHover) {
-            this.showPopup(target);
-            // Hide popup if already pinned same item
-            if (
-                this.state.pinPopupOnClick
-                && target.item === this.pinnedTarget
-            ) {
-                show(this.popup, false);
-            }
+            this.setState({
+                ...this.state,
+                popupTarget: this.state.activeTarget,
+            });
         }
 
         this.notifyEvent('onItemOver', { ...target, event: e });
@@ -664,6 +655,16 @@ export class BaseChart extends Component {
 
     /** Chart content 'mouseleave' event handler */
     onMouseLeave(e) {
+        if (
+            e.relatedTarget
+            && (
+                this.popup?.contains(e.relatedTarget)
+                || this.pinnedPopup?.contains(e.relatedTarget)
+            )
+        ) {
+            return;
+        }
+
         if (this.state.activateOnHover) {
             this.deactivateTarget();
         }
@@ -680,21 +681,30 @@ export class BaseChart extends Component {
             return null;
         }
 
-        if (!this.popupContent) {
+        const isPinnedTarget = state.pinnedTarget && target === state.pinnedTarget;
+        let popup = (isPinnedTarget) ? this.pinnedPopupContent : this.popupContent;
+
+        if (!popup) {
             const ChartPopup = this.getComponent('ChartPopup');
-            this.popupContent = ChartPopup.create({
+            popup = ChartPopup.create({
                 ...state,
                 target,
             });
+
+            if (isPinnedTarget) {
+                this.pinnedPopupContent = popup;
+            } else {
+                this.popupContent = popup;
+            }
         } else {
-            this.popupContent.setState((popupState) => ({
+            popup.setState((popupState) => ({
                 ...popupState,
                 ...state,
                 target,
             }));
         }
 
-        return this.popupContent.elem;
+        return popup.elem;
     }
 
     renderPopupContent(target, state) {
@@ -706,46 +716,52 @@ export class BaseChart extends Component {
     }
 
     hidePopup() {
-        show(this.popup, false);
-        this.popupPosition?.reset();
-        this.popupPosition = null;
-
-        if (this.state.pinPopupOnClick) {
-            show(this.pinnedPopup, false);
+        if (!this.state.popupTarget) {
+            return;
         }
 
-        removeEmptyClick(this.emptyClickHandler);
+        this.setState({
+            ...this.state,
+            popupTarget: null,
+        });
     }
 
-    showPopup(target) {
-        if (!target?.item) {
+    showPopup(target, state) {
+        const isPinnedTarget = !!state.pinnedTarget && target === state.pinnedTarget;
+        const item = this.findItemByTarget(target);
+        if (!item) {
             return;
         }
 
         removeEmptyClick(this.emptyClickHandler);
-        if (!this.popup) {
-            this.popup = createElement('div', { className: POPUP_CLASS });
-            this.elem.append(this.popup);
+
+        let popupElem = (isPinnedTarget) ? this.pinnedPopup : this.popup;
+        if (!popupElem) {
+            popupElem = createElement('div', { className: POPUP_CLASS });
+            this.elem.append(popupElem);
         }
 
-        this.popup.classList.toggle(ANIMATE_POPUP_CLASS, this.state.animatePopup);
-        show(this.popup, true);
+        popupElem.classList.toggle(PINNED_POPUP_CLASS, isPinnedTarget);
+        popupElem.classList.toggle(ANIMATE_POPUP_CLASS, state.animatePopup);
+        show(popupElem, true);
 
         this.elem.style.position = 'relative';
 
-        const content = this.renderPopupContent(target, this.state);
-        show(this.popup, (content !== null));
+        const content = this.renderPopupContent(target, state);
+        show(popupElem, (content !== null));
         if (content === null) {
+            popupElem.remove();
             return;
         }
 
-        this.popup.replaceChildren(...asArray(content));
+        popupElem.replaceChildren(...asArray(content));
 
-        this.popupPosition?.reset();
-        this.popupPosition = PopupPosition.create({
-            elem: this.popup,
-            refElem: target.item.elem,
-            position: this.state.popupPosition,
+        const position = (isPinnedTarget) ? this.pinnedPopupPosition : this.popupPosition;
+        position?.reset();
+        const newPosition = PopupPosition.create({
+            elem: popupElem,
+            refElem: item.elem,
+            position: state.popupPosition,
             margin: 5,
             screenPadding: 5,
             useRefWidth: false,
@@ -756,8 +772,16 @@ export class BaseChart extends Component {
             allowChangeAxis: true,
         });
 
+        if (isPinnedTarget) {
+            this.pinnedPopup = popupElem;
+            this.pinnedPopupPosition = newPosition;
+        } else {
+            this.popup = popupElem;
+            this.popupPosition = newPosition;
+        }
+
         setEmptyClick(this.emptyClickHandler, [
-            target.item.elem,
+            item.elem,
             this.popup,
             this.pinnedPopup,
         ]);
@@ -925,6 +949,64 @@ export class BaseChart extends Component {
         });
 
         return categories;
+    }
+
+    renderPopup(state, prevState) {
+        if (
+            state.popupTarget === prevState.popupTarget
+            && state.pinnedTarget === prevState.pinnedTarget
+            && state.animatePopup === prevState.animatePopup
+            && state.showPopupOnHover === prevState.showPopupOnHover
+            && state.showPopupOnClick === prevState.showPopupOnClick
+            && state.pinPopupOnClick === prevState.pinPopupOnClick
+        ) {
+            return;
+        }
+
+        // Reuse main popup for pinned popup
+        if (
+            state.pinnedTarget
+            && !state.popupTarget
+            && !!prevState.popupTarget
+        ) {
+            this.pinnedPopup?.remove();
+            this.pinnedPopup = this.popup;
+            this.pinnedPopupPosition = this.popupPosition;
+            this.popup = null;
+            this.popupPosition = null;
+        }
+
+        if (!state.popupTarget) {
+            show(this.popup, false);
+            this.popupPosition?.reset();
+            this.popupPosition = null;
+        }
+
+        if (!state.pinnedTarget) {
+            show(this.pinnedPopup, false);
+            this.pinnedPopupPosition?.reset();
+            this.pinnedPopupPosition = null;
+        }
+
+        if (!state.popupTarget && !state.pinnedTarget) {
+            removeEmptyClick(this.emptyClickHandler);
+            return;
+        }
+
+        if (state.popupTarget) {
+            this.showPopup(state.popupTarget, state);
+        }
+        if (state.pinnedTarget) {
+            this.showPopup(state.pinnedTarget, state);
+        }
+
+        // Hide main popup if already pinned same item
+        if (
+            state.pinPopupOnClick
+            && isSameTarget(state.popupTarget, state.pinnedTarget)
+        ) {
+            show(this.popup, false);
+        }
     }
 
     renderLegend(state) {
@@ -1160,6 +1242,7 @@ export class BaseChart extends Component {
         this.renderGrid(state, prevState);
         this.renderActiveGroup(state, prevState);
 
+        this.renderPopup(state, prevState);
         this.renderLegend(state, prevState);
     }
 }

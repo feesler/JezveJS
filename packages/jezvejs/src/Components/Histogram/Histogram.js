@@ -112,6 +112,8 @@ export class Histogram extends BaseChart {
             item,
             index,
             group: result.item,
+            value: item?.value,
+            valueOffset: item?.valueOffset,
             groupIndex: item?.groupIndex,
             columnIndex: item?.columnIndex,
             category: item?.category,
