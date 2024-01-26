@@ -1,4 +1,6 @@
-import { asArray, isFunction } from '@jezvejs/types';
+import { asArray, isFunction, isObject } from '@jezvejs/types';
+
+import { minmax } from '../../common.js';
 
 const SVG_VALUE_PRECISION = 3;
 
@@ -33,6 +35,110 @@ export const isSameTarget = (a, b) => (
         && a.columnIndex === b.columnIndex
     )
 );
+
+/** Returns array of data sets */
+export const getDataSets = (state) => {
+    const { values } = state.data;
+    if (values.length === 0) {
+        return [];
+    }
+
+    const [firstItem] = values;
+    if (!isObject(firstItem)) {
+        const data = values;
+        return [{ data }];
+    }
+
+    return values;
+};
+
+/** Returns longest data set */
+export const getLongestDataSet = (state) => {
+    const resIndex = state.dataSets.reduce((res, item, index) => (
+        (state.dataSets[res].data.length < item.data.length) ? index : res
+    ), 0);
+
+    return state.dataSets[resIndex]?.data ?? [];
+};
+
+/** Returns array of groups for stacked chart data */
+export const getStackedGroups = (state) => {
+    if (!state.data.stacked) {
+        return [];
+    }
+
+    return state.dataSets.reduce((res, item) => {
+        const group = item.group ?? null;
+        return res.includes(group) ? res : [...res, group];
+    }, []);
+};
+
+/** Returns categories for stacked chart data */
+export const getStackedCategories = (state) => {
+    if (!state.data.stacked) {
+        return [];
+    }
+
+    return state.dataSets.reduce((res, item) => {
+        let category = item.category ?? null;
+        if (res.includes(category)) {
+            return res;
+        }
+
+        const categoryIndex = res.length;
+        if (category === null && !res.includes(categoryIndex)) {
+            category = categoryIndex;
+        }
+
+        return [...res, category];
+    }, []);
+};
+
+/** Returns index of first visible item for specified state */
+export const getFirstVisibleGroupIndex = (state) => {
+    const groupWidth = state.getGroupOuterWidth(state);
+    const offs = state.visibilityOffset;
+
+    const firstItem = Math.round(state.scrollLeft / groupWidth);
+    return Math.max(0, firstItem - offs);
+};
+
+/** Returns count of visible items from specified index */
+export const getVisibleGroupsCount = (firstItemIndex, state) => {
+    const groupWidth = state.getGroupOuterWidth(state);
+    const longestSet = getLongestDataSet(state);
+    const offs = state.visibilityOffset;
+    const first = Math.max(0, firstItemIndex);
+
+    const itemsOnWidth = Math.round(state.containerWidth / groupWidth);
+    return Math.min(longestSet.length - first, itemsOnWidth + 2 * offs);
+};
+
+/** Returns group index for specified position on x-axis */
+export const getGroupIndexByX = (x, state) => {
+    const groupOuterWidth = state.getGroupOuterWidth(state);
+    return Math.floor(x / groupOuterWidth);
+};
+
+/** Returns series value for specified items group */
+export const getSeriesByIndex = (index, state) => {
+    if (index === -1) {
+        return null;
+    }
+
+    const { series } = state.data;
+    const ind = minmax(0, series.length - 1, index);
+    return series[ind];
+};
+
+/** Return array of values */
+export const mapValues = (items) => {
+    if (!items || !Array.isArray(items)) {
+        return null;
+    }
+
+    return items.flat().map((item) => item.value + item.valueOffset);
+};
 
 /**
  * Returns specified value rounded to default precision for SVG

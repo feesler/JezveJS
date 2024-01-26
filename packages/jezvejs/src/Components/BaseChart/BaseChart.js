@@ -1,4 +1,4 @@
-import { asArray, isFunction, isObject } from '@jezvejs/types';
+import { asArray, isFunction } from '@jezvejs/types';
 import {
     createSVGElement,
     show,
@@ -6,7 +6,7 @@ import {
     createElement,
 } from '@jezvejs/dom';
 
-import { debounce, minmax } from '../../common.js';
+import { debounce } from '../../common.js';
 import { setEmptyClick, removeEmptyClick } from '../../emptyClick.js';
 import { Component } from '../../Component.js';
 
@@ -18,7 +18,16 @@ import { combineReducers, createStore } from '../Store/Store.js';
 import { defaultProps } from './defaultProps.js';
 import {
     formatCoord,
+    getDataSets,
+    getFirstVisibleGroupIndex,
+    getGroupIndexByX,
+    getLongestDataSet,
+    getSeriesByIndex,
+    getStackedCategories,
+    getStackedGroups,
+    getVisibleGroupsCount,
     isSameTarget,
+    mapValues,
 } from './helpers.js';
 import { actions, reducer } from './reducer.js';
 import '../../common.scss';
@@ -326,58 +335,20 @@ export class BaseChart extends Component {
 
     /** Returns array of data sets */
     getDataSets(state = this.state) {
-        const { values } = state.data;
-        if (values.length === 0) {
-            return [];
-        }
-
-        const [firstItem] = values;
-        if (!isObject(firstItem)) {
-            const data = values;
-            return [{ data }];
-        }
-
-        return values;
+        return getDataSets(state);
     }
 
     /** Returns longest data set */
     getLongestDataSet(state = this.state) {
-        const resIndex = state.dataSets.reduce((res, item, index) => (
-            (state.dataSets[res].data.length < item.data.length) ? index : res
-        ), 0);
-
-        return state.dataSets[resIndex]?.data ?? [];
+        return getLongestDataSet(state);
     }
 
     getStackedGroups(state = this.state) {
-        if (!state.data.stacked) {
-            return [];
-        }
-
-        return state.dataSets.reduce((res, item) => {
-            const group = item.group ?? null;
-            return res.includes(group) ? res : [...res, group];
-        }, []);
+        return getStackedGroups(state);
     }
 
     getStackedCategories(state = this.state) {
-        if (!state.data.stacked) {
-            return [];
-        }
-
-        return state.dataSets.reduce((res, item) => {
-            let category = item.category ?? null;
-            if (res.includes(category)) {
-                return res;
-            }
-
-            const categoryIndex = res.length;
-            if (category === null && !res.includes(categoryIndex)) {
-                category = categoryIndex;
-            }
-
-            return [...res, category];
-        }, []);
+        return getStackedCategories(state);
     }
 
     formatCoord(value, asPixels = false) {
@@ -407,15 +378,6 @@ export class BaseChart extends Component {
         return (grid.steps === 0) ? state.grid : grid;
     }
 
-    /** Return array of values */
-    mapValues(items) {
-        if (!items || !Array.isArray(items)) {
-            return null;
-        }
-
-        return items.flat().map((item) => item.value + item.valueOffset);
-    }
-
     /** Returns object with main dimensions of component */
     measureLayout() {
         return {
@@ -427,22 +389,14 @@ export class BaseChart extends Component {
         };
     }
 
+    /** Returns index of first visible item */
     getFirstVisibleGroupIndex(state = this.state) {
-        const groupWidth = this.getGroupOuterWidth(state);
-        const offs = state.visibilityOffset;
-
-        const firstItem = Math.round(state.scrollLeft / groupWidth);
-        return Math.max(0, firstItem - offs);
+        return getFirstVisibleGroupIndex(state);
     }
 
+    /** Returns count of visible items from specified index */
     getVisibleGroupsCount(firstItemIndex, state = this.state) {
-        const groupWidth = this.getGroupOuterWidth(state);
-        const longestSet = this.getLongestDataSet(state);
-        const offs = state.visibilityOffset;
-        const first = Math.max(0, firstItemIndex);
-
-        const itemsOnWidth = Math.round(state.containerWidth / groupWidth);
-        return Math.min(longestSet.length - first, itemsOnWidth + 2 * offs);
+        return getVisibleGroupsCount(firstItemIndex, state);
     }
 
     /** Return array of currently visible items */
@@ -460,18 +414,12 @@ export class BaseChart extends Component {
 
     /** Returns series value for specified items group */
     getSeriesByIndex(index, state = this.state) {
-        if (index === -1) {
-            return null;
-        }
-
-        const { series } = state.data;
-        const ind = minmax(0, series.length - 1, index);
-        return series[ind];
+        return getSeriesByIndex(index, state);
     }
 
+    /** Returns group index for specified position on x-axis */
     getGroupIndexByX(x) {
-        const groupOuterWidth = this.getGroupOuterWidth();
-        return Math.floor(x / groupOuterWidth);
+        return getGroupIndexByX(x, this.state);
     }
 
     /** Find item by event object */
@@ -703,7 +651,7 @@ export class BaseChart extends Component {
         }
 
         const vItems = this.getVisibleItems(state);
-        const values = this.mapValues(vItems);
+        const values = mapValues(vItems);
 
         this.dispatch(actions.scaleVisible(values));
     }
