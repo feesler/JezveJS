@@ -61,6 +61,7 @@ export const defaultProps = {
         series: [],
         stacked: false,
     },
+    reducers: null,
     components: {
         Grid: BaseChartGrid,
         XAxisLabels: BaseChartXAxisLabels,

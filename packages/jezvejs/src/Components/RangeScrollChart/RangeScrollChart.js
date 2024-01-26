@@ -329,10 +329,7 @@ export class RangeScrollChart extends Component {
         }
 
         if (state.scrollLeft !== prevState?.scrollLeft) {
-            this.mainChart.setState((chartState) => ({
-                ...chartState,
-                scrollLeft: state.scrollLeft,
-            }));
+            this.mainChart.setScroll(state.scrollLeft);
         }
 
         if (
