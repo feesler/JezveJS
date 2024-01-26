@@ -75,6 +75,9 @@ export class LineChart extends BaseChart {
             groupIndex: item?.groupIndex,
             category: item?.category,
             categoryIndex: item?.categoryIndex,
+            columnIndex: item?.columnIndex,
+            value: item?.value,
+            valueOffset: item?.valueOffset,
         };
 
         return res;
