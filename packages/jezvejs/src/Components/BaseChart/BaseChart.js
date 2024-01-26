@@ -77,7 +77,6 @@ export class BaseChart extends Component {
         this.yAxisLabels = null;
         this.vertLabelsGroup = null;
         this.scrollRequested = false;
-        this.contentOffset = null;
 
         this.cancelScaleFunc = null;
         this.cancelScrollFunc = null;
@@ -112,6 +111,8 @@ export class BaseChart extends Component {
 
         this.emptyClickHandler = () => this.hidePopup();
 
+        const { height, marginTop } = this.props;
+
         this.state = {
             ...this.props,
             data: { ...defaultProps.data },
@@ -126,10 +127,11 @@ export class BaseChart extends Component {
             scrollerWidth: 0,
             containerWidth: 0,
             chartWidth: 0,
-            chartHeight: 0,
+            chartHeight: height - marginTop,
             scrollLeft: 0,
             scrollWidth: 0,
-            blockTouch: false,
+            contentOffset: null,
+            ignoreTouch: false,
             animateNow: false,
             showPopup: false,
             popupTarget: null,
@@ -181,9 +183,6 @@ export class BaseChart extends Component {
             className: CHART_CLASS,
             children: this.chartContainer,
         });
-
-        const { height, marginTop } = this.state;
-        this.state.chartHeight = height - marginTop;
 
         // Create main chart content
         const events = {
@@ -264,10 +263,12 @@ export class BaseChart extends Component {
             this.cancelScrollFunc();
         }
 
-        const state = this.getDataState(data);
+        let newState = {
+            ...this.getDataState(data),
+            contentOffset: getOffset(this.chartScroller),
+        };
 
-        this.contentOffset = getOffset(this.chartScroller);
-        let newState = this.updateColumnWidth(state);
+        newState = this.updateColumnWidth(newState);
         newState = this.updateChartWidth(newState);
         this.setState(newState);
 
@@ -528,13 +529,14 @@ export class BaseChart extends Component {
 
     /** Find item by event object */
     findItemByEvent(e) {
-        if (!this.contentOffset) {
+        const { contentOffset } = this.state;
+        if (!contentOffset) {
             return { item: null, index: -1 };
         }
 
         const firstGroupIndex = this.getFirstVisibleGroupIndex();
 
-        const x = e.clientX - this.contentOffset.left + this.state.scrollLeft;
+        const x = e.clientX - contentOffset.left + this.state.scrollLeft;
         const index = this.getGroupIndexByX(x);
         const relIndex = index - firstGroupIndex;
         if (relIndex < 0 || relIndex >= this.items.length) {
@@ -560,8 +562,6 @@ export class BaseChart extends Component {
 
     /** Chart content 'click' event handler */
     onClick(e) {
-        this.state.blockTouch = false;
-
         const target = this.findItemByEvent(e);
         if (!target.item) {
             return;
@@ -614,13 +614,16 @@ export class BaseChart extends Component {
     /** Chart content 'touchstart' event handler */
     onTouchStart(e) {
         if (e.touches) {
-            this.state.blockTouch = true;
+            this.setState({
+                ...this.state,
+                ignoreTouch: true,
+            });
         }
     }
 
     /** Chart content 'mousemove' event handler */
     onMouseMove(e) {
-        if (this.state.blockTouch) {
+        if (this.state.ignoreTouch) {
             return;
         }
 
@@ -838,8 +841,12 @@ export class BaseChart extends Component {
 
     /** Chart scroller resize observer handler */
     onResize(lastHLabelOffset = 0) {
-        this.contentOffset = getOffset(this.chartScroller);
-        let newState = this.updateColumnWidth(this.state);
+        let newState = {
+            ...this.state,
+            contentOffset: getOffset(this.chartScroller),
+        };
+
+        newState = this.updateColumnWidth(newState);
 
         // Update width of x axis labels
         newState.lastHLabelOffset = (!newState.fitToWidth)
