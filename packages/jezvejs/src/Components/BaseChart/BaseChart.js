@@ -13,9 +13,14 @@ import { Component } from '../../Component.js';
 // Global utilities
 import { PopupPosition } from '../PopupPosition/PopupPosition.js';
 import { ChartGrid } from '../ChartGrid/ChartGrid.js';
+import { combineReducers, createStore } from '../Store/Store.js';
 
 import { defaultProps } from './defaultProps.js';
-import { formatCoord, isSameTarget } from './helpers.js';
+import {
+    formatCoord,
+    isSameTarget,
+} from './helpers.js';
+import { actions, reducer } from './reducer.js';
 import '../../common.scss';
 import './BaseChart.scss';
 
@@ -111,9 +116,25 @@ export class BaseChart extends Component {
 
         this.emptyClickHandler = () => this.hidePopup();
 
+        // Setup store
+        const extraReducers = asArray(this.props.reducers);
+        const storeReducer = (extraReducers.length > 0)
+            ? combineReducers(reducer, ...extraReducers)
+            : reducer;
+        this.store = createStore(storeReducer, {
+            initialState: this.getInitialState(),
+        });
+
+        this.init();
+        this.postInit();
+
+        this.setData(this.props.data);
+    }
+
+    getInitialState() {
         const { height, marginTop } = this.props;
 
-        this.state = {
+        return {
             ...this.props,
             data: { ...defaultProps.data },
             dataSets: [],
@@ -136,12 +157,20 @@ export class BaseChart extends Component {
             showPopup: false,
             popupTarget: null,
             pinnedTarget: null,
+            getDataSets: (...args) => this.getDataSets(...args),
+            getGroupsCount: (...args) => this.getGroupsCount(...args),
+            getColumnsInGroupCount: (...args) => this.getColumnsInGroupCount(...args),
+            calculateGrid: (...args) => this.calculateGrid(...args),
+            isHorizontalScaleNeeded: (...args) => this.isHorizontalScaleNeeded(...args),
+            getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
+            getFirstVisibleGroupIndex: (...args) => this.getFirstVisibleGroupIndex(...args),
+            getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
+            onResize: (...args) => this.onResize(...args),
         };
+    }
 
-        this.init();
-        this.postInit();
-        this.render(this.state);
-        this.setData(this.props.data);
+    get state() {
+        return this.store.getState();
     }
 
     get activeCategory() {
@@ -209,6 +238,7 @@ export class BaseChart extends Component {
     postInit() {
         this.setClassNames();
         this.observeSize();
+        this.subscribeToStore(this.store);
     }
 
     getComponent(name) {
@@ -226,28 +256,6 @@ export class BaseChart extends Component {
         observer.observe(this.chartScroller);
     }
 
-    getDataState(data, state = this.state) {
-        if (state.data === data) {
-            return state;
-        }
-
-        const newState = {
-            ...state,
-            data: {
-                ...defaultProps.data,
-                ...data,
-            },
-            lastHLabelOffset: 0,
-        };
-
-        newState.dataSets = this.getDataSets(newState);
-        newState.groupsCount = this.getGroupsCount(newState);
-        newState.columnsInGroup = this.getColumnsInGroupCount(newState);
-        newState.grid = this.calculateGrid(data.values, newState);
-
-        return newState;
-    }
-
     setData(data) {
         if (!data?.values || !data?.series) {
             throw new Error('Invalid data');
@@ -263,14 +271,7 @@ export class BaseChart extends Component {
             this.cancelScrollFunc();
         }
 
-        let newState = {
-            ...this.getDataState(data),
-            contentOffset: getOffset(this.chartScroller),
-        };
-
-        newState = this.updateColumnWidth(newState);
-        newState = this.updateChartWidth(newState);
-        this.setState(newState);
+        this.dispatch(actions.setData({ data, layout: this.measureLayout() }));
 
         if (this.scrollFunc) {
             this.scrollRequested = true;
@@ -291,42 +292,20 @@ export class BaseChart extends Component {
         this.chartScroller.scrollLeft = this.chartScroller.scrollWidth;
     }
 
-    setColumnWidth(value) {
-        const width = parseFloat(value, 10);
-        if (Number.isNaN(width) || width < 1 || this.state.columnWidth === width) {
-            return;
-        }
+    setScroll(value) {
+        this.dispatch(actions.setScroll(value));
+    }
 
-        const state = {
-            ...this.state,
-            columnWidth: Math.min(width, this.state.maxColumnWidth),
-            lastHLabelOffset: 0,
-        };
-        const newState = this.updateChartWidth(state);
-        this.setState(newState);
+    setColumnWidth(value) {
+        this.dispatch(actions.setColumnWidth(value));
     }
 
     setGroupsGap(value) {
-        const gap = parseFloat(value, 10);
-        if (Number.isNaN(gap) || this.state.groupsGap === gap) {
-            return;
-        }
-
-        const state = {
-            ...this.state,
-            groupsGap: gap,
-            lastHLabelOffset: 0,
-        };
-        const newState = this.updateChartWidth(state);
-        this.setState(newState);
+        this.dispatch(actions.setGroupsGap(value));
     }
 
-    setActiveCategory(activeCategory) {
-        if (this.state.activeCategory === activeCategory) {
-            return;
-        }
-
-        this.setState({ ...this.state, activeCategory });
+    setActiveCategory(value) {
+        this.dispatch(actions.setActiveCategory(value));
     }
 
     /** Returns count of data categories */
@@ -437,47 +416,15 @@ export class BaseChart extends Component {
         return items.flat().map((item) => item.value + item.valueOffset);
     }
 
-    /** Update width of chart block */
-    updateChartWidth(state) {
-        const groupsWidth = state.groupsCount * this.getGroupOuterWidth(state);
-        const contentWidth = Math.max(groupsWidth, state.lastHLabelOffset);
-
-        const newState = {
-            ...state,
-            chartContentWidth: contentWidth,
+    /** Returns object with main dimensions of component */
+    measureLayout() {
+        return {
+            contentOffset: getOffset(this.chartScroller),
+            scrollerWidth: this.chartScroller.offsetWidth,
             scrollLeft: this.chartScroller.scrollLeft,
             scrollWidth: this.chartScroller.scrollWidth,
+            containerWidth: this.elem.offsetWidth,
         };
-
-        newState.containerWidth = this.elem.offsetWidth;
-        newState.scrollerWidth = this.chartScroller.offsetWidth;
-        newState.chartWidth = Math.max(newState.scrollerWidth, contentWidth);
-
-        return newState;
-    }
-
-    /** Calculate width and margin of bar for fitToWidth option */
-    updateColumnWidth(state) {
-        if (!state.fitToWidth) {
-            return state;
-        }
-
-        const groupOuterWidth = (state.groupsCount > 0)
-            ? this.chartScroller.offsetWidth / state.groupsCount
-            : 0;
-        const groupsGap = groupOuterWidth / 5;
-        const groupWidth = groupOuterWidth - groupsGap;
-        const columnWidth = (state.columnsInGroup > 0)
-            ? Math.min(state.maxColumnWidth, groupWidth / state.columnsInGroup)
-            : 0;
-
-        const newState = {
-            ...state,
-            columnWidth,
-            groupsGap,
-        };
-
-        return newState;
     }
 
     getFirstVisibleGroupIndex(state = this.state) {
@@ -567,57 +514,29 @@ export class BaseChart extends Component {
             return;
         }
 
-        const { showPopupOnClick, pinPopupOnClick, activateOnClick } = this.state;
-
-        if (activateOnClick || showPopupOnClick) {
+        if (this.state.activateOnClick || this.state.showPopupOnClick) {
             this.activateTarget(target);
         }
 
-        this.setState({
-            ...this.state,
-            popupTarget: (showPopupOnClick && !pinPopupOnClick) ? this.state.activeTarget : null,
-            pinnedTarget: (pinPopupOnClick) ? this.state.activeTarget : null,
-        });
+        this.dispatch(actions.itemClicked());
 
         this.notifyEvent('onItemClick', { ...target, event: e });
     }
 
     /** Activates specified target */
     activateTarget(target) {
-        if (
-            !target?.item
-            || isSameTarget(this.state.activeTarget, target)
-        ) {
-            return;
-        }
-
-        const { item, ...targetProps } = target;
-
-        this.setState({
-            ...this.state,
-            activeTarget: { item: item.state, ...targetProps },
-        });
+        this.dispatch(actions.activateTarget(target));
     }
 
     /** Deactivates specified target */
     deactivateTarget() {
-        if (!this.state.activeTarget) {
-            return;
-        }
-
-        this.setState({
-            ...this.state,
-            activeTarget: null,
-        });
+        this.dispatch(actions.deactivateTarget());
     }
 
     /** Chart content 'touchstart' event handler */
     onTouchStart(e) {
         if (e.touches) {
-            this.setState({
-                ...this.state,
-                ignoreTouch: true,
-            });
+            this.dispatch(actions.ignoreTouch());
         }
     }
 
@@ -637,21 +556,15 @@ export class BaseChart extends Component {
         }
 
         this.currentTarget = target;
+        if (!target?.item) {
+            return;
+        }
 
         if (this.state.activateOnHover) {
             this.activateTarget(target);
         }
 
-        if (!target?.item) {
-            return;
-        }
-
-        if (this.state.showPopupOnHover) {
-            this.setState({
-                ...this.state,
-                popupTarget: this.state.activeTarget,
-            });
-        }
+        this.dispatch(actions.itemOver());
 
         this.notifyEvent('onItemOver', { ...target, event: e });
     }
@@ -719,14 +632,7 @@ export class BaseChart extends Component {
     }
 
     hidePopup() {
-        if (!this.state.popupTarget) {
-            return;
-        }
-
-        this.setState({
-            ...this.state,
-            popupTarget: null,
-        });
+        this.dispatch(actions.hidePopup());
     }
 
     showPopup(target, state) {
@@ -799,30 +705,16 @@ export class BaseChart extends Component {
         const vItems = this.getVisibleItems(state);
         const values = this.mapValues(vItems);
 
-        const newState = {
-            ...state,
-            grid: this.calculateGrid(values, state),
-            animateNow: state.animate,
-        };
-
-        this.updateItemsScale(vItems, newState);
-        this.setState(newState);
+        this.dispatch(actions.scaleVisible(values));
     }
 
     onAnimationDone() {
-        if (this.state.animateNow) {
-            this.setState({ ...this.state, animateNow: false });
-        }
+        this.dispatch(actions.animationDone());
     }
 
     /** Chart content 'scroll' event handler */
     onScroll() {
-        this.setState({
-            ...this.state,
-            animateNow: false,
-            scrollLeft: this.chartScroller.scrollLeft,
-            scrollWidth: this.chartScroller.scrollWidth,
-        });
+        this.dispatch(actions.scroll(this.measureLayout()));
 
         if (this.scaleFunc) {
             this.scaleFunc();
@@ -841,26 +733,10 @@ export class BaseChart extends Component {
 
     /** Chart scroller resize observer handler */
     onResize(lastHLabelOffset = 0) {
-        let newState = {
-            ...this.state,
-            contentOffset: getOffset(this.chartScroller),
-        };
-
-        newState = this.updateColumnWidth(newState);
-
-        // Update width of x axis labels
-        newState.lastHLabelOffset = (!newState.fitToWidth)
-            ? Math.ceil(lastHLabelOffset)
-            : 0;
-
-        newState = this.updateChartWidth(newState);
-
-        this.setState({
-            ...newState,
-            animateNow: false,
-            scrollLeft: this.chartScroller.scrollLeft,
-            scrollWidth: this.chartScroller.scrollWidth,
-        });
+        this.dispatch(actions.resize({
+            ...this.measureLayout(),
+            lastHLabelOffset,
+        }));
 
         if (this.scaleFunc) {
             this.scaleFunc();
@@ -899,6 +775,14 @@ export class BaseChart extends Component {
             || state.groupsGap !== prevState?.groupsGap
             || state.fitToWidth !== prevState?.fitToWidth
             || state.alignColumns !== prevState?.alignColumns
+        );
+    }
+
+    isVerticalScaleNeeded(state, prevState = {}) {
+        return (
+            state.autoScale
+            && state.data === prevState?.data
+            && state.grid !== prevState?.grid
         );
     }
 
@@ -1044,8 +928,11 @@ export class BaseChart extends Component {
     }
 
     renderItems(state, prevState) {
+        const horizontalScale = this.isVerticalScaleNeeded(state, prevState);
+        const verticalScale = this.isVerticalScaleNeeded(state, prevState);
         if (
-            !this.isHorizontalScaleNeeded(state, prevState)
+            !horizontalScale
+            && !verticalScale
             && state.chartContentWidth === prevState.chartContentWidth
             && state.containerWidth === prevState.containerWidth
             && state.scrollLeft === prevState.scrollLeft
@@ -1061,7 +948,12 @@ export class BaseChart extends Component {
             this.resetItems();
         }
 
-        this.createItems(state, prevState);
+        if (verticalScale) {
+            const vItems = this.getVisibleItems(state);
+            this.updateItemsScale(vItems, state);
+        } else {
+            this.createItems(state, prevState);
+        }
     }
 
     renderHorizontalLabels(state, prevState) {
@@ -1086,11 +978,6 @@ export class BaseChart extends Component {
             const XAxisLabels = this.getComponent('XAxisLabels');
             this.xAxisLabels = XAxisLabels.create({
                 ...state,
-                isHorizontalScaleNeeded: (...args) => this.isHorizontalScaleNeeded(...args),
-                getGroupOuterWidth: (...args) => this.getGroupOuterWidth(...args),
-                getFirstVisibleGroupIndex: (...args) => this.getFirstVisibleGroupIndex(...args),
-                getVisibleGroupsCount: (...args) => this.getVisibleGroupsCount(...args),
-                onResize: (...args) => this.onResize(...args),
             });
             this.chart.append(this.xAxisLabels.elem);
         } else {
