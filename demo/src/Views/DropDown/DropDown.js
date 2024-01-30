@@ -96,9 +96,9 @@ class DropDownView extends DemoView {
         this.fullScreen();
         this.fullScreenFilter();
 
-        this.dynamicAddRemoveItems();
-
         this.popupOverflow();
+
+        this.dynamicAddRemoveItems();
     }
 
     inline() {
