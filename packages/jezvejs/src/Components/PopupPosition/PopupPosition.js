@@ -547,7 +547,7 @@ export class PopupPosition {
 
         const direction = (topToBottom) ? -1 : 1;
         let overflow = (isRefOverflow) ? refVertOverflow : elemVertOverflow;
-        if (overflow > 1 && state.vertScrollAvailable && state.scrollOnOverflow) {
+        if (overflow > state.screenPadding && state.vertScrollAvailable && state.scrollOnOverflow) {
             const maxDistance = (topToBottom) ? state.dist.top : state.dist.bottom;
             const distance = Math.min(overflow, maxDistance) * direction;
             const newScrollTop = scrollParent.scrollTop + distance;
@@ -556,9 +556,13 @@ export class PopupPosition {
                 overflow -= Math.abs(distance);
             }
 
+            if (overflow <= state.screenPadding) {
+                overflow = 0;
+            }
+
             // Scroll window if overflow is not cleared yet
             let windowScrollDistance = 0;
-            if (overflow > 1) {
+            if (overflow > state.screenPadding) {
                 const maxWindowDistance = (topToBottom)
                     ? state.windowDist.top
                     : state.windowDist.bottom;
@@ -573,7 +577,7 @@ export class PopupPosition {
             if (Math.abs(windowScrollDistance) > 0) {
                 window.scrollTo(window.scrollX, newWindowScrollY);
             }
-        } else if (overflow > 1 && !state.scrollOnOverflow) {
+        } else if (overflow > state.screenPadding && state.isInitial && !state.scrollOnOverflow) {
             const minPos = state.screenPadding - offset.top;
             const maxPos = screen.height - offset.top - current.height - state.screenPadding;
             current.top = minmax(minPos, maxPos, current.top);
@@ -585,7 +589,7 @@ export class PopupPosition {
         current.top = getInitialTopPosition(state);
 
         // Decrease height of element if overflow is not cleared
-        if (overflow > 1 && state.allowResize) {
+        if (overflow > state.screenPadding && state.isInitial && state.allowResize) {
             current.height -= overflow;
             style.maxHeight = px(current.height);
             if (isTopPosition) {
@@ -638,7 +642,7 @@ export class PopupPosition {
 
             // Scroll window if overflow is not cleared yet
             let windowHScrollDistance = 0;
-            if (hOverflow > 1) {
+            if (hOverflow > state.screenPadding) {
                 const maxWindowDistance = (leftToRight) ? windowDist.left : windowDist.right;
                 windowHScrollDistance = (
                     Math.min(hOverflow, maxWindowDistance) * horDirection
@@ -656,7 +660,7 @@ export class PopupPosition {
             this.getRefClientRect();
             current.left = getInitialLeftPosition(state);
             this.renderPosition();
-        } else if (hOverflow > 1 && !state.scrollOnOverflow) {
+        } else if (hOverflow > state.screenPadding && state.isInitial && !state.scrollOnOverflow) {
             const minPos = state.screenPadding - offset.left;
             const maxPos = screen.width - offset.left - current.width - state.screenPadding;
             current.left = minmax(minPos, maxPos, current.left);

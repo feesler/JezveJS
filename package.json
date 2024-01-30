@@ -48,7 +48,7 @@
         "astroturf": "^1.2.0",
         "autoprefixer": "^10.4.17",
         "babel-loader": "^8.3.0",
-        "browserslist": "^4.22.2",
+        "browserslist": "^4.22.3",
         "commonjs-variables-for-esmodules": "^1.1.0",
         "css-loader": "^5.2.7",
         "del-cli": "^3.0.1",

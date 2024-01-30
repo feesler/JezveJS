@@ -103,10 +103,12 @@ class DatePickerView extends DemoView {
         this.initSetSelection();
         this.initDisabledDate();
         this.initRangePart();
-        this.initMonthSelect();
-        this.initYearSelect();
+
         this.initFirstDay();
         this.initLocales();
+
+        this.initMonthSelect();
+        this.initYearSelect();
     }
 
     initStatic() {
