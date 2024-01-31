@@ -143,7 +143,7 @@ const slice = createSlice({
     },
 
     scaleVisible: (state, values) => (
-        (state.autoScale)
+        (state.autoScale && values?.length > 0)
             ? {
                 ...state,
                 grid: state.calculateGrid(values, state),
