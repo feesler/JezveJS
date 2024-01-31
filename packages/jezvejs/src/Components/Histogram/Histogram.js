@@ -316,7 +316,7 @@ export class Histogram extends BaseChart {
             item.setVerticalPos(newY, height);
         });
 
-        if (state.animateNow) {
+        if (state.animateNow && !this.scrollRequested) {
             afterTransition(this.content, {
                 duration: this.props.animationEndTimeout,
             }, () => this.onAnimationDone());
