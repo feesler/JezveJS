@@ -249,7 +249,7 @@ export class PopupPosition {
         const { state } = this;
         const refRect = state.refElem.getBoundingClientRect();
 
-        if (isInitial || (refRect.width > 0 || refRect.height > 0)) {
+        if (isInitial || refRect.width > 0 || refRect.height > 0) {
             state.reference = refRect;
         }
     }
@@ -586,6 +586,8 @@ export class PopupPosition {
         }
 
         this.getRefClientRect();
+        this.getOffsetParentRect();
+        this.getScrollParentRect();
         current.top = getInitialTopPosition(state);
 
         // Decrease height of element if overflow is not cleared
@@ -658,6 +660,8 @@ export class PopupPosition {
             }
 
             this.getRefClientRect();
+            this.getOffsetParentRect();
+            this.getScrollParentRect();
             current.left = getInitialLeftPosition(state);
             this.renderPosition();
         } else if (hOverflow > state.screenPadding && state.isInitial && !state.scrollOnOverflow) {
