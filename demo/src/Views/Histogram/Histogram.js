@@ -33,6 +33,7 @@ import {
     chartGroupedData,
     chartGroupedCategoriesData,
     legendCategoriesData,
+    gapData,
 } from './data.js';
 import {
     chartContainer,
@@ -547,6 +548,7 @@ class HistogramView extends DemoView {
             autoScale: true,
             showLegend: true,
             scrollToEnd: true,
+            animate: true,
             components: {
                 Legend: ChartCustomLegend,
             },
@@ -588,6 +590,10 @@ class HistogramView extends DemoView {
             id: 'largeDataBtn',
             title: 'Large data set',
             onClick: () => chart.setData(largeData),
+        }, {
+            id: 'gapDataBtn',
+            title: 'Data with gap',
+            onClick: () => chart.setData(gapData),
         }];
 
         this.addSection({
