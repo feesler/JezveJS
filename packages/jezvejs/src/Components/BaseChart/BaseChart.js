@@ -429,7 +429,10 @@ export class BaseChart extends Component {
     /** Find item by event object */
     findItemByEvent(e) {
         const { contentOffset } = this.state;
-        if (!contentOffset) {
+        if (
+            !contentOffset
+            || !this.elem.contains(e?.target)
+        ) {
             return { item: null, index: -1 };
         }
 
@@ -463,6 +466,7 @@ export class BaseChart extends Component {
     onClick(e) {
         const target = this.findItemByEvent(e);
         if (!target.item) {
+            this.deactivateTarget();
             return;
         }
 
@@ -508,7 +512,10 @@ export class BaseChart extends Component {
         }
 
         this.currentTarget = target;
-        if (!target?.item) {
+        if (!this.elem.contains(target?.item?.elem)) {
+            if (this.state.activateOnHover) {
+                this.deactivateTarget();
+            }
             return;
         }
 
@@ -599,6 +606,8 @@ export class BaseChart extends Component {
         let popupElem = (isPinnedTarget) ? this.pinnedPopup : this.popup;
         if (!popupElem) {
             popupElem = createElement('div', { className: POPUP_CLASS });
+        }
+        if (!popupElem.parentNode) {
             this.elem.append(popupElem);
         }
 
