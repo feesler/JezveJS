@@ -147,9 +147,13 @@ export class Histogram extends BaseChart {
         return x;
     }
 
+    isVisibleValue(value) {
+        return value < 0 || value > 0;
+    }
+
     createItem(data, state) {
         const value = data?.value ?? 0;
-        if (value === 0) {
+        if (!this.isVisibleValue(value)) {
             return null;
         }
 
@@ -220,7 +224,7 @@ export class Histogram extends BaseChart {
 
             dataSets.forEach((dataSet, dataSetIndex) => {
                 const value = dataSet.data[groupIndex] ?? 0;
-                if (value === 0) {
+                if (!this.isVisibleValue(value)) {
                     return;
                 }
 

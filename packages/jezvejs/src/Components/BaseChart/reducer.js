@@ -136,6 +136,11 @@ const slice = createSlice({
         let newState = {
             ...getDataState(data, state),
             ...layout,
+            activeTarget: null,
+            popupTarget: null,
+            pinnedTarget: null,
+            activeCategory: null,
+            animateNow: false,
         };
 
         newState = updateColumnWidth(newState);

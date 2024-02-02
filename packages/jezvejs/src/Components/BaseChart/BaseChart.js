@@ -186,6 +186,10 @@ export class BaseChart extends Component {
         return this.state.activeCategory;
     }
 
+    setState(state) {
+        this.store.setState(state);
+    }
+
     getGroupOuterWidth(state = this.state) {
         return state.columnWidth + state.groupsGap;
     }
@@ -425,7 +429,10 @@ export class BaseChart extends Component {
     /** Find item by event object */
     findItemByEvent(e) {
         const { contentOffset } = this.state;
-        if (!contentOffset) {
+        if (
+            !contentOffset
+            || !this.elem.contains(e?.target)
+        ) {
             return { item: null, index: -1 };
         }
 
@@ -459,6 +466,7 @@ export class BaseChart extends Component {
     onClick(e) {
         const target = this.findItemByEvent(e);
         if (!target.item) {
+            this.deactivateTarget();
             return;
         }
 
@@ -504,7 +512,10 @@ export class BaseChart extends Component {
         }
 
         this.currentTarget = target;
-        if (!target?.item) {
+        if (!this.elem.contains(target?.item?.elem)) {
+            if (this.state.activateOnHover) {
+                this.deactivateTarget();
+            }
             return;
         }
 
@@ -595,6 +606,8 @@ export class BaseChart extends Component {
         let popupElem = (isPinnedTarget) ? this.pinnedPopup : this.popup;
         if (!popupElem) {
             popupElem = createElement('div', { className: POPUP_CLASS });
+        }
+        if (!popupElem.parentNode) {
             this.elem.append(popupElem);
         }
 
@@ -752,19 +765,49 @@ export class BaseChart extends Component {
         return legend.elem;
     }
 
-    getVisibleCategories(state) {
-        const vItems = this.getVisibleItems(state);
+    isVisibleValue() {
+        return true;
+    }
+
+    getVisibleCategories(state = this.state) {
+        const { dataSets } = state;
+        if (dataSets.length === 0) {
+            return [];
+        }
+
         const categories = [];
+        const stackedGroups = this.getStackedGroups(state);
+        const stackedCategories = this.getStackedCategories(state);
+        const firstGroupIndex = this.getFirstVisibleGroupIndex(state);
+        const visibleGroups = this.getVisibleGroupsCount(firstGroupIndex, state);
 
-        vItems.flat().forEach((item) => {
-            const category = (state.data.stacked)
-                ? (item.category ?? null)
-                : (item.categoryIndex ?? item.columnIndex ?? null);
+        for (let i = 0; i < visibleGroups; i += 1) {
+            const groupIndex = firstGroupIndex + i;
 
-            if (!categories.includes(category)) {
-                categories.push(category);
-            }
-        });
+            dataSets.forEach((dataSet, dataSetIndex) => {
+                const value = dataSet.data[groupIndex] ?? 0;
+                if (!this.isVisibleValue(value)) {
+                    return;
+                }
+
+                const category = dataSet.category ?? null;
+                const categoryIndex = (category && stackedCategories.includes(category))
+                    ? stackedCategories.indexOf(category)
+                    : dataSetIndex;
+                const groupName = dataSet.group ?? null;
+                const columnIndex = (state.data.stacked)
+                    ? stackedGroups.indexOf(groupName)
+                    : categoryIndex;
+
+                const itemCategory = (state.data.stacked)
+                    ? (category ?? null)
+                    : (categoryIndex ?? columnIndex ?? null);
+
+                if (!categories.includes(itemCategory)) {
+                    categories.push(itemCategory);
+                }
+            });
+        }
 
         return categories;
     }
