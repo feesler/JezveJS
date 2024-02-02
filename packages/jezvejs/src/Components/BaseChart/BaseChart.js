@@ -186,6 +186,10 @@ export class BaseChart extends Component {
         return this.state.activeCategory;
     }
 
+    setState(state) {
+        this.store.setState(state);
+    }
+
     getGroupOuterWidth(state = this.state) {
         return state.columnWidth + state.groupsGap;
     }
