@@ -55,6 +55,7 @@ export const defaultProps = {
     onItemClick: null,
     onItemOver: null,
     onItemOut: null,
+    scrollDone: null,
     // Data
     data: {
         values: [],

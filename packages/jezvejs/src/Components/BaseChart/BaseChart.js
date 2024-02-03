@@ -299,6 +299,8 @@ export class BaseChart extends Component {
 
         if (this.state.scrollLeft + this.state.scrollerWidth >= this.state.chartWidth) {
             this.scrollRequested = false;
+
+            this.notifyEvent('scrollDone');
             return;
         }
 
@@ -931,6 +933,12 @@ export class BaseChart extends Component {
             && state.animateNow === prevState.animateNow
             && state.activeTarget === prevState.activeTarget
             && state.activeCategory === prevState.activeCategory
+            && state.chartWidth === prevState.chartWidth
+            && state.chartHeight === prevState.chartHeight
+            && state.scrollerWidth === prevState.scrollerWidth
+            && state.grid === prevState.grid
+            && state.data === prevState.data
+            && state.contentOffset === prevState.contentOffset
         ) {
             return;
         }
