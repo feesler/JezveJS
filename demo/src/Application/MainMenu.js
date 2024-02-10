@@ -40,6 +40,15 @@ export default [{
         { id: 'chartGrid', title: 'Chart grid tests', url: 'chartgrid.html' },
     ],
 }, {
+    id: 'menuComponents',
+    type: 'group',
+    title: 'Menus',
+    items: [
+        { id: 'menu', title: 'Menu', url: 'menu.html' },
+        { id: 'lineMenu', title: 'Link Menu', url: 'linkmenu.html' },
+        { id: 'popupMenu', title: 'Popup Menu', url: 'popupmenu.html' },
+    ],
+}, {
     id: 'components',
     type: 'group',
     title: 'Components',
@@ -50,12 +59,9 @@ export default [{
         { id: 'datePicker', title: 'Date Picker', url: 'datepicker.html' },
         { id: 'dropDown', title: 'Drop Down', url: 'dropdown.html' },
         { id: 'header', title: 'Header', url: 'header.html' },
-        { id: 'menu', title: 'Menu', url: 'menu.html' },
-        { id: 'lineMenu', title: 'Link Menu', url: 'linkmenu.html' },
         { id: 'offcanvas', title: 'Offcanvas', url: 'offcanvas.html' },
         { id: 'paginator', title: 'Paginator', url: 'paginator.html' },
         { id: 'popup', title: 'Popup', url: 'popup.html' },
-        { id: 'popupMenu', title: 'Popup Menu', url: 'popupmenu.html' },
         { id: 'progress', title: 'Progress and Spinner', url: 'progress.html' },
         { id: 'rangeslider', title: 'Range slider', url: 'rangeslider.html' },
         { id: 'slider', title: 'Slider', url: 'slider.html' },
