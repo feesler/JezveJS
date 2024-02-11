@@ -5,7 +5,7 @@
 main {
   display: flex;
   flex-flow: column nowrap;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -89,5 +89,12 @@ main {
 
   .description {
     font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .page-content-wrap {
+    grid-template-rows: auto;
+    grid-template-columns: auto;
   }
 }

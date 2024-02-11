@@ -206,17 +206,6 @@ export class ListContainer extends Component {
     }
 
     /**
-     * Returns default element for 'no data' message
-     * @param {object} props message properties object
-     */
-    defaultNoDataMessage(props) {
-        return createElement('span', {
-            className: props?.className,
-            textContent: props?.message,
-        });
-    }
-
-    /**
      * Renders 'no data' message
      * @param {object} state current state object
      * @param {object} prevState previous state object
