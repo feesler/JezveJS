@@ -59,6 +59,7 @@ export default [{
         { id: 'datePicker', title: 'Date Picker', url: 'datepicker.html' },
         { id: 'dropDown', title: 'Drop Down', url: 'dropdown.html' },
         { id: 'header', title: 'Header', url: 'header.html' },
+        { id: 'listcontainer', title: 'List container', url: 'listcontainer.html' },
         { id: 'offcanvas', title: 'Offcanvas', url: 'offcanvas.html' },
         { id: 'paginator', title: 'Paginator', url: 'paginator.html' },
         { id: 'popup', title: 'Popup', url: 'popup.html' },

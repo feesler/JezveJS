@@ -1,0 +1,15 @@
+/* ListItem component */
+.list-item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  padding: 0.5rem;
+  background-color: #dddddd;
+}
+
+/* Disabled state */
+.list-item[disabled] {
+  color: #888888;
+}

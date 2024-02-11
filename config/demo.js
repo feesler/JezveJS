@@ -34,6 +34,7 @@ const entryPoints = [
     'InputGroup',
     'LineChart',
     'LinkMenu',
+    'ListContainer',
     'Menu',
     'Offcanvas',
     'Paginator',
