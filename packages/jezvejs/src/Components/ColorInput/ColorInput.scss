@@ -2,6 +2,7 @@
   --color-input-size: 1rem;
   --color-input-border-radius: 100vh;
   --color-input-disabled-opacity: 0.3;
+  --color-input-shadow-color: #000000;
 
   width: var(--color-input-size);
   height: var(--color-input-size);
@@ -22,6 +23,7 @@
   .color-item.color-input__value {
     --color-item-size: var(--color-input-size);
     --color-item-border-radius: var(--color-input-border-radius);
+    --color-item-shadow-color: var(--color-input-shadow-color);
 
     position: absolute;
     left: 0;

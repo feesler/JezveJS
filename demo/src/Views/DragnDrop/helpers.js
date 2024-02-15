@@ -2,7 +2,7 @@ import { asArray } from '@jezvejs/types';
 import { createElement } from '@jezvejs/dom';
 import { Icon } from 'jezvejs/Icon';
 
-import { TileCardIcon } from './impl/TileCardIcon.js';
+import { TileCardIcon } from './components/TileCardIcon.js';
 
 export const tableData = [
     [1, 10000, 'some text'],

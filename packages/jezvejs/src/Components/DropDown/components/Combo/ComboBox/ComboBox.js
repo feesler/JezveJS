@@ -1,19 +1,22 @@
 import { createElement } from '@jezvejs/dom';
 import { Component } from '../../../../../Component.js';
 import { getSelectedItems } from '../../../utils.js';
+
+// Local components
 import { DropDownMultiSelectionItem } from '../MultiSelectionItem/MultiSelectionItem.js';
+import { DropDownComboBoxControls } from '../ComboBoxControls/ComboBoxControls.js';
 import { DropDownClearButton } from '../ClearButton/ClearButton.js';
 import { DropDownToggleButton } from '../ToggleButton/ToggleButton.js';
 import { DropDownInput } from '../../Input/Input.js';
 import { DropDownMultipleSelection } from '../MultipleSelection/MultipleSelection.js';
 import { DropDownSingleSelection } from '../SingleSelection/SingleSelection.js';
 import { DropDownPlaceholder } from '../Placeholder/Placeholder.js';
+
 import './ComboBox.scss';
 
 /* CSS classes */
 const COMBO_CLASS = 'dd__combo';
 const VALUE_CLASS = 'dd__combo-value';
-const CONTROLS_CLASS = 'dd__combo-controls';
 
 const defaultProps = {
     inputElem: null,
@@ -38,6 +41,7 @@ const defaultProps = {
         MultiSelectionItem: DropDownMultiSelectionItem,
         ToggleButton: DropDownToggleButton,
         ClearButton: DropDownClearButton,
+        ComboBoxControls: DropDownComboBoxControls,
     },
 };
 
@@ -57,6 +61,8 @@ export class DropDownComboBox extends Component {
             editable: this.props.editable,
             disabled: this.props.disabled,
             items: this.props.items,
+            showClearButton: this.props.showClearButton,
+            showToggleButton: this.props.showToggleButton,
             actSelItemIndex: this.props.actSelItemIndex,
         };
 
@@ -95,25 +101,18 @@ export class DropDownComboBox extends Component {
 
         valueContainer.append(this.placeholder.elem, this.singleSelection.elem, this.input.elem);
 
-        const controls = createElement('div', { className: CONTROLS_CLASS });
-
-        if (this.state.multiple && this.props.showClearButton) {
-            const { ClearButton } = this.props.components;
-            this.clearBtn = ClearButton.create({
-                onClick: (e) => this.onClearSelection(e),
-            });
-            controls.append(this.clearBtn.elem);
-        }
-
-        if (this.props.showToggleButton) {
-            const { ToggleButton } = this.props.components;
-            this.toggleBtn = ToggleButton.create();
-            controls.append(this.toggleBtn.elem);
-        }
+        const { ComboBoxControls } = this.props.components;
+        this.controls = ComboBoxControls.create({
+            ...this.state,
+            onClearSelection: this.props.onClearSelection,
+        });
 
         this.elem = createElement('div', {
             className: COMBO_CLASS,
-            children: [valueContainer, controls],
+            children: [
+                valueContainer,
+                this.controls.elem,
+            ],
         });
 
         this.render(this.state);
@@ -215,13 +214,19 @@ export class DropDownComboBox extends Component {
         this.clearBtn?.show(selectedItems.length > 0);
     }
 
+    renderControls(state) {
+        this.controls.setState((controlsState) => ({
+            ...controlsState,
+            ...state,
+        }));
+    }
+
     render(state, prevState = {}) {
         if (state.disabled !== prevState?.disabled) {
             this.input.enable(!state.disabled);
-            this.clearBtn?.enable(!state.disabled);
-            this.toggleBtn?.enable(!state.disabled);
         }
 
         this.renderSelection(state, prevState);
+        this.renderControls(state, prevState);
     }
 }

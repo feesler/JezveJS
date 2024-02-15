@@ -39,6 +39,7 @@ import {
 } from './helpers.js';
 
 import './DropDownView.scss';
+import { CustomControlsSelect } from './components/CustomControls/CustomControlsSelect.js';
 
 /**
  * DropDown component demo view
@@ -87,6 +88,7 @@ class DropDownView extends DemoView {
         this.attachedFilterMulti();
 
         this.customRender();
+        this.customControls();
         this.collapsibleGroups();
 
         this.parseNativeSelect();
@@ -907,6 +909,27 @@ class DropDownView extends DemoView {
             id: 'custom',
             title: 'Custom render',
             content: [dropDown.elem, controls, logsField.elem],
+        });
+    }
+
+    customControls() {
+        const dropDown = CustomControlsSelect.create({
+            className: 'dd_stretch',
+            placeholder: 'Multi select control',
+            multiple: true,
+            enableFilter: true,
+            data: initItems('Filter item', 100),
+            onInput() {
+                dropDown.toggleLoading();
+                setTimeout(() => dropDown.toggleLoading(), 500);
+            },
+        });
+
+        this.addSection({
+            id: 'customComboboxControls',
+            title: 'Custom combobox controls',
+            description: 'Loading indicator is shown on input',
+            content: [dropDown.elem],
         });
     }
 

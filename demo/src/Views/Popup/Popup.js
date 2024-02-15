@@ -14,8 +14,8 @@ import { DemoView } from '../../Components/DemoView/DemoView.js';
 import { LogsField } from '../../Components/LogsField/LogsField.js';
 
 // Local components
-import { PopupDragZone } from './impl/PopupDragZone.js';
-import { PopupDropTarget } from './impl/PopupDropTarget.js';
+import { PopupDragZone } from './components/PopupDragZone.js';
+import { PopupDropTarget } from './components/PopupDropTarget.js';
 
 import {
     createOkBtn,

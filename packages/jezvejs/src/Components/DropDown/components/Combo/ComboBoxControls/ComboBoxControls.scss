@@ -1,0 +1,9 @@
+/* Controls */
+.dd__combo-controls {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--dd-combo-content-height);
+  flex: 0 0 auto;
+}
