@@ -40,6 +40,9 @@ export class Collapsible extends Component {
             expanded: this.props.expanded,
         };
 
+        this.animationFrame = 0;
+        this.cancelTransition = null;
+
         this.init();
         this.render(this.state);
     }
@@ -99,6 +102,7 @@ export class Collapsible extends Component {
     }
 
     onAnimationDone() {
+        this.cancelTransition = null;
         this.elem.classList.remove(ANIMATED_CLASS);
         this.contentContainer.style.height = '';
 
@@ -124,28 +128,34 @@ export class Collapsible extends Component {
 
         if (state.expanded) {
             this.elem.classList.add(EXPANDED_CLASS);
-
-            const height = this.contentContainer.offsetHeight;
-            this.elem.classList.add(ANIMATED_CLASS);
-
-            requestAnimationFrame(() => {
-                this.contentContainer.style.height = px(height);
-            });
-        } else {
-            const height = this.contentContainer.offsetHeight;
-            this.contentContainer.style.height = px(height);
-
-            this.elem.classList.add(ANIMATED_CLASS);
-
-            requestAnimationFrame(() => {
-                this.contentContainer.style.height = px(0);
-            });
         }
 
-        afterTransition(this.contentContainer, {
-            property: 'height',
-            duration: TRANSITION_END_TIMEOUT,
-            target: this.contentContainer,
-        }, () => this.onAnimationDone());
+        const height = this.contentContainer.offsetHeight;
+        const newHeight = (state.expanded) ? height : 0;
+
+        if (!state.expanded) {
+            this.contentContainer.style.height = px(height);
+        }
+
+        this.elem.classList.add(ANIMATED_CLASS);
+
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        if (this.cancelTransition) {
+            this.cancelTransition();
+        }
+
+        this.animationFrame = requestAnimationFrame(() => {
+            this.animationFrame = 0;
+
+            this.contentContainer.style.height = px(newHeight);
+
+            this.cancelTransition = afterTransition(this.contentContainer, {
+                property: 'height',
+                duration: TRANSITION_END_TIMEOUT,
+                target: this.contentContainer,
+            }, () => this.onAnimationDone());
+        });
     }
 }
