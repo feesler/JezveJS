@@ -133,6 +133,7 @@ export class DatePicker extends Component {
         this.waitingForAnimation = false;
         this.rebuildContent = true;
         this.resizeRequested = false;
+        this.animationFrame = 0;
         this.removeTransitionHandler = null;
         this.position = 0;
         this.width = 0;
@@ -1291,7 +1292,12 @@ export class DatePicker extends Component {
 
         transform(animationTarget, `matrix(${(zoomingOut ? viewTrans : cellTrans).join()})`);
 
-        requestAnimationFrame(() => {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        this.removeTransition();
+
+        this.animationFrame = requestAnimationFrame(() => {
             this.wrapper.classList.add(ANIMATED_CLASS);
             this.cellsContainer.classList.add(ANIMATED_VIEW_CLASS);
 
@@ -1314,7 +1320,6 @@ export class DatePicker extends Component {
 
             this.newView = views;
 
-            this.removeTransition();
             this.removeTransitionHandler = afterTransition(this.cellsContainer, {
                 property: 'transform',
                 duration: TRANSITION_END_TIMEOUT,
