@@ -28,8 +28,8 @@ class ColorInputView extends DemoView {
             id: 'default',
             onFocus: () => logsField.write('onFocus'),
             onBlur: () => logsField.write('onBlur'),
-            onInput: () => logsField.write('onInput'),
-            onChange: () => logsField.write('onChange'),
+            onInput: (e) => logsField.write(`onInput(${e?.target?.value})`),
+            onChange: (e) => logsField.write(`onChange(${e?.target?.value})`),
         });
 
         this.addSection({
@@ -38,10 +38,6 @@ class ColorInputView extends DemoView {
             content: [
                 input.elem,
                 createControls([
-                    createElement('input', {
-                        id: 'testValueInput',
-                        className: 'input',
-                    }),
                     logsField.elem,
                 ]),
             ],
