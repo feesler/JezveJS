@@ -5,5 +5,5 @@ export const config = {
         'clipboard-write',
         'clipboard-sanitized-write',
     ],
-    testsExpected: 1154,
+    testsExpected: 1155,
 };

@@ -1,0 +1,36 @@
+.color-input {
+  --color-input-size: 1rem;
+  --color-input-border-radius: 100vh;
+  --color-input-disabled-opacity: 0.3;
+
+  width: var(--color-input-size);
+  height: var(--color-input-size);
+  overflow: hidden;
+  position: relative;
+  border-radius: var(--color-input-border-radius);
+
+  .color-input__input {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .color-item.color-input__value {
+    --color-item-size: var(--color-input-size);
+    --color-item-border-radius: var(--color-input-border-radius);
+
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+
+/* Disalbed state */
+.color-input[disabled] {
+  pointer-events: none;
+  opacity: var(--color-input-disabled-opacity);
+}
