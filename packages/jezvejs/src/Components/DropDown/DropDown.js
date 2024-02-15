@@ -41,6 +41,7 @@ import {
 import { DropDownInput } from './components/Input/Input.js';
 /* Combo box */
 import { DropDownComboBox } from './components/Combo/ComboBox/ComboBox.js';
+import { DropDownComboBoxControls } from './components/Combo/ComboBoxControls/ComboBoxControls.js';
 import { DropDownSingleSelection } from './components/Combo/SingleSelection/SingleSelection.js';
 import { DropDownMultipleSelection } from './components/Combo/MultipleSelection/MultipleSelection.js';
 import { DropDownMultiSelectionItem } from './components/Combo/MultiSelectionItem/MultiSelectionItem.js';
@@ -77,6 +78,7 @@ export {
     DropDownSingleSelection,
     DropDownMultipleSelection,
     DropDownMultiSelectionItem,
+    DropDownComboBoxControls,
     DropDownToggleButton,
     DropDownClearButton,
     /* Menu */
@@ -209,6 +211,7 @@ const defaultProps = {
         ListPlaceholder: DropDownListPlaceholder,
         MultipleSelection: DropDownMultipleSelection,
         MultiSelectionItem: DropDownMultiSelectionItem,
+        ComboBoxControls: DropDownComboBoxControls,
         ToggleButton: DropDownToggleButton,
         ClearButton: DropDownClearButton,
     },
@@ -450,6 +453,7 @@ export class DropDown extends Component {
             MultiSelectionItem,
             ToggleButton,
             ClearButton,
+            ComboBoxControls,
         } = this.props.components;
         const {
             placeholder,
@@ -492,6 +496,7 @@ export class DropDown extends Component {
                 MultiSelectionItem,
                 ToggleButton,
                 ClearButton,
+                ComboBoxControls,
             },
         };
     }
@@ -2016,11 +2021,9 @@ export class DropDown extends Component {
         if (this.combo) {
             this.combo.setState((comboState) => ({
                 ...comboState,
+                ...state,
                 editable,
-                disabled: state.disabled,
                 items: toFlatList(state.items),
-                actSelItemIndex: state.actSelItemIndex,
-                inputString: state.inputString,
             }));
         }
 

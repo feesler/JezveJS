@@ -1,0 +1,13 @@
+.dd__custom-combo-controls {
+  .menu-btn {
+    --btn-icon-color: var(--dd-btn-fill);
+  }
+
+  .dd__combo-loading {
+    --spinner-size: 14px;
+    --spinner-width: 2px;
+    --spinner-color: var(--dd-btn-fill);
+
+    margin: 8px;
+  }
+}
