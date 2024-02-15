@@ -8,6 +8,7 @@ import {
     rgbToColor,
 } from '@jezvejs/color';
 import { createElement } from '@jezvejs/dom';
+import { ColorItem } from 'jezvejs/ColorItem';
 
 import { createControls } from '../../Application/utils.js';
 
@@ -32,8 +33,7 @@ class ColorUtilsView extends DemoView {
         let lightnessStepsField = null;
 
         const renderContent = () => {
-            content.textContent = '';
-            content.append(this.generateColors({
+            content.replaceChildren(this.generateColors({
                 hueSteps: parseInt(hueStepsField.value, 10),
                 lightnessSteps: parseInt(lightnessStepsField.value, 10),
             }));
@@ -102,13 +102,9 @@ class ColorUtilsView extends DemoView {
         return res;
     }
 
-    createColorItem(color) {
-        const res = createElement('div', {
-            className: 'color-item',
-        });
-        res.style.setProperty('--color-item-value', color);
-
-        return res;
+    createColorItem(value) {
+        const item = ColorItem.create({ value });
+        return item.elem;
     }
 }
 

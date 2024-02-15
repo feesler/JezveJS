@@ -1,0 +1,14 @@
+/* ColorItem component */
+.color-item {
+  --color-item-value: #ffffff;
+  --color-item-size: 1rem;
+  --color-item-border-radius: 100vh;
+  --color-item-shadow-color: #000000;
+
+  display: block;
+  width: var(--color-item-size);
+  height: var(--color-item-size);
+  background-color: var(--color-item-value);
+  box-shadow: inset 2px 2px 4px -2px var(--color-item-shadow-color);
+  border-radius: var(--color-item-border-radius);
+}

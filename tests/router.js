@@ -17,6 +17,7 @@ const routeMap = {
     checkbox: AppView,
     collapsible: CollapsibleView,
     controlledinput: ControlledInputView,
+    colorinput: AppView,
     colorutils: AppView,
     common: AppView,
     dateinput: DateInputView,
