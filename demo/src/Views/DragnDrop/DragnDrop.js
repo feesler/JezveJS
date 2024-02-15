@@ -14,12 +14,12 @@ import { LogsField } from '../../Components/LogsField/LogsField.js';
 import { HeaderMenuIcon } from '../../assets/icons/HeaderMenuIcon.js';
 
 // Local components
-import { DefaultDragZone } from './impl/DefaultDragZone.js';
-import { DefaultDropTarget } from './impl/DefaultDropTarget.js';
-import { OriginalDropTarget } from './impl/OriginalDropTarget.js';
-import { ListItem } from './impl/ListItem.js';
-import { XAxisDropTarget } from './impl/XAxisDropTarget.js';
-import { XAxisDragZone } from './impl/XAxisDragZone.js';
+import { DefaultDragZone } from './components/DefaultDragZone.js';
+import { DefaultDropTarget } from './components/DefaultDropTarget.js';
+import { OriginalDropTarget } from './components/OriginalDropTarget.js';
+import { ListItem } from './components/ListItem.js';
+import { XAxisDropTarget } from './components/XAxisDropTarget.js';
+import { XAxisDragZone } from './components/XAxisDragZone.js';
 
 import {
     tableData,
