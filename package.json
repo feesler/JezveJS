@@ -48,11 +48,11 @@
         "astroturf": "^1.2.0",
         "autoprefixer": "^10.4.17",
         "babel-loader": "^8.3.0",
-        "browserslist": "^4.22.3",
+        "browserslist": "^4.23.0",
         "commonjs-variables-for-esmodules": "^1.1.0",
         "css-loader": "^5.2.7",
         "del-cli": "^3.0.1",
-        "dotenv": "^16.4.2",
+        "dotenv": "^16.4.4",
         "eslint": "^7.32.0",
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-import-resolver-webpack": "^0.13.8",
@@ -81,7 +81,7 @@
         "@babel/runtime": "^7.23.9",
         "@jezvejs/datetime": "^1.1.0",
         "@jezvejs/types": "^1.0.0",
-        "core-js": "^3.35.1",
+        "core-js": "^3.36.0",
         "whatwg-fetch": "^3.6.20"
     },
     "workspaces": [
