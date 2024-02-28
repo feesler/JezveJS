@@ -47,6 +47,7 @@ const defaultProps = {
     bottomSafeArea: 70,
     useRefWidth: false,
     allowFlip: true,
+    allowHorizontalFlip: true,
     allowChangeAxis: false,
     scrollOnOverflow: true,
     allowResize: true,
