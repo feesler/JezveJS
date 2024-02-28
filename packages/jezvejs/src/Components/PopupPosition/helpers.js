@@ -320,7 +320,7 @@ export const isVerticalFlip = (state) => (
  * @returns {boolean}
  */
 export const isHorizontalFlip = (state) => (
-    state.allowFlip && (
+    state.allowHorizontalFlip && (
         (
             isRightPosition(state)
             && (state.horOverflowRight > 0)
@@ -362,7 +362,7 @@ export const isVerticalCrossFlip = (state) => (
  * @returns {boolean}
  */
 export const isHorizontalCrossFlip = (state) => (
-    state.allowFlip && (
+    state.allowHorizontalFlip && (
         (
             isHorizontalStartPosition(state)
             && (state.vertOverflowRight > 0)
