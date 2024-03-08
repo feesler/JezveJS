@@ -3,6 +3,7 @@ import {
     setEvents,
     createElement,
     enable,
+    afterTransition,
 } from '@jezvejs/dom';
 import { Component } from '../../Component.js';
 import '../../common.scss';
@@ -12,6 +13,9 @@ import './Switch.scss';
 const CONTAINER_CLASS = 'switch';
 const SLIDER_CLASS = 'switch-slider';
 const LABEL_CLASS = 'switch__label';
+const ANIMATED_CLASS = 'animated';
+
+const TRANSITION_END_TIMEOUT = 500;
 
 const defaultProps = {
     id: undefined,
@@ -93,6 +97,14 @@ export class Switch extends Component {
         this.setClassNames();
         setEvents(this.input, { change: (e) => this.onChange(e) });
 
+        setEvents(this.elem, {
+            touchstart: (e) => {
+                if (e?.touches) {
+                    this.elem.classList.add(ANIMATED_CLASS);
+                }
+            },
+        });
+
         // Apply props
         if (typeof this.props.disabled !== 'undefined') {
             this.enable(!this.props.disabled);
@@ -109,8 +121,22 @@ export class Switch extends Component {
             : (tooltip ?? '');
     }
 
+    onAnimationDone() {
+        this.elem.classList.remove(ANIMATED_CLASS);
+    }
+
     onChange() {
         this.notifyEvent('onChange', this.checked);
+
+        if (this.cancelTransition) {
+            this.cancelTransition();
+        }
+
+        this.cancelTransition = afterTransition(this.slider, {
+            property: 'left',
+            duration: TRANSITION_END_TIMEOUT,
+            target: this.slider,
+        }, () => this.onAnimationDone());
     }
 
     /** Set label content */
