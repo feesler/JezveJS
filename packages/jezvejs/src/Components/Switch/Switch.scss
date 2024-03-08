@@ -84,6 +84,7 @@
 }
 
 /* Animated only focused */
+.switch.animated .switch-slider::before,
 .switch input:focus + .switch-slider::before {
   transition: left 0.2s;
 }

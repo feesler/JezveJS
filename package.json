@@ -47,7 +47,7 @@
         "@babel/preset-env": "^7.24.0",
         "@jezvejs/release-tools": "^0.5.1",
         "astroturf": "^1.2.0",
-        "autoprefixer": "^10.4.17",
+        "autoprefixer": "^10.4.18",
         "babel-loader": "^8.3.0",
         "browserslist": "^4.23.0",
         "commonjs-variables-for-esmodules": "^1.1.0",
