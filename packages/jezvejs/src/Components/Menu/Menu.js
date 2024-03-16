@@ -473,7 +473,7 @@ export class Menu extends Component {
         }
 
         this.activeElem = null;
-        if (this.state.ignoreTouch) {
+        if (this.state.ignoreTouch && e.type === 'click') {
             this.handleLeaveItem(e);
         }
     }
@@ -606,7 +606,7 @@ export class Menu extends Component {
         if (e.key === 'Enter') {
             const activeItem = this.getActiveItem();
             if (activeItem) {
-                this.toggleSelectItem(activeItem.id);
+                this.onItemClick(activeItem.id, e);
             }
 
             e.preventDefault();
