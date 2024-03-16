@@ -14,9 +14,10 @@ class IndexView extends DemoView {
         this.pageContentWrapper = document.querySelector('.page-content-wrap');
 
         this.logoHeader = this.createLogoHeader();
+        this.installinstructions = this.createInstallInstructions();
 
         this.mainContainer = createElement('main', {
-            children: [this.logoHeader],
+            children: [this.logoHeader, this.installinstructions],
         });
 
         this.pageContentWrapper.append(this.mainContainer);
@@ -75,6 +76,34 @@ class IndexView extends DemoView {
         return createElement('p', {
             className: 'description',
             textContent: 'Components and utilities to organize development of pet project.',
+        });
+    }
+
+    createInstallInstructions() {
+        return createElement('div', {
+            className: 'main-content',
+            children: [
+                createElement('p', {
+                    className: 'main-text',
+                    textContent: 'Install using NPM',
+                }),
+                createElement('pre', {
+                    className: 'code-block',
+                    textContent: 'npm install jezvejs',
+                }),
+                createElement('p', {
+                    className: 'main-text',
+                    textContent: 'Import required component',
+                }),
+                createElement('pre', {
+                    className: 'code-block',
+                    textContent: 'import { Button } from \'jezvejs/Button\';',
+                }),
+                createElement('p', {
+                    className: 'main-text',
+                    textContent: 'Setup transpilation and bundling',
+                }),
+            ],
         });
     }
 }
