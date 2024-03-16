@@ -168,6 +168,13 @@ section {
   }
 }
 
+/* Desktop */
+@media (min-width: 768px) {
+  .page-content-wrap {
+    padding-left: 232px;
+  }
+}
+
 @media (min-width: 992px) {
   .page-content-wrap {
     display: grid;

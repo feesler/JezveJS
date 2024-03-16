@@ -27,3 +27,41 @@
     text-decoration: underline;
   }
 }
+
+/* Left side navigation */
+.navigation {
+  --offcanvas-bg: #ffffff;
+
+  z-index: 2110;
+  margin-top: 50px;
+}
+
+.navigation .offcanvas__content {
+  display: flex;
+}
+
+.navigation + .offcanvas__bg {
+  z-index: 2100;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .navigation {
+    width: 220px;
+    z-index: 1000;
+  }
+
+  .navigation-content {
+    width: 100%;
+    margin: 50px 0 0 0;
+  }
+
+  .navigation.offcanvas_closed {
+    transform: translateX(0);
+  }
+
+  .offcanvas__bg,
+  .navigation-controls {
+    display: none;
+  }
+}

@@ -8,30 +8,17 @@ const LOGO_PATH = 'm16.07 3.744-2.803.8165-.2145.08682-4.205 2.033-1.576.6408-.3
 
 class IndexView extends DemoView {
     /**
-     * Initializes navigation menu
-     */
-    initNavigation() {
-        this.createHeader();
-
-        const navMenu = this.createNavigationMenu();
-
-        this.menuContainer = createElement('div', {
-            className: 'menu-container',
-            children: navMenu.elem,
-        });
-
-        this.logoHeader = this.createLogoHeader();
-
-        this.mainContainer = createElement('main', {
-            children: [this.logoHeader, this.menuContainer],
-        });
-    }
-
-    /**
      * Initializes content container
      */
     initContainer() {
         this.pageContentWrapper = document.querySelector('.page-content-wrap');
+
+        this.logoHeader = this.createLogoHeader();
+
+        this.mainContainer = createElement('main', {
+            children: [this.logoHeader],
+        });
+
         this.pageContentWrapper.append(this.mainContainer);
     }
 

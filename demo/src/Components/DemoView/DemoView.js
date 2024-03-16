@@ -77,6 +77,7 @@ export class DemoView extends View {
         const navMenu = this.createNavigationMenu();
         this.navOffcanvas = Offcanvas.create({
             content: navMenu.elem,
+            className: 'navigation',
         });
 
         this.createHeader();

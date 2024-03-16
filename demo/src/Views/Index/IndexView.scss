@@ -91,10 +91,3 @@ main {
     font-size: 1.6rem;
   }
 }
-
-@media (min-width: 992px) {
-  .page-content-wrap {
-    grid-template-rows: auto;
-    grid-template-columns: auto;
-  }
-}
