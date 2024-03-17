@@ -74,6 +74,16 @@ main {
   }
 }
 
+.main-text {
+  margin: 0.5rem 0;
+}
+
+.code-block {
+  padding: 1rem;
+  background-color: #f6f8fa;
+  border-radius: 0.4rem;
+}
+
 @media (min-width: 576px) {
   :root {
     --logo-size: 128px;
@@ -88,13 +98,6 @@ main {
   }
 
   .description {
-    font-size: 1.6rem;
-  }
-}
-
-@media (min-width: 992px) {
-  .page-content-wrap {
-    grid-template-rows: auto;
-    grid-template-columns: auto;
+    font-size: 1.5rem;
   }
 }

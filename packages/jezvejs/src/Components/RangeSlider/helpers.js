@@ -2,7 +2,7 @@ import { minmax } from '../../common.js';
 
 export const valueToPosition = (value, minValue, maxValue, maxPos) => {
     const fixedValue = minmax(minValue, maxValue, value);
-    return Math.ceil(maxPos * Math.abs((fixedValue - minValue) / (minValue - maxValue)));
+    return maxPos * Math.abs((fixedValue - minValue) / (minValue - maxValue));
 };
 
 export const positionToValue = (pos, minValue, maxValue, maxPos) => (

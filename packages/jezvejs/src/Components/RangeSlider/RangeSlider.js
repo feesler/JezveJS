@@ -54,7 +54,7 @@ const defaultProps = {
  */
 export class RangeSlider extends Component {
     static userProps = {
-        elem: ['id', 'tabIndex'],
+        elem: ['id'],
     };
 
     constructor(props) {
@@ -180,6 +180,7 @@ export class RangeSlider extends Component {
             focus: (e) => this.onFocus(e),
             blur: (e) => this.onBlur(e),
             click: (e) => this.onClick(e),
+            keydown: (e) => this.onKey(e),
         });
     }
 
@@ -269,6 +270,75 @@ export class RangeSlider extends Component {
 
     onBlur(e) {
         this.notifyEvent('onBlur', e);
+    }
+
+    getStep() {
+        const { step, min, max } = this.state;
+        return step ?? (Math.abs(max - min) / 100);
+    }
+
+    onKey(e) {
+        const { axis } = this.props;
+        const {
+            value,
+            start,
+            end,
+            maxPos,
+        } = this.state;
+        const step = this.getStep();
+
+        const isEndFocused = (
+            this.props.range
+            && document.activeElement?.contains(this.endSlider)
+        );
+
+        if (
+            (axis === 'x' && e.code === 'ArrowRight')
+            || (axis === 'y' && e.code === 'ArrowDown')
+        ) {
+            e.preventDefault();
+
+            if (this.props.range) {
+                if (isEndFocused) {
+                    const newValue = this.valueToPosition(end + step);
+                    const newPos = Math.min(maxPos, newValue);
+                    this.onEndPosChange(newPos);
+                } else {
+                    const newValue = this.valueToPosition(start + step);
+                    const newPos = Math.min(maxPos, newValue);
+                    this.onStartPosChange(newPos);
+                }
+            } else {
+                const newValue = this.valueToPosition(value + step);
+                const newPos = Math.min(maxPos, newValue);
+                this.onPosChange(newPos);
+            }
+        }
+
+        if (
+            (axis === 'x' && e.code === 'ArrowLeft')
+            || (axis === 'y' && e.code === 'ArrowUp')
+        ) {
+            e.preventDefault();
+
+            if (this.props.range) {
+                if (isEndFocused) {
+                    const newValue = this.valueToPosition(end - step);
+                    const newPos = Math.max(0, newValue);
+                    this.onEndPosChange(newPos);
+                } else {
+                    const newValue = this.valueToPosition(start - step);
+                    const newPos = Math.max(0, newValue);
+                    this.onStartPosChange(newPos);
+                }
+            } else {
+                const newValue = this.valueToPosition(value - step);
+                const newPos = Math.max(0, newValue);
+                this.onPosChange(newPos);
+            }
+        }
+
+        this.notifyEvent('onKey', e);
     }
 
     onResize() {
@@ -415,7 +485,21 @@ export class RangeSlider extends Component {
         this.precision = getStepPrecision(state.step);
     }
 
+    setTabIndex(elem, state) {
+        if (!elem) {
+            return;
+        }
+
+        if (!state.disabled && typeof this.props.tabIndex !== 'undefined') {
+            elem.setAttribute('tabindex', this.props.tabIndex);
+        } else {
+            elem.removeAttribute('tabindex');
+        }
+    }
+
     renderSlider(state, prevState) {
+        this.setTabIndex(this.slider, state);
+
         const value = this.getStartValue(state);
         const prevValue = this.getStartValue(prevState);
         if (
@@ -429,6 +513,8 @@ export class RangeSlider extends Component {
     }
 
     renderEndSlider(state, prevState) {
+        this.setTabIndex(this.endSlider, state);
+
         if (
             !this.props.range
             || (
@@ -543,12 +629,6 @@ export class RangeSlider extends Component {
         this.elem.classList.toggle(Y_AXIS_CLASS, state.axis === 'y');
 
         enable(this.elem, !state.disabled);
-
-        if (!state.disabled && typeof this.props.tabIndex !== 'undefined') {
-            this.elem.setAttribute('tabindex', this.props.tabIndex);
-        } else {
-            this.elem.removeAttribute('tabindex');
-        }
 
         this.updatePrecision(state, prevState);
         this.renderSlider(state, prevState);

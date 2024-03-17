@@ -8,30 +8,18 @@ const LOGO_PATH = 'm16.07 3.744-2.803.8165-.2145.08682-4.205 2.033-1.576.6408-.3
 
 class IndexView extends DemoView {
     /**
-     * Initializes navigation menu
-     */
-    initNavigation() {
-        this.createHeader();
-
-        const navMenu = this.createNavigationMenu();
-
-        this.menuContainer = createElement('div', {
-            className: 'menu-container',
-            children: navMenu.elem,
-        });
-
-        this.logoHeader = this.createLogoHeader();
-
-        this.mainContainer = createElement('main', {
-            children: [this.logoHeader, this.menuContainer],
-        });
-    }
-
-    /**
      * Initializes content container
      */
     initContainer() {
         this.pageContentWrapper = document.querySelector('.page-content-wrap');
+
+        this.logoHeader = this.createLogoHeader();
+        this.installinstructions = this.createInstallInstructions();
+
+        this.mainContainer = createElement('main', {
+            children: [this.logoHeader, this.installinstructions],
+        });
+
         this.pageContentWrapper.append(this.mainContainer);
     }
 
@@ -88,6 +76,34 @@ class IndexView extends DemoView {
         return createElement('p', {
             className: 'description',
             textContent: 'Components and utilities to organize development of pet project.',
+        });
+    }
+
+    createInstallInstructions() {
+        return createElement('div', {
+            className: 'main-content',
+            children: [
+                createElement('p', {
+                    className: 'main-text',
+                    textContent: 'Install using NPM',
+                }),
+                createElement('pre', {
+                    className: 'code-block',
+                    textContent: 'npm install jezvejs',
+                }),
+                createElement('p', {
+                    className: 'main-text',
+                    textContent: 'Import required component',
+                }),
+                createElement('pre', {
+                    className: 'code-block',
+                    textContent: 'import { Button } from \'jezvejs/Button\';',
+                }),
+                createElement('p', {
+                    className: 'main-text',
+                    textContent: 'Setup transpilation and bundling',
+                }),
+            ],
         });
     }
 }
