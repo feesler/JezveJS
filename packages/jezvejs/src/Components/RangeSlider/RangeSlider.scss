@@ -47,6 +47,11 @@
   --rs-active-slider-background: var(--rs-hover-slider-background);
   --rs-active-slider-border-color: var(--rs-hover-slider-border-color);
 
+  /* Focused state */
+  --rs-focus-slider-border-color: var(--rs-slider-border-color);
+  --rs-focus-slider-background: var(--rs-slider-background);
+  --rs-focus-slider-shadow: 0 0 0 0.25rem #0d6efd40;
+
   /* Disabled state */
   --rs-disabled-background: #8a8a8a;
   --rs-disabled-area-border-color: var(--rs-area-border-color);
@@ -190,6 +195,13 @@
   .range-slider__slider:active {
     border-color: var(--rs-active-slider-border-color);
     background: var(--rs-active-slider-background);
+  }
+
+  /* Focused state */
+  .range-slider__slider:focus-visible {
+    border-color: var(--rs-focus-slider-border-color);
+    background: var(--rs-focus-slider-background);
+    box-shadow: var(--rs-focus-slider-shadow);
   }
 }
 
