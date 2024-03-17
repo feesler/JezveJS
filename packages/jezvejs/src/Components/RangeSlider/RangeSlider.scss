@@ -43,6 +43,10 @@
   --rs-hover-after-border-color: var(--rs-after-border-color);
   --rs-hover-after-background: var(--rs-after-background);
 
+  /* Active state */
+  --rs-active-slider-background: var(--rs-hover-slider-background);
+  --rs-active-slider-border-color: var(--rs-hover-slider-border-color);
+
   /* Disabled state */
   --rs-disabled-background: #8a8a8a;
   --rs-disabled-area-border-color: var(--rs-area-border-color);
@@ -180,6 +184,12 @@
       height: var(--rs-slider-length);
       cursor: ns-resize;
     }
+  }
+
+  /* Active state */
+  .range-slider__slider:active {
+    border-color: var(--rs-active-slider-border-color);
+    background: var(--rs-active-slider-background);
   }
 }
 
