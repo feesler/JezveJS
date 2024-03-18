@@ -29,7 +29,6 @@ export class Histogram extends BaseChart {
         super({
             ...defaultProps,
             ...props,
-            visibilityOffset: 1,
             scaleAroundAxis: true,
             className: [CONTAINER_CLASS, ...asArray(props.className)],
             components: {

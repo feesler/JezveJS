@@ -31,7 +31,6 @@ export class LineChart extends BaseChart {
         super({
             ...defaultProps,
             ...props,
-            visibilityOffset: 2,
             scaleAroundAxis: false,
             className: [CONTAINER_CLASS, ...asArray(props.className)],
             components: {
