@@ -959,14 +959,16 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (
+        const resetRequired = (
             (state.data !== prevState.data)
             || (state.chartHeight !== prevState.chartHeight)
-        ) {
+        );
+
+        if (resetRequired) {
             this.resetItems();
         }
 
-        if (verticalScale) {
+        if (verticalScale && !resetRequired) {
             const vItems = this.getVisibleItems(state);
             this.updateItemsScale(vItems, state);
         } else {
@@ -1138,10 +1140,10 @@ export class BaseChart extends Component {
         this.chartContainer.classList.toggle(TOP_X_AXIS_CLASS, (state.xAxis === 'top'));
         this.chartContainer.classList.toggle(LEFT_Y_AXIS_CLASS, state.yAxis === 'left');
 
-        if (state.chartWidth !== prevState?.chartWidth) {
+        if (state.chartWidth && state.chartWidth !== prevState?.chartWidth) {
             this.content.setAttribute('width', state.chartWidth);
         }
-        if (state.height !== prevState?.height) {
+        if (state.height && state.height !== prevState?.height) {
             this.content.setAttribute('height', state.height);
         }
 
