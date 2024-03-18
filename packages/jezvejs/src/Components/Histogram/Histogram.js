@@ -157,6 +157,10 @@ export class Histogram extends BaseChart {
         }
 
         const { grid } = state;
+        if (!grid) {
+            return null;
+        }
+
         const valueOffset = data?.valueOffset ?? 0;
         const y0 = grid.getY(valueOffset);
         const y1 = grid.getY(value + valueOffset);
@@ -202,8 +206,8 @@ export class Histogram extends BaseChart {
 
     /** Create items with default scale */
     createItems(state) {
-        const { dataSets, activeTarget } = state;
-        if (dataSets.length === 0) {
+        const { dataSets, activeTarget, grid } = state;
+        if (dataSets.length === 0 || !grid) {
             return;
         }
 
@@ -310,6 +314,10 @@ export class Histogram extends BaseChart {
         }
 
         const { grid } = state;
+        if (!grid) {
+            return;
+        }
+
         items.flat().forEach((item) => {
             const y0 = grid.getY(item.valueOffset);
             const y1 = grid.getY(item.value + item.valueOffset);

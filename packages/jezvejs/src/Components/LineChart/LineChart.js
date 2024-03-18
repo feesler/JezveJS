@@ -119,6 +119,10 @@ export class LineChart extends BaseChart {
 
     createItem(data, state) {
         const { grid, alignColumns } = state;
+        if (!grid) {
+            return null;
+        }
+
         const value = data?.value ?? 0;
         const valueOffset = data?.valueOffset ?? 0;
         const groupWidth = this.getGroupOuterWidth(state);
@@ -156,8 +160,8 @@ export class LineChart extends BaseChart {
 
     /** Create items with default scale */
     createItems(state) {
-        const { dataSets, activeTarget } = state;
-        if (dataSets.length === 0) {
+        const { dataSets, activeTarget, grid } = state;
+        if (dataSets.length === 0 || !grid) {
             return;
         }
 
@@ -326,6 +330,10 @@ export class LineChart extends BaseChart {
         }
 
         const { grid } = state;
+        if (!grid) {
+            return;
+        }
+
         items.flat().forEach((item) => {
             const y = grid.getY(item.value + item.valueOffset);
             item.setVerticalPos(y);

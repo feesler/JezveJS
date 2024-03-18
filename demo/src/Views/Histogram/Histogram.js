@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import { px } from 'jezvejs';
 import { Histogram } from 'jezvejs/Histogram';
 
 import { createButtons, createControls } from '../../Application/utils.js';
@@ -56,6 +57,7 @@ class HistogramView extends DemoView {
         this.fitToWidth();
 
         this.horizontalLabels();
+        this.autoHeight();
         this.maxColumnWidth();
 
         this.chartAxes();
@@ -138,6 +140,45 @@ class HistogramView extends DemoView {
         });
 
         histogram.setData(maxColumnWidthData);
+    }
+
+    autoHeight() {
+        const histogram = Histogram.create({
+            maxColumnWidth: 38,
+            groupsGap: 3,
+            height: null,
+            data: chartData,
+        });
+
+        const setHeight = (height) => {
+            if (!histogram?.elem?.parentNode) {
+                return;
+            }
+            const { style } = histogram.elem.parentNode;
+            style.height = px(height);
+        };
+
+        const controls = createControls([
+            RangeInputField.create({
+                title: 'Height:',
+                min: 50,
+                max: 600,
+                value: 300,
+                onInput: (value) => setHeight(value),
+            }).elem,
+        ]);
+
+        this.addSection({
+            id: 'autoHeight',
+            title: 'Height update on resize',
+            description: 'Set height to null to enable auto height.',
+            content: [
+                chartContainer('autoHeightChart', histogram),
+                controls,
+            ],
+        });
+
+        setHeight(300);
     }
 
     maxColumnWidth() {

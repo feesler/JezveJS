@@ -34,6 +34,7 @@
   display: flex;
   flex-flow: column nowrap;
   flex-basis: 100%;
+  height: 100%;
 }
 
 /* Horizontal container for chart */
@@ -41,6 +42,7 @@
   display: flex;
   flex-flow: row nowrap;
   flex-basis: 100%;
+  height: 100%;
 }
 
 .chart__container {
@@ -50,6 +52,7 @@
 
 .chart__scroller {
   width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   overflow-x: auto;

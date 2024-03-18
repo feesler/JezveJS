@@ -1,4 +1,5 @@
 import 'jezvejs/style';
+import { px } from 'jezvejs';
 import { LineChart } from 'jezvejs/LineChart';
 
 import { createButtons, createControls } from '../../Application/utils.js';
@@ -50,6 +51,8 @@ class LineChartView extends DemoView {
 
         this.columnWidthAndGap();
         this.fitToWidth();
+
+        this.autoHeight();
 
         this.chartAxes();
         this.xAxisGrid();
@@ -111,6 +114,45 @@ class LineChartView extends DemoView {
             title: '\'fitToWidth\' option',
             content: chartContainer('linechart_fittowidth', chart),
         });
+    }
+
+    autoHeight() {
+        const chart = LineChart.create({
+            maxColumnWidth: 38,
+            groupsGap: 3,
+            height: null,
+            data: chartData,
+        });
+
+        const setHeight = (height) => {
+            if (!chart?.elem?.parentNode) {
+                return;
+            }
+            const { style } = chart.elem.parentNode;
+            style.height = px(height);
+        };
+
+        const controls = createControls([
+            RangeInputField.create({
+                title: 'Height:',
+                min: 50,
+                max: 600,
+                value: 300,
+                onInput: (value) => setHeight(value),
+            }).elem,
+        ]);
+
+        this.addSection({
+            id: 'autoHeight',
+            title: 'Height update on resize',
+            description: 'Set height to null to enable auto height.',
+            content: [
+                chartContainer('autoHeightChart', chart),
+                controls,
+            ],
+        });
+
+        setHeight(300);
     }
 
     chartAxes() {

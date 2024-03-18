@@ -156,6 +156,7 @@ export class BaseChart extends Component {
             hLabelsHeight: 25,
             scrollerWidth: 0,
             containerWidth: 0,
+            containerHeight: 0,
             chartWidth: 0,
             chartHeight: height - marginTop,
             scrollLeft: 0,
@@ -389,13 +390,24 @@ export class BaseChart extends Component {
 
     /** Returns object with main dimensions of component */
     measureLayout() {
-        return {
+        const res = {
             contentOffset: getOffset(this.chartScroller),
             scrollerWidth: this.chartScroller.offsetWidth,
             scrollLeft: this.chartScroller.scrollLeft,
             scrollWidth: this.chartScroller.scrollWidth,
             containerWidth: this.elem.offsetWidth,
         };
+
+        if (!this.props.height) {
+            const xAxisLabelsHeight = this.xAxisLabels?.elem?.offsetHeight ?? 0;
+            const { clientHeight } = this.chartScroller;
+
+            res.containerHeight = this.elem.offsetHeight;
+            res.height = clientHeight - xAxisLabelsHeight;
+            res.chartHeight = clientHeight - xAxisLabelsHeight - this.props.marginTop;
+        }
+
+        return res;
     }
 
     /** Returns index of first visible item */
@@ -931,6 +943,7 @@ export class BaseChart extends Component {
             && !verticalScale
             && state.chartContentWidth === prevState.chartContentWidth
             && state.containerWidth === prevState.containerWidth
+            && state.containerHeight === prevState.containerHeight
             && state.scrollLeft === prevState.scrollLeft
             && state.scrollWidth === prevState.scrollWidth
             && state.animateNow === prevState.animateNow
@@ -946,7 +959,10 @@ export class BaseChart extends Component {
             return;
         }
 
-        if (state.data !== prevState.data) {
+        if (
+            (state.data !== prevState.data)
+            || (state.chartHeight !== prevState.chartHeight)
+        ) {
             this.resetItems();
         }
 
@@ -995,6 +1011,8 @@ export class BaseChart extends Component {
             state.grid === prevState.grid
             && state.yAxis === prevState.yAxis
             && state.containerWidth === prevState.containerWidth
+            && state.containerHeight === prevState.containerHeight
+            && state.chartHeight === prevState.chartHeight
             && state.yAxisLabelsAlign === prevState.yAxisLabelsAlign
         ) {
             return;
@@ -1025,10 +1043,12 @@ export class BaseChart extends Component {
             !this.isHorizontalScaleNeeded(state, prevState)
             && state.chartContentWidth === prevState.chartContentWidth
             && state.containerWidth === prevState.containerWidth
+            && state.containerHeight === prevState.containerHeight
             && state.scrollLeft === prevState.scrollLeft
             && state.grid === prevState.grid
             && state.xAxis === prevState.xAxis
             && state.chartWidth === prevState.chartWidth
+            && state.chartHeight === prevState.chartHeight
             && state.hLabelsHeight === prevState.hLabelsHeight
             && state.xAxisGrid === prevState.xAxisGrid
         ) {
@@ -1118,6 +1138,13 @@ export class BaseChart extends Component {
         this.chartContainer.classList.toggle(TOP_X_AXIS_CLASS, (state.xAxis === 'top'));
         this.chartContainer.classList.toggle(LEFT_Y_AXIS_CLASS, state.yAxis === 'left');
 
+        if (state.chartWidth !== prevState?.chartWidth) {
+            this.content.setAttribute('width', state.chartWidth);
+        }
+        if (state.height !== prevState?.height) {
+            this.content.setAttribute('height', state.height);
+        }
+
         this.renderScroll(state, prevState);
 
         this.renderVerticalLabels(state, prevState);
@@ -1126,13 +1153,6 @@ export class BaseChart extends Component {
 
         if (this.isHorizontalScaleNeeded(state, prevState)) {
             this.updateHorizontalScale(state);
-        }
-
-        if (state.chartWidth !== prevState?.chartWidth) {
-            this.content.setAttribute('width', state.chartWidth);
-        }
-        if (state.height !== prevState?.height) {
-            this.content.setAttribute('height', state.height);
         }
 
         this.renderGrid(state, prevState);
