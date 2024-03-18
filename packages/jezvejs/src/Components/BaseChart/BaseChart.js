@@ -236,7 +236,10 @@ export class BaseChart extends Component {
             || isFunction(this.props.onItemOver)
             || isFunction(this.props.onItemOut)
         ) {
-            events.touchstart = (e) => this.onTouchStart(e);
+            events.touchstart = {
+                listener: (e) => this.onTouchStart(e),
+                options: { passive: true },
+            };
             events.mousemove = (e) => this.onMouseMove(e);
             events.mouseleave = (e) => this.onMouseLeave(e);
         }
