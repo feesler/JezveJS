@@ -472,7 +472,6 @@ export const getInitialTopPosition = (state) => {
     const {
         offset,
         reference,
-        elem,
         current,
     } = state;
 
@@ -496,10 +495,10 @@ export const getInitialTopPosition = (state) => {
 
     if (
         state.fixedParent
-        && state.fixedParent === elem.offsetParent
+        && state.fixedParent === state.elem.offsetParent
         && !state.fixedElement
     ) {
-        res += state.scrollTop;
+        res += state.fixedParent.scrollTop;
     }
 
     return res;
@@ -533,6 +532,14 @@ export const getInitialLeftPosition = (state) => {
         if (isHorizontalEnd(state)) {
             res = reference.left - offset.left - current.width + reference.width;
         }
+    }
+
+    if (
+        state.fixedParent
+        && state.fixedParent === state.elem.offsetParent
+        && !state.fixedElement
+    ) {
+        res += state.fixedParent.scrollLeft;
     }
 
     return res;

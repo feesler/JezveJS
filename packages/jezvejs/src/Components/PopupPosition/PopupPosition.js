@@ -228,6 +228,8 @@ export class PopupPosition {
         this.getScrollParentRect();
         this.getBottomSafe();
 
+        this.renderInitialPosition();
+
         this.calculateRefScroll();
         this.calculateScroll();
 
@@ -266,10 +268,9 @@ export class PopupPosition {
     getScrollParentRect() {
         const { state } = this;
 
-        const scrollParent = state.fixedParent || getScrollParent(this.props.elem);
-        state.scrollParent = scrollParent;
+        state.scrollParent = getScrollParent(this.props.elem);
 
-        state.scrollParentBox = (scrollParent && !state.fixedElement)
+        state.scrollParentBox = (state.scrollParent && !state.fixedElement)
             ? state.scrollParent.getBoundingClientRect()
             : { ...state.screen, left: 0, top: 0 };
     }
@@ -281,6 +282,19 @@ export class PopupPosition {
         state.bottomSafe = (state.screen.height - html.clientHeight > 50)
             ? state.bottomSafeArea
             : state.screenPadding;
+    }
+
+    renderInitialPosition() {
+        const { state } = this;
+        if (!state?.elem) {
+            return;
+        }
+
+        const { style } = state.elem;
+        style.left = px(0);
+        style.top = px(0);
+
+        transform(state.elem, '');
     }
 
     renderPosition() {
