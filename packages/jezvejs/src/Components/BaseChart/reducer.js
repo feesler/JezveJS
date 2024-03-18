@@ -115,6 +115,11 @@ const slice = createSlice({
             ...layout,
         };
 
+        newState = {
+            ...newState,
+            grid: state.calculateGrid(newState.data.values, newState),
+        };
+
         newState = updateColumnWidth(newState);
 
         // Update width of x axis labels

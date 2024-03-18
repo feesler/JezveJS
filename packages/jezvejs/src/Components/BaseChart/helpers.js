@@ -99,8 +99,9 @@ export const getFirstVisibleGroupIndex = (state) => {
     const groupWidth = state.getGroupOuterWidth(state);
     const offs = state.visibilityOffset;
 
-    const firstItem = Math.round(state.scrollLeft / groupWidth);
-    return Math.max(0, firstItem - offs);
+    const left = state.scrollLeft - offs;
+    const firstItem = Math.floor(left / groupWidth);
+    return Math.max(0, firstItem);
 };
 
 /** Returns count of visible items from specified index */
@@ -110,8 +111,9 @@ export const getVisibleGroupsCount = (firstItemIndex, state) => {
     const offs = state.visibilityOffset;
     const first = Math.max(0, firstItemIndex);
 
-    const itemsOnWidth = Math.round(state.containerWidth / groupWidth);
-    return Math.min(longestSet.length - first, itemsOnWidth + 2 * offs);
+    const width = state.containerWidth + 2 * offs;
+    const itemsOnWidth = Math.round(width / groupWidth);
+    return Math.min(longestSet.length - first, itemsOnWidth);
 };
 
 /** Returns group index for specified position on x-axis */

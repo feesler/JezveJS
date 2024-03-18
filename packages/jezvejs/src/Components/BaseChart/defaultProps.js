@@ -15,7 +15,7 @@ export const defaultProps = {
     marginTop: 10,
     alignColumns: 'left', // available values: 'left', 'right' and 'center'
     // Grid behavior
-    visibilityOffset: 1,
+    visibilityOffset: 100,
     scaleAroundAxis: true,
     gridValuesMargin: 0.1,
     minGridStep: 30,
