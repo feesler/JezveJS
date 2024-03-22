@@ -2,6 +2,9 @@ import { createElement, getClassName } from '@jezvejs/dom';
 import { MenuGroupHeader } from 'jezvejs/Menu';
 import { Icon } from 'jezvejs/Icon';
 
+import { MinusIcon } from '../../../../../assets/icons/MinusIcon.js';
+import { PlusIcon } from '../../../../../assets/icons/PlusIcon.js';
+
 import './CollapsibleMenuGroupHeader.scss';
 
 /* CSS classes */
@@ -53,7 +56,7 @@ export class CollapsibleMenuGroupHeader extends MenuGroupHeader {
         this.titleElem.textContent = state.title ?? '';
 
         if (state.expanded !== prevState?.expanded) {
-            this.toggleBtn.setIcon((state.expanded) ? 'minus' : 'plus');
+            this.toggleBtn.setIcon((state.expanded) ? MinusIcon() : PlusIcon());
         }
     }
 }

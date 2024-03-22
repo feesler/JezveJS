@@ -46,9 +46,6 @@ export class Icon extends Component {
         if (!(state.icon instanceof Element)) {
             return;
         }
-        if (this.elem && !this.useElem) {
-            return;
-        }
 
         const elem = state.icon.cloneNode(true);
         this.setElement(elem);
