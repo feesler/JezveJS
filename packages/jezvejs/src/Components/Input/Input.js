@@ -16,7 +16,7 @@ const defaultProps = {
     form: undefined,
     tabIndex: undefined,
     inputMode: undefined,
-    placeholder: '',
+    placeholder: undefined,
     type: 'text',
     disabled: false,
     value: undefined,
