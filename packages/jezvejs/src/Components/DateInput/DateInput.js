@@ -440,6 +440,7 @@ export class DateInput extends ControlledInput {
         // Remove first character from part after selection
         if (afterSelection.length > 0) {
             afterSelection = this.props.guideChar + afterSelection.substr(1);
+            this.cursorPos += 1;
         }
 
         while (selection.length) {
