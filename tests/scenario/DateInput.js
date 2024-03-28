@@ -46,16 +46,19 @@ const typeInvalidToEmpty = async () => {
     // Month
     await Actions.inputToEmpty('usLocaleInput', 'x', '');
     await Actions.inputToEmpty('usLocaleInput', '13', '1_/__/__');
+    await Actions.inputToEmpty('usLocaleInput', '1.', '1_/__/__');
     await Actions.inputToEmpty('usLocaleInput', '1x', '1_/__/__');
     await Actions.inputToEmpty('usLocaleInput', '0x', '0_/__/__');
     // Day
     await Actions.inputToEmpty('usLocaleInput', '4x', '04/__/__');
     await Actions.inputToEmpty('usLocaleInput', '438', '04/3_/__');
+    await Actions.inputToEmpty('usLocaleInput', '43.', '04/3_/__');
     await Actions.inputToEmpty('usLocaleInput', '43x', '04/3_/__');
     await Actions.inputToEmpty('usLocaleInput', '40x', '04/0_/__');
     // Year
     await Actions.inputToEmpty('usLocaleInput', '45x', '04/05/__');
     await Actions.inputToEmpty('usLocaleInput', '451x', '04/05/1_');
+    await Actions.inputToEmpty('usLocaleInput', '451.', '04/05/1_');
 
     setBlock('ko-KR locale', 2);
     // Year
@@ -92,11 +95,13 @@ const typeInvalidToEmpty = async () => {
     await Actions.inputToEmpty('esLocaleInput', 'x', '');
     await Actions.inputToEmpty('esLocaleInput', '38', '3_/__/__');
     await Actions.inputToEmpty('esLocaleInput', '3x', '3_/__/__');
+    await Actions.inputToEmpty('esLocaleInput', '3.', '3_/__/__');
     await Actions.inputToEmpty('esLocaleInput', '0x', '0_/__/__');
     // Month
     await Actions.inputToEmpty('esLocaleInput', '4x', '04/__/__');
     await Actions.inputToEmpty('esLocaleInput', '413', '04/1_/__');
     await Actions.inputToEmpty('esLocaleInput', '41x', '04/1_/__');
+    await Actions.inputToEmpty('esLocaleInput', '41.', '04/1_/__');
     await Actions.inputToEmpty('esLocaleInput', '40x', '04/0_/__');
     // Year
     await Actions.inputToEmpty('esLocaleInput', '45x', '04/05/__');
@@ -390,10 +395,10 @@ const pasteToSelection = async () => {
     await Actions.pasteToSelection('usLocaleInput', '11/22/33', 0, 7, '2', '02/__/_3');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22.');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22.');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22.');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22.');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, '1', '33. 11. _2.');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 9, '3', '3_. __. _2.');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 10, '30. 1', '30. 1_. __.');

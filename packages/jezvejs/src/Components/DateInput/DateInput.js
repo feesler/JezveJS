@@ -510,10 +510,14 @@ export class DateInput extends ControlledInput {
         const expectedYear = this.getContentRange(content, this.yearRange);
 
         const search = new RegExp(`${this.props.guideChar}`, 'g');
+        const testExp = new RegExp(`^[0-9${this.props.guideChar}]+$`);
 
         const dayStr = expectedDay.replaceAll(search, '');
         const dayVal = parseInt(dayStr, 10);
         if (dayStr.length > 0 && (!isNumber(dayStr) || !(dayVal >= 0 && dayVal <= 31))) {
+            return this.state;
+        }
+        if (dayStr.length > 0 && !testExp.test(dayStr)) {
             return this.state;
         }
         if (dayStr.length === 2 && dayVal === 0) {
@@ -523,6 +527,9 @@ export class DateInput extends ControlledInput {
         const monthStr = expectedMonth.replaceAll(search, '');
         const monthVal = parseInt(monthStr, 10);
         if (monthStr.length > 0 && (!isNumber(monthStr) || !(monthVal >= 0 && monthVal <= 12))) {
+            return this.state;
+        }
+        if (monthStr.length > 0 && !testExp.test(monthStr)) {
             return this.state;
         }
         if (monthStr.length === 2 && monthVal === 0) {
@@ -535,6 +542,9 @@ export class DateInput extends ControlledInput {
             yearStr.length > 0
             && (!isNumber(yearStr) || (this.yearRange.length === 4 && yearVal < 1))
         ) {
+            return this.state;
+        }
+        if (yearStr.length > 0 && !testExp.test(yearStr)) {
             return this.state;
         }
 
