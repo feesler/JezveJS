@@ -99,6 +99,7 @@ class DateInputView extends DemoView {
             { id: 'koDateInput', title: 'ko-KR', locales: ['ko-KR'] },
             { id: 'ruDateInput', title: 'ru-RU', locales: ['ru-RU'] },
             { id: 'esDateInput', title: 'es', locales: ['es'] },
+            { id: 'frDateInput', title: 'fr', locales: ['fr'] },
         ];
 
         this.addSection({

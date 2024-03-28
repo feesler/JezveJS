@@ -46,16 +46,19 @@ const typeInvalidToEmpty = async () => {
     // Month
     await Actions.inputToEmpty('usLocaleInput', 'x', '');
     await Actions.inputToEmpty('usLocaleInput', '13', '1_/__/__');
+    await Actions.inputToEmpty('usLocaleInput', '1.', '1_/__/__');
     await Actions.inputToEmpty('usLocaleInput', '1x', '1_/__/__');
     await Actions.inputToEmpty('usLocaleInput', '0x', '0_/__/__');
     // Day
     await Actions.inputToEmpty('usLocaleInput', '4x', '04/__/__');
     await Actions.inputToEmpty('usLocaleInput', '438', '04/3_/__');
+    await Actions.inputToEmpty('usLocaleInput', '43.', '04/3_/__');
     await Actions.inputToEmpty('usLocaleInput', '43x', '04/3_/__');
     await Actions.inputToEmpty('usLocaleInput', '40x', '04/0_/__');
     // Year
     await Actions.inputToEmpty('usLocaleInput', '45x', '04/05/__');
     await Actions.inputToEmpty('usLocaleInput', '451x', '04/05/1_');
+    await Actions.inputToEmpty('usLocaleInput', '451.', '04/05/1_');
 
     setBlock('ko-KR locale', 2);
     // Year
@@ -92,11 +95,13 @@ const typeInvalidToEmpty = async () => {
     await Actions.inputToEmpty('esLocaleInput', 'x', '');
     await Actions.inputToEmpty('esLocaleInput', '38', '3_/__/__');
     await Actions.inputToEmpty('esLocaleInput', '3x', '3_/__/__');
+    await Actions.inputToEmpty('esLocaleInput', '3.', '3_/__/__');
     await Actions.inputToEmpty('esLocaleInput', '0x', '0_/__/__');
     // Month
     await Actions.inputToEmpty('esLocaleInput', '4x', '04/__/__');
     await Actions.inputToEmpty('esLocaleInput', '413', '04/1_/__');
     await Actions.inputToEmpty('esLocaleInput', '41x', '04/1_/__');
+    await Actions.inputToEmpty('esLocaleInput', '41.', '04/1_/__');
     await Actions.inputToEmpty('esLocaleInput', '40x', '04/0_/__');
     // Year
     await Actions.inputToEmpty('esLocaleInput', '45x', '04/05/__');
