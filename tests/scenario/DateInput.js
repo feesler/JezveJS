@@ -390,10 +390,10 @@ const pasteToSelection = async () => {
     await Actions.pasteToSelection('usLocaleInput', '11/22/33', 0, 7, '2', '02/__/_3');
 
     setBlock('ko-KR locale', 2);
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22.');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22.');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22.');
-    await Actions.inputToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 2, 6, '1', '33. 1_. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 3, 6, '1', '33. 1_. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 4, 6, '1', '33. 1_. 22.');
+    await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 2, 6, '7', '33. 07. 22.');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 5, 9, '1', '33. 11. _2.');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 9, '3', '3_. __. _2.');
     await Actions.pasteToSelection('koLocaleInput', '33. 11. 22', 0, 10, '30. 1', '30. 1_. __.');
