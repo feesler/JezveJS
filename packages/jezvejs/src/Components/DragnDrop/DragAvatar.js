@@ -27,6 +27,7 @@ export class DragAvatar {
         this.dragZoneElem = this.props.elem;
         this.elem = this.props.elem; // element of avatar
         this.scrollRequested = false;
+        this.animationFrame = 0;
     }
 
     /**
@@ -87,16 +88,24 @@ export class DragAvatar {
         const page = DragMaster.getEventPageCoordinates(e);
         const client = DragMaster.getEventClientCoordinates(e);
 
-        this.elem.style.left = px(page.x - this.shiftX);
-        this.elem.style.top = px(page.y - this.shiftY);
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
 
-        this.currentTargetElem = DragMaster.getElementUnderClientXY(
-            this.elem,
-            client.x,
-            client.y,
-        );
+        this.animationFrame = requestAnimationFrame(() => {
+            this.animationFrame = 0;
 
-        this.scrollDocument(client);
+            this.elem.style.left = px(page.x - this.shiftX);
+            this.elem.style.top = px(page.y - this.shiftY);
+
+            this.currentTargetElem = DragMaster.getElementUnderClientXY(
+                this.elem,
+                client.x,
+                client.y,
+            );
+
+            this.scrollDocument(client);
+        });
     }
 
     /** Drop cancel handler */
