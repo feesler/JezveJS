@@ -25,10 +25,14 @@ export class OriginalDropTarget extends DropTarget {
         elemToMove.style.zIndex = '';
 
         const offset = getOffset(this.elem);
+        const border = {
+            top: this.elem.clientTop,
+            left: this.elem.clientLeft,
+        };
 
         const page = DragMaster.getEventPageCoordinates(params.e);
-        elemToMove.style.left = px(page.x - avatarInfo.mouseShift.x - offset.left);
-        elemToMove.style.top = px(page.y - avatarInfo.mouseShift.y - offset.top);
+        elemToMove.style.left = px(page.x - avatarInfo.mouseShift.x - offset.left - border.left);
+        elemToMove.style.top = px(page.y - avatarInfo.mouseShift.y - offset.top - border.top);
 
         this.elem.appendChild(elemToMove);
 
