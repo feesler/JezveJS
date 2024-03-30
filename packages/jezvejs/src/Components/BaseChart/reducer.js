@@ -122,9 +122,12 @@ const slice = createSlice({
             ? Math.ceil(newState.lastHLabelOffset)
             : 0;
 
+        if (!state.autoScale) {
+            newState.grid = state.calculateGrid(newState.data.values, newState);
+        }
+
         return updateChartWidth({
             ...newState,
-            grid: state.calculateGrid(newState.data.values, newState),
             animateNow: false,
         });
     },
