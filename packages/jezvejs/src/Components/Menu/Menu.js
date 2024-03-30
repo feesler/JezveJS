@@ -567,6 +567,30 @@ export class Menu extends Component {
             includeGroupItems: this.state.allowActiveGroupHeader,
         };
 
+        if (e.code === 'Home') {
+            const activeItem = this.getActiveItem();
+            const nextItem = findMenuItem(this.state.items, availCallback);
+            if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
+                this.activateItem(nextItem.id);
+
+                e.preventDefault();
+            }
+
+            return;
+        }
+
+        if (e.code === 'End') {
+            const activeItem = this.getActiveItem();
+            const nextItem = findLastMenuItem(this.state.items, availCallback);
+            if (nextItem && (!activeItem || nextItem.id !== activeItem.id)) {
+                this.activateItem(nextItem.id);
+
+                e.preventDefault();
+            }
+
+            return;
+        }
+
         if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
             const activeItem = this.getActiveItem();
             let nextItem = (activeItem)
