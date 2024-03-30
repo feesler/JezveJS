@@ -124,6 +124,7 @@ const slice = createSlice({
 
         return updateChartWidth({
             ...newState,
+            grid: state.calculateGrid(newState.data.values, newState),
             animateNow: false,
         });
     },
