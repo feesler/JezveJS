@@ -47,7 +47,7 @@ export const getScrollParent = (elem) => {
 
 /**
  * Returns width of visualViewport if possible
- * Otherwise returns clientHeight of document
+ * Otherwise returns clientWidth of document
  */
 export const getScreenWidth = () => {
     const { clientWidth } = document.documentElement;
