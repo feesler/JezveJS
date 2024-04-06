@@ -119,7 +119,7 @@ class ProgressView extends DemoView {
             content: pr2.elem,
         });
 
-        const pr3 = IndetermProgress.create({ circles: 3, className: 'circles-style' });
+        const pr3 = IndetermProgress.create({ circlesCount: 3, className: 'circles-style' });
 
         this.addSection({
             id: 'indetermStyled',

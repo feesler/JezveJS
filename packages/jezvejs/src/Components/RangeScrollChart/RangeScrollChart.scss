@@ -1,12 +1,12 @@
 .range-scroll-chart {
   --rschart-outside-areas-background: #88888888;
-  --rschart-slider-size: 2rem;
-  --rschart-slider-length: 1rem;
-  --rschart-slider-background: #000000;
+  --rschart-slider-size: 50%;
+  --rschart-slider-length: 0.8rem;
+  --rschart-slider-background: #888888;
   --rschart-slider-border-width: 0;
   --rschart-slider-border-style: none;
   --rschart-slider-border-color: #000000;
-  --rschart-navigation-margin: 0 0.5rem;
+  --rschart-navigation-margin: 0 0.4rem;
 
   display: flex;
   flex-flow: column nowrap;
@@ -51,6 +51,7 @@
   --rs-after-background: var(--rschart-outside-areas-background);
   --rs-selected-opacity: 0;
   --rs-background: none;
+  --rs-hover-background: none;
   --rs-area-size: 100%;
   --rs-slider-border-width: var(--rschart-slider-border-width);
   --rs-slider-border-style: var(--rschart-slider-border-style);
