@@ -5,6 +5,10 @@ input[type="submit"] {
   overflow: visible;
 }
 
+.content-container {
+  grid-column: 1 / 3;
+}
+
 .test-content {
   height: 100%;
   display: flex;
