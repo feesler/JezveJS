@@ -3,7 +3,6 @@ export const config = {
     nodePermissions: [
         'clipboard-read',
         'clipboard-write',
-        'clipboard-sanitized-write',
     ],
     testsExpected: 1160,
 };
