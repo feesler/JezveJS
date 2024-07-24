@@ -27,7 +27,6 @@ const chartTypesMap = {
 };
 
 const defaultProps = {
-    logField: null,
     type: 'histogram', // available values: 'histogram' and 'linechart'
     hideScrollBar: true,
     mainChart: {
