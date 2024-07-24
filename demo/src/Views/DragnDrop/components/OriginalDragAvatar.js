@@ -9,7 +9,6 @@ import { DragAvatar } from 'jezvejs/DragnDrop';
  * @param {*} dragElem
  */
 export class OriginalDragAvatar extends DragAvatar {
-    /* eslint-disable-next-line no-unused-vars */
     initFromEvent({ downX, downY }) {
         this.dragZoneElem = this.dragZone.getElement();
         const elem = this.dragZoneElem;

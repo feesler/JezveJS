@@ -144,10 +144,10 @@ export class HistogramDataItem extends Component {
                     this.elem.style[name] = formatCoord(state[name], true);
                 } else {
                     this.elem.style[name] = '';
-                    attrs[name] = state[name];
+                    attrs[name] = formatCoord(state[name]);
                 }
             } else {
-                attrs[name] = state[name];
+                attrs[name] = formatCoord(state[name]);
             }
         }
 
