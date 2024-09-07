@@ -1,5 +1,8 @@
 {
-    "extends": "airbnb-base",
+    "extends": [
+        "airbnb-base",
+        "plugin:import/typescript"
+    ],
     "env": {
         "browser": true,
         "node": false
@@ -11,17 +14,30 @@
         "requireConfigFile": false
     },
     "rules": {
-        "indent": ["error", 4],
-        "no-continue": ["warn"],
-        "no-console": ["error"],
-        "class-methods-use-this": ["warn"],
-        "import/prefer-default-export": ["warn"],
+        "indent": [
+            "error",
+            4
+        ],
+        "no-continue": [
+            "warn"
+        ],
+        "no-console": [
+            "error"
+        ],
+        "class-methods-use-this": [
+            "warn"
+        ],
+        "import/prefer-default-export": [
+            "warn"
+        ],
         "import/extensions": [
             "error",
             "ignorePackages"
         ]
     },
     "settings": {
-        "import/resolver": "webpack"
+        "import/resolver": {
+            "typescript": {}
+        }
     }
 }

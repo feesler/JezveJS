@@ -1,11 +1,14 @@
 {
     "name": "@jezvejs/dom",
-    "version": "1.1.0",
+    "version": "1.2.1",
     "description": "Collection of simple DOM utilities",
     "type": "module",
     "module": "./src/index.js",
+    "types": "./types/index.d.ts",
     "files": [
-        "src"
+        "src",
+        "types",
+        "package.json"
     ],
     "repository": {
         "type": "git",
@@ -20,13 +23,16 @@
     "license": "ISC",
     "main": "./src/index.js",
     "exports": {
-        ".": "./src/index.js",
+        ".": {
+            "import": "./src/index.js",
+            "types": "./types/index.d.ts"
+        },
         "./package.json": "./package.json"
     },
     "publishConfig": {
         "access": "public"
     },
     "dependencies": {
-        "@jezvejs/types": "^1.0.0"
+        "@jezvejs/types": "^1.1.0"
     }
 }

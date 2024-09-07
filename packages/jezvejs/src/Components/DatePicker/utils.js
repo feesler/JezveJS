@@ -9,21 +9,6 @@ export const YEAR_RANGE_LENGTH = 10;
 
 export const toCSSValue = (val) => (+val.toFixed(4));
 
-/** Compares order of view types and returns result */
-export const compareViewTypes = (a, b) => {
-    const typeMap = {
-        [MONTH_VIEW]: 1,
-        [YEAR_VIEW]: 2,
-        [YEARRANGE_VIEW]: 3,
-    };
-
-    if (!(a in typeMap) || !(b in typeMap)) {
-        throw new Error('Invalid view type');
-    }
-
-    return typeMap[a] - typeMap[b];
-};
-
 /** Returns previous date for specified view type */
 export const getPrevViewDate = (date, viewType) => {
     if (!isDate(date)) {

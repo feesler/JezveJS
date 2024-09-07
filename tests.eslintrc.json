@@ -1,5 +1,8 @@
 {
-    "extends": "airbnb-base",
+    "extends": [
+        "airbnb-base",
+        "plugin:import/typescript"
+    ],
     "env": {
         "browser": true,
         "node": true
@@ -46,6 +49,8 @@
         ]
     },
     "settings": {
-        "import/resolver": "webpack"
+        "import/resolver": {
+            "typescript": {}
+        }
     }
 }
