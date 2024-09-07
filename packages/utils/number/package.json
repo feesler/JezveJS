@@ -1,11 +1,14 @@
 {
     "name": "@jezvejs/number",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Collection of simple decimal number utilities",
     "type": "module",
     "module": "./src/index.js",
+    "types": "./types/index.d.ts",
     "files": [
-        "src"
+        "src",
+        "types",
+        "package.json"
     ],
     "repository": {
         "type": "git",
@@ -20,7 +23,10 @@
     "license": "ISC",
     "main": "./src/index.js",
     "exports": {
-        ".": "./src/index.js",
+        ".": {
+            "import": "./src/index.js",
+            "types": "./types/index.d.ts"
+        },
         "./package.json": "./package.json"
     },
     "publishConfig": {
