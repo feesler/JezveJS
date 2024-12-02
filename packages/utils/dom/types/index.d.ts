@@ -49,7 +49,7 @@ export interface RangeType {
 /**
  * Indexed CSS style object
  */
-export type StyleDeclaration = Partial<CSSStyleDeclaration> & { [propName: string]: string };
+export type StyleDeclaration = Partial<CSSStyleDeclaration> & { [propName: string]: string; };
 
 /** Return DOM element by id */
 export const ge: (id: string) => Element | null;
@@ -79,7 +79,7 @@ export const addChilds: (elem: Element, childs: Element | Element[] | null) => v
  */
 export const setEvents: (
     elem: EventTarget | null | undefined,
-    events: ListenerFunctionsGroup | ListenersGroup,
+    events: ListenersGroup,
     options?: boolean | object | undefined,
 ) => void;
 
@@ -91,7 +91,7 @@ export const setEvents: (
  */
 export const removeEvents: (
     elem: EventTarget | null | undefined,
-    events: ListenerFunctionsGroup | ListenersGroup,
+    events: ListenersGroup,
     options?: boolean | object | undefined,
 ) => void;
 
