@@ -1,5 +1,5 @@
 export const config = {
-    nodeURL: 'https://localtest/jezvejs/dist/',
+    nodeURL: 'http://localhost:8080/',
     nodePermissions: [
         'clipboard-read',
         'clipboard-write',
