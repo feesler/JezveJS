@@ -9,7 +9,7 @@ $active-colors: #00bfff, #ff3392, #00ff55, #fcf93d, #37db79, #ffa540, #ed3b83,
 
 .histogram,
 .linechart {
-  @for $i from 1 through length($colors) {
+  @for $i from 1 through list.length($colors) {
     --charts-color-#{$i}: #{list.nth($colors, $i)};
     --charts-active-color-#{$i}: #{list.nth($active-colors, $i)};
   }
@@ -19,7 +19,7 @@ section {
   max-width: 1000px;
 }
 
-@for $i from 1 through length($colors) {
+@for $i from 1 through list.length($colors) {
   .histogram_column-#{$i} {
     --histogram-bar-color: var(--charts-color-#{$i});
     --histogram-active-bar-color: var(--charts-active-color-#{$i});
