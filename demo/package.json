@@ -8,7 +8,7 @@
     "dependencies": {
         "@jezvejs/assert": "^1.1.0",
         "@jezvejs/color": "^1.1.0",
-        "@jezvejs/datetime": "^1.2.1",
+        "@jezvejs/datetime": "^1.2.2",
         "@jezvejs/dom": "^1.2.2",
         "@jezvejs/types": "^1.1.0",
         "jezvejs": "^2.29.2"
