@@ -10,7 +10,7 @@ export interface FormatDateParam {
 }
 
 /** Returns fixed date locale string without RTL characters */
-export const formatDate: (date: Date, params: FormatDateParam) => string;
+export const formatDate: (date: Date, params: FormatDateParam = {}) => string;
 
 export interface DateFormatPartType {
     type: string;
