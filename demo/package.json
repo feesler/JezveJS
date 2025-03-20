@@ -11,6 +11,6 @@
         "@jezvejs/datetime": "^1.2.2",
         "@jezvejs/dom": "^1.2.2",
         "@jezvejs/types": "^1.1.0",
-        "jezvejs": "^2.29.2"
+        "jezvejs": "^2.29.3"
     }
 }
